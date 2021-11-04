@@ -9,6 +9,7 @@ from distribution_functions import (
     get_chi_squared,
     get_chisq_pvalue,
 )
+from constants import distribution_measures_to_func
 
 
 class DistributionMeasures:
@@ -29,21 +30,20 @@ class DistributionMeasures:
             raise Exception("reference distribution not implemented")
 
     def get_distribution_measures(self, df, sensitive_col, ref_dist="uniform"):
-        f_obs = df[sensitive_col].nunique()
+        f_obs = df.groupby(sensitive_col).size().reset_index(name="count")
         sum_obs = f_obs.sum()
         obs = f_obs / sum_obs
         ref = self.get_ref_col(ref_dist, f_obs.size)
+        f_ref = ref * sum_obs
 
         # can change depending on reference distribution
         measures = {}
-        measures["cross_entropy"] = get_cross_entropy(obs, ref)
-        measures["kl_divergence"] = get_kl_divergence(obs, ref)
-        measures["js_distance"] = get_js_distance(obs, ref)
-        measures["ws_distance"] = get_ws_distance(obs, ref)
-        measures["infinity_norm_distance"] = get_infinity_norm_distance(obs, ref)
-        measures["total_variation_distance"] = get_total_variation_distance(obs, ref)
-        measures["chisq"] = get_chi_squared(obs, ref)
-        measures["chisq_pvalue"] = get_chisq_pvalue(obs, ref)
+        for measure, func in distribution_measures_to_func.items():
+            if measure in [Measures.CHISQ_PVALUE, Measures.CHISQ]:
+                measures[measure.value] = func(f_obs, f_ref)
+            else:
+                measures[measure.value] = func(obs, ref)
+
         return measures
 
     @property
