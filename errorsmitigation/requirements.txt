@@ -1,0 +1,11 @@
+wheel
+numpy
+pandas
+scipy
+sklearn
+scikit-learn
+imbalanced-learn
+jupyterlab
+PyQt5
+pywin32
+lightgbm
