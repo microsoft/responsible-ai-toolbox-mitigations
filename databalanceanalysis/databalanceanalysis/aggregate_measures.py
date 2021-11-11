@@ -1,8 +1,8 @@
-from databalanceanalysis.constants import (
+from databalanceanalysis.databalanceanalysis.constants import (
     aggregate_measures_to_func,
     aggregate_balance_measures,
 )
-from databalanceanalysis.constants import Measures
+from databalanceanalysis.databalanceanalysis.constants import Measures
 
 
 class AggregateMeasures:

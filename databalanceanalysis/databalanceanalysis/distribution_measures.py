@@ -1,5 +1,8 @@
 import numpy as np
-from databalanceanalysis.constants import distribution_measures_to_func, Measures
+from databalanceanalysis.databalanceanalysis.constants import (
+    distribution_measures_to_func,
+    Measures,
+)
 
 
 class DistributionMeasures:
@@ -28,9 +31,9 @@ class DistributionMeasures:
         measures = {}
         for measure, func in distribution_measures_to_func.items():
             if measure in [Measures.CHISQ_PVALUE, Measures.CHISQ]:
-                measures[measure.value] = func(f_obs["count"], f_ref)
+                measures[measure] = func(f_obs["count"], f_ref)
             else:
-                measures[measure.value] = func(obs, ref)
+                measures[measure] = func(obs, ref)
 
         return measures
 

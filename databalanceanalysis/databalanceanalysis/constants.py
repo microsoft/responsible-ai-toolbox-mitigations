@@ -1,7 +1,7 @@
 from enum import Enum
 
 from numpy import log
-from databalanceanalysis.feature_functions import (
+from databalanceanalysis.databalanceanalysis.feature_functions import (
     get_demographic_parity,
     get_point_mutual,
     get_sorenson_dice,
@@ -10,7 +10,7 @@ from databalanceanalysis.feature_functions import (
     t_test_value,
 )
 
-from databalanceanalysis.distribution_functions import (
+from databalanceanalysis.databalanceanalysis.distribution_functions import (
     get_kl_divergence,
     get_js_distance,
     get_ws_distance,
@@ -20,7 +20,7 @@ from databalanceanalysis.distribution_functions import (
     get_chisq_pvalue,
 )
 
-from databalanceanalysis.aggregate_functions import (
+from databalanceanalysis.databalanceanalysis.aggregate_functions import (
     get_atkinson_index,
     get_thiel_l_index,
     get_thiel_t_index,

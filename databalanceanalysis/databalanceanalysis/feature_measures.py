@@ -1,7 +1,7 @@
 import pandas as pd
 import itertools
 
-from databalanceanalysis.constants import feature_measures_to_func
+from databalanceanalysis.databalanceanalysis.constants import feature_measures_to_func
 
 
 class FeatureMeasures:

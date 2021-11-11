@@ -21,3 +21,5 @@ def test_distribution_measures():
     gender_measures = dist_measures.distribution_measures[feature1]
     print(gender_measures)
     assert gender_measures == approx(exp_feature_1)
+
+    
