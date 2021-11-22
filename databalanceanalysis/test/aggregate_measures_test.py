@@ -11,10 +11,10 @@ def test_one_feature():
     agg_measures = AggregateMeasures(small_df, [feature1])
     expected = {
         Measures.ATKINSON_INDEX: 0.03850028646172776,
-        Measures.THIEL_L_INDEX: 0.039261011885461196,
-        Measures.THIEL_T_INDEX: 0.03775534151008828,
+        Measures.THEIL_L_INDEX: 0.039261011885461196,
+        Measures.THEIL_T_INDEX: 0.03775534151008828,
     }
-    assert agg_measures.aggregate_measures == approx(expected)
+    assert agg_measures.measures == approx(expected)
 
 
 def test_both_features():
@@ -24,7 +24,7 @@ def test_both_features():
     agg_measures = AggregateMeasures(small_df, [feature1, feature2])
     expected = {
         Measures.ATKINSON_INDEX: 0.030659793186437745,
-        Measures.THIEL_L_INDEX: 0.03113963808639034,
-        Measures.THIEL_T_INDEX: 0.03624967113471546,
+        Measures.THEIL_L_INDEX: 0.03113963808639034,
+        Measures.THEIL_T_INDEX: 0.03624967113471546,
     }
-    assert agg_measures.aggregate_measures == approx(expected)
+    assert agg_measures.measures == approx(expected)

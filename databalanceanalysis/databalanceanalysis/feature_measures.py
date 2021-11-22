@@ -3,6 +3,21 @@ import itertools
 
 from databalanceanalysis.databalanceanalysis.constants import feature_measures_to_func
 
+"""
+ The output is a dictionary that maps the sensitive column table to Pandas dataframe containing the following
+  - A feature value within the sensitive feature.
+  - Another feature value within the sensitive feature.
+  - It contains the following measures of the gaps between the two classes
+    - Demographic Parity - https://en.wikipedia.org/wiki/Fairness_(machine_learning)
+    - Pointwise Mutual Information - https://en.wikipedia.org/wiki/Pointwise_mutual_information
+    - Sorensen-Dice Coefficient - https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient
+    - Jaccard Index - https://en.wikipedia.org/wiki/Jaccard_index
+    - Kendall Rank Correlation - https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient
+    - Log-Likelihood Ratio - https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio
+    - t-test - https://en.wikipedia.org/wiki/Student's_t-test
+This output dataframe contains a row per combination of feature values for each sensitive feature.
+"""
+
 
 class FeatureMeasures:
     def __init__(self, df, sensitive_cols, label_col):
@@ -56,9 +71,5 @@ class FeatureMeasures:
         return gap_dict
 
     @property
-    def feature_measures(self):
+    def measures(self):
         return self._feature_measures
-
-    @property
-    def feature_measures_one_col(self, col_name):
-        return self._feature_measures[col_name]

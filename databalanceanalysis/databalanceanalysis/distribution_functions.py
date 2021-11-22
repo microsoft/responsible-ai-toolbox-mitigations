@@ -3,10 +3,14 @@ import itertools
 from scipy.stats import entropy
 from scipy.stats import wasserstein_distance
 from scipy.spatial import distance
+
 from scipy.stats import chisquare
 
-# # Metrics for Comparison with Reference Distribution
-# - Many distance measures available in toolkit to find how far is expected and observed distribution of label and sensitive column attributes
+"""
+Helper functions to calculate distribution measures given an observed and reference column
+"""
+
+
 def get_cross_entropy(obs, ref):
     p = ref
     q = obs
@@ -19,9 +23,6 @@ def get_kl_divergence(obs, ref):
     return entropy(p, qk=q)
 
 
-## Jensen-Shannon Distance
-# - Measuring the similarity between two probability distributions.
-# Symmetrized and smoothed version of the Kullback–Leibler divergence.
 def get_js_distance(obs, ref):
     p = np.asarray(obs)
     q = np.asarray(ref)
@@ -52,7 +53,6 @@ def get_total_variation_distance(obs, ref):
 
 # f_obs is the frequencies of the observation rather than the arrays themselves
 def get_chi_squared(f_obs, f_ref):
-
     res = chisquare(f_obs, f_ref)
     chisq = res[0]
     return chisq

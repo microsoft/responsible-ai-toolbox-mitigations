@@ -4,6 +4,21 @@ from databalanceanalysis.databalanceanalysis.constants import (
     Measures,
 )
 
+"""
+This class computes data balance measures for sensitive columns based on a reference distribution.
+For now, we only support a uniform reference distribution.
+
+The output is a dictionary that maps the sensitive column name to another dictionary:
+    the dictionary for each sensitive column contains a mapping of the name of a measure to its value 
+        - Kullback-Leibler Divergence - https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence
+        - Jensen-Shannon Distance - https://en.wikipedia.org/wiki/Jensen%E2%80%93Shannon_divergence
+        - Wasserstein Distance - https://en.wikipedia.org/wiki/Wasserstein_metric
+        - Infinity Norm Distance - https://en.wikipedia.org/wiki/Chebyshev_distance
+        - Total Variation Distance - https://en.wikipedia.org/wiki/Total_variation_distance_of_probability_measures
+        - Chi-Squared Test - https://en.wikipedia.org/wiki/Chi-squared_test
+    There is one dictionary for each of the sensitive columns specified
+"""
+
 
 class DistributionMeasures:
     def __init__(self, df, sensitive_cols):
@@ -27,7 +42,7 @@ class DistributionMeasures:
         ref = self.get_ref_col(ref_dist, f_obs.shape[0])
         f_ref = ref * sum_obs
 
-        # can change depending on reference distribution
+        # TODO can change depending on the reference distribution
         measures = {}
         for measure, func in distribution_measures_to_func.items():
             if measure in [Measures.CHISQ_PVALUE, Measures.CHISQ]:
@@ -44,5 +59,5 @@ class DistributionMeasures:
         return all_measures
 
     @property
-    def distribution_measures(self):
+    def measures(self):
         return self._distribution_measures

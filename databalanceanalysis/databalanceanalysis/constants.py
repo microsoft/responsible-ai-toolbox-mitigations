@@ -22,8 +22,8 @@ from databalanceanalysis.databalanceanalysis.distribution_functions import (
 
 from databalanceanalysis.databalanceanalysis.aggregate_functions import (
     get_atkinson_index,
-    get_thiel_l_index,
-    get_thiel_t_index,
+    get_theil_l_index,
+    get_theil_t_index,
 )
 
 
@@ -39,8 +39,8 @@ class Measures(str, Enum):
     TTEST = "ttest"
     TTEST_PVALUE = "ttest_pvalue"
     ATKINSON_INDEX = "atkinson_index"
-    THIEL_L_INDEX = "thiel_l_index"
-    THIEL_T_INDEX = "thiel_t_index"
+    THEIL_L_INDEX = "theil_l_index"
+    THEIL_T_INDEX = "theil_t_index"
     CROSS_ENTROPY = "cross_entropy"
     KL_DIVERGENCE = "kl_divergence"
     JS_DISTANCE = "js_distance"
@@ -61,8 +61,8 @@ measure_to_display_name = {
     Measures.TTEST: "T-test Value",
     Measures.TTEST_PVALUE: "T-test p-value",
     Measures.ATKINSON_INDEX: "Atkinson Index",
-    Measures.THIEL_L_INDEX: "Thiel L Index",
-    Measures.THIEL_T_INDEX: "Thiel T Index",
+    Measures.THEIL_L_INDEX: "Theil L Index",
+    Measures.THEIL_T_INDEX: "Theil T Index",
     Measures.CROSS_ENTROPY: "Cross Entropy",
     Measures.KL_DIVERGENCE: "Kullback-Leibler Divergence",
     Measures.JS_DISTANCE: "Jenson-Shannan Distance",
@@ -96,8 +96,8 @@ feature_balance_measures = {
 
 aggregate_balance_measures = {
     Measures.ATKINSON_INDEX,
-    Measures.THIEL_T_INDEX,
-    Measures.THIEL_L_INDEX,
+    Measures.THEIL_T_INDEX,
+    Measures.THEIL_L_INDEX,
 }
 
 feature_measures_to_func = {
@@ -122,7 +122,7 @@ distribution_measures_to_func = {
 }
 
 aggregate_measures_to_func = {
-    Measures.THIEL_L_INDEX: get_thiel_l_index,
-    Measures.THIEL_T_INDEX: get_thiel_t_index,
+    Measures.THEIL_L_INDEX: get_theil_l_index,
+    Measures.THEIL_T_INDEX: get_theil_t_index,
     Measures.ATKINSON_INDEX: get_atkinson_index,
 }

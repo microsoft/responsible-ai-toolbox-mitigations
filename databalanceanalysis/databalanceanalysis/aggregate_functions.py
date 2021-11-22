@@ -1,5 +1,9 @@
 import numpy as np
 
+"""
+Helper functions to calculate each of the individual aggregate measures 
+"""
+
 
 def get_generalized_entropy_index(benefits, alpha, useAbsVal, errorTolerance=1e-12):
     if useAbsVal:
@@ -31,9 +35,9 @@ def get_atkinson_index(benefits, epsilon=1.0, errorTolerance=1e-12):
     return ati
 
 
-def get_thiel_t_index(benefits):
+def get_theil_t_index(benefits):
     return get_generalized_entropy_index(benefits, 1.0, True)
 
 
-def get_thiel_l_index(benefits):
+def get_theil_l_index(benefits):
     return get_generalized_entropy_index(benefits, 0.0, True)

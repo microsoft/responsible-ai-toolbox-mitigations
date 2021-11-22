@@ -1,8 +1,8 @@
 import numpy as np
 
-# Demographic Parity
-
-# given a column and a class, get the total number from that class
+"""
+Helper functions to calculate measures for individual features
+"""
 
 
 def get_total_count(df):
