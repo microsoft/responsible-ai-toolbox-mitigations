@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from databalanceanalysis.feature_measures import FeatureMeasures
+from databalanceanalysis.feature_measures import FeatureBalanceMeasures
 from databalanceanalysis.constants import Measures
 
 # run the tests using this command: python -m pytest
@@ -13,7 +13,7 @@ def test_feature_balance_measures():
     gender1 = small_df[feature1].unique()[0]
     gender2 = small_df[feature1].unique()[1]
     feature2 = small_df.columns[2]
-    feat_measures = FeatureMeasures(small_df, [feature1, feature2], label)
+    feat_measures = FeatureBalanceMeasures(small_df, [feature1, feature2], label)
     exp_male_female = {
         Measures.DEMOGRAPHIC_PARITY: 0.16666666666666669,
         Measures.SD_COEF: 0.1190476190476191,
@@ -22,6 +22,6 @@ def test_feature_balance_measures():
         Measures.POINTWISE_MUTUAL_INFO: 0.4054651081081645,
         Measures.TTEST: 0.19245008972987523,
     }
-    gender_measures = feat_measures.feature_measures[feature1]
+    gender_measures = feat_measures.measures[feature1]
     print(feat_measures.get_gaps_given_classes(feature1, gender1, gender2))
     print(gender_measures)

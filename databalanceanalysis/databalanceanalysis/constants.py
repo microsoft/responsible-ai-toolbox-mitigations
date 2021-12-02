@@ -1,30 +1,12 @@
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
+
 from enum import Enum
-
 from numpy import log
-from databalanceanalysis.databalanceanalysis.feature_functions import (
-    get_demographic_parity,
-    get_point_mutual,
-    get_sorenson_dice,
-    get_jaccard_index,
-    log_likelihood_ratio,
-    t_test_value,
-)
 
-from databalanceanalysis.databalanceanalysis.distribution_functions import (
-    get_kl_divergence,
-    get_js_distance,
-    get_ws_distance,
-    get_infinity_norm_distance,
-    get_total_variation_distance,
-    get_chi_squared,
-    get_chisq_pvalue,
-)
-
-from databalanceanalysis.databalanceanalysis.aggregate_functions import (
-    get_atkinson_index,
-    get_theil_l_index,
-    get_theil_t_index,
-)
+import databalanceanalysis.databalanceanalysis.feature_functions as feature_functions
+import databalanceanalysis.databalanceanalysis.distribution_functions as distribution_functions
+import databalanceanalysis.databalanceanalysis.aggregate_functions as aggregate_functions
 
 
 class Measures(str, Enum):
@@ -51,6 +33,7 @@ class Measures(str, Enum):
     TOTAL_VARIANCE_DISTANCE = "total_variance_distance"
 
 
+# Display name to be used for the UI
 measure_to_display_name = {
     Measures.DEMOGRAPHIC_PARITY: "Demographic Parity",
     Measures.POINTWISE_MUTUAL_INFO: "Pointwise Mutual Information",
@@ -71,58 +54,4 @@ measure_to_display_name = {
     Measures.CHISQ: "Chisquare Value",
     Measures.CHISQ_PVALUE: "Chisquare p-value",
     Measures.TOTAL_VARIANCE_DISTANCE: "Total Variance Distance",
-}
-
-distribution_balance_measures = {
-    Measures.KL_DIVERGENCE,
-    Measures.JS_DISTANCE,
-    Measures.WS_DISTANCE,
-    Measures.INF_NORM_DISTANCE,
-    Measures.CHISQ_PVALUE,
-    Measures.CHISQ,
-    Measures.TOTAL_VARIANCE_DISTANCE,
-}
-
-feature_balance_measures = {
-    Measures.DEMOGRAPHIC_PARITY,
-    Measures.POINTWISE_MUTUAL_INFO,
-    Measures.SD_COEF,
-    Measures.JACCARD_INDEX,
-    Measures.KR_CORRELATION,
-    Measures.LOG_LIKELIHOOD,
-    Measures.TTEST_PVALUE,
-    Measures.TTEST,
-}
-
-aggregate_balance_measures = {
-    Measures.ATKINSON_INDEX,
-    Measures.THEIL_T_INDEX,
-    Measures.THEIL_L_INDEX,
-}
-
-feature_measures_to_func = {
-    Measures.DEMOGRAPHIC_PARITY: get_demographic_parity,
-    Measures.POINTWISE_MUTUAL_INFO: get_point_mutual,
-    Measures.SD_COEF: get_sorenson_dice,
-    Measures.JACCARD_INDEX: get_jaccard_index,
-    # Measures.KR_CORRELATION: get_kr_correlation,
-    Measures.LOG_LIKELIHOOD: log_likelihood_ratio,
-    # Measures.TTEST_PVALUE: t_test_value,
-    Measures.TTEST: t_test_value,
-}
-
-distribution_measures_to_func = {
-    Measures.KL_DIVERGENCE: get_kl_divergence,
-    Measures.JS_DISTANCE: get_js_distance,
-    Measures.WS_DISTANCE: get_ws_distance,
-    Measures.INF_NORM_DISTANCE: get_infinity_norm_distance,
-    Measures.CHISQ_PVALUE: get_chisq_pvalue,
-    Measures.CHISQ: get_chi_squared,
-    Measures.TOTAL_VARIANCE_DISTANCE: get_total_variation_distance,
-}
-
-aggregate_measures_to_func = {
-    Measures.THEIL_L_INDEX: get_theil_l_index,
-    Measures.THEIL_T_INDEX: get_theil_t_index,
-    Measures.ATKINSON_INDEX: get_atkinson_index,
 }
