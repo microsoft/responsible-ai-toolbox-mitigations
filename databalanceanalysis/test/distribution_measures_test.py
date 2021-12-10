@@ -1,23 +1,27 @@
+import pytest
 import pandas as pd
-import os
-from databalanceanalysis.distribution_measures import DistributionBalanceMeasures
-from pytest import approx
+
+from databalanceanalysis.databalanceanalysis.distribution_measures import (
+    DistributionBalanceMeasure,
+)
+from databalanceanalysis.databalanceanalysis.constants import Measures
 
 
-def test_distribution_measures():
-    small_df = pd.read_csv(os.path.join(os.getcwd(), "test_df.csv"))
+def test_distribution_measures(small_df):
     feature1 = small_df.columns[1]
     feature2 = small_df.columns[2]
-    dist_measures = DistributionBalanceMeasures(small_df, [feature1, feature2])
+    dist_measures = DistributionBalanceMeasure(small_df, [feature1, feature2])
     exp_feature_1 = {
-        "kl_divergence": 0.03775534151008829,
-        "js_distance": 0.09785224086736323,
-        "inf_norm_distance": 0.1111111111111111,
-        "total_variance_distance": 0.1111111111111111,
-        "ws_distance": 0.07407407407407407,
-        "chisq": 0.6666666666666666,
-        "chisq_pvalue": 0.7165313105737893,
+        "feature_name": feature1,
+        Measures.KL_DIVERGENCE: 0.03775534151008829,
+        Measures.JS_DISTANCE: 0.09785224086736323,
+        Measures.INF_NORM_DISTANCE: 0.1111111111111111,
+        Measures.TOTAL_VARIANCE_DISTANCE: 0.1111111111111111,
+        Measures.WS_DISTANCE: 0.07407407407407407,
+        Measures.CHISQ: 0.6666666666666666,
+        Measures.CHISQ_PVALUE: 0.7165313105737893,
     }
-    gender_measures = dist_measures.measures[feature1]
+    df = dist_measures.measures
+    gender_measures = df.loc[df["feature_name"] == feature1].iloc[0].to_dict()
     print(gender_measures)
-    assert gender_measures == approx(exp_feature_1)
+    assert gender_measures == pytest.approx(exp_feature_1)

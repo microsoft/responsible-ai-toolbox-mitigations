@@ -4,13 +4,13 @@ from typing import Dict, Callable, List, Optional
 
 import numpy as np
 import pandas as pd
+from databalanceanalysis.databalanceanalysis.balance_measure import BalanceMeasure
 
 from databalanceanalysis.databalanceanalysis.constants import (
     Measures,
 )
-from databalanceanalysis.databalanceanalysis.distribution_functions import (
-    DistributionFunctions,
-)
+import databalanceanalysis.databalanceanalysis.balance_metric_functions as BalanceMetricFunctions
+
 
 """
 This class computes data balance measures for sensitive columns based on a reference distribution.
@@ -28,42 +28,39 @@ The output is a dictionary that maps the sensitive column name to another dictio
 """
 
 
-class DistributionBalanceMeasures:
-    DISTRIBUTION_METRICS: Dict[Measures : Callable[[np.array, np.array], float]] = {
-        Measures.KL_DIVERGENCE: DistributionFunctions.get_kl_divergence,
-        Measures.JS_DISTANCE: DistributionFunctions.get_js_distance,
-        Measures.WS_DISTANCE: DistributionFunctions.get_ws_distance,
-        Measures.INF_NORM_DISTANCE: DistributionFunctions.get_infinity_norm_distance,
-        Measures.TOTAL_VARIANCE_DISTANCE: DistributionFunctions.get_total_variation_distance,
-        Measures.CHISQ_PVALUE: DistributionFunctions.get_chisq_pvalue,
-        Measures.CHISQ: DistributionFunctions.get_chi_squared,
+class DistributionBalanceMeasure(BalanceMeasure):
+    DISTRIBUTION_METRICS: Dict[Measures, Callable[[np.array, np.array], float]] = {
+        Measures.KL_DIVERGENCE: BalanceMetricFunctions.get_kl_divergence,
+        Measures.JS_DISTANCE: BalanceMetricFunctions.get_js_distance,
+        Measures.WS_DISTANCE: BalanceMetricFunctions.get_ws_distance,
+        Measures.INF_NORM_DISTANCE: BalanceMetricFunctions.get_infinity_norm_distance,
+        Measures.TOTAL_VARIANCE_DISTANCE: BalanceMetricFunctions.get_total_variation_distance,
+        Measures.CHISQ_PVALUE: BalanceMetricFunctions.get_chisq_pvalue,
+        Measures.CHISQ: BalanceMetricFunctions.get_chi_squared,
     }
 
     def __init__(self, df: pd.DataFrame, sensitive_cols: List[str]):
         self._df = df
         self._sensitive_cols = sensitive_cols
-        self._distribution_measures = self.get_all_distribution_measures(
+        self._distribution_measures = self._get_all_distribution_measures(
             df, sensitive_cols
         )
 
-    def get_ref_col(self, ref_dist: str, n: int) -> np.array:
-        if ref_dist == "uniform":
-            uniform_val: float = 1.0 / n
-            return np.ones(n) * uniform_val
-        else:
-            raise Exception("reference distribution not implemented")
+    def _get_ref_col(self, n: int) -> np.array:
+        uniform_val: float = 1.0 / n
+        return np.ones(n) * uniform_val
 
-    def get_distribution_measures(
-        self, df: pd.DataFrame, sensitive_col: str, ref_dist: Optional[str] = "uniform"
+    def _get_distribution_measures(
+        self, df: pd.DataFrame, sensitive_col: str
     ) -> Dict[Measures, float]:
         f_obs = df.groupby(sensitive_col).size().reset_index(name="count")
         sum_obs = f_obs["count"].sum()
         obs = f_obs["count"] / sum_obs
-        ref = self.get_ref_col(ref_dist, f_obs.shape[0])
+        ref = self._get_ref_col(f_obs.shape[0])
         f_ref = ref * sum_obs
 
-        # TODO can change depending on the reference distribution
-        measures = {}
+        # TODO future can change depending on the reference distribution
+        measures = {"feature_name": sensitive_col}
         for measure, func in self.DISTRIBUTION_METRICS.items():
             if measure in [Measures.CHISQ_PVALUE, Measures.CHISQ]:
                 measures[measure] = func(f_obs["count"], f_ref)
@@ -72,14 +69,14 @@ class DistributionBalanceMeasures:
 
         return measures
 
-    def get_all_distribution_measures(
+    def _get_all_distribution_measures(
         self, df: pd.DataFrame, sensitive_cols: List[str]
-    ) -> Dict[str, Dict[Measures, float]]:
-        all_measures = {}
-        for col in sensitive_cols:
-            all_measures[col] = self.get_distribution_measures(df, col)
-        return all_measures
+    ) -> pd.DataFrame:
+        all_measures = [
+            self._get_distribution_measures(df, col) for col in sensitive_cols
+        ]
+        return pd.DataFrame.from_dict(all_measures)
 
     @property
-    def measures(self) -> Dict[str, Dict[Measures, float]]:
+    def measures(self) -> pd.DataFrame:
         return self._distribution_measures

@@ -1,15 +1,14 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from typing import Dict, Callable
+from typing import Dict, Callable, List
 
 import numpy as np
 import pandas as pd
 
 from databalanceanalysis.databalanceanalysis.constants import Measures
-from databalanceanalysis.databalanceanalysis.aggregate_functions import (
-    AggregateFunctions,
-)
+import databalanceanalysis.databalanceanalysis.balance_metric_functions as BalanceMetricFunctions
+
 
 """
 This class computes a set of aggregated balance measures that represents how balanced
@@ -22,21 +21,21 @@ The output is a dictionary that maps the names of the different aggregate measur
 """
 
 
-class AggregateBalanceMeasures:
+class AggregateBalanceMeasure:
 
     AGGREGATE_METRICS: Dict[Measures, Callable[[np.array], float]] = {
-        Measures.THEIL_L_INDEX: AggregateFunctions.get_theil_l_index,
-        Measures.THEIL_T_INDEX: AggregateFunctions.get_theil_t_index,
-        Measures.ATKINSON_INDEX: AggregateFunctions.get_atkinson_index,
+        Measures.THEIL_L_INDEX: BalanceMetricFunctions.get_theil_l_index,
+        Measures.THEIL_T_INDEX: BalanceMetricFunctions.get_theil_t_index,
+        Measures.ATKINSON_INDEX: BalanceMetricFunctions.get_atkinson_index,
     }
 
     def __init__(self, df: pd.DataFrame, sensitive_cols: List[str]):
         self._benefits = df.groupby(sensitive_cols).size() / df.shape[0]
-        self._aggregate_measures = {}
-        for measure in self.aggregate_balance_measures:
-            func = self.AGGREGATE_METRICS[measure]
-            self._aggregate_measures[measure] = func(self._benefits)
+        self._aggregate_measures_dict = {}
+        for measure, func in self.AGGREGATE_METRICS.items():
+            self._aggregate_measures_dict[measure] = [func(self._benefits)]
+        self._aggregate_measures = pd.DataFrame.from_dict(self._aggregate_measures_dict)
 
     @property
-    def measures(self) -> Dict[str, float]:
+    def measures(self) -> pd.DataFrame:
         return self._aggregate_measures
