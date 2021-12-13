@@ -39,12 +39,8 @@ class DistributionBalanceMeasure(BalanceMeasure):
         Measures.CHISQ: BalanceMetricFunctions.get_chi_squared,
     }
 
-    def __init__(self, df: pd.DataFrame, sensitive_cols: List[str]):
-        self._df = df
-        self._sensitive_cols = sensitive_cols
-        self._distribution_measures = self._get_all_distribution_measures(
-            df, sensitive_cols
-        )
+    def __init__(self, sensitive_cols: List[str]):
+        super().__init__(sensitive_cols)
 
     def _get_ref_col(self, n: int) -> np.array:
         uniform_val: float = 1.0 / n
@@ -78,5 +74,8 @@ class DistributionBalanceMeasure(BalanceMeasure):
         return pd.DataFrame.from_dict(all_measures)
 
     @property
-    def measures(self) -> pd.DataFrame:
-        return self._distribution_measures
+    def measures(self, df: pd.DataFrame) -> pd.DataFrame:
+        _distribution_measures = self._get_all_distribution_measures(
+            df, self._sensitive_cols
+        )
+        return _distribution_measures

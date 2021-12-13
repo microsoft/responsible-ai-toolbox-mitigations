@@ -48,11 +48,9 @@ class FeatureBalanceMeasure(BalanceMeasure):
         ): BalanceMetricFunctions.get_t_test_p_value,
     }
 
-    def __init__(self, df: pd.DataFrame, sensitive_cols: List[str], label_col: str):
-        self._df = df
-        self._sensitive_cols = sensitive_cols
+    def __init__(self, sensitive_cols: List[str], label_col: str):
+        super().__init__(sensitive_cols)
         self._label_col = label_col
-        self._feature_measures = self._get_all_gaps(df, sensitive_cols, label_col)
 
     def _get_individual_feature_measures(
         self,
@@ -70,8 +68,8 @@ class FeatureBalanceMeasure(BalanceMeasure):
             / num_rows
         )
         new_df = pd.concat([p_feature_col, p_pos_feature_col], axis=1)
+        new_df["p_pos_feature"] = new_df["p_pos_feature"].fillna(0)
         new_df["p_pos"] = df[df[label_col] == label_pos_val].shape[0] / num_rows
-        new_df = new_df.fillna(0)
         for measure, func in self.FEATURE_METRICS.items():
             new_df[measure] = new_df.apply(
                 lambda x: func(
@@ -117,5 +115,8 @@ class FeatureBalanceMeasure(BalanceMeasure):
         return pd.concat(gap_list)
 
     @property
-    def measures(self) -> pd.DataFrame:
-        return self._feature_measures
+    def measures(self, df: pd.DataFrame) -> pd.DataFrame:
+        _feature_measures = self._get_all_gaps(
+            df, self._sensitive_cols, self._label_col
+        )
+        return _feature_measures
