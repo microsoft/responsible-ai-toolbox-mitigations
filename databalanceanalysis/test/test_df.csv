@@ -1,0 +1,10 @@
+Label, Gender, Ethnicity
+0, Male, Asian
+0, Male, White
+1, Male, Other
+1, Male, Black
+0, Female, White
+0, Female, Black
+1, Female, Black
+0, Other, Asian
+0, Other, White
