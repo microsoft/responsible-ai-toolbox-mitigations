@@ -49,7 +49,7 @@ class FeatureBalanceMeasure(BalanceMeasure):
     }
 
     def __init__(self, sensitive_cols: List[str], label_col: str):
-        super().__init__(sensitive_cols)
+        super().__init__(sensitive_cols=sensitive_cols)
         self._label_col = label_col
 
     def _get_individual_feature_measures(
@@ -114,7 +114,6 @@ class FeatureBalanceMeasure(BalanceMeasure):
         gap_list = [self._get_gaps(df, col, label_col) for col in sensitive_cols]
         return pd.concat(gap_list)
 
-    @property
     def measures(self, df: pd.DataFrame) -> pd.DataFrame:
         _feature_measures = self._get_all_gaps(
             df, self._sensitive_cols, self._label_col

@@ -31,9 +31,8 @@ class AggregateBalanceMeasure(BalanceMeasure):
     }
 
     def __init__(self, sensitive_cols: List[str]):
-        super().__init__(sensitive_cols)
+        super().__init__(sensitive_cols=sensitive_cols)
 
-    @property
     def measures(self, df: pd.DataFrame) -> pd.DataFrame:
         _aggregate_measures_dict = {}
         _benefits = df.groupby(self._sensitive_cols).size() / df.shape[0]

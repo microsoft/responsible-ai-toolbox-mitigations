@@ -10,7 +10,7 @@ from databalanceanalysis.databalanceanalysis.constants import Measures
 def test_distribution_measures(small_df):
     feature1 = small_df.columns[1]
     feature2 = small_df.columns[2]
-    dist_measures = DistributionBalanceMeasure(small_df, [feature1, feature2])
+    dist_measures = DistributionBalanceMeasure([feature1, feature2])
     exp_feature_1 = {
         "feature_name": feature1,
         Measures.KL_DIVERGENCE: 0.03775534151008829,
@@ -21,7 +21,7 @@ def test_distribution_measures(small_df):
         Measures.CHISQ: 0.6666666666666666,
         Measures.CHISQ_PVALUE: 0.7165313105737893,
     }
-    df = dist_measures.measures
+    df = dist_measures.measures(small_df)
     gender_measures = df.loc[df["feature_name"] == feature1].iloc[0].to_dict()
     print(gender_measures)
     assert gender_measures == pytest.approx(exp_feature_1)

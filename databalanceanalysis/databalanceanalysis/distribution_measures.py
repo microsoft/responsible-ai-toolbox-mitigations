@@ -40,9 +40,11 @@ class DistributionBalanceMeasure(BalanceMeasure):
     }
 
     def __init__(self, sensitive_cols: List[str]):
-        super().__init__(sensitive_cols)
+        super().__init__(sensitive_cols=sensitive_cols)
 
-    def _get_ref_col(self, n: int) -> np.array:
+    # given the distribution, get the column of values
+    def _get_ref_col(self, n: int, ref_dist: Dict[str, float] = None) -> np.array:
+        # if ref_dist == None:
         uniform_val: float = 1.0 / n
         return np.ones(n) * uniform_val
 
@@ -52,6 +54,8 @@ class DistributionBalanceMeasure(BalanceMeasure):
         f_obs = df.groupby(sensitive_col).size().reset_index(name="count")
         sum_obs = f_obs["count"].sum()
         obs = f_obs["count"] / sum_obs
+        print("f_obs")
+        print(f_obs)
         ref = self._get_ref_col(f_obs.shape[0])
         f_ref = ref * sum_obs
 
@@ -73,7 +77,6 @@ class DistributionBalanceMeasure(BalanceMeasure):
         ]
         return pd.DataFrame.from_dict(all_measures)
 
-    @property
     def measures(self, df: pd.DataFrame) -> pd.DataFrame:
         _distribution_measures = self._get_all_distribution_measures(
             df, self._sensitive_cols
