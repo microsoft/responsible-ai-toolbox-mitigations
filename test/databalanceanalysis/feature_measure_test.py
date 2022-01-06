@@ -1,7 +1,9 @@
 from abc import abstractproperty
 from pandas.core import api
 import pytest
+import sys
 
+sys.path.append("../../../ResponsibleAIToolbox-Mitigation")
 from databalanceanalysis.databalanceanalysis.feature_measures import (
     FeatureBalanceMeasure,
 )

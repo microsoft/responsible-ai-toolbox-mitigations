@@ -1,6 +1,8 @@
 import pytest
 import pandas as pd
+import sys
 
+sys.path.append("../../../ResponsibleAIToolbox-Mitigation")
 from databalanceanalysis.databalanceanalysis.distribution_measures import (
     DistributionBalanceMeasure,
 )

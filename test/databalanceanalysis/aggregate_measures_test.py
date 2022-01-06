@@ -1,6 +1,7 @@
 import pytest
+import sys
 
-
+sys.path.append("../../../ResponsibleAIToolbox-Mitigation")
 from databalanceanalysis.databalanceanalysis.aggregate_measures import (
     AggregateBalanceMeasure,
 )
