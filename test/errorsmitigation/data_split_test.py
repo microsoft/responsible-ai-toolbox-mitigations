@@ -19,12 +19,12 @@ from errorsmitigation.dataprocessing import DataSplit
 #           drop_duplicates = False
 #           is_stratify = False
 
-pytest.global_variable_1 = "datasets/hr_promotion_test"
+pytest.global_variable_1 = "test/datasets/hr_promotion_test"
 pytest.hr_promotion_TEST = pd.read_csv(
-    "datasets/hr_promotion_test" + "/train.csv"
+    "test/datasets/hr_promotion_test" + "/train.csv"
 ).drop(["employee_id"], axis=1)
-pytest.global_variable_3 = "datasets/hr_promotion"
-pytest.hr_promotion = pd.read_csv("datasets/hr_promotion" + "/train.csv").drop(
+pytest.global_variable_3 = "test/datasets/hr_promotion"
+pytest.hr_promotion = pd.read_csv("test/datasets/hr_promotion" + "/train.csv").drop(
     ["employee_id"], axis=1
 )
 

@@ -20,7 +20,7 @@ from errorsmitigation.dataprocessing import DataTransformer
 #           output_distribution  = 'uniform'
 
 pytest.hr_promotion_TEST = pd.read_csv(
-    "datasets/hr_promotion_test" + "/train.csv"
+    "test/datasets/hr_promotion_test" + "/train.csv"
 ).drop(["employee_id"], axis=1)
 pytest.seed = 42
 
@@ -58,7 +58,9 @@ def test_data_transf_allfeatures(hr_data_test, target_index_promoted):
     )
     result = data_transform.Transform()
 
-    expected = pd.DataFrame(pd.read_pickle("datasets/transfer" + "/transfAll.pickle"))
+    expected = pd.DataFrame(
+        pd.read_pickle("test/datasets/transfer" + "/transfAll.pickle")
+    )
 
     assert result.equals(expected)
 
@@ -78,7 +80,7 @@ def test_data_transf_allfeatures_diffTargetIndex(
     result = data_transform.Transform()
 
     expected = pd.DataFrame(
-        pd.read_pickle("datasets/transfer" + "/transfAllDiffIndex.pickle")
+        pd.read_pickle("test/datasets/transfer" + "/transfAllDiffIndex.pickle")
     )
 
     assert result.equals(expected)
@@ -100,7 +102,9 @@ def test_data_transf_StandardScalerFeat_None(hr_data_test, target_index_promoted
     )
     result = data_transform.Transform()
 
-    expected = pd.DataFrame(pd.read_pickle("datasets/transfer" + "/transfAll.pickle"))
+    expected = pd.DataFrame(
+        pd.read_pickle("test/datasets/transfer" + "/transfAll.pickle")
+    )
 
     assert result.equals(expected)
 
@@ -127,7 +131,7 @@ def test_data_transf_StandardScaler(hr_data_test, target_index_promoted):
     result = data_transform.Transform()
 
     expected = pd.DataFrame(
-        pd.read_pickle("datasets/transfer" + "/transfStandardScaler.pickle")
+        pd.read_pickle("test/datasets/transfer" + "/transfStandardScaler.pickle")
     )
 
     assert result.equals(expected)
@@ -152,7 +156,9 @@ def test_data_transf_StandardScaler_OneFeature_DiffTargetIndex(
     result = data_transform.Transform()
 
     expected = pd.DataFrame(
-        pd.read_pickle("datasets/transfer" + "/transfStandardScalerDiffIndexAge.pickle")
+        pd.read_pickle(
+            "test/datasets/transfer" + "/transfStandardScalerDiffIndexAge.pickle"
+        )
     )
 
     assert result.equals(expected)
@@ -180,7 +186,7 @@ def test_data_transf_MinMaxScaler(hr_data_test, target_index_promoted):
     result = data_transform.Transform()
 
     expected = pd.DataFrame(
-        pd.read_pickle("datasets/transfer" + "/transfMinMax.pickle")
+        pd.read_pickle("test/datasets/transfer" + "/transfMinMax.pickle")
     )
 
     assert result.equals(expected)
@@ -203,7 +209,7 @@ def test_data_transf_MinMaxScaler_Feat_None(hr_data_test, target_index_promoted)
     result = data_transform.Transform()
 
     expected = pd.DataFrame(
-        pd.read_pickle("datasets/transfer" + "/transfMinMaxNone.pickle")
+        pd.read_pickle("test/datasets/transfer" + "/transfMinMaxNone.pickle")
     )
 
     assert result.equals(expected)
@@ -231,7 +237,7 @@ def test_data_transf_Robust(hr_data_test, target_index_promoted):
     result2 = data_transform2.Transform()
 
     expected = pd.DataFrame(
-        pd.read_pickle("datasets/transfer" + "/transfRobust.pickle")
+        pd.read_pickle("test/datasets/transfer" + "/transfRobust.pickle")
     )
 
     assert result2.equals(expected)
@@ -258,7 +264,9 @@ def test_data_transf_Power(hr_data_test, target_index_promoted):
     )
     result2 = data_transform2.Transform()
 
-    expected = pd.DataFrame(pd.read_pickle("datasets/transfer" + "/transfPower.pickle"))
+    expected = pd.DataFrame(
+        pd.read_pickle("test/datasets/transfer" + "/transfPower.pickle")
+    )
 
     assert result2.equals(expected)
 
@@ -285,7 +293,7 @@ def test_data_transf_Quantile(hr_data_test, target_index_promoted):
     result2 = data_transform2.Transform()
 
     expected = pd.DataFrame(
-        pd.read_pickle("datasets/transfer" + "/transfQuantile.pickle")
+        pd.read_pickle("test/datasets/transfer" + "/transfQuantile.pickle")
     )
 
     assert result2.equals(expected)
@@ -313,7 +321,7 @@ def test_data_transf_Normalizer(hr_data_test, target_index_promoted):
     result2 = data_transform2.Transform()
 
     expected = pd.DataFrame(
-        pd.read_pickle("datasets/transfer" + "/transfNormalizer.pickle")
+        pd.read_pickle("test/datasets/transfer" + "/transfNormalizer.pickle")
     )
 
     assert result2.equals(expected)
@@ -342,7 +350,7 @@ def test_data_transf_method_boxcox(hr_data_test, target_index_promoted):
     result = data_transform2.Transform()
 
     expected = pd.DataFrame(
-        pd.read_pickle("datasets/transfer" + "/transfboxcox.pickle")
+        pd.read_pickle("test/datasets/transfer" + "/transfboxcox.pickle")
     )
 
     assert result.equals(expected)
@@ -371,7 +379,7 @@ def test_data_transf_method_yeojohnson(hr_data_test, target_index_promoted):
     result = data_transform.Transform()
 
     expected = pd.DataFrame(
-        pd.read_pickle("datasets/transfer" + "/transfyeojohnson.pickle")
+        pd.read_pickle("test/datasets/transfer" + "/transfyeojohnson.pickle")
     )
 
     assert result.equals(expected)
@@ -395,7 +403,7 @@ def test_data_transf_method_subsetFeatures(hr_data_test, target_index_promoted):
     result = data_transform.Transform()
 
     expected = pd.DataFrame(
-        pd.read_pickle("datasets/transfer" + "/subsetFeatures.pickle")
+        pd.read_pickle("test/datasets/transfer" + "/subsetFeatures.pickle")
     )
 
     assert result.equals(expected)
@@ -420,7 +428,7 @@ def test_data_transf_output_distribution_Normal(hr_data_test, target_index_promo
     result = data_transform.Transform()
 
     expected = pd.DataFrame(
-        pd.read_pickle("datasets/transfer" + "/transfDistribNormal.pickle")
+        pd.read_pickle("test/datasets/transfer" + "/transfDistribNormal.pickle")
     )
 
     assert result.equals(expected)
@@ -445,7 +453,7 @@ def test_data_transf_output_distribution_Uniform(hr_data_test, target_index_prom
     result = data_transform.Transform()
 
     expected = pd.DataFrame(
-        pd.read_pickle("datasets/transfer" + "/transfDistribUniform.pickle")
+        pd.read_pickle("test/datasets/transfer" + "/transfDistribUniform.pickle")
     )
 
     # Verifying that QuantileTransformer provides a non-parametric transformation to map the data to a uniform distribution with values between 0 and 1

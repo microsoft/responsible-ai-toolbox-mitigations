@@ -24,27 +24,27 @@ from errorsmitigation.dataprocessing import DataRebalance
 #           tomek=None
 
 # LOGGER = logging.getLogger(__name__)
-pytest.hr_test_PATH = "datasets/hr_promotion_test"
+pytest.hr_test_PATH = "test/datasets/hr_promotion_test"
 pytest.hr_promotion_TEST = pd.read_csv(pytest.hr_test_PATH + "/train.csv").drop(
     ["employee_id"], axis=1
 )
 
-pytest.hr_PATH = "datasets/hr_promotion"
+pytest.hr_PATH = "test/datasets/hr_promotion"
 pytest.hr_promotion = pd.read_csv(pytest.hr_PATH + "/train.csv").drop(
     ["employee_id"], axis=1
 )
 
-pytest.hr_10_PATH = "datasets/hr_promotion_10"
+pytest.hr_10_PATH = "test/datasets/hr_promotion_10"
 pytest.hr_promotion_10 = pd.read_csv(pytest.hr_10_PATH + "/train.csv").drop(
     ["employee_id"], axis=1
 )
 
-pytest.hr_30_PATH = "datasets/hr_promotion_30"
+pytest.hr_30_PATH = "test/datasets/hr_promotion_30"
 pytest.hr_promotion_30 = pd.read_csv(pytest.hr_30_PATH + "/train.csv").drop(
     ["employee_id"], axis=1
 )
 
-pytest.hr_50_PATH = "datasets/hr_promotion_50"
+pytest.hr_50_PATH = "test/datasets/hr_promotion_50"
 pytest.hr_promotion_50 = pd.read_csv(pytest.hr_50_PATH + "/train.csv").drop(
     ["employee_id"], axis=1
 )
