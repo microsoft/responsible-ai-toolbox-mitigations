@@ -2,7 +2,6 @@
 import pandas as pd
 from errorsmitigation.dataprocessing import DataTransformer
 
-
 # unit test for the DataTransform API
 def test_data_transform():
     # load the training dataset
@@ -20,11 +19,11 @@ def test_data_transform():
     # output_distribution  = 'uniform' 
     # transform_features = None
     
-    # transform_features = ['department', 'region', 'education','gender','recruitment_channel']
+    transform_features = ['department', 'region', 'education','gender','recruitment_channel']
     # transform_features = [0,1,2,3,4]
 
     target_index = hr_data.columns.get_loc('is_promoted')
-    data_transform =  DataTransformer(hr_data, target_index, DataTransformer.TransformerType.StandardScaler, None, seed) 
+    data_transform =  DataTransformer(hr_data, target_index, DataTransformer.TransformerType.StandardScaler, transform_features, seed)
     X = data_transform.Transform()
 
     print('')
