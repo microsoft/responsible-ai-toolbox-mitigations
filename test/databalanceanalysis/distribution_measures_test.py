@@ -1,18 +1,23 @@
 import pytest
 import pandas as pd
 import sys
+import os
 
 sys.path.append("../../../ResponsibleAIToolbox-Mitigation")
-from databalanceanalysis.databalanceanalysis.distribution_measures import (
-    DistributionBalanceMeasure,
-)
+from databalanceanalysis.databalanceanalysis import distribution_measures
 from databalanceanalysis.databalanceanalysis.constants import Measures
+
+
+@pytest.fixture
+def small_df():
+    filepath = "test/databalanceanalysis/"
+    return pd.read_csv(os.path.join(os.getcwd(), filepath + "test_df.csv"))
 
 
 def test_distribution_measures(small_df):
     feature1 = small_df.columns[1]
     feature2 = small_df.columns[2]
-    dist_measures = DistributionBalanceMeasure([feature1, feature2])
+    dist_measures = distribution_measures.DistributionBalanceMeasure([feature1, feature2])
     exp_feature_1 = {
         "feature_name": feature1,
         Measures.KL_DIVERGENCE: 0.03775534151008829,

@@ -2,14 +2,20 @@ from abc import abstractproperty
 from pandas.core import api
 import pytest
 import sys
+import os
+import pandas as pd
 
 sys.path.append("../../../ResponsibleAIToolbox-Mitigation")
-from databalanceanalysis.databalanceanalysis.feature_measures import (
-    FeatureBalanceMeasure,
-)
+from databalanceanalysis.databalanceanalysis import feature_measures
 from databalanceanalysis.databalanceanalysis.constants import Measures
 
 # run the tests using this command: python -m pytest
+
+
+@pytest.fixture
+def small_df():
+    filepath = "test/databalanceanalysis/"
+    return pd.read_csv(os.path.join(os.getcwd(), filepath + "test_df.csv"))
 
 
 def test_feature_balance_measures(small_df):
@@ -18,7 +24,7 @@ def test_feature_balance_measures(small_df):
     gender1 = small_df[feature1].unique()[0]
     gender2 = small_df[feature1].unique()[1]
     feature2 = small_df.columns[2]
-    feat_measures = FeatureBalanceMeasure([feature1], label)
+    feat_measures = feature_measures.FeatureBalanceMeasure([feature1], label)
     exp_male_female = {
         "feature_name": feature1,
         "classA": gender1,
