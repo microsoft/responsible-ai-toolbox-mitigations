@@ -54,8 +54,6 @@ class DistributionBalanceMeasure(BalanceMeasure):
         f_obs = df.groupby(sensitive_col).size().reset_index(name="count")
         sum_obs = f_obs["count"].sum()
         obs = f_obs["count"] / sum_obs
-        print("f_obs")
-        print(f_obs)
         ref = self._get_ref_col(f_obs.shape[0])
         f_ref = ref * sum_obs
 
