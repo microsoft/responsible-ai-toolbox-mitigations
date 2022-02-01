@@ -4,27 +4,17 @@ from typing import Dict, Callable, List, Optional
 
 import numpy as np
 import pandas as pd
-from databalanceanalysis.databalanceanalysis.balance_measure import BalanceMeasure
+from databalanceanalysis.balance_measure import BalanceMeasure
 
-from databalanceanalysis.databalanceanalysis.constants import (
+from databalanceanalysis.constants import (
     Measures,
 )
-import databalanceanalysis.databalanceanalysis.balance_metric_functions as BalanceMetricFunctions
+import databalanceanalysis.balance_metric_functions as BalanceMetricFunctions
 
 
 """
 This class computes data balance measures for sensitive columns based on a reference distribution.
 For now, we only support a uniform reference distribution.
-
-The output is a dictionary that maps the sensitive column name to another dictionary:
-    the dictionary for each sensitive column contains a mapping of the name of a measure to its value 
-        - Kullback-Leibler Divergence - https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence
-        - Jensen-Shannon Distance - https://en.wikipedia.org/wiki/Jensen%E2%80%93Shannon_divergence
-        - Wasserstein Distance - https://en.wikipedia.org/wiki/Wasserstein_metric
-        - Infinity Norm Distance - https://en.wikipedia.org/wiki/Chebyshev_distance
-        - Total Variation Distance - https://en.wikipedia.org/wiki/Total_variation_distance_of_probability_measures
-        - Chi-Squared Test - https://en.wikipedia.org/wiki/Chi-squared_test
-    There is one dictionary for each of the sensitive columns specified
 """
 
 
@@ -44,7 +34,6 @@ class DistributionBalanceMeasure(BalanceMeasure):
 
     # given the distribution, get the column of values
     def _get_ref_col(self, n: int, ref_dist: Dict[str, float] = None) -> np.array:
-        # if ref_dist == None:
         uniform_val: float = 1.0 / n
         return np.ones(n) * uniform_val
 
@@ -76,6 +65,17 @@ class DistributionBalanceMeasure(BalanceMeasure):
         return pd.DataFrame.from_dict(all_measures)
 
     def measures(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        The output is a dictionary that maps the sensitive column name to another dictionary:
+            the dictionary for each sensitive column contains a mapping of the name of a measure to its value
+                - Kullback-Leibler Divergence - https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence
+                - Jensen-Shannon Distance - https://en.wikipedia.org/wiki/Jensen%E2%80%93Shannon_divergence
+                - Wasserstein Distance - https://en.wikipedia.org/wiki/Wasserstein_metric
+                - Infinity Norm Distance - https://en.wikipedia.org/wiki/Chebyshev_distance
+                - Total Variation Distance - https://en.wikipedia.org/wiki/Total_variation_distance_of_probability_measures
+                - Chi-Squared Test - https://en.wikipedia.org/wiki/Chi-squared_test
+            There is one dictionary for each of the sensitive columns specified
+        """
         _distribution_measures = self._get_all_distribution_measures(
             df, self._sensitive_cols
         )

@@ -21,7 +21,7 @@ _MESSAGE_TARGET_NOT_PROVIDED = "The dataset target is a required parameter."
 _MESSAGE_INDEX_NOT_FOUND = "Index is not found."
 
 
-class DataTransformer:
+class Transformer:
 
     r"""
 
@@ -158,7 +158,7 @@ class DataTransformer:
 
         return feat_pipe.fit_transform(X)
 
-    def Transform(self):
+    def transform(self):
 
         if self.transform_features is not None:
             # Split features

@@ -5,20 +5,15 @@ from typing import Dict, Callable, List
 
 import numpy as np
 import pandas as pd
-from databalanceanalysis.databalanceanalysis.balance_measure import BalanceMeasure
+from databalanceanalysis.balance_measure import BalanceMeasure
 
-from databalanceanalysis.databalanceanalysis.constants import Measures
-import databalanceanalysis.databalanceanalysis.balance_metric_functions as BalanceMetricFunctions
+from databalanceanalysis.constants import Measures
+import databalanceanalysis.balance_metric_functions as BalanceMetricFunctions
 
 
 """
 This class computes a set of aggregated balance measures that represents how balanced
 the given dataframe is along the given sensitive features.
-  
-The output is a dictionary that maps the names of the different aggregate measures to their values:
-    The following measures are computed:
-    - Atkinson Index - https://en.wikipedia.org/wiki/Atkinson_index
-    - Theil Index (L and T) - https://en.wikipedia.org/wiki/Theil_index
 """
 
 
@@ -34,6 +29,12 @@ class AggregateBalanceMeasure(BalanceMeasure):
         super().__init__(sensitive_cols=sensitive_cols)
 
     def measures(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        The output is a dictionary that maps the names of the different aggregate measures to their values:
+            The following measures are computed:
+            - Atkinson Index - https://en.wikipedia.org/wiki/Atkinson_index
+            - Theil Index (L and T) - https://en.wikipedia.org/wiki/Theil_index
+        """
         _aggregate_measures_dict = {}
         _benefits = df.groupby(self._sensitive_cols).size() / df.shape[0]
         for measure, func in self.AGGREGATE_METRICS.items():
