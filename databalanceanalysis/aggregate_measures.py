@@ -30,10 +30,15 @@ class AggregateBalanceMeasure(BalanceMeasure):
 
     def measures(self, df: pd.DataFrame) -> pd.DataFrame:
         """
-        The output is a dictionary that maps the names of the different aggregate measures to their values:
+        The output is a dataframe that maps the names of the different aggregate measures to their values:
             The following measures are computed:
             - Atkinson Index - https://en.wikipedia.org/wiki/Atkinson_index
             - Theil Index (L and T) - https://en.wikipedia.org/wiki/Theil_index
+
+        :param df: the df to calculate aggregate measures on
+        :type df: pd.DataFrame
+        :return: returns a dataframe that has one column that is the name of the aggregate measure, the second column contains the values for each of the metrics of interest.
+        :rtype: pd.DataFrame
         """
         _aggregate_measures_dict = {}
         _benefits = df.groupby(self._sensitive_cols).size() / df.shape[0]

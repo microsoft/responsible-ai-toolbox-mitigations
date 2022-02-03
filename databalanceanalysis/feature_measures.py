@@ -120,5 +120,11 @@ class FeatureBalanceMeasure(BalanceMeasure):
             - Log-Likelihood Ratio - https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio
             - t-test - https://en.wikipedia.org/wiki/Student's_t-test
         This output dataframe contains a row per combination of feature values for each sensitive feature.
+        
+        :param df: the df to calculate all of the feature balance measures on
+        :type df: pd.DataFrame
+        :return:  a dataframe that contains 4 columns, first column is the sensitive feature's name, 2nd column is one possible value of that sensitive feature, 
+        the 3rd column is a different possible value of that feature and the last column is a dictionary which indicates 
+        :rtype: pd.DataFrame
         """
         return _feature_measures
