@@ -7,11 +7,8 @@ setup(
     author_email="aksharar@microsoft.com",
     description="Data Balance Analysis and Error mitigation steps on python",
     packages=find_packages(
-        include=[
-            "raimitigations.databalanceanalysis",
-            "raimitigations.dataprocessing",
-            "test",
-        ]
+        exclude=["test"],
+        include=["raimitigations.databalanceanalysis", "raimitigations.dataprocessing"],
     ),
     install_requires=[
         "pandas",
