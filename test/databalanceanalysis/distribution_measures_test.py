@@ -19,7 +19,7 @@ def test_distribution_measures(small_df):
     feature2 = small_df.columns[2]
     dist_measures = DistributionBalanceMeasure([feature1, feature2])
     exp_feature_1 = {
-        "feature_name": feature1,
+        "FeatureName": feature1,
         "kl_divergence": 0.03775534151008829,
         "js_dist": 0.09785224086736323,
         "inf_norm_dist": 0.1111111111111111,
@@ -29,6 +29,6 @@ def test_distribution_measures(small_df):
         "chi_sq_p_value": 0.7165313105737893,
     }
     df = dist_measures.measures(small_df)
-    gender_measures = df.loc[df["feature_name"] == feature1].iloc[0].to_dict()
+    gender_measures = df.loc[df["FeatureName"] == feature1].iloc[0].to_dict()
     print(gender_measures)
     assert gender_measures == pytest.approx(exp_feature_1)

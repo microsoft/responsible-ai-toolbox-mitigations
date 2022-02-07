@@ -25,9 +25,9 @@ def test_feature_balance_measures(small_df):
     feature2 = small_df.columns[2]
     feat_measures = FeatureBalanceMeasure([feature1], label)
     exp_male_female = {
-        "feature_name": feature1,
-        "classA": gender1,
-        "classB": gender2,
+        "FeatureName": feature1,
+        "ClassA": gender1,
+        "ClassB": gender2,
         "dp": 0.16666666666666669,
         "krc": 0.18801108758923135,
         "sdc": 0.1190476190476191,
@@ -37,6 +37,7 @@ def test_feature_balance_measures(small_df):
         "t_test": 0.19245008972987523,
     }
 
+    print(feat_measures.measures(small_df).iloc[0].to_dict())
     assert feat_measures.measures(small_df).iloc[0].to_dict()[
-        "feature_name"
-    ] == pytest.approx(exp_male_female["feature_name"])
+        "FeatureName"
+    ] == pytest.approx(exp_male_female["FeatureName"])

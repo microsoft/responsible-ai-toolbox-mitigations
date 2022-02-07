@@ -45,7 +45,7 @@ class DistributionBalanceMeasure(BalanceMeasure):
         f_ref = ref * sum_obs
 
         # TODO future can change depending on the reference distribution
-        measures = {"feature_name": sensitive_col}
+        measures = {"FeatureName": sensitive_col}
         for measure, func in self.DISTRIBUTION_METRICS.items():
             if measure in [Measures.CHISQ_PVALUE, Measures.CHISQ]:
                 measures[measure.value] = func(f_obs["count"], f_ref)
