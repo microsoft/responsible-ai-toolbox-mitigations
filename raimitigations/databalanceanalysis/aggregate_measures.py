@@ -5,10 +5,11 @@ from typing import Dict, Callable, List
 
 import numpy as np
 import pandas as pd
-from databalanceanalysis.balance_measure import BalanceMeasure
 
-from databalanceanalysis.constants import Measures
-import databalanceanalysis.balance_metric_functions as BalanceMetricFunctions
+
+from raimitigations.databalanceanalysis.constants import Measures
+from raimitigations.databalanceanalysis.balance_measure import BalanceMeasure
+import raimitigations.databalanceanalysis.balance_metric_functions as BalanceMetricFunctions
 
 
 """
@@ -43,6 +44,6 @@ class AggregateBalanceMeasure(BalanceMeasure):
         _aggregate_measures_dict = {}
         _benefits = df.groupby(self._sensitive_cols).size() / df.shape[0]
         for measure, func in self.AGGREGATE_METRICS.items():
-            _aggregate_measures_dict[measure] = [func(_benefits)]
+            _aggregate_measures_dict[measure.value] = [func(_benefits)]
         _aggregate_measures = pd.DataFrame.from_dict(_aggregate_measures_dict)
         return _aggregate_measures

@@ -5,10 +5,10 @@ from typing import Dict, Callable, List, Tuple
 
 import pandas as pd
 import itertools
-from databalanceanalysis.balance_measure import BalanceMeasure
+from raimitigations.databalanceanalysis.balance_measure import BalanceMeasure
 
-from databalanceanalysis.constants import Measures
-import databalanceanalysis.balance_metric_functions as BalanceMetricFunctions
+from raimitigations.databalanceanalysis.constants import Measures
+import raimitigations.databalanceanalysis.balance_metric_functions as BalanceMetricFunctions
 
 
 """
@@ -60,7 +60,7 @@ class FeatureBalanceMeasure(BalanceMeasure):
         new_df["p_pos_feature"] = new_df["p_pos_feature"].fillna(0)
         new_df["p_pos"] = df[df[label_col] == label_pos_val].shape[0] / num_rows
         for measure, func in self.FEATURE_METRICS.items():
-            new_df[measure] = new_df.apply(
+            new_df[measure.value] = new_df.apply(
                 lambda x: func(
                     x["p_pos"], x["p_feature"], x["p_pos_feature"], num_rows
                 ),
@@ -84,11 +84,11 @@ class FeatureBalanceMeasure(BalanceMeasure):
         for measure in self.FEATURE_METRICS.keys():
             classA_metric = gap_df[FeatureBalanceMeasure.CLASS_A].apply(
                 lambda x: metrics_df.loc[x]
-            )[measure]
+            )[measure.value]
             classB_metric = gap_df[FeatureBalanceMeasure.CLASS_B].apply(
                 lambda x: metrics_df.loc[x]
-            )[measure]
-            gap_df[measure] = classA_metric - classB_metric
+            )[measure.value]
+            gap_df[measure.value] = classA_metric - classB_metric
 
         # For overall stats
         for (measure, test_stat), func in self.OVERALL_METRICS.items():

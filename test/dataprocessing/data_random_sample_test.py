@@ -3,11 +3,10 @@ import sys
 import copy
 import pandas as pd
 
-sys.path.append("../../../ResponsibleAIToolbox-Mitigation/")
+sys.path.append("../../../responsible-ai-mitigations")
+from raimitigations.dataprocessing import RandomSample
 
-from errorsmitigation.dataprocessing import DataSample
-
-# data_random_sample = DataSample(data_set, target, sample_size, stratify)
+# data_random_sample = RandomSample(data_set, target, sample_size, stratify)
 # Parameters:
 #           dataset
 #           target
@@ -60,11 +59,11 @@ def target_index_no_trainings(data_set):
 @pytest.mark.Functional
 def test_data_randomSample_split_categorical(data_set, target_index_promoted):
 
-    """Data RandomSample test with split rate 0.2, drop_null and categorical features. API call: DataSample(hr_data, target_index, 0.2, True)"""
+    """Data RandomSample test with split rate 0.2, drop_null and categorical features. API call: RandomSample(hr_data, target_index, 0.2, True)"""
 
-    data_sample = DataSample(data_set, target_index_promoted, 0.2, True)
+    data_sample = RandomSample(data_set, target_index_promoted, 0.2, True)
 
-    random_sample_split = data_sample.RandomSample()
+    random_sample_split = data_sample.random_sample()
 
     assert random_sample_split.shape[0] == 8
     assert random_sample_split.shape[1] == 45
@@ -73,11 +72,11 @@ def test_data_randomSample_split_categorical(data_set, target_index_promoted):
 @pytest.mark.Functional
 def test_data_randomSample_split_not_categorical(data_set, target_index_promoted):
 
-    """Data RandomSample test with split rate 0.2, drop_null and not categorical features. API call: DataSample(hr_data, target_index, 0.2, False)"""
+    """Data RandomSample test with split rate 0.2, drop_null and not categorical features. API call: RandomSample(hr_data, target_index, 0.2, False)"""
 
-    data_sample = DataSample(data_set, target_index_promoted, 0.2, False)
+    data_sample = RandomSample(data_set, target_index_promoted, 0.2, False)
 
-    random_sample_split = data_sample.RandomSample()
+    random_sample_split = data_sample.random_sample()
 
     assert random_sample_split.shape[1] == 13
 
@@ -85,11 +84,11 @@ def test_data_randomSample_split_not_categorical(data_set, target_index_promoted
 @pytest.mark.Functional
 def test_data_randomSample_default_dup(data_set, target_index_promoted):
 
-    """Data RandomSample test with split rate 0.2, drop_null and drop_duplicates. API call: DataSample(hr_data, target_index_promoted, 0.2, True, True)"""
+    """Data RandomSample test with split rate 0.2, drop_null and drop_duplicates. API call: RandomSample(hr_data, target_index_promoted, 0.2, True, True)"""
 
-    data_sample = DataSample(data_set, target_index_promoted, 0.2, True, True)
+    data_sample = RandomSample(data_set, target_index_promoted, 0.2, True, True)
 
-    random_sample = data_sample.RandomSample()
+    random_sample = data_sample.random_sample()
 
     assert random_sample.shape[0] == 8
 
@@ -97,11 +96,11 @@ def test_data_randomSample_default_dup(data_set, target_index_promoted):
 @pytest.mark.Functional
 def test_data_randomSample_split_dropNulDup(data_set, target_index_promoted):
 
-    """Data RandomSample test with split rate 0.2, drop_null and drop_duplicates. API call: DataSample(hr_data, target_index_promoted, 0.2, False, True, True, True)"""
+    """Data RandomSample test with split rate 0.2, drop_null and drop_duplicates. API call: RandomSample(hr_data, target_index_promoted, 0.2, False, True, True, True)"""
 
-    data_sample = DataSample(data_set, target_index_promoted, 0.2, True, True, True)
+    data_sample = RandomSample(data_set, target_index_promoted, 0.2, True, True, True)
 
-    random_sample = data_sample.RandomSample()
+    random_sample = data_sample.random_sample()
 
     assert random_sample.shape[0] == 8
 
@@ -109,11 +108,11 @@ def test_data_randomSample_split_dropNulDup(data_set, target_index_promoted):
 @pytest.mark.Functional
 def test_data_randomSample_split_dropDup(data_set, target_index_promoted):
 
-    """Data RandomSample test with split rate 0.3, drop_null and drop_duplicates. API call: DataSample(hr_data, target_index_promoted, 0.2, True, False, True)"""
+    """Data RandomSample test with split rate 0.3, drop_null and drop_duplicates. API call: RandomSample(hr_data, target_index_promoted, 0.2, True, False, True)"""
 
-    data_sample = DataSample(data_set, target_index_promoted, 0.3, True, False, True)
+    data_sample = RandomSample(data_set, target_index_promoted, 0.3, True, False, True)
 
-    random_sample = data_sample.RandomSample()
+    random_sample = data_sample.random_sample()
 
     assert random_sample.shape[0] == 14
 
@@ -121,13 +120,13 @@ def test_data_randomSample_split_dropDup(data_set, target_index_promoted):
 @pytest.mark.Functional
 def test_data_randomSample_split_noDrops(data_set, target_index_promoted):
 
-    """Data RandomSample test with split rate 0.2, no drop_null and no drop_duplicates. API call: DataSample(hr_data, target_index_promoted, 0.2, True, False, False, False)"""
+    """Data RandomSample test with split rate 0.2, no drop_null and no drop_duplicates. API call: RandomSample(hr_data, target_index_promoted, 0.2, True, False, False, False)"""
 
-    data_sample = DataSample(
+    data_sample = RandomSample(
         data_set, target_index_promoted, 0.2, True, False, False, False
     )
 
-    random_sample = data_sample.RandomSample()
+    random_sample = data_sample.random_sample()
 
     assert random_sample.shape[0] == 10
 
@@ -135,17 +134,17 @@ def test_data_randomSample_split_noDrops(data_set, target_index_promoted):
 @pytest.mark.Functional
 def test_data_randomSample_stratifyOnOff(data_large_set, target_index_promoted_largeDS):
 
-    """Data RandomSample test with split rate 0.5. API call: DataSample(data_large_set, target_index_promoted, 0.5, True, False, False, False)"""
+    """Data RandomSample test with split rate 0.5. API call: RandomSample(data_large_set, target_index_promoted, 0.5, True, False, False, False)"""
 
-    data_sample1 = DataSample(
+    data_sample1 = RandomSample(
         data_large_set, target_index_promoted_largeDS, 0.8, True, False, False, False
     )
-    random_sample1 = data_sample1.RandomSample()
+    random_sample1 = data_sample1.random_sample()
 
-    data_sample_stratOn1 = DataSample(
+    data_sample_stratOn1 = RandomSample(
         data_large_set, target_index_promoted_largeDS, 0.8, True, False, False, True
     )
-    random_sample_stratOn1 = data_sample_stratOn1.RandomSample()
+    random_sample_stratOn1 = data_sample_stratOn1.random_sample()
 
     stratOff_random_1_over_0 = (
         random_sample1.is_promoted.value_counts()[1]
@@ -170,17 +169,17 @@ def test_data_randomSample_stratifyOnOff_dropnull(
     data_large_set, target_index_promoted_largeDS
 ):
 
-    """Data RandomSample test with split rate 0.8, drop null and stratify. API call: DataSample(hr_data, target_index_promoted, 0.8, True, True, False, False)"""
+    """Data RandomSample test with split rate 0.8, drop null and stratify. API call: RandomSample(hr_data, target_index_promoted, 0.8, True, True, False, False)"""
 
-    data_sample2 = DataSample(
+    data_sample2 = RandomSample(
         data_large_set, target_index_promoted_largeDS, 0.8, False, True, False, False
     )
-    random_sample2 = data_sample2.RandomSample()
+    random_sample2 = data_sample2.random_sample()
 
-    data_sample_stratOn2 = DataSample(
+    data_sample_stratOn2 = RandomSample(
         data_large_set, target_index_promoted_largeDS, 0.8, False, True, False, True
     )
-    random_sample_stratOn2 = data_sample_stratOn2.RandomSample()
+    random_sample_stratOn2 = data_sample_stratOn2.random_sample()
 
     stratOff_random_1_over_0 = (
         random_sample2.is_promoted.value_counts()[1]
@@ -205,17 +204,17 @@ def test_data_randomSample_stratifyOnOff_dropNull_dropdup(
     data_large_set, target_index_promoted_largeDS
 ):
 
-    """Data RandomSample test with split rate 0.8, drop null, frop duplicates, checking stratify On_Off. API call: DataSample(hr_data, target_index_promoted, 0.7, True, True, True, False)"""
+    """Data RandomSample test with split rate 0.8, drop null, frop duplicates, checking stratify On_Off. API call: RandomSample(hr_data, target_index_promoted, 0.7, True, True, True, False)"""
 
-    data_sample3 = DataSample(
+    data_sample3 = RandomSample(
         data_large_set, target_index_promoted_largeDS, 0.7, True, True, True, False
     )
-    random_sample3 = data_sample3.RandomSample()
+    random_sample3 = data_sample3.random_sample()
 
-    data_sample_stratOn3 = DataSample(
+    data_sample_stratOn3 = RandomSample(
         data_large_set, target_index_promoted_largeDS, 0.7, True, True, True, True
     )
-    random_sample_stratOn3 = data_sample_stratOn3.RandomSample()
+    random_sample_stratOn3 = data_sample_stratOn3.random_sample()
 
     stratOff_random_1_over_0 = (
         random_sample3.is_promoted.value_counts()[1]
@@ -238,12 +237,12 @@ def test_data_randomSample_stratifyOnOff_dropNull_dropdup(
 @pytest.mark.Functional
 def test_data_randomSample_split_target_dropDup(data_set, target_index_no_trainings):
 
-    """Data RandomSample test with split rate 0.4, target_index and drop_duplicates. API call: DataSample(hr_data, target_index_no_trainings, 0.4, True, False, True)"""
+    """Data RandomSample test with split rate 0.4, target_index and drop_duplicates. API call: RandomSample(hr_data, target_index_no_trainings, 0.4, True, False, True)"""
 
-    data_sample = DataSample(
+    data_sample = RandomSample(
         data_set, target_index_no_trainings, 0.4, True, False, True
     )
-    random_sample = data_sample.RandomSample()
+    random_sample = data_sample.random_sample()
 
     assert random_sample.shape[0] == 19
     assert random_sample.shape[1] == 46

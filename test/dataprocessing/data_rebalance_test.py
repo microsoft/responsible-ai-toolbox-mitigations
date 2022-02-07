@@ -8,12 +8,10 @@ from imblearn.under_sampling import TomekLinks
 from imblearn.over_sampling import SMOTE
 from imblearn.combine import SMOTETomek
 
-sys.path.append("../../../ResponsibleAIToolbox-Mitigation")
+sys.path.append("../../../responsible-ai-mitigations")
+from raimitigations.dataprocessing import Rebalance
 
-from errorsmitigation.dataprocessing import DataRebalance
-
-
-# data_rebalance = DataRebalance(dataset, target, sampling_strategy, random_state, smote_tomek, smote, tomek)
+# data_rebalance = Rebalance(dataset, target, sampling_strategy, random_state, smote_tomek, smote, tomek)
 # Parameters:
 #           dataset
 #           target
@@ -98,7 +96,7 @@ rebal_data = [
 ]
 
 
-# unit test for the DataRebalance API
+# unit test for the Rebalance API
 
 
 @pytest.mark.Functional
@@ -145,7 +143,7 @@ def test_data_rebal_p(
         tomek_str = tomek.__class__.__name__
 
     test_data_rebal_p.__doc__ = (
-        "Data Rebalance test with the objects to use. API call: DataRebalance (data set size = "
+        "Data Rebalance test with the objects to use. API call: Rebalance (data set size = "
         + str(hr_data_set.shape[0])
         + " rows, target index = "
         + target_index
@@ -162,10 +160,10 @@ def test_data_rebal_p(
         + ")"
     )
 
-    data_rebal = DataRebalance(
+    data_rebal = Rebalance(
         hr_data_set, "is_promoted", random_state, seed, smote_tomek, smote, tomek
     )
-    result_p = data_rebal.Rebalance()
+    result_p = data_rebal.rebalance()
 
     result_p.shape
 
@@ -187,7 +185,7 @@ def test_data_rebal_p(
 @pytest.mark.Functional
 def test_data_rebal_default():
 
-    """Data Rebalance test with smote object to use. API call: DataRebalance(hr_promotion_TEST, target_index, 'auto', seed)"""
+    """Data Rebalance test with smote object to use. API call: Rebalance(hr_promotion_TEST, target_index, 'auto', seed)"""
 
     hr_data1 = copy.deepcopy(pytest.hr_promotion_TEST)
 
@@ -204,8 +202,8 @@ def test_data_rebal_default():
     hr_data11.dropna(inplace=True)
 
     target_index = hr_data11.columns.get_loc("is_promoted")
-    data_rebalance = DataRebalance(hr_data11, target_index, "auto", seed)
-    result = data_rebalance.Rebalance()
+    data_rebalance = Rebalance(hr_data11, target_index, "auto", seed)
+    result = data_rebalance.rebalance()
 
     result.shape
 
@@ -218,7 +216,7 @@ def test_data_rebal_default():
 @pytest.mark.Functional
 def test_data_rebal_default1():
 
-    """Data Rebalance test with smote and tomek object to use. API call: DataRebalance(hr_promotion_TEST, target_index, 'auto', seed, None)"""
+    """Data Rebalance test with smote and tomek object to use. API call: Rebalance(hr_promotion_TEST, target_index, 'auto', seed, None)"""
 
     hr_data2 = copy.deepcopy(pytest.hr_promotion_TEST)
 
@@ -235,8 +233,8 @@ def test_data_rebal_default1():
     hr_data21.dropna(inplace=True)
 
     target_index = hr_data21.columns.get_loc("is_promoted")
-    data_rebalance = DataRebalance(hr_data21, target_index, "auto", seed, None)
-    result = data_rebalance.Rebalance()
+    data_rebalance = Rebalance(hr_data21, target_index, "auto", seed, None)
+    result = data_rebalance.rebalance()
 
     result.shape
 
@@ -249,7 +247,7 @@ def test_data_rebal_default1():
 @pytest.mark.Functional
 def test_data_rebal_default2():
 
-    """Data Rebalance test with Smote object to use as default. API call: DataRebalance(hr_promotion_TEST, target_index, 'auto', seed, None, None)"""
+    """Data Rebalance test with Smote object to use as default. API call: Rebalance(hr_promotion_TEST, target_index, 'auto', seed, None, None)"""
 
     hr_data3 = copy.deepcopy(pytest.hr_promotion_TEST)
 
@@ -266,8 +264,8 @@ def test_data_rebal_default2():
     hr_data31.dropna(inplace=True)
 
     target_index = hr_data31.columns.get_loc("is_promoted")
-    data_rebalance = DataRebalance(hr_data31, target_index, "auto", seed, None, None)
-    result = data_rebalance.Rebalance()
+    data_rebalance = Rebalance(hr_data31, target_index, "auto", seed, None, None)
+    result = data_rebalance.rebalance()
 
     promoted = result.is_promoted.value_counts()[1]
     notPromoted = result.is_promoted.value_counts()[0]
@@ -278,7 +276,7 @@ def test_data_rebal_default2():
 @pytest.mark.Functional
 def test_data_rebal_smotetomekLargeDS():
 
-    """Data Rebalance test with smote_tomek object to use against big dataset. API call: DataRebalance(hr_promotion, target_index, 'auto', seed, smote_tomek)"""
+    """Data Rebalance test with smote_tomek object to use against big dataset. API call: Rebalance(hr_promotion, target_index, 'auto', seed, smote_tomek)"""
 
     hr_data4 = copy.deepcopy(pytest.hr_promotion)
 
@@ -297,9 +295,9 @@ def test_data_rebal_smotetomekLargeDS():
     smote_tomek = SMOTETomek(sampling_strategy="auto", random_state=seed)
 
     target_index = hr_data41.columns.get_loc("is_promoted")
-    data_rebalance = DataRebalance(hr_data41, target_index, "auto", seed, smote_tomek)
+    data_rebalance = Rebalance(hr_data41, target_index, "auto", seed, smote_tomek)
 
-    result = data_rebalance.Rebalance()
+    result = data_rebalance.rebalance()
 
     promoted = result.is_promoted.value_counts()[1]
     notPromoted = result.is_promoted.value_counts()[0]
@@ -311,7 +309,7 @@ def test_data_rebal_smotetomekLargeDS():
 @pytest.mark.xfail
 def test_data_rebal_smotetomekSmallDS():
 
-    """Data Rebalance test with smote_tomek object to use. API call: DataRebalance(hr_promotion_TEST, target_index, 'auto', seed, smote_tomek)"""
+    """Data Rebalance test with smote_tomek object to use. API call: Rebalance(hr_promotion_TEST, target_index, 'auto', seed, smote_tomek)"""
 
     hr_data5 = copy.deepcopy(pytest.hr_promotion_TEST)
 
@@ -330,9 +328,9 @@ def test_data_rebal_smotetomekSmallDS():
     smote_tomek = SMOTETomek(sampling_strategy="auto", random_state=seed)
 
     target_index = hr_data51.columns.get_loc("is_promoted")
-    data_rebalance = DataRebalance(hr_data51, target_index, "auto", seed, smote_tomek)
+    data_rebalance = Rebalance(hr_data51, target_index, "auto", seed, smote_tomek)
     with pytest.raises(ValueError) as excinfo:
-        result = data_rebalance.Rebalance()
+        result = data_rebalance.rebalance()
     assert "Expected n_neighbors" in str(excinfo.value), "this is catch exception"
 
 
@@ -537,7 +535,7 @@ def test_data_rebal_perf(
 
     # output for HTML reporting
     test_data_rebal_perf.__doc__ = (
-        "Data Rebalance performance test. API call: DataRebalance (data set size = "
+        "Data Rebalance performance test. API call: Rebalance (data set size = "
         + str(hr_data_set.shape[0])
         + " rows, target index = "
         + target_index
@@ -554,9 +552,9 @@ def test_data_rebal_perf(
         + ")"
     )
 
-    data_rebal = DataRebalance(
+    data_rebal = Rebalance(
         hr_data, target_index_column, random_state, seed, smote_tomek, smote, tomek
     )
-    result_perf = data_rebal.Rebalance()
+    result_perf = data_rebal.rebalance()
 
     result_perf.shape

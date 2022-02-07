@@ -5,11 +5,11 @@ import pickle as pk
 import copy
 import pandas as pd
 
-sys.path.append("../../../ResponsibleAIToolbox-Mitigation")
+sys.path.append("../../../responsible-ai-mitigations")
+from raimitigations.dataprocessing import Transformer
 
-from errorsmitigation.dataprocessing import DataTransformer
 
-# data_transformer =  DataTransformer(dataset, target, transformer_type, transform_features, random_state, method, output_distribution)
+# data_transformer =  Transformer(dataset, target, transformer_type, transform_features, random_state, method, output_distribution)
 # Parameters:
 #           dataset,
 #           target,
@@ -49,14 +49,12 @@ def target_index_previous_year_rating():
 @pytest.mark.Functional
 def test_data_transf_allfeatures(hr_data_test, target_index_promoted):
 
-    """Data Transformer test with default transform_features. API call: DataTransformer(hr_data_test, target_index_promoted, DataTransformer.TransformerType.StandardScaler)"""
+    """Data Transformer test with default transform_features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.StandardScaler)"""
 
-    data_transform = DataTransformer(
-        hr_data_test,
-        target_index_promoted,
-        DataTransformer.TransformerType.StandardScaler,
+    data_transform = Transformer(
+        hr_data_test, target_index_promoted, Transformer.TransformerType.StandardScaler,
     )
-    result = data_transform.Transform()
+    result = data_transform.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/transfAll.pickle")
@@ -70,14 +68,14 @@ def test_data_transf_allfeatures_diffTargetIndex(
     hr_data_test, target_index_previous_year_rating
 ):
 
-    """Data Transformer test with default transform_features and previous year rating target index. API call: DataTransformer(hr_data_test, target_index_previous_year_rating, DataTransformer.TransformerType.StandardScaler)"""
+    """Data Transformer test with default transform_features and previous year rating target index. API call: Transformer(hr_data_test, target_index_previous_year_rating, Transformer.TransformerType.StandardScaler)"""
 
-    data_transform = DataTransformer(
+    data_transform = Transformer(
         hr_data_test,
         target_index_previous_year_rating,
-        DataTransformer.TransformerType.StandardScaler,
+        Transformer.TransformerType.StandardScaler,
     )
-    result = data_transform.Transform()
+    result = data_transform.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/transfAllDiffIndex.pickle")
@@ -89,18 +87,18 @@ def test_data_transf_allfeatures_diffTargetIndex(
 @pytest.mark.Functional
 def test_data_transf_StandardScalerFeat_None(hr_data_test, target_index_promoted):
 
-    """Data Transformer test with all transform_features. API call: DataTransformer(hr_data_test, target_index_promoted, DataTransformer.TransformerType.StandardScaler, None, pytest.seed)"""
+    """Data Transformer test with all transform_features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.StandardScaler, None, pytest.seed)"""
 
     transform_features = None
 
-    data_transform = DataTransformer(
+    data_transform = Transformer(
         hr_data_test,
         target_index_promoted,
-        DataTransformer.TransformerType.StandardScaler,
+        Transformer.TransformerType.StandardScaler,
         transform_features,
         pytest.seed,
     )
-    result = data_transform.Transform()
+    result = data_transform.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/transfAll.pickle")
@@ -112,7 +110,7 @@ def test_data_transf_StandardScalerFeat_None(hr_data_test, target_index_promoted
 @pytest.mark.Functional
 def test_data_transf_StandardScaler(hr_data_test, target_index_promoted):
 
-    """Data Transformer test with subset of transform_features. API call: DataTransformer(hr_data_test, target_index_promoted, DataTransformer.TransformerType.StandardScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
+    """Data Transformer test with subset of transform_features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.StandardScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
 
     transform_features = [
         "age",
@@ -121,14 +119,14 @@ def test_data_transf_StandardScaler(hr_data_test, target_index_promoted):
         "avg_training_score",
     ]
 
-    data_transform = DataTransformer(
+    data_transform = Transformer(
         hr_data_test,
         target_index_promoted,
-        DataTransformer.TransformerType.StandardScaler,
+        Transformer.TransformerType.StandardScaler,
         transform_features,
         pytest.seed,
     )
-    result = data_transform.Transform()
+    result = data_transform.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/transfStandardScaler.pickle")
@@ -142,18 +140,18 @@ def test_data_transf_StandardScaler_OneFeature_DiffTargetIndex(
     hr_data_test, target_index_previous_year_rating
 ):
 
-    """Data Transformer test with subset of transform_features. API call: DataTransformer(hr_data_test, target_index_promoted, DataTransformer.TransformerType.StandardScaler, 'age', pytest.seed)"""
+    """Data Transformer test with subset of transform_features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.StandardScaler, 'age', pytest.seed)"""
 
     transform_features = ["age"]
 
-    data_transform = DataTransformer(
+    data_transform = Transformer(
         hr_data_test,
         target_index_previous_year_rating,
-        DataTransformer.TransformerType.StandardScaler,
+        Transformer.TransformerType.StandardScaler,
         transform_features,
         pytest.seed,
     )
-    result = data_transform.Transform()
+    result = data_transform.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle(
@@ -167,7 +165,7 @@ def test_data_transf_StandardScaler_OneFeature_DiffTargetIndex(
 @pytest.mark.Functional
 def test_data_transf_MinMaxScaler(hr_data_test, target_index_promoted):
 
-    """Data Transformer test with MinMaxScaler transformer type. API call: DataTransformer(hr_data_test, target_index_promoted, DataTransformer.TransformerType.MinMaxScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
+    """Data Transformer test with MinMaxScaler transformer type. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.MinMaxScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
 
     transform_features = [
         "age",
@@ -176,14 +174,14 @@ def test_data_transf_MinMaxScaler(hr_data_test, target_index_promoted):
         "avg_training_score",
     ]
 
-    data_transform = DataTransformer(
+    data_transform = Transformer(
         hr_data_test,
         target_index_promoted,
-        DataTransformer.TransformerType.MinMaxScaler,
+        Transformer.TransformerType.MinMaxScaler,
         transform_features,
         pytest.seed,
     )
-    result = data_transform.Transform()
+    result = data_transform.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/transfMinMax.pickle")
@@ -195,18 +193,18 @@ def test_data_transf_MinMaxScaler(hr_data_test, target_index_promoted):
 @pytest.mark.Functional
 def test_data_transf_MinMaxScaler_Feat_None(hr_data_test, target_index_promoted):
 
-    """Data Transformer test with MinMaxScaler transformer type with all transform features. API call: DataTransformer(hr_data_test, target_index_promoted, DataTransformer.TransformerType.MinMaxScaler, None, pytest.seed)"""
+    """Data Transformer test with MinMaxScaler transformer type with all transform features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.MinMaxScaler, None, pytest.seed)"""
 
     transform_features = None
 
-    data_transform = DataTransformer(
+    data_transform = Transformer(
         hr_data_test,
         target_index_promoted,
-        DataTransformer.TransformerType.MinMaxScaler,
+        Transformer.TransformerType.MinMaxScaler,
         transform_features,
         pytest.seed,
     )
-    result = data_transform.Transform()
+    result = data_transform.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/transfMinMaxNone.pickle")
@@ -218,7 +216,7 @@ def test_data_transf_MinMaxScaler_Feat_None(hr_data_test, target_index_promoted)
 @pytest.mark.Functional
 def test_data_transf_Robust(hr_data_test, target_index_promoted):
 
-    """Data Transformer test with RobustScaler transformer type with all transform features. API call: DataTransformer(hr_data_test, target_index_promoted, DataTransformer.TransformerType.RobustScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
+    """Data Transformer test with RobustScaler transformer type with all transform features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.RobustScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
 
     transform_features = [
         "age",
@@ -227,14 +225,14 @@ def test_data_transf_Robust(hr_data_test, target_index_promoted):
         "avg_training_score",
     ]
 
-    data_transform2 = DataTransformer(
+    data_transform2 = Transformer(
         hr_data_test,
         target_index_promoted,
-        DataTransformer.TransformerType.RobustScaler,
+        Transformer.TransformerType.RobustScaler,
         transform_features,
         pytest.seed,
     )
-    result2 = data_transform2.Transform()
+    result2 = data_transform2.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/transfRobust.pickle")
@@ -246,7 +244,7 @@ def test_data_transf_Robust(hr_data_test, target_index_promoted):
 @pytest.mark.Functional
 def test_data_transf_Power(hr_data_test, target_index_promoted):
 
-    """Data Transformer test with Power transformer type with non-categorical transform features. API call: DataTransformer(hr_data_test, target_index_promoted, DataTransformer.TransformerType.PowerTransformer, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
+    """Data Transformer test with Power transformer type with non-categorical transform features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.PowerTransformer, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
 
     transform_features = [
         "age",
@@ -255,14 +253,14 @@ def test_data_transf_Power(hr_data_test, target_index_promoted):
         "avg_training_score",
     ]
 
-    data_transform2 = DataTransformer(
+    data_transform2 = Transformer(
         hr_data_test,
         target_index_promoted,
-        DataTransformer.TransformerType.PowerTransformer,
+        Transformer.TransformerType.PowerTransformer,
         transform_features,
         pytest.seed,
     )
-    result2 = data_transform2.Transform()
+    result2 = data_transform2.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/transfPower.pickle")
@@ -274,7 +272,7 @@ def test_data_transf_Power(hr_data_test, target_index_promoted):
 @pytest.mark.Functional
 def test_data_transf_Quantile(hr_data_test, target_index_promoted):
 
-    """Data Transformer test with Quantile transformer type with non-categorical transform features. API call: DataTransformer(hr_data_test, target_index_promoted, DataTransformer.TransformerType.QuantileTransformer, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
+    """Data Transformer test with Quantile transformer type with non-categorical transform features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.QuantileTransformer, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
 
     transform_features = [
         "age",
@@ -283,14 +281,14 @@ def test_data_transf_Quantile(hr_data_test, target_index_promoted):
         "avg_training_score",
     ]
 
-    data_transform2 = DataTransformer(
+    data_transform2 = Transformer(
         hr_data_test,
         target_index_promoted,
-        DataTransformer.TransformerType.QuantileTransformer,
+        Transformer.TransformerType.QuantileTransformer,
         transform_features,
         pytest.seed,
     )
-    result2 = data_transform2.Transform()
+    result2 = data_transform2.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/transfQuantile.pickle")
@@ -302,7 +300,7 @@ def test_data_transf_Quantile(hr_data_test, target_index_promoted):
 @pytest.mark.Functional
 def test_data_transf_Normalizer(hr_data_test, target_index_promoted):
 
-    """Data Transformer test with Normalizer transformer type with non-categorical transform features. API call: DataTransformer(hr_data_test, target_index_promoted, DataTransformer.TransformerType.QuantileTransformer, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
+    """Data Transformer test with Normalizer transformer type with non-categorical transform features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.QuantileTransformer, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
 
     transform_features = [
         "age",
@@ -311,14 +309,14 @@ def test_data_transf_Normalizer(hr_data_test, target_index_promoted):
         "avg_training_score",
     ]
 
-    data_transform2 = DataTransformer(
+    data_transform2 = Transformer(
         hr_data_test,
         target_index_promoted,
-        DataTransformer.TransformerType.Normalizer,
+        Transformer.TransformerType.Normalizer,
         transform_features,
         pytest.seed,
     )
-    result2 = data_transform2.Transform()
+    result2 = data_transform2.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/transfNormalizer.pickle")
@@ -330,7 +328,7 @@ def test_data_transf_Normalizer(hr_data_test, target_index_promoted):
 @pytest.mark.Functional
 def test_data_transf_method_boxcox(hr_data_test, target_index_promoted):
 
-    """Data Transformer test with StandardScaler transformer type with non-categorical transform features and box-cox method. API call: DataTransformer.TransformerType.StandardScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed, method='box-cox')"""
+    """Data Transformer test with StandardScaler transformer type with non-categorical transform features and box-cox method. API call: Transformer.TransformerType.StandardScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed, method='box-cox')"""
 
     transform_features = [
         "age",
@@ -339,15 +337,15 @@ def test_data_transf_method_boxcox(hr_data_test, target_index_promoted):
         "avg_training_score",
     ]
 
-    data_transform2 = DataTransformer(
+    data_transform2 = Transformer(
         hr_data_test,
         target_index_promoted,
-        DataTransformer.TransformerType.StandardScaler,
+        Transformer.TransformerType.StandardScaler,
         transform_features,
         pytest.seed,
         method="box-cox",
     )
-    result = data_transform2.Transform()
+    result = data_transform2.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/transfboxcox.pickle")
@@ -359,7 +357,7 @@ def test_data_transf_method_boxcox(hr_data_test, target_index_promoted):
 @pytest.mark.Functional
 def test_data_transf_method_yeojohnson(hr_data_test, target_index_promoted):
 
-    """Data Transformer test with StandardScaler transformer type with non-categorical transform features and yeo-johnson method. API call: DataTransformer.TransformerType.StandardScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed, method='yeo-johnson')"""
+    """Data Transformer test with StandardScaler transformer type with non-categorical transform features and yeo-johnson method. API call: Transformer.TransformerType.StandardScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed, method='yeo-johnson')"""
 
     transform_features = [
         "age",
@@ -368,15 +366,15 @@ def test_data_transf_method_yeojohnson(hr_data_test, target_index_promoted):
         "avg_training_score",
     ]
 
-    data_transform = DataTransformer(
+    data_transform = Transformer(
         hr_data_test,
         target_index_promoted,
-        DataTransformer.TransformerType.StandardScaler,
+        Transformer.TransformerType.StandardScaler,
         transform_features,
         pytest.seed,
         method="yeo-johnson",
     )
-    result = data_transform.Transform()
+    result = data_transform.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/transfyeojohnson.pickle")
@@ -388,19 +386,19 @@ def test_data_transf_method_yeojohnson(hr_data_test, target_index_promoted):
 @pytest.mark.Functional
 def test_data_transf_method_subsetFeatures(hr_data_test, target_index_promoted):
 
-    """Data Transformer test with StandardScaler transformer type with non-categorical transform features and box-cox method. API call: DataTransformer.TransformerType.StandardScaler, ['length_of_service', 'avg_training_score'], pytest.seed, method='box-cox')"""
+    """Data Transformer test with StandardScaler transformer type with non-categorical transform features and box-cox method. API call: Transformer.TransformerType.StandardScaler, ['length_of_service', 'avg_training_score'], pytest.seed, method='box-cox')"""
 
     transform_features = ["length_of_service", "avg_training_score"]
 
-    data_transform = DataTransformer(
+    data_transform = Transformer(
         hr_data_test,
         target_index_promoted,
-        DataTransformer.TransformerType.StandardScaler,
+        Transformer.TransformerType.StandardScaler,
         transform_features,
         pytest.seed,
         method="box-cox",
     )
-    result = data_transform.Transform()
+    result = data_transform.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/subsetFeatures.pickle")
@@ -412,20 +410,20 @@ def test_data_transf_method_subsetFeatures(hr_data_test, target_index_promoted):
 @pytest.mark.Functional
 def test_data_transf_output_distribution_Normal(hr_data_test, target_index_promoted):
 
-    """Data Transformer test with StandardScaler transformer type with non-categorical transform features and box-cox method. API call: DataTransformer.TransformerType.StandardScaler, ['length_of_service', 'avg_training_score'], pytest.seed, method='yeo-johnson', output_distribution='normal')"""
+    """Data Transformer test with StandardScaler transformer type with non-categorical transform features and box-cox method. API call: Transformer.TransformerType.StandardScaler, ['length_of_service', 'avg_training_score'], pytest.seed, method='yeo-johnson', output_distribution='normal')"""
 
     transform_features = ["length_of_service", "avg_training_score"]
 
-    data_transform = DataTransformer(
+    data_transform = Transformer(
         hr_data_test,
         target_index_promoted,
-        DataTransformer.TransformerType.StandardScaler,
+        Transformer.TransformerType.StandardScaler,
         transform_features,
         pytest.seed,
         method="yeo-johnson",
         output_distribution="normal",
     )
-    result = data_transform.Transform()
+    result = data_transform.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/transfDistribNormal.pickle")
@@ -437,20 +435,20 @@ def test_data_transf_output_distribution_Normal(hr_data_test, target_index_promo
 @pytest.mark.Functional
 def test_data_transf_output_distribution_Uniform(hr_data_test, target_index_promoted):
 
-    """Data Transformer test with StandardScaler transformer type with non-categorical transform features and box-cox method. API call: DataTransformer.TransformerType.QuantileTransformer, ['length_of_service', 'avg_training_score'], pytest.seed, method='yeo-johnson', output_distribution='uniform')"""
+    """Data Transformer test with StandardScaler transformer type with non-categorical transform features and box-cox method. API call: Transformer.TransformerType.QuantileTransformer, ['length_of_service', 'avg_training_score'], pytest.seed, method='yeo-johnson', output_distribution='uniform')"""
 
     transform_features = ["length_of_service", "avg_training_score"]
 
-    data_transform = DataTransformer(
+    data_transform = Transformer(
         hr_data_test,
         target_index_promoted,
-        DataTransformer.TransformerType.QuantileTransformer,
+        Transformer.TransformerType.QuantileTransformer,
         transform_features,
         pytest.seed,
         method="yeo-johnson",
         output_distribution="uniform",
     )
-    result = data_transform.Transform()
+    result = data_transform.transform()
 
     expected = pd.DataFrame(
         pd.read_pickle("test/datasets/transfer" + "/transfDistribUniform.pickle")

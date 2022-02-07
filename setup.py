@@ -6,7 +6,13 @@ setup(
     author="Akshara Ramakrishnan",
     author_email="aksharar@microsoft.com",
     description="Data Balance Analysis and Error mitigation steps on python",
-    packages=find_packages(include=["databalanceanalysis", "dataprocessing", "test"]),
+    packages=find_packages(
+        include=[
+            "raimitigations.databalanceanalysis",
+            "raimitigations.dataprocessing",
+            "test",
+        ]
+    ),
     install_requires=[
         "pandas",
         "numpy",

@@ -4,12 +4,10 @@ from typing import Dict, Callable, List, Optional
 
 import numpy as np
 import pandas as pd
-from databalanceanalysis.balance_measure import BalanceMeasure
+from raimitigations.databalanceanalysis.balance_measure import BalanceMeasure
 
-from databalanceanalysis.constants import (
-    Measures,
-)
-import databalanceanalysis.balance_metric_functions as BalanceMetricFunctions
+from raimitigations.databalanceanalysis.constants import Measures
+import raimitigations.databalanceanalysis.balance_metric_functions as BalanceMetricFunctions
 
 
 """
@@ -50,9 +48,9 @@ class DistributionBalanceMeasure(BalanceMeasure):
         measures = {"feature_name": sensitive_col}
         for measure, func in self.DISTRIBUTION_METRICS.items():
             if measure in [Measures.CHISQ_PVALUE, Measures.CHISQ]:
-                measures[measure] = func(f_obs["count"], f_ref)
+                measures[measure.value] = func(f_obs["count"], f_ref)
             else:
-                measures[measure] = func(obs, ref)
+                measures[measure.value] = func(obs, ref)
 
         return measures
 

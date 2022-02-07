@@ -3,9 +3,9 @@ import pandas as pd
 import sys
 import os
 
-sys.path.append("../../../ResponsibleAIToolbox-Mitigation")
-from databalanceanalysis.databalanceanalysis import distribution_measures
-from databalanceanalysis.databalanceanalysis.constants import Measures
+
+sys.path.append("../../../responsible-ai-mitigations")
+from raimitigations.databalanceanalysis import DistributionBalanceMeasure
 
 
 @pytest.fixture
@@ -17,16 +17,16 @@ def small_df():
 def test_distribution_measures(small_df):
     feature1 = small_df.columns[1]
     feature2 = small_df.columns[2]
-    dist_measures = distribution_measures.DistributionBalanceMeasure([feature1, feature2])
+    dist_measures = DistributionBalanceMeasure([feature1, feature2])
     exp_feature_1 = {
         "feature_name": feature1,
-        Measures.KL_DIVERGENCE: 0.03775534151008829,
-        Measures.JS_DISTANCE: 0.09785224086736323,
-        Measures.INF_NORM_DISTANCE: 0.1111111111111111,
-        Measures.TOTAL_VARIANCE_DISTANCE: 0.1111111111111111,
-        Measures.WS_DISTANCE: 0.07407407407407407,
-        Measures.CHISQ: 0.6666666666666666,
-        Measures.CHISQ_PVALUE: 0.7165313105737893,
+        "kl_divergence": 0.03775534151008829,
+        "js_dist": 0.09785224086736323,
+        "inf_norm_dist": 0.1111111111111111,
+        "total_variation_dist": 0.1111111111111111,
+        "wasserstein_dist": 0.07407407407407407,
+        "chi_sq_stat": 0.6666666666666666,
+        "chi_sq_p_value": 0.7165313105737893,
     }
     df = dist_measures.measures(small_df)
     gender_measures = df.loc[df["feature_name"] == feature1].iloc[0].to_dict()

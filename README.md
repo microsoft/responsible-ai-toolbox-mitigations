@@ -52,8 +52,6 @@ trademarks or logos is subject to and must follow
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
 
-Error Mitigation APIs
-
 Data Processing: Preprocessing data component to help with splitting and
 transforming a dataset.
 
@@ -66,7 +64,7 @@ this functionality.
 
 Parameters:
 
-> **dataset** : Panda Data Frame.
+> **dataset** : Pandas Data Frame.
 
 > **target** : str, int
 
@@ -84,7 +82,7 @@ Parameters:
 - If not None, data is split in a stratified fashion, using this as the class
   labels.
 
-Return: A Panda Frame dataset.
+Return: A Pandas Frame dataset.
 
 **Split**
 
@@ -99,7 +97,7 @@ values, duplicate records, and transform all categorical features.
 
 Parameters:
 
-> **dataset** : Panda Data Frame
+> **dataset** : Pandas Data Frame
 
 > **target** : str, int
 
@@ -152,7 +150,7 @@ Parameters:
 
 > **dataset** :
 
-- A Panda Data Frame representing the data to rebalance.
+- A Pandas Data Frame representing the data to rebalance.
 
 > **target** : str, int
 
@@ -208,7 +206,7 @@ Parameters:
 Return: A rebalanced NumPy array.
 
 Note:
-The DataRebalance API call with SMOTETomek object to use could be failing with following message:
+The DataRebalance call with SMOTETomek object to use could be failing with following message:
 Expected n_neighbors <= n_samples, but n_samples = 3, n_neighbors = 6
 when the data are not perfectly balanced and there are not enough samples (3 in the shown above error) and the number of neighbors is 6.
 The workaround solution could be rebalance with SMOTE and Tomek objects instead of SMOTETomek
@@ -226,7 +224,7 @@ Parameters:
 
 > **dataset** :
 
-- A Panda Data Frame representing the data to transform.
+- A Pandas Data Frame representing the data to transform.
 
 > **target** : str, int
 

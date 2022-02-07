@@ -1,4 +1,5 @@
-# Copyright (c) Microsoft Corporation and ErrorsMitigation contributors.
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
 
 
 import pandas as pd

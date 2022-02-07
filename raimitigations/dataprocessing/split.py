@@ -1,4 +1,5 @@
-# Copyright (c) Microsoft Corporation and ErrorsMitigation contributors.
+# Copyright (c) Microsoft Corporation
+# Licensed under the MIT License.
 
 
 import pandas as pd
@@ -9,20 +10,21 @@ from sklearn.model_selection import train_test_split
 _MESSAGE_DATASET_NOT_PROVIDED = "A panda dataframe dataset is a required parameter."
 _MESSAGE_TARGET_NOT_PROVIDED = "the dataset target is a required parameter."
 _MESSAGE_INDEX_NOT_FOUND = "Index is not found."
-_MESSAGE_SAMPLE_SIZE_NOT_PROVIDED = (
-    "An numeric percentage value representing the sample size ( between 0 and 1) ."
-)
+_MESSAGE_TRAIN_SIZE_NOT_PROVIDED = "An numeric percentage value representing the Training data size ( between 0 and 1) ."
 
 
-class RandomSample:
+class Split:
 
-    """
+    r"""
 
     Parameters
     ----------
         dataset - Panda Data Frame.
         target - The target column name or index (zero base)
-        sample_size - The data sample size.
+        train_size – The training data split size.
+        random_state – Control the randomization of the algorithm.
+            ‘None’: the random number generator is the RandomState instance used by np.random.
+        categorical_features – A Boolean flag to indicates the presence of categorical features. It defaults to true.
         stratify - array-like, default=None.  If not None, data is split in a stratified fashion, using this as the class targets.
 
     """
@@ -31,13 +33,15 @@ class RandomSample:
         self,
         dataset,
         target,
-        sample_size,
+        train_size,
+        random_state=None,
         categorical_features=True,
         drop_null=True,
         drop_duplicates=False,
         stratify=False,
     ):
-        if dataset is None or dataset.empty:
+
+        if dataset.empty:
             raise ValueError(_MESSAGE_DATASET_NOT_PROVIDED)
         else:
             self.dataset = dataset
@@ -52,10 +56,18 @@ class RandomSample:
             self.target_index = dataset.columns.get_loc(target)
             self.target = target
 
-        if sample_size is None:
-            raise ValueError(_MESSAGE_SAMPLE_SIZE_NOT_PROVIDED)
+        self.train_size = train_size
+
+        if train_size is None:
+            raise ValueError(_MESSAGE_TRAIN_SIZE_NOT_PROVIDED)
         else:
-            self.sample_size = sample_size
+            self.train_size = train_size
+
+        # set random seed if it is not provided by the caller
+        if random_state is None:
+            self.random_state = np.random.randint(1, 100)
+        else:
+            self.random_state = random_state
 
         self.categorical_features = categorical_features
         self.drop_null = drop_null
@@ -72,8 +84,7 @@ class RandomSample:
         except IndexError:
             raise IndexError(_MESSAGE_INDEX_NOT_FOUND)
 
-    def _random_sample(self):
-
+    def _split(self):
         # handle duplicates
         if self.drop_duplicates:
             self.dataset = self.dataset.drop_duplicates()
@@ -84,12 +95,16 @@ class RandomSample:
         else:
             self.dataset.fillna(self.dataset.mean(), inplace=True)
 
-        # OneHotEncoder for categorical features
+        # handle the stratify option
         if self.categorical_features:
-            self.dataset = pd.get_dummies(self.dataset, dummy_na=True, drop_first=False)
+            # OneHotEncoder for categorical features
+            self.dataset = pd.get_dummies(
+                self.dataset, dummy_na=True, drop_first=False, prefix_sep="-"
+            )
 
-        # set random seed
-        random_state = np.random.randint(1, 100)
+        # set random seed if it is not provided by the caller
+        if self.random_state == None:
+            self.random_state = np.random.randint(1, 100)
 
         # handle the stratify option
         if self.stratify:
@@ -97,18 +112,15 @@ class RandomSample:
         else:
             y_stratify = None
 
-        # split data and return a random data sample
-        data_sample, test = train_test_split(
+        # split data into training and testing datasets
+        train, test = train_test_split(
             self.dataset,
-            train_size=self.sample_size,
-            random_state=random_state,
+            train_size=self.train_size,
+            random_state=self.random_state,
             stratify=y_stratify,
         )
 
-        return data_sample
+        return train, test
 
-    def random_sample(self):
-        """
-        Returns a random sample of the dataset
-        """
-        return self._random_sample()
+    def split(self):
+        return self._split()

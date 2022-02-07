@@ -14,13 +14,9 @@ from scipy.stats import chisquare
 Helper functions to calculate each of the individual aggregate measures 
 """
 
-
 # Aggregate Balance Measure Helper Functions
 def _get_generalized_entropy_index(
-    benefits: np.array,
-    alpha: float,
-    use_abs_val: bool,
-    error_tolerance: float = 1e-12,
+    benefits: np.array, alpha: float, use_abs_val: bool, error_tolerance: float = 1e-12,
 ) -> float:
     """
     Returns general Entropy index: measure of redundancy in the data
@@ -127,7 +123,7 @@ def get_ws_distance(obs: np.array, ref: np.array) -> float:
 
 def get_infinity_norm_distance(obs: np.array, ref: np.array) -> float:
     """
-    Infinity norm distance (also known as the Chebyshev distance)
+    Returns Infinity norm distance (also known as the Chebyshev distance)
     https://en.wikipedia.org/wiki/Chebyshev_distance
     """
     return distance.chebyshev(obs, ref)
@@ -135,7 +131,7 @@ def get_infinity_norm_distance(obs: np.array, ref: np.array) -> float:
 
 def get_total_variation_distance(obs: np.array, ref: np.array) -> float:
     """
-    Total variation distance
+    Returns Total variation distance
     https://en.wikipedia.org/wiki/Total_variation_distance_of_probability_measures
     """
     return 0.5 * np.sum(np.abs(obs - ref))
@@ -143,7 +139,7 @@ def get_total_variation_distance(obs: np.array, ref: np.array) -> float:
 
 def get_chi_squared(f_obs: np.array, f_ref: np.array) -> float:
     """
-    Chi squared test statistic
+    Returns Chi squared test statistic
     f_obs is the frequencies of the observation rather than the arrays themselves
     https://en.wikipedia.org/wiki/Chi-squared_test
     """
@@ -154,7 +150,7 @@ def get_chi_squared(f_obs: np.array, f_ref: np.array) -> float:
 
 def get_chisq_pvalue(f_obs: np.array, f_ref: np.array) -> float:
     """
-    p-value of the chi squared test
+    Returns p-value of the chi squared test
     https://en.wikipedia.org/wiki/Chi-squared_test
     """
     res = chisquare(f_obs, f_ref)
@@ -167,7 +163,7 @@ def get_demographic_parity(
     p_pos: float, p_feature: float, p_pos_feature: float, total_count: int
 ) -> float:
     """
-    returns Demographic Parity
+    Returns Demographic Parity
     """
     return p_pos_feature / p_feature
 
@@ -176,7 +172,7 @@ def get_point_mutual(
     p_pos: float, p_feature: float, p_pos_feature: float, total_count: int
 ) -> float:
     """
-    returns Point Mutual Information
+    Returns Point Mutual Information
     """
     dp = get_demographic_parity(p_pos, p_feature, p_pos_feature, total_count)
     return -np.inf if dp == 0 else np.log(dp)
@@ -186,7 +182,7 @@ def get_sorenson_dice(
     p_pos: float, p_feature: float, p_pos_feature: float, total_count: int
 ) -> float:
     """
-    Sorensen-Dice - used to gauge the similarity between two samples
+    Returns Sorensen-Dice - used to gauge the similarity between two samples
     https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient
     """
 
@@ -197,7 +193,7 @@ def get_jaccard_index(
     p_pos: float, p_feature: float, p_pos_feature: float, total_count: int
 ) -> float:
     """
-    Jaccard Index - used for gauging similarity and diversity of sample sets
+    Returns Jaccard Index - used for gauging similarity and diversity of sample sets
     https://en.wikipedia.org/wiki/Jaccard_index
     """
     return p_pos_feature / (p_feature + p_pos - p_pos_feature)
@@ -207,7 +203,7 @@ def get_kr_correlation(
     p_feature: float, p_pos: float, p_pos_feature: float, total_count: int
 ) -> float:
     """
-    Kendall Rank Correlation - ordinal association between two measured quantities
+    Returns Kendall Rank Correlation - ordinal association between two measured quantities
     https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient
     """
     a = np.power(total_count, 2) * (
@@ -224,7 +220,7 @@ def get_log_likelihood_ratio(
     p_pos: float, p_feature: float, p_pos_feature: float, total_count: int
 ) -> float:
     """
-    Log likelihood ratio - calculate the degree to which the data supports one variable versus another
+    Returns Log likelihood ratio - calculate the degree to which the data supports one variable versus another
     https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio
     """
     return -np.inf if p_pos_feature == 0 else np.log(p_pos_feature / p_pos)
@@ -234,7 +230,7 @@ def get_t_test_stat(
     p_pos: float, p_feature: float, p_pos_feature: float, total_count: int
 ) -> float:
     """
-    t-test statistic - t test compares the means of two groups and this gets a value to be looked
+    Returns t-test statistic - t test compares the means of two groups and this gets a value to be looked
     up on t-distribution
     https://en.wikipedia.org/wiki/Student's_t-test
     """
@@ -243,7 +239,7 @@ def get_t_test_stat(
 
 def get_t_test_p_value(metric: float, num_unique_vals: int) -> float:
     """
-    t-test p-value - t test compares the means of two groups and this gets the p-value to be compares to some
+    Returns t-test p-value - t test compares the means of two groups and this gets the p-value to be compares to some
     alpha to check for statistical significance
     https://en.wikipedia.org/wiki/Student's_t-test
     """
