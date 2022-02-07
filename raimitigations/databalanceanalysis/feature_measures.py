@@ -17,8 +17,8 @@ This class computes data balance measures based on two different feature values 
 
 
 class FeatureBalanceMeasure(BalanceMeasure):
-    CLASS_A = "classA"
-    CLASS_B = "classB"
+    CLASS_A = "ClassA"
+    CLASS_B = "ClassB"
 
     FEATURE_METRICS: Dict[Measures, Callable[[float, float, float, float], float]] = {
         Measures.DEMOGRAPHIC_PARITY: BalanceMetricFunctions.get_demographic_parity,
@@ -80,7 +80,7 @@ class FeatureBalanceMeasure(BalanceMeasure):
             pairs,
             columns=[FeatureBalanceMeasure.CLASS_A, FeatureBalanceMeasure.CLASS_B],
         )
-        gap_df["feature_name"] = sensitive_col
+        gap_df["FeatureName"] = sensitive_col
         for measure in self.FEATURE_METRICS.keys():
             classA_metric = gap_df[FeatureBalanceMeasure.CLASS_A].apply(
                 lambda x: metrics_df.loc[x]
