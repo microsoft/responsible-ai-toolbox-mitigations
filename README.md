@@ -8,27 +8,17 @@ The goal of Data Balance Analysis to provide metrics that help to determine how 
 
 # Notebook Examples
 
-- Data Balance Analysis Walk Through
-- Data Balance Analysis Adult Census Example
-- Random Sample Mitigation Example
-- Data Rebalance Mitigation Example
-- Data Split Example
-- Data Transformer Example
-- End to End Notebook
+- [Data Balance Analysis Walk Through](notebooks/databalanceanalysis/data_balance_overall.ipynb)
+- [Data Balance Analysis Adult Census Example](notebooks/databalanceanalysis/data_balance_census.ipynb)
+- [Random Sample Mitigation Example](notebooks/dataprocessing/error_random_sample.ipynb)
+- [Data Rebalance Mitigation Example](notebooks/dataprocessing/error_rebalance.ipynb)
+- [Data Split Example](notebooks/dataprocessing/errors_analysis_split.ipynb)
+- [Data Transformer Example](notebooks/dataprocessing/errors_mitigation_transform.ipynb)
+- [End to End Notebook](notebooks/data_balance_e2e.ipynb)
 
 ## Maintainers
 
 - [Akshara Ramakrishnan](https://github.com/akshara-msft)
-
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
-
-As the maintainer of this project, please make a few updates:
-
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
 
 ## Contributing
 
@@ -52,12 +42,36 @@ trademarks or logos is subject to and must follow
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
 
+Data Balance Analysis:
+
+**FeatureBalanceMeasure**
+
+> **label_col** : name of the column that contains the label for the data
+> **sensitive_cols** : a list of the columns of interest to analyze for data imbalances
+> measures(df)
+> Parameters:
+> **df** : Pandas Data Frame to calculate the Feature Balance Measures on
+
+**DistributionBalanceMeasure**
+
+> **sensitive_cols** : a list of the columns of interest to analyze for data imbalances
+> measures(df)
+> Parameters:
+> **df** : Pandas Data Frame to calculate the Distribution Balance Measures on
+
+**AggregateBalanceMeasure**
+
+> **sensitive_cols** : a list of the columns of interest to analyze for data imbalances
+> measures(df)
+> Parameters:
+> **df** : Pandas Data Frame to calculate the Aggregate Balance Measures on
+
 Data Processing: Preprocessing data component to help with splitting and
 transforming a dataset.
 
 **RandomSample**
 
-_data_sample (dataset, target, sample_size, stratify = False)_
+sample (dataset, target, sample*size, stratify = False)*
 
 Return a data random sample or random stratify sample. We use Sklearn to enable
 this functionality.
@@ -86,9 +100,9 @@ Return: A Pandas Frame dataset.
 
 **Split**
 
-_data_split (dataset, target, train_size = 0.9, random_state = None,
+split (dataset, target, train*size = 0.9, random_state = None,
 categorical_features = True, drop_null = True, drop_duplicates = False,
-stratify_ = False)
+stratify* = False)
 
 [sklearn.model_selection.train_test_split](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html?highlight=train_test_split#sklearn.model_selection.train_test_split)
 
@@ -105,8 +119,9 @@ Parameters:
 
 - Wnen int, it corresponds to the label column integer index (zero base) of
   the target feature
+  "
 
-> **train_size** :
+  > **train_size** :
 
 - The training data split size. The default is 0.9, which split the dataset to
   90% training and 10% testing. Training and Test split values add up to 1.
@@ -140,8 +155,8 @@ Return: A NumPy array
 
 **Rebalance**
 
-_data-rebalance (dataset, target, sampling_strategy = ‘auto’, random_state =
-None, smote_tomek = None, smote = None, tomek = None)_
+rebalance (dataset, target, sampling*strategy = ‘auto’, random_state =
+None, smote_tomek = None, smote = None, tomek = None)*
 
 Combine over- and under-sampling using SMOTE Tomek. Over-sampling using SMOTE
 and under-sampling using Tomek links.
@@ -213,8 +228,8 @@ The workaround solution could be rebalance with SMOTE and Tomek objects instead 
 
 **Transform**
 
-_data_transform (dataset, target, random_state = None, transformer_type,
-transform_features= None, method=None, output_distribution=None)_
+transform (dataset, target, random*state = None, transformer_type,
+transform_features= None, method=None, output_distribution=None)*
 
 Transform the data into a standardized or a normalized form.
 

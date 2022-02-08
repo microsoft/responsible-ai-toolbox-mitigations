@@ -92,7 +92,7 @@ class FeatureBalanceMeasure(BalanceMeasure):
 
         # For overall stats
         for (measure, test_stat), func in self.OVERALL_METRICS.items():
-            gap_df[measure] = gap_df[test_stat].apply(
+            gap_df[measure.value] = gap_df[test_stat.value].apply(
                 lambda x: func(x, len(unique_vals))
             )
         return gap_df
