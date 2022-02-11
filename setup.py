@@ -1,5 +1,8 @@
 from setuptools import setup, find_packages
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name="raimitigations",
     version="0.0.0",
@@ -18,4 +21,6 @@ setup(
         "scikit-learn",
         "imbalanced-learn",
     ],
+    long_description=long_description,
+    long_description_content_type="text/markdown",
 )
