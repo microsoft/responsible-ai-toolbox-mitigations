@@ -20,7 +20,6 @@ _MESSAGE_N_SAMPLE_LESS_K_NEIGHBOR = "The minimum number of samples (n_sample) in
 class Rebalance:
 
     """
-
     Parameters
     ----------
         dataset - Panda Data Frame.
@@ -29,7 +28,6 @@ class Rebalance:
         random_state – Control the randomization of the algorithm.
             ‘None’: the random number generator is the RandomState instance used by np.random.
         categorical_features – A Boolean flag to indicates the presence of categorical features. It defaults to true.
-
     """
 
     def __init__(

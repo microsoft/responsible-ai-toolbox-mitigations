@@ -22,7 +22,6 @@ def test_feature_balance_measures(small_df):
     feature1 = small_df.columns[1]
     gender1 = small_df[feature1].unique()[0]
     gender2 = small_df[feature1].unique()[1]
-    feature2 = small_df.columns[2]
     feat_measures = FeatureBalanceMeasure([feature1], label)
     exp_male_female = {
         "FeatureName": feature1,
@@ -36,8 +35,13 @@ def test_feature_balance_measures(small_df):
         "pmi": 0.4054651081081645,
         "t_test": 0.19245008972987523,
     }
-
-    print(feat_measures.measures(small_df).iloc[0].to_dict())
-    assert feat_measures.measures(small_df).iloc[0].to_dict()[
-        "FeatureName"
-    ] == pytest.approx(exp_male_female["FeatureName"])
+    feat_dict = feat_measures.measures(small_df).iloc[0].to_dict()
+    assert feat_dict["FeatureName"] == exp_male_female["FeatureName"]
+    assert feat_dict["ClassA"] == exp_male_female["ClassA"]
+    assert feat_dict["ClassB"] == exp_male_female["ClassB"]
+    assert feat_dict["dp"] == exp_male_female["dp"]
+    assert feat_dict["krc"] == exp_male_female["krc"]
+    assert feat_dict["sdc"] == exp_male_female["sdc"]
+    assert feat_dict["ji"] == exp_male_female["ji"]
+    assert feat_dict["llr"] == exp_male_female["llr"]
+    assert feat_dict["pmi"] == exp_male_female["pmi"]

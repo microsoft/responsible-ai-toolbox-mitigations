@@ -1,4 +1,6 @@
+from cmath import exp
 import pytest
+from pytest import approx
 import sys
 import os
 import pandas as pd
@@ -22,7 +24,10 @@ def test_one_feature(small_df):
         "theil_l_index": 0.039261011885461196,
         "theil_t_index": 0.03775534151008828,
     }
-    assert agg_measures.measures(small_df).iloc[0].to_dict() == pytest.approx(expected)
+    agg_dict = agg_measures.measures(small_df).iloc[0].to_dict()
+    assert agg_dict["atkinson_index"] == approx(expected["atkinson_index"])
+    assert agg_dict["theil_l_index"] == approx(expected["theil_l_index"])
+    assert agg_dict["theil_t_index"] == approx(expected["theil_t_index"])
 
 
 def test_both_features(small_df):
@@ -34,4 +39,7 @@ def test_both_features(small_df):
         "theil_l_index": 0.03113963808639034,
         "theil_t_index": 0.03624967113471546,
     }
-    assert agg_measures.measures(small_df).iloc[0].to_dict() == pytest.approx(expected)
+    agg_dict = agg_measures.measures(small_df).iloc[0].to_dict()
+    assert agg_dict["atkinson_index"] == approx(expected["atkinson_index"])
+    assert agg_dict["theil_l_index"] == approx(expected["theil_l_index"])
+    assert agg_dict["theil_t_index"] == approx(expected["theil_t_index"])
