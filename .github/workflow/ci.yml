@@ -28,13 +28,29 @@ jobs:
         pip install --upgrade pip-tools 
     
     - name: Pip compile
+      run: |
+        pip-compile requirements-dev.txt
+        cat requirements-dev.txt
+      working-directory: ${{ matrix.packageDirectory }}
     
     - name: Upload Requirements
+      uses: actions/upload-artifact@v2
+      with: 
+        name: requirements-dev.txt
+        path: requirments-dev.txt
     
     - name: Install dependencies
+      run: |
+        pip-sync requirements-dev.txt
     
     - name: Install package
+      run: |
+        pip install -v .
+      working-directory: ${{ matrix.packageDirectory }} 
     
     - name: Run Tests
+    run: |
+      pytest
+      
     
     # code cov results 
