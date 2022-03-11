@@ -50,7 +50,7 @@ jobs:
     
     - name: Run Tests
     run: |
-      pytest
+      pytest .\test\databalanceanalysis\.
       
     
     # code cov results 
