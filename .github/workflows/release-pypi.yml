@@ -41,7 +41,7 @@ jobs:
          
         # run tests before uploading to PyPi
         - name: run tests
-          run: pytest
+          run: pytest .\test\databalanceanalysis\.
         
         # publish to Test or Normal PyPi
         - name: Publish package to Test Pypi
