@@ -5,8 +5,9 @@ import pickle as pk
 import copy
 import pandas as pd
 
-sys.path.append("../../../responsible-ai-mitigations")
 from raimitigations.dataprocessing import Transformer
+
+from common_utils import (create_hr_promotion_data, create_hr_promotion_10_data)
 
 
 # data_transformer =  Transformer(dataset, target, transformer_type, transform_features, random_state, method, output_distribution)
@@ -19,27 +20,25 @@ from raimitigations.dataprocessing import Transformer
 #           method ='yeo-johnson',
 #           output_distribution  = 'uniform'
 
-pytest.hr_promotion_TEST = pd.read_csv(
-    "test/datasets/hr_promotion_test" + "/train.csv"
-).drop(["employee_id"], axis=1)
-pytest.seed = 42
+hr_promotion = create_hr_promotion_data()
+hr_promotion_10 = create_hr_promotion_10_data()
 
 
 @pytest.fixture
 def hr_data_test():
-    hr_data = copy.deepcopy(pytest.hr_promotion_TEST)
+    hr_data = copy.deepcopy(pytest.hr_promotion_10)
     return hr_data
 
 
 @pytest.fixture
 def target_index_promoted():
-    target_index = pytest.hr_promotion_TEST.columns.get_loc("is_promoted")
+    target_index = pytest.hr_promotion_10.columns.get_loc("is_promoted")
     return target_index
 
 
 @pytest.fixture
 def target_index_previous_year_rating():
-    target_index = pytest.hr_promotion_TEST.columns.get_loc("previous_year_rating")
+    target_index = pytest.hr_promotion_10.columns.get_loc("previous_year_rating")
     return target_index
 
 

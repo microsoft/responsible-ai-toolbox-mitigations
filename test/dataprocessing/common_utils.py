@@ -8,6 +8,7 @@ import pathlib
 from pandas import read_csv
 from urllib.request import urlretrieve
 
+
 def download_hr_promotion_data():
     outdirname = 'mitigations-datasets.2.22.2022'
     zipfilename = outdirname + '.zip'
@@ -27,7 +28,8 @@ def create_hr_promotion_data():
 
 def create_hr_promotion_10_data():
     outdirname = download_hr_promotion_data()
-    hr_promotion = read_csv('./' + outdirname + '/hr_promotion/train.csv').drop(
+    hr_promotion = read_csv('./' + outdirname + '/hr_promotion_10/train.csv').drop(
         ["employee_id"], axis=1)
 
     return hr_promotion
+
