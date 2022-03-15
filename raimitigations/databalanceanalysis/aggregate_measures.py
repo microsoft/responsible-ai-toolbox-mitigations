@@ -33,8 +33,8 @@ class AggregateBalanceMeasure(BalanceMeasure):
         """
         The output is a dataframe that maps the names of the different aggregate measures to their values:
             The following measures are computed:
-            - Atkinson Index - https://en.wikipedia.org/wiki/Atkinson_index
-            - Theil Index (L and T) - https://en.wikipedia.org/wiki/Theil_index
+            * Atkinson Index - https://en.wikipedia.org/wiki/Atkinson_index
+            * Theil Index (L and T) - https://en.wikipedia.org/wiki/Theil_index
 
         :param df: the df to calculate aggregate measures on
         :type df: pd.DataFrame

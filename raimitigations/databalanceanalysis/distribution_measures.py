@@ -64,20 +64,24 @@ class DistributionBalanceMeasure(BalanceMeasure):
 
     def measures(self, df: pd.DataFrame) -> pd.DataFrame:
         """
+
         The output is a dataframe that maps the sensitive column name to another dictionary:
             the dictionary for each sensitive column contains a mapping of the name of a measure to its value
-                - Kullback-Leibler Divergence - https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence
-                - Jensen-Shannon Distance - https://en.wikipedia.org/wiki/Jensen%E2%80%93Shannon_divergence
-                - Wasserstein Distance - https://en.wikipedia.org/wiki/Wasserstein_metric
-                - Infinity Norm Distance - https://en.wikipedia.org/wiki/Chebyshev_distance
-                - Total Variation Distance - https://en.wikipedia.org/wiki/Total_variation_distance_of_probability_measures
-                - Chi-Squared Test - https://en.wikipedia.org/wiki/Chi-squared_test
+            
+                * Kullback-Leibler Divergence - https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence
+                * Jensen-Shannon Distance - https://en.wikipedia.org/wiki/Jensen%E2%80%93Shannon_divergence
+                * Wasserstein Distance - https://en.wikipedia.org/wiki/Wasserstein_metric
+                * Infinity Norm Distance - https://en.wikipedia.org/wiki/Chebyshev_distance
+                * Total Variation Distance - https://en.wikipedia.org/wiki/Total_variation_distance_of_probability_measures
+                * Chi-Squared Test - https://en.wikipedia.org/wiki/Chi-squared_test
+
             There is one dictionary for each of the sensitive columns specified
 
         :param df: the df to calculate all of the distribution measures on
         :type df: pd.DataFrame
         :return:  a dataframe that has one column with the sensitive column name and column that contains the dictionary that has the mapping of the name of the measure to its value for that sensitive feature.
         :rtype: pd.DataFrame
+
         """
         _distribution_measures = self._get_all_distribution_measures(
             df, self._sensitive_cols

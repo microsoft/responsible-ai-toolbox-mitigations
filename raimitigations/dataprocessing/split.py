@@ -17,16 +17,19 @@ class Split:
 
     r"""
 
-    Parameters
-    ----------
-        dataset - Panda Data Frame.
-        target - The target column name or index (zero base)
-        train_size – The training data split size.
-        random_state – Control the randomization of the algorithm.
-            ‘None’: the random number generator is the RandomState instance used by np.random.
-        categorical_features – A Boolean flag to indicates the presence of categorical features. It defaults to true.
-        stratify - array-like, default=None.  If not None, data is split in a stratified fashion, using this as the class targets.
-
+    :param dataset: the dataframe that the user will apply splitting on
+    :type dataset: pd.Dataframe
+    :param target: the name of the target column or the index of the target column
+    :type target: str, int
+    :param train_size: the ratio of the training data split
+    :type train_size: float
+    :param random_state: seed to control the randomization of the algorithm
+    :type random_state: int
+    :param categorical_features: a flag indicating the presence of categorical features in the dataset
+    :type categorical_features: boolean
+    :param stratify: if not None, data is split in a stratified fashion, using this as the class targets
+    :type stratify: array-like
+    
     """
 
     def __init__(

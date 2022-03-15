@@ -25,16 +25,17 @@ _MESSAGE_INDEX_NOT_FOUND = "Index is not found."
 class Transformer:
 
     r"""
-
-    Parameters
-    ----------
-        dataset - Panda Data Frame.
-        target - The target column name or index (zero base)
-        transformer_type – Enum object for available transformations [StandardScaler, MinMaxScaler, RobustScaler. PowerTransformer, QuantileTransformer, Normalizer].
-        random_state – Control the randomization of the algorithm.
-            ‘None’: the random number generator is the RandomState instance used by np.random.
-        method – {‘yeo-johnson’, ‘box-cox’}, default=’yeo-johnson’
-        output_distribution - {‘uniform’, ‘normal’}, Marginal distribution for the transformed data. The choices are ‘uniform’ (default) or ‘normal’.
+    :param dataset: the dataframe that the user will apply splitting on
+    :type dataset: pd.Dataframe
+    :param target: the name of the target column or the index of the target column
+    :type target: str, int
+    :param transformer_type: the type of transformer to apply to the data
+    :type transformer_type:  TransformerType 
+    :param transform_features: the features to be transformer using those transformers
+    :type transform_features: array-like
+    :param random_state: seed to control the randomization of the algorithm
+    :param method: method of transformation for the PowerTransformer
+    :param output_distribution: marginal distribution for the transformed data
 
     """
 

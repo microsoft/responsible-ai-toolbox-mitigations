@@ -71,7 +71,7 @@ transforming a dataset.
 
 **RandomSample**
 
-sample (dataset, target, sample*size, stratify = False)*
+sample (dataset, target, sample_size, stratify = False)\*
 
 Return a data random sample or random stratify sample. We use Sklearn to enable
 this functionality.
@@ -100,9 +100,9 @@ Return: A Pandas Frame dataset.
 
 **Split**
 
-split (dataset, target, train*size = 0.9, random_state = None,
+split (dataset, target, train_size = 0.9, random_state = None,
 categorical_features = True, drop_null = True, drop_duplicates = False,
-stratify* = False)
+stratify = False)
 
 [sklearn.model_selection.train_test_split](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html?highlight=train_test_split#sklearn.model_selection.train_test_split)
 
@@ -155,8 +155,8 @@ Return: A NumPy array
 
 **Rebalance**
 
-rebalance (dataset, target, sampling*strategy = ‘auto’, random_state =
-None, smote_tomek = None, smote = None, tomek = None)*
+rebalance (dataset, target, sampling_strategy = ‘auto’, random_state =
+None, smote_tomek = None, smote = None, tomek = None)\*
 
 Combine over- and under-sampling using SMOTE Tomek. Over-sampling using SMOTE
 and under-sampling using Tomek links.
@@ -228,8 +228,8 @@ The workaround solution could be rebalance with SMOTE and Tomek objects instead 
 
 **Transform**
 
-transform (dataset, target, random*state = None, transformer_type,
-transform_features= None, method=None, output_distribution=None)*
+transform (dataset, target, random_state = None, transformer_type,
+transform_features= None, method=None, output_distribution=None)\*
 
 Transform the data into a standardized or a normalized form.
 

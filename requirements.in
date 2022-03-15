@@ -1,0 +1,13 @@
+pandas
+imbalanced-learn
+jupyterlab
+matplotlib
+numpy
+PyQt5
+pytest
+pytest-json-report
+pytest-html
+scipy
+scikit-learn
+sphinx
+wheel
