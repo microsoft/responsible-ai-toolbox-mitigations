@@ -2,9 +2,10 @@ import pytest
 import sys
 import copy
 import pandas as pd
+import zipfile
 
-sys.path.append("../../../responsible-ai-mitigations")
 from raimitigations.dataprocessing import Split
+from common_utils import (create_hr_promotion_data, create_hr_promotion_10_data)
 
 # parameters for Split API
 # data_split =  Split(dataset, target, train_size, random_state, categorical_features, drop_null, drop_duplicates, is_stratify)
@@ -18,6 +19,8 @@ from raimitigations.dataprocessing import Split
 #           drop_duplicates = False
 #           is_stratify = False
 
+
+""" 
 pytest.global_variable_1 = "test/datasets/hr_promotion_test"
 pytest.hr_promotion_TEST = pd.read_csv(
     "test/datasets/hr_promotion_test" + "/train.csv"
@@ -26,7 +29,10 @@ pytest.global_variable_3 = "test/datasets/hr_promotion"
 pytest.hr_promotion = pd.read_csv("test/datasets/hr_promotion" + "/train.csv").drop(
     ["employee_id"], axis=1
 )
+ """
 
+hr_promotion = create_hr_promotion_data()
+hr_promotion_10 = create_hr_promotion_10_data()
 
 # unit test for the Split API
 
@@ -41,7 +47,7 @@ def test_data_split_rate_v0(train_size, expected):
 
     """Data Split test with 0.9 rate, no drop_null and no drop_dupicates. API call: Split(hr_data1, 12, 0.9, 42, True, False, False, False)"""
 
-    hr_data1 = copy.deepcopy(pytest.hr_promotion_TEST)
+    hr_data1 = copy.deepcopy(pytest.hr_promotion_10)
     data_split = Split(hr_data1, 12, train_size, 42, True, False, False, False)
     train_data, test_data = data_split.split()
 
@@ -56,7 +62,7 @@ def test_data_split_remove_duplicate():
 
     """Data Split test with 0.9 rate, drop_dupicates but no drop_null. API call: Split(hr_data2, 12, 0.9, 42, True, False, True, False)"""
 
-    hr_data2 = copy.deepcopy(pytest.hr_promotion_TEST)
+    hr_data2 = copy.deepcopy(pytest.hr_promotion_10)
 
     data_split = Split(hr_data2, 12, 0.9, 42, True, False, True, False)
     train_data, test_data = data_split.split()
@@ -72,7 +78,7 @@ def test_data_split_drop_Null():
 
     """Data Split test with 0.9 rate, drop_null but no drop_dupicates. API call: Split(hr_data3, 12, 0.9, 42, True, True, False, False)"""
 
-    hr_data3 = copy.deepcopy(pytest.hr_promotion_TEST)
+    hr_data3 = copy.deepcopy(pytest.hr_promotion_10)
 
     data_split = Split(hr_data3, 12, 0.9, 42, True, True, False, False)
     train_data, test_data = data_split.split()

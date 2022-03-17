@@ -3,8 +3,11 @@ import sys
 import copy
 import pandas as pd
 
-sys.path.append("../../../responsible-ai-mitigations")
+from pandas import read_csv
+from common_utils import (create_hr_promotion_data, create_hr_promotion_10_data)
+
 from raimitigations.dataprocessing import RandomSample
+
 
 # data_random_sample = RandomSample(data_set, target, sample_size, stratify)
 # Parameters:
@@ -13,19 +16,12 @@ from raimitigations.dataprocessing import RandomSample
 #           sample_size,
 #           stratify = False
 
-pytest.hr_test_PATH = "test/datasets/hr_promotion_test"
-pytest.hr_promotion_TEST = pd.read_csv(pytest.hr_test_PATH + "/train.csv").drop(
-    ["employee_id"], axis=1
-)
-pytest.hr_dset_PATH = "test/datasets/hr_promotion"
-pytest.hr_promotion = pd.read_csv(pytest.hr_dset_PATH + "/train.csv").drop(
-    ["employee_id"], axis=1
-)
-
+pytest.hr_promotion = create_hr_promotion_data()
+pytest.hr_promotion_10 = create_hr_promotion_10_data()
 
 @pytest.fixture
 def data_set():
-    hr_data = copy.deepcopy(pytest.hr_promotion_TEST)
+    hr_data = copy.deepcopy(pytest.hr_promotion_10)
     return hr_data
 
 
@@ -65,8 +61,7 @@ def test_data_randomSample_split_categorical(data_set, target_index_promoted):
 
     random_sample_split = data_sample.random_sample()
 
-    assert random_sample_split.shape[0] == 8
-    assert random_sample_split.shape[1] == 45
+    assert random_sample_split.shape[0] == validate_sampling(data_set, 0.2)
 
 
 @pytest.mark.Functional
@@ -74,11 +69,11 @@ def test_data_randomSample_split_not_categorical(data_set, target_index_promoted
 
     """Data RandomSample test with split rate 0.2, drop_null and not categorical features. API call: RandomSample(hr_data, target_index, 0.2, False)"""
 
-    data_sample = RandomSample(data_set, target_index_promoted, 0.2, False)
+    data_sample = RandomSample(data_set, target_index_promoted, 0.3, False)
 
     random_sample_split = data_sample.random_sample()
 
-    assert random_sample_split.shape[1] == 13
+    assert random_sample_split.shape[0] == validate_sampling(data_set, 0.3)
 
 
 @pytest.mark.Functional
@@ -86,11 +81,11 @@ def test_data_randomSample_default_dup(data_set, target_index_promoted):
 
     """Data RandomSample test with split rate 0.2, drop_null and drop_duplicates. API call: RandomSample(hr_data, target_index_promoted, 0.2, True, True)"""
 
-    data_sample = RandomSample(data_set, target_index_promoted, 0.2, True, True)
+    data_sample = RandomSample(data_set, target_index_promoted, 0.3, True, True)
 
     random_sample = data_sample.random_sample()
 
-    assert random_sample.shape[0] == 8
+    assert random_sample.shape[0] == validate_sampling(data_set, 0.3)
 
 
 @pytest.mark.Functional
@@ -98,11 +93,11 @@ def test_data_randomSample_split_dropNulDup(data_set, target_index_promoted):
 
     """Data RandomSample test with split rate 0.2, drop_null and drop_duplicates. API call: RandomSample(hr_data, target_index_promoted, 0.2, False, True, True, True)"""
 
-    data_sample = RandomSample(data_set, target_index_promoted, 0.2, True, True, True)
+    data_sample = RandomSample(data_set, target_index_promoted, 0.4, True, True, True)
 
     random_sample = data_sample.random_sample()
 
-    assert random_sample.shape[0] == 8
+    assert random_sample.shape[0] == validate_sampling(data_set, 0.4)
 
 
 @pytest.mark.Functional
@@ -114,7 +109,7 @@ def test_data_randomSample_split_dropDup(data_set, target_index_promoted):
 
     random_sample = data_sample.random_sample()
 
-    assert random_sample.shape[0] == 14
+    assert random_sample.shape[0] == validate_sampling(data_set, 0.3)
 
 
 @pytest.mark.Functional
@@ -128,7 +123,7 @@ def test_data_randomSample_split_noDrops(data_set, target_index_promoted):
 
     random_sample = data_sample.random_sample()
 
-    assert random_sample.shape[0] == 10
+    assert random_sample.shape[0] == validate_sampling(data_set, 0.2)
 
 
 @pytest.mark.Functional
@@ -246,3 +241,18 @@ def test_data_randomSample_split_target_dropDup(data_set, target_index_no_traini
 
     assert random_sample.shape[0] == 19
     assert random_sample.shape[1] == 46
+
+def validate_sampling (data_set, sample):
+
+    num_rows = int(data_set.shape[0] * sample)
+
+    return num_rows
+
+def validate_sampling_drop (data_set, sample, drop_nul, drop_dup):
+
+    if drop_dup:
+      data_set = data_set.drop_duplicates()
+      
+    num_rows = int(data_set.shape[0] * sample)
+
+    return num_rows
