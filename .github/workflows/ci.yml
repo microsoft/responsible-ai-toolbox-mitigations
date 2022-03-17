@@ -49,8 +49,8 @@ jobs:
       working-directory: ${{ matrix.packageDirectory }} 
     
     - name: Run Tests
-    run: |
-      pytest .\test\databalanceanalysis\.
+      run: |
+        pytest
       
     
     # code cov results 
