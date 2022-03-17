@@ -34,6 +34,12 @@ jobs:
       - name: install requirements.txt 
         run: |
            pip install -r requirements.txt
+           
+      - name: Install current package
+        run: |
+          cd responsible-ai-mitigations
+          pip install -e ./
+          cd ..
        
       - name: build wheel
         run: python setup.py sdist bdist_wheel
