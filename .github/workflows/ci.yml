@@ -31,7 +31,6 @@ jobs:
       run: |
         pip-compile requirements.txt
         cat requirements.txt
-      working-directory: ${{ matrix.packageDirectory }}
     
     - name: Upload Requirements
       uses: actions/upload-artifact@v2
@@ -46,7 +45,6 @@ jobs:
     - name: Install package
       run: |
         pip install -v .
-      working-directory: ${{ matrix.packageDirectory }} 
     
     - name: Run Tests
       run: |
