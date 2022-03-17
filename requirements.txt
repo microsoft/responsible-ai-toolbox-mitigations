@@ -9,3 +9,5 @@ PyQt5
 pytest
 pytest-json-report
 pytest-html
+matplotlib
+lightgbm
