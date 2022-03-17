@@ -20,16 +20,21 @@ _MESSAGE_N_SAMPLE_LESS_K_NEIGHBOR = "The minimum number of samples (n_sample) in
 class Rebalance:
 
     """
-
-    Parameters
-    ----------
-        dataset - Panda Data Frame.
-        target - The target column name or index (zero base)
-        train_size – The training data split size.
-        random_state – Control the randomization of the algorithm.
-            ‘None’: the random number generator is the RandomState instance used by np.random.
-        categorical_features – A Boolean flag to indicates the presence of categorical features. It defaults to true.
-
+    :param dataset: the dataframe that the user will rebalance  
+    :type dataset: pd.DataFrame
+    :param target: the name of the target column or the index of the target column
+    :type target: str, int
+    :param sampling_strategy: optional parameter for the strategy to use for the smote tomek resampling
+    :type sampling_strategy: string 
+    :param random_state: seed to control the randomization of the algorithm
+    :type random_state: int
+    :param smote: optional parameter to include a SMOTE object
+    :type smote: imblearn.SMOTE
+    :param tomek: optional parameter to include Tomek object
+    :type tomek: imblearn.Tomek
+    :param smote_tomek: optional parameter to include SmoteTomek object
+    :type smote_tomek: imblearn.SmoteTomek
+   
     """
 
     def __init__(

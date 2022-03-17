@@ -1,17 +1,17 @@
 from setuptools import setup, find_packages
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name="raimitigations",
-    version="0.0.0",
+    version="0.0.1",
     author="Akshara Ramakrishnan",
     author_email="aksharar@microsoft.com",
     description="Data Balance Analysis and Error mitigation steps on python",
     packages=find_packages(
-        include=[
-            "raimitigations.databalanceanalysis",
-            "raimitigations.dataprocessing",
-            "test",
-        ]
+        exclude=["test"],
+        include=["raimitigations.databalanceanalysis", "raimitigations.dataprocessing"],
     ),
     install_requires=[
         "pandas",
@@ -21,4 +21,6 @@ setup(
         "scikit-learn",
         "imbalanced-learn",
     ],
+    long_description=long_description,
+    long_description_content_type="text/markdown",
 )

@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "program": "errorsmitigation\\test\\test_data_rebalance.py",
+            "program": "test\\test_data_rebalance.py",
             "env": {"PYTHONPATH": "${workspaceRoot}"},
             "console": "integratedTerminal",
             "justMyCode": true

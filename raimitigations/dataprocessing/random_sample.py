@@ -19,12 +19,14 @@ class RandomSample:
 
     """
 
-    Parameters
-    ----------
-        dataset - Panda Data Frame.
-        target - The target column name or index (zero base)
-        sample_size - The data sample size.
-        stratify - array-like, default=None.  If not None, data is split in a stratified fashion, using this as the class targets.
+    :param dataset: the dataframe that the user will apply sampling on
+    :type dataset: pd.Dataframe
+    :param target: the name of the target column or the index of the target column
+    :type target: str, int
+    :param sample_size: the number of samples to include in the random sample
+    :type sample_size: int
+    :param stratify: if not None, data is split in a stratified fashion, using this as the class targets
+    :type stratify: array-like
 
     """
 
@@ -99,7 +101,7 @@ class RandomSample:
             y_stratify = None
 
         # split data and return a random data sample
-        data_sample, test = train_test_split(
+        data_sample, _ = train_test_split(
             self.dataset,
             train_size=self.sample_size,
             random_state=random_state,
