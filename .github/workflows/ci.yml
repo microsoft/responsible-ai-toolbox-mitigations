@@ -29,18 +29,18 @@ jobs:
     
     - name: Pip compile
       run: |
-        pip-compile requirements-dev.txt
-        cat requirements-dev.txt
+        pip-compile requirements.in
+        cat requirements.txt
     
     - name: Upload Requirements
       uses: actions/upload-artifact@v2
       with: 
-        name: requirements-dev.txt
-        path: requirements-dev.txt
+        name: requirements.txt
+        path: requirements.txt
     
     - name: Install dependencies
       run: |
-        pip-sync requirements-dev.txt
+        pip-sync requirements.txt
     
     - name: Install package
       run: |
