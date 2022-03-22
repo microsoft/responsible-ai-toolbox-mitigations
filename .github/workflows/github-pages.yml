@@ -31,12 +31,10 @@ jobs:
       - name: Install dependencies
         run: |
           pip-sync requirements.txt
-
-      - name: Install current package
+          
+      - name: Install package
         run: |
-          cd responsible-ai-mitigations
-          pip install -e ./
-          cd ..
+          pip install -v .
       
       - name: Build
         run: make html
