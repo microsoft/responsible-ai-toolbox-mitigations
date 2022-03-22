@@ -4,20 +4,18 @@ name: Release raimitigations to Pypi
 on:
   workflow_dispatch: 
     inputs:
-      type:
+      releaseType:
+        type: choice
         description: "Test or Prod PyPi"
+        options:
+          - Test
+          - Prod
         required: true
-        default: "Test"
 
 jobs: 
   release-pypi:
     runs-on: ubuntu-latest
     steps:
-      - name: fail if not Test nor Prod
-        if: ${{ ! (github.events.inputs.type == 'Test' || github.events.inputs.type == 'Prod') }} 
-        run: |
-          echo "Only Test or Prod can be used."
-          exit 1
        
        # build wheel 
       - uses: actions/checkout@v2
@@ -50,7 +48,7 @@ jobs:
         
         # publish to Test or Normal PyPi
       - name: Publish package to Test Pypi
-        if: ${{ github.events.inputs.type == 'Test'}}
+        if: ${{ github.events.inputs.releaseType == 'Test'}}
         uses: pypa/gh-action-pypi-publish@release/v1
         with: 
           user: __token__
@@ -58,7 +56,7 @@ jobs:
           repository_url: https://test.pypi.org/legacy/
      
       - name: Publish package to Pypi
-        if: ${{ github.events.inputs.type == 'Prod'}}
+        if: ${{ github.events.inputs.releaseType == 'Prod'}}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           user: __token__
