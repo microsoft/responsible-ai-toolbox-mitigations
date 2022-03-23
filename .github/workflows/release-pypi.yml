@@ -46,6 +46,12 @@ jobs:
       - name: run tests
         run: pytest test/databalanceanalysis/.
         
+      - name: check release type
+        run: |
+          echo ${{ github.events.inputs.releaseType }}
+          echo ${{ github.events.inputs.releaseType == 'Test'}}
+          echo ${{ github.events.inputs.releaseType == 'Prod'}}
+        
         # publish to Test or Normal PyPi
       - name: Publish package to Test Pypi
         if: ${{ github.events.inputs.releaseType == 'Test'}}
