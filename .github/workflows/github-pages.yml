@@ -37,8 +37,9 @@ jobs:
           pip install -v .
       
       - name: Build
-        run: make html
-        working-directory: ../docs
+        run: | 
+          make html
+        working-directory: docs
       
       # github pages creates jekyll build by default, just want to point to index.html
       - name: Disable jekyll builds
