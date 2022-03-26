@@ -33,32 +33,12 @@ pytest.hr_promotion_TEST = pd.read_csv(pytest.hr_test_PATH + "/train.csv").drop(
 hr_promotion = create_hr_promotion_data()
 hr_promotion_10 = create_hr_promotion_10_data()
 
-""" pytest.hr_PATH = "test/datasets/hr_promotion"
-pytest.hr_promotion = pd.read_csv(pytest.hr_PATH + "/train.csv").drop(
-    ["employee_id"], axis=1
-) """
-""" 
-pytest.hr_10_PATH = "test/datasets/hr_promotion_10"
-pytest.hr_promotion_10 = pd.read_csv(pytest.hr_10_PATH + "/train.csv").drop(
-    ["employee_id"], axis=1
-) """
-""" 
-pytest.hr_30_PATH = "test/datasets/hr_promotion_30"
-pytest.hr_promotion_30 = pd.read_csv(pytest.hr_30_PATH + "/train.csv").drop(
-    ["employee_id"], axis=1
-)
-
-pytest.hr_50_PATH = "test/datasets/hr_promotion_50"
-pytest.hr_promotion_50 = pd.read_csv(pytest.hr_50_PATH + "/train.csv").drop(
-    ["employee_id"], axis=1
-) """
-
-hr_data_set = copy.deepcopy(pytest.hr_promotion)
+hr_data_set = copy.deepcopy(hr_promotion)
 hr_data_set = hr_data_set.drop_duplicates()
 hr_data_set = pd.get_dummies(hr_data_set, drop_first=False)
 hr_data_set.dropna(inplace=True)
 
-hr_data_Small = copy.deepcopy(pytest.hr_promotion_10)
+hr_data_Small = copy.deepcopy(hr_promotion_10)
 hr_data_Small = hr_data_Small.drop_duplicates()
 hr_data_Small = pd.get_dummies(hr_data_Small, drop_first=False)
 hr_data_Small.dropna(inplace=True)
