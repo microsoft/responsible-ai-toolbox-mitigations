@@ -98,9 +98,7 @@ def verify_data_categorical_columns(categorical_columns, result, hr_promotion_10
 def verify_type_non_categorical_columns(non_categorical_columns, result):
 
     for current_column in non_categorical_columns:
-        #column_type = result[current_column].dtypes
-        #if column_type != 'float64':
-        #    return (current_column)
+
         for current_cell in result[current_column]:
             if type(current_cell) != np.float:
                 return (current_cell)

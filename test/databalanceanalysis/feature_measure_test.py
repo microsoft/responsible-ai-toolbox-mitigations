@@ -5,7 +5,6 @@ import sys
 import os
 import pandas as pd
 
-sys.path.append("../../../responsible-ai-mitigations")
 from raimitigations.databalanceanalysis import FeatureBalanceMeasure
 
 # run the tests using this command: python -m pytest
