@@ -43,7 +43,7 @@ jobs:
       
       # github pages creates jekyll build by default, just want to point to index.html
       - name: Disable jekyll builds
-        run: touch docs/.build/html/.nojekyll
+        run: touch docs/_build/html/.nojekyll
       
       - name: Deploy
         if: github.event_name == 'push'
