@@ -6,14 +6,12 @@ from .aggregate_measures import AggregateBalanceMeasure
 from .feature_measures import FeatureBalanceMeasure
 from .distribution_measures import DistributionBalanceMeasure
 from .balance_measure import BalanceMeasure
-from .utils import undummify
 from .constants import Measures
 
 __all__ = [
     "AggregateBalanceMeasure",
     "FeatureBalanceMeasure",
     "DistributionBalanceMeasure",
-    "undummify",
     "Measures",
     "BalanceMeasure",
 ]
