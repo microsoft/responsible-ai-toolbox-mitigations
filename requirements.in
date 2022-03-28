@@ -5,6 +5,7 @@ matplotlib
 numpy
 PyQt5
 pytest
+pytest-codecov
 pytest-json-report
 pytest-html
 scipy

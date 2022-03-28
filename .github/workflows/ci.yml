@@ -48,7 +48,13 @@ jobs:
     
     - name: Run Tests
       run: |
-        pytest test/databalanceanalysis/.
-      
+        pytest --cov=raimitigations test/databalanceanalysis/. --cov-report=html
     
-    # code cov results 
+    - name: Upload code coverage results
+      uses: actions/upload-artifact@v2
+      with: 
+        name: raimitigations-code-coverage-results
+        path: htmlcov
+      if: ${{ always() }}
+        
+    # upload to codecov 
