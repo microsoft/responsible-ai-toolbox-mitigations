@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 import pytest
 import sys
 import numpy as np
@@ -7,7 +8,14 @@ import pandas as pd
 
 from raimitigations.dataprocessing import Transformer
 
-from common_utils import (create_hr_promotion_data, create_hr_promotion_10_data)
+from common_utils import (
+    PASS, 
+    create_hr_promotion_data, 
+    create_hr_promotion_10_data, 
+    validate_categorical_trans, 
+    verify_data_categorical_columns,
+    verify_type_non_categorical_columns
+    )
 
 
 # data_transformer =  Transformer(dataset, target, transformer_type, transform_features, random_state, method, output_distribution)
@@ -23,91 +31,133 @@ from common_utils import (create_hr_promotion_data, create_hr_promotion_10_data)
 hr_promotion = create_hr_promotion_data()
 hr_promotion_10 = create_hr_promotion_10_data()
 
-
-@pytest.fixture
-def hr_data_test():
-    hr_data = copy.deepcopy(pytest.hr_promotion_10)
-    return hr_data
+seed = 42
 
 
 @pytest.fixture
 def target_index_promoted():
-    target_index = pytest.hr_promotion_10.columns.get_loc("is_promoted")
+    target_index = hr_promotion_10.columns.get_loc("is_promoted")
     return target_index
 
 
 @pytest.fixture
 def target_index_previous_year_rating():
-    target_index = pytest.hr_promotion_10.columns.get_loc("previous_year_rating")
+    target_index = hr_promotion_10.columns.get_loc("previous_year_rating")
     return target_index
 
 
 # unit test for the Transform API
 
 
-@pytest.mark.Functional
-def test_data_transf_allfeatures(hr_data_test, target_index_promoted):
+def test_data_transf_allfeatures(target_index_promoted):
 
     """Data Transformer test with default transform_features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.StandardScaler)"""
 
+    data_transform = Transformer(hr_promotion_10, target_index_promoted, Transformer.TransformerType.StandardScaler)
+    result = data_transform.transform()
+
+    categorical_columns = ['department', 'region', 'education', 'gender', 'recruitment_channel']
+    non_categorical_columns = ['previous_year_rating', 'length_of_service', 'KPIs_met >80%', 'awards_won?', 'avg_training_score']
+
+    categorical_trans = validate_categorical_trans (hr_promotion_10, result, categorical_columns)
+    assert categorical_trans == None, f'Error in result table in column: {categorical_trans}'
+
+    verify_categorical = verify_data_categorical_columns(categorical_columns, result, hr_promotion_10)
+    assert verify_categorical  == None, f'Error in result table in column: {verify_categorical[0]} and row: {verify_categorical[1]}'
+    
+    verify_non_categorical = verify_type_non_categorical_columns(non_categorical_columns, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'
+
+
+def test_data_transf_allfeatures_PowerTrans(target_index_promoted):
+
+    """Data Transformer test with default transform_features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.PowerTransformer)"""
+
     data_transform = Transformer(
-        hr_data_test, target_index_promoted, Transformer.TransformerType.StandardScaler,
+        hr_promotion_10, 
+        target_index_promoted, 
+        Transformer.TransformerType.PowerTransformer
     )
     result = data_transform.transform()
 
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/transfAll.pickle")
-    )
+    categorical_columns = ['department', 'region', 'education', 'gender', 'recruitment_channel']
+    non_categorical_columns = ['previous_year_rating', 'length_of_service', 'KPIs_met >80%', 'awards_won?', 'avg_training_score']
 
-    assert result.equals(expected)
+    categorical_trans = validate_categorical_trans (hr_promotion_10, result, categorical_columns)
+    assert categorical_trans == None, f'Error in result table in column: {categorical_trans}'
+
+    verify_categorical = verify_data_categorical_columns(categorical_columns, result, hr_promotion_10)
+    assert verify_categorical  == None, f'Error in result table in column: {verify_categorical[0]} and row: {verify_categorical[1]}'
+    
+    verify_non_categorical = verify_type_non_categorical_columns(non_categorical_columns, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'
 
 
-@pytest.mark.Functional
-def test_data_transf_allfeatures_diffTargetIndex(
-    hr_data_test, target_index_previous_year_rating
-):
+def test_data_transf_allfeatures_diffTargetIndex(target_index_previous_year_rating):
 
     """Data Transformer test with default transform_features and previous year rating target index. API call: Transformer(hr_data_test, target_index_previous_year_rating, Transformer.TransformerType.StandardScaler)"""
 
     data_transform = Transformer(
-        hr_data_test,
+        hr_promotion_10,
         target_index_previous_year_rating,
-        Transformer.TransformerType.StandardScaler,
+        Transformer.TransformerType.StandardScaler
     )
     result = data_transform.transform()
 
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/transfAllDiffIndex.pickle")
-    )
+    categorical_columns = ['department', 'region', 'education', 'gender', 'recruitment_channel']
+    non_categorical_columns = ['is_promoted', 'length_of_service', 'KPIs_met >80%', 'awards_won?', 'avg_training_score']
 
-    assert result.equals(expected)
+    categorical_trans = validate_categorical_trans (hr_promotion_10, result, categorical_columns)
+    assert categorical_trans == None, f'Error in result table in column: {categorical_trans}'
+
+    verify_categorical = verify_data_categorical_columns(categorical_columns, result, hr_promotion_10)
+    assert verify_categorical  == None, f'Error in result table in column: {verify_categorical[0]} and row: {verify_categorical[1]}'
+    
+    verify_non_categorical = verify_type_non_categorical_columns(non_categorical_columns, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'
+    
 
 
-@pytest.mark.Functional
-def test_data_transf_StandardScalerFeat_None(hr_data_test, target_index_promoted):
+def test_data_transf_StandardScalerFeat_None(target_index_promoted):
 
     """Data Transformer test with all transform_features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.StandardScaler, None, pytest.seed)"""
 
     transform_features = None
 
     data_transform = Transformer(
-        hr_data_test,
-        target_index_promoted,
-        Transformer.TransformerType.StandardScaler,
-        transform_features,
-        pytest.seed,
+        hr_promotion_10, 
+        target_index_promoted, 
+        Transformer.TransformerType.StandardScaler, 
+        transform_features, 
+        seed
     )
     result = data_transform.transform()
 
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/transfAll.pickle")
-    )
+    categorical_columns = [
+        'department', 
+        'region', 'education', 
+        'gender', 
+        'recruitment_channel'
+    ]
+    non_categorical_columns = [
+        'previous_year_rating', 
+        'length_of_service', 
+        'KPIs_met >80%', 
+        'awards_won?', 
+        'avg_training_score'
+    ]
 
-    assert result.equals(expected)
+    categorical_trans = validate_categorical_trans (hr_promotion_10, result, categorical_columns)
+    assert categorical_trans == None, f'Error in result table in column: {categorical_trans}'
+
+    verify_categorical = verify_data_categorical_columns(categorical_columns, result, hr_promotion_10)
+    assert verify_categorical  == None, f'Error in result table in column: {verify_categorical[0]} and row: {verify_categorical[1]}'
+    
+    verify_non_categorical = verify_type_non_categorical_columns(non_categorical_columns, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'
 
 
-@pytest.mark.Functional
-def test_data_transf_StandardScaler(hr_data_test, target_index_promoted):
+def test_data_transf_StandardScaler(target_index_promoted):
 
     """Data Transformer test with subset of transform_features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.StandardScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
 
@@ -119,24 +169,20 @@ def test_data_transf_StandardScaler(hr_data_test, target_index_promoted):
     ]
 
     data_transform = Transformer(
-        hr_data_test,
+        hr_promotion_10,
         target_index_promoted,
         Transformer.TransformerType.StandardScaler,
         transform_features,
-        pytest.seed,
+        seed
     )
     result = data_transform.transform()
 
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/transfStandardScaler.pickle")
-    )
-
-    assert result.equals(expected)
+    verify_non_categorical = verify_type_non_categorical_columns(transform_features, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'
 
 
-@pytest.mark.Functional
 def test_data_transf_StandardScaler_OneFeature_DiffTargetIndex(
-    hr_data_test, target_index_previous_year_rating
+    target_index_previous_year_rating
 ):
 
     """Data Transformer test with subset of transform_features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.StandardScaler, 'age', pytest.seed)"""
@@ -144,25 +190,19 @@ def test_data_transf_StandardScaler_OneFeature_DiffTargetIndex(
     transform_features = ["age"]
 
     data_transform = Transformer(
-        hr_data_test,
+        hr_promotion_10,
         target_index_previous_year_rating,
         Transformer.TransformerType.StandardScaler,
         transform_features,
-        pytest.seed,
+        seed
     )
     result = data_transform.transform()
 
-    expected = pd.DataFrame(
-        pd.read_pickle(
-            "test/datasets/transfer" + "/transfStandardScalerDiffIndexAge.pickle"
-        )
-    )
-
-    assert result.equals(expected)
+    verify_non_categorical = verify_type_non_categorical_columns(transform_features, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'
 
 
-@pytest.mark.Functional
-def test_data_transf_MinMaxScaler(hr_data_test, target_index_promoted):
+def test_data_transf_MinMaxScaler(target_index_promoted):
 
     """Data Transformer test with MinMaxScaler transformer type. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.MinMaxScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
 
@@ -174,46 +214,60 @@ def test_data_transf_MinMaxScaler(hr_data_test, target_index_promoted):
     ]
 
     data_transform = Transformer(
-        hr_data_test,
+        hr_promotion_10,
         target_index_promoted,
         Transformer.TransformerType.MinMaxScaler,
         transform_features,
-        pytest.seed,
+        seed
     )
     result = data_transform.transform()
 
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/transfMinMax.pickle")
-    )
-
-    assert result.equals(expected)
+    verify_non_categorical = verify_type_non_categorical_columns(transform_features, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'
 
 
-@pytest.mark.Functional
-def test_data_transf_MinMaxScaler_Feat_None(hr_data_test, target_index_promoted):
+def test_data_transf_MinMaxScaler_Feat_None(target_index_promoted):
 
     """Data Transformer test with MinMaxScaler transformer type with all transform features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.MinMaxScaler, None, pytest.seed)"""
 
     transform_features = None
+    seed = 42
 
     data_transform = Transformer(
-        hr_data_test,
+        hr_promotion_10,
         target_index_promoted,
         Transformer.TransformerType.MinMaxScaler,
         transform_features,
-        pytest.seed,
+        seed
     )
     result = data_transform.transform()
 
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/transfMinMaxNone.pickle")
-    )
+    categorical_columns = [
+        'department', 
+        'region', 
+        'education', 
+        'gender', 
+        'recruitment_channel'
+    ]
+    non_categorical_columns = [
+        'previous_year_rating', 
+        'length_of_service', 
+        'KPIs_met >80%', 
+        'awards_won?', 
+        'avg_training_score'
+    ]
 
-    assert result.equals(expected)
+    categorical_trans = validate_categorical_trans (hr_promotion_10, result, categorical_columns)
+    assert categorical_trans == None, f'Error in result table in column: {categorical_trans}'
+
+    verify_categorical = verify_data_categorical_columns(categorical_columns, result, hr_promotion_10)
+    assert verify_categorical  == None, f'Error in result table in column: {verify_categorical[0]} and row: {verify_categorical[1]}'
+    
+    verify_non_categorical = verify_type_non_categorical_columns(non_categorical_columns, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'
 
 
-@pytest.mark.Functional
-def test_data_transf_Robust(hr_data_test, target_index_promoted):
+def test_data_transf_Robust(target_index_promoted):
 
     """Data Transformer test with RobustScaler transformer type with all transform features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.RobustScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
 
@@ -221,27 +275,23 @@ def test_data_transf_Robust(hr_data_test, target_index_promoted):
         "age",
         "previous_year_rating",
         "length_of_service",
-        "avg_training_score",
+        "avg_training_score"
     ]
 
-    data_transform2 = Transformer(
-        hr_data_test,
+    data_transform = Transformer(
+        hr_promotion_10,
         target_index_promoted,
         Transformer.TransformerType.RobustScaler,
         transform_features,
-        pytest.seed,
+        seed 
     )
-    result2 = data_transform2.transform()
+    result = data_transform.transform()
 
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/transfRobust.pickle")
-    )
-
-    assert result2.equals(expected)
+    verify_non_categorical = verify_type_non_categorical_columns(transform_features, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'
 
 
-@pytest.mark.Functional
-def test_data_transf_Power(hr_data_test, target_index_promoted):
+def test_data_transf_Power(target_index_promoted):
 
     """Data Transformer test with Power transformer type with non-categorical transform features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.PowerTransformer, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
 
@@ -249,27 +299,23 @@ def test_data_transf_Power(hr_data_test, target_index_promoted):
         "age",
         "previous_year_rating",
         "length_of_service",
-        "avg_training_score",
+        "avg_training_score"
     ]
 
-    data_transform2 = Transformer(
-        hr_data_test,
+    data_transform = Transformer(
+        hr_promotion_10,
         target_index_promoted,
         Transformer.TransformerType.PowerTransformer,
         transform_features,
-        pytest.seed,
+        seed
     )
-    result2 = data_transform2.transform()
+    result = data_transform.transform()
 
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/transfPower.pickle")
-    )
-
-    assert result2.equals(expected)
+    verify_non_categorical = verify_type_non_categorical_columns(transform_features, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'
 
 
-@pytest.mark.Functional
-def test_data_transf_Quantile(hr_data_test, target_index_promoted):
+def test_data_transf_Quantile(target_index_promoted):
 
     """Data Transformer test with Quantile transformer type with non-categorical transform features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.QuantileTransformer, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
 
@@ -277,181 +323,147 @@ def test_data_transf_Quantile(hr_data_test, target_index_promoted):
         "age",
         "previous_year_rating",
         "length_of_service",
-        "avg_training_score",
     ]
 
-    data_transform2 = Transformer(
-        hr_data_test,
+    data_transform = Transformer(
+        hr_promotion_10,
         target_index_promoted,
         Transformer.TransformerType.QuantileTransformer,
         transform_features,
-        pytest.seed,
+        seed
     )
-    result2 = data_transform2.transform()
+    result = data_transform.transform()
 
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/transfQuantile.pickle")
-    )
-
-    assert result2.equals(expected)
+    verify_non_categorical = verify_type_non_categorical_columns(transform_features, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'
 
 
-@pytest.mark.Functional
-def test_data_transf_Normalizer(hr_data_test, target_index_promoted):
+def test_data_transf_Normalizer(target_index_promoted):
 
     """Data Transformer test with Normalizer transformer type with non-categorical transform features. API call: Transformer(hr_data_test, target_index_promoted, Transformer.TransformerType.QuantileTransformer, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed)"""
 
     transform_features = [
+        "department",
+        "gender",
         "age",
-        "previous_year_rating",
-        "length_of_service",
-        "avg_training_score",
+        "length_of_service"
     ]
 
-    data_transform2 = Transformer(
-        hr_data_test,
+    data_transform = Transformer(
+        hr_promotion_10,
         target_index_promoted,
         Transformer.TransformerType.Normalizer,
         transform_features,
-        pytest.seed,
+        seed
     )
-    result2 = data_transform2.transform()
+    result = data_transform.transform()
 
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/transfNormalizer.pickle")
-    )
+    categorical_columns = [
+        'department', 
+        'gender'
+    ]
+    non_categorical_columns = [
+        'age', 
+        'length_of_service'
+    ]
 
-    assert result2.equals(expected)
+    categorical_trans = validate_categorical_trans (hr_promotion_10, result, categorical_columns)
+    assert categorical_trans == None, f'Error in result table in column: {categorical_trans}'
+
+    verify_categorical = verify_data_categorical_columns(categorical_columns, result, hr_promotion_10)
+    assert verify_categorical  == None, f'Error in result table in column: {verify_categorical[0]} and row: {verify_categorical[1]}'
+    
+    verify_non_categorical = verify_type_non_categorical_columns(non_categorical_columns, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'
 
 
-@pytest.mark.Functional
-def test_data_transf_method_boxcox(hr_data_test, target_index_promoted):
+def test_data_transf_method_boxcox(target_index_promoted):
 
     """Data Transformer test with StandardScaler transformer type with non-categorical transform features and box-cox method. API call: Transformer.TransformerType.StandardScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed, method='box-cox')"""
 
     transform_features = [
-        "age",
-        "previous_year_rating",
-        "length_of_service",
-        "avg_training_score",
-    ]
-
-    data_transform2 = Transformer(
-        hr_data_test,
-        target_index_promoted,
-        Transformer.TransformerType.StandardScaler,
-        transform_features,
-        pytest.seed,
-        method="box-cox",
-    )
-    result = data_transform2.transform()
-
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/transfboxcox.pickle")
-    )
-
-    assert result.equals(expected)
-
-
-@pytest.mark.Functional
-def test_data_transf_method_yeojohnson(hr_data_test, target_index_promoted):
-
-    """Data Transformer test with StandardScaler transformer type with non-categorical transform features and yeo-johnson method. API call: Transformer.TransformerType.StandardScaler, ['age', 'previous_year_rating', 'length_of_service', 'avg_training_score'], pytest.seed, method='yeo-johnson')"""
-
-    transform_features = [
-        "age",
-        "previous_year_rating",
-        "length_of_service",
-        "avg_training_score",
+        "region",
+        "education",
+        "avg_training_score"
     ]
 
     data_transform = Transformer(
-        hr_data_test,
+        hr_promotion_10,
         target_index_promoted,
-        Transformer.TransformerType.StandardScaler,
+        Transformer.TransformerType.QuantileTransformer,
         transform_features,
-        pytest.seed,
-        method="yeo-johnson",
+        seed,
+        method="box-cox"
     )
     result = data_transform.transform()
 
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/transfyeojohnson.pickle")
-    )
+    categorical_columns = ['region', 'education']
+    non_categorical_columns = ['avg_training_score']
 
-    assert result.equals(expected)
+    categorical_trans = validate_categorical_trans (hr_promotion_10, result, categorical_columns)
+    assert categorical_trans == None, f'Error in result table in column: {categorical_trans}'
 
-
-@pytest.mark.Functional
-def test_data_transf_method_subsetFeatures(hr_data_test, target_index_promoted):
-
-    """Data Transformer test with StandardScaler transformer type with non-categorical transform features and box-cox method. API call: Transformer.TransformerType.StandardScaler, ['length_of_service', 'avg_training_score'], pytest.seed, method='box-cox')"""
-
-    transform_features = ["length_of_service", "avg_training_score"]
-
-    data_transform = Transformer(
-        hr_data_test,
-        target_index_promoted,
-        Transformer.TransformerType.StandardScaler,
-        transform_features,
-        pytest.seed,
-        method="box-cox",
-    )
-    result = data_transform.transform()
-
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/subsetFeatures.pickle")
-    )
-
-    assert result.equals(expected)
+    verify_categorical = verify_data_categorical_columns(categorical_columns, result, hr_promotion_10)
+    assert verify_categorical  == None, f'Error in result table in column: {verify_categorical[0]} and row: {verify_categorical[1]}'
+    
+    verify_non_categorical = verify_type_non_categorical_columns(non_categorical_columns, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'
 
 
-@pytest.mark.Functional
-def test_data_transf_output_distribution_Normal(hr_data_test, target_index_promoted):
+def test_data_transf_output_distribution_Normal(target_index_promoted):
 
     """Data Transformer test with StandardScaler transformer type with non-categorical transform features and box-cox method. API call: Transformer.TransformerType.StandardScaler, ['length_of_service', 'avg_training_score'], pytest.seed, method='yeo-johnson', output_distribution='normal')"""
 
-    transform_features = ["length_of_service", "avg_training_score"]
+    transform_features = [
+        "length_of_service", 
+        "avg_training_score"
+    ]
 
     data_transform = Transformer(
-        hr_data_test,
+        hr_promotion_10,
         target_index_promoted,
-        Transformer.TransformerType.StandardScaler,
+        Transformer.TransformerType.MinMaxScaler,
         transform_features,
-        pytest.seed,
+        seed,
         method="yeo-johnson",
         output_distribution="normal",
     )
     result = data_transform.transform()
 
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/transfDistribNormal.pickle")
-    )
-
-    assert result.equals(expected)
+    verify_non_categorical = verify_type_non_categorical_columns(transform_features, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'
 
 
-@pytest.mark.Functional
-def test_data_transf_output_distribution_Uniform(hr_data_test, target_index_promoted):
+def test_data_transf_output_distribution_Uniform(target_index_promoted):
 
     """Data Transformer test with StandardScaler transformer type with non-categorical transform features and box-cox method. API call: Transformer.TransformerType.QuantileTransformer, ['length_of_service', 'avg_training_score'], pytest.seed, method='yeo-johnson', output_distribution='uniform')"""
 
-    transform_features = ["length_of_service", "avg_training_score"]
+    transform_features = [
+        "education", 
+        "recruitment_channel", 
+        "KPIs_met >80%", 
+        "awards_won?"
+    ]
 
     data_transform = Transformer(
-        hr_data_test,
+        hr_promotion_10,
         target_index_promoted,
-        Transformer.TransformerType.QuantileTransformer,
+        Transformer.TransformerType.Normalizer,
         transform_features,
-        pytest.seed,
-        method="yeo-johnson",
-        output_distribution="uniform",
+        seed,
+        method="box-cox",
+        output_distribution="uniform"
     )
     result = data_transform.transform()
 
-    expected = pd.DataFrame(
-        pd.read_pickle("test/datasets/transfer" + "/transfDistribUniform.pickle")
-    )
+    categorical_columns = ['education', 'recruitment_channel']
+    non_categorical_columns = ['KPIs_met >80%','awards_won?']
 
-    # Verifying that QuantileTransformer provides a non-parametric transformation to map the data to a uniform distribution with values between 0 and 1
-    assert result.equals(expected)
+    categorical_trans = validate_categorical_trans (hr_promotion_10, result, categorical_columns)
+    assert categorical_trans == None, f'Error in result table in column: {categorical_trans}'
+
+    verify_categorical = verify_data_categorical_columns(categorical_columns, result, hr_promotion_10)
+    assert verify_categorical  == None, f'Error in result table in column: {verify_categorical[0]} and row: {verify_categorical[1]}'
+    
+    verify_non_categorical = verify_type_non_categorical_columns(non_categorical_columns, result)
+    assert verify_non_categorical == None, f'Error in result table in column: {verify_non_categorical}'

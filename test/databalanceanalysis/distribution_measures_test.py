@@ -4,8 +4,6 @@ import pandas as pd
 import sys
 import os
 
-
-sys.path.append("../../../responsible-ai-mitigations")
 from raimitigations.databalanceanalysis import DistributionBalanceMeasure
 
 

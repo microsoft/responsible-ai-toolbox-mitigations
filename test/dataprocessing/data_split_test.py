@@ -5,7 +5,7 @@ import pandas as pd
 import zipfile
 
 from raimitigations.dataprocessing import Split
-from common_utils import (create_hr_promotion_data, create_hr_promotion_10_data)
+from common_utils import (create_hr_promotion_data, create_hr_promotion_10_data, validate_rows, data_set_drop_null_dup)
 
 # parameters for Split API
 # data_split =  Split(dataset, target, train_size, random_state, categorical_features, drop_null, drop_duplicates, is_stratify)
@@ -20,86 +20,60 @@ from common_utils import (create_hr_promotion_data, create_hr_promotion_10_data)
 #           is_stratify = False
 
 
-""" 
-pytest.global_variable_1 = "test/datasets/hr_promotion_test"
-pytest.hr_promotion_TEST = pd.read_csv(
-    "test/datasets/hr_promotion_test" + "/train.csv"
-).drop(["employee_id"], axis=1)
-pytest.global_variable_3 = "test/datasets/hr_promotion"
-pytest.hr_promotion = pd.read_csv("test/datasets/hr_promotion" + "/train.csv").drop(
-    ["employee_id"], axis=1
-)
- """
-
 hr_promotion = create_hr_promotion_data()
 hr_promotion_10 = create_hr_promotion_10_data()
 
 # unit test for the Split API
 
-testdata = [(0.9, (45, 46, 5, 46)), (0.5, (25, 46, 25, 46))]
-
-
-@pytest.mark.Functional
-@pytest.mark.parametrize(
-    "train_size, expected", testdata, ids=["train size=0.9", "train size=0.5"]
-)
-def test_data_split_rate_v0(train_size, expected):
+def test_data_split_rate():
 
     """Data Split test with 0.9 rate, no drop_null and no drop_dupicates. API call: Split(hr_data1, 12, 0.9, 42, True, False, False, False)"""
 
-    hr_data1 = copy.deepcopy(pytest.hr_promotion_10)
-    data_split = Split(hr_data1, 12, train_size, 42, True, False, False, False)
+    train_size = 0.9
+    data_split = Split(hr_promotion_10, 12, train_size, 42, True, False, False, False)
     train_data, test_data = data_split.split()
 
-    assert train_data.shape[0] == expected[0]
-    assert train_data.shape[1] == expected[1]
-    assert test_data.shape[0] == expected[2]
-    assert test_data.shape[1] == expected[3]
+    assert train_data.shape[0] == validate_rows(hr_promotion_10, 0.9, False, False)
+    assert test_data.shape[0] == validate_rows(hr_promotion_10, 0.1, False, False)
 
 
-@pytest.mark.Functional
 def test_data_split_remove_duplicate():
 
     """Data Split test with 0.9 rate, drop_dupicates but no drop_null. API call: Split(hr_data2, 12, 0.9, 42, True, False, True, False)"""
 
-    hr_data2 = copy.deepcopy(pytest.hr_promotion_10)
-
-    data_split = Split(hr_data2, 12, 0.9, 42, True, False, True, False)
+    data_split = Split(hr_promotion_10, 12, 0.6, 42, True, False, True, False)
     train_data, test_data = data_split.split()
 
-    assert train_data.shape[0] == 43
-    assert train_data.shape[1] == 46
-    assert test_data.shape[0] == 5
-    assert test_data.shape[1] == 46
+    train_val = validate_rows(hr_promotion_10, 0.6, False, True)
+    test_val = data_set_drop_null_dup(hr_promotion_10, False, True) - train_val
+
+    assert train_data.shape[0] == train_val
+    assert test_data.shape[0] == test_val
 
 
-@pytest.mark.Functional
+
 def test_data_split_drop_Null():
 
     """Data Split test with 0.9 rate, drop_null but no drop_dupicates. API call: Split(hr_data3, 12, 0.9, 42, True, True, False, False)"""
 
-    hr_data3 = copy.deepcopy(pytest.hr_promotion_10)
-
-    data_split = Split(hr_data3, 12, 0.9, 42, True, True, False, False)
+    data_split = Split(hr_promotion_10, 12, 0.8, 42, True, True, False, False)
     train_data, test_data = data_split.split()
 
-    assert train_data.shape[0] == 38
-    assert train_data.shape[1] == 45
-    assert test_data.shape[0] == 5
-    assert test_data.shape[1] == 45
+    train_val = validate_rows(hr_promotion_10, 0.8, True, False)
+    test_val = data_set_drop_null_dup(hr_promotion_10, True, False) - train_val
+
+    assert train_data.shape[0] == train_val
+    assert test_data.shape[0] == test_val
 
 
-@pytest.mark.Functional
 def test_data_split_stratifyOn():
 
     """Data Split test with 0.8 rate, stratify On. API call: Split(hr_data4, 12, 0.8, 42, True, False, False, True)"""
 
-    hr_data4 = copy.deepcopy(pytest.hr_promotion)
-
-    data_split_strat_False = Split(hr_data4, 12, 0.8, 42, True, False, False, False)
+    data_split_strat_False = Split(hr_promotion, 12, 0.8, 42, True, False, False, False)
     train_dataOff, test_dataOff = data_split_strat_False.split()
 
-    data_split = Split(hr_data4, 12, 0.8, 42, True, False, False, True)
+    data_split = Split(hr_promotion, 12, 0.8, 42, True, False, False, True)
     train_dataOn, test_dataOn = data_split.split()
 
     df_trainOff = pd.DataFrame(train_dataOff)
@@ -129,17 +103,14 @@ def test_data_split_stratifyOn():
     )
 
 
-@pytest.mark.Functional
 def test_data_split_dropNulls_stratifyOff():
 
     """Data Split test with 0.8 rate, drop null, stratify Off. API call: Split(hr_data5, 12, 0.8, 42, True, True, False, False)"""
 
-    hr_data5 = copy.deepcopy(pytest.hr_promotion)
-
-    data_split_strat_False = Split(hr_data5, 12, 0.8, 42, True, True, False, False)
+    data_split_strat_False = Split(hr_promotion, 12, 0.8, 42, True, True, False, False)
     train_dataOff, test_dataOff = data_split_strat_False.split()
 
-    data_split = Split(hr_data5, 12, 0.8, 42, True, True, False, True)
+    data_split = Split(hr_promotion, 12, 0.8, 42, True, True, False, True)
     train_dataOn, test_dataOn = data_split.split()
 
     df_trainOff = pd.DataFrame(train_dataOff)
@@ -169,17 +140,14 @@ def test_data_split_dropNulls_stratifyOff():
     )
 
 
-@pytest.mark.Functional
 def test_data_split_dropDups_stratifyOnOff():
 
     """Data Split test with 0.8 rate, drop null, stratify Off. API call: Split(hr_data5, 12, 0.5, 42, True, False, True, False)"""
 
-    hr_data6 = copy.deepcopy(pytest.hr_promotion)
-
-    data_split_strat_False = Split(hr_data6, 12, 0.5, 42, True, False, True, False)
+    data_split_strat_False = Split(hr_promotion, 12, 0.5, 42, True, False, True, False)
     train_dataOff, test_dataOff = data_split_strat_False.split()
 
-    data_split = Split(hr_data6, 12, 0.5, 42, True, False, True, True)
+    data_split = Split(hr_promotion, 12, 0.5, 42, True, False, True, True)
     train_dataOn, test_dataOn = data_split.split()
 
     aproxOff = (
@@ -194,18 +162,16 @@ def test_data_split_dropDups_stratifyOnOff():
     assert abs(aproxOff) > abs(aproxOn)
 
 
-@pytest.mark.Functional
 def test_data_split_dropNulls_dropdups_stratifyOnOff():
 
-    """Data Split test with 0.8 rate, drop null, stratify Off. API call: Split(hr_data5, 12, 0.5, 42, True, True, True, False)"""
+    """Data Split test with 0.8 rate, drop null, stratify Off. API call: Split(hr_data5, 12, 0.6, 42, True, True, True, False)"""
 
-    hr_data5 = copy.deepcopy(pytest.hr_promotion)
-    hr_data5 = hr_data5.drop_duplicates()
+    hr_promotion_d = hr_promotion.drop_duplicates()
 
-    data_split_strat_False = Split(hr_data5, 12, 0.6, 42, True, True, True, False)
+    data_split_strat_False = Split(hr_promotion_d, 12, 0.6, 42, True, True, True, False)
     train_dataOff, test_dataOff = data_split_strat_False.split()
 
-    data_split = Split(hr_data5, 12, 0.6, 42, True, True, True, True)
+    data_split = Split(hr_promotion_d, 12, 0.6, 42, True, True, True, True)
     train_dataOn, test_dataOn = data_split.split()
 
     df_trainOff = pd.DataFrame(train_dataOff)
