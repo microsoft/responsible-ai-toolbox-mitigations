@@ -448,7 +448,7 @@ def test_data_transf_output_distribution_Uniform(target_index_promoted):
     data_transform = Transformer(
         hr_promotion_10,
         target_index_promoted,
-        Transformer.TransformerType.QuantileTransformer,
+        Transformer.TransformerType.Normalizer,
         transform_features,
         seed,
         method="box-cox",
