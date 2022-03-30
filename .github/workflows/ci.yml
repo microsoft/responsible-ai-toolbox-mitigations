@@ -48,7 +48,7 @@ jobs:
     
     - name: Run Tests
       run: |
-        pytest --cov=raimitigations test/databalanceanalysis/. --cov-report=html
+        pytest --cov=raimitigations test/. --cov-report=html
     
     - name: Upload code coverage results
       uses: actions/upload-artifact@v2
