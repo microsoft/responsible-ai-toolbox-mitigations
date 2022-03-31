@@ -1,8 +1,4 @@
-import pytest
-import sys
-import copy
 import pandas as pd
-import zipfile
 
 from raimitigations.dataprocessing import Split
 from common_utils import (create_hr_promotion_data, create_hr_promotion_10_data, validate_rows, data_set_drop_null_dup)
@@ -19,18 +15,35 @@ from common_utils import (create_hr_promotion_data, create_hr_promotion_10_data,
 #           drop_duplicates = False
 #           is_stratify = False
 
+seed = 42
 
 hr_promotion = create_hr_promotion_data()
 hr_promotion_10 = create_hr_promotion_10_data()
+
+target_promoted = "is_promoted"
+target_previous_year_rating = "previous_year_rating"
 
 # unit test for the Split API
 
 def test_data_split_rate():
 
-    """Data Split test with 0.9 rate, no drop_null and no drop_dupicates. API call: Split(hr_data1, 12, 0.9, 42, True, False, False, False)"""
+    """Data Split test with 0.9 rate, no drop_null and no drop_dupicates. API call: Split(hr_data1, target_index, 0.9, seed, True, False, False, False)"""
 
     train_size = 0.9
-    data_split = Split(hr_promotion_10, 12, train_size, 42, True, False, False, False)
+    target_index_promoted = hr_promotion_10.columns.get_loc(target_promoted)
+    data_split = Split(hr_promotion_10, target_index_promoted, train_size, seed, True, False, False, False)
+    train_data, test_data = data_split.split()
+
+    assert train_data.shape[0] == validate_rows(hr_promotion_10, 0.9, False, False)
+    assert test_data.shape[0] == validate_rows(hr_promotion_10, 0.1, False, False)
+
+
+def test_data_split_not_target():
+
+    """Data Split test with 0.9 rate, not target, no drop_null and no drop_dupicates. API call: Split(hr_data1, target_index, 0.9, seed, True, False, False, False)"""
+
+    train_size = 0.9
+    data_split = Split(hr_promotion_10, target_previous_year_rating, train_size, seed, True, False, False, False)
     train_data, test_data = data_split.split()
 
     assert train_data.shape[0] == validate_rows(hr_promotion_10, 0.9, False, False)
@@ -39,9 +52,9 @@ def test_data_split_rate():
 
 def test_data_split_remove_duplicate():
 
-    """Data Split test with 0.9 rate, drop_dupicates but no drop_null. API call: Split(hr_data2, 12, 0.9, 42, True, False, True, False)"""
+    """Data Split test with 0.9 rate, drop_dupicates but no drop_null. API call: Split(hr_data2, target_index, 0.9, seed, True, False, True, False)"""
 
-    data_split = Split(hr_promotion_10, 12, 0.6, 42, True, False, True, False)
+    data_split = Split(hr_promotion_10, target_promoted, 0.6, seed, True, False, True, False)
     train_data, test_data = data_split.split()
 
     train_val = validate_rows(hr_promotion_10, 0.6, False, True)
@@ -51,12 +64,11 @@ def test_data_split_remove_duplicate():
     assert test_data.shape[0] == test_val
 
 
-
 def test_data_split_drop_Null():
 
-    """Data Split test with 0.9 rate, drop_null but no drop_dupicates. API call: Split(hr_data3, 12, 0.9, 42, True, True, False, False)"""
+    """Data Split test with 0.9 rate, drop_null but no drop_dupicates. API call: Split(hr_data3, target_index, 0.9, seed, True, True, False, False)"""
 
-    data_split = Split(hr_promotion_10, 12, 0.8, 42, True, True, False, False)
+    data_split = Split(hr_promotion_10, target_promoted, 0.8, seed, True, True, False, False)
     train_data, test_data = data_split.split()
 
     train_val = validate_rows(hr_promotion_10, 0.8, True, False)
@@ -68,12 +80,12 @@ def test_data_split_drop_Null():
 
 def test_data_split_stratifyOn():
 
-    """Data Split test with 0.8 rate, stratify On. API call: Split(hr_data4, 12, 0.8, 42, True, False, False, True)"""
+    """Data Split test with 0.8 rate, stratify On. API call: Split(hr_data4, target_index, 0.8, seed, True, False, False, True)"""
 
-    data_split_strat_False = Split(hr_promotion, 12, 0.8, 42, True, False, False, False)
+    data_split_strat_False = Split(hr_promotion, target_promoted, 0.8, seed, True, False, False, False)
     train_dataOff, test_dataOff = data_split_strat_False.split()
 
-    data_split = Split(hr_promotion, 12, 0.8, 42, True, False, False, True)
+    data_split = Split(hr_promotion, target_promoted, 0.8, seed, True, False, False, True)
     train_dataOn, test_dataOn = data_split.split()
 
     df_trainOff = pd.DataFrame(train_dataOff)
@@ -105,12 +117,12 @@ def test_data_split_stratifyOn():
 
 def test_data_split_dropNulls_stratifyOff():
 
-    """Data Split test with 0.8 rate, drop null, stratify Off. API call: Split(hr_data5, 12, 0.8, 42, True, True, False, False)"""
+    """Data Split test with 0.8 rate, drop null, stratify Off. API call: Split(hr_data5, target_index, 0.8, seed, True, True, False, False)"""
 
-    data_split_strat_False = Split(hr_promotion, 12, 0.8, 42, True, True, False, False)
+    data_split_strat_False = Split(hr_promotion, target_promoted, 0.8, seed, True, True, False, False)
     train_dataOff, test_dataOff = data_split_strat_False.split()
 
-    data_split = Split(hr_promotion, 12, 0.8, 42, True, True, False, True)
+    data_split = Split(hr_promotion, target_promoted, 0.8, seed, True, True, False, True)
     train_dataOn, test_dataOn = data_split.split()
 
     df_trainOff = pd.DataFrame(train_dataOff)
@@ -142,12 +154,12 @@ def test_data_split_dropNulls_stratifyOff():
 
 def test_data_split_dropDups_stratifyOnOff():
 
-    """Data Split test with 0.8 rate, drop null, stratify Off. API call: Split(hr_data5, 12, 0.5, 42, True, False, True, False)"""
+    """Data Split test with 0.8 rate, drop null, stratify Off. API call: Split(hr_data5, target_index, 0.5, seed, True, False, True, False)"""
 
-    data_split_strat_False = Split(hr_promotion, 12, 0.5, 42, True, False, True, False)
+    data_split_strat_False = Split(hr_promotion, target_promoted, 0.5, seed, True, False, True, False)
     train_dataOff, test_dataOff = data_split_strat_False.split()
 
-    data_split = Split(hr_promotion, 12, 0.5, 42, True, False, True, True)
+    data_split = Split(hr_promotion, target_promoted, 0.5, seed, True, False, True, True)
     train_dataOn, test_dataOn = data_split.split()
 
     aproxOff = (
@@ -164,14 +176,14 @@ def test_data_split_dropDups_stratifyOnOff():
 
 def test_data_split_dropNulls_dropdups_stratifyOnOff():
 
-    """Data Split test with 0.8 rate, drop null, stratify Off. API call: Split(hr_data5, 12, 0.6, 42, True, True, True, False)"""
+    """Data Split test with 0.8 rate, drop null, stratify Off. API call: Split(hr_data5, target_index, 0.6, seed, True, True, True, False)"""
 
     hr_promotion_d = hr_promotion.drop_duplicates()
 
-    data_split_strat_False = Split(hr_promotion_d, 12, 0.6, 42, True, True, True, False)
+    data_split_strat_False = Split(hr_promotion_d, target_promoted, 0.6, seed, True, True, True, False)
     train_dataOff, test_dataOff = data_split_strat_False.split()
 
-    data_split = Split(hr_promotion_d, 12, 0.6, 42, True, True, True, True)
+    data_split = Split(hr_promotion_d, target_promoted, 0.6, seed, True, True, True, True)
     train_dataOn, test_dataOn = data_split.split()
 
     df_trainOff = pd.DataFrame(train_dataOff)
@@ -195,9 +207,6 @@ def test_data_split_dropNulls_dropdups_stratifyOnOff():
         df_testOn.is_promoted.value_counts()[0]
         + df_testOn.is_promoted.value_counts()[1]
     )
-
-    on = abs(train_percent_stratOn - test_percent_stratOn)
-    off = abs(train_percent_stratOff - test_percent_stratOff)
 
     assert abs(train_percent_stratOn - test_percent_stratOn) < abs(
         train_percent_stratOff - test_percent_stratOff
