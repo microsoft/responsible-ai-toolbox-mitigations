@@ -1,5 +1,4 @@
 # Defines common utilities for dataprocessing tests
-from asyncio.windows_events import NULL
 import numpy as np
 import pandas as pd
 import zipfile

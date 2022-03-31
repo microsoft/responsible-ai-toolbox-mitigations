@@ -1,6 +1,4 @@
 import pytest
-import sys
-import copy
 import pandas as pd
 
 from pandas import read_csv
@@ -22,22 +20,24 @@ from raimitigations.dataprocessing import RandomSample
 
 hr_promotion = create_hr_promotion_data()
 hr_promotion_10 = create_hr_promotion_10_data()
+target_promoted = "is_promoted"
+target_no_trainings = "no_of_trainings"
 
 @pytest.fixture
 def target_index_promoted():
-    target = hr_promotion_10.columns.get_loc("is_promoted")
+    target = hr_promotion_10.columns.get_loc(target_promoted)
     return target
 
 
 @pytest.fixture
 def target_index_promoted_largeDS():
-    target = hr_promotion.columns.get_loc("is_promoted")
+    target = hr_promotion.columns.get_loc(target_promoted)
     return target
 
 
 @pytest.fixture
 def target_index_no_trainings():
-    target = hr_promotion_10.columns.get_loc("no_of_trainings")
+    target = hr_promotion_10.columns.get_loc(target_no_trainings)
     return target
 
 
@@ -49,7 +49,6 @@ def test_data_randomSample_split_categorical(target_index_promoted):
     """Data RandomSample test with split rate 0.2, drop_null and categorical features. API call: RandomSample(hr_data, target_index, 0.2, True)"""
 
     data_sample = RandomSample(hr_promotion, target_index_promoted, 0.2, True)
-
     random_sample_split = data_sample.random_sample()
 
     assert random_sample_split.shape[0] == validate_rows(hr_promotion, 0.2, True, False)
@@ -60,18 +59,16 @@ def test_data_randomSample_split_not_categorical(target_index_no_trainings):
     """Data RandomSample test with split rate 0.2, drop_null and not categorical features. API call: RandomSample(hr_data, target_index, 0.3, False)"""
 
     data_sample = RandomSample(hr_promotion, target_index_no_trainings, 0.3, False)
-
     random_sample_split = data_sample.random_sample()
 
     assert random_sample_split.shape[0] == validate_rows(hr_promotion, 0.3, True, False)
 
 
-def test_data_randomSample_default_dup(target_index_promoted):
+def test_data_randomSample_default_dup():
 
     """Data RandomSample test with split rate 0.2, drop_null and drop_duplicates. API call: RandomSample(hr_data, target_index_promoted, 0.4, True, True)"""
 
-    data_sample = RandomSample(hr_promotion, target_index_promoted, 0.4, True, True)
-
+    data_sample = RandomSample(hr_promotion, target_promoted, 0.4, True, True)
     random_sample = data_sample.random_sample()
 
     assert random_sample.shape[0] == validate_rows(hr_promotion, 0.4, True, False)
@@ -82,7 +79,6 @@ def test_data_randomSample_split_dropNulDup(target_index_promoted):
     """Data RandomSample test with split rate 0.2, drop_null and drop_duplicates. API call: RandomSample(hr_data, target_index_promoted, 0.4, False, True, True, True)"""
 
     data_sample = RandomSample(hr_promotion_10, target_index_promoted, 0.4, True, True, True)
-
     random_sample = data_sample.random_sample()
 
     assert random_sample.shape[0] == validate_rows(hr_promotion_10, 0.4, True, True)
@@ -93,7 +89,6 @@ def test_data_randomSample_split_dropDup(target_index_promoted):
     """Data RandomSample test with split rate 0.3, drop_null and drop_duplicates. API call: RandomSample(hr_data, target_index_promoted, 0.3, True, False, True)"""
 
     data_sample = RandomSample(hr_promotion_10, target_index_promoted, 0.3, True, False, True)
-
     random_sample = data_sample.random_sample()
 
     assert random_sample.shape[0] == validate_rows(hr_promotion_10, 0.3, False, True)
@@ -118,7 +113,6 @@ def test_data_randomSample_split_noDrops(target_index_promoted):
     data_sample = RandomSample(
         hr_promotion_10, target_index_promoted, 0.2, True, False, False, False
     )
-
     random_sample = data_sample.random_sample()
 
     assert random_sample.shape[0] == validate_rows(hr_promotion_10, 0.2, False, False)

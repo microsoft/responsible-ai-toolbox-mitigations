@@ -1,7 +1,5 @@
 from _pytest.compat import STRING_TYPES
 import pytest
-import sys
-import copy
 import pandas as pd
 
 from imblearn.under_sampling import TomekLinks
@@ -29,13 +27,11 @@ seed = 42
 hr_promotion = create_hr_promotion_data()
 hr_promotion_10 = create_hr_promotion_10_data()
 
-hr_data_set = copy.deepcopy(hr_promotion)
-hr_data_set = hr_data_set.drop_duplicates()
+hr_data_set = hr_promotion.drop_duplicates()
 hr_data_set = pd.get_dummies(hr_data_set, drop_first=False)
 hr_data_set.dropna(inplace=True)
 
-hr_data_Small = copy.deepcopy(hr_promotion_10)
-hr_data_Small = hr_data_Small.drop_duplicates()
+hr_data_Small = hr_promotion_10.drop_duplicates()
 hr_data_Small = pd.get_dummies(hr_data_Small, drop_first=False)
 hr_data_Small.dropna(inplace=True)
 
