@@ -17,37 +17,10 @@ jobs:
         with: 
           python-version: 3.8
           
-      - name: Setup tools
-        run: | 
-          python -m pip install --upgrade pip
-          pip install --upgrade setuptools
-          pip install --upgrade pip-tools 
-    
-      - name: Pip compile
-        run: |
-          pip-compile requirements.in
-          cat requirements.txt
-    
-      - name: Install dependencies
-        run: |
-          pip-sync requirements.txt
-          
-      - name: Install package
-        run: |
-          pip install -v .
-      
-      - name: Build
-        run: | 
-          make html
-        working-directory: docs
-      
-      # github pages creates jekyll build by default, just want to point to index.html
-      - name: Disable jekyll builds
-        run: touch docs/_build/html/.nojekyll
-      
-      - name: Deploy
-        if: github.event_name == 'push'
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Build and Commit
+        uses: sphinx-notes/pages@v2
+      - name: Push changes
+        uses: ad-m/github-push-action@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/build/html
+         github_token: ${{ secrets.GITHUB_TOKEN }}
+         branch: gh-pages
