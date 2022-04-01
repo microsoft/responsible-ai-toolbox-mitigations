@@ -260,12 +260,6 @@ pytz==2021.3
     # via
     #   babel
     #   pandas
-pywin32==303
-    # via jupyter-core
-pywinpty==2.0.5
-    # via
-    #   jupyter-server
-    #   terminado
 pyzmq==22.3.0
     # via
     #   jupyter-client
