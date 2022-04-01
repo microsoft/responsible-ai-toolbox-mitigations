@@ -20,7 +20,7 @@ jobs:
       - name: Build and Commit
         uses: sphinx-notes/pages@v2
       - name: Push changes
-        uses: ad-m/github-push-action@v2
+        uses: ad-m/github-push-action@master
         with:
          github_token: ${{ secrets.GITHUB_TOKEN }}
          branch: gh-pages
