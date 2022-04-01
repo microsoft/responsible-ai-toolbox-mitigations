@@ -16,8 +16,6 @@ argon2-cffi-bindings==21.2.0
     # via argon2-cffi
 asttokens==2.0.5
     # via stack-data
-atomicwrites==1.4.0
-    # via pytest
 attrs==21.4.0
     # via
     #   jsonschema
@@ -38,11 +36,6 @@ cffi==1.15.0
     # via argon2-cffi-bindings
 charset-normalizer==2.0.12
     # via requests
-colorama==0.4.4
-    # via
-    #   ipython
-    #   pytest
-    #   sphinx
 coverage[toml]==6.3.2
     # via
     #   pytest-codecov
@@ -74,10 +67,6 @@ imagesize==1.3.0
     # via sphinx
 imbalanced-learn==0.9.0
     # via -r requirements.in
-importlib-metadata==4.11.3
-    # via sphinx
-importlib-resources==5.4.0
-    # via jsonschema
 iniconfig==1.1.1
     # via pytest
 ipykernel==6.9.2
@@ -122,7 +111,7 @@ jupyter-core==4.9.2
     #   nbconvert
     #   nbformat
     #   notebook
-jupyter-server==1.15.3
+jupyter-server==1.15.4
     # via
     #   jupyterlab
     #   jupyterlab-server
@@ -193,6 +182,8 @@ pandocfilters==1.5.0
     # via nbconvert
 parso==0.8.3
     # via jedi
+pexpect==4.8.0
+    # via ipython
 pickleshare==0.7.5
     # via ipython
 pillow==9.0.1
@@ -207,6 +198,10 @@ prompt-toolkit==3.0.28
     # via ipython
 psutil==5.9.0
     # via ipykernel
+ptyprocess==0.7.0
+    # via
+    #   pexpect
+    #   terminado
 pure-eval==0.2.2
     # via stack-data
 py==1.11.0
@@ -354,10 +349,6 @@ websocket-client==1.3.1
     # via jupyter-server
 wheel==0.37.1
     # via -r requirements.in
-zipp==3.7.0
-    # via
-    #   importlib-metadata
-    #   importlib-resources
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
