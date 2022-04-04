@@ -17,6 +17,31 @@ jobs:
         with: 
           python-version: 3.8
           
+      - name: Setup tools
+        run: | 
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools
+          pip install --upgrade pip-tools 
+    
+      - name: Pip compile
+        run: |
+          pip-compile requirements.in
+          cat requirements.txt
+    
+      - name: Upload Requirements
+        uses: actions/upload-artifact@v2
+        with: 
+          name: requirements.txt
+          path: requirements.txt
+    
+      - name: Install dependencies
+        run: |
+          pip-sync requirements.txt
+    
+      - name: Install package
+        run: |
+          pip install -v .
+          
       - name: Build and Commit
         uses: sphinx-notes/pages@v2
         with:
