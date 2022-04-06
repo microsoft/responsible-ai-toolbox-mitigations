@@ -122,19 +122,19 @@ def test_data_randomSample_stratifyOnOff(target_index_promoted_largeDS):
 
     """Data RandomSample test with split rate 0.5. API call: RandomSample(data_large_set, target_index_promoted, 0.5, True, False, False, False)"""
 
-    data_sample1 = RandomSample(
+    data_sample = RandomSample(
         hr_promotion, target_index_promoted_largeDS, 0.8, True, False, False, False
     )
-    random_sample1 = data_sample1.random_sample()
+    random_sample = data_sample.random_sample()
 
-    data_sample_stratOn1 = RandomSample(
+    data_sample_stratOn = RandomSample(
         hr_promotion, target_index_promoted_largeDS, 0.8, True, False, False, True
     )
-    random_sample_stratOn1 = data_sample_stratOn1.random_sample()
+    random_sample_stratOn1 = data_sample_stratOn.random_sample()
 
     stratOff_random_1_over_0 = (
-        random_sample1.is_promoted.value_counts()[1]
-        / random_sample1.is_promoted.value_counts()[0]
+        random_sample.is_promoted.value_counts()[1]
+        / random_sample.is_promoted.value_counts()[0]
     )
     stratOn_random_1_over_0 = (
         random_sample_stratOn1.is_promoted.value_counts()[1]
@@ -145,7 +145,7 @@ def test_data_randomSample_stratifyOnOff(target_index_promoted_largeDS):
         / hr_promotion.is_promoted.value_counts()[0]
     )
 
-    assert abs(all_set_1_over_0 - stratOn_random_1_over_0) < abs(
+    assert abs(all_set_1_over_0 - stratOn_random_1_over_0) <= abs(
         all_set_1_over_0 - stratOff_random_1_over_0
     )
 
@@ -156,30 +156,32 @@ def test_data_randomSample_stratifyOnOff_dropnull(
 
     """Data RandomSample test with split rate 0.8, drop null and stratify. API call: RandomSample(hr_data, target_index_promoted, 0.8, True, True, False, False)"""
 
-    data_sample2 = RandomSample(
+    hr_promotion.dropna(axis=0, inplace=True)
+
+    data_sample = RandomSample(
         hr_promotion, target_index_promoted_largeDS, 0.8, False, True, False, False
     )
-    random_sample2 = data_sample2.random_sample()
+    random_sample = data_sample.random_sample()
 
-    data_sample_stratOn2 = RandomSample(
+    data_sample_stratOn = RandomSample(
         hr_promotion, target_index_promoted_largeDS, 0.8, False, True, False, True
     )
-    random_sample_stratOn2 = data_sample_stratOn2.random_sample()
+    random_sample_stratOn = data_sample_stratOn.random_sample()
 
     stratOff_random_1_over_0 = (
-        random_sample2.is_promoted.value_counts()[1]
-        / random_sample2.is_promoted.value_counts()[0]
+        random_sample.is_promoted.value_counts()[1]
+        / random_sample.is_promoted.value_counts()[0]
     )
     stratOn_random_1_over_0 = (
-        random_sample_stratOn2.is_promoted.value_counts()[1]
-        / random_sample_stratOn2.is_promoted.value_counts()[0]
+        random_sample_stratOn.is_promoted.value_counts()[1]
+        / random_sample_stratOn.is_promoted.value_counts()[0]
     )
     all_set_1_over_0 = (
         hr_promotion.is_promoted.value_counts()[1]
         / hr_promotion.is_promoted.value_counts()[0]
     )
 
-    assert abs(all_set_1_over_0 - stratOn_random_1_over_0) < abs(
+    assert abs(all_set_1_over_0 - stratOn_random_1_over_0) <= abs(
         all_set_1_over_0 - stratOff_random_1_over_0
     )
 
@@ -190,30 +192,33 @@ def test_data_randomSample_stratifyOnOff_dropNull_dropdup(
 
     """Data RandomSample test with split rate 0.8, drop null, frop duplicates, checking stratify On_Off. API call: RandomSample(hr_data, target_index_promoted, 0.7, True, True, True, False)"""
 
-    data_sample3 = RandomSample(
+    hr_promotion_drop = hr_promotion.drop_duplicates()
+    hr_promotion_drop.dropna(axis=0, inplace=True)
+    
+    data_sample = RandomSample(
         hr_promotion, target_index_promoted_largeDS, 0.7, True, True, True, False
     )
-    random_sample3 = data_sample3.random_sample()
+    random_sample = data_sample.random_sample()
 
-    data_sample_stratOn3 = RandomSample(
+    data_sample_stratOn = RandomSample(
         hr_promotion, target_index_promoted_largeDS, 0.7, True, True, True, True
     )
-    random_sample_stratOn3 = data_sample_stratOn3.random_sample()
+    random_sample_stratOn = data_sample_stratOn.random_sample()
 
     stratOff_random_1_over_0 = (
-        random_sample3.is_promoted.value_counts()[1]
-        / random_sample3.is_promoted.value_counts()[0]
+        random_sample.is_promoted.value_counts()[1]
+        / random_sample.is_promoted.value_counts()[0]
     )
     stratOn_random_1_over_0 = (
-        random_sample_stratOn3.is_promoted.value_counts()[1]
-        / random_sample_stratOn3.is_promoted.value_counts()[0]
+        random_sample_stratOn.is_promoted.value_counts()[1]
+        / random_sample_stratOn.is_promoted.value_counts()[0]
     )
     all_set_1_over_0 = (
-        hr_promotion.is_promoted.value_counts()[1]
-        / hr_promotion.is_promoted.value_counts()[0]
+        hr_promotion_drop.is_promoted.value_counts()[1]
+        / hr_promotion_drop.is_promoted.value_counts()[0]
     )
 
-    assert abs(all_set_1_over_0 - stratOn_random_1_over_0) < abs(
+    assert abs(all_set_1_over_0 - stratOn_random_1_over_0) <= abs(
         all_set_1_over_0 - stratOff_random_1_over_0
     )
 
