@@ -11,6 +11,16 @@ on:
           - Test
           - Prod
         required: true
+      bumpType:
+        type: choice
+        description: "Part of version number to bump"
+        options:
+          - major
+          - minor
+          - revision
+          - none
+        required: true
+        default: 'minor'
 
 jobs: 
   release-pypi:
@@ -38,6 +48,35 @@ jobs:
       - name: Install current package
         run: |
           pip install -v .
+          
+      # update the package version by bumping the minor version to the next
+      - name: Bump minor version
+        if: ${{ github.event.inputs.bumpType == 'minor' }}
+        run: |
+          bump --minor --reset
+          
+      - name: Bump major version
+        if: ${{ github.event.inputs.bumpType == 'major' }}
+        run: |
+          bump --major --reset
+      
+      - name: Bump revision version
+        if: ${{ github.event.inputs.bumpType == 'revision' }}
+        run: |
+          bump
+          
+      #commit the bumped version and push to repo 
+      - name: commit new setup file
+        if: ${{ github.event.inputs.bumpType != 'none' }}
+        run: |
+          git add setup.py
+          git commit -m "update version number"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }} 
        
       - name: build wheel
         run: python setup.py sdist bdist_wheel
@@ -62,6 +101,5 @@ jobs:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN }}
             
-        
-       
+
          
