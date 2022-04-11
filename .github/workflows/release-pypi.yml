@@ -29,6 +29,9 @@ jobs:
        
        # build wheel 
       - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
       
       - uses: actions/setup-python@v2
         with:
@@ -71,6 +74,8 @@ jobs:
       - name: commit new setup file
         if: ${{ github.event.inputs.bumpType != 'none' }}
         run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
           git add setup.py
           git commit -m "update version number"
       
