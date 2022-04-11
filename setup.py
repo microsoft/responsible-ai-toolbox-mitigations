@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="raimitigations",
-    version="0.0.2",
+    version="0.0.3",
     author="Akshara Ramakrishnan",
     author_email="aksharar@microsoft.com",
     description="Data Balance Analysis and Error mitigation steps on python",
