@@ -12,7 +12,6 @@ __all__ = [
     "AggregateBalanceMeasure",
     "FeatureBalanceMeasure",
     "DistributionBalanceMeasure",
-    "undummify",
     "Measures",
     "BalanceMeasure",
 ]
