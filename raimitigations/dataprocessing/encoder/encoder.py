@@ -1,0 +1,107 @@
+from abc import abstractmethod
+from typing import Union
+
+import numpy as np
+import pandas as pd
+
+from ..data_processing import DataProcessing
+from ..data_utils import get_cat_cols
+
+
+class DataEncoding(DataProcessing):
+    """
+    Base class for all encoding subclasses. Implements basic functionalities
+    that can be used by all encoding approaches.
+
+    :param df: pandas data frame that contains the columns to be encoded;
+
+    :param col_encode: a list of the column names or indexes that will be encoded.
+        If None, this parameter will be set automatically as being a list of all
+        categorical variables in the dataset;
+
+    :param verbose: indicates whether internal messages should be printed or not."""
+
+    # -----------------------------------
+    def __init__(self, df: pd.DataFrame = None, col_encode: list = None, verbose: bool = True):
+        super().__init__(verbose)
+        self.df = None
+        self._set_df(df)
+        self.col_encode = col_encode
+        self.do_nothing = False
+        self.fitted = False
+
+    # -----------------------------------
+    def _set_column_to_encode(self):
+        """
+        Sets the columns to encode (col_encode) automatically
+        if these columns are not provided. We consider that
+        only categorical columns must be encoded. Therefore, we
+        automatically check which columns are possibly categorical.
+        """
+        if self.col_encode is not None:
+            return
+
+        cat_col = get_cat_cols(self.df)
+        self.col_encode = cat_col
+        self.print_message(
+            f"No columns specified for encoding. These columns "
+            f"have been automatically identfied as the following:\n{self.col_encode}"
+        )
+
+    # -----------------------------------
+    def _check_valid_input(self):
+        self.col_encode = self._check_error_col_list(self.df, self.col_encode, "col_encode")
+
+    # -----------------------------------
+    def _get_fit_input_type(self):
+        return self.FIT_INPUT_DF
+
+    # -----------------------------------
+    @abstractmethod
+    def _fit(self):
+        """
+        Abstract method. For a given concrete class, this method must
+        create and execute the encoding method implemented and save any
+        important information in a set of class-specific attributes. These
+        attributes are then used to transform a dataset and encode it.
+        """
+        pass
+
+    # -----------------------------------
+    def fit(self, df: Union[pd.DataFrame, np.ndarray] = None, y: Union[pd.Series, np.ndarray] = None):
+        self._set_df(df, require_set=True)
+        self._set_column_to_encode()
+        self._check_valid_input()
+        self._fit()
+        self.fitted = True
+        return self
+
+    # -----------------------------------
+    @abstractmethod
+    def _transform(self, df: pd.DataFrame):
+        """
+        Abstract method. For a given concrete class, this method must execute the
+        transformation of a dataset using the encoding method implemented and
+        return the encoded dataset.
+        """
+        pass
+
+    # -----------------------------------
+    def _check_if_fitted(self):
+        if not self.fitted:
+            raise ValueError(
+                f"ERROR: trying to call the transform() method from an instance of the {self.__class__.__name__} class "
+                + "before calling the fit() method. "
+                + "Call the fit() method before using this instance to transform a dataset."
+            )
+
+    # -----------------------------------
+    def transform(self, df: Union[pd.DataFrame, np.ndarray]):
+        self._check_if_fitted()
+        transf_df = self._fix_col_transform(df)
+        transf_df = self._transform(transf_df)
+        return transf_df
+
+    # -----------------------------------
+    def get_encoded_columns(self):
+        return self.col_encode.copy()

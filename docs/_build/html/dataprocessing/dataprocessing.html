@@ -50,11 +50,12 @@
 <span id="dataprocessing-random-sample-module"></span><h2>dataprocessing.random_sample module<a class="headerlink" href="#module-dataprocessing.random_sample" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="dataprocessing.random_sample.RandomSample">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.random_sample.</span></span><span class="sig-name descname"><span class="pre">RandomSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_duplicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.random_sample.RandomSample" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.random_sample.</span></span><span class="sig-name descname"><span class="pre">RandomSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_duplicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.random_sample.RandomSample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pd.Dataframe</em>) – the dataframe that the user will apply sampling on</p></li>
 <li><p><strong>target</strong> (<em>str</em><em>, </em><em>int</em>) – the name of the target column or the index of the target column</p></li>
 <li><p><strong>sample_size</strong> (<em>int</em>) – the number of samples to include in the random sample</p></li>
 <li><p><strong>stratify</strong> (<em>array-like</em>) – if not None, data is split in a stratified fashion, using this as the class targets</p></li>
@@ -62,27 +63,9 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.random_sample.RandomSample.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.random_sample.RandomSample.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.random_sample.RandomSample.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.random_sample.RandomSample.transform" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dataset</strong> – the dataset to take a random sample from</p>
-</dd>
-<dt class="field-even">Type</dt>
-<dd class="field-even"><p>pd.DataFrame</p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a random sample of the dataset using the params initialized</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>pd.Dataframe</p>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="dataprocessing.random_sample.RandomSample.random_sample">
+<span class="sig-name descname"><span class="pre">random_sample</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.random_sample.RandomSample.random_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a random sample of the dataset</p>
 </dd></dl>
 
 </dd></dl>
@@ -201,11 +184,6 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.transformer.Transformer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.transformer.Transformer.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="dataprocessing.transformer.Transformer.transform">
 <span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.transformer.Transformer.transform" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -218,11 +196,12 @@
 <p>data processing tools to help prepare data for ML training.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dataprocessing.RandomSample">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">RandomSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_duplicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.RandomSample" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">RandomSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_duplicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.RandomSample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>pd.Dataframe</em>) – the dataframe that the user will apply sampling on</p></li>
 <li><p><strong>target</strong> (<em>str</em><em>, </em><em>int</em>) – the name of the target column or the index of the target column</p></li>
 <li><p><strong>sample_size</strong> (<em>int</em>) – the number of samples to include in the random sample</p></li>
 <li><p><strong>stratify</strong> (<em>array-like</em>) – if not None, data is split in a stratified fashion, using this as the class targets</p></li>
@@ -230,27 +209,9 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.RandomSample.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.RandomSample.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.RandomSample.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.RandomSample.transform" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dataset</strong> – the dataset to take a random sample from</p>
-</dd>
-<dt class="field-even">Type</dt>
-<dd class="field-even"><p>pd.DataFrame</p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a random sample of the dataset using the params initialized</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>pd.Dataframe</p>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="dataprocessing.RandomSample.random_sample">
+<span class="sig-name descname"><span class="pre">random_sample</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.RandomSample.random_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a random sample of the dataset</p>
 </dd></dl>
 
 </dd></dl>
@@ -355,11 +316,6 @@
 <dd></dd></dl>
 
 </dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.Transformer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Transformer.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dataprocessing.Transformer.transform">
