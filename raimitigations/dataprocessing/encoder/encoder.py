@@ -69,6 +69,15 @@ class DataEncoding(DataProcessing):
 
     # -----------------------------------
     def fit(self, df: Union[pd.DataFrame, np.ndarray] = None, y: Union[pd.Series, np.ndarray] = None):
+        """
+        Default fit method for all encoders that inherit from the DataEncoding class. The
+        following steps are executed: (i) set the dataset, (ii) set the list of columns that
+        will be encoded, (iii) check for any invalid input, (iv) call the fit method of the
+        child class.
+
+        :param df: the full dataset;
+        :param y: ignored. This exists for compatibility with the sklearn's Pipeline class.
+        """
         self._set_df(df, require_set=True)
         self._set_column_to_encode()
         self._check_valid_input()
@@ -97,6 +106,12 @@ class DataEncoding(DataProcessing):
 
     # -----------------------------------
     def transform(self, df: Union[pd.DataFrame, np.ndarray]):
+        """
+        Transforms a given dataset by encoding all columns specified by the
+        col_encode parameter. Returns a dataset with the encoded columns.
+
+        :param df: the full dataset with the columns to be encoded.
+        """
         self._check_if_fitted()
         transf_df = self._fix_col_transform(df)
         transf_df = self._transform(transf_df)
@@ -104,4 +119,8 @@ class DataEncoding(DataProcessing):
 
     # -----------------------------------
     def get_encoded_columns(self):
+        """
+        Returns a list with the column names or column indices of the
+        encoded columns.
+        """
         return self.col_encode.copy()

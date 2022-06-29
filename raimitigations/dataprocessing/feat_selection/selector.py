@@ -155,11 +155,11 @@ class FeatureSelection(DataProcessing):
         self.transform_pipe attribute to the dataset, (iv) call the concrete
         class's specific _fit method, and (v) set the self.selected_feat attribute.
 
-        :param df: the full dataset;
-        :param label_col: the name or index of the label column;
         :param X: contains only the features of the original dataset, that is, does not
             contain the label column;
         :param y: contains only the label column of the original dataset;
+        :param df: the full dataset;
+        :param label_col: the name or index of the label column;
 
         Check the documentation of the _set_df_mult method (DataProcessing class)
         for more information on how these parameters work.

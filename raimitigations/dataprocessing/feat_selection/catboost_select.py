@@ -112,25 +112,26 @@ class CatBoostSelection(FeatureSelection):
         following string values: ['predict', 'loss', 'shap']. Here is a description of each of
         the algorithms allowed according to CatBoost's own documentation (text in double quotation
         marks were extracted from Catboost's official documentation):
+
             * 'predict': uses the caboost.EFeaturesSelectionAlgorithm.RecursiveByPredictionValuesChange
-                algorithm. According to CatBoost's own documentation: "the fastest algorithm
-                and the least accurate method (not recommended for ranking losses)" - "For each
-                feature, PredictionValuesChange shows how much on average the prediction changes
-                if the feature value changes. The bigger the value of the importance the bigger
-                on average is the change to the prediction value, if this feature is changed.";
+              algorithm. According to CatBoost's own documentation: "the fastest algorithm
+              and the least accurate method (not recommended for ranking losses)" - "For each
+              feature, PredictionValuesChange shows how much on average the prediction changes
+              if the feature value changes. The bigger the value of the importance the bigger
+              on average is the change to the prediction value, if this feature is changed.";
             * 'loss': uses the caboost.EFeaturesSelectionAlgorithm.RecursiveByLossFunctionChange
-                algorithm. According to CatBoost's own documentation: "the optimal option
-                according to accuracy/speed balance" - "For each feature the value represents the
-                difference between the loss value of the model with this feature and without it.
-                The model without this feature is equivalent to the one that would have been trained
-                if this feature was excluded from the dataset. Since it is computationally expensive
-                to retrain the model without one of the features, this model is built approximately
-                using the original model with this feature removed from all the trees in the ensemble.
-                The calculation of this feature importance requires a dataset and, therefore, the
-                calculated value is dataset-dependent.";
+              algorithm. According to CatBoost's own documentation: "the optimal option
+              according to accuracy/speed balance" - "For each feature the value represents the
+              difference between the loss value of the model with this feature and without it.
+              The model without this feature is equivalent to the one that would have been trained
+              if this feature was excluded from the dataset. Since it is computationally expensive
+              to retrain the model without one of the features, this model is built approximately
+              using the original model with this feature removed from all the trees in the ensemble.
+              The calculation of this feature importance requires a dataset and, therefore, the
+              calculated value is dataset-dependent.";
             * 'shap': uses the caboost.EFeaturesSelectionAlgorithm.RecursiveByShapValues algorithm.
-                According to CatBoost's own documentation: "the most accurate method.". For this
-                algorithm, CatBoost uses Shap Values to determine the importance of each feature;
+              According to CatBoost's own documentation: "the most accurate method.". For this
+              algorithm, CatBoost uses Shap Values to determine the importance of each feature;
 
     :param steps: the number of times the model is trained. The greater the number of steps, the more
         accurate is the importance score of each feature;

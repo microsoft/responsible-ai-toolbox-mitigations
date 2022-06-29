@@ -190,6 +190,9 @@ class DataScaler(DataProcessing):
         be ignored according the exclude_cols or include_cols, (vi) call the
         _fit() method to effectively fit the current scaler on the preprocessed
         dataset.
+
+        :param df: the full dataset containing the columns that should be scaled;
+        :param y: ignored. This exists for compatibility with the sklearn's Pipeline class.
         """
         self._set_df(df, require_set=True)
         self._check_error_col_filters()
@@ -211,6 +214,8 @@ class DataScaler(DataProcessing):
         and transform. In the sequence, apply all the transforms in the
         transform_pipe parameter. Finally, call the transform() method of the
         current scaler over the preprocessed dataset and return a new dataset.
+
+        :param df: the full dataset containing the columns that should be scaled.
         """
         df = self._fix_col_transform(df)
         final_df = df.copy()

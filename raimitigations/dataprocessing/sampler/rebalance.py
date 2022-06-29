@@ -70,81 +70,88 @@ class Rebalance(DataProcessing):
     :param strategy_over: indicates which oversampling strategy should be used. This
         parameter can be a string, a float, or a dictionary, and their meaning are similar
         to what is used by the imblearn library for SMOTE classes:
+
             - Float: a value between [0, 1] that represents the desired ratio between the
-                number of instances of the minority class over the majority class. The ratio 'r'
-                is given by: $r = N_m/N_M$ where $N_m$ is the number of instances of the minority
-                class after applying oversample and $N_M$ is the number of instances of the
-                majority class;
+              number of instances of the minority class over the majority class. The ratio 'r'
+              is given by: $r = N_m/N_M$ where $N_m$ is the number of instances of the minority
+              class after applying oversample and $N_M$ is the number of instances of the
+              majority class;
             - String: a string value must be one of the following, which identifies preset
-                oversampling strategies (explanations retrieved from the imblearn's SMOTE
-                documentation):
-                    * 'minority': resample only the minority class;
-                    * 'not minority': resample all classes but the minority class;
-                    * 'not majority': resample all classes but the majority class;
-                    * 'all': resample all classes;
-                    * 'auto': equivalent to 'not majority'.
+              oversampling strategies (explanations retrieved from the imblearn's SMOTE
+              documentation):
+
+                * 'minority': resample only the minority class;
+                * 'not minority': resample all classes but the minority class;
+                * 'not majority': resample all classes but the majority class;
+                * 'all': resample all classes;
+                * 'auto': equivalent to 'not majority'.
+
             - Dictionary: the dictionary must have one key for each of the possible classes
-                found in the label column, and the value associated to each key represents the
-                number of instances desired for that class after the oversampling process is done;
+              found in the label column, and the value associated to each key represents the
+              number of instances desired for that class after the oversampling process is done;
 
     :param k_neighbors: an integer value representing the number of neighbors that should be
         used when creating the artificial samples using the SMOTE oversampling. This value is
         only valid if no oversampling object is passed, that is, over_sampler=True;
 
     :param over_sampler: this parameter can be a boolean value or a sampler object from imblearn:
+
         - Boolean: if a boolean value is passed, it indicates if the current class should
-            use an oversampling method or not. If True, a default SMOTE is created internally using
-            the parameters provided (such as k_neighbors, n_jobs, strategy_over, etc.), where the
-            SMOTE type (SMOTE, SMOTEN, SMOTENC) used is determined automatically based on the dataset
-            provided: if the dataset contains only numerical data, then SMOTE is used, if the dataset
-            contains only categorical features, then SMOTEN is used, and if the dataset contains
-            numerical and categorical data, SMOTENC is used;
+          use an oversampling method or not. If True, a default SMOTE is created internally using
+          the parameters provided (such as k_neighbors, n_jobs, strategy_over, etc.), where the
+          SMOTE type (SMOTE, SMOTEN, SMOTENC) used is determined automatically based on the dataset
+          provided: if the dataset contains only numerical data, then SMOTE is used, if the dataset
+          contains only categorical features, then SMOTEN is used, and if the dataset contains
+          numerical and categorical data, SMOTENC is used;
         - BaseSampler object: if the value provided is an object that inherits from BaseSampler, then
-            this sampler is used instead of creating a new sampler. The preprocessing steps
-            automatically applied to the dataset changes based on which SMOTE type is passed: if
-            the object is SMOTE, then all categorical data is encoded using one-hot encoding
-            (EncoderOHE) and all missing values are imputed using the BasicImputer, but if the object
-            is another SMOTE type (SMOTEN or SMOTENC), then only the imputation preprocessing is
-            applied;
+          this sampler is used instead of creating a new sampler. The preprocessing steps
+          automatically applied to the dataset changes based on which SMOTE type is passed: if
+          the object is SMOTE, then all categorical data is encoded using one-hot encoding
+          (EncoderOHE) and all missing values are imputed using the BasicImputer, but if the object
+          is another SMOTE type (SMOTEN or SMOTENC), then only the imputation preprocessing is
+          applied;
 
     :param strategy_under: similar to strategy_over, but instead specifies the strategy to be used for
         the undersampling approach. This parameter can be a string, a float, or a dictionary, and their
         meaning are similar to what is used by the imblearn library for the ClusterCentroids class:
+
             - Float: a value between [0, 1] that represents the desired ratio between the
-                number of instances of the minority class over the majority class after undersampling.
-                The ratio 'r' is given by: $r = N_m/N_M$ where $N_m$ is the number of instances of the
-                minority class and $N_M$ is the number of instances of the majority class after
-                undersampling. Note: this parameter only works with undersampling approaches that allows
-                controlling the number of instances to be undersampled, such as RandomUnderSampler,
-                ClusterCentroids (from imblearn). If any other undersampler is provided in the
-                under_sampler parameter along with a float value for the strategy_under parameter, an
-                error will be raised;
+              number of instances of the minority class over the majority class after undersampling.
+              The ratio 'r' is given by: $r = N_m/N_M$ where $N_m$ is the number of instances of the
+              minority class and $N_M$ is the number of instances of the majority class after
+              undersampling. Note: this parameter only works with undersampling approaches that allows
+              controlling the number of instances to be undersampled, such as RandomUnderSampler,
+              ClusterCentroids (from imblearn). If any other undersampler is provided in the
+              under_sampler parameter along with a float value for the strategy_under parameter, an
+              error will be raised;
             - Dictionary: the dictionary must have one key for each of the possible classes
-                found in the label column, and the value associated to each key represents the
-                number of instances desired for that class after the undersampling process is done.
-                Note: this parameter only works with undersampling approaches that allow
-                controlling the number of instances to be undersampled, such as RandomUnderSampler,
-                ClusterCentroids (from imblearn). If any other undersampler is provided in the
-                under_sampler parameter along with a float value for the strategy_under parameter,
-                an error will be raised;
+              found in the label column, and the value associated to each key represents the
+              number of instances desired for that class after the undersampling process is done.
+              Note: this parameter only works with undersampling approaches that allow
+              controlling the number of instances to be undersampled, such as RandomUnderSampler,
+              ClusterCentroids (from imblearn). If any other undersampler is provided in the
+              under_sampler parameter along with a float value for the strategy_under parameter,
+              an error will be raised;
             - String: a string value must be one of the following, which identifies preset
-                oversampling strategies (explanations retrieved from the imblearn's ClusterCentroids
-                documentation):
-                    * 'majority': resample only the majority class;
-                    * 'not minority': resample all classes but the minority class;
-                    * 'not majority': resample all classes but the majority class;
-                    * 'all': resample all classes;
-                    * 'auto': equivalent to 'not minority';
+              oversampling strategies (explanations retrieved from the imblearn's ClusterCentroids
+              documentation):
+
+                * 'majority': resample only the majority class;
+                * 'not minority': resample all classes but the minority class;
+                * 'not majority': resample all classes but the majority class;
+                * 'all': resample all classes;
+                * 'auto': equivalent to 'not minority';
 
     :param under_sampler: this parameter can be a boolean value or a sampler object from imblearn:
+
         - Boolean: if a boolean value is passed, it indicates if the current class should
-            use an undersampling method or not. If True, a default undersampler is created internally.
-            There are two possible default undersamplers that can be created: (i) a ClusterCentroids
-            is created if the value provided to the strategy_under parameter is a float value or a
-            dictionary (the ClusterCentroids allows control over the number of instances that should
-            be undersampled), and (ii) a TomekLinks otherwise;
+          use an undersampling method or not. If True, a default undersampler is created internally.
+          There are two possible default undersamplers that can be created: (i) a ClusterCentroids
+          is created if the value provided to the strategy_under parameter is a float value or a
+          dictionary (the ClusterCentroids allows control over the number of instances that should
+          be undersampled), and (ii) a TomekLinks otherwise;
         - BaseSampler object: if the value provided is an object that inherits from BaseSampler, then
-            this sampler is used instead of creating a new sampler;
+          this sampler is used instead of creating a new sampler;
 
     :param n_jobs: the number of workers used to run the sampling methods. This value is only used
         when a default sampler (under or over) is created, where this parameter is provided to the
@@ -556,6 +563,26 @@ class Rebalance(DataProcessing):
         (v) set the oversampler to be used, (vi) set the undersampler to be used, (vii) run
         the oversampler, (viii) run the undersampler, and finally (ix) create a new data frame
         with the modified data.
+
+        :param X: contains only the features of the original dataset, that is, does
+            not contain the column used for rebalancing. This is useful if the user has
+            already separated the features from the label column prior to calling this
+            class. This parameter is mandatory if 'y' is provided;
+        :param y: contains only the rebalance column of the original dataset. The rebalance
+            operation is executed based on the data distribution of this column. This parameter
+            is mandatory if 'X' is provided;
+        :param df: the dataset to be rebalanced, which is used during the fit method.
+            This data frame must contain all the features, including the rebalance
+            column (specified in the 'rebalance_col' parameter). This parameter is
+            mandatory if 'rebalance_col' is also provided. The user can also provide
+            this dataset (along with the 'rebalance_col') when calling the fit()
+            method. If df is provided during the class instantiation, it is not
+            necessary to provide it again when calling fit(). It is also possible
+            to use the 'X' and 'y' instead of 'df' and 'rebalance_col', although it is
+            mandatory to pass the pair of parameters (X,y) or (df, rebalance_col) either
+            during the class instantiation or during the fit() method;
+        :param rebalance_col: the name or index of the column used to do the rebalance
+            operation. This parameter is mandatory if 'df' is provided;
         """
         self._set_df_mult(df, rebalance_col, X, y, require_set=True)
         self._check_rebalance_col()

@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Synthesizer &#8212; RAI Error Mitigation  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Rebalance" href="rebalance.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rebalance.html" title="Rebalance"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">RAI Error Mitigation  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../dataprocessing.html" >dataprocessing package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="sampler.html" accesskey="U">Sampling</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Synthesizer</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="synthesizer">
+<h1>Synthesizer<a class="headerlink" href="#synthesizer" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="dataprocessing.Synthesizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">Synthesizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseTabularModel</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ctgan'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_existing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Synthesizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../dataprocessing.html#dataprocessing.DataProcessing" title="dataprocessing.data_processing.DataProcessing"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataProcessing</span></code></a></p>
+<p>Concrete class that uses generative models (implemented in the sdv library)
+to create synthetic data for imbalanced datasets. This class allows the creation
+of synthetic data according to a set of conditions specified by the user or
+according to a predefined strategies based on the minority and majority
+classes (both considering the label column only).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – the dataset to be rebalanced, which is used during the fit method.
+This data frame must contain all the features, including the label
+column (specified in the ‘label_col’ parameter). This parameter is
+mandatory if ‘label_col’ is also provided. The user can also provide
+this dataset (along with the ‘label_col’) when calling the fit()
+method. If df is provided during the class instantiation, it is not
+necessary to provide it again when calling fit(). It is also possible
+to use the ‘X’ and ‘y’ instead of ‘df’ and ‘label_col’, although it is
+mandatory to pass the pair of parameters (X,y) or (df, label_col) either
+during the class instantiation or during the fit() method;</p></li>
+<li><p><strong>label_col</strong> – the name or index of the label column. This parameter is
+mandatory if ‘df’ is provided;</p></li>
+<li><p><strong>X</strong> – contains only the features of the original dataset, that is, does
+not contain the label column. This is useful if the user has already
+separated the features from the label column prior to calling this class.
+This parameter is mandatory if ‘y’ is provided;</p></li>
+<li><p><strong>y</strong> – contains only the label column of the original dataset. This parameter
+is mandatory if ‘X’ is provided;</p></li>
+<li><p><strong>transform_pipe</strong> – a list of transformations to be used as a pre-processing
+pipeline. Each transformation in this list must be a valid subclass of the
+current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+methods require a dataset with no categorical features or with no missing values
+(depending on the approach). If no transformations are provided, a set of default
+transformations will be used, which depends on the feature selection approach
+(subclass dependent);</p></li>
+<li><p><strong>in_place</strong> – indicates if the original dataset will be saved internally (df_org)
+or not. If True, then the feature selection transformation is saved over the
+original dataset. If False, the original dataset is saved separately (default
+value);</p></li>
+<li><p><strong>model</strong> – <p>the model that should be used to generate the synthetic instances. Can
+be a string or an object that inherits from sdv.tabular.base.BaseTabularModel:</p>
+<blockquote>
+<div><ul>
+<li><p>BaseTabularModel: an object from one of the following classes: CTGAN, TVAE,
+GaussianCopula, or CopulaGAN, all from the sdv.tabular module;</p></li>
+<li><p>str: a string that identifies which base model should be created. The base
+models supported are: CTGAN, TVAE, GaussianCopula, and CopulaGAN. The string
+values allowed associated to each of the previous models are (respectively):
+“ctgan”, “tvae”, “copula”, and “copula_gan”;</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>epochs</strong> – the number of epochs that the model (specified by the ‘model’ parameter)
+should be trained. This parameter is not used when the selected model is from the
+class GaussianCopula;</p></li>
+<li><p><strong>save_file</strong> – the name of the file containing the data of the trained model. After
+training the model (when calling the fit method), the model’s weights are saved in
+the path specified by this parameter, which can then be loaded and reused for future
+use. This is useful when training over a large dataset since this results in an
+extended training time. If the provided value is None, then a default name will be
+created based on the model’s type and number of epochs. If load_existing is True,
+then this parameter will indicate which save file should be loaded;</p></li>
+<li><p><strong>load_existing</strong> – a boolean value indicating if the model should be loaded or not.
+If False, a new save file will be created (or overwritten if the file specified in
+save_file already exists) containing the model’s wights of a new model. If True, the
+model will be loaded from the file save_file;</p></li>
+<li><p><strong>verbose</strong> – indicates whether internal messages should be printed or not</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dataprocessing.Synthesizer.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Series</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Synthesizer.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare the dataset and then call the model’s fit method. If the model was loaded,
+then there is no need to call the fit method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> – contains only the features of the original dataset, that is, does not
+contain the label column;</p></li>
+<li><p><strong>y</strong> – contains only the label column of the original dataset;</p></li>
+<li><p><strong>df</strong> – the full dataset;</p></li>
+<li><p><strong>label_col</strong> – the name or index of the label column;</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dataprocessing.Synthesizer.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Synthesizer.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encapsulates the method sample() from the models that inherit from
+sdv.tabular.baseBaseTabularModel. This allows users to use this method
+without requiring to directly access the model object (self.model).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dataprocessing.Synthesizer.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Synthesizer.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms a dataset by adding synthetic instances to it. The types of instances
+created depend on the number of samples provided and the set of conditions specified,
+or the chosen strategy. Returns a dataset with the original data and the synthetic
+data generated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – the full dataset to be transformed, which contains the label column
+(specified during the fit method);</p></li>
+<li><p><strong>X</strong> – contains only the features of the dataset, that is, does not contain the
+label column;</p></li>
+<li><p><strong>y</strong> – contains only the label column of the dataset to be transformed. If the
+user provides df, X and y must be left as None. Alternatively, if the user
+provides (X, y), df must be left as None;</p></li>
+<li><p><strong>n_samples</strong> – the number of samples that should be created using the set of
+conditions specified by the ‘conditions’ parameter;</p></li>
+<li><p><strong>conditions</strong> – a set of conditions, specified by a dictionary, that defines the
+characteristics of the synthetic instances that should be created. This parameter
+indicates the values for certain features that the synthetic instances should
+have. If None, then no restrictions will be imposed on how to generate the
+synthetic data;</p></li>
+<li><p><strong>strategy</strong> – <p>represents the strategy used to generate the artificial instances.
+This parameter is ignored when n_samples is provided. Strategy can assume the
+following values:</p>
+<ul>
+<li><p>String: one of the following predefined strategies:</p>
+<ul class="simple">
+<li><p>’minority’: generates synthetic samples for only the minority class;</p></li>
+<li><p>’not majority’: generates synthetic samples for all classes but the
+majority class;</p></li>
+<li><p>’auto’: equivalent to ‘minority’;</p></li>
+</ul>
+<p>Note that for a binary classification problem, “minority” is similar to
+“not majority”;</p>
+</li>
+<li><p>Dictionary: the dictionary must have one key for each of the possible classes
+found in the label column, and the value associated with each key represents the
+number of instances desired for that class after the undersampling process is done.
+Note: this parameter only works with undersampling approaches that allow
+controlling the number of instances to be undersampled, such as RandomUnderSampler,
+ClusterCentroids (from imblearn). If any other undersampler is provided in the
+under_sampler parameter along with a float value for the strategy_under parameter,
+an error will be raised;</p></li>
+<li><p>Float: a value between [0, 1] that represents the desired ratio between
+the number of instances of the minority class over the majority class
+after undersampling. The ratio ‘r’ is given by: $r = N_m/N_M$ where
+$N_m$ is the number of instances of the minority class and $N_M$ is the
+number of instances of the majority class after undersampling. Note: this
+parameter only works with undersampling approaches that allow controlling
+the number of instances to be undersampled, such as RandomUnderSampler,
+ClusterCentroids (from imblearn). If any other undersampler is provided in
+the under_sampler parameter along with a float value for the strategy_under
+parameter, an error will be raised;
+If None, the default value is set to “auto”, which is the same as “minority”.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="rebalance.html"
+                          title="previous chapter">Rebalance</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/dataprocessing/sampler/synthesizer.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rebalance.html" title="Rebalance"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">RAI Error Mitigation  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../dataprocessing.html" >dataprocessing package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="sampler.html" >Sampling</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Synthesizer</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Akshara Ramakrishnan &lt;akshara@microsoft.com&gt;.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    </div>
+  </body>
+</html>

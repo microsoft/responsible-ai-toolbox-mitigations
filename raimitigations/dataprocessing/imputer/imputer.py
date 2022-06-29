@@ -78,7 +78,8 @@ class DataImputer(DataProcessing):
         (iii) check if the dataset provided is valid (contains all columns that
         should be imputed), and (iv) call the concrete class's specific _fit method.
 
-        :param df: the full dataset.
+        :param df: the full dataset;
+        :param y: ignored. This exists for compatibility with the sklearn's Pipeline class.
         """
         if self.do_nothing:
             return
@@ -115,6 +116,8 @@ class DataImputer(DataProcessing):
         """
         Default behavior for transforming the data for the different
         imputation methods.
+
+        :param df: the full dataset with the columns to be imputed.
         """
         transf_df = self._fix_col_transform(df)
         if self.do_nothing:

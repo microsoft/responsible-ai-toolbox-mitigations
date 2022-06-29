@@ -136,37 +136,39 @@ class CorrelatedFeatures(FeatureSelection):
 
     :param method_num_cat: the method used to compute the correlation between a categorical and
         a numerical variable. There are currently three approaches implemented:
-        * 'anova':  uses the ANOVA test to identify a correlation. First, we use the Levene
-                    test to see if the numerical variable has a similar variance across the
-                    different values of the categorical variable (Homoscedastic data). If
-                    the test passes (that is if the p-value of the Levene test is greater
-                    than 'levene_pvalue'), then we can perform the ANOVA test, in which we
-                    compute the F-statistic to see if there is a correlation between the
-                    numerical and categorical variables and its associated p-value. We also
-                    compute the omega-squared metric. If the p-value is less than 'anova_pvalue'
-                    and the omega-squared is greater than 'omega_th', then both variables
-                    are considered to be correlated;
-        * 'jensen': first we clusterize the numerical values according to their respective
-                    values of the categorical data. We then compute the probability density
-                    function of the numerical variable for each cluster (we approximate the
-                    PDF with the histogram using 'jensen_n_bins' different bins). The next
-                    step is to compute the Jensen-Shannon Distance metric between the distribution
-                    functions of each pair of clusters. This distance metric varies from 0 to 1,
-                    where values closer to 0 mean that both distributions tested are similar and
-                    values closer to 1 mean that the distributions are different. If all pairs
-                    of distributions tested are considered different (a Jensen-Shannon metric above
-                    'jensen_th' for all pairs tested), then both variables are considered to be
-                    correlated;
-        * 'model':  trains a simple decision tree using the numerical variable and predicts the
-                    categorical variable. Both variables are first divided into a training and
-                    test set (70% and 30% of the size of the original variables, respectively). The
-                    training set is used to train the decision tree, where the only feature used
-                    by the model is the numerical variable and the predicted label is the different
-                    values within the categorical variable. After training, the model is used to
-                    predict the values of the test set and a set of metrics is computed to assess the
-                    performance of the model (the metrics computed are defined by 'model_metrics').
-                    If all metrics computed are above the threshold 'metric_th', then both variables
-                    are considered to be correlated;
+
+            * 'anova': uses the ANOVA test to identify a correlation. First, we use the Levene
+              test to see if the numerical variable has a similar variance across the
+              different values of the categorical variable (Homoscedastic data). If
+              the test passes (that is if the p-value of the Levene test is greater
+              than 'levene_pvalue'), then we can perform the ANOVA test, in which we
+              compute the F-statistic to see if there is a correlation between the
+              numerical and categorical variables and its associated p-value. We also
+              compute the omega-squared metric. If the p-value is less than 'anova_pvalue'
+              and the omega-squared is greater than 'omega_th', then both variables
+              are considered to be correlated;
+            * 'jensen': first we clusterize the numerical values according to their respective
+              values of the categorical data. We then compute the probability density
+              function of the numerical variable for each cluster (we approximate the
+              PDF with the histogram using 'jensen_n_bins' different bins). The next
+              step is to compute the Jensen-Shannon Distance metric between the distribution
+              functions of each pair of clusters. This distance metric varies from 0 to 1,
+              where values closer to 0 mean that both distributions tested are similar and
+              values closer to 1 mean that the distributions are different. If all pairs
+              of distributions tested are considered different (a Jensen-Shannon metric above
+              'jensen_th' for all pairs tested), then both variables are considered to be
+              correlated;
+            * 'model': trains a simple decision tree using the numerical variable and predicts the
+              categorical variable. Both variables are first divided into a training and
+              test set (70% and 30% of the size of the original variables, respectively). The
+              training set is used to train the decision tree, where the only feature used
+              by the model is the numerical variable and the predicted label is the different
+              values within the categorical variable. After training, the model is used to
+              predict the values of the test set and a set of metrics is computed to assess the
+              performance of the model (the metrics computed are defined by 'model_metrics').
+              If all metrics computed are above the threshold 'metric_th', then both variables
+              are considered to be correlated;
+
         If set to None, then none of the correlations between numerical and categorical variables will
         be tested;
 
@@ -220,11 +222,13 @@ class CorrelatedFeatures(FeatureSelection):
 
     :param method_cat_cat: the method used to test the correlation between two categorical variables. There is only
         one option implemented:
-        * 'cramer': performs the Cramer's V test between two categorical variables. This test returns a value
-                    between 0 and 1, where values near 1 indicate a high correlation between the variables
-                    and a p-value associated with this metric. If the Cramer's V correlation coefficient is
-                    greater than cat_corr_th and its p-value is smaller than cat_pvalue_th, then both variables
-                    are considered to be correlated.
+
+            * 'cramer': performs the Cramer's V test between two categorical variables. This test returns a value
+              between 0 and 1, where values near 1 indicate a high correlation between the variables
+              and a p-value associated with this metric. If the Cramer's V correlation coefficient is
+              greater than cat_corr_th and its p-value is smaller than cat_pvalue_th, then both variables
+              are considered to be correlated.
+
         If set to None, then none of the correlations between two categorical variables will be tested;
 
     :param cat_corr_th: the threshold used for the Cramer's V correlation coefficient. Values greater than cat_corr_th
@@ -237,13 +241,15 @@ class CorrelatedFeatures(FeatureSelection):
         between them is identified. This is used for all types of correlations:
         numerical x numerical, categorical x numerical, and categorical x categorical. The
         possible values are:
-            * "missing": 	chooses the variable with the least number of missing values;
-            * "var":  		chooses the variable with the largest data dispersion (std / (V - v),
-                            where std is the standard deviation of the variable, V and v are the
-                            maximum and minimum values observed in the variable, respectively).
-                            Works only for numerical x numerical analysis. Otherwise, it uses the
-                            cardinality approach internally;
+
+            * "missing": chooses the variable with the least number of missing values;
+            * "var": chooses the variable with the largest data dispersion (std / (V - v),
+              where std is the standard deviation of the variable, V and v are the
+              maximum and minimum values observed in the variable, respectively).
+              Works only for numerical x numerical analysis. Otherwise, it uses the
+              cardinality approach internally;
             * "cardinality": chooses the variable with the most number of different values present;
+
         In all three cases, if both variables are tied (same dispersion, same number of missing
         values, or same cardinality), the variable to be removed will be selected randomly;
 
@@ -1005,12 +1011,14 @@ class CorrelatedFeatures(FeatureSelection):
     def _build_auxiliary_dicts(self):
         """
         Creates two dictionaries:
-        - self.corr_pairs:   stores information and correlation metrics for all
-                             pairs of correlated variables. Each key of this
-                             dictionary follows the pattern "{key1} x {key2}";
-        - self.uncorr_pairs: stores information and correlation metrics for all
-                             pairs of uncorrelated variables. Each key of this
-                             dictionary follows the pattern "{key1} x {key2}".
+
+            - self.corr_pairs: stores information and correlation metrics for all
+              pairs of correlated variables. Each key of this
+              dictionary follows the pattern "{key1} x {key2}";
+            - self.uncorr_pairs: stores information and correlation metrics for all
+              pairs of uncorrelated variables. Each key of this
+              dictionary follows the pattern "{key1} x {key2}".
+
         These dictionaries are later saved in a json file, which can then be
         consulted for a more in-depth analysis by the user.
         """
@@ -1049,10 +1057,12 @@ class CorrelatedFeatures(FeatureSelection):
         """
         Returns the feature with the greatest number of correlations.
         There are two values returned:
-        - selected: the unblocked feature identifier with the largest
-            amount of correlations;
-        - selected: the feature identifier (blocked or unblocked) with
-            the largest amount of correlations;
+
+            - selected: the unblocked feature identifier with the largest
+              amount of correlations;
+            - selected: the feature identifier (blocked or unblocked) with
+              the largest amount of correlations;
+
         All features start as unblocked. Whenever a feature f_x is selected
         to be removed, all the other features f_y correlated to f_x are
         blocked. This avoids removing both features of a correlated pair,
@@ -1533,6 +1543,91 @@ class CorrelatedFeatures(FeatureSelection):
         json_corr: str = None,
         json_uncorr: str = None,
     ):
+        """
+        Update different parameters associated to the different types of correlations and
+        recomputes the selected features using these new parameter values without recomputing
+        the correlations. This method allow users to change certain thresholds and metrics
+        without requiring to recompute all of the correlations, which can be computationally
+        expensive depending on the size of the dataset. The only parameters allowed to be
+        changed are the ones accepted by this method. If another parameter not listed here
+        needs to be changed, then it is necessary to instantiate a different object and call
+        the fit() method again.
+
+        :param num_corr_th: the correlation coefficient value used as a threshold for
+            considering if there is a correlation between two numerical variables.
+            That is, given two variables with a correlation coefficient of 'x' (depends on
+            the correlation used, specified by method_num_num), a correlation is considered
+            only if abs(x) >= method_num_num and if the associated p-value 'p' is smaller than
+            'p' <= num_pvalue_th;
+
+        :param num_pvalue_th: the p-value used as a threshold when considering if there is a
+            correlation between two variables. That is, given two variables with a correlation
+            coefficient of 'x' (depends on the correlation used, specified by method_num_num),
+            a correlation is considered only if abs(x) >= method_num_num and if the associated
+            p-value 'p' is smaller than 'p' <= num_pvalue_th;
+
+        :param levene_pvalue: the threshold used to check if a set of samples are homoscedastic (similar
+            variances across samples). This condition is necessary for the ANOVA test. This check is done
+            using the Levene test, which considers that all samples have similar variances as the null
+            hypothesis. If the p-value associated with this test is high, then the null hypothesis is accepted,
+            thus allowing the ANOVA test to be carried out. This parameter defines the threshold used by the
+            p-value of this test: if p-value > levene_pvalue, then the data is considered to be homoscedastic.
+            This parameter is ignored if method_num_cat != 'anova';
+
+        :param anova_pvalue: threshold used by the p-value associated with the F-statistic computed by the ANOVA
+            test. If the p-value < anova_pvalue, then we consider that there is a statistically significant
+            difference between the numerical values of different clusters (clusterized according to the values
+            of the categorical variable). This implies a possible correlation between the numerical and
+            categorical variables, although the F-statistic doesn't tell us the magnitude of this difference.
+            For that, we use the Omega-Squared metric. This parameter is ignored if method_num_cat != 'anova';
+
+        :param omega_th: the threshold used for the omega squared metric. The omega squared is a metric that
+            varies between 0 and 1 that indicates the effect of a categorical variable over the variance of
+            a numerical variable. A value closer to 0 indicates a weak effect, while values closer to 1 show
+            that the categorical variable has a significant impact on the variance of the numerical variable,
+            thus showing a high correlation. If the omega squared is greater than omega_th, then both variables
+            being analyzed are considered to be correlated. This parameter is ignored if method_num_cat != 'anova';
+
+        :param jensen_th: when method_num_cat = 'jensen', we compare the distribution of each cluster of data
+            using the Jensen-Shannon distance metric. If the distance is close to 1, then the distributions are
+            considered different. If all pairs of clusters have a high distance, then both variables being analyzed
+            are considered to be correlated. This parameter indicates the threshold used to check if a distance
+            metric is high or not: if distance > jensen_th, then the distributions being compared are considered
+            different. Must be a float value within [0, 1]. This parameter is ignored if method_num_cat != 'jensen';
+
+        :param model_metrics: a list of metric names that should be used when evaluating if a model trained using
+            a single numerical variable to predict a categorical variable is good enough. If the trained model
+            presents a good performance for the metrics in model_metrics, then both variables being analyzed are
+            considered to be correlated. This parameter must be a list, and the allowed values in this list are:
+            ["f1", "auc", "accuracy", "precision", "recall"]. This parameter is ignored if
+            method_num_cat != 'model';
+
+        :param metric_th: given the metrics provided by model_metrics, a pair of variables being analyzed are only
+            considered correlated if all metrics in model_metrics achieve a score greater than metric_th over the
+            test set (the variables being analyzed are split into training and test set internally). This parameter
+            is ignored if method_num_cat != 'model';
+
+        :param cat_corr_th: the threshold used for the Cramer's V correlation coefficient. Values greater than cat_corr_th
+            indicates a high correlation between two variables, but only if the p-value associated with this coefficient
+            is smaller than cat_pvalue_th;
+
+        :param cat_pvalue_th: check the description for the parameter cat_corr_th for more information;
+
+        :param save_json: if True, the summary jsons are saved according to the paths json_summary, json_corr, and
+            json_uncorr. If False, these json files are not saved;
+
+        :param json_summary: when calling the fit method, all correlations will be computed according to the many
+            parameters detailed previously. After computing all this data, everything is saved in a JSON file,
+            which can then be accessed and analyzed carefully. We recommend using a JSON viewing tool for this.
+            This parameter indicates the name of the file where the JSON should be saved (including the path
+            to the file). If set to None no JSON file will be saved;
+
+        :param json_corr: similar to json_summary, but corresponds to the name of the JSON file that contains only
+            the information of the pairs of variables considered to be correlated (with no repetitions);
+
+        :param json_uncorr: similar to json_summary, but corresponds to the name of the JSON file that contains only
+            the information of the pairs of variables considered NOT to be correlated (with no repetitions);
+        """
         update_num_num = self._update_thresholds_num_num(num_corr_th, num_pvalue_th)
         update_num_cat = self._update_thresholds_num_cat(
             levene_pvalue, anova_pvalue, omega_th, jensen_th, model_metrics, metric_th
@@ -1561,15 +1656,16 @@ class CorrelatedFeatures(FeatureSelection):
     def get_summary(self, print_summary: bool = True):
         """
         Fetches three internal dictionaries:
-        - self.corr_dict:    stores information and correlation metrics for
-                             each variable. There is one key for each variable
-                             analyzed;
-        - self.corr_pairs:   stores information and correlation metrics for all
-                             pairs of correlated variables. Each key of this
-                             dictionary follows the pattern "{key1} x {key2}";
-        - self.uncorr_pairs: stores information and correlation metrics for all
-                             pairs of uncorrelated variables. Each key of this
-                             dictionary follows the pattern "{key1} x {key2}".
+
+            - self.corr_dict: stores information and correlation metrics for
+              each variable. There is one key for each variable
+              analyzed;
+            - self.corr_pairs: stores information and correlation metrics for all
+              pairs of correlated variables. Each key of this
+              dictionary follows the pattern "{key1} x {key2}";
+            - self.uncorr_pairs: stores information and correlation metrics for all
+              pairs of uncorrelated variables. Each key of this
+              dictionary follows the pattern "{key1} x {key2}".
 
         :param print_summary: if True, print the values stored in the correlated
             and the uncorrelated dictionary. If False, just return the three

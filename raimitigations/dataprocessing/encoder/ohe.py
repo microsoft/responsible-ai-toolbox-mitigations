@@ -129,6 +129,11 @@ class EncoderOHE(DataEncoding):
 
     # -----------------------------------
     def get_encoded_columns(self):
+        """
+        Returns a list with the column names or column indices of the one-hot
+        encoded columns. These are the columns created by the one-hot encoder
+        that replaced the original columns.
+        """
         return self.new_col_names.copy()
 
     # -----------------------------------

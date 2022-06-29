@@ -54,12 +54,13 @@ class Synthesizer(DataProcessing):
 
     :param model: the model that should be used to generate the synthetic instances. Can
         be a string or an object that inherits from sdv.tabular.base.BaseTabularModel:
+
             - BaseTabularModel: an object from one of the following classes: CTGAN, TVAE,
-                GaussianCopula, or CopulaGAN, all from the sdv.tabular module;
+              GaussianCopula, or CopulaGAN, all from the sdv.tabular module;
             - str: a string that identifies which base model should be created. The base
-                models supported are: CTGAN, TVAE, GaussianCopula, and CopulaGAN. The string
-                values allowed associated to each of the previous models are (respectively):
-                "ctgan", "tvae", "copula", and "copula_gan";
+              models supported are: CTGAN, TVAE, GaussianCopula, and CopulaGAN. The string
+              values allowed associated to each of the previous models are (respectively):
+              "ctgan", "tvae", "copula", and "copula_gan";
 
     :param epochs: the number of epochs that the model (specified by the 'model' parameter)
         should be trained. This parameter is not used when the selected model is from the
@@ -255,13 +256,11 @@ class Synthesizer(DataProcessing):
         Prepare the dataset and then call the model's fit method. If the model was loaded,
         then there is no need to call the fit method.
 
-        :param df: the full dataset;
-        :param label_col: the name or index of the label column;
         :param X: contains only the features of the original dataset, that is, does not
             contain the label column;
         :param y: contains only the label column of the original dataset;
-        :param require_set: if True, a ValueError will be raised if both pairs of
-            variables ((df, label_col) and (X, y)) are all None.
+        :param df: the full dataset;
+        :param label_col: the name or index of the label column;
         """
         self._set_df_mult(df, label_col, X, y, require_set=True)
         self._check_valid_df(self.df)
@@ -304,31 +303,34 @@ class Synthesizer(DataProcessing):
         A valid strategy must be a string, dictionary, or a float value.
 
         :param strategy: this parameter can assume the following values:
+
             - String: one of the following predefined strategies:
-                * 'minority': generates synthetic samples for only the minority class;
-                * 'not majority': generates synthetic samples for all classes but the
+
+              * 'minority': generates synthetic samples for only the minority class;
+              * 'not majority': generates synthetic samples for all classes but the
                 majority class;
-                 * 'auto': equivalent to 'minority';
-                Note that for a binary classification problem, "minority" is similar to
-                "not majority";
+              * 'auto': equivalent to 'minority';
+
+              Note that for a binary classification problem, "minority" is similar to
+              "not majority";
             - Dictionary: the dictionary must have one key for each of the possible classes
-                found in the label column, and the value associated to each key represents the
-                number of instances desired for that class after the undersampling process is done.
-                Note: this parameter only works with undersampling approaches that allow
-                controlling the number of instances to be undersampled, such as RandomUnderSampler,
-                ClusterCentroids (from imblearn). If any other undersampler is provided in the
-                under_sampler parameter along with a float value for the strategy_under parameter,
-                an error will be raised;
+              found in the label column, and the value associated to each key represents the
+              number of instances desired for that class after the undersampling process is done.
+              Note: this parameter only works with undersampling approaches that allow
+              controlling the number of instances to be undersampled, such as RandomUnderSampler,
+              ClusterCentroids (from imblearn). If any other undersampler is provided in the
+              under_sampler parameter along with a float value for the strategy_under parameter,
+              an error will be raised;
             - Float: a value between [0, 1] that represents the desired ratio between
-                the number of instances of the minority class over the majority class
-                after undersampling. The ratio 'r' is given by: $r = N_m/N_M$ where
-                $N_m$ is the number of instances of the minority class and $N_M$ is the
-                number of instances of the majority class after undersampling. Note: this
-                parameter only works with undersampling approaches that allow controlling
-                the number of instances to be undersampled, such as RandomUnderSampler,
-                ClusterCentroids (from imblearn). If any other undersampler is provided in
-                the under_sampler parameter along with a float value for the strategy_under
-                parameter, an error will be raised.
+              the number of instances of the minority class over the majority class
+              after undersampling. The ratio 'r' is given by: $r = N_m/N_M$ where
+              $N_m$ is the number of instances of the minority class and $N_M$ is the
+              number of instances of the majority class after undersampling. Note: this
+              parameter only works with undersampling approaches that allow controlling
+              the number of instances to be undersampled, such as RandomUnderSampler,
+              ClusterCentroids (from imblearn). If any other undersampler is provided in
+              the under_sampler parameter along with a float value for the strategy_under
+              parameter, an error will be raised.
         """
         if strategy is None:
             strategy = "auto"
@@ -519,32 +521,35 @@ class Synthesizer(DataProcessing):
         :param strategy: represents the strategy used to generate the artificial instances.
             This parameter is ignored when n_samples is provided. Strategy can assume the
             following values:
+
             - String: one of the following predefined strategies:
-                * 'minority': generates synthetic samples for only the minority class;
-                * 'not majority': generates synthetic samples for all classes but the
+
+              * 'minority': generates synthetic samples for only the minority class;
+              * 'not majority': generates synthetic samples for all classes but the
                 majority class;
-                 * 'auto': equivalent to 'minority';
-                Note that for a binary classification problem, "minority" is similar to
-                "not majority";
+              * 'auto': equivalent to 'minority';
+
+              Note that for a binary classification problem, "minority" is similar to
+              "not majority";
             - Dictionary: the dictionary must have one key for each of the possible classes
-                found in the label column, and the value associated with each key represents the
-                number of instances desired for that class after the undersampling process is done.
-                Note: this parameter only works with undersampling approaches that allow
-                controlling the number of instances to be undersampled, such as RandomUnderSampler,
-                ClusterCentroids (from imblearn). If any other undersampler is provided in the
-                under_sampler parameter along with a float value for the strategy_under parameter,
-                an error will be raised;
+              found in the label column, and the value associated with each key represents the
+              number of instances desired for that class after the undersampling process is done.
+              Note: this parameter only works with undersampling approaches that allow
+              controlling the number of instances to be undersampled, such as RandomUnderSampler,
+              ClusterCentroids (from imblearn). If any other undersampler is provided in the
+              under_sampler parameter along with a float value for the strategy_under parameter,
+              an error will be raised;
             - Float: a value between [0, 1] that represents the desired ratio between
-                the number of instances of the minority class over the majority class
-                after undersampling. The ratio 'r' is given by: $r = N_m/N_M$ where
-                $N_m$ is the number of instances of the minority class and $N_M$ is the
-                number of instances of the majority class after undersampling. Note: this
-                parameter only works with undersampling approaches that allow controlling
-                the number of instances to be undersampled, such as RandomUnderSampler,
-                ClusterCentroids (from imblearn). If any other undersampler is provided in
-                the under_sampler parameter along with a float value for the strategy_under
-                parameter, an error will be raised;
-            If None, the default value is set to "auto", which is the same as "minority".
+              the number of instances of the minority class over the majority class
+              after undersampling. The ratio 'r' is given by: $r = N_m/N_M$ where
+              $N_m$ is the number of instances of the minority class and $N_M$ is the
+              number of instances of the majority class after undersampling. Note: this
+              parameter only works with undersampling approaches that allow controlling
+              the number of instances to be undersampled, such as RandomUnderSampler,
+              ClusterCentroids (from imblearn). If any other undersampler is provided in
+              the under_sampler parameter along with a float value for the strategy_under
+              parameter, an error will be raised;
+              If None, the default value is set to "auto", which is the same as "minority".
         """
         df, input_mode = self._arrange_transform_df(df, X, y)
         if df is not None:
