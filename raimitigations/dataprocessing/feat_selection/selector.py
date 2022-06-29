@@ -68,6 +68,7 @@ class FeatureSelection(DataProcessing):
         self.df_org = None
         self.y = None
         self.in_place = in_place
+        self.fitted = False
         self._set_df_mult(df, label_col, X, y)
         self._set_transforms(transform_pipe)
 
@@ -172,6 +173,7 @@ class FeatureSelection(DataProcessing):
             self.df_org = self.df
         self._fit()
         self.set_selected_features()
+        self.fitted = True
         return self
 
     # -----------------------------------
@@ -195,6 +197,7 @@ class FeatureSelection(DataProcessing):
 
         :param df: the dataset used for inference.
         """
+        self._check_if_fitted()
         df = self._fix_col_transform(df)
         df = self._apply_transforms(df)
         features = self.get_selected_features()

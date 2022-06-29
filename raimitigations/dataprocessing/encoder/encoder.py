@@ -96,15 +96,6 @@ class DataEncoding(DataProcessing):
         pass
 
     # -----------------------------------
-    def _check_if_fitted(self):
-        if not self.fitted:
-            raise ValueError(
-                f"ERROR: trying to call the transform() method from an instance of the {self.__class__.__name__} class "
-                + "before calling the fit() method. "
-                + "Call the fit() method before using this instance to transform a dataset."
-            )
-
-    # -----------------------------------
     def transform(self, df: Union[pd.DataFrame, np.ndarray]):
         """
         Transforms a given dataset by encoding all columns specified by the

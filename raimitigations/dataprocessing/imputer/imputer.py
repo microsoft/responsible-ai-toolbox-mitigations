@@ -28,6 +28,7 @@ class DataImputer(DataProcessing):
     def __init__(self, df: pd.DataFrame = None, col_impute: list = None, verbose: bool = True):
         super().__init__(verbose)
         self.df = None
+        self.fitted = False
         self._set_df(df)
         self.col_impute = col_impute
         self.do_nothing = False
@@ -87,6 +88,7 @@ class DataImputer(DataProcessing):
         self._set_column_to_impute()
         self._check_valid_input()
         self._fit()
+        self.fitted = True
         return self
 
     # -----------------------------------
@@ -119,6 +121,7 @@ class DataImputer(DataProcessing):
 
         :param df: the full dataset with the columns to be imputed.
         """
+        self._check_if_fitted()
         transf_df = self._fix_col_transform(df)
         if self.do_nothing:
             return df

@@ -69,6 +69,7 @@ class DataScaler(DataProcessing):
     ):
         super().__init__(verbose)
         self.df = None
+        self.fitted = False
         self._set_df(df)
         self.exclude_cols = exclude_cols
         self.include_cols = include_cols
@@ -202,6 +203,7 @@ class DataScaler(DataProcessing):
         transf_df = self._apply_transforms(self.df)
         subset_df = self._get_df_subset(transf_df, self.scale_col)
         self._fit(subset_df)
+        self.fitted = True
         return self
 
     # -----------------------------------
@@ -217,6 +219,7 @@ class DataScaler(DataProcessing):
 
         :param df: the full dataset containing the columns that should be scaled.
         """
+        self._check_if_fitted()
         df = self._fix_col_transform(df)
         final_df = df.copy()
         final_df = self._apply_transforms(final_df)

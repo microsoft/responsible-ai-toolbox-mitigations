@@ -220,6 +220,15 @@ class DataProcessing(ABC):
         return df_valid
 
     # -----------------------------------
+    def _check_if_fitted(self):
+        if not self.fitted:
+            raise ValueError(
+                f"ERROR: trying to call the transform() method from an instance of the {self.__class__.__name__} class "
+                + "before calling the fit() method. "
+                + "Call the fit() method before using this instance to transform a dataset."
+            )
+
+    # -----------------------------------
     def _check_df_input_format(self, df: pd.DataFrame, label_col: str, X: pd.DataFrame, y: pd.DataFrame):
         """
         Checks the consistency of the input scheme chosen by the user. There are two ways

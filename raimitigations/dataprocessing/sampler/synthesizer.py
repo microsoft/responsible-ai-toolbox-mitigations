@@ -107,6 +107,7 @@ class Synthesizer(DataProcessing):
         self.df_org = None
         self.y = None
         self.in_place = in_place
+        self.fitted = False
         self.transform_pipe = transform_pipe
         self.model = model
         self.epochs = epochs
@@ -271,6 +272,8 @@ class Synthesizer(DataProcessing):
         if not loaded:
             self.model.fit(self.df)
             self._save_model()
+
+        self.fitted = True
         return self
 
     # -----------------------------------
@@ -551,6 +554,7 @@ class Synthesizer(DataProcessing):
               parameter, an error will be raised;
               If None, the default value is set to "auto", which is the same as "minority".
         """
+        self._check_if_fitted()
         df, input_mode = self._arrange_transform_df(df, X, y)
         if df is not None:
             self._check_valid_df(df)
