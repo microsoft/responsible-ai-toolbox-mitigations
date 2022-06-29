@@ -1,5 +1,5 @@
 import os
-
+import pytest
 import pickle
 
 import conftest as utils
@@ -26,13 +26,13 @@ def _get_object_list(df=None, label_col=None, X=None, y=None):
     )
     synth_list.append(synth)
 
-    synth = Synthesizer(df=df, label_col=label_col, X=X, y=y, model="copula", epochs=2, load_existing=True)
+    synth = Synthesizer(df=df, label_col=label_col, X=X, y=y, model="copula", epochs=1, load_existing=True)
     synth_list.append(synth)
 
-    synth = Synthesizer(df=df, label_col=label_col, X=X, y=y, model="copula_gan", epochs=2, load_existing=True)
+    synth = Synthesizer(df=df, label_col=label_col, X=X, y=y, model="copula_gan", epochs=1, load_existing=True)
     synth_list.append(synth)
 
-    synth = Synthesizer(df=df, label_col=label_col, X=X, y=y, model="tvae", epochs=2, load_existing=True)
+    synth = Synthesizer(df=df, label_col=label_col, X=X, y=y, model="tvae", epochs=1, load_existing=True)
     synth_list.append(synth)
 
     return synth_list
@@ -46,7 +46,14 @@ def _run_main_commands(df, label_col, transf, df_in_fit=True):
     else:
         transf.fit()
 
-    conditions = {"num_0": 0.2, "CN_1_num_1": "val1_0", label_col: 1}
+    conditions = {"CN_1_num_1": "val1_0", label_col: 1}
+
+    try:
+        _ = transf.sample(10)
+    except Exception as error:
+        error_msg = str(error)
+        if "valid rows" not in error_msg:
+            raise ValueError(f"ERROR: the following error occured while generating synthetic data: {error_msg}")
 
     try:
         _ = transf.transform(df=df)
@@ -56,28 +63,16 @@ def _run_main_commands(df, label_col, transf, df_in_fit=True):
             raise ValueError(f"ERROR: the following error occured while generating synthetic data: {error_msg}")
 
     try:
-        _ = transf.transform(df=df, n_samples=20)
+        _ = transf.transform(df=df, n_samples=10)
     except Exception as error:
         error_msg = str(error)
         if "valid rows" not in error_msg:
             raise ValueError(f"ERROR: the following error occured while generating synthetic data: {error_msg}")
 
+    X = df.drop(columns=[label_col])
+    y = df[label_col]
     try:
-        _ = transf.transform(df=df, n_samples=20, conditions=conditions)
-    except Exception as error:
-        error_msg = str(error)
-        if "valid rows" not in error_msg:
-            raise ValueError(f"ERROR: the following error occured while generating synthetic data: {error_msg}")
-
-    try:
-        _ = transf.sample(20)
-    except Exception as error:
-        error_msg = str(error)
-        if "valid rows" not in error_msg:
-            raise ValueError(f"ERROR: the following error occured while generating synthetic data: {error_msg}")
-
-    try:
-        _ = transf.sample(20, conditions=conditions)
+        _ = transf.transform(X=X, y=y, n_samples=5, conditions=conditions)
     except Exception as error:
         error_msg = str(error)
         if "valid rows" not in error_msg:
@@ -114,7 +109,7 @@ def test_col_name(df_full_nan, label_col_name):
 # -----------------------------------
 def test_pickle(df_full_nan, label_col_name):
     df = df_full_nan
-    synth = Synthesizer(model="ctgan", epochs=2)
+    synth = Synthesizer(model="ctgan", epochs=1)
     synth.fit(df=df, label_col=label_col_name)
     _ = synth.sample(20)
 
@@ -129,3 +124,34 @@ def test_pickle(df_full_nan, label_col_name):
 
     _ = synth_loaded.sample(20)
     os.remove("synth.obj")
+
+
+# -----------------------------------
+def test_errors(df_full_nan, label_col_name):
+    df = df_full_nan
+    with pytest.raises(Exception):
+        obj = Synthesizer(model="a")
+    with pytest.raises(Exception):
+        obj = Synthesizer(df=df, label_col=6)
+    with pytest.raises(Exception):
+        obj = Synthesizer(save_file=10)
+
+    df_err1 = df.copy()
+    df_err1.rename(columns={"num_0":"new"}, inplace=True)
+    df_err2 = df.copy()
+    df_err2["new"] = df_err2["num_0"].values.tolist()
+    conditions = {"CN_1_num_1": "val1_0", label_col_name: 1}
+
+    obj = Synthesizer(epochs=1)
+    obj.fit(df=df, label_col=label_col_name)
+    with pytest.raises(Exception):
+        obj.transform(strategy="a")
+    with pytest.raises(Exception):
+        obj.transform(strategy=10)
+    with pytest.raises(Exception):
+        obj.transform(df=df_err1)
+    with pytest.raises(Exception):
+        obj.transform(df=df_err2)
+    with pytest.raises(Exception):
+        obj.transform(conditions=conditions)
+    os.remove(obj.save_file)

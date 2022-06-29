@@ -5,11 +5,21 @@ import numpy as np
 from raimitigations.dataprocessing import create_dummy_dataset
 
 
+SEED = 42
+
+
+# -----------------------------------
+def _set_seed():
+    np.random.seed(SEED)
+    random.seed(SEED)
+
+
 # -----------------------------------
 @pytest.fixture
 def df_num():
+    _set_seed()
     df = create_dummy_dataset(
-        samples=1000,
+        samples=500,
         n_features=6,
         n_num_num=0,
         n_cat_num=0,
@@ -27,8 +37,9 @@ def label_col_name():
 # -----------------------------------
 @pytest.fixture
 def df_full():
+    _set_seed()
     df = create_dummy_dataset(
-        samples=1000,
+        samples=500,
         n_features=6,
         n_num_num=2,
         n_cat_num=2,
@@ -42,8 +53,9 @@ def df_full():
 # -----------------------------------
 @pytest.fixture
 def df_regression():
+    _set_seed()
     df = create_dummy_dataset(
-        samples=1000,
+        samples=500,
         n_features=6,
         n_num_num=2,
         n_cat_num=2,
@@ -58,6 +70,7 @@ def df_regression():
 # -----------------------------------
 @pytest.fixture
 def df_full_nan():
+    _set_seed()
     def add_nan(vec, pct):
         vec = list(vec)
         nan_index = random.sample(range(len(vec)), int(pct * len(vec)))
@@ -66,7 +79,7 @@ def df_full_nan():
         return vec
 
     df = create_dummy_dataset(
-        samples=1000,
+        samples=500,
         n_features=6,
         n_num_num=2,
         n_cat_num=2,
@@ -88,8 +101,11 @@ def label_col_index():
 
 
 # -----------------------------------
-def check_valid_columns(final_list, selected):
-    size = len(final_list) == len(selected) + 1
+def check_valid_columns(final_list, selected, include_label=True):
+    if include_label:
+        size = len(final_list) == len(selected) + 1
+    else:
+        size = len(final_list) == len(selected)
     for v in selected:
         if v not in final_list:
             return False

@@ -163,10 +163,10 @@ class EncoderOrdinal(DataEncoding):
                 break
 
         if unk_value is None:
-            cont = 0.0
+            count = 0.0
             while unk_value is None:
-                new_value = f"{self.UNK_VALUES[0]}_{cont}"
-                cont += 1
+                new_value = f"{self.UNK_VALUES[0]}_{count}"
+                count += 1
                 if new_value not in values:
                     unk_value = new_value
 

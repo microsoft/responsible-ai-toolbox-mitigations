@@ -9,6 +9,20 @@ from raimitigations.dataprocessing import (
 )
 
 
+def _run_assertions(new_df, cor_feat, include_label=True):
+    assert utils.check_valid_columns(new_df.columns.to_list(), cor_feat.get_selected_features(), include_label), (
+        f"The list of selected columns is different from the columns in the final df:"
+        f"\nnew_df.columns = {new_df.columns.to_list()}\n"
+        f"cor_feat.get_selected_features() = {cor_feat.get_selected_features()}"
+    )
+
+    fixed_cols = [col for col in cor_feat.df.columns.to_list() if col not in cor_feat.cor_features]
+    assert utils.check_fixed_col(fixed_cols, cor_feat.get_selected_features()), (
+        f"The selected features does not include the fixed features.\n"
+        f"fixed features = {fixed_cols}\n"
+        f"selected features = {cor_feat.get_selected_features()}"
+    )
+
 
 # -----------------------------------
 def _get_object_list(df=None, label_col=None, X=None, y=None, use_index=True):
@@ -97,18 +111,7 @@ def _run_main_commands(df, label_col, cor_feat, df_in_fit=True):
     _ = cor_feat.get_summary(print_summary=True)
     new_df = cor_feat.transform(df)
 
-    assert utils.check_valid_columns(new_df.columns.to_list(), cor_feat.get_selected_features()), (
-        f"The list of selected columns is different from the columns in the final df:"
-        f"\nnew_df.columns = {new_df.columns.to_list()}\n"
-        f"cor_feat.get_selected_features() = {cor_feat.get_selected_features()}"
-    )
-
-    fixed_cols = [col for col in cor_feat.df.columns.to_list() if col not in cor_feat.cor_features]
-    assert utils.check_fixed_col(fixed_cols, cor_feat.get_selected_features()), (
-        f"The selected features does not include the fixed features.\n"
-        f"fixed features = {fixed_cols}\n"
-        f"selected features = {cor_feat.get_selected_features()}"
-    )
+    _run_assertions(new_df, cor_feat)
 
 
 # -----------------------------------
@@ -187,8 +190,6 @@ def test_no_col_name(df_full, label_col_index):
 
 
 # -----------------------------------
-
-
 def test_numpy_in(df_full, label_col_name, label_col_index):
     df = df_full
     X = df.drop(columns=[label_col_name])
@@ -199,13 +200,19 @@ def test_numpy_in(df_full, label_col_name, label_col_index):
 
     obj = CorrelatedFeatures()
     obj.fit(X=Xnp, y=ynp)
+    new_df = obj.transform(Xnp)
+    _run_assertions(new_df, obj, include_label=False)
 
     obj = CorrelatedFeatures()
     obj.fit(df=dfnp, label_col=label_col_index)
+    new_df = obj.transform(dfnp)
+    _run_assertions(new_df, obj)
 
     y = df[[label_col_name]]
     obj = CorrelatedFeatures()
     obj.fit(X=X, y=y)
+    new_df = obj.transform(X)
+    _run_assertions(new_df, obj, include_label=False)
 
     os.remove(obj.json_summary)
     os.remove(obj.json_corr)
@@ -213,8 +220,6 @@ def test_numpy_in(df_full, label_col_name, label_col_index):
 
 
 # -----------------------------------
-
-
 def test_errors(df_full, label_col_name):
     df = df_full
     X = df.drop(columns=[label_col_name])

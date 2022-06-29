@@ -8,4 +8,4 @@ catboost_info/
 *.obj
 **/*.obj
 *.egg-info/
-**.coverage
+**.coverage**
