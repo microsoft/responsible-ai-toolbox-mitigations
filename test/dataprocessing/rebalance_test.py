@@ -1,5 +1,6 @@
-from imblearn.under_sampling import RandomUnderSampler
-
+from imblearn.under_sampling import RandomUnderSampler, TomekLinks
+from imblearn.over_sampling import SMOTE, SMOTEN, SMOTENC
+import pytest
 import conftest as utils
 from raimitigations.dataprocessing import (
     Rebalance,
@@ -126,3 +127,62 @@ def test_no_col_name(df_full_nan, label_col_index):
     obj_list = _get_object_list(cat_col)
     for obj in obj_list:
         _run_main_commands(df, label_col_index, obj, df_in_fit=True)
+
+
+# -----------------------------------
+def test_errors(df_full_nan, label_col_name):
+    df = df_full_nan
+    obj = Rebalance()
+    with pytest.raises(Exception):
+        obj.fit_resample(df=df, rebalance_col="CN_0_num_0")
+    with pytest.raises(Exception):
+        obj.fit_resample(df=df, rebalance_col="num_1")
+
+    obj = Rebalance(strategy_over="a")
+    with pytest.raises(Exception):
+        obj.fit_resample(df=df, rebalance_col=label_col_name)
+
+    obj = Rebalance(strategy_over=1)
+    with pytest.raises(Exception):
+        obj.fit_resample(df=df, rebalance_col=label_col_name)
+
+    obj = Rebalance(over_sampler=SMOTEN(), under_sampler=True)
+    with pytest.raises(Exception):
+        obj.fit_resample(df=df, rebalance_col=label_col_name)
+
+    df_num = df.copy()
+    df_num = df_num[["num_0", "num_1", "num_2", label_col_name]]
+    df_cat = df.copy()
+    df_cat = df_cat[["CN_0_num_0", "CN_1_num_1", label_col_name]]
+
+    obj = Rebalance(over_sampler=SMOTEN())
+    with pytest.raises(Exception):
+        obj.fit_resample(df=df, rebalance_col=label_col_name)
+
+    obj = Rebalance(over_sampler=SMOTEN())
+    with pytest.raises(Exception):
+        obj.fit_resample(df=df_num, rebalance_col=label_col_name)
+
+    obj = Rebalance(over_sampler=SMOTENC(categorical_features=["CN_0_num_0", "CN_1_num_1"]))
+    with pytest.raises(Exception):
+        obj.fit_resample(df=df_cat, rebalance_col=label_col_name)
+
+    obj = Rebalance(under_sampler=TomekLinks(), strategy_under=0.2)
+    with pytest.raises(Exception):
+        obj.fit_resample(df=df_cat, rebalance_col=label_col_name)
+
+    obj = Rebalance(over_sampler=False, under_sampler=False)
+    with pytest.raises(Exception):
+        obj.fit_resample(df=df, rebalance_col=label_col_name)
+
+    obj = Rebalance(over_sampler=10)
+    with pytest.raises(Exception):
+        obj.fit_resample(df=df, rebalance_col=label_col_name)
+
+    obj = Rebalance(under_sampler=10)
+    with pytest.raises(Exception):
+        obj.fit_resample(df=df, rebalance_col=label_col_name)
+
+    obj = Rebalance(k_neighbors="a")
+    with pytest.raises(Exception):
+        obj.fit_resample(df=df, rebalance_col=label_col_name)

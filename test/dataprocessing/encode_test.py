@@ -115,8 +115,6 @@ def test_no_col_name(df_full):
 
 
 # -----------------------------------
-
-
 def test_special_case(df_full):
     df = df_full
     obj = EncoderOrdinal()
@@ -129,8 +127,6 @@ def test_special_case(df_full):
 
 
 # -----------------------------------
-
-
 def test_errors(df_full):
     df = df_full
     obj_list = [EncoderOrdinal(categories={18: ["1"]}), EncoderOrdinal(col_encode=18), EncoderOrdinal(col_encode=[6.0])]
@@ -141,8 +137,6 @@ def test_errors(df_full):
 
 
 # -----------------------------------
-
-
 def test_errors_no_col_name(df_full):
     df = df_full
     df.columns = [i for i in range(df.shape[1])]
@@ -162,14 +156,14 @@ def test_errors_no_col_name(df_full):
 
     obj = EncoderOrdinal()
     with pytest.raises(Exception):
+        obj.transform(df=df)
+    with pytest.raises(Exception):
         obj.fit(df=["a", "a", "b", "a", "b", "b"])
     with pytest.raises(Exception):
         obj.fit()
 
 
 # -----------------------------------
-
-
 def test_ordinal_unknown():
     df = pd.DataFrame()
     df["col1"] = [1, 2, 3, 4, 5, 6, 7]
