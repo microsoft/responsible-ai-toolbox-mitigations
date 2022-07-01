@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.7", "3.8", "3.9"]
 
     steps:
     - uses: actions/checkout@v2
@@ -23,41 +23,41 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-        
+
     - name: Setup tools
-      run: | 
+      run: |
         python -m pip install --upgrade pip
         pip install --upgrade setuptools
-        pip install --upgrade pip-tools 
-    
+        pip install --upgrade pip-tools
+
     - name: Pip compile
       run: |
         pip-compile requirements.in
         cat requirements.txt
-    
+
     - name: Upload Requirements
       uses: actions/upload-artifact@v2
-      with: 
+      with:
         name: requirements.txt
         path: requirements.txt
-    
+
     - name: Install dependencies
       run: |
         pip-sync requirements.txt
-    
+
     - name: Install package
       run: |
-        pip install -v .
-    
+        pip install -e .
+
     - name: Run Tests
       run: |
         pytest --cov=raimitigations test/. --cov-report=html --cov-report=term
-    
+
     - name: Upload code coverage results
       uses: actions/upload-artifact@v2
-      with: 
+      with:
         name: raimitigations-code-coverage-results
         path: htmlcov
       if: ${{ always() }}
-        
-    # upload to codecov 
+
+    # upload to codecov
