@@ -246,5 +246,9 @@ class BasicImputer(DataImputer):
         transf_df = df.copy()
         for col in self.col_impute:
             df_valid = self._get_df_subset(df, [col])
+            is_int1 = 'int' in df_valid[col].dtype.name
             transf_df[[col]] = self.imputers[col].transform(df_valid)
+            is_int2 = 'int' in transf_df[col].dtype.name
+            if is_int1 and not is_int2:
+                transf_df[col] = transf_df[col].apply(int)
         return transf_df
