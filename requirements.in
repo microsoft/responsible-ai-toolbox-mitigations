@@ -24,6 +24,5 @@ pytest==7.1.2
 pytest-codecov
 pytest-json-report
 pytest-html
-feature_engine
 sphinx
 uci_dataset
