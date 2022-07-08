@@ -19,7 +19,7 @@ several different customization options, making the module ideal for those with 
 Target Audience
 ---------------
 
-This module was designed for unexperienced and experienced data scientists. The **dataprocessing** module aims to offer
+This module was designed mainly for data scientists. The **dataprocessing** module aims to offer
 classes that provide automated solutions, which helps the more unexperienced data scientists, while also allowing a wide
 variety of customizations, making it a good option for the more experienced as well.
 
