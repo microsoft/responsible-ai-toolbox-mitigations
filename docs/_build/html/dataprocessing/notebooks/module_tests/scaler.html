@@ -1,0 +1,3527 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Scaling &mdash; RAI Error Mitigation  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="DataMinMaxScaler" href="../../scaler/minmax.html" />
+    <link rel="prev" title="DataStandardScaler" href="../../scaler/standard.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> RAI Error Mitigation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../databalanceanalysis/databalanceanalysis.html">databalanceanalysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../intro.html">dataprocessing</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../intro.html#target-audience">Target Audience</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro.html#structure">Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro.html#api">API</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../intro.html#examples">Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../case_studies.html">Case Studies</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../module_tests.html">Tutorials</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="encoding.html">Encoding Examples</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Data Scaling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="imputation.html">BasicImputer Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="feat_sel_sequential.html">SeqFeatSelection Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="feat_sel_catboost.html">CatBoostSelection Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="feat_sel_corr.html">CorrelatedFeatures Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="feat_sel_corr_tutorial.html">Checking Correlations Between Variables - A Comprehensive Guide</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rebalance_imbl.html">Rebalance Class (imblearn)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rebalance_sdv.html">Synthesizer Class (SDV)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro.html#sklearn-s-pipeline-support">Sklearn’s Pipeline Support</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">RAI Error Mitigation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../intro.html">dataprocessing</a> &raquo;</li>
+          <li><a href="../../dataprocessing.html">DataProcessing</a> &raquo;</li>
+          <li><a href="../../scaler/scaler.html">Scalers</a> &raquo;</li>
+          <li><a href="../../scaler/standard.html">DataStandardScaler</a> &raquo;</li>
+      <li>Data Scaling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/dataprocessing/notebooks/module_tests/scaler.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stat</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MinMaxScaler</span><span class="p">,</span>
+    <span class="n">RobustScaler</span><span class="p">,</span>
+    <span class="n">QuantileTransformer</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">create_dummy_dataset</span><span class="p">,</span>
+    <span class="n">BasicImputer</span><span class="p">,</span>
+    <span class="n">EncoderOHE</span><span class="p">,</span>
+    <span class="n">DataRobustScaler</span><span class="p">,</span>
+    <span class="n">DataPowerTransformer</span><span class="p">,</span>
+    <span class="n">DataNormalizer</span><span class="p">,</span>
+    <span class="n">DataStandardScaler</span><span class="p">,</span>
+    <span class="n">DataMinMaxScaler</span><span class="p">,</span>
+    <span class="n">DataQuantileTransformer</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Data-Scaling">
+<h1>Data Scaling<a class="headerlink" href="#Data-Scaling" title="Permalink to this heading"></a></h1>
+<p>In this notebook we will show how to use data transformation classes. Each class applies a different data transformation over the numerical data, and it was designed to allow several transformations to be applied using a simple and easy to use interface.</p>
+<p>Let’s start with the basic scenarios where we use only default values. But before jumping to the different classes, let’s first create a dummy dataset with numerical and categorical features, and Nan values scattered along different columns.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># -----------------------------------</span>
+<span class="k">def</span> <span class="nf">add_nan</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">pct</span><span class="p">):</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+    <span class="n">nan_index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vec</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">pct</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">vec</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">nan_index</span><span class="p">:</span>
+            <span class="n">vec</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">return</span> <span class="n">vec</span>
+
+<span class="c1"># -----------------------------------</span>
+<span class="k">def</span> <span class="nf">build_dummy_dataset</span><span class="p">():</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">create_dummy_dataset</span><span class="p">(</span>
+                                    <span class="n">samples</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span>
+                                    <span class="n">n_features</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                                    <span class="n">n_num_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                    <span class="n">n_cat_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                    <span class="n">n_cat_cat</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                    <span class="n">num_num_noise</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">],</span>
+                                    <span class="n">pct_change</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span>
+                            <span class="p">)</span>
+    <span class="n">label_col</span> <span class="o">=</span> <span class="s2">&quot;label&quot;</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="n">label_col</span>
+
+<span class="n">df</span><span class="p">,</span> <span class="n">label_col</span> <span class="o">=</span> <span class="n">build_dummy_dataset</span><span class="p">()</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>num_2</th>
+      <th>num_3</th>
+      <th>num_4</th>
+      <th>num_5</th>
+      <th>label</th>
+      <th>num_c0_num_0</th>
+      <th>num_c1_num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+      <th>CC_0_num_0</th>
+      <th>CC_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.838682</td>
+      <td>-1.408271</td>
+      <td>2.758909</td>
+      <td>-1.558914</td>
+      <td>0.606338</td>
+      <td>2.828664</td>
+      <td>1</td>
+      <td>1.796571</td>
+      <td>-1.397257</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>3.249825</td>
+      <td>-3.925450</td>
+      <td>2.953185</td>
+      <td>3.540991</td>
+      <td>-2.340552</td>
+      <td>3.398367</td>
+      <td>1</td>
+      <td>3.257607</td>
+      <td>-3.925562</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.978148</td>
+      <td>0.330699</td>
+      <td>1.483723</td>
+      <td>3.198539</td>
+      <td>-4.134112</td>
+      <td>2.312435</td>
+      <td>1</td>
+      <td>1.041164</td>
+      <td>0.338390</td>
+      <td>val0_2</td>
+      <td>val1_3</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.847425</td>
+      <td>1.008353</td>
+      <td>1.192225</td>
+      <td>3.496178</td>
+      <td>-1.120895</td>
+      <td>1.910650</td>
+      <td>0</td>
+      <td>-0.875685</td>
+      <td>1.020226</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.972314</td>
+      <td>-2.305080</td>
+      <td>2.136697</td>
+      <td>2.224677</td>
+      <td>-2.409424</td>
+      <td>2.504838</td>
+      <td>1</td>
+      <td>1.012618</td>
+      <td>-2.295010</td>
+      <td>val0_2</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2995</th>
+      <td>0.740834</td>
+      <td>-1.171719</td>
+      <td>0.357037</td>
+      <td>1.863302</td>
+      <td>-2.869701</td>
+      <td>0.658475</td>
+      <td>1</td>
+      <td>0.776097</td>
+      <td>-1.167798</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2996</th>
+      <td>1.865602</td>
+      <td>-1.226943</td>
+      <td>3.212207</td>
+      <td>0.961388</td>
+      <td>-0.925646</td>
+      <td>2.316213</td>
+      <td>1</td>
+      <td>1.848407</td>
+      <td>-1.231393</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2997</th>
+      <td>-0.854474</td>
+      <td>-2.369469</td>
+      <td>0.457335</td>
+      <td>3.216465</td>
+      <td>-4.680820</td>
+      <td>3.322093</td>
+      <td>1</td>
+      <td>-0.876535</td>
+      <td>-2.366553</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2998</th>
+      <td>0.892994</td>
+      <td>-2.115929</td>
+      <td>2.741942</td>
+      <td>-0.218843</td>
+      <td>-0.097098</td>
+      <td>1.893662</td>
+      <td>1</td>
+      <td>0.890398</td>
+      <td>-2.143039</td>
+      <td>val0_2</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2999</th>
+      <td>1.664427</td>
+      <td>-1.075205</td>
+      <td>3.487387</td>
+      <td>-0.182207</td>
+      <td>0.033374</td>
+      <td>2.417933</td>
+      <td>1</td>
+      <td>1.654759</td>
+      <td>-1.052976</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>3000 rows × 13 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 3000 entries, 0 to 2999
+Data columns (total 13 columns):
+ #   Column        Non-Null Count  Dtype
+---  ------        --------------  -----
+ 0   num_0         3000 non-null   float64
+ 1   num_1         3000 non-null   float64
+ 2   num_2         3000 non-null   float64
+ 3   num_3         3000 non-null   float64
+ 4   num_4         3000 non-null   float64
+ 5   num_5         3000 non-null   float64
+ 6   label         3000 non-null   int64
+ 7   num_c0_num_0  3000 non-null   float64
+ 8   num_c1_num_1  3000 non-null   float64
+ 9   CN_0_num_0    3000 non-null   object
+ 10  CN_1_num_1    3000 non-null   object
+ 11  CC_0_num_0    3000 non-null   object
+ 12  CC_1_num_1    3000 non-null   object
+dtypes: float64(8), int64(1), object(4)
+memory usage: 304.8+ KB
+</pre></div></div>
+</div>
+<section id="Basic-Use-Case:-Robust-Scaler">
+<h2>Basic Use Case: Robust Scaler<a class="headerlink" href="#Basic-Use-Case:-Robust-Scaler" title="Permalink to this heading"></a></h2>
+<p>As we can see, the dataset we are working with has several numerical and several categorical data. Also, all columns have a few missing values. When using data scalers or data transformers using Sklearn, we usually need to provide a dataset with only the numerical columns. This requires the user to separate these columns from the original dataset, and then they need to merge the scaled columns with the categorical columns. We encapsulate all of these processes inside the main scaler class,
+making it easier to use.</p>
+<p>Let’s see an example of how to use the Robust scaler through the <strong>DataRobustScaler</strong> class implemented in this library. For now, we will use only the default values, with exception of the <em>exclude_cols</em> parameter. This parameter is a list of column names or column indexes that should be ignored when doing the scaling process, that is, all columns that should not be scaled. By default, this parameter is set as being the list of all column names associated to categorical columns. But since our
+label is numerical and we don’t want to transform the values in the label column, we will force the label column to be ignored as well (along with the categorical columns). This way, we create the object by passing “exclude_cols=[‘label’]”. The categorical columns are added internally to the exclude_cols list if they are not already specified.</p>
+<p>After creating the object of <strong>DataRobustScaler</strong>, we must call the fit() and transform() methods, following the pattern established in this library (which is a pattern followed by several well established machine learning libraries). Here we will fit and transform the data using the same dataset, but remember that we should use the training dataset when calling the fit method and then call the transform method for both training and testing datasets.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">DataRobustScaler</span><span class="p">(</span><span class="n">exclude_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>num_2</th>
+      <th>num_3</th>
+      <th>num_4</th>
+      <th>num_5</th>
+      <th>label</th>
+      <th>num_c0_num_0</th>
+      <th>num_c1_num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+      <th>CC_0_num_0</th>
+      <th>CC_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.118733</td>
+      <td>0.237866</td>
+      <td>0.492773</td>
+      <td>-1.849241</td>
+      <td>1.363420</td>
+      <td>0.372973</td>
+      <td>1</td>
+      <td>0.105654</td>
+      <td>0.243515</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.601353</td>
+      <td>-0.795141</td>
+      <td>0.621367</td>
+      <td>0.807144</td>
+      <td>-0.197305</td>
+      <td>0.629804</td>
+      <td>1</td>
+      <td>0.604797</td>
+      <td>-0.796681</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.175575</td>
+      <td>0.951508</td>
+      <td>-0.351287</td>
+      <td>0.628771</td>
+      <td>-1.147206</td>
+      <td>0.140249</td>
+      <td>1</td>
+      <td>-0.152420</td>
+      <td>0.957595</td>
+      <td>val0_2</td>
+      <td>val1_3</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.799932</td>
+      <td>1.229606</td>
+      <td>-0.544233</td>
+      <td>0.783802</td>
+      <td>0.448647</td>
+      <td>-0.040882</td>
+      <td>0</td>
+      <td>-0.807285</td>
+      <td>1.238116</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.177570</td>
+      <td>-0.130169</td>
+      <td>0.080924</td>
+      <td>0.121516</td>
+      <td>-0.233781</td>
+      <td>0.226987</td>
+      <td>1</td>
+      <td>-0.162172</td>
+      <td>-0.125839</td>
+      <td>val0_2</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2995</th>
+      <td>-0.256738</td>
+      <td>0.334942</td>
+      <td>-1.097054</td>
+      <td>-0.066713</td>
+      <td>-0.477552</td>
+      <td>-0.605382</td>
+      <td>1</td>
+      <td>-0.242977</td>
+      <td>0.337919</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2996</th>
+      <td>0.127940</td>
+      <td>0.312279</td>
+      <td>0.792817</td>
+      <td>-0.536493</td>
+      <td>0.552054</td>
+      <td>0.141952</td>
+      <td>1</td>
+      <td>0.123363</td>
+      <td>0.311755</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2997</th>
+      <td>-0.802343</td>
+      <td>-0.156593</td>
+      <td>-1.030666</td>
+      <td>0.638108</td>
+      <td>-1.436752</td>
+      <td>0.595418</td>
+      <td>1</td>
+      <td>-0.807575</td>
+      <td>-0.155273</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2998</th>
+      <td>-0.204698</td>
+      <td>-0.052545</td>
+      <td>0.481543</td>
+      <td>-1.151239</td>
+      <td>0.990868</td>
+      <td>-0.048541</td>
+      <td>1</td>
+      <td>-0.203927</td>
+      <td>-0.063315</td>
+      <td>val0_2</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2999</th>
+      <td>0.059137</td>
+      <td>0.374550</td>
+      <td>0.974962</td>
+      <td>-1.132156</td>
+      <td>1.059968</td>
+      <td>0.187809</td>
+      <td>1</td>
+      <td>0.057206</td>
+      <td>0.385159</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>3000 rows × 13 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaled_df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 3000 entries, 0 to 2999
+Data columns (total 13 columns):
+ #   Column        Non-Null Count  Dtype
+---  ------        --------------  -----
+ 0   num_0         3000 non-null   float64
+ 1   num_1         3000 non-null   float64
+ 2   num_2         3000 non-null   float64
+ 3   num_3         3000 non-null   float64
+ 4   num_4         3000 non-null   float64
+ 5   num_5         3000 non-null   float64
+ 6   label         3000 non-null   int64
+ 7   num_c0_num_0  3000 non-null   float64
+ 8   num_c1_num_1  3000 non-null   float64
+ 9   CN_0_num_0    3000 non-null   object
+ 10  CN_1_num_1    3000 non-null   object
+ 11  CC_0_num_0    3000 non-null   object
+ 12  CC_1_num_1    3000 non-null   object
+dtypes: float64(8), int64(1), object(4)
+memory usage: 304.8+ KB
+</pre></div></div>
+</div>
+</section>
+<section id="Inverse-Transform">
+<h2>Inverse Transform<a class="headerlink" href="#Inverse-Transform" title="Permalink to this heading"></a></h2>
+<p>The scalers implemented in Sklearn all have an inverse transform method, which reverts the scaling performed over the numerical data, returning the dataset to its original state. We encapsulate this behavior in a method with the same name as the one used by sklearn: <strong>inverse_transform()</strong>. Note that in our case, the inverse_transform method receives a dataset with scaled numerical columns, as well as categorical columns, and returns a new dataframe with only the scaled numerical columns
+reversed (the label column is kept the same, since it was set to be ignored).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">org_df</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">scaled_df</span><span class="p">)</span>
+<span class="n">org_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>num_2</th>
+      <th>num_3</th>
+      <th>num_4</th>
+      <th>num_5</th>
+      <th>label</th>
+      <th>num_c0_num_0</th>
+      <th>num_c1_num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+      <th>CC_0_num_0</th>
+      <th>CC_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.838682</td>
+      <td>-1.408271</td>
+      <td>2.758909</td>
+      <td>-1.558914</td>
+      <td>0.606338</td>
+      <td>2.828664</td>
+      <td>1</td>
+      <td>1.796571</td>
+      <td>-1.397257</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>3.249825</td>
+      <td>-3.925450</td>
+      <td>2.953185</td>
+      <td>3.540991</td>
+      <td>-2.340552</td>
+      <td>3.398367</td>
+      <td>1</td>
+      <td>3.257607</td>
+      <td>-3.925562</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.978148</td>
+      <td>0.330699</td>
+      <td>1.483723</td>
+      <td>3.198539</td>
+      <td>-4.134112</td>
+      <td>2.312435</td>
+      <td>1</td>
+      <td>1.041164</td>
+      <td>0.338390</td>
+      <td>val0_2</td>
+      <td>val1_3</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.847425</td>
+      <td>1.008353</td>
+      <td>1.192225</td>
+      <td>3.496178</td>
+      <td>-1.120895</td>
+      <td>1.910650</td>
+      <td>0</td>
+      <td>-0.875685</td>
+      <td>1.020226</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.972314</td>
+      <td>-2.305080</td>
+      <td>2.136697</td>
+      <td>2.224677</td>
+      <td>-2.409424</td>
+      <td>2.504838</td>
+      <td>1</td>
+      <td>1.012618</td>
+      <td>-2.295010</td>
+      <td>val0_2</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2995</th>
+      <td>0.740834</td>
+      <td>-1.171719</td>
+      <td>0.357037</td>
+      <td>1.863302</td>
+      <td>-2.869701</td>
+      <td>0.658475</td>
+      <td>1</td>
+      <td>0.776097</td>
+      <td>-1.167798</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2996</th>
+      <td>1.865602</td>
+      <td>-1.226943</td>
+      <td>3.212207</td>
+      <td>0.961388</td>
+      <td>-0.925646</td>
+      <td>2.316213</td>
+      <td>1</td>
+      <td>1.848407</td>
+      <td>-1.231393</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2997</th>
+      <td>-0.854474</td>
+      <td>-2.369469</td>
+      <td>0.457335</td>
+      <td>3.216465</td>
+      <td>-4.680820</td>
+      <td>3.322093</td>
+      <td>1</td>
+      <td>-0.876535</td>
+      <td>-2.366553</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2998</th>
+      <td>0.892994</td>
+      <td>-2.115929</td>
+      <td>2.741942</td>
+      <td>-0.218843</td>
+      <td>-0.097098</td>
+      <td>1.893662</td>
+      <td>1</td>
+      <td>0.890398</td>
+      <td>-2.143039</td>
+      <td>val0_2</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2999</th>
+      <td>1.664427</td>
+      <td>-1.075205</td>
+      <td>3.487387</td>
+      <td>-0.182207</td>
+      <td>0.033374</td>
+      <td>2.417933</td>
+      <td>1</td>
+      <td>1.654759</td>
+      <td>-1.052976</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>3000 rows × 13 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Power-Transform">
+<h2>Power Transform<a class="headerlink" href="#Power-Transform" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">DataPowerTransformer</span><span class="p">(</span><span class="n">exclude_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>num_2</th>
+      <th>num_3</th>
+      <th>num_4</th>
+      <th>num_5</th>
+      <th>label</th>
+      <th>num_c0_num_0</th>
+      <th>num_c1_num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+      <th>CC_0_num_0</th>
+      <th>CC_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.204668</td>
+      <td>0.340865</td>
+      <td>0.624318</td>
+      <td>-2.355844</td>
+      <td>1.892091</td>
+      <td>0.497892</td>
+      <td>1</td>
+      <td>0.184078</td>
+      <td>0.347054</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.938741</td>
+      <td>-1.046138</td>
+      <td>0.791909</td>
+      <td>1.060248</td>
+      <td>-0.260243</td>
+      <td>0.853418</td>
+      <td>1</td>
+      <td>0.943084</td>
+      <td>-1.046297</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.211606</td>
+      <td>1.280236</td>
+      <td>-0.462634</td>
+      <td>0.821744</td>
+      <td>-1.544629</td>
+      <td>0.177042</td>
+      <td>1</td>
+      <td>-0.181683</td>
+      <td>1.284699</td>
+      <td>val0_2</td>
+      <td>val1_3</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.969191</td>
+      <td>1.639213</td>
+      <td>-0.707276</td>
+      <td>1.028996</td>
+      <td>0.621462</td>
+      <td>-0.071696</td>
+      <td>0</td>
+      <td>-0.979450</td>
+      <td>1.645924</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.214327</td>
+      <td>-0.150747</td>
+      <td>0.090894</td>
+      <td>0.147964</td>
+      <td>-0.309796</td>
+      <td>0.296469</td>
+      <td>1</td>
+      <td>-0.195061</td>
+      <td>-0.145133</td>
+      <td>val0_2</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2995</th>
+      <td>-0.321017</td>
+      <td>0.469917</td>
+      <td>-1.397383</td>
+      <td>-0.100105</td>
+      <td>-0.640434</td>
+      <td>-0.839805</td>
+      <td>1</td>
+      <td>-0.304500</td>
+      <td>0.472252</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2996</th>
+      <td>0.218123</td>
+      <td>0.439816</td>
+      <td>1.016051</td>
+      <td>-0.713380</td>
+      <td>0.763497</td>
+      <td>0.179385</td>
+      <td>1</td>
+      <td>0.209931</td>
+      <td>0.437581</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2997</th>
+      <td>-0.971766</td>
+      <td>-0.186168</td>
+      <td>-1.315517</td>
+      <td>0.834209</td>
+      <td>-1.934027</td>
+      <td>0.805738</td>
+      <td>1</td>
+      <td>-0.979760</td>
+      <td>-0.184495</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2998</th>
+      <td>-0.251167</td>
+      <td>-0.046782</td>
+      <td>0.609704</td>
+      <td>-1.497267</td>
+      <td>1.370180</td>
+      <td>-0.082193</td>
+      <td>1</td>
+      <td>-0.251934</td>
+      <td>-0.061582</td>
+      <td>val0_2</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2999</th>
+      <td>0.118160</td>
+      <td>0.522483</td>
+      <td>1.255006</td>
+      <td>-1.473387</td>
+      <td>1.466475</td>
+      <td>0.242502</td>
+      <td>1</td>
+      <td>0.113814</td>
+      <td>0.534794</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>3000 rows × 13 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Normalizer">
+<h2>Normalizer<a class="headerlink" href="#Normalizer" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">DataNormalizer</span><span class="p">(</span><span class="n">exclude_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+No columns specified for imputation. These columns have been automatically identified:
+[]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>num_2</th>
+      <th>num_3</th>
+      <th>num_4</th>
+      <th>num_5</th>
+      <th>label</th>
+      <th>num_c0_num_0</th>
+      <th>num_c1_num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+      <th>CC_0_num_0</th>
+      <th>CC_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.341701</td>
+      <td>-0.261714</td>
+      <td>0.512717</td>
+      <td>-0.289709</td>
+      <td>0.112682</td>
+      <td>0.525680</td>
+      <td>1.0</td>
+      <td>0.333876</td>
+      <td>-0.259667</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.342031</td>
+      <td>-0.413138</td>
+      <td>0.310811</td>
+      <td>0.372675</td>
+      <td>-0.246334</td>
+      <td>0.357664</td>
+      <td>1.0</td>
+      <td>0.342850</td>
+      <td>-0.413149</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.160514</td>
+      <td>0.054268</td>
+      <td>0.243479</td>
+      <td>0.524880</td>
+      <td>-0.678407</td>
+      <td>0.379470</td>
+      <td>1.0</td>
+      <td>0.170855</td>
+      <td>0.055530</td>
+      <td>val0_2</td>
+      <td>val1_3</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.180286</td>
+      <td>0.214523</td>
+      <td>0.253640</td>
+      <td>0.743796</td>
+      <td>-0.238466</td>
+      <td>0.406482</td>
+      <td>0.0</td>
+      <td>-0.186298</td>
+      <td>0.217048</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.166395</td>
+      <td>-0.394475</td>
+      <td>0.365659</td>
+      <td>0.380715</td>
+      <td>-0.412332</td>
+      <td>0.428660</td>
+      <td>1.0</td>
+      <td>0.173292</td>
+      <td>-0.392752</td>
+      <td>val0_2</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2995</th>
+      <td>0.184312</td>
+      <td>-0.291512</td>
+      <td>0.088827</td>
+      <td>0.463571</td>
+      <td>-0.713954</td>
+      <td>0.163822</td>
+      <td>1.0</td>
+      <td>0.193085</td>
+      <td>-0.290537</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2996</th>
+      <td>0.356516</td>
+      <td>-0.234468</td>
+      <td>0.613851</td>
+      <td>0.183721</td>
+      <td>-0.176890</td>
+      <td>0.442627</td>
+      <td>1.0</td>
+      <td>0.353230</td>
+      <td>-0.235319</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2997</th>
+      <td>-0.113966</td>
+      <td>-0.316029</td>
+      <td>0.060997</td>
+      <td>0.428997</td>
+      <td>-0.624306</td>
+      <td>0.443085</td>
+      <td>1.0</td>
+      <td>-0.116908</td>
+      <td>-0.315640</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2998</th>
+      <td>0.191164</td>
+      <td>-0.452958</td>
+      <td>0.586970</td>
+      <td>-0.046848</td>
+      <td>-0.020786</td>
+      <td>0.405378</td>
+      <td>1.0</td>
+      <td>0.190608</td>
+      <td>-0.458762</td>
+      <td>val0_2</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2999</th>
+      <td>0.327582</td>
+      <td>-0.211615</td>
+      <td>0.686367</td>
+      <td>-0.035861</td>
+      <td>0.006568</td>
+      <td>0.475883</td>
+      <td>1.0</td>
+      <td>0.325680</td>
+      <td>-0.207240</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>3000 rows × 13 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Standard-Scaler">
+<h2>Standard Scaler<a class="headerlink" href="#Standard-Scaler" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">exclude_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>num_2</th>
+      <th>num_3</th>
+      <th>num_4</th>
+      <th>num_5</th>
+      <th>label</th>
+      <th>num_c0_num_0</th>
+      <th>num_c1_num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+      <th>CC_0_num_0</th>
+      <th>CC_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.279543</td>
+      <td>0.332628</td>
+      <td>0.628637</td>
+      <td>-2.422861</td>
+      <td>1.875546</td>
+      <td>0.502397</td>
+      <td>1</td>
+      <td>0.260887</td>
+      <td>0.338829</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.908693</td>
+      <td>-1.043038</td>
+      <td>0.793104</td>
+      <td>1.055566</td>
+      <td>-0.255713</td>
+      <td>0.853082</td>
+      <td>1</td>
+      <td>0.912494</td>
+      <td>-1.043198</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.104122</td>
+      <td>1.282994</td>
+      <td>-0.450880</td>
+      <td>0.821995</td>
+      <td>-1.552858</td>
+      <td>0.184628</td>
+      <td>1</td>
+      <td>-0.076018</td>
+      <td>1.287573</td>
+      <td>val0_2</td>
+      <td>val1_3</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.918043</td>
+      <td>1.653340</td>
+      <td>-0.697650</td>
+      <td>1.025001</td>
+      <td>0.626371</td>
+      <td>-0.062694</td>
+      <td>0</td>
+      <td>-0.930914</td>
+      <td>1.660279</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.106723</td>
+      <td>-0.157488</td>
+      <td>0.101900</td>
+      <td>0.157765</td>
+      <td>-0.305523</td>
+      <td>0.303063</td>
+      <td>1</td>
+      <td>-0.088749</td>
+      <td>-0.151902</td>
+      <td>val0_2</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2995</th>
+      <td>-0.209927</td>
+      <td>0.461906</td>
+      <td>-1.404684</td>
+      <td>-0.088714</td>
+      <td>-0.638406</td>
+      <td>-0.833480</td>
+      <td>1</td>
+      <td>-0.194235</td>
+      <td>0.464257</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2996</th>
+      <td>0.291545</td>
+      <td>0.431726</td>
+      <td>1.012380</td>
+      <td>-0.703871</td>
+      <td>0.767580</td>
+      <td>0.186954</td>
+      <td>1</td>
+      <td>0.284005</td>
+      <td>0.429494</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2997</th>
+      <td>-0.921186</td>
+      <td>-0.192677</td>
+      <td>-1.319776</td>
+      <td>0.834221</td>
+      <td>-1.948250</td>
+      <td>0.806131</td>
+      <td>1</td>
+      <td>-0.931293</td>
+      <td>-0.191009</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2998</th>
+      <td>-0.142087</td>
+      <td>-0.054115</td>
+      <td>0.614274</td>
+      <td>-1.508856</td>
+      <td>1.366805</td>
+      <td>-0.073151</td>
+      <td>1</td>
+      <td>-0.143258</td>
+      <td>-0.068831</td>
+      <td>val0_2</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2999</th>
+      <td>0.201852</td>
+      <td>0.514652</td>
+      <td>1.245336</td>
+      <td>-1.483868</td>
+      <td>1.461165</td>
+      <td>0.249568</td>
+      <td>1</td>
+      <td>0.197640</td>
+      <td>0.527021</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>3000 rows × 13 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaled_df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 3000 entries, 0 to 2999
+Data columns (total 13 columns):
+ #   Column        Non-Null Count  Dtype
+---  ------        --------------  -----
+ 0   num_0         3000 non-null   float64
+ 1   num_1         3000 non-null   float64
+ 2   num_2         3000 non-null   float64
+ 3   num_3         3000 non-null   float64
+ 4   num_4         3000 non-null   float64
+ 5   num_5         3000 non-null   float64
+ 6   label         3000 non-null   int64
+ 7   num_c0_num_0  3000 non-null   float64
+ 8   num_c1_num_1  3000 non-null   float64
+ 9   CN_0_num_0    3000 non-null   object
+ 10  CN_1_num_1    3000 non-null   object
+ 11  CC_0_num_0    3000 non-null   object
+ 12  CC_1_num_1    3000 non-null   object
+dtypes: float64(8), int64(1), object(4)
+memory usage: 304.8+ KB
+</pre></div></div>
+</div>
+</section>
+<section id="Min-Max-Scaler">
+<h2>Min Max Scaler<a class="headerlink" href="#Min-Max-Scaler" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">exclude_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>num_2</th>
+      <th>num_3</th>
+      <th>num_4</th>
+      <th>num_5</th>
+      <th>label</th>
+      <th>num_c0_num_0</th>
+      <th>num_c1_num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+      <th>CC_0_num_0</th>
+      <th>CC_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.538771</td>
+      <td>0.495719</td>
+      <td>0.588105</td>
+      <td>0.161065</td>
+      <td>0.773957</td>
+      <td>0.542666</td>
+      <td>1</td>
+      <td>0.537741</td>
+      <td>0.496233</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.634397</td>
+      <td>0.317108</td>
+      <td>0.608658</td>
+      <td>0.621755</td>
+      <td>0.492937</td>
+      <td>0.590060</td>
+      <td>1</td>
+      <td>0.637324</td>
+      <td>0.317234</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.480457</td>
+      <td>0.619110</td>
+      <td>0.453200</td>
+      <td>0.590821</td>
+      <td>0.321901</td>
+      <td>0.499721</td>
+      <td>1</td>
+      <td>0.486254</td>
+      <td>0.619113</td>
+      <td>val0_2</td>
+      <td>val1_3</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.356747</td>
+      <td>0.667194</td>
+      <td>0.422362</td>
+      <td>0.617707</td>
+      <td>0.609246</td>
+      <td>0.466296</td>
+      <td>0</td>
+      <td>0.355604</td>
+      <td>0.667385</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.480061</td>
+      <td>0.432084</td>
+      <td>0.522280</td>
+      <td>0.502849</td>
+      <td>0.486370</td>
+      <td>0.515727</td>
+      <td>1</td>
+      <td>0.484308</td>
+      <td>0.432674</td>
+      <td>val0_2</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2995</th>
+      <td>0.464375</td>
+      <td>0.512504</td>
+      <td>0.334005</td>
+      <td>0.470205</td>
+      <td>0.442477</td>
+      <td>0.362127</td>
+      <td>1</td>
+      <td>0.468187</td>
+      <td>0.512478</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2996</th>
+      <td>0.540595</td>
+      <td>0.508585</td>
+      <td>0.636061</td>
+      <td>0.388732</td>
+      <td>0.627865</td>
+      <td>0.500035</td>
+      <td>1</td>
+      <td>0.541275</td>
+      <td>0.507975</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2997</th>
+      <td>0.356269</td>
+      <td>0.427515</td>
+      <td>0.344616</td>
+      <td>0.592440</td>
+      <td>0.269766</td>
+      <td>0.583715</td>
+      <td>1</td>
+      <td>0.355546</td>
+      <td>0.427609</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2998</th>
+      <td>0.474686</td>
+      <td>0.445506</td>
+      <td>0.586310</td>
+      <td>0.282118</td>
+      <td>0.706876</td>
+      <td>0.464883</td>
+      <td>1</td>
+      <td>0.475978</td>
+      <td>0.443433</td>
+      <td>val0_2</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2999</th>
+      <td>0.526962</td>
+      <td>0.519352</td>
+      <td>0.665173</td>
+      <td>0.285427</td>
+      <td>0.719318</td>
+      <td>0.508497</td>
+      <td>1</td>
+      <td>0.528076</td>
+      <td>0.520607</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>3000 rows × 13 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Quantile-Transform">
+<h2>Quantile Transform<a class="headerlink" href="#Quantile-Transform" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">DataQuantileTransformer</span><span class="p">(</span><span class="n">exclude_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>num_2</th>
+      <th>num_3</th>
+      <th>num_4</th>
+      <th>num_5</th>
+      <th>label</th>
+      <th>num_c0_num_0</th>
+      <th>num_c1_num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+      <th>CC_0_num_0</th>
+      <th>CC_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.563929</td>
+      <td>0.629615</td>
+      <td>0.748641</td>
+      <td>0.010215</td>
+      <td>0.970001</td>
+      <td>0.687788</td>
+      <td>1</td>
+      <td>0.554528</td>
+      <td>0.632123</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.823907</td>
+      <td>0.149258</td>
+      <td>0.792533</td>
+      <td>0.857954</td>
+      <td>0.400110</td>
+      <td>0.800766</td>
+      <td>1</td>
+      <td>0.825264</td>
+      <td>0.148166</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.406645</td>
+      <td>0.906626</td>
+      <td>0.326266</td>
+      <td>0.799757</td>
+      <td>0.057018</td>
+      <td>0.564204</td>
+      <td>1</td>
+      <td>0.412858</td>
+      <td>0.907607</td>
+      <td>val0_2</td>
+      <td>val1_3</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.182652</td>
+      <td>0.951966</td>
+      <td>0.232610</td>
+      <td>0.852475</td>
+      <td>0.735349</td>
+      <td>0.478572</td>
+      <td>0</td>
+      <td>0.180338</td>
+      <td>0.952968</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.405598</td>
+      <td>0.430716</td>
+      <td>0.542525</td>
+      <td>0.566506</td>
+      <td>0.379286</td>
+      <td>0.606670</td>
+      <td>1</td>
+      <td>0.409656</td>
+      <td>0.434478</td>
+      <td>val0_2</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2995</th>
+      <td>0.364130</td>
+      <td>0.678050</td>
+      <td>0.075035</td>
+      <td>0.462473</td>
+      <td>0.266227</td>
+      <td>0.194694</td>
+      <td>1</td>
+      <td>0.372719</td>
+      <td>0.678672</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2996</th>
+      <td>0.568323</td>
+      <td>0.666334</td>
+      <td>0.857290</td>
+      <td>0.229171</td>
+      <td>0.778167</td>
+      <td>0.564785</td>
+      <td>1</td>
+      <td>0.564750</td>
+      <td>0.665816</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2997</th>
+      <td>0.182363</td>
+      <td>0.415749</td>
+      <td>0.088817</td>
+      <td>0.804872</td>
+      <td>0.024023</td>
+      <td>0.786688</td>
+      <td>1</td>
+      <td>0.180254</td>
+      <td>0.417115</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2998</th>
+      <td>0.391255</td>
+      <td>0.475301</td>
+      <td>0.744740</td>
+      <td>0.065804</td>
+      <td>0.913498</td>
+      <td>0.473249</td>
+      <td>1</td>
+      <td>0.392185</td>
+      <td>0.470084</td>
+      <td>val0_2</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2999</th>
+      <td>0.531529</td>
+      <td>0.698122</td>
+      <td>0.897845</td>
+      <td>0.069955</td>
+      <td>0.927006</td>
+      <td>0.584906</td>
+      <td>1</td>
+      <td>0.529527</td>
+      <td>0.702879</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>3000 rows × 13 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Using-Multiple-Scalers:-Fit-and-Transform">
+<h2>Using Multiple Scalers: Fit and Transform<a class="headerlink" href="#Using-Multiple-Scalers:-Fit-and-Transform" title="Permalink to this heading"></a></h2>
+<p>In case the user wants to use multiple scalers in succession, they can use the <strong>transform_pipe</strong> parameter. This parameter is used by many other classes in this library, and it allows users to provide other class objects that has a fit and transform methods from the current library to be used internally. To do this, instantiate different scaler classes implemented in the <strong>dataprocessing</strong> module, create a list of these objects, and provide this list to the <strong>transform_pipe</strong> parameter. In the
+example below, we created a list with the following scalers: DataRobustScaler, DataMinMaxScaler, and DataQuantileTransformer. These scalers are passed as a parameter when creating an object of the DataRobustScaler class. Note however that we also pass an object from the class BasicImputer() into this list. The order of the list is important: it dictates the order by which the fit() and transform() methods will be called. In this case for example, when the fit method is called, we call the fit
+method of all transforms in the transform_pipe before calling the fit mehtod of the main scaler (DataRobustScaler in this case). Therefore, we first call the fit and transform for the BasicImputer class, the resulting data frame is used to call the fit and transform methods of the DataRobustScaler class, and so on. This same process is used for the transform method as well.</p>
+<p>Note that this time, instead of using the default values for each scaler, we are also providing a specific sklearn scaler to each of the scalers created. For instance, when creating the DataPowerTransformer object, we specify that instead of creating a default PowerTransformer (from sklearn) internally, we want to use a specific object of this PowerTransformer class. This allows the users to customize their sklearn instances that should be used inside each scaler class.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">imputer</span> <span class="o">=</span> <span class="n">BasicImputer</span><span class="p">()</span>
+<span class="n">s1</span> <span class="o">=</span> <span class="n">DataRobustScaler</span><span class="p">(</span>
+                    <span class="n">scaler_obj</span><span class="o">=</span><span class="n">RobustScaler</span><span class="p">(),</span>
+                    <span class="n">exclude_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;num_3&#39;</span><span class="p">,</span> <span class="s1">&#39;num_4&#39;</span><span class="p">,</span> <span class="s1">&#39;num_5&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="s1">&#39;CN_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;CN_1_num_1&#39;</span><span class="p">,</span> <span class="s1">&#39;CC_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;CC_1_num_1&#39;</span><span class="p">]</span>
+                    <span class="p">)</span>
+<span class="n">s2</span> <span class="o">=</span> <span class="n">DataMinMaxScaler</span><span class="p">(</span>
+                    <span class="n">scaler_obj</span><span class="o">=</span><span class="n">MinMaxScaler</span><span class="p">(),</span>
+                    <span class="n">exclude_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;num_1&#39;</span><span class="p">,</span> <span class="s1">&#39;num_2&#39;</span><span class="p">,</span> <span class="s1">&#39;num_4&#39;</span><span class="p">,</span> <span class="s1">&#39;num_5&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="s1">&#39;CN_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;CN_1_num_1&#39;</span><span class="p">,</span> <span class="s1">&#39;CC_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;CC_1_num_1&#39;</span><span class="p">]</span>
+                    <span class="p">)</span>
+<span class="n">s3</span> <span class="o">=</span> <span class="n">DataQuantileTransformer</span><span class="p">(</span>
+                    <span class="n">scaler_obj</span><span class="o">=</span><span class="n">QuantileTransformer</span><span class="p">(),</span>
+                    <span class="n">exclude_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;num_1&#39;</span><span class="p">,</span> <span class="s1">&#39;num_2&#39;</span><span class="p">,</span> <span class="s1">&#39;num_3&#39;</span><span class="p">,</span> <span class="s1">&#39;num_5&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="s1">&#39;CN_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;CN_1_num_1&#39;</span><span class="p">,</span> <span class="s1">&#39;CC_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;CC_1_num_1&#39;</span><span class="p">]</span>
+                    <span class="p">)</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">DataRobustScaler</span><span class="p">(</span>
+                    <span class="n">scaler_obj</span><span class="o">=</span><span class="n">RobustScaler</span><span class="p">(),</span>
+                    <span class="n">exclude_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;num_1&#39;</span><span class="p">,</span> <span class="s1">&#39;num_2&#39;</span><span class="p">,</span> <span class="s1">&#39;num_3&#39;</span><span class="p">,</span> <span class="s1">&#39;num_4&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="s1">&#39;CN_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;CN_1_num_1&#39;</span><span class="p">,</span> <span class="s1">&#39;CC_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;CC_1_num_1&#39;</span><span class="p">],</span>
+                    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span><span class="n">imputer</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">s3</span><span class="p">]</span>
+                    <span class="p">)</span>
+
+
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+No columns specified for imputation. These columns have been automatically identified:
+[]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>num_2</th>
+      <th>num_3</th>
+      <th>num_4</th>
+      <th>num_5</th>
+      <th>label</th>
+      <th>num_c0_num_0</th>
+      <th>num_c1_num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+      <th>CC_0_num_0</th>
+      <th>CC_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.118733</td>
+      <td>0.237866</td>
+      <td>0.492773</td>
+      <td>0.161065</td>
+      <td>0.970001</td>
+      <td>0.372973</td>
+      <td>1.0</td>
+      <td>0.108853</td>
+      <td>0.264084</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.601353</td>
+      <td>-0.795141</td>
+      <td>0.621367</td>
+      <td>0.621755</td>
+      <td>0.400110</td>
+      <td>0.629804</td>
+      <td>1.0</td>
+      <td>0.650448</td>
+      <td>-0.703694</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.175575</td>
+      <td>0.951508</td>
+      <td>-0.351287</td>
+      <td>0.590821</td>
+      <td>0.057018</td>
+      <td>0.140249</td>
+      <td>1.0</td>
+      <td>-0.174553</td>
+      <td>0.814974</td>
+      <td>val0_2</td>
+      <td>val1_3</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.799932</td>
+      <td>1.229606</td>
+      <td>-0.544233</td>
+      <td>0.617707</td>
+      <td>0.735349</td>
+      <td>-0.040882</td>
+      <td>0.0</td>
+      <td>-0.639699</td>
+      <td>0.905684</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.177570</td>
+      <td>-0.130169</td>
+      <td>0.080924</td>
+      <td>0.502849</td>
+      <td>0.379286</td>
+      <td>0.226987</td>
+      <td>1.0</td>
+      <td>-0.180957</td>
+      <td>-0.131151</td>
+      <td>val0_2</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2995</th>
+      <td>-0.256738</td>
+      <td>0.334942</td>
+      <td>-1.097054</td>
+      <td>0.470205</td>
+      <td>0.266227</td>
+      <td>-0.605382</td>
+      <td>1.0</td>
+      <td>-0.254850</td>
+      <td>0.357168</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2996</th>
+      <td>0.127940</td>
+      <td>0.312279</td>
+      <td>0.792817</td>
+      <td>0.388732</td>
+      <td>0.778167</td>
+      <td>0.141952</td>
+      <td>1.0</td>
+      <td>0.129300</td>
+      <td>0.331460</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2997</th>
+      <td>-0.802343</td>
+      <td>-0.156593</td>
+      <td>-1.030666</td>
+      <td>0.592440</td>
+      <td>0.024023</td>
+      <td>0.595418</td>
+      <td>1.0</td>
+      <td>-0.639868</td>
+      <td>-0.165871</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2998</th>
+      <td>-0.204698</td>
+      <td>-0.052545</td>
+      <td>0.481543</td>
+      <td>0.282118</td>
+      <td>0.913498</td>
+      <td>-0.048541</td>
+      <td>1.0</td>
+      <td>-0.215909</td>
+      <td>-0.059949</td>
+      <td>val0_2</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2999</th>
+      <td>0.059137</td>
+      <td>0.374550</td>
+      <td>0.974962</td>
+      <td>0.285427</td>
+      <td>0.927006</td>
+      <td>0.187809</td>
+      <td>1.0</td>
+      <td>0.058840</td>
+      <td>0.405575</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>3000 rows × 13 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Using-Multiple-Scalers:-Inverse-Transform">
+<h2>Using Multiple Scalers: Inverse Transform<a class="headerlink" href="#Using-Multiple-Scalers:-Inverse-Transform" title="Permalink to this heading"></a></h2>
+<p>When calling the <strong>inverse_transform</strong>, we should use the reverse logic used for the fit and transform methods when using the transform_pipe parameter: we call the inverse_transform of each scaler in the reverse order that they were called during the transform method. This way, the order of the inverse_transform calls are the following: DataRobustScaler, DataQuantileTransformer, DataMinMaxScaler, DataPowerTransformer. By doing this in the reverse order, we can recover the original dataset, as
+shown below.</p>
+<p>Note however that the <strong>inverse_transform()</strong> method is only called for the scalers that apear after the last transform object that doesn’t inherit from the DataScaler() class. For example, if we create a DataRobustScaler() object using <strong>transform_pipe = [BasicImputer(), DataQuantileTransformer(), EncoderOHE(), DataMinMaxScaler()]</strong>, then when calling the fit or transform method for the base scaler (<strong>DataRobustScaler</strong>), we would execute the fit or transform for the objects in the
+transform_pipe in the order they appear. But when the <strong>inverse_transform()</strong> of the base scaler is called, the <strong>inverse_transform</strong> would be called in the following order: <strong>DataRobustScaler</strong>, followed by <strong>DataMinMaxScaler</strong>. The inverse transform of the DataQuantileTransformer wouldn’t be called because it appears between two non-scaler transforms (<strong>BasicImputer</strong> and <strong>EncoderOHE</strong>). Since the <strong>EncoderOHE</strong> doesn’t have an inverse transform, we stop the chain of inverse transformations
+when we reach the first non-scaler transform object moving from the last object to the first, which in this case is the <strong>EncoderOHE</strong>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">org_df</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">scaled_df</span><span class="p">)</span>
+<span class="n">org_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>num_2</th>
+      <th>num_3</th>
+      <th>num_4</th>
+      <th>num_5</th>
+      <th>label</th>
+      <th>num_c0_num_0</th>
+      <th>num_c1_num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+      <th>CC_0_num_0</th>
+      <th>CC_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.838682</td>
+      <td>-1.408271</td>
+      <td>2.758909</td>
+      <td>-1.558914</td>
+      <td>0.606338</td>
+      <td>2.828664</td>
+      <td>1.0</td>
+      <td>1.796571</td>
+      <td>-1.397257</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>3.249825</td>
+      <td>-3.925450</td>
+      <td>2.953185</td>
+      <td>3.540991</td>
+      <td>-2.340552</td>
+      <td>3.398367</td>
+      <td>1.0</td>
+      <td>3.257607</td>
+      <td>-3.925562</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.978148</td>
+      <td>0.330699</td>
+      <td>1.483723</td>
+      <td>3.198539</td>
+      <td>-4.134112</td>
+      <td>2.312435</td>
+      <td>1.0</td>
+      <td>1.041164</td>
+      <td>0.338390</td>
+      <td>val0_2</td>
+      <td>val1_3</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.847425</td>
+      <td>1.008353</td>
+      <td>1.192225</td>
+      <td>3.496178</td>
+      <td>-1.120895</td>
+      <td>1.910650</td>
+      <td>0.0</td>
+      <td>-0.875685</td>
+      <td>1.020226</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.972314</td>
+      <td>-2.305080</td>
+      <td>2.136697</td>
+      <td>2.224677</td>
+      <td>-2.409424</td>
+      <td>2.504838</td>
+      <td>1.0</td>
+      <td>1.012618</td>
+      <td>-2.295010</td>
+      <td>val0_2</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2995</th>
+      <td>0.740834</td>
+      <td>-1.171719</td>
+      <td>0.357037</td>
+      <td>1.863302</td>
+      <td>-2.869701</td>
+      <td>0.658475</td>
+      <td>1.0</td>
+      <td>0.776097</td>
+      <td>-1.167798</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2996</th>
+      <td>1.865602</td>
+      <td>-1.226943</td>
+      <td>3.212207</td>
+      <td>0.961388</td>
+      <td>-0.925646</td>
+      <td>2.316213</td>
+      <td>1.0</td>
+      <td>1.848407</td>
+      <td>-1.231393</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2997</th>
+      <td>-0.854474</td>
+      <td>-2.369469</td>
+      <td>0.457335</td>
+      <td>3.216465</td>
+      <td>-4.680820</td>
+      <td>3.322093</td>
+      <td>1.0</td>
+      <td>-0.876535</td>
+      <td>-2.366553</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2998</th>
+      <td>0.892994</td>
+      <td>-2.115929</td>
+      <td>2.741942</td>
+      <td>-0.218843</td>
+      <td>-0.097098</td>
+      <td>1.893662</td>
+      <td>1.0</td>
+      <td>0.890398</td>
+      <td>-2.143039</td>
+      <td>val0_2</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>2999</th>
+      <td>1.664427</td>
+      <td>-1.075205</td>
+      <td>3.487387</td>
+      <td>-0.182207</td>
+      <td>0.033374</td>
+      <td>2.417933</td>
+      <td>1.0</td>
+      <td>1.654759</td>
+      <td>-1.052976</td>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>3000 rows × 13 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Using-the-include_cols-instead-of-the-exclude_cols-parameter">
+<h2>Using the include_cols instead of the exclude_cols parameter<a class="headerlink" href="#Using-the-include_cols-instead-of-the-exclude_cols-parameter" title="Permalink to this heading"></a></h2>
+<p>The exclude_cols parameter is useful when we want to leave only a few features out of the scaling process. However, in some cases (such as the one presented above), we might want to create scalers that are applied to only a few columns. Using the exclude_cols can become tedious and error prone in these situations, since we need to pass a long list of columns that should be ignored. In these scenarios, we can instead use the include_cols parameter, which works as the inverse of the exclude_cols
+parameter: the data transformations will be applied only to the columns in the include_cols parameter. We replicated the experiment presented two cells above, but this time using the include_cols parameter instead of the exclude_cols parameter:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">imputer</span> <span class="o">=</span> <span class="n">BasicImputer</span><span class="p">()</span>
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">EncoderOHE</span><span class="p">()</span>
+<span class="n">s1</span> <span class="o">=</span> <span class="n">DataRobustScaler</span><span class="p">(</span>
+                    <span class="n">scaler_obj</span><span class="o">=</span><span class="n">RobustScaler</span><span class="p">(),</span>
+                    <span class="n">include_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;num_1&#39;</span><span class="p">,</span> <span class="s1">&#39;num_2&#39;</span><span class="p">]</span>
+                    <span class="p">)</span>
+<span class="n">s2</span> <span class="o">=</span> <span class="n">DataMinMaxScaler</span><span class="p">(</span>
+                    <span class="n">scaler_obj</span><span class="o">=</span><span class="n">MinMaxScaler</span><span class="p">(),</span>
+                    <span class="n">include_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;num_3&#39;</span><span class="p">]</span>
+                    <span class="p">)</span>
+<span class="n">s3</span> <span class="o">=</span> <span class="n">DataQuantileTransformer</span><span class="p">(</span>
+                    <span class="n">scaler_obj</span><span class="o">=</span><span class="n">QuantileTransformer</span><span class="p">(),</span>
+                    <span class="n">include_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;num_4&#39;</span><span class="p">]</span>
+                    <span class="p">)</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">DataRobustScaler</span><span class="p">(</span>
+                    <span class="n">scaler_obj</span><span class="o">=</span><span class="n">RobustScaler</span><span class="p">(),</span>
+                    <span class="n">include_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;num_5&#39;</span><span class="p">],</span>
+                    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span><span class="n">imputer</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">s3</span><span class="p">]</span>
+                    <span class="p">)</span>
+
+
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">scaled_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+No columns specified for imputation. These columns have been automatically identified:
+[]
+No columns specified for encoding. These columns have been automatically identfied as the following:
+[&#39;CN_0_num_0&#39;, &#39;CN_1_num_1&#39;, &#39;CC_0_num_0&#39;, &#39;CC_1_num_1&#39;]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>num_2</th>
+      <th>num_3</th>
+      <th>num_4</th>
+      <th>num_5</th>
+      <th>label</th>
+      <th>num_c0_num_0</th>
+      <th>num_c1_num_1</th>
+      <th>CN_0_num_0_val0_1</th>
+      <th>CN_0_num_0_val0_2</th>
+      <th>CN_0_num_0_val0_3</th>
+      <th>CN_0_num_0_val0_4</th>
+      <th>CN_1_num_1_val1_1</th>
+      <th>CN_1_num_1_val1_2</th>
+      <th>CN_1_num_1_val1_3</th>
+      <th>CC_0_num_0_val0_1</th>
+      <th>CC_1_num_1_val1_1</th>
+      <th>CC_1_num_1_val1_2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.118733</td>
+      <td>0.237866</td>
+      <td>0.492773</td>
+      <td>0.161065</td>
+      <td>0.970001</td>
+      <td>0.372973</td>
+      <td>1.0</td>
+      <td>1.796571</td>
+      <td>-1.397257</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.601353</td>
+      <td>-0.795141</td>
+      <td>0.621367</td>
+      <td>0.621755</td>
+      <td>0.400110</td>
+      <td>0.629804</td>
+      <td>1.0</td>
+      <td>3.257607</td>
+      <td>-3.925562</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.175575</td>
+      <td>0.951508</td>
+      <td>-0.351287</td>
+      <td>0.590821</td>
+      <td>0.057018</td>
+      <td>0.140249</td>
+      <td>1.0</td>
+      <td>1.041164</td>
+      <td>0.338390</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.799932</td>
+      <td>1.229606</td>
+      <td>-0.544233</td>
+      <td>0.617707</td>
+      <td>0.735349</td>
+      <td>-0.040882</td>
+      <td>0.0</td>
+      <td>-0.875685</td>
+      <td>1.020226</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.177570</td>
+      <td>-0.130169</td>
+      <td>0.080924</td>
+      <td>0.502849</td>
+      <td>0.379286</td>
+      <td>0.226987</td>
+      <td>1.0</td>
+      <td>1.012618</td>
+      <td>-2.295010</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2995</th>
+      <td>-0.256738</td>
+      <td>0.334942</td>
+      <td>-1.097054</td>
+      <td>0.470205</td>
+      <td>0.266227</td>
+      <td>-0.605382</td>
+      <td>1.0</td>
+      <td>0.776097</td>
+      <td>-1.167798</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2996</th>
+      <td>0.127940</td>
+      <td>0.312279</td>
+      <td>0.792817</td>
+      <td>0.388732</td>
+      <td>0.778167</td>
+      <td>0.141952</td>
+      <td>1.0</td>
+      <td>1.848407</td>
+      <td>-1.231393</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2997</th>
+      <td>-0.802343</td>
+      <td>-0.156593</td>
+      <td>-1.030666</td>
+      <td>0.592440</td>
+      <td>0.024023</td>
+      <td>0.595418</td>
+      <td>1.0</td>
+      <td>-0.876535</td>
+      <td>-2.366553</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2998</th>
+      <td>-0.204698</td>
+      <td>-0.052545</td>
+      <td>0.481543</td>
+      <td>0.282118</td>
+      <td>0.913498</td>
+      <td>-0.048541</td>
+      <td>1.0</td>
+      <td>0.890398</td>
+      <td>-2.143039</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2999</th>
+      <td>0.059137</td>
+      <td>0.374550</td>
+      <td>0.974962</td>
+      <td>0.285427</td>
+      <td>0.927006</td>
+      <td>0.187809</td>
+      <td>1.0</td>
+      <td>1.654759</td>
+      <td>-1.052976</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>3000 rows × 19 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">org_df</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">scaled_df</span><span class="p">)</span>
+<span class="n">org_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+      <th>CC_0_num_0</th>
+      <th>CC_1_num_1</th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>num_2</th>
+      <th>num_3</th>
+      <th>num_4</th>
+      <th>num_5</th>
+      <th>label</th>
+      <th>num_c0_num_0</th>
+      <th>num_c1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>1.838682</td>
+      <td>-1.408271</td>
+      <td>2.758909</td>
+      <td>-1.558914</td>
+      <td>0.606338</td>
+      <td>2.828664</td>
+      <td>1.0</td>
+      <td>1.796571</td>
+      <td>-1.397257</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+      <td>3.249825</td>
+      <td>-3.925450</td>
+      <td>2.953185</td>
+      <td>3.540991</td>
+      <td>-2.340552</td>
+      <td>3.398367</td>
+      <td>1.0</td>
+      <td>3.257607</td>
+      <td>-3.925562</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>val0_2</td>
+      <td>val1_3</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+      <td>0.978148</td>
+      <td>0.330699</td>
+      <td>1.483723</td>
+      <td>3.198539</td>
+      <td>-4.134112</td>
+      <td>2.312435</td>
+      <td>1.0</td>
+      <td>1.041164</td>
+      <td>0.338390</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>val0_1</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_2</td>
+      <td>-0.847425</td>
+      <td>1.008353</td>
+      <td>1.192225</td>
+      <td>3.496178</td>
+      <td>-1.120895</td>
+      <td>1.910650</td>
+      <td>0.0</td>
+      <td>-0.875685</td>
+      <td>1.020226</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>val0_2</td>
+      <td>val1_0</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+      <td>0.972314</td>
+      <td>-2.305080</td>
+      <td>2.136697</td>
+      <td>2.224677</td>
+      <td>-2.409424</td>
+      <td>2.504838</td>
+      <td>1.0</td>
+      <td>1.012618</td>
+      <td>-2.295010</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2995</th>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+      <td>0.740834</td>
+      <td>-1.171719</td>
+      <td>0.357037</td>
+      <td>1.863302</td>
+      <td>-2.869701</td>
+      <td>0.658475</td>
+      <td>1.0</td>
+      <td>0.776097</td>
+      <td>-1.167798</td>
+    </tr>
+    <tr>
+      <th>2996</th>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>1.865602</td>
+      <td>-1.226943</td>
+      <td>3.212207</td>
+      <td>0.961388</td>
+      <td>-0.925646</td>
+      <td>2.316213</td>
+      <td>1.0</td>
+      <td>1.848407</td>
+      <td>-1.231393</td>
+    </tr>
+    <tr>
+      <th>2997</th>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+      <td>-0.854474</td>
+      <td>-2.369469</td>
+      <td>0.457335</td>
+      <td>3.216465</td>
+      <td>-4.680820</td>
+      <td>3.322093</td>
+      <td>1.0</td>
+      <td>-0.876535</td>
+      <td>-2.366553</td>
+    </tr>
+    <tr>
+      <th>2998</th>
+      <td>val0_2</td>
+      <td>val1_1</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+      <td>0.892994</td>
+      <td>-2.115929</td>
+      <td>2.741942</td>
+      <td>-0.218843</td>
+      <td>-0.097098</td>
+      <td>1.893662</td>
+      <td>1.0</td>
+      <td>0.890398</td>
+      <td>-2.143039</td>
+    </tr>
+    <tr>
+      <th>2999</th>
+      <td>val0_2</td>
+      <td>val1_2</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+      <td>1.664427</td>
+      <td>-1.075205</td>
+      <td>3.487387</td>
+      <td>-0.182207</td>
+      <td>0.033374</td>
+      <td>2.417933</td>
+      <td>1.0</td>
+      <td>1.654759</td>
+      <td>-1.052976</td>
+    </tr>
+  </tbody>
+</table>
+<p>3000 rows × 13 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Other-non-scaler-Transforms">
+<h2>Other non-scaler Transforms<a class="headerlink" href="#Other-non-scaler-Transforms" title="Permalink to this heading"></a></h2>
+<p>As a final note, the scaler classes presented here also accept a list of other transformations that are not scalers, such as <strong>DataImputer</strong>, <strong>EncoderOHE</strong>, <strong>CatBoostSelection</strong>, among other classes from the dataprocessing module. Just create a list with these objects and pass it to the <strong>transform_pipe</strong> parameter. These transforms will be applied before scaling the numerical columns.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../scaler/standard.html" class="btn btn-neutral float-left" title="DataStandardScaler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../scaler/minmax.html" class="btn btn-neutral float-right" title="DataMinMaxScaler" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

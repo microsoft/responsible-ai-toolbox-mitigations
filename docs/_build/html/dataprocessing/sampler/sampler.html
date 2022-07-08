@@ -1,123 +1,198 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-
-    <title>Sampling &#8212; RAI Error Mitigation  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
-    
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sampling &mdash; RAI Error Mitigation  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Rebalance" href="rebalance.html" />
-    <link rel="prev" title="Imputers" href="../imputer/imputer.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="rebalance.html" title="Rebalance"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../imputer/imputer.html" title="Imputers"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">RAI Error Mitigation  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../dataprocessing.html" accesskey="U">dataprocessing package</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Sampling</a></li> 
-      </ul>
-    </div>  
+    <link rel="prev" title="BasicImputer Example" href="../notebooks/module_tests/imputation.html" /> 
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <section id="sampling">
-<h1>Sampling<a class="headerlink" href="#sampling" title="Permalink to this heading">¶</a></h1>
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> RAI Error Mitigation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../databalanceanalysis/databalanceanalysis.html">databalanceanalysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../intro.html">dataprocessing</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#target-audience">Target Audience</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#structure">Structure</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../intro.html#api">API</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../dataprocessing.html">DataProcessing</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../encoder/encoder.html">Encoders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../feat_sel/feat_sel.html">Feature Selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../imputer/imputer.html">Imputers</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Sampling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../scaler/scaler.html">Scalers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#sklearn-s-pipeline-support">Sklearn’s Pipeline Support</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">RAI Error Mitigation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../intro.html">dataprocessing</a> &raquo;</li>
+          <li><a href="../dataprocessing.html">DataProcessing</a> &raquo;</li>
+      <li>Sampling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/dataprocessing/sampler/sampler.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="sampling">
+<h1>Sampling<a class="headerlink" href="#sampling" title="Permalink to this heading"></a></h1>
+<p>This sub-module of the <strong>dataprocessing</strong> package collects all sampling transformers implemented here.
+Sampling transformers are responsible for creating artificial data for a dataset. This is useful when
+a dataset is imbalanced when considering a given class or feature. The difference between sampling methods
+lies in how the artificial data is created.</p>
+<p>Since the sampling methods implemented here are very different from each other, we didn’t create any base class
+for the sampling methods. Therefore, each sampling class here inherits directly from the <strong>DataProcessing</strong>
+abstract class. Below is a list of the sampling methods present in the <strong>dataprocessing</strong> module:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="rebalance.html">Rebalance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="synthesizer.html">Synthesizer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rebalance.html">Rebalance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rebalance.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="synthesizer.html">Synthesizer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="synthesizer.html#example">Example</a></li>
+</ul>
+</li>
 </ul>
 </div>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/module_tests/rebalance_sdv.html">
+          <span class="std std-ref">Synthesizer Class (SDV)</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/module_tests/rebalance_imbl.html">
+          <span class="std std-ref">Rebalance Class (imblearn)</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-clear"></div></section>
 </section>
 
 
-            <div class="clearer"></div>
+           </div>
           </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../notebooks/module_tests/imputation.html" class="btn btn-neutral float-left" title="BasicImputer Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rebalance.html" class="btn btn-neutral float-right" title="Rebalance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="../imputer/imputer.html"
-                          title="previous chapter">Imputers</a></p>
+    </section>
   </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="rebalance.html"
-                          title="next chapter">Rebalance</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/dataprocessing/sampler/sampler.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="rebalance.html" title="Rebalance"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../imputer/imputer.html" title="Imputers"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">RAI Error Mitigation  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../dataprocessing.html" >dataprocessing package</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Sampling</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Akshara Ramakrishnan &lt;akshara@microsoft.com&gt;.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
-    </div>
-  </body>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

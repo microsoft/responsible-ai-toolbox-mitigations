@@ -137,7 +137,7 @@ class CorrelatedFeatures(FeatureSelection):
     :param method_num_cat: the method used to compute the correlation between a categorical and
         a numerical variable. There are currently three approaches implemented:
 
-            * 'anova': uses the ANOVA test to identify a correlation. First, we use the Levene
+            * **'anova':** uses the ANOVA test to identify a correlation. First, we use the Levene
               test to see if the numerical variable has a similar variance across the
               different values of the categorical variable (Homoscedastic data). If
               the test passes (that is if the p-value of the Levene test is greater
@@ -147,7 +147,7 @@ class CorrelatedFeatures(FeatureSelection):
               compute the omega-squared metric. If the p-value is less than 'anova_pvalue'
               and the omega-squared is greater than 'omega_th', then both variables
               are considered to be correlated;
-            * 'jensen': first we clusterize the numerical values according to their respective
+            * **'jensen':** first we clusterize the numerical values according to their respective
               values of the categorical data. We then compute the probability density
               function of the numerical variable for each cluster (we approximate the
               PDF with the histogram using 'jensen_n_bins' different bins). The next
@@ -158,7 +158,7 @@ class CorrelatedFeatures(FeatureSelection):
               of distributions tested are considered different (a Jensen-Shannon metric above
               'jensen_th' for all pairs tested), then both variables are considered to be
               correlated;
-            * 'model': trains a simple decision tree using the numerical variable and predicts the
+            * **'model':** trains a simple decision tree using the numerical variable and predicts the
               categorical variable. Both variables are first divided into a training and
               test set (70% and 30% of the size of the original variables, respectively). The
               training set is used to train the decision tree, where the only feature used
@@ -223,7 +223,7 @@ class CorrelatedFeatures(FeatureSelection):
     :param method_cat_cat: the method used to test the correlation between two categorical variables. There is only
         one option implemented:
 
-            * 'cramer': performs the Cramer's V test between two categorical variables. This test returns a value
+            * **'cramer':** performs the Cramer's V test between two categorical variables. This test returns a value
               between 0 and 1, where values near 1 indicate a high correlation between the variables
               and a p-value associated with this metric. If the Cramer's V correlation coefficient is
               greater than cat_corr_th and its p-value is smaller than cat_pvalue_th, then both variables
@@ -242,13 +242,13 @@ class CorrelatedFeatures(FeatureSelection):
         numerical x numerical, categorical x numerical, and categorical x categorical. The
         possible values are:
 
-            * "missing": chooses the variable with the least number of missing values;
-            * "var": chooses the variable with the largest data dispersion (std / (V - v),
+            * **"missing":** chooses the variable with the least number of missing values;
+            * **"var":** chooses the variable with the largest data dispersion (std / (V - v),
               where std is the standard deviation of the variable, V and v are the
               maximum and minimum values observed in the variable, respectively).
               Works only for numerical x numerical analysis. Otherwise, it uses the
               cardinality approach internally;
-            * "cardinality": chooses the variable with the most number of different values present;
+            * **"cardinality":** chooses the variable with the most number of different values present;
 
         In all three cases, if both variables are tied (same dispersion, same number of missing
         values, or same cardinality), the variable to be removed will be selected randomly;

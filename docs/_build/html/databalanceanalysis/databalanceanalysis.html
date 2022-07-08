@@ -1,70 +1,124 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-
-    <title>databalanceanalysis package &#8212; RAI Error Mitigation  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
-    
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>databalanceanalysis &mdash; RAI Error Mitigation  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="dataprocessing package" href="../dataprocessing/dataprocessing.html" />
-    <link rel="prev" title="Welcome to RAI Error Mitigation’s documentation!" href="../index.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../dataprocessing/dataprocessing.html" title="dataprocessing package"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../index.html" title="Welcome to RAI Error Mitigation’s documentation!"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RAI Error Mitigation  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">databalanceanalysis package</a></li> 
-      </ul>
-    </div>  
+    <link rel="next" title="dataprocessing" href="../dataprocessing/intro.html" />
+    <link rel="prev" title="Welcome to RAI Toolbox Mitigations documentation!" href="../index.html" /> 
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <section id="databalanceanalysis-package">
-<h1>databalanceanalysis package<a class="headerlink" href="#databalanceanalysis-package" title="Permalink to this heading">¶</a></h1>
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> RAI Error Mitigation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">databalanceanalysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-databalanceanalysis.aggregate_measures">databalanceanalysis.aggregate_measures module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-databalanceanalysis.distribution_measures">databalanceanalysis.distribution_measures module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-databalanceanalysis.feature_measures">databalanceanalysis.feature_measures module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-databalanceanalysis">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dataprocessing/intro.html">dataprocessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RAI Error Mitigation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>databalanceanalysis</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/databalanceanalysis/databalanceanalysis.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="databalanceanalysis">
+<h1>databalanceanalysis<a class="headerlink" href="#databalanceanalysis" title="Permalink to this heading"></a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
 <section id="module-databalanceanalysis.aggregate_measures">
-<span id="databalanceanalysis-aggregate-measures-module"></span><h2>databalanceanalysis.aggregate_measures module<a class="headerlink" href="#module-databalanceanalysis.aggregate_measures" title="Permalink to this heading">¶</a></h2>
+<span id="databalanceanalysis-aggregate-measures-module"></span><h2>databalanceanalysis.aggregate_measures module<a class="headerlink" href="#module-databalanceanalysis.aggregate_measures" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="databalanceanalysis.aggregate_measures.AggregateBalanceMeasure">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.aggregate_measures.</span></span><span class="sig-name descname"><span class="pre">AggregateBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.aggregate_measures.AggregateBalanceMeasure" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.aggregate_measures.</span></span><span class="sig-name descname"><span class="pre">AggregateBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.aggregate_measures.AggregateBalanceMeasure" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BalanceMeasure</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.aggregate_measures.AggregateBalanceMeasure.AGGREGATE_METRICS">
-<span class="sig-name descname"><span class="pre">AGGREGATE_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.ATKINSON_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_atkinson_index&gt;,</span> <span class="pre">Measures.THEIL_L_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_theil_l_index&gt;,</span> <span class="pre">Measures.THEIL_T_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_theil_t_index&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.aggregate_measures.AggregateBalanceMeasure.AGGREGATE_METRICS" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">AGGREGATE_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.ATKINSON_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_atkinson_index&gt;,</span> <span class="pre">Measures.THEIL_L_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_theil_l_index&gt;,</span> <span class="pre">Measures.THEIL_T_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_theil_t_index&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.aggregate_measures.AggregateBalanceMeasure.AGGREGATE_METRICS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="databalanceanalysis.aggregate_measures.AggregateBalanceMeasure.measures">
-<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.aggregate_measures.AggregateBalanceMeasure.measures" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.aggregate_measures.AggregateBalanceMeasure.measures" title="Permalink to this definition"></a></dt>
 <dd><dl class="simple">
 <dt>The output is a dataframe that maps the names of the different aggregate measures to their values:</dt><dd><p>The following measures are computed:
 * Atkinson Index - <a class="reference external" href="https://en.wikipedia.org/wiki/Atkinson_index">https://en.wikipedia.org/wiki/Atkinson_index</a>
@@ -72,13 +126,13 @@
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – the df to calculate aggregate measures on</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>returns a dataframe that has one column that is the name of the aggregate measure, the second column contains the values for each of the metrics of interest.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -88,19 +142,19 @@
 
 </section>
 <section id="module-databalanceanalysis.distribution_measures">
-<span id="databalanceanalysis-distribution-measures-module"></span><h2>databalanceanalysis.distribution_measures module<a class="headerlink" href="#module-databalanceanalysis.distribution_measures" title="Permalink to this heading">¶</a></h2>
+<span id="databalanceanalysis-distribution-measures-module"></span><h2>databalanceanalysis.distribution_measures module<a class="headerlink" href="#module-databalanceanalysis.distribution_measures" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="databalanceanalysis.distribution_measures.DistributionBalanceMeasure">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.distribution_measures.</span></span><span class="sig-name descname"><span class="pre">DistributionBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.distribution_measures.DistributionBalanceMeasure" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.distribution_measures.</span></span><span class="sig-name descname"><span class="pre">DistributionBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.distribution_measures.DistributionBalanceMeasure" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BalanceMeasure</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.distribution_measures.DistributionBalanceMeasure.DISTRIBUTION_METRICS">
-<span class="sig-name descname"><span class="pre">DISTRIBUTION_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.CHISQ_PVALUE:</span> <span class="pre">&lt;function</span> <span class="pre">get_chisq_pvalue&gt;,</span> <span class="pre">Measures.CHISQ:</span> <span class="pre">&lt;function</span> <span class="pre">get_chi_squared&gt;,</span> <span class="pre">Measures.INF_NORM_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_infinity_norm_distance&gt;,</span> <span class="pre">Measures.JS_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_js_distance&gt;,</span> <span class="pre">Measures.KL_DIVERGENCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_kl_divergence&gt;,</span> <span class="pre">Measures.TOTAL_VARIANCE_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_total_variation_distance&gt;,</span> <span class="pre">Measures.WS_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_ws_distance&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.distribution_measures.DistributionBalanceMeasure.DISTRIBUTION_METRICS" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">DISTRIBUTION_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.CHISQ_PVALUE:</span> <span class="pre">&lt;function</span> <span class="pre">get_chisq_pvalue&gt;,</span> <span class="pre">Measures.CHISQ:</span> <span class="pre">&lt;function</span> <span class="pre">get_chi_squared&gt;,</span> <span class="pre">Measures.INF_NORM_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_infinity_norm_distance&gt;,</span> <span class="pre">Measures.JS_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_js_distance&gt;,</span> <span class="pre">Measures.KL_DIVERGENCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_kl_divergence&gt;,</span> <span class="pre">Measures.TOTAL_VARIANCE_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_total_variation_distance&gt;,</span> <span class="pre">Measures.WS_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_ws_distance&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.distribution_measures.DistributionBalanceMeasure.DISTRIBUTION_METRICS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="databalanceanalysis.distribution_measures.DistributionBalanceMeasure.measures">
-<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.distribution_measures.DistributionBalanceMeasure.measures" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.distribution_measures.DistributionBalanceMeasure.measures" title="Permalink to this definition"></a></dt>
 <dd><dl>
 <dt>The output is a dataframe that maps the sensitive column name to another dictionary:</dt><dd><p>the dictionary for each sensitive column contains a mapping of the name of a measure to its value</p>
 <blockquote>
@@ -117,13 +171,13 @@
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – the df to calculate all of the distribution measures on</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dataframe that has one column with the sensitive column name and column that contains the dictionary that has the mapping of the name of the measure to its value for that sensitive feature.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -133,54 +187,54 @@
 
 </section>
 <section id="module-databalanceanalysis.feature_measures">
-<span id="databalanceanalysis-feature-measures-module"></span><h2>databalanceanalysis.feature_measures module<a class="headerlink" href="#module-databalanceanalysis.feature_measures" title="Permalink to this heading">¶</a></h2>
+<span id="databalanceanalysis-feature-measures-module"></span><h2>databalanceanalysis.feature_measures module<a class="headerlink" href="#module-databalanceanalysis.feature_measures" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="databalanceanalysis.feature_measures.FeatureBalanceMeasure">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.feature_measures.</span></span><span class="sig-name descname"><span class="pre">FeatureBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.feature_measures.</span></span><span class="sig-name descname"><span class="pre">FeatureBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BalanceMeasure</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.feature_measures.FeatureBalanceMeasure.CLASS_A">
-<span class="sig-name descname"><span class="pre">CLASS_A</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ClassA'</span></em><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.CLASS_A" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">CLASS_A</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ClassA'</span></em><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.CLASS_A" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.feature_measures.FeatureBalanceMeasure.CLASS_B">
-<span class="sig-name descname"><span class="pre">CLASS_B</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ClassB'</span></em><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.CLASS_B" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">CLASS_B</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ClassB'</span></em><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.CLASS_B" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.feature_measures.FeatureBalanceMeasure.FEATURE_METRICS">
-<span class="sig-name descname"><span class="pre">FEATURE_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.DEMOGRAPHIC_PARITY:</span> <span class="pre">&lt;function</span> <span class="pre">get_demographic_parity&gt;,</span> <span class="pre">Measures.JACCARD_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_jaccard_index&gt;,</span> <span class="pre">Measures.KR_CORRELATION:</span> <span class="pre">&lt;function</span> <span class="pre">get_kr_correlation&gt;,</span> <span class="pre">Measures.LOG_LIKELIHOOD:</span> <span class="pre">&lt;function</span> <span class="pre">get_log_likelihood_ratio&gt;,</span> <span class="pre">Measures.POINTWISE_MUTUAL_INFO:</span> <span class="pre">&lt;function</span> <span class="pre">get_point_mutual&gt;,</span> <span class="pre">Measures.SD_COEF:</span> <span class="pre">&lt;function</span> <span class="pre">get_sorenson_dice&gt;,</span> <span class="pre">Measures.TTEST:</span> <span class="pre">&lt;function</span> <span class="pre">get_t_test_stat&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.FEATURE_METRICS" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">FEATURE_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.DEMOGRAPHIC_PARITY:</span> <span class="pre">&lt;function</span> <span class="pre">get_demographic_parity&gt;,</span> <span class="pre">Measures.JACCARD_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_jaccard_index&gt;,</span> <span class="pre">Measures.KR_CORRELATION:</span> <span class="pre">&lt;function</span> <span class="pre">get_kr_correlation&gt;,</span> <span class="pre">Measures.LOG_LIKELIHOOD:</span> <span class="pre">&lt;function</span> <span class="pre">get_log_likelihood_ratio&gt;,</span> <span class="pre">Measures.POINTWISE_MUTUAL_INFO:</span> <span class="pre">&lt;function</span> <span class="pre">get_point_mutual&gt;,</span> <span class="pre">Measures.SD_COEF:</span> <span class="pre">&lt;function</span> <span class="pre">get_sorenson_dice&gt;,</span> <span class="pre">Measures.TTEST:</span> <span class="pre">&lt;function</span> <span class="pre">get_t_test_stat&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.FEATURE_METRICS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.feature_measures.FeatureBalanceMeasure.OVERALL_METRICS">
-<span class="sig-name descname"><span class="pre">OVERALL_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Measures</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{(&lt;Measures.TTEST_PVALUE:</span> <span class="pre">'ttest_pvalue'&gt;,</span> <span class="pre">&lt;Measures.TTEST:</span> <span class="pre">'t_test'&gt;):</span> <span class="pre">&lt;function</span> <span class="pre">get_t_test_p_value&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.OVERALL_METRICS" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">OVERALL_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Measures</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{(&lt;Measures.TTEST_PVALUE:</span> <span class="pre">'ttest_pvalue'&gt;,</span> <span class="pre">&lt;Measures.TTEST:</span> <span class="pre">'t_test'&gt;):</span> <span class="pre">&lt;function</span> <span class="pre">get_t_test_p_value&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.OVERALL_METRICS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="databalanceanalysis.feature_measures.FeatureBalanceMeasure.measures">
-<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.measures" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.measures" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="module-databalanceanalysis">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-databalanceanalysis" title="Permalink to this heading">¶</a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-databalanceanalysis" title="Permalink to this heading"></a></h2>
 <p>data processing tools to help prepare data for ML training.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="databalanceanalysis.AggregateBalanceMeasure">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.</span></span><span class="sig-name descname"><span class="pre">AggregateBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.AggregateBalanceMeasure" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.</span></span><span class="sig-name descname"><span class="pre">AggregateBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.AggregateBalanceMeasure" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BalanceMeasure</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.AggregateBalanceMeasure.AGGREGATE_METRICS">
-<span class="sig-name descname"><span class="pre">AGGREGATE_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.ATKINSON_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_atkinson_index&gt;,</span> <span class="pre">Measures.THEIL_L_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_theil_l_index&gt;,</span> <span class="pre">Measures.THEIL_T_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_theil_t_index&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.AggregateBalanceMeasure.AGGREGATE_METRICS" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">AGGREGATE_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.ATKINSON_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_atkinson_index&gt;,</span> <span class="pre">Measures.THEIL_L_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_theil_l_index&gt;,</span> <span class="pre">Measures.THEIL_T_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_theil_t_index&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.AggregateBalanceMeasure.AGGREGATE_METRICS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="databalanceanalysis.AggregateBalanceMeasure.measures">
-<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.AggregateBalanceMeasure.measures" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.AggregateBalanceMeasure.measures" title="Permalink to this definition"></a></dt>
 <dd><dl class="simple">
 <dt>The output is a dataframe that maps the names of the different aggregate measures to their values:</dt><dd><p>The following measures are computed:
 * Atkinson Index - <a class="reference external" href="https://en.wikipedia.org/wiki/Atkinson_index">https://en.wikipedia.org/wiki/Atkinson_index</a>
@@ -188,13 +242,13 @@
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – the df to calculate aggregate measures on</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>returns a dataframe that has one column that is the name of the aggregate measure, the second column contains the values for each of the metrics of interest.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -204,27 +258,27 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="databalanceanalysis.BalanceMeasure">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.</span></span><span class="sig-name descname"><span class="pre">BalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.BalanceMeasure" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.</span></span><span class="sig-name descname"><span class="pre">BalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.BalanceMeasure" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="databalanceanalysis.BalanceMeasure.measures">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.BalanceMeasure.measures" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.BalanceMeasure.measures" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="databalanceanalysis.DistributionBalanceMeasure">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.</span></span><span class="sig-name descname"><span class="pre">DistributionBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.DistributionBalanceMeasure" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.</span></span><span class="sig-name descname"><span class="pre">DistributionBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.DistributionBalanceMeasure" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BalanceMeasure</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.DistributionBalanceMeasure.DISTRIBUTION_METRICS">
-<span class="sig-name descname"><span class="pre">DISTRIBUTION_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.CHISQ_PVALUE:</span> <span class="pre">&lt;function</span> <span class="pre">get_chisq_pvalue&gt;,</span> <span class="pre">Measures.CHISQ:</span> <span class="pre">&lt;function</span> <span class="pre">get_chi_squared&gt;,</span> <span class="pre">Measures.INF_NORM_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_infinity_norm_distance&gt;,</span> <span class="pre">Measures.JS_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_js_distance&gt;,</span> <span class="pre">Measures.KL_DIVERGENCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_kl_divergence&gt;,</span> <span class="pre">Measures.TOTAL_VARIANCE_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_total_variation_distance&gt;,</span> <span class="pre">Measures.WS_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_ws_distance&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.DistributionBalanceMeasure.DISTRIBUTION_METRICS" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">DISTRIBUTION_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.CHISQ_PVALUE:</span> <span class="pre">&lt;function</span> <span class="pre">get_chisq_pvalue&gt;,</span> <span class="pre">Measures.CHISQ:</span> <span class="pre">&lt;function</span> <span class="pre">get_chi_squared&gt;,</span> <span class="pre">Measures.INF_NORM_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_infinity_norm_distance&gt;,</span> <span class="pre">Measures.JS_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_js_distance&gt;,</span> <span class="pre">Measures.KL_DIVERGENCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_kl_divergence&gt;,</span> <span class="pre">Measures.TOTAL_VARIANCE_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_total_variation_distance&gt;,</span> <span class="pre">Measures.WS_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_ws_distance&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.DistributionBalanceMeasure.DISTRIBUTION_METRICS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="databalanceanalysis.DistributionBalanceMeasure.measures">
-<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.DistributionBalanceMeasure.measures" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.DistributionBalanceMeasure.measures" title="Permalink to this definition"></a></dt>
 <dd><dl>
 <dt>The output is a dataframe that maps the sensitive column name to another dictionary:</dt><dd><p>the dictionary for each sensitive column contains a mapping of the name of a measure to its value</p>
 <blockquote>
@@ -241,13 +295,13 @@
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – the df to calculate all of the distribution measures on</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a dataframe that has one column with the sensitive column name and column that contains the dictionary that has the mapping of the name of the measure to its value for that sensitive feature.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
@@ -257,133 +311,133 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="databalanceanalysis.FeatureBalanceMeasure">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.</span></span><span class="sig-name descname"><span class="pre">FeatureBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.FeatureBalanceMeasure" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.</span></span><span class="sig-name descname"><span class="pre">FeatureBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.FeatureBalanceMeasure" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BalanceMeasure</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.FeatureBalanceMeasure.CLASS_A">
-<span class="sig-name descname"><span class="pre">CLASS_A</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ClassA'</span></em><a class="headerlink" href="#databalanceanalysis.FeatureBalanceMeasure.CLASS_A" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">CLASS_A</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ClassA'</span></em><a class="headerlink" href="#databalanceanalysis.FeatureBalanceMeasure.CLASS_A" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.FeatureBalanceMeasure.CLASS_B">
-<span class="sig-name descname"><span class="pre">CLASS_B</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ClassB'</span></em><a class="headerlink" href="#databalanceanalysis.FeatureBalanceMeasure.CLASS_B" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">CLASS_B</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ClassB'</span></em><a class="headerlink" href="#databalanceanalysis.FeatureBalanceMeasure.CLASS_B" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.FeatureBalanceMeasure.FEATURE_METRICS">
-<span class="sig-name descname"><span class="pre">FEATURE_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.DEMOGRAPHIC_PARITY:</span> <span class="pre">&lt;function</span> <span class="pre">get_demographic_parity&gt;,</span> <span class="pre">Measures.JACCARD_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_jaccard_index&gt;,</span> <span class="pre">Measures.KR_CORRELATION:</span> <span class="pre">&lt;function</span> <span class="pre">get_kr_correlation&gt;,</span> <span class="pre">Measures.LOG_LIKELIHOOD:</span> <span class="pre">&lt;function</span> <span class="pre">get_log_likelihood_ratio&gt;,</span> <span class="pre">Measures.POINTWISE_MUTUAL_INFO:</span> <span class="pre">&lt;function</span> <span class="pre">get_point_mutual&gt;,</span> <span class="pre">Measures.SD_COEF:</span> <span class="pre">&lt;function</span> <span class="pre">get_sorenson_dice&gt;,</span> <span class="pre">Measures.TTEST:</span> <span class="pre">&lt;function</span> <span class="pre">get_t_test_stat&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.FeatureBalanceMeasure.FEATURE_METRICS" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">FEATURE_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.DEMOGRAPHIC_PARITY:</span> <span class="pre">&lt;function</span> <span class="pre">get_demographic_parity&gt;,</span> <span class="pre">Measures.JACCARD_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_jaccard_index&gt;,</span> <span class="pre">Measures.KR_CORRELATION:</span> <span class="pre">&lt;function</span> <span class="pre">get_kr_correlation&gt;,</span> <span class="pre">Measures.LOG_LIKELIHOOD:</span> <span class="pre">&lt;function</span> <span class="pre">get_log_likelihood_ratio&gt;,</span> <span class="pre">Measures.POINTWISE_MUTUAL_INFO:</span> <span class="pre">&lt;function</span> <span class="pre">get_point_mutual&gt;,</span> <span class="pre">Measures.SD_COEF:</span> <span class="pre">&lt;function</span> <span class="pre">get_sorenson_dice&gt;,</span> <span class="pre">Measures.TTEST:</span> <span class="pre">&lt;function</span> <span class="pre">get_t_test_stat&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.FeatureBalanceMeasure.FEATURE_METRICS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.FeatureBalanceMeasure.OVERALL_METRICS">
-<span class="sig-name descname"><span class="pre">OVERALL_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Measures</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{(&lt;Measures.TTEST_PVALUE:</span> <span class="pre">'ttest_pvalue'&gt;,</span> <span class="pre">&lt;Measures.TTEST:</span> <span class="pre">'t_test'&gt;):</span> <span class="pre">&lt;function</span> <span class="pre">get_t_test_p_value&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.FeatureBalanceMeasure.OVERALL_METRICS" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">OVERALL_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Measures</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{(&lt;Measures.TTEST_PVALUE:</span> <span class="pre">'ttest_pvalue'&gt;,</span> <span class="pre">&lt;Measures.TTEST:</span> <span class="pre">'t_test'&gt;):</span> <span class="pre">&lt;function</span> <span class="pre">get_t_test_p_value&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.FeatureBalanceMeasure.OVERALL_METRICS" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="databalanceanalysis.FeatureBalanceMeasure.measures">
-<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.FeatureBalanceMeasure.measures" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.FeatureBalanceMeasure.measures" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.</span></span><span class="sig-name descname"><span class="pre">Measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.Measures" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.</span></span><span class="sig-name descname"><span class="pre">Measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.Measures" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
 <p>Provide the supported dataset imbalance metrics</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.ATKINSON_INDEX">
-<span class="sig-name descname"><span class="pre">ATKINSON_INDEX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'atkinson_index'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.ATKINSON_INDEX" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">ATKINSON_INDEX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'atkinson_index'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.ATKINSON_INDEX" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.CHISQ">
-<span class="sig-name descname"><span class="pre">CHISQ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'chi_sq_stat'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.CHISQ" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">CHISQ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'chi_sq_stat'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.CHISQ" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.CHISQ_PVALUE">
-<span class="sig-name descname"><span class="pre">CHISQ_PVALUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'chi_sq_p_value'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.CHISQ_PVALUE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">CHISQ_PVALUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'chi_sq_p_value'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.CHISQ_PVALUE" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.CROSS_ENTROPY">
-<span class="sig-name descname"><span class="pre">CROSS_ENTROPY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'cross_entropy'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.CROSS_ENTROPY" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">CROSS_ENTROPY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'cross_entropy'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.CROSS_ENTROPY" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.DEMOGRAPHIC_PARITY">
-<span class="sig-name descname"><span class="pre">DEMOGRAPHIC_PARITY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dp'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.DEMOGRAPHIC_PARITY" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">DEMOGRAPHIC_PARITY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dp'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.DEMOGRAPHIC_PARITY" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.INF_NORM_DISTANCE">
-<span class="sig-name descname"><span class="pre">INF_NORM_DISTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'inf_norm_dist'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.INF_NORM_DISTANCE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">INF_NORM_DISTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'inf_norm_dist'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.INF_NORM_DISTANCE" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.JACCARD_INDEX">
-<span class="sig-name descname"><span class="pre">JACCARD_INDEX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ji'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.JACCARD_INDEX" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">JACCARD_INDEX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ji'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.JACCARD_INDEX" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.JS_DISTANCE">
-<span class="sig-name descname"><span class="pre">JS_DISTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'js_dist'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.JS_DISTANCE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">JS_DISTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'js_dist'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.JS_DISTANCE" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.KL_DIVERGENCE">
-<span class="sig-name descname"><span class="pre">KL_DIVERGENCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'kl_divergence'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.KL_DIVERGENCE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">KL_DIVERGENCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'kl_divergence'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.KL_DIVERGENCE" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.KR_CORRELATION">
-<span class="sig-name descname"><span class="pre">KR_CORRELATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'krc'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.KR_CORRELATION" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">KR_CORRELATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'krc'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.KR_CORRELATION" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.LOG_LIKELIHOOD">
-<span class="sig-name descname"><span class="pre">LOG_LIKELIHOOD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'llr'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.LOG_LIKELIHOOD" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">LOG_LIKELIHOOD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'llr'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.LOG_LIKELIHOOD" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.POINTWISE_MUTUAL_INFO">
-<span class="sig-name descname"><span class="pre">POINTWISE_MUTUAL_INFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pmi'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.POINTWISE_MUTUAL_INFO" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">POINTWISE_MUTUAL_INFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pmi'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.POINTWISE_MUTUAL_INFO" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.SD_COEF">
-<span class="sig-name descname"><span class="pre">SD_COEF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'sdc'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.SD_COEF" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">SD_COEF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'sdc'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.SD_COEF" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.THEIL_L_INDEX">
-<span class="sig-name descname"><span class="pre">THEIL_L_INDEX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'theil_l_index'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.THEIL_L_INDEX" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">THEIL_L_INDEX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'theil_l_index'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.THEIL_L_INDEX" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.THEIL_T_INDEX">
-<span class="sig-name descname"><span class="pre">THEIL_T_INDEX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'theil_t_index'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.THEIL_T_INDEX" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">THEIL_T_INDEX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'theil_t_index'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.THEIL_T_INDEX" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.TOTAL_VARIANCE_DISTANCE">
-<span class="sig-name descname"><span class="pre">TOTAL_VARIANCE_DISTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'total_variation_dist'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.TOTAL_VARIANCE_DISTANCE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">TOTAL_VARIANCE_DISTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'total_variation_dist'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.TOTAL_VARIANCE_DISTANCE" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.TTEST">
-<span class="sig-name descname"><span class="pre">TTEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'t_test'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.TTEST" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">TTEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'t_test'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.TTEST" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.TTEST_PVALUE">
-<span class="sig-name descname"><span class="pre">TTEST_PVALUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ttest_pvalue'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.TTEST_PVALUE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">TTEST_PVALUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ttest_pvalue'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.TTEST_PVALUE" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="databalanceanalysis.Measures.WS_DISTANCE">
-<span class="sig-name descname"><span class="pre">WS_DISTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'wasserstein_dist'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.WS_DISTANCE" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">WS_DISTANCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'wasserstein_dist'</span></em><a class="headerlink" href="#databalanceanalysis.Measures.WS_DISTANCE" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -392,79 +446,34 @@
 </section>
 
 
-            <div class="clearer"></div>
+           </div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">databalanceanalysis package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-databalanceanalysis.aggregate_measures">databalanceanalysis.aggregate_measures module</a></li>
-<li><a class="reference internal" href="#module-databalanceanalysis.distribution_measures">databalanceanalysis.distribution_measures module</a></li>
-<li><a class="reference internal" href="#module-databalanceanalysis.feature_measures">databalanceanalysis.feature_measures module</a></li>
-<li><a class="reference internal" href="#module-databalanceanalysis">Module contents</a></li>
-</ul>
-</li>
-</ul>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to RAI Toolbox Mitigations documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../dataprocessing/intro.html" class="btn btn-neutral float-right" title="dataprocessing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
   </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="../index.html"
-                          title="previous chapter">Welcome to RAI Error Mitigation’s documentation!</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="../dataprocessing/dataprocessing.html"
-                          title="next chapter">dataprocessing package</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/databalanceanalysis/databalanceanalysis.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../dataprocessing/dataprocessing.html" title="dataprocessing package"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../index.html" title="Welcome to RAI Error Mitigation’s documentation!"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RAI Error Mitigation  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">databalanceanalysis package</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Akshara Ramakrishnan &lt;akshara@microsoft.com&gt;.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

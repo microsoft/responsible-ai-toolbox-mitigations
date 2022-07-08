@@ -22,12 +22,12 @@ class EncoderOrdinal(DataEncoding):
 
     :param categories: can be a dict or a string:
 
-        - dict: a dict that indicates the order of the values for each column in col_encode.
+        - **dict:** a dict that indicates the order of the values for each column in col_encode.
           That is, a dict of lists, where the keys must be valid column names and the
           value associated to key k is a list of size n, where n is the number of
           different values that exist in column k, and this list represents the order of
           the encoding for that column;
-        - string: the only string value allowed is "auto". When categories = "auto", the
+        - **string:** the only string value allowed is "auto". When categories = "auto", the
           categories dict used by sklearn is generated automatically;
 
     :param unknown_err: if True, an error will occur when the transform method is called upon a
@@ -239,12 +239,12 @@ class EncoderOrdinal(DataEncoding):
         * One key for each column. Each key is associated ​with a secondary
           dictionary with the following keys:
 
-          - "values": the unique values encountered in the column;
-          - "labels": the labels assigned to each of the unique values.
+          - **"values":** the unique values encountered in the column;
+          - **"labels":** the labels assigned to each of the unique values.
             the list from the "values" key is aligned with this
             list, that is, mapping[column]["labels][i] is the
             label assigned to the value mapping[column]["values][i].
-          - "n_labels": the number of labels. If unknown_err is set to False,
+          - **"n_labels":** the number of labels. If unknown_err is set to False,
             this will account for the label for ​unknown values.
         """
         return self.mapping

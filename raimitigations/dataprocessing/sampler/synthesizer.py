@@ -55,9 +55,9 @@ class Synthesizer(DataProcessing):
     :param model: the model that should be used to generate the synthetic instances. Can
         be a string or an object that inherits from sdv.tabular.base.BaseTabularModel:
 
-            - BaseTabularModel: an object from one of the following classes: CTGAN, TVAE,
+            - **BaseTabularModel:** an object from one of the following classes: CTGAN, TVAE,
               GaussianCopula, or CopulaGAN, all from the sdv.tabular module;
-            - str: a string that identifies which base model should be created. The base
+            - **str:** a string that identifies which base model should be created. The base
               models supported are: CTGAN, TVAE, GaussianCopula, and CopulaGAN. The string
               values allowed associated to each of the previous models are (respectively):
               "ctgan", "tvae", "copula", and "copula_gan";
@@ -525,16 +525,16 @@ class Synthesizer(DataProcessing):
             This parameter is ignored when n_samples is provided. Strategy can assume the
             following values:
 
-            - String: one of the following predefined strategies:
+            - **String:** one of the following predefined strategies:
 
-              * 'minority': generates synthetic samples for only the minority class;
-              * 'not majority': generates synthetic samples for all classes but the
+              * **'minority':** generates synthetic samples for only the minority class;
+              * **'not majority':** generates synthetic samples for all classes but the
                 majority class;
-              * 'auto': equivalent to 'minority';
+              * **'auto':** equivalent to 'minority';
 
               Note that for a binary classification problem, "minority" is similar to
               "not majority";
-            - Dictionary: the dictionary must have one key for each of the possible classes
+            - **Dictionary:** the dictionary must have one key for each of the possible classes
               found in the label column, and the value associated with each key represents the
               number of instances desired for that class after the undersampling process is done.
               Note: this parameter only works with undersampling approaches that allow
@@ -542,7 +542,7 @@ class Synthesizer(DataProcessing):
               ClusterCentroids (from imblearn). If any other undersampler is provided in the
               under_sampler parameter along with a float value for the strategy_under parameter,
               an error will be raised;
-            - Float: a value between [0, 1] that represents the desired ratio between
+            - **Float:** a value between [0, 1] that represents the desired ratio between
               the number of instances of the minority class over the majority class
               after undersampling. The ratio 'r' is given by: $r = N_m/N_M$ where
               $N_m$ is the number of instances of the minority class and $N_M$ is the

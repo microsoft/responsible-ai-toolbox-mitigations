@@ -71,20 +71,20 @@ class Rebalance(DataProcessing):
         parameter can be a string, a float, or a dictionary, and their meaning are similar
         to what is used by the imblearn library for SMOTE classes:
 
-            - Float: a value between [0, 1] that represents the desired ratio between the
+            - **Float:** a value between [0, 1] that represents the desired ratio between the
               number of instances of the minority class over the majority class. The ratio 'r'
               is given by: $r = N_m/N_M$ where $N_m$ is the number of instances of the minority
               class after applying oversample and $N_M$ is the number of instances of the
               majority class;
-            - String: a string value must be one of the following, which identifies preset
+            - **String:** a string value must be one of the following, which identifies preset
               oversampling strategies (explanations retrieved from the imblearn's SMOTE
               documentation):
 
-                * 'minority': resample only the minority class;
-                * 'not minority': resample all classes but the minority class;
-                * 'not majority': resample all classes but the majority class;
-                * 'all': resample all classes;
-                * 'auto': equivalent to 'not majority'.
+                * **'minority':** resample only the minority class;
+                * **'not minority':** resample all classes but the minority class;
+                * **'not majority':** resample all classes but the majority class;
+                * **'all':** resample all classes;
+                * **'auto':** equivalent to 'not majority'.
 
             - Dictionary: the dictionary must have one key for each of the possible classes
               found in the label column, and the value associated to each key represents the
@@ -115,7 +115,7 @@ class Rebalance(DataProcessing):
         the undersampling approach. This parameter can be a string, a float, or a dictionary, and their
         meaning are similar to what is used by the imblearn library for the ClusterCentroids class:
 
-            - Float: a value between [0, 1] that represents the desired ratio between the
+            - **Float:** a value between [0, 1] that represents the desired ratio between the
               number of instances of the minority class over the majority class after undersampling.
               The ratio 'r' is given by: $r = N_m/N_M$ where $N_m$ is the number of instances of the
               minority class and $N_M$ is the number of instances of the majority class after
@@ -124,7 +124,7 @@ class Rebalance(DataProcessing):
               ClusterCentroids (from imblearn). If any other undersampler is provided in the
               under_sampler parameter along with a float value for the strategy_under parameter, an
               error will be raised;
-            - Dictionary: the dictionary must have one key for each of the possible classes
+            - **Dictionary:** the dictionary must have one key for each of the possible classes
               found in the label column, and the value associated to each key represents the
               number of instances desired for that class after the undersampling process is done.
               Note: this parameter only works with undersampling approaches that allow
@@ -132,25 +132,25 @@ class Rebalance(DataProcessing):
               ClusterCentroids (from imblearn). If any other undersampler is provided in the
               under_sampler parameter along with a float value for the strategy_under parameter,
               an error will be raised;
-            - String: a string value must be one of the following, which identifies preset
+            - **String:** a string value must be one of the following, which identifies preset
               oversampling strategies (explanations retrieved from the imblearn's ClusterCentroids
               documentation):
 
-                * 'majority': resample only the majority class;
-                * 'not minority': resample all classes but the minority class;
-                * 'not majority': resample all classes but the majority class;
-                * 'all': resample all classes;
-                * 'auto': equivalent to 'not minority';
+                * **'majority':** resample only the majority class;
+                * **'not minority':** resample all classes but the minority class;
+                * **'not majority':** resample all classes but the majority class;
+                * **'all':** resample all classes;
+                * **'auto':** equivalent to 'not minority';
 
     :param under_sampler: this parameter can be a boolean value or a sampler object from imblearn:
 
-        - Boolean: if a boolean value is passed, it indicates if the current class should
+        - **Boolean:** if a boolean value is passed, it indicates if the current class should
           use an undersampling method or not. If True, a default undersampler is created internally.
           There are two possible default undersamplers that can be created: (i) a ClusterCentroids
           is created if the value provided to the strategy_under parameter is a float value or a
           dictionary (the ClusterCentroids allows control over the number of instances that should
           be undersampled), and (ii) a TomekLinks otherwise;
-        - BaseSampler object: if the value provided is an object that inherits from BaseSampler, then
+        - **BaseSampler object:** if the value provided is an object that inherits from BaseSampler, then
           this sampler is used instead of creating a new sampler;
 
     :param n_jobs: the number of workers used to run the sampling methods. This value is only used

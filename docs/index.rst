@@ -3,18 +3,17 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to RAI Error Mitigation's documentation!
-================================================
+Welcome to RAI Toolbox Mitigations documentation!
+=================================================
 
 .. toctree::
    :maxdepth: 2
 
    databalanceanalysis/databalanceanalysis
-   dataprocessing/dataprocessing
+   dataprocessing/intro
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`

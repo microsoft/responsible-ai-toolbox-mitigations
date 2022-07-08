@@ -1,5 +1,8 @@
 /datasets/hr_promotion/
 test/datasets/
+build/
+dist/
+htmlcov/
 __pycache__/
 catboost_info/
 .ipynb_checkpoints/
@@ -9,3 +12,4 @@ catboost_info/
 **/*.obj
 *.egg-info/
 **.coverage**
+docs/dataprocessing/notebooks/

@@ -27,14 +27,11 @@ class BasicImputer(DataImputer):
         used on all categorical columns not represented in the
         'specific_col' param. The dict has the following structure:
 
-            {
-                'missing_values':np.nan,
-
-                'strategy':'constant',
-
-                'fill_value':'NULL'
-
-            }
+            | {
+            |   **'missing_values'**:np.nan,
+            |   **'strategy'**:'constant',
+            |   **'fill_value'**:'NULL'
+            | }
 
         where 'missing_values', 'strategy', and 'fill_value' are
         the parameters used by sklearn's SimpleImputer. If None,
@@ -45,14 +42,11 @@ class BasicImputer(DataImputer):
         numerical columns not present in the 'specific_col' param.
         If None, this dict will be auto-filled as follows:
 
-        {
-            'missing_values':np.nan,
-
-            'strategy':'mean',
-
-            'fill_value':None
-
-        }
+            | {
+            |   **'missing_values'**:np.nan,
+            |   **'strategy'**:'mean',
+            |   **'fill_value'**:None
+            | }
 
     :param specific_col: a dict of dicts. Each key of the main dict must be a
         column name present in the 'col_impute' param. This key must
@@ -64,30 +58,19 @@ class BasicImputer(DataImputer):
         And then, the 'categorical' or 'numeric' parameters are used for those
         columns. The dict structure is given by:
 
-        {
-            COL_NAME1:  {
-
-                    'missing_values':np.nan,
-
-                    'strategy':'constant',
-
-                    'fill_value':'NULL'
-
-                }
-
-            COL_NAME2:  {
-
-                    'missing_values':np.nan,
-
-                    'strategy':'constant',
-
-                    'fill_value':'NULL'
-
-                }
-
-            etc.
-
-        }
+            | {
+            |   **COL_NAME1:**  {
+            |           **'missing_values':** np.nan,
+            |           **'strategy':** 'constant',
+            |           **'fill_value':** 'NULL'
+            |       }
+            |   **COL_NAME2:**  {
+            |           **'missing_values':** np.nan,
+            |           **'strategy':** 'constant',
+            |           **'fill_value':** 'NULL'
+            |       }
+            |   etc.
+            | }
 
     :param verbose: indicates whether internal messages should be printed or not.
     """

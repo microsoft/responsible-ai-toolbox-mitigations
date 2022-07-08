@@ -4,6 +4,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -12,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.8", "3.9"]
+        python-version: ["3.7", "3.8", "3.9"]
 
     steps:
     - uses: actions/checkout@v2
@@ -24,29 +25,9 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Setup tools
-      run: |
-        python -m pip install --upgrade pip
-        pip install --upgrade setuptools
-        pip install --upgrade pip-tools
-
-    - name: Pip compile
-      run: |
-        pip-compile requirements.in
-        cat requirements.txt
-
-    - name: Upload Requirements
-      uses: actions/upload-artifact@v2
-      with:
-        name: requirements.txt
-        path: requirements.txt
-
-    - name: Install dependencies
-      run: |
-        pip-sync requirements.txt
-
     - name: Install package
       run: |
+        pip install --upgrade pip
         pip install -e .
 
     - name: Run Tests

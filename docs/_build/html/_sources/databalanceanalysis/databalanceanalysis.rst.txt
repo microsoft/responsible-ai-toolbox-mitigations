@@ -1,5 +1,5 @@
-databalanceanalysis package
-===========================
+databalanceanalysis
+===================
 
 Submodules
 ----------

@@ -1,62 +1,131 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-
-    <title>Feature Selection &#8212; RAI Error Mitigation  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
-    
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feature Selection &mdash; RAI Error Mitigation  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Imputers" href="../imputer/imputer.html" />
-    <link rel="prev" title="Encoders" href="../encoder/encoder.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../imputer/imputer.html" title="Imputers"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../encoder/encoder.html" title="Encoders"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">RAI Error Mitigation  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../dataprocessing.html" accesskey="U">dataprocessing package</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Feature Selection</a></li> 
-      </ul>
-    </div>  
+    <link rel="next" title="SeqFeatSelection" href="seq.html" />
+    <link rel="prev" title="EncoderOHE" href="../encoder/ohe.html" /> 
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <section id="feature-selection">
-<h1>Feature Selection<a class="headerlink" href="#feature-selection" title="Permalink to this heading">¶</a></h1>
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> RAI Error Mitigation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../databalanceanalysis/databalanceanalysis.html">databalanceanalysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../intro.html">dataprocessing</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#target-audience">Target Audience</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#structure">Structure</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../intro.html#api">API</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../dataprocessing.html">DataProcessing</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../encoder/encoder.html">Encoders</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Feature Selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../imputer/imputer.html">Imputers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sampler/sampler.html">Sampling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../scaler/scaler.html">Scalers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#sklearn-s-pipeline-support">Sklearn’s Pipeline Support</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">RAI Error Mitigation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../intro.html">dataprocessing</a> &raquo;</li>
+          <li><a href="../dataprocessing.html">DataProcessing</a> &raquo;</li>
+      <li>Feature Selection</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/dataprocessing/feat_sel/feat_sel.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="feature-selection">
+<h1>Feature Selection<a class="headerlink" href="#feature-selection" title="Permalink to this heading"></a></h1>
+<p>This sub-module of the <strong>dataprocessing</strong> package collects a set of transformers that remove a set of unimportant
+features from a dataset. The difference between each feature selection approach lies in how this importance metric
+is computed. All the feature selection methods from the <strong>dataprocessing</strong> package are based on the abstract
+class presented below, called <strong>FeatureSelection</strong>.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dataprocessing.FeatureSelection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">FeatureSelection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.FeatureSelection" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">FeatureSelection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.FeatureSelection" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../dataprocessing.html#dataprocessing.DataProcessing" title="dataprocessing.data_processing.DataProcessing"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataProcessing</span></code></a></p>
 <p>Base class for all feature selection subclasses. Implements basic
 functionalities that can be used by all feature selection approaches.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> – the data frame to be used during the fit method.
 This data frame must contain all the features, including the label
@@ -93,7 +162,7 @@ value);</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="dataprocessing.FeatureSelection.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Series</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.FeatureSelection.fit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Series</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.FeatureSelection.fit" title="Permalink to this definition"></a></dt>
 <dd><p>Default fit method for all feature selection classes that inherit from
 the current class. The following steps are executed: (i) set the self.df
 and self.y attributes, (ii) set the transform list (or create a default
@@ -101,7 +170,7 @@ one if needed), (iii) fit and then apply the transformations in the
 self.transform_pipe attribute to the dataset, (iv) call the concrete
 class’s specific _fit method, and (v) set the self.selected_feat attribute.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> – contains only the features of the original dataset, that is, does not
 contain the label column;</p></li>
@@ -117,7 +186,7 @@ for more information on how these parameters work.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dataprocessing.FeatureSelection.get_selected_features">
-<span class="sig-name descname"><span class="pre">get_selected_features</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.FeatureSelection.get_selected_features" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_selected_features</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.FeatureSelection.get_selected_features" title="Permalink to this definition"></a></dt>
 <dd><p>Public method that returns the list of the selected features.
 The difference between this method and _get_selected_features
 is that the latter returns the list of features selected by the
@@ -128,7 +197,7 @@ which can be manually changed by the user.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dataprocessing.FeatureSelection.set_selected_features">
-<span class="sig-name descname"><span class="pre">set_selected_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selected</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.FeatureSelection.set_selected_features" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_selected_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selected</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.FeatureSelection.set_selected_features" title="Permalink to this definition"></a></dt>
 <dd><p>Sets the self.selected_feat attribute, which indicates the currently selected
 features. Receives a list of column names that should be set as the currently
 selected features. If this list is None, then the features selected by the
@@ -141,7 +210,7 @@ self.selected_feat attribute, it is checked if the provided list of features
 are all within the dataset provided for the fit method. If one of the
 features in the list is not present in the dataset, a ValueError is raised.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>selected</strong> – a list of column names or indexes representing the new
 selected features. If None, the features selected by the feature
 selection method are used instead.</p>
@@ -151,12 +220,12 @@ selection method are used instead.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="dataprocessing.FeatureSelection.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.FeatureSelection.transform" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.FeatureSelection.transform" title="Permalink to this definition"></a></dt>
 <dd><p>Default behavior for transforming the data for the different
 feature selection methods. If a concrete class requires a
 different behavior, just override this method.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>df</strong> – the dataset used for inference.</p>
 </dd>
 </dl>
@@ -164,633 +233,119 @@ different behavior, just override this method.</p>
 
 </dd></dl>
 
-<section id="seqfeatselection">
-<h2>SeqFeatSelection<a class="headerlink" href="#seqfeatselection" title="Permalink to this heading">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.SeqFeatSelection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">SeqFeatSelection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseEstimator</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_feat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forward</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_summary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'seq_feat_summary.json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.SeqFeatSelection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#dataprocessing.FeatureSelection" title="dataprocessing.feat_selection.selector.FeatureSelection"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureSelection</span></code></a></p>
-<p>Concrete class that uses sequential feature selection over a dataset.
-Implements the sequential feature selection method using the mlxtend
-library. This approach uses a classifier and sequentially changes the
-set of features used for training the model. There are two ways to
-perform this: (i) forward feature selection or (ii) backward feature
-selection. The former starts with an empty set of features and tests
-the performance of the model when inserting each of the non-selected
-features. The feature with the best score in the test set is added to
-the selected features. It then restarts the process until the number
-of desired features is reached. The backward feature selection is the
-opposite: it starts with all the features and removes them one by one.
-The feature that has the least impact on the score of the test set is
-selected to be removed. This is repeated until the number of remaining
-features is the desired number of features.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> – the data frame to be used during the fit method.
-This data frame must contain all the features, including the label
-column (specified in the ‘label_col’ parameter). This parameter is
-mandatory if ‘label_col’ is also provided. The user can also provide
-this dataset (along with the ‘label_col’) when calling the fit()
-method. If df is provided during the class instantiation, it is not
-necessary to provide it again when calling fit(). It is also possible
-to use the ‘X’ and ‘y’ instead of ‘df’ and ‘label_col’, although it is
-mandatory to pass the pair or parameters (X,y) or (df, label_col) either
-during the class instantiation or during the fit() method;</p></li>
-<li><p><strong>label_col</strong> – the name or index of the label column. This parameter is
-mandatory if ‘df’ is provided;</p></li>
-<li><p><strong>X</strong> – contains only the features of the original dataset, that
-is, does not contain the label column. This is useful if the user has
-already separated the features from the label column prior to calling this
-class. This parameter is mandatory if ‘y’ is provided;</p></li>
-<li><p><strong>y</strong> – contains only the label column of the original dataset.
-This parameter is mandatory if ‘X’ is provided;</p></li>
-<li><p><strong>transform_pipe</strong> – a list of transformations to be used as a pre-processing
-pipeline. Each transformation in this list must be a valid subclass of the
-current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
-methods require a dataset with no categorical features or with no missing values
-(depending on the approach). If no transformations are provided, a set of default
-transformations will be used, which depends on the feature selection approach
-(subclass dependent);</p></li>
-<li><p><strong>in_place</strong> – indicates if the original dataset will be saved internally (df_org)
-or not. If True, then the feature selection transformation is saved over the
-original dataset. If False, the original dataset is saved separately (default
-value);</p></li>
-<li><p><strong>regression</strong> – if True and no estimator is provided, then create a default
-CatBoostRegressor. If False, a CatBoostClassifier is created instead. This parameter
-is ignored if an estimator is provided using the ‘estimator’ parameter;</p></li>
-<li><p><strong>estimator</strong> – a sklearn estimator to be used during the sequential
-feature selection process. If no estimator is provided, a default classifier or
-regressor is used (BASE_CLASSIFIER and BASE_REGRESSOR, respectively);</p></li>
-<li><p><strong>n_feat</strong> – <p>the number of features to be selected. Can be an
-integer, string, or tuple:</p>
-<blockquote>
-<div><ul>
-<li><p>int: a number between 1 and df.shape[1] (number of features);</p></li>
-<li><p>string: the only value accepted in this case is the “best” string, which
-selects the number of features with the best score using cross-validation;</p></li>
-<li><p>tuple: a tuple with only 2 values: (min, max), where min and max
-are the minimum and maximum number of features to be selected. The
-number of features selected the number of features that achieved
-the best score in the cross-validation and that is between min and max;</p></li>
-</ul>
-</div></blockquote>
-</p></li>
-<li><p><strong>fixed_cols</strong> – a list of column names or indices that should always be included in the
-set of selected features. Note that the number of columns included here must be smaller
-than n_feat, otherwise there is nothing for the class to do (that is:
-len(fixed_cols) &lt; n_feat);</p></li>
-<li><p><strong>cv</strong> – the number of folds used for the cross-validation;</p></li>
-<li><p><strong>scoring</strong> – <p>the score used to indicate which set of features is better. The set of valid
-values for this parameter depends on the task being solved: regression or classification.
-The valid values are:</p>
-<blockquote>
-<div><ul>
-<li><p>Regression: “neg_mean_squared_error”, “r2”, “neg_median_absolute_error”;</p></li>
-<li><p>Classification: “accuracy”, “f1”, “precision”, “recall”, “roc_auc”.</p></li>
-</ul>
-</div></blockquote>
-<p>If None, “roc_auc” is used for classification tasks, and “r2” is used for regression tasks;</p>
-</p></li>
-<li><p><strong>forward</strong> – if True, a forward sequential feature selection approach is used.
-If False, a backward sequential feature selection approach is used;</p></li>
-<li><p><strong>save_json</strong> – if True, the summary json will be saved in the path specified by the
-json_summary parameter after calling the fit() method. If False, this json file is
-not saved;</p></li>
-<li><p><strong>json_summary</strong> – the path where the summary with the results obtained by the feature
-selection process should be saved. This summary is saved after the fit() method is
-called. Note that this summary is only saved if save_json is set to True;</p></li>
-<li><p><strong>n_jobs</strong> – the number of workers used to run the sequential feature selection method;</p></li>
-<li><p><strong>verbose</strong> – indicates whether internal messages should be printed or not.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.SeqFeatSelection.get_summary">
-<span class="sig-name descname"><span class="pre">get_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.SeqFeatSelection.get_summary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Public method that returns the summary generated by the
-SequentialFeatureSelector class. This summary is a dictionary
-where each key represents a different run, which is associated
-with a secondary dictionary with all the relevant data regarding
-that particular run.</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="catboostselection">
-<h2>CatBoostSelection<a class="headerlink" href="#catboostselection" title="Permalink to this heading">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.CatBoostSelection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">CatBoostSelection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">CatBoostClassifier</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">CatBoostRegressor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catboost_log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catboost_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_feat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'loss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_summary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cb_feat_summary.json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.CatBoostSelection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#dataprocessing.FeatureSelection" title="dataprocessing.feat_selection.selector.FeatureSelection"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureSelection</span></code></a></p>
-<p>Concrete class that uses the CatBoost model and its feature’s
-importance values to select the most important features. CatBoost
-is a tree boosting method capable of handling categorical features.
-This method creates internally an importance score for each feature.
-This way, these scores can be used to perform feature selection. The
-CatBoost implementation (from the catboost lib) has already prepared
-a functionality for this purpose. The subclass CatBoostSelection simply
-encapsulates all the complexities associated with this functionality and
-makes it easier for the user feature selection over a dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> – the data frame to be used during the fit method.
-This data frame must contain all the features, including the label
-column (specified in the ‘label_col’ parameter). This parameter is
-mandatory if ‘label_col’ is also provided. The user can also provide
-this dataset (along with the ‘label_col’) when calling the fit()
-method. If df is provided during the class instantiation, it is not
-necessary to provide it again when calling fit(). It is also possible
-to use the ‘X’ and ‘y’ instead of ‘df’ and ‘label_col’, although it is
-mandatory to pass the pair of parameters (X,y) or (df, label_col) either
-during the class instantiation or during the fit() method;</p></li>
-<li><p><strong>label_col</strong> – the name or index of the label column. This parameter is
-mandatory if ‘df’ is provided;</p></li>
-<li><p><strong>X</strong> – contains only the features of the original dataset, that
-is, does not contain the label column. This is useful if the user has
-already separated the features from the label column prior to calling this
-class. This parameter is mandatory if ‘y’ is provided;</p></li>
-<li><p><strong>y</strong> – contains only the label column of the original dataset.
-This parameter is mandatory if ‘X’ is provided;</p></li>
-<li><p><strong>transform_pipe</strong> – a list of transformations to be used as a pre-processing
-pipeline. Each transformation in this list must be a valid subclass of the
-current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
-methods require a dataset with no categorical features or with no missing values
-(depending on the approach). If no transformations are provided, a set of default
-transformations will be used, which depends on the feature selection approach
-(subclass dependent);</p></li>
-<li><p><strong>regression</strong> – if True and no estimator is provided, then create a default
-CatBoostRegressor. If False, a CatBoostClassifier is created instead. This parameter
-is ignored if an estimator is provided using the ‘estimator’ parameter;</p></li>
-<li><p><strong>estimator</strong> – a CatBoostClassifier or CatBoostRegressor object that will be used
-for filtering the most important features. If no estimator is provided, a default
-CatBoostClassifier or CatBoostRegressor is used, where the latter is used if
-regression is set to True or if the type of the label column is float, while the
-former is used otherwise;</p></li>
-<li><p><strong>in_place</strong> – indicates if the original dataset will be saved internally (df_org)
-or not. If True, then the feature selection transformation is saved over the
-original dataset. If False, the original dataset is saved separately (default
-value);</p></li>
-<li><p><strong>catboost_log</strong> – if True, the default estimator will print logging
-messages during its training phase. If False, no log will be printed. This
-parameter is only used when ‘estimator’ is None, since this parameter is only used
-when creating the default classifier, which is not the case when the user specifies
-the classifier to be used. This parameter is automatically set to False if ‘verbose’
-is False;</p></li>
-<li><p><strong>catboost_plot</strong> – if True, uses CatBoost’s plot feature: if running on a python
-notebook environment, an interactive plot will be created, which shows the loss
-function for both training and test sets, as well as the error obtained when removing
-an increasing number of features. If running on a script environment, a web interface
-will be opened showing this plot. If False, no plot will be generated.  This
-parameter is only used when ‘estimator’ is None, since this parameter is only used
-when creating the default classifier, which is not the case when the user specifies
-the classifier to be used;</p></li>
-<li><p><strong>test_size</strong> – the size of the test set used to train the CatBoost method, which
-is used to create the importance score of each feature;</p></li>
-<li><p><strong>cat_col</strong> – a list with the name or index of all categorical columns. These columns
-do not need to be encoded, since CatBoost does this encoding internally. If None, this
-list will be automatically set as a list with all categorical features found in the
-dataset;</p></li>
-<li><p><strong>n_feat</strong> – the number of features to be selected. If None, then the following procedure
-is followed: (i) half of the existing features will be selected, (ii) after the feature
-selection method from CatBoost is executed, it generates a ‘loss_graph’, that indicates
-the loss function for each feature removed: the loss when 0 features were removed, the
-loss when 1 feature was removed, etc., up until half of the features were removed. With
-this loss graph, we get the number of features removed that resulted in the best loss
-function. We then set the features to be selected as the ones selected up until that
-point;</p></li>
-<li><p><strong>fixed_cols</strong> – a list of column names or indices that should always be included in the
-set of selected features. Note that the number of columns included here must be smaller
-than n_feat, otherwise there is nothing for the class to do (that is:
-len(fixed_cols) &lt; n_feat);</p></li>
-<li><p><strong>algorithm</strong> – <p>the algorithm used to do feature selection. CatBoost uses a Recursive
-Feature Selection approach, where each feature is removed at a time. The feature
-selected to be removed is the one with the least importance. The difference between
-each algorithm is how this importance is computed. This parameter can be one of the
-following string values: [‘predict’, ‘loss’, ‘shap’]. Here is a description of each of
-the algorithms allowed according to CatBoost’s own documentation (text in double quotation
-marks were extracted from Catboost’s official documentation):</p>
-<blockquote>
-<div><ul>
-<li><p>’predict’: uses the caboost.EFeaturesSelectionAlgorithm.RecursiveByPredictionValuesChange
-algorithm. According to CatBoost’s own documentation: “the fastest algorithm
-and the least accurate method (not recommended for ranking losses)” - “For each
-feature, PredictionValuesChange shows how much on average the prediction changes
-if the feature value changes. The bigger the value of the importance the bigger
-on average is the change to the prediction value, if this feature is changed.”;</p></li>
-<li><p>’loss’: uses the caboost.EFeaturesSelectionAlgorithm.RecursiveByLossFunctionChange
-algorithm. According to CatBoost’s own documentation: “the optimal option
-according to accuracy/speed balance” - “For each feature the value represents the
-difference between the loss value of the model with this feature and without it.
-The model without this feature is equivalent to the one that would have been trained
-if this feature was excluded from the dataset. Since it is computationally expensive
-to retrain the model without one of the features, this model is built approximately
-using the original model with this feature removed from all the trees in the ensemble.
-The calculation of this feature importance requires a dataset and, therefore, the
-calculated value is dataset-dependent.”;</p></li>
-<li><p>’shap’: uses the caboost.EFeaturesSelectionAlgorithm.RecursiveByShapValues algorithm.
-According to CatBoost’s own documentation: “the most accurate method.”. For this
-algorithm, CatBoost uses Shap Values to determine the importance of each feature;</p></li>
-</ul>
-</div></blockquote>
-</p></li>
-<li><p><strong>steps</strong> – the number of times the model is trained. The greater the number of steps, the more
-accurate is the importance score of each feature;</p></li>
-<li><p><strong>verbose</strong> – indicates whether internal messages should be printed or not.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.CatBoostSelection.get_summary">
-<span class="sig-name descname"><span class="pre">get_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.CatBoostSelection.get_summary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Public method that returns the summary generated by the CatBoost model.
-For more information on the data contained in this summary, please check
-CatBoost’s official documentation:
-<a class="reference external" href="https://catboost.ai/en/docs/concepts/output-data_features-selection">https://catboost.ai/en/docs/concepts/output-data_features-selection</a></p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="correlatedfeatures">
-<h2>CorrelatedFeatures<a class="headerlink" href="#correlatedfeatures" title="Permalink to this heading">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.CorrelatedFeatures">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">CorrelatedFeatures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cor_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_num_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['spearman']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_corr_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.85</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_pvalue_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_num_cat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'model'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levene_pvalue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anova_pvalue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jensen_n_bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jensen_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['f1',</span> <span class="pre">'auc']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_cat_cat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cramer'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_corr_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.85</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_pvalue_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tie_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'missing'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_summary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'summary.json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_corr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'corr_pairs.json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_uncorr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'uncorr_pairs.json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_exact_matches</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.CorrelatedFeatures" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#dataprocessing.FeatureSelection" title="dataprocessing.feat_selection.selector.FeatureSelection"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureSelection</span></code></a></p>
-<p>Concrete class that measures the correlation between variables
-(numerical x numerical, categorical x numerical, and categorical x categorical)
-and drop features that are correlated to another feature.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> – the data frame to be used during the fit method.
-This data frame must contain all the features, including the label
-column (specified in the ‘label_col’ parameter). This parameter is
-mandatory if ‘label_col’ is also provided. The user can also provide
-this dataset (along with the ‘label_col’) when calling the fit()
-method. If df is provided during the class instantiation, it is not
-necessary to provide it again when calling fit(). It is also possible
-to use the ‘X’ and ‘y’ instead of ‘df’ and ‘label_col’, although it is
-mandatory to pass the pair of parameters (X,y) or (df, label_col) either
-during the class instantiation or during the fit() method;</p></li>
-<li><p><strong>label_col</strong> – the name or index of the label column. This parameter is
-mandatory if ‘df’ is provided;</p></li>
-<li><p><strong>X</strong> – contains only the features of the original dataset, that is, does not
-contain the label column. This is useful if the user has already separated
-the features from the label column prior to calling this class. This parameter
-is mandatory if ‘y’ is provided;</p></li>
-<li><p><strong>y</strong> – contains only the label column of the original dataset.
-This parameter is mandatory if ‘X’ is provided;</p></li>
-<li><p><strong>transform_pipe</strong> – a list of transformations to be used as a pre-processing
-pipeline. Each transformation in this list must be a valid subclass of the
-current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
-methods require a dataset with no categorical features or with no missing
-values (depending on the approach). If no transformations are provided, a set
-of default transformations will be used, which depends on the feature selection
-approach (subclass dependent);</p></li>
-<li><p><strong>in_place</strong> – indicates if the original dataset will be saved internally
-(df_org) or not. If True, then the feature selection transformation is saved
-over the original dataset. If False, the original dataset is saved separately
-(default value);</p></li>
-<li><p><strong>cor_features</strong> – a list of the column names or indexes that should have their
-correlations checked. If None, all columns are checked for correlations, where
-each correlation is checked in pairs (all possible column pairs are checked);</p></li>
-<li><p><strong>method_num_num</strong> – the method used to test the correlation between numerical
-variables. Must be a list containing one or more methods (limited to the
-number of available methods). The available methods are:
-[“spearman”, “pearson”, “kendall”]. If None, none of the correlations between
-two numerical variables will be tested;</p></li>
-<li><p><strong>num_corr_th</strong> – the correlation coefficient value used as a threshold for
-considering if there is a correlation between two numerical variables.
-That is, given two variables with a correlation coefficient of ‘x’ (depends on
-the correlation used, specified by method_num_num), a correlation is considered
-only if abs(x) &gt;= method_num_num and if the associated p-value ‘p’ is smaller than
-‘p’ &lt;= num_pvalue_th;</p></li>
-<li><p><strong>num_pvalue_th</strong> – the p-value used as a threshold when considering if there is a
-correlation between two variables. That is, given two variables with a correlation
-coefficient of ‘x’ (depends on the correlation used, specified by method_num_num),
-a correlation is considered only if abs(x) &gt;= method_num_num and if the associated
-p-value ‘p’ is smaller than ‘p’ &lt;= num_pvalue_th;</p></li>
-<li><p><strong>method_num_cat</strong> – <p>the method used to compute the correlation between a categorical and
-a numerical variable. There are currently three approaches implemented:</p>
-<blockquote>
-<div><ul>
-<li><p>’anova’: uses the ANOVA test to identify a correlation. First, we use the Levene
-test to see if the numerical variable has a similar variance across the
-different values of the categorical variable (Homoscedastic data). If
-the test passes (that is if the p-value of the Levene test is greater
-than ‘levene_pvalue’), then we can perform the ANOVA test, in which we
-compute the F-statistic to see if there is a correlation between the
-numerical and categorical variables and its associated p-value. We also
-compute the omega-squared metric. If the p-value is less than ‘anova_pvalue’
-and the omega-squared is greater than ‘omega_th’, then both variables
-are considered to be correlated;</p></li>
-<li><p>’jensen’: first we clusterize the numerical values according to their respective
-values of the categorical data. We then compute the probability density
-function of the numerical variable for each cluster (we approximate the
-PDF with the histogram using ‘jensen_n_bins’ different bins). The next
-step is to compute the Jensen-Shannon Distance metric between the distribution
-functions of each pair of clusters. This distance metric varies from 0 to 1,
-where values closer to 0 mean that both distributions tested are similar and
-values closer to 1 mean that the distributions are different. If all pairs
-of distributions tested are considered different (a Jensen-Shannon metric above
-‘jensen_th’ for all pairs tested), then both variables are considered to be
-correlated;</p></li>
-<li><p>’model’: trains a simple decision tree using the numerical variable and predicts the
-categorical variable. Both variables are first divided into a training and
-test set (70% and 30% of the size of the original variables, respectively). The
-training set is used to train the decision tree, where the only feature used
-by the model is the numerical variable and the predicted label is the different
-values within the categorical variable. After training, the model is used to
-predict the values of the test set and a set of metrics is computed to assess the
-performance of the model (the metrics computed are defined by ‘model_metrics’).
-If all metrics computed are above the threshold ‘metric_th’, then both variables
-are considered to be correlated;</p></li>
-</ul>
-</div></blockquote>
-<p>If set to None, then none of the correlations between numerical and categorical variables will
-be tested;</p>
-</p></li>
-<li><p><strong>levene_pvalue</strong> – the threshold used to check if a set of samples are homoscedastic (similar
-variances across samples). This condition is necessary for the ANOVA test. This check is done
-using the Levene test, which considers that all samples have similar variances as the null
-hypothesis. If the p-value associated with this test is high, then the null hypothesis is accepted,
-thus allowing the ANOVA test to be carried out. This parameter defines the threshold used by the
-p-value of this test: if p-value &gt; levene_pvalue, then the data is considered to be homoscedastic.
-This parameter is ignored if method_num_cat != ‘anova’;</p></li>
-<li><p><strong>anova_pvalue</strong> – threshold used by the p-value associated with the F-statistic computed by the ANOVA
-test. If the p-value &lt; anova_pvalue, then we consider that there is a statistically significant
-difference between the numerical values of different clusters (clusterized according to the values
-of the categorical variable). This implies a possible correlation between the numerical and
-categorical variables, although the F-statistic doesn’t tell us the magnitude of this difference.
-For that, we use the Omega-Squared metric. This parameter is ignored if method_num_cat != ‘anova’;</p></li>
-<li><p><strong>omega_th</strong> – the threshold used for the omega squared metric. The omega squared is a metric that
-varies between 0 and 1 that indicates the effect of a categorical variable over the variance of
-a numerical variable. A value closer to 0 indicates a weak effect, while values closer to 1 show
-that the categorical variable has a significant impact on the variance of the numerical variable,
-thus showing a high correlation. If the omega squared is greater than omega_th, then both variables
-being analyzed are considered to be correlated. This parameter is ignored if method_num_cat != ‘anova’;</p></li>
-<li><p><strong>jensen_n_bins</strong> – the number of bins used for creating the histogram of each cluster of data when
-method_num_cat = ‘jensen’. For this method, we cluster the numerical data according to the categorical
-variable. For each cluster, we compute a histogram, which is used to approximate the Probability
-Density Function of that cluster. This parameter controls the number of bins used during the creation
-of the histogram. This parameter is ignored if method_num_cat != ‘jensen’. If None, the best number
-of bins for the numerical variable being analyzed is computed using the Freedman Diaconis rule;</p></li>
-<li><p><strong>jensen_th</strong> – when method_num_cat = ‘jensen’, we compare the distribution of each cluster of data
-using the Jensen-Shannon distance metric. If the distance is close to 1, then the distributions are
-considered different. If all pairs of clusters have a high distance, then both variables being analyzed
-are considered to be correlated. This parameter indicates the threshold used to check if a distance
-metric is high or not: if distance &gt; jensen_th, then the distributions being compared are considered
-different. Must be a float value within [0, 1]. This parameter is ignored if method_num_cat != ‘jensen’;</p></li>
-<li><p><strong>model_metrics</strong> – a list of metric names that should be used when evaluating if a model trained using
-a single numerical variable to predict a categorical variable is good enough. If the trained model
-presents a good performance for the metrics in model_metrics, then both variables being analyzed are
-considered to be correlated. This parameter must be a list, and the allowed values in this list are:
-[“f1”, “auc”, “accuracy”, “precision”, “recall”]. This parameter is ignored if
-method_num_cat != ‘model’;</p></li>
-<li><p><strong>metric_th</strong> – given the metrics provided by model_metrics, a pair of variables being analyzed are only
-considered correlated if all metrics in model_metrics achieve a score greater than metric_th over the
-test set (the variables being analyzed are split into training and test set internally). This parameter
-is ignored if method_num_cat != ‘model’;</p></li>
-<li><p><strong>method_cat_cat</strong> – <p>the method used to test the correlation between two categorical variables. There is only
-one option implemented:</p>
-<blockquote>
-<div><ul>
-<li><p>’cramer’: performs the Cramer’s V test between two categorical variables. This test returns a value
-between 0 and 1, where values near 1 indicate a high correlation between the variables
-and a p-value associated with this metric. If the Cramer’s V correlation coefficient is
-greater than cat_corr_th and its p-value is smaller than cat_pvalue_th, then both variables
-are considered to be correlated.</p></li>
-</ul>
-</div></blockquote>
-<p>If set to None, then none of the correlations between two categorical variables will be tested;</p>
-</p></li>
-<li><p><strong>cat_corr_th</strong> – the threshold used for the Cramer’s V correlation coefficient. Values greater than cat_corr_th
-indicates a high correlation between two variables, but only if the p-value associated with this coefficient
-is smaller than cat_pvalue_th;</p></li>
-<li><p><strong>cat_pvalue_th</strong> – check the description for the parameter cat_corr_th for more information;</p></li>
-<li><p><strong>tie_method</strong> – <p>the method used to choose the variable to remove in case a correlation
-between them is identified. This is used for all types of correlations:
-numerical x numerical, categorical x numerical, and categorical x categorical. The
-possible values are:</p>
-<blockquote>
-<div><ul>
-<li><p>”missing”: chooses the variable with the least number of missing values;</p></li>
-<li><p>”var”: chooses the variable with the largest data dispersion (std / (V - v),
-where std is the standard deviation of the variable, V and v are the
-maximum and minimum values observed in the variable, respectively).
-Works only for numerical x numerical analysis. Otherwise, it uses the
-cardinality approach internally;</p></li>
-<li><p>”cardinality”: chooses the variable with the most number of different values present;</p></li>
-</ul>
-</div></blockquote>
-<p>In all three cases, if both variables are tied (same dispersion, same number of missing
-values, or same cardinality), the variable to be removed will be selected randomly;</p>
-</p></li>
-<li><p><strong>save_json</strong> – if True, the summary jsons are saved according to the paths json_summary, json_corr, and
-json_uncorr. If False, these json files are not saved;</p></li>
-<li><p><strong>json_summary</strong> – when calling the fit method, all correlations will be computed according to the many
-parameters detailed previously. After computing all this data, everything is saved in a JSON file,
-which can then be accessed and analyzed carefully. We recommend using a JSON viewing tool for this.
-This parameter indicates the name of the file where the JSON should be saved (including the path
-to the file). If set to None no JSON file will be saved;</p></li>
-<li><p><strong>json_corr</strong> – similar to json_summary, but corresponds to the name of the JSON file that contains only
-the information of the pairs of variables considered to be correlated (with no repetitions);</p></li>
-<li><p><strong>json_uncorr</strong> – similar to json_summary, but corresponds to the name of the JSON file that contains only
-the information of the pairs of variables considered NOT to be correlated (with no repetitions);</p></li>
-<li><p><strong>compute_exact_matches</strong> – if True, compute the number of exact matches between two variables and save
-this information in the json_summary, json_uncorr, and json_corr;</p></li>
-<li><p><strong>verbose</strong> – indicates whether internal messages should be printed or not.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.CorrelatedFeatures.get_summary">
-<span class="sig-name descname"><span class="pre">get_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">print_summary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.CorrelatedFeatures.get_summary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fetches three internal dictionaries:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>self.corr_dict: stores information and correlation metrics for
-each variable. There is one key for each variable
-analyzed;</p></li>
-<li><p>self.corr_pairs: stores information and correlation metrics for all
-pairs of correlated variables. Each key of this
-dictionary follows the pattern “{key1} x {key2}”;</p></li>
-<li><p>self.uncorr_pairs: stores information and correlation metrics for all
-pairs of uncorrelated variables. Each key of this
-dictionary follows the pattern “{key1} x {key2}”.</p></li>
-</ul>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>print_summary</strong> – if True, print the values stored in the correlated
-and the uncorrelated dictionary. If False, just return the three
-dictionaries previously mentioned.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.CorrelatedFeatures.update_selected_features">
-<span class="sig-name descname"><span class="pre">update_selected_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_corr_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_pvalue_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levene_pvalue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anova_pvalue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jensen_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_corr_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_pvalue_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_summary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_corr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_uncorr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.CorrelatedFeatures.update_selected_features" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update different parameters associated to the different types of correlations and
-recomputes the selected features using these new parameter values without recomputing
-the correlations. This method allow users to change certain thresholds and metrics
-without requiring to recompute all of the correlations, which can be computationally
-expensive depending on the size of the dataset. The only parameters allowed to be
-changed are the ones accepted by this method. If another parameter not listed here
-needs to be changed, then it is necessary to instantiate a different object and call
-the fit() method again.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>num_corr_th</strong> – the correlation coefficient value used as a threshold for
-considering if there is a correlation between two numerical variables.
-That is, given two variables with a correlation coefficient of ‘x’ (depends on
-the correlation used, specified by method_num_num), a correlation is considered
-only if abs(x) &gt;= method_num_num and if the associated p-value ‘p’ is smaller than
-‘p’ &lt;= num_pvalue_th;</p></li>
-<li><p><strong>num_pvalue_th</strong> – the p-value used as a threshold when considering if there is a
-correlation between two variables. That is, given two variables with a correlation
-coefficient of ‘x’ (depends on the correlation used, specified by method_num_num),
-a correlation is considered only if abs(x) &gt;= method_num_num and if the associated
-p-value ‘p’ is smaller than ‘p’ &lt;= num_pvalue_th;</p></li>
-<li><p><strong>levene_pvalue</strong> – the threshold used to check if a set of samples are homoscedastic (similar
-variances across samples). This condition is necessary for the ANOVA test. This check is done
-using the Levene test, which considers that all samples have similar variances as the null
-hypothesis. If the p-value associated with this test is high, then the null hypothesis is accepted,
-thus allowing the ANOVA test to be carried out. This parameter defines the threshold used by the
-p-value of this test: if p-value &gt; levene_pvalue, then the data is considered to be homoscedastic.
-This parameter is ignored if method_num_cat != ‘anova’;</p></li>
-<li><p><strong>anova_pvalue</strong> – threshold used by the p-value associated with the F-statistic computed by the ANOVA
-test. If the p-value &lt; anova_pvalue, then we consider that there is a statistically significant
-difference between the numerical values of different clusters (clusterized according to the values
-of the categorical variable). This implies a possible correlation between the numerical and
-categorical variables, although the F-statistic doesn’t tell us the magnitude of this difference.
-For that, we use the Omega-Squared metric. This parameter is ignored if method_num_cat != ‘anova’;</p></li>
-<li><p><strong>omega_th</strong> – the threshold used for the omega squared metric. The omega squared is a metric that
-varies between 0 and 1 that indicates the effect of a categorical variable over the variance of
-a numerical variable. A value closer to 0 indicates a weak effect, while values closer to 1 show
-that the categorical variable has a significant impact on the variance of the numerical variable,
-thus showing a high correlation. If the omega squared is greater than omega_th, then both variables
-being analyzed are considered to be correlated. This parameter is ignored if method_num_cat != ‘anova’;</p></li>
-<li><p><strong>jensen_th</strong> – when method_num_cat = ‘jensen’, we compare the distribution of each cluster of data
-using the Jensen-Shannon distance metric. If the distance is close to 1, then the distributions are
-considered different. If all pairs of clusters have a high distance, then both variables being analyzed
-are considered to be correlated. This parameter indicates the threshold used to check if a distance
-metric is high or not: if distance &gt; jensen_th, then the distributions being compared are considered
-different. Must be a float value within [0, 1]. This parameter is ignored if method_num_cat != ‘jensen’;</p></li>
-<li><p><strong>model_metrics</strong> – a list of metric names that should be used when evaluating if a model trained using
-a single numerical variable to predict a categorical variable is good enough. If the trained model
-presents a good performance for the metrics in model_metrics, then both variables being analyzed are
-considered to be correlated. This parameter must be a list, and the allowed values in this list are:
-[“f1”, “auc”, “accuracy”, “precision”, “recall”]. This parameter is ignored if
-method_num_cat != ‘model’;</p></li>
-<li><p><strong>metric_th</strong> – given the metrics provided by model_metrics, a pair of variables being analyzed are only
-considered correlated if all metrics in model_metrics achieve a score greater than metric_th over the
-test set (the variables being analyzed are split into training and test set internally). This parameter
-is ignored if method_num_cat != ‘model’;</p></li>
-<li><p><strong>cat_corr_th</strong> – the threshold used for the Cramer’s V correlation coefficient. Values greater than cat_corr_th
-indicates a high correlation between two variables, but only if the p-value associated with this coefficient
-is smaller than cat_pvalue_th;</p></li>
-<li><p><strong>cat_pvalue_th</strong> – check the description for the parameter cat_corr_th for more information;</p></li>
-<li><p><strong>save_json</strong> – if True, the summary jsons are saved according to the paths json_summary, json_corr, and
-json_uncorr. If False, these json files are not saved;</p></li>
-<li><p><strong>json_summary</strong> – when calling the fit method, all correlations will be computed according to the many
-parameters detailed previously. After computing all this data, everything is saved in a JSON file,
-which can then be accessed and analyzed carefully. We recommend using a JSON viewing tool for this.
-This parameter indicates the name of the file where the JSON should be saved (including the path
-to the file). If set to None no JSON file will be saved;</p></li>
-<li><p><strong>json_corr</strong> – similar to json_summary, but corresponds to the name of the JSON file that contains only
-the information of the pairs of variables considered to be correlated (with no repetitions);</p></li>
-<li><p><strong>json_uncorr</strong> – similar to json_summary, but corresponds to the name of the JSON file that contains only
-the information of the pairs of variables considered NOT to be correlated (with no repetitions);</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-</section>
-
-
-            <div class="clearer"></div>
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../../index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">Feature Selection</a><ul>
-<li><a class="reference internal" href="#seqfeatselection">SeqFeatSelection</a></li>
-<li><a class="reference internal" href="#catboostselection">CatBoostSelection</a></li>
-<li><a class="reference internal" href="#correlatedfeatures">CorrelatedFeatures</a></li>
+<p>The following is a list of all feature selection methods implemented in this module. All
+of the classes below inherit from the <strong>FeatureSelection</strong> class, and thus, have access to
+all of the methods previously shown.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="seq.html">SeqFeatSelection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="seq.html#example">Example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../notebooks/module_tests/feat_sel_sequential.html">SeqFeatSelection Example</a></li>
 </ul>
 </li>
 </ul>
-
-  </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="../encoder/encoder.html"
-                          title="previous chapter">Encoders</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="../imputer/imputer.html"
-                          title="next chapter">Imputers</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/dataprocessing/feat_sel/feat_sel.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="catboost.html">CatBoostSelection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="catboost.html#example">Example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../notebooks/module_tests/feat_sel_catboost.html">CatBoostSelection Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="correlation.html">CorrelatedFeatures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="correlation.html#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../notebooks/module_tests/feat_sel_corr.html">CorrelatedFeatures Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../notebooks/module_tests/feat_sel_corr_tutorial.html">Checking Correlations Between Variables - A Comprehensive Guide</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 </div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/module_tests/feat_sel_sequential.html">
+          <span class="std std-ref">SeqFeatSelection Example</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/module_tests/feat_sel_catboost.html">
+          <span class="std std-ref">CatBoostSelection Example</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/module_tests/feat_sel_corr.html">
+          <span class="std std-ref">CorrelatedFeatures Example</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/module_tests/feat_sel_corr_tutorial.html">
+          <span class="std std-ref">Checking Correlations Between Variables - A Comprehensive Guide</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-clear"></div></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../encoder/ohe.html" class="btn btn-neutral float-left" title="EncoderOHE" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="seq.html" class="btn btn-neutral float-right" title="SeqFeatSelection" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../imputer/imputer.html" title="Imputers"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../encoder/encoder.html" title="Encoders"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">RAI Error Mitigation  documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../dataprocessing.html" >dataprocessing package</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Feature Selection</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Akshara Ramakrishnan &lt;akshara@microsoft.com&gt;.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

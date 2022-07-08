@@ -72,10 +72,10 @@ class SeqFeatSelection(FeatureSelection):
     :param n_feat: the number of features to be selected. Can be an
         integer, string, or tuple:
 
-            * int: a number between 1 and df.shape[1] (number of features);
-            * string: the only value accepted in this case is the "best" string, which
+            * **int**: a number between 1 and df.shape[1] (number of features);
+            * **string:** the only value accepted in this case is the "best" string, which
               selects the number of features with the best score using cross-validation;
-            * tuple: a tuple with only 2 values: (min, max), where min and max
+            * **tuple:** a tuple with only 2 values: (min, max), where min and max
               are the minimum and maximum number of features to be selected. The
               number of features selected the number of features that achieved
               the best score in the cross-validation and that is between min and max;
@@ -91,8 +91,8 @@ class SeqFeatSelection(FeatureSelection):
         values for this parameter depends on the task being solved: regression or classification.
         The valid values are:
 
-            * Regression: "neg_mean_squared_error", "r2", "neg_median_absolute_error";
-            * Classification: "accuracy", "f1", "precision", "recall", "roc_auc".
+            * **Regression:** "neg_mean_squared_error", "r2", "neg_median_absolute_error";
+            * **Classification:** "accuracy", "f1", "precision", "recall", "roc_auc".
 
         If None, "roc_auc" is used for classification tasks, and "r2" is used for regression tasks;
 
