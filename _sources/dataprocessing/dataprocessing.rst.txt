@@ -1,53 +1,17 @@
-dataprocessing package
-======================
+DataProcessing
+==============
 
-Submodules
-----------
-
-dataprocessing.random\_sample module
-------------------------------------
-
-.. automodule:: dataprocessing.random_sample
+.. autoclass:: dataprocessing.DataProcessing
    :members:
-   :undoc-members:
-   :show-inheritance:
 
-dataprocessing.rebalance module
--------------------------------
+The following is a list of all child classes that inherit from the **DataProcessing**:
 
-.. automodule:: dataprocessing.rebalance
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. toctree::
+   :maxdepth: 2
+   :caption: Child Classes
 
-dataprocessing.setup module
----------------------------
-
-.. automodule:: dataprocessing.setup
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-dataprocessing.split module
----------------------------
-
-.. automodule:: dataprocessing.split
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-dataprocessing.transformer module
----------------------------------
-
-.. automodule:: dataprocessing.transformer
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: dataprocessing
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   encoder/encoder
+   feat_sel/feat_sel
+   imputer/imputer
+   sampler/sampler
+   scaler/scaler

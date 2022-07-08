@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dataprocessing &mdash; RAI Error Mitigation  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="DataProcessing" href="dataprocessing.html" />
+    <link rel="prev" title="databalanceanalysis" href="../databalanceanalysis/databalanceanalysis.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> RAI Error Mitigation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/databalanceanalysis.html">databalanceanalysis</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">dataprocessing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#target-audience">Target Audience</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api">API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dataprocessing.html">DataProcessing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="case_studies.html">Case Studies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="module_tests.html">Tutorials</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sklearn-s-pipeline-support">Sklearn’s Pipeline Support</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pipeline.html">Pipeline Support</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RAI Error Mitigation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>dataprocessing</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/dataprocessing/intro.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="dataprocessing">
+<h1>dataprocessing<a class="headerlink" href="#dataprocessing" title="Permalink to this heading"></a></h1>
+<p>This module contains several transformer classes that aim to change or mitigate certain aspects of a dataset.
+The goal of this module is to provide a unified interface for different mitigation methods scattered around
+multiple machine learning libraries, such as scikit-learn, mlxtend, sdv, among others. The advantage of using
+this module is that it allow users to create their data processing pipelines using a single library, without
+worrying about making sure that the output from one mitigation (found in one library) is compatible with the
+output of a second mitigation (found in a separate library). As this library grows, we aim to offer an even larger
+amount of mitigation, and also offer complex solutions in a simple and easy to use interface.</p>
+<p>Some of the classes available here are meant to be a wrapper for some other class found in one of these libraries,
+with the goal of making simplifications to the usage of these approaches, while also automating certain steps. Other
+classes offer unique solutions to a given aspect found in the area of data preprocessing for tabular data. All classes
+offer a simple interface, with pre-determined parameter values, making it easier to use when the user doesn’t know
+(or doesn’t want) to configure all of the available parameters. At the same time, the classes found here provide
+several different customization options, making it ideal for those with more experience.</p>
+<section id="target-audience">
+<h2>Target Audience<a class="headerlink" href="#target-audience" title="Permalink to this heading"></a></h2>
+<p>This module was designed for unexperienced and experienced data scientists. The <strong>dataprocessing</strong> module aims to offer
+classes that provide automated solutions, which helps the more unexperienced data scientists, while also allowing a wide
+variety of customizations, making it a good option for the more experienced as well.</p>
+</section>
+<section id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this heading"></a></h2>
+<p>The <strong>dataprocessing</strong> module uses a base class (<strong>DataProcessing</strong>) that implements several tasks shared
+across the different transformation classes. Whenever possible, the classes implemented in this module follow
+the .fit() and .transform() behavior from scikit-learn, making these classes compatible with scikit-learn.
+Each class aims to mitigate a certain aspect in tabular datasets. For each of these aspects, there might be one
+or more different solutions for it. This way, we create a hierarchy, where each problem category has its own
+abstract class (that inherits from the main abstract <strong>DataProcessing</strong> class), where each of these classes have
+a set of concrete child classes that implements a different solution to the problem at hand. For example, we have
+an abstract encoding class (<a class="reference internal" href="encoder/encoder.html#dataencoding"><span class="std std-ref">DataEncoding</span></a>), which has concrete child classes that implements
+different encoding approaches (<a class="reference internal" href="encoder/ohe.html#encoderohe"><span class="std std-ref">EncoderOHE</span></a> and <a class="reference internal" href="encoder/ordinal.html#encoderordinal"><span class="std std-ref">EncoderOrdinal</span></a>).</p>
+</section>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dataprocessing.html">DataProcessing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="encoder/encoder.html">Encoders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="feat_sel/feat_sel.html">Feature Selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imputer/imputer.html">Imputers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampler/sampler.html">Sampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scaler/scaler.html">Scalers</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<p>All notebooks listed here can be found in the folder <strong>notebooks/dataprocessing/</strong>.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="case_studies.html">Case Studies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_tests.html">Tutorials</a></li>
+</ul>
+</div>
+</section>
+<section id="sklearn-s-pipeline-support">
+<h2>Sklearn’s Pipeline Support<a class="headerlink" href="#sklearn-s-pipeline-support" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">Pipeline Support</a></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../databalanceanalysis/databalanceanalysis.html" class="btn btn-neutral float-left" title="databalanceanalysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dataprocessing.html" class="btn btn-neutral float-right" title="DataProcessing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

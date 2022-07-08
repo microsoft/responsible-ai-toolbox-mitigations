@@ -10,11 +10,10 @@ Welcome to RAI Error Mitigation's documentation!
    :maxdepth: 2
 
    databalanceanalysis/databalanceanalysis
-   dataprocessing/dataprocessing
+   dataprocessing/intro
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`
