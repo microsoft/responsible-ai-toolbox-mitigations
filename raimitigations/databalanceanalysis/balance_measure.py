@@ -4,8 +4,8 @@ from abc import ABC, abstractmethod
 import pandas as pd
 
 """
-An abstract class that shows the measures method that allows us to actually retrieve the 
-data balance measures 
+An abstract class that shows the measures method that allows us to actually retrieve the
+data balance measures
 """
 
 

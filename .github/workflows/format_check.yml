@@ -1,0 +1,27 @@
+name: Format Check
+
+on:
+  push:
+    paths:
+      - '**.py'
+  workflow_dispatch:
+
+jobs:
+  pre-commit:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      # -------------------
+      # Checkout code
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      # -------------------
+      # Setup environment in remote runner
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - uses: pre-commit/action@v3.0.0

@@ -1,0 +1,19 @@
+files: raimitigations/
+
+repos:
+-   repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: v1.6.0
+    hooks:
+    - id: autopep8
+
+-   repo: https://github.com/ambv/black
+    rev: 22.3.0
+    hooks:
+    - id: black
+
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    - id: flake8
+    - id: check-yaml
+    - id: trailing-whitespace

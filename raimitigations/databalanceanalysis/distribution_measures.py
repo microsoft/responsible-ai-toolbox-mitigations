@@ -1,6 +1,6 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
-from typing import Dict, Callable, List, Optional
+from typing import Dict, Callable, List
 
 import numpy as np
 import pandas as pd
@@ -35,9 +35,7 @@ class DistributionBalanceMeasure(BalanceMeasure):
         uniform_val: float = 1.0 / n
         return np.ones(n) * uniform_val
 
-    def _get_distribution_measures(
-        self, df: pd.DataFrame, sensitive_col: str
-    ) -> Dict[Measures, float]:
+    def _get_distribution_measures(self, df: pd.DataFrame, sensitive_col: str) -> Dict[Measures, float]:
         f_obs = df.groupby(sensitive_col).size().reset_index(name="count")
         sum_obs = f_obs["count"].sum()
         obs = f_obs["count"] / sum_obs
@@ -54,12 +52,8 @@ class DistributionBalanceMeasure(BalanceMeasure):
 
         return measures
 
-    def _get_all_distribution_measures(
-        self, df: pd.DataFrame, sensitive_cols: List[str]
-    ) -> pd.DataFrame:
-        all_measures = [
-            self._get_distribution_measures(df, col) for col in sensitive_cols
-        ]
+    def _get_all_distribution_measures(self, df: pd.DataFrame, sensitive_cols: List[str]) -> pd.DataFrame:
+        all_measures = [self._get_distribution_measures(df, col) for col in sensitive_cols]
         return pd.DataFrame.from_dict(all_measures)
 
     def measures(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -67,7 +61,7 @@ class DistributionBalanceMeasure(BalanceMeasure):
 
         The output is a dataframe that maps the sensitive column name to another dictionary:
             the dictionary for each sensitive column contains a mapping of the name of a measure to its value
-            
+
                 * Kullback-Leibler Divergence - https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence
                 * Jensen-Shannon Distance - https://en.wikipedia.org/wiki/Jensen%E2%80%93Shannon_divergence
                 * Wasserstein Distance - https://en.wikipedia.org/wiki/Wasserstein_metric
@@ -83,7 +77,5 @@ class DistributionBalanceMeasure(BalanceMeasure):
         :rtype: pd.DataFrame
 
         """
-        _distribution_measures = self._get_all_distribution_measures(
-            df, self._sensitive_cols
-        )
+        _distribution_measures = self._get_all_distribution_measures(df, self._sensitive_cols)
         return _distribution_measures

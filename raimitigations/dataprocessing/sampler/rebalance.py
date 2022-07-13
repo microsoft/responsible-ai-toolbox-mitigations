@@ -475,10 +475,9 @@ class Rebalance(DataProcessing):
         if self.default_smote_type == self.SMOTE_TYPE:
             requirements = {
                 DataImputer: BasicImputer(
-                                    verbose=self.verbose,
-                                    numerical={ 'missing_values':np.nan,
-                                                'strategy':'most_frequent',
-                                                'fill_value':None}),
+                    verbose=self.verbose,
+                    numerical={"missing_values": np.nan, "strategy": "most_frequent", "fill_value": None},
+                ),
                 DataEncoding: EncoderOHE(col_encode=self.cat_col, verbose=self.verbose),
             }
         else:
