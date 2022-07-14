@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation
 # Licensed under the MIT License.
 
-from itertools import count
 import numpy as np
 import scipy
 
@@ -11,12 +10,15 @@ from scipy.spatial import distance
 from scipy.stats import chisquare
 
 """
-Helper functions to calculate each of the individual aggregate measures 
+Helper functions to calculate each of the individual aggregate measures
 """
 
 # Aggregate Balance Measure Helper Functions
 def _get_generalized_entropy_index(
-    benefits: np.array, alpha: float, use_abs_val: bool, error_tolerance: float = 1e-12,
+    benefits: np.array,
+    alpha: float,
+    use_abs_val: bool,
+    error_tolerance: float = 1e-12,
 ) -> float:
     """
     Returns general Entropy index: measure of redundancy in the data
@@ -41,15 +43,11 @@ def _get_generalized_entropy_index(
     elif abs(alpha) < error_tolerance:
         gei = np.sum(-np.log(norm_benefits)) / count
     else:
-        gei = np.sum(np.power(norm_benefits, alpha) - 1.0) / (
-            count * alpha * (alpha - 1.0)
-        )
+        gei = np.sum(np.power(norm_benefits, alpha) - 1.0) / (count * alpha * (alpha - 1.0))
     return gei
 
 
-def get_atkinson_index(
-    benefits: np.array, epsilon: float = 1.0, error_tolerance: float = 1e-12
-) -> float:
+def get_atkinson_index(benefits: np.array, epsilon: float = 1.0, error_tolerance: float = 1e-12) -> float:
     """
     Returns the Atkinson INdex which is a measure of income inequality that indicates percentage  that would need to been foregone to have equal shares of income
     https://en.wikipedia.org/wiki/Atkinson_index
@@ -159,18 +157,14 @@ def get_chisq_pvalue(f_obs: np.array, f_ref: np.array) -> float:
 
 
 # Feature Balance Measures Helper functions
-def get_demographic_parity(
-    p_pos: float, p_feature: float, p_pos_feature: float, total_count: int
-) -> float:
+def get_demographic_parity(p_pos: float, p_feature: float, p_pos_feature: float, total_count: int) -> float:
     """
     Returns Demographic Parity
     """
     return p_pos_feature / p_feature
 
 
-def get_point_mutual(
-    p_pos: float, p_feature: float, p_pos_feature: float, total_count: int
-) -> float:
+def get_point_mutual(p_pos: float, p_feature: float, p_pos_feature: float, total_count: int) -> float:
     """
     Returns Point Mutual Information
     """
@@ -178,9 +172,7 @@ def get_point_mutual(
     return -np.inf if dp == 0 else np.log(dp)
 
 
-def get_sorenson_dice(
-    p_pos: float, p_feature: float, p_pos_feature: float, total_count: int
-) -> float:
+def get_sorenson_dice(p_pos: float, p_feature: float, p_pos_feature: float, total_count: int) -> float:
     """
     Returns Sorensen-Dice - used to gauge the similarity between two samples
     https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient
@@ -189,9 +181,7 @@ def get_sorenson_dice(
     return p_pos_feature / (p_feature + p_pos)
 
 
-def get_jaccard_index(
-    p_pos: float, p_feature: float, p_pos_feature: float, total_count: int
-) -> float:
+def get_jaccard_index(p_pos: float, p_feature: float, p_pos_feature: float, total_count: int) -> float:
     """
     Returns Jaccard Index - used for gauging similarity and diversity of sample sets
     https://en.wikipedia.org/wiki/Jaccard_index
@@ -199,26 +189,18 @@ def get_jaccard_index(
     return p_pos_feature / (p_feature + p_pos - p_pos_feature)
 
 
-def get_kr_correlation(
-    p_feature: float, p_pos: float, p_pos_feature: float, total_count: int
-) -> float:
+def get_kr_correlation(p_feature: float, p_pos: float, p_pos_feature: float, total_count: int) -> float:
     """
     Returns Kendall Rank Correlation - ordinal association between two measured quantities
     https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient
     """
-    a = np.power(total_count, 2) * (
-        1 - 2 * p_feature - 2 * p_pos + 2 * p_pos_feature + 2 * p_pos * p_feature
-    )
+    a = np.power(total_count, 2) * (1 - 2 * p_feature - 2 * p_pos + 2 * p_pos_feature + 2 * p_pos * p_feature)
     b = total_count * (2 * p_feature + 2 * p_pos - 4 * p_pos_feature - 1)
-    c = np.power(total_count, 2) * np.sqrt(
-        (p_feature - np.power(p_feature, 2)) * (p_pos - np.power(p_pos, 2))
-    )
+    c = np.power(total_count, 2) * np.sqrt((p_feature - np.power(p_feature, 2)) * (p_pos - np.power(p_pos, 2)))
     return (a + b) / c
 
 
-def get_log_likelihood_ratio(
-    p_pos: float, p_feature: float, p_pos_feature: float, total_count: int
-) -> float:
+def get_log_likelihood_ratio(p_pos: float, p_feature: float, p_pos_feature: float, total_count: int) -> float:
     """
     Returns Log likelihood ratio - calculate the degree to which the data supports one variable versus another
     https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio
@@ -226,9 +208,7 @@ def get_log_likelihood_ratio(
     return -np.inf if p_pos_feature == 0 else np.log(p_pos_feature / p_pos)
 
 
-def get_t_test_stat(
-    p_pos: float, p_feature: float, p_pos_feature: float, total_count: int
-) -> float:
+def get_t_test_stat(p_pos: float, p_feature: float, p_pos_feature: float, total_count: int) -> float:
     """
     Returns t-test statistic - t test compares the means of two groups and this gets a value to be looked
     up on t-distribution

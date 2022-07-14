@@ -12,6 +12,7 @@
 #
 import os
 import sys
+import sphinx_rtd_theme
 
 sys.path.insert(0, os.path.abspath("../raimitigations"))
 
@@ -19,8 +20,8 @@ sys.path.insert(0, os.path.abspath("../raimitigations"))
 # -- Project information -----------------------------------------------------
 
 project = "RAI Error Mitigation"
-copyright = "2022, Akshara Ramakrishnan <akshara@microsoft.com>"
-author = "Akshara Ramakrishnan <akshara@microsoft.com>"
+copyright = '2022, Microsoft'
+author = 'Microsoft'
 
 
 # -- General configuration ---------------------------------------------------
@@ -28,8 +29,13 @@ author = "Akshara Ramakrishnan <akshara@microsoft.com>"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx.ext.autodoc",
-             "sphinx.ext.githubpages"]
+extensions = [
+                "sphinx.ext.autodoc",
+                "sphinx.ext.githubpages",
+                "sphinx_rtd_theme",
+                "nbsphinx",
+                "sphinx_gallery.load_style",
+            ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -50,10 +56,17 @@ exclude_patterns = [
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "classic"
+#html_theme = "classic"
+html_theme = "sphinx_rtd_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
+html_context = {
+    'display_github': False,
+    "github_repo": "microsoft/responsible-ai-toolbox-mitigations", # Repo name
+    "github_version": "main", # Version
+    "conf_py_path": "/docs/", # Path in the checkout to the docs root
+}

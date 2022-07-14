@@ -1,444 +1,228 @@
-
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>dataprocessing package &#8212; RAI Error Mitigation  documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
-    
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DataProcessing &mdash; RAI Error Mitigation  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="databalanceanalysis package" href="../databalanceanalysis/databalanceanalysis.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../databalanceanalysis/databalanceanalysis.html" title="databalanceanalysis package"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RAI Error Mitigation  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">dataprocessing package</a></li> 
-      </ul>
-    </div>  
+    <link rel="next" title="Encoders" href="encoder/encoder.html" />
+    <link rel="prev" title="dataprocessing" href="intro.html" /> 
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <section id="dataprocessing-package">
-<h1>dataprocessing package<a class="headerlink" href="#dataprocessing-package" title="Permalink to this headline">¶</a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</section>
-<section id="module-dataprocessing.random_sample">
-<span id="dataprocessing-random-sample-module"></span><h2>dataprocessing.random_sample module<a class="headerlink" href="#module-dataprocessing.random_sample" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.random_sample.RandomSample">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.random_sample.</span></span><span class="sig-name descname"><span class="pre">RandomSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_duplicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.random_sample.RandomSample" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> (<em>str</em><em>, </em><em>int</em>) – the name of the target column or the index of the target column</p></li>
-<li><p><strong>sample_size</strong> (<em>int</em>) – the number of samples to include in the random sample</p></li>
-<li><p><strong>stratify</strong> (<em>array-like</em>) – if not None, data is split in a stratified fashion, using this as the class targets</p></li>
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> RAI Error Mitigation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/databalanceanalysis.html">databalanceanalysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="intro.html">dataprocessing</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="intro.html#target-audience">Target Audience</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#structure">Structure</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">DataProcessing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="encoder/encoder.html">Encoders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="feat_sel/feat_sel.html">Feature Selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="imputer/imputer.html">Imputers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sampler/sampler.html">Sampling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scaler/scaler.html">Scalers</a></li>
 </ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.random_sample.RandomSample.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.random_sample.RandomSample.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.random_sample.RandomSample.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.random_sample.RandomSample.transform" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dataset</strong> – the dataset to take a random sample from</p>
-</dd>
-<dt class="field-even">Type</dt>
-<dd class="field-even"><p>pd.DataFrame</p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a random sample of the dataset using the params initialized</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>pd.Dataframe</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-dataprocessing.rebalance">
-<span id="dataprocessing-rebalance-module"></span><h2>dataprocessing.rebalance module<a class="headerlink" href="#module-dataprocessing.rebalance" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.rebalance.Rebalance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.rebalance.</span></span><span class="sig-name descname"><span class="pre">Rebalance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smote_tomek</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smote</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tomek</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.rebalance.Rebalance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<em>pd.DataFrame</em>) – the dataframe that the user will rebalance</p></li>
-<li><p><strong>target</strong> (<em>str</em><em>, </em><em>int</em>) – the name of the target column or the index of the target column</p></li>
-<li><p><strong>sampling_strategy</strong> (<em>string</em>) – optional parameter for the strategy to use for the smote tomek resampling</p></li>
-<li><p><strong>random_state</strong> (<em>int</em>) – seed to control the randomization of the algorithm</p></li>
-<li><p><strong>smote</strong> (<em>imblearn.SMOTE</em>) – optional parameter to include a SMOTE object</p></li>
-<li><p><strong>tomek</strong> (<em>imblearn.Tomek</em>) – optional parameter to include Tomek object</p></li>
-<li><p><strong>smote_tomek</strong> (<em>imblearn.SmoteTomek</em>) – optional parameter to include SmoteTomek object</p></li>
+</li>
 </ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.rebalance.Rebalance.rebalance">
-<span class="sig-name descname"><span class="pre">rebalance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.rebalance.Rebalance.rebalance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="dataprocessing-setup-module">
-<h2>dataprocessing.setup module<a class="headerlink" href="#dataprocessing-setup-module" title="Permalink to this headline">¶</a></h2>
-</section>
-<section id="module-dataprocessing.split">
-<span id="dataprocessing-split-module"></span><h2>dataprocessing.split module<a class="headerlink" href="#module-dataprocessing.split" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.split.Split">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.split.</span></span><span class="sig-name descname"><span class="pre">Split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_duplicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.split.Split" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<em>pd.Dataframe</em>) – the dataframe that the user will apply splitting on</p></li>
-<li><p><strong>target</strong> (<em>str</em><em>, </em><em>int</em>) – the name of the target column or the index of the target column</p></li>
-<li><p><strong>train_size</strong> (<em>float</em>) – the ratio of the training data split</p></li>
-<li><p><strong>random_state</strong> (<em>int</em>) – seed to control the randomization of the algorithm</p></li>
-<li><p><strong>categorical_features</strong> (<em>boolean</em>) – a flag indicating the presence of categorical features in the dataset</p></li>
-<li><p><strong>stratify</strong> (<em>array-like</em>) – if not None, data is split in a stratified fashion, using this as the class targets</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.split.Split.split">
-<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.split.Split.split" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-dataprocessing.transformer">
-<span id="dataprocessing-transformer-module"></span><h2>dataprocessing.transformer module<a class="headerlink" href="#module-dataprocessing.transformer" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.transformer.Transformer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.transformer.</span></span><span class="sig-name descname"><span class="pre">Transformer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transformer_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'yeo-johnson'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_distribution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'uniform'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.transformer.Transformer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<em>pd.Dataframe</em>) – the dataframe that the user will apply splitting on</p></li>
-<li><p><strong>target</strong> (<em>str</em><em>, </em><em>int</em>) – the name of the target column or the index of the target column</p></li>
-<li><p><strong>transformer_type</strong> (<a class="reference internal" href="#dataprocessing.transformer.Transformer.TransformerType" title="dataprocessing.transformer.Transformer.TransformerType"><em>TransformerType</em></a>) – the type of transformer to apply to the data</p></li>
-<li><p><strong>transform_features</strong> (<em>array-like</em>) – the features to be transformer using those transformers</p></li>
-<li><p><strong>random_state</strong> – seed to control the randomization of the algorithm</p></li>
-<li><p><strong>method</strong> – method of transformation for the PowerTransformer</p></li>
-<li><p><strong>output_distribution</strong> – marginal distribution for the transformed data</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.transformer.Transformer.TransformerType">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TransformerType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.transformer.Transformer.TransformerType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>An enumeration.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dataprocessing.transformer.Transformer.TransformerType.MinMaxScaler">
-<span class="sig-name descname"><span class="pre">MinMaxScaler</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#dataprocessing.transformer.Transformer.TransformerType.MinMaxScaler" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dataprocessing.transformer.Transformer.TransformerType.Normalizer">
-<span class="sig-name descname"><span class="pre">Normalizer</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#dataprocessing.transformer.Transformer.TransformerType.Normalizer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dataprocessing.transformer.Transformer.TransformerType.PowerTransformer">
-<span class="sig-name descname"><span class="pre">PowerTransformer</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#dataprocessing.transformer.Transformer.TransformerType.PowerTransformer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dataprocessing.transformer.Transformer.TransformerType.QuantileTransformer">
-<span class="sig-name descname"><span class="pre">QuantileTransformer</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#dataprocessing.transformer.Transformer.TransformerType.QuantileTransformer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dataprocessing.transformer.Transformer.TransformerType.RobustScaler">
-<span class="sig-name descname"><span class="pre">RobustScaler</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#dataprocessing.transformer.Transformer.TransformerType.RobustScaler" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dataprocessing.transformer.Transformer.TransformerType.StandardScaler">
-<span class="sig-name descname"><span class="pre">StandardScaler</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#dataprocessing.transformer.Transformer.TransformerType.StandardScaler" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.transformer.Transformer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.transformer.Transformer.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.transformer.Transformer.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.transformer.Transformer.transform" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-dataprocessing">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-dataprocessing" title="Permalink to this headline">¶</a></h2>
-<p>data processing tools to help prepare data for ML training.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.RandomSample">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">RandomSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_duplicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.RandomSample" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> (<em>str</em><em>, </em><em>int</em>) – the name of the target column or the index of the target column</p></li>
-<li><p><strong>sample_size</strong> (<em>int</em>) – the number of samples to include in the random sample</p></li>
-<li><p><strong>stratify</strong> (<em>array-like</em>) – if not None, data is split in a stratified fashion, using this as the class targets</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.RandomSample.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.RandomSample.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.RandomSample.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.RandomSample.transform" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dataset</strong> – the dataset to take a random sample from</p>
-</dd>
-<dt class="field-even">Type</dt>
-<dd class="field-even"><p>pd.DataFrame</p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a random sample of the dataset using the params initialized</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>pd.Dataframe</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.Rebalance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">Rebalance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smote_tomek</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smote</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tomek</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Rebalance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<em>pd.DataFrame</em>) – the dataframe that the user will rebalance</p></li>
-<li><p><strong>target</strong> (<em>str</em><em>, </em><em>int</em>) – the name of the target column or the index of the target column</p></li>
-<li><p><strong>sampling_strategy</strong> (<em>string</em>) – optional parameter for the strategy to use for the smote tomek resampling</p></li>
-<li><p><strong>random_state</strong> (<em>int</em>) – seed to control the randomization of the algorithm</p></li>
-<li><p><strong>smote</strong> (<em>imblearn.SMOTE</em>) – optional parameter to include a SMOTE object</p></li>
-<li><p><strong>tomek</strong> (<em>imblearn.Tomek</em>) – optional parameter to include Tomek object</p></li>
-<li><p><strong>smote_tomek</strong> (<em>imblearn.SmoteTomek</em>) – optional parameter to include SmoteTomek object</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.Rebalance.rebalance">
-<span class="sig-name descname"><span class="pre">rebalance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Rebalance.rebalance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.Split">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">Split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_duplicates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stratify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Split" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<em>pd.Dataframe</em>) – the dataframe that the user will apply splitting on</p></li>
-<li><p><strong>target</strong> (<em>str</em><em>, </em><em>int</em>) – the name of the target column or the index of the target column</p></li>
-<li><p><strong>train_size</strong> (<em>float</em>) – the ratio of the training data split</p></li>
-<li><p><strong>random_state</strong> (<em>int</em>) – seed to control the randomization of the algorithm</p></li>
-<li><p><strong>categorical_features</strong> (<em>boolean</em>) – a flag indicating the presence of categorical features in the dataset</p></li>
-<li><p><strong>stratify</strong> (<em>array-like</em>) – if not None, data is split in a stratified fashion, using this as the class targets</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.Split.split">
-<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Split.split" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.Transformer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">Transformer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transformer_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'yeo-johnson'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_distribution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'uniform'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Transformer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<em>pd.Dataframe</em>) – the dataframe that the user will apply splitting on</p></li>
-<li><p><strong>target</strong> (<em>str</em><em>, </em><em>int</em>) – the name of the target column or the index of the target column</p></li>
-<li><p><strong>transformer_type</strong> (<a class="reference internal" href="#dataprocessing.Transformer.TransformerType" title="dataprocessing.Transformer.TransformerType"><em>TransformerType</em></a>) – the type of transformer to apply to the data</p></li>
-<li><p><strong>transform_features</strong> (<em>array-like</em>) – the features to be transformer using those transformers</p></li>
-<li><p><strong>random_state</strong> – seed to control the randomization of the algorithm</p></li>
-<li><p><strong>method</strong> – method of transformation for the PowerTransformer</p></li>
-<li><p><strong>output_distribution</strong> – marginal distribution for the transformed data</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.Transformer.TransformerType">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TransformerType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Transformer.TransformerType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
-<p>An enumeration.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dataprocessing.Transformer.TransformerType.MinMaxScaler">
-<span class="sig-name descname"><span class="pre">MinMaxScaler</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#dataprocessing.Transformer.TransformerType.MinMaxScaler" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dataprocessing.Transformer.TransformerType.Normalizer">
-<span class="sig-name descname"><span class="pre">Normalizer</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#dataprocessing.Transformer.TransformerType.Normalizer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dataprocessing.Transformer.TransformerType.PowerTransformer">
-<span class="sig-name descname"><span class="pre">PowerTransformer</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#dataprocessing.Transformer.TransformerType.PowerTransformer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dataprocessing.Transformer.TransformerType.QuantileTransformer">
-<span class="sig-name descname"><span class="pre">QuantileTransformer</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#dataprocessing.Transformer.TransformerType.QuantileTransformer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dataprocessing.Transformer.TransformerType.RobustScaler">
-<span class="sig-name descname"><span class="pre">RobustScaler</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#dataprocessing.Transformer.TransformerType.RobustScaler" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="dataprocessing.Transformer.TransformerType.StandardScaler">
-<span class="sig-name descname"><span class="pre">StandardScaler</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#dataprocessing.Transformer.TransformerType.StandardScaler" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.Transformer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Transformer.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.Transformer.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Transformer.transform" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-</section>
-
-
-            <div class="clearer"></div>
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">dataprocessing package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-dataprocessing.random_sample">dataprocessing.random_sample module</a></li>
-<li><a class="reference internal" href="#module-dataprocessing.rebalance">dataprocessing.rebalance module</a></li>
-<li><a class="reference internal" href="#dataprocessing-setup-module">dataprocessing.setup module</a></li>
-<li><a class="reference internal" href="#module-dataprocessing.split">dataprocessing.split module</a></li>
-<li><a class="reference internal" href="#module-dataprocessing.transformer">dataprocessing.transformer module</a></li>
-<li><a class="reference internal" href="#module-dataprocessing">Module contents</a></li>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#sklearn-s-pipeline-support">Sklearn’s Pipeline Support</a></li>
 </ul>
 </li>
 </ul>
 
-  </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="../databalanceanalysis/databalanceanalysis.html"
-                          title="previous chapter">databalanceanalysis package</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/dataprocessing/dataprocessing.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
         </div>
       </div>
-      <div class="clearer"></div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RAI Error Mitigation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="intro.html">dataprocessing</a> &raquo;</li>
+      <li>DataProcessing</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/dataprocessing/dataprocessing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="dataprocessing">
+<h1>DataProcessing<a class="headerlink" href="#dataprocessing" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="dataprocessing.DataProcessing">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">DataProcessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.DataProcessing" title="Permalink to this definition"></a></dt>
+<dd><p>Base class for all classes present in the dataprocessing module
+of the RAIMitigation library. Implements basic functionalities
+that can be used throughout different mitigations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>verbose</strong> – indicates whether internal messages should be printed or not.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="dataprocessing.DataProcessing.inverse_transform">
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.DataProcessing.inverse_transform" title="Permalink to this definition"></a></dt>
+<dd><p>Implements the behavior for the inverse transformation. This method
+first checks if the current class can be reversed. All transformation
+classes that can be reversed have a private _inverse_transform() method.
+If the current class doesn’t have this method, an error is raised. If
+it does, then we call this method. The next step is to reverse all other
+reversible transformations in the transf_pipe parameter up until we reach
+the first reversible transformation. The following steps are executed:
+(i) call the _inverse_transform() method for the current class, which
+returns a new dataset, (ii) call the _inverse_transform() method for all
+other transformers in the transform_pipe parameter (note that these methods
+are called in reverse order to guarantee a correct behavior, and that the
+inverse_transform is called only for the transformations that appear after
+the last non-reversible transformer object in the transform_pipe parameter),
+(iii) return the reversed dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> – the dataframe to be scaled containing all
+original columns, that is, all columns that should be ignored
+and those that should be scaled.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p>The following is a list of all child classes that inherit from the <strong>DataProcessing</strong>:</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Child Classes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="encoder/encoder.html">Encoders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="encoder/ordinal.html">EncoderOrdinal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoder/ohe.html">EncoderOHE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoder/encoder.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="feat_sel/feat_sel.html">Feature Selection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="feat_sel/seq.html">SeqFeatSelection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="feat_sel/catboost.html">CatBoostSelection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="feat_sel/correlation.html">CorrelatedFeatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="feat_sel/feat_sel.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="imputer/imputer.html">Imputers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="imputer/basic.html">BasicImputer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imputer/imputer.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sampler/sampler.html">Sampling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sampler/rebalance.html">Rebalance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampler/synthesizer.html">Synthesizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sampler/sampler.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scaler/scaler.html">Scalers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scaler/standard.html">DataStandardScaler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scaler/minmax.html">DataMinMaxScaler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scaler/quantile.html">DataQuantileTransformer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scaler/power.html">DataPowerTransformer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scaler/robust.html">DataRobustScaler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scaler/normalize.html">DataNormalizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scaler/scaler.html#example">Example</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="intro.html" class="btn btn-neutral float-left" title="dataprocessing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="encoder/encoder.html" class="btn btn-neutral float-right" title="Encoders" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../databalanceanalysis/databalanceanalysis.html" title="databalanceanalysis package"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">RAI Error Mitigation  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">dataprocessing package</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Akshara Ramakrishnan &lt;akshara@microsoft.com&gt;.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.4.0.
-    </div>
-  </body>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

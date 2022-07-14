@@ -51,27 +51,20 @@ class FeatureBalanceMeasure(BalanceMeasure):
         num_rows = df.shape[0]
         p_feature_col = df[sensitive_col].value_counts().rename("p_feature") / num_rows
         p_pos_feature_col = (
-            df[df[label_col] == label_pos_val][sensitive_col]
-            .value_counts()
-            .rename("p_pos_feature")
-            / num_rows
+            df[df[label_col] == label_pos_val][sensitive_col].value_counts().rename("p_pos_feature") / num_rows
         )
         new_df = pd.concat([p_feature_col, p_pos_feature_col], axis=1)
         new_df["p_pos_feature"] = new_df["p_pos_feature"].fillna(0)
         new_df["p_pos"] = df[df[label_col] == label_pos_val].shape[0] / num_rows
         for measure, func in self.FEATURE_METRICS.items():
             new_df[measure.value] = new_df.apply(
-                lambda x: func(
-                    x["p_pos"], x["p_feature"], x["p_pos_feature"], num_rows
-                ),
+                lambda x: func(x["p_pos"], x["p_feature"], x["p_pos_feature"], num_rows),
                 axis=1,
             )
         return new_df
 
     # dataframe version with a column for the classes and then column for each gap measure
-    def _get_gaps(
-        self, df: pd.DataFrame, sensitive_col: str, label_col: str
-    ) -> pd.DataFrame:
+    def _get_gaps(self, df: pd.DataFrame, sensitive_col: str, label_col: str) -> pd.DataFrame:
         metrics_df = self._get_individual_feature_measures(df, sensitive_col, label_col)
         unique_vals = df[sensitive_col].unique()
         # list of tuples of the pairings of classes
@@ -82,31 +75,21 @@ class FeatureBalanceMeasure(BalanceMeasure):
         )
         gap_df["FeatureName"] = sensitive_col
         for measure in self.FEATURE_METRICS.keys():
-            classA_metric = gap_df[FeatureBalanceMeasure.CLASS_A].apply(
-                lambda x: metrics_df.loc[x]
-            )[measure.value]
-            classB_metric = gap_df[FeatureBalanceMeasure.CLASS_B].apply(
-                lambda x: metrics_df.loc[x]
-            )[measure.value]
+            classA_metric = gap_df[FeatureBalanceMeasure.CLASS_A].apply(lambda x: metrics_df.loc[x])[measure.value]
+            classB_metric = gap_df[FeatureBalanceMeasure.CLASS_B].apply(lambda x: metrics_df.loc[x])[measure.value]
             gap_df[measure.value] = classA_metric - classB_metric
 
         # For overall stats
         for (measure, test_stat), func in self.OVERALL_METRICS.items():
-            gap_df[measure.value] = gap_df[test_stat.value].apply(
-                lambda x: func(x, len(unique_vals))
-            )
+            gap_df[measure.value] = gap_df[test_stat.value].apply(lambda x: func(x, len(unique_vals)))
         return gap_df
 
-    def _get_all_gaps(
-        self, df: pd.DataFrame, sensitive_cols: List[str], label_col: str
-    ) -> pd.DataFrame:
+    def _get_all_gaps(self, df: pd.DataFrame, sensitive_cols: List[str], label_col: str) -> pd.DataFrame:
         gap_list = [self._get_gaps(df, col, label_col) for col in sensitive_cols]
         return pd.concat(gap_list)
 
     def measures(self, df: pd.DataFrame) -> pd.DataFrame:
-        _feature_measures = self._get_all_gaps(
-            df, self._sensitive_cols, self._label_col
-        )
+        _feature_measures = self._get_all_gaps(df, self._sensitive_cols, self._label_col)
         """
          The output is a dictionary that maps the sensitive column table to Pandas dataframe containing the following
         * A feature value within the sensitive feature.
@@ -120,11 +103,11 @@ class FeatureBalanceMeasure(BalanceMeasure):
             * Log-Likelihood Ratio - https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio
             * t-test - https://en.wikipedia.org/wiki/Student's_t-test
         This output dataframe contains a row per combination of feature values for each sensitive feature.
-        
+
         :param df: the df to calculate all of the feature balance measures on
         :type df: pd.DataFrame
-        :return:  a dataframe that contains 4 columns, first column is the sensitive feature's name, 2nd column is one possible value of that sensitive feature, 
-        the 3rd column is a different possible value of that feature and the last column is a dictionary which indicates 
+        :return:  a dataframe that contains 4 columns, first column is the sensitive feature's name, 2nd column is one possible value of that sensitive feature,
+        the 3rd column is a different possible value of that feature and the last column is a dictionary which indicates
         :rtype: pd.DataFrame
         """
         return _feature_measures

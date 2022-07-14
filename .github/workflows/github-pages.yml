@@ -1,52 +1,40 @@
 name: GitHub Pages
 
-on: 
-  push: 
+on:
+  push:
     branches: [main]
-  pull_request: 
+  pull_request:
     branches: [main]
-  
-jobs: 
+  workflow_dispatch:
+
+jobs:
   website-build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Setup Python 3.8
         uses: actions/setup-python@v2
-        with: 
+        with:
           python-version: 3.8
-          
-      - name: Setup tools
-        run: | 
-          python -m pip install --upgrade pip
-          pip install --upgrade setuptools
-          pip install --upgrade pip-tools 
-    
-      - name: Pip compile
-        run: |
-          pip-compile requirements.in
-          cat requirements.txt
-    
-      - name: Install dependencies
-        run: |
-          pip-sync requirements.txt
-          
+
       - name: Install package
         run: |
-          pip install -v .
-      
+          pip install --upgrade pip
+          pip install -e .
+
       - name: Build
-        run: | 
+        run: |
+          sudo apt install pandoc
           make html
         working-directory: docs
-      
+
       # github pages creates jekyll build by default, just want to point to index.html
       - name: Disable jekyll builds
         run: touch docs/_build/html/.nojekyll
-      
+
       - name: Deploy
-        if: github.event_name == 'push'
+        #if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
