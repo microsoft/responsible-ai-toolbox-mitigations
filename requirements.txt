@@ -200,7 +200,7 @@ notebook==6.4.12
     #   widgetsnbextension
 numba==0.55.2
     # via pyts
-numpy==1.21.2
+numpy==1.22.0
     # via
     #   -r requirements.in
     #   catboost
