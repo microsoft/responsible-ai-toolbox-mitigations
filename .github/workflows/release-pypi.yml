@@ -17,7 +17,8 @@ on:
         options:
           - major
           - minor
-          - revision
+          - patch
+          - prerelease
           - none
         required: true
         default: 'minor'
@@ -26,6 +27,12 @@ jobs:
   release-pypi:
     runs-on: ubuntu-latest
     steps:
+      - name: Check Parameters
+        if: ${{ (github.event.inputs.bumpType != 'none') && (github.event.inputs.releaseType == 'Prod') }}
+        run: |
+           echo "If releaseType == 'Prod', then bumpType must be 'none'. Bump the version and send it to test.pypi first. Only then send it to PyPi."
+           exit 1
+
       # -------------------
       # Checkout code
       - uses: actions/checkout@v2
@@ -45,10 +52,19 @@ jobs:
         run: |
            pip install --upgrade pip
            pip install --upgrade setuptools wheel twine pip-tools
-           pip install bump2version
+           pip install configparser semver
+
+      # -------------------
+      # Update the package version by bumping the version to the next
+      - name: Bump version
+        run: |
+          python bump_version.py ${{github.event.inputs.bumpType}}
+
 
       # -------------------
       # Install the package and all its dependencies
+      # Needs to do this after bumping the version, otherwise
+      # package.__version__ will point to the previous version
       - name: Install current package
         run: |
           pip install -e .
@@ -58,26 +74,6 @@ jobs:
       # Run tests before uploading to PyPi
       - name: run tests
         run: pytest
-
-      # -------------------
-      # Update the package version by bumping the version to the next
-      # > Major update (from 0.0.1 to 1.0.0)
-      - name: Bump major version
-        if: ${{ github.event.inputs.bumpType == 'major' }}
-        run: |
-          bumpversion --allow-dirty major
-
-      # > Minor update (from 0.0.1 to 0.1.0)
-      - name: Bump minor version
-        if: ${{ github.event.inputs.bumpType == 'minor' }}
-        run: |
-          bumpversion --allow-dirty minor
-
-      # > Patch or revision (from 0.0.1 to 0.0.2)
-      - name: Bump revision version
-        if: ${{ github.event.inputs.bumpType == 'revision' }}
-        run: |
-          bumpversion --allow-dirty patch
 
       # -------------------
       # Build wheel
@@ -102,23 +98,26 @@ jobs:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN }}
 
+
       # -------------------
-      # Commit the changes performed by bump2version
+      # Commit the changes performed by the bump
+      # Also, tag the current commit with the version number
       - name: commit new setup file
         if: ${{ github.event.inputs.bumpType != 'none' }}
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
-          git add setup.cfg .bumpversion.cfg
+          git add setup.cfg
           git commit -m "update version number"
+          VERSION=$(python bump_version.py 'none')
+          git tag -a $VERSION -m "Release $VERSION"
 
       # -------------------
       # Push the changes performed by bump2version to the current branch
       - name: Push changes
+        if: ${{ github.event.inputs.bumpType != 'none' }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
-
-
-
+          tags: true
