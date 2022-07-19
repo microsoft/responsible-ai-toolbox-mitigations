@@ -200,8 +200,10 @@ def evaluate_set(
     :param model: the model used to make the predictions given by the **y_pred** parameter;
     :param Y: an array with the true labels;
     :param y_pred: an arry with the prediction probabilities for each label;
-    :param is_train: is train
-    :param plot_pr: plot
+    :param is_train: a boolean value that indicates if the predictions are for the train
+        set or not;
+    :param plot_pr: if True, plots a graph showing the precision and recall values for
+        different threshold values;
     :param best_th_auc: if True, the best threshold is computed using ROC graph. If False,
         the threshold is computed using the precision x recall graph.
     """
@@ -233,7 +235,28 @@ def train_model_plot_results(
     best_th_auc: bool = True,
 ):
     """
-    Train and fetch...
+    Given a train and test sets, and a model name, this function instantiates the model,
+    fits the model to the train dataset, predicts the output for the train and test sets,
+    and then compute a set of metrics that evaluates the performance of the model in
+    both sets. These metrics are printed in the stdout. Returns the trained model.
+
+    :param x: the feature columns of the train dataset;
+    :param y: the label column of the train dataset;
+    :param x_test: the feature columns of the test dataset;
+    :param y_test: the label column of the test dataset;
+    :param model_name: a string specifying the model to be used. There are four models allowed:
+
+            *  **"tree":** Decision Tree Classifier
+            *  **"knn":** KNN Classifier
+            *  **"xgb":** XGBoost
+            *  **"log":** Logistic Regression
+
+    :param train_result: if True, shows the results for the train dataset. If False, show the
+        results only for the test dataset;
+    :param plot_pr: if True, plots a graph showing the precision and recall values for
+        different threshold values;
+    :param best_th_auc: if True, the best threshold is computed using ROC graph. If False,
+        the threshold is computed using the precision x recall graph.
     """
     model = _get_model(model_name)
     model.fit(x, y)
@@ -251,7 +274,38 @@ def train_model_plot_results(
 # -----------------------------------
 def train_model_fetch_results(x, y, x_test, y_test, model_name=DECISION_TREE, best_th_auc=True):
     """
-    Train and fetch...
+    Given a train and test sets, and a model name, this function instantiates the model,
+    fits the model to the train dataset, predicts the output for the test set,
+    and then compute a set of metrics that evaluates the performance of the model in the
+    test set. Returns a dictionary with the computed metrics, with the following keys:
+
+        * **"roc":** the ROC AUC obtained for the test set;
+        * **"th":** the best threshold found for binarizing the predicted probabilities for
+          label. This threshold is found by using the ROC graph, or the precision x recall
+          graph. The approach used is determined by the 'best_th_auc' parameter;
+        * **"pr":** the precision obtained after binarizing the outputs using the previously
+          mentioned threshold;
+        * **"rc":** the recall obtained after binarizing the outputs using the previously
+          mentioned threshold;
+        * **"f1":** the F1 score obtained after binarizing the outputs using the previously
+          mentioned threshold;
+        * **"accuracy":** the accuracy obtained after binarizing the outputs using the previously
+          mentioned threshold;
+        * **"y_pred":** the binarized predictions.
+
+    :param x: the feature columns of the train dataset;
+    :param y: the label column of the train dataset;
+    :param x_test: the feature columns of the test dataset;
+    :param y_test: the label column of the test dataset;
+    :param model_name: a string specifying the model to be used. There are four models allowed:
+
+            *  **"tree":** Decision Tree Classifier
+            *  **"knn":** KNN Classifier
+            *  **"xgb":** XGBoost
+            *  **"log":** Logistic Regression
+
+    :param best_th_auc: if True, the best threshold is computed using ROC graph. If False,
+        the threshold is computed using the precision x recall graph.
     """
     model = _get_model(model_name)
     model.fit(x, y)

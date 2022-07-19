@@ -138,8 +138,10 @@ using this threshold before computing the precision, recall, F,1 and accuracy</p
 <li><p><strong>model</strong> – the model used to make the predictions given by the <strong>y_pred</strong> parameter;</p></li>
 <li><p><strong>Y</strong> – an array with the true labels;</p></li>
 <li><p><strong>y_pred</strong> – an arry with the prediction probabilities for each label;</p></li>
-<li><p><strong>is_train</strong> – is train</p></li>
-<li><p><strong>plot_pr</strong> – plot</p></li>
+<li><p><strong>is_train</strong> – a boolean value that indicates if the predictions are for the train
+set or not;</p></li>
+<li><p><strong>plot_pr</strong> – if True, plots a graph showing the precision and recall values for
+different threshold values;</p></li>
 <li><p><strong>best_th_auc</strong> – if True, the best threshold is computed using ROC graph. If False,
 the threshold is computed using the precision x recall graph.</p></li>
 </ul>
@@ -212,13 +214,80 @@ tries to maintain the same proportion of classes in the train and test sets.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="dataprocessing.model_utils.train_model_fetch_results">
 <span class="sig-prename descclassname"><span class="pre">dataprocessing.model_utils.</span></span><span class="sig-name descname"><span class="pre">train_model_fetch_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tree'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_th_auc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.model_utils.train_model_fetch_results" title="Permalink to this definition"></a></dt>
-<dd><p>Train and fetch…</p>
+<dd><p>Given a train and test sets, and a model name, this function instantiates the model,
+fits the model to the train dataset, predicts the output for the test set,
+and then compute a set of metrics that evaluates the performance of the model in the
+test set. Returns a dictionary with the computed metrics, with the following keys:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>“roc”:</strong> the ROC AUC obtained for the test set;</p></li>
+<li><p><strong>“th”:</strong> the best threshold found for binarizing the predicted probabilities for
+label. This threshold is found by using the ROC graph, or the precision x recall
+graph. The approach used is determined by the ‘best_th_auc’ parameter;</p></li>
+<li><p><strong>“pr”:</strong> the precision obtained after binarizing the outputs using the previously
+mentioned threshold;</p></li>
+<li><p><strong>“rc”:</strong> the recall obtained after binarizing the outputs using the previously
+mentioned threshold;</p></li>
+<li><p><strong>“f1”:</strong> the F1 score obtained after binarizing the outputs using the previously
+mentioned threshold;</p></li>
+<li><p><strong>“accuracy”:</strong> the accuracy obtained after binarizing the outputs using the previously
+mentioned threshold;</p></li>
+<li><p><strong>“y_pred”:</strong> the binarized predictions.</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – the feature columns of the train dataset;</p></li>
+<li><p><strong>y</strong> – the label column of the train dataset;</p></li>
+<li><p><strong>x_test</strong> – the feature columns of the test dataset;</p></li>
+<li><p><strong>y_test</strong> – the label column of the test dataset;</p></li>
+<li><p><strong>model_name</strong> – <p>a string specifying the model to be used. There are four models allowed:</p>
+<ul>
+<li><p><strong>”tree”:</strong> Decision Tree Classifier</p></li>
+<li><p><strong>”knn”:</strong> KNN Classifier</p></li>
+<li><p><strong>”xgb”:</strong> XGBoost</p></li>
+<li><p><strong>”log”:</strong> Logistic Regression</p></li>
+</ul>
+</p></li>
+<li><p><strong>best_th_auc</strong> – if True, the best threshold is computed using ROC graph. If False,
+the threshold is computed using the precision x recall graph.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="dataprocessing.model_utils.train_model_plot_results">
 <span class="sig-prename descclassname"><span class="pre">dataprocessing.model_utils.</span></span><span class="sig-name descname"><span class="pre">train_model_plot_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'tree'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_pr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_th_auc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.model_utils.train_model_plot_results" title="Permalink to this definition"></a></dt>
-<dd><p>Train and fetch…</p>
+<dd><p>Given a train and test sets, and a model name, this function instantiates the model,
+fits the model to the train dataset, predicts the output for the train and test sets,
+and then compute a set of metrics that evaluates the performance of the model in
+both sets. These metrics are printed in the stdout. Returns the trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – the feature columns of the train dataset;</p></li>
+<li><p><strong>y</strong> – the label column of the train dataset;</p></li>
+<li><p><strong>x_test</strong> – the feature columns of the test dataset;</p></li>
+<li><p><strong>y_test</strong> – the label column of the test dataset;</p></li>
+<li><p><strong>model_name</strong> – <p>a string specifying the model to be used. There are four models allowed:</p>
+<ul>
+<li><p><strong>”tree”:</strong> Decision Tree Classifier</p></li>
+<li><p><strong>”knn”:</strong> KNN Classifier</p></li>
+<li><p><strong>”xgb”:</strong> XGBoost</p></li>
+<li><p><strong>”log”:</strong> Logistic Regression</p></li>
+</ul>
+</p></li>
+<li><p><strong>train_result</strong> – if True, shows the results for the train dataset. If False, show the
+results only for the test dataset;</p></li>
+<li><p><strong>plot_pr</strong> – if True, plots a graph showing the precision and recall values for
+different threshold values;</p></li>
+<li><p><strong>best_th_auc</strong> – if True, the best threshold is computed using ROC graph. If False,
+the threshold is computed using the precision x recall graph.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
