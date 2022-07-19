@@ -1,7 +1,0 @@
-<map id="inheritancec682faed38" name="inheritancec682faed38">
-<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,31,77,56"/>
-<area shape="rect" id="node3" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,31,248,56"/>
-<area shape="rect" id="node2" href="#dataprocessing.DataEncoding" target="_top" title="Base class for all encoding subclasses. Implements basic functionalities" alt="" coords="296,31,408,56"/>
-<area shape="rect" id="node4" href="ohe.html#dataprocessing.EncoderOHE" target="_top" title="Concrete class that applies one&#45;hot encoding over a dataset. The categorical" alt="" coords="465,5,568,31"/>
-<area shape="rect" id="node5" href="ordinal.html#dataprocessing.EncoderOrdinal" target="_top" title="Concrete class that applies ordinal encoding over a dataset. The categorical features" alt="" coords="456,55,577,80"/>
-</map>
