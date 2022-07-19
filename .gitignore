@@ -13,4 +13,5 @@ catboost_info/
 *.egg-info/
 **.coverage**
 docs/dataprocessing/notebooks/
+docs/_build/
 htmlcov/
