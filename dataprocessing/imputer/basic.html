@@ -215,19 +215,12 @@ columns. The dict structure is given by:</p>
 </dd></dl>
 
 <p class="rubric">Class Diagram</p>
-digraph inheritance2f547944e7 {
-bgcolor=transparent;
-rankdir=LR;
-size=&quot;8.0, 12.0&quot;;
-  &quot;ABC&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,tooltip=&quot;Helper class that provides a standard way to create an ABC using&quot;];
-  &quot;BasicImputer&quot; [URL=&quot;#dataprocessing.BasicImputer&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Concrete class that imputes missing data in a dataset using a set of simple&quot;];
-  &quot;DataImputer&quot; -&gt; &quot;BasicImputer&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;DataImputer&quot; [URL=&quot;imputer.html#dataprocessing.DataImputer&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all imputer subclasses. Implements basic functionalities&quot;];
-  &quot;DataProcessing&quot; -&gt; &quot;DataImputer&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;DataProcessing&quot; [URL=&quot;../dataprocessing.html#dataprocessing.DataProcessing&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all classes present in the dataprocessing module&quot;];
-  &quot;ABC&quot; -&gt; &quot;DataProcessing&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-}
-<section id="example">
+<div class="graphviz"><img src="../../_images/inheritance-da1890f139fba1bbb3e2e2bcfd26113cce4e2a68.png" alt="Inheritance diagram of dataprocessing.BasicImputer" usemap="#inheritance2f547944e7" class="inheritance graphviz" /></div>
+<map id="inheritance2f547944e7" name="inheritance2f547944e7">
+<area shape="rect" id="node4" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node2" href="#dataprocessing.BasicImputer" target="_top" title="Concrete class that imputes missing data in a dataset using a set of simple" alt="" coords="448,5,556,31"/>
+<area shape="rect" id="node3" href="imputer.html#dataprocessing.DataImputer" target="_top" title="Base class for all imputer subclasses. Implements basic functionalities" alt="" coords="296,5,400,31"/>
+</map><section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>

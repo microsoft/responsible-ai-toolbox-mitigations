@@ -179,19 +179,12 @@ isn’t reversed because it appears between two non-scaler objects: BasicImputer
 </dd></dl>
 
 <p class="rubric">Class Diagram</p>
-digraph inheritance7f8b424c70 {
-bgcolor=transparent;
-rankdir=LR;
-size=&quot;8.0, 12.0&quot;;
-  &quot;ABC&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,tooltip=&quot;Helper class that provides a standard way to create an ABC using&quot;];
-  &quot;DataProcessing&quot; [URL=&quot;../dataprocessing.html#dataprocessing.DataProcessing&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all classes present in the dataprocessing module&quot;];
-  &quot;ABC&quot; -&gt; &quot;DataProcessing&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;DataScaler&quot; [URL=&quot;scaler.html#dataprocessing.DataScaler&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class used by all data scaling or data transformation classes.&quot;];
-  &quot;DataProcessing&quot; -&gt; &quot;DataScaler&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;DataStandardScaler&quot; [URL=&quot;#dataprocessing.DataStandardScaler&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Concrete class that applies the StandardScaler scaler over a given dataset.&quot;];
-  &quot;DataScaler&quot; -&gt; &quot;DataStandardScaler&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-}
-<section id="example">
+<div class="graphviz"><img src="../../_images/inheritance-2175474274e5bbf26a3957513be95a148fff09a8.png" alt="Inheritance diagram of dataprocessing.DataStandardScaler" usemap="#inheritance7f8b424c70" class="inheritance graphviz" /></div>
+<map id="inheritance7f8b424c70" name="inheritance7f8b424c70">
+<area shape="rect" id="node2" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node3" href="scaler.html#dataprocessing.DataScaler" target="_top" title="Base class used by all data scaling or data transformation classes." alt="" coords="296,5,389,31"/>
+<area shape="rect" id="node4" href="#dataprocessing.DataStandardScaler" target="_top" title="Concrete class that applies the StandardScaler scaler over a given dataset." alt="" coords="437,5,588,31"/>
+</map><section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>

@@ -418,19 +418,12 @@ the information of the pairs of variables considered NOT to be correlated (with 
 </dd></dl>
 
 <p class="rubric">Class Diagram</p>
-digraph inheritancedcb80b3939 {
-bgcolor=transparent;
-rankdir=LR;
-size=&quot;8.0, 12.0&quot;;
-  &quot;ABC&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,tooltip=&quot;Helper class that provides a standard way to create an ABC using&quot;];
-  &quot;CorrelatedFeatures&quot; [URL=&quot;#dataprocessing.CorrelatedFeatures&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Concrete class that measures the correlation between variables&quot;];
-  &quot;FeatureSelection&quot; -&gt; &quot;CorrelatedFeatures&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;DataProcessing&quot; [URL=&quot;../dataprocessing.html#dataprocessing.DataProcessing&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all classes present in the dataprocessing module&quot;];
-  &quot;ABC&quot; -&gt; &quot;DataProcessing&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;FeatureSelection&quot; [URL=&quot;feat_sel.html#dataprocessing.FeatureSelection&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all feature selection subclasses. Implements basic&quot;];
-  &quot;DataProcessing&quot; -&gt; &quot;FeatureSelection&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-}
-<section id="examples">
+<div class="graphviz"><img src="../../_images/inheritance-1dc05e70ff55d8c0903b149391413fa8a086ed05.png" alt="Inheritance diagram of dataprocessing.CorrelatedFeatures" usemap="#inheritancedcb80b3939" class="inheritance graphviz" /></div>
+<map id="inheritancedcb80b3939" name="inheritancedcb80b3939">
+<area shape="rect" id="node4" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node2" href="#dataprocessing.CorrelatedFeatures" target="_top" title="Concrete class that measures the correlation between variables" alt="" coords="475,5,621,31"/>
+<area shape="rect" id="node3" href="feat_sel.html#dataprocessing.FeatureSelection" target="_top" title="Base class for all feature selection subclasses. Implements basic" alt="" coords="296,5,427,31"/>
+</map><section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>

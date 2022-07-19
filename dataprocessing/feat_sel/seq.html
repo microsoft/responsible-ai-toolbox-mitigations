@@ -230,19 +230,12 @@ that particular run.</p>
 </dd></dl>
 
 <p class="rubric">Class Diagram</p>
-digraph inheritancefce55d7f88 {
-bgcolor=transparent;
-rankdir=LR;
-size=&quot;8.0, 12.0&quot;;
-  &quot;ABC&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,tooltip=&quot;Helper class that provides a standard way to create an ABC using&quot;];
-  &quot;DataProcessing&quot; [URL=&quot;../dataprocessing.html#dataprocessing.DataProcessing&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all classes present in the dataprocessing module&quot;];
-  &quot;ABC&quot; -&gt; &quot;DataProcessing&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;FeatureSelection&quot; [URL=&quot;feat_sel.html#dataprocessing.FeatureSelection&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all feature selection subclasses. Implements basic&quot;];
-  &quot;DataProcessing&quot; -&gt; &quot;FeatureSelection&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;SeqFeatSelection&quot; [URL=&quot;#dataprocessing.SeqFeatSelection&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Concrete class that uses sequential feature selection over a dataset.&quot;];
-  &quot;FeatureSelection&quot; -&gt; &quot;SeqFeatSelection&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-}
-<section id="example">
+<div class="graphviz"><img src="../../_images/inheritance-2f2978e26f8059c5e02652f7e9255897680533ee.png" alt="Inheritance diagram of dataprocessing.SeqFeatSelection" usemap="#inheritancefce55d7f88" class="inheritance graphviz" /></div>
+<map id="inheritancefce55d7f88" name="inheritancefce55d7f88">
+<area shape="rect" id="node2" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node3" href="feat_sel.html#dataprocessing.FeatureSelection" target="_top" title="Base class for all feature selection subclasses. Implements basic" alt="" coords="296,5,427,31"/>
+<area shape="rect" id="node4" href="#dataprocessing.SeqFeatSelection" target="_top" title="Concrete class that uses sequential feature selection over a dataset." alt="" coords="475,5,609,31"/>
+</map><section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>

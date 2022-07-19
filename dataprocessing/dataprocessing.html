@@ -196,27 +196,16 @@ and those that should be scaled.</p>
 </ul>
 </div>
 <p class="rubric">Class Diagram</p>
-digraph inheritance162add4c09 {
-bgcolor=transparent;
-rankdir=LR;
-size=&quot;8.0, 12.0&quot;;
-  &quot;ABC&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,tooltip=&quot;Helper class that provides a standard way to create an ABC using&quot;];
-  &quot;DataEncoding&quot; [URL=&quot;encoder/encoder.html#dataprocessing.DataEncoding&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all encoding subclasses. Implements basic functionalities&quot;];
-  &quot;DataProcessing&quot; -&gt; &quot;DataEncoding&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;DataImputer&quot; [URL=&quot;imputer/imputer.html#dataprocessing.DataImputer&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all imputer subclasses. Implements basic functionalities&quot;];
-  &quot;DataProcessing&quot; -&gt; &quot;DataImputer&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;DataProcessing&quot; [URL=&quot;#dataprocessing.DataProcessing&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all classes present in the dataprocessing module&quot;];
-  &quot;ABC&quot; -&gt; &quot;DataProcessing&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;DataScaler&quot; [URL=&quot;scaler/scaler.html#dataprocessing.DataScaler&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class used by all data scaling or data transformation classes.&quot;];
-  &quot;DataProcessing&quot; -&gt; &quot;DataScaler&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;FeatureSelection&quot; [URL=&quot;feat_sel/feat_sel.html#dataprocessing.FeatureSelection&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all feature selection subclasses. Implements basic&quot;];
-  &quot;DataProcessing&quot; -&gt; &quot;FeatureSelection&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;Rebalance&quot; [URL=&quot;sampler/rebalance.html#dataprocessing.Rebalance&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Concrete class that uses under and oversampling approaches (implemented&quot;];
-  &quot;DataProcessing&quot; -&gt; &quot;Rebalance&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-  &quot;Synthesizer&quot; [URL=&quot;sampler/synthesizer.html#dataprocessing.Synthesizer&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Concrete class that uses generative models (implemented in the sdv library)&quot;];
-  &quot;DataProcessing&quot; -&gt; &quot;Synthesizer&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
-}
-<div class="toctree-wrapper compound">
+<div class="graphviz"><img src="../_images/inheritance-6a710b89d1fcc6c31f567f8f2fa45ea0e758adfb.png" alt="Inheritance diagram of dataprocessing.DataEncoding, dataprocessing.FeatureSelection, dataprocessing.DataImputer, dataprocessing.DataScaler, dataprocessing.Rebalance, dataprocessing.Synthesizer" usemap="#inheritance162add4c09" class="inheritance graphviz" /></div>
+<map id="inheritance162add4c09" name="inheritance162add4c09">
+<area shape="rect" id="node3" href="#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,129,248,155"/>
+<area shape="rect" id="node2" href="encoder/encoder.html#dataprocessing.DataEncoding" target="_top" title="Base class for all encoding subclasses. Implements basic functionalities" alt="" coords="305,5,417,31"/>
+<area shape="rect" id="node4" href="imputer/imputer.html#dataprocessing.DataImputer" target="_top" title="Base class for all imputer subclasses. Implements basic functionalities" alt="" coords="309,55,413,80"/>
+<area shape="rect" id="node5" href="scaler/scaler.html#dataprocessing.DataScaler" target="_top" title="Base class used by all data scaling or data transformation classes." alt="" coords="315,104,408,129"/>
+<area shape="rect" id="node6" href="feat_sel/feat_sel.html#dataprocessing.FeatureSelection" target="_top" title="Base class for all feature selection subclasses. Implements basic" alt="" coords="296,153,427,179"/>
+<area shape="rect" id="node7" href="sampler/rebalance.html#dataprocessing.Rebalance" target="_top" title="Concrete class that uses under and oversampling approaches (implemented" alt="" coords="316,203,407,228"/>
+<area shape="rect" id="node8" href="sampler/synthesizer.html#dataprocessing.Synthesizer" target="_top" title="Concrete class that uses generative models (implemented in the sdv library)" alt="" coords="312,252,411,277"/>
+</map><div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="model_utils.html">Model Utils</a></li>
