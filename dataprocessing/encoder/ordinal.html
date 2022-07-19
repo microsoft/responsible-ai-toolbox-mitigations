@@ -182,12 +182,19 @@ this will account for the label for ​unknown values.</p></li>
 </dd></dl>
 
 <p class="rubric">Class Diagram</p>
-<div class="graphviz"><img src="../../_images/inheritance-4f550e3c00fd3a60a94ade75329548c45f5406ba.png" alt="Inheritance diagram of dataprocessing.EncoderOrdinal" usemap="#inheritanced0bc793cdb" class="inheritance graphviz" /></div>
-<map id="inheritanced0bc793cdb" name="inheritanced0bc793cdb">
-<area shape="rect" id="node3" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
-<area shape="rect" id="node2" href="encoder.html#dataprocessing.DataEncoding" target="_top" title="Base class for all encoding subclasses. Implements basic functionalities" alt="" coords="296,5,408,31"/>
-<area shape="rect" id="node4" href="#dataprocessing.EncoderOrdinal" target="_top" title="Concrete class that applies ordinal encoding over a dataset. The categorical features" alt="" coords="456,5,577,31"/>
-</map><section id="example">
+digraph inheritanced0bc793cdb {
+bgcolor=transparent;
+rankdir=LR;
+size=&quot;8.0, 12.0&quot;;
+  &quot;ABC&quot; [fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,tooltip=&quot;Helper class that provides a standard way to create an ABC using&quot;];
+  &quot;DataEncoding&quot; [URL=&quot;encoder.html#dataprocessing.DataEncoding&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all encoding subclasses. Implements basic functionalities&quot;];
+  &quot;DataProcessing&quot; -&gt; &quot;DataEncoding&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;DataProcessing&quot; [URL=&quot;../dataprocessing.html#dataprocessing.DataProcessing&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Base class for all classes present in the dataprocessing module&quot;];
+  &quot;ABC&quot; -&gt; &quot;DataProcessing&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+  &quot;EncoderOrdinal&quot; [URL=&quot;#dataprocessing.EncoderOrdinal&quot;,fillcolor=white,fontname=&quot;Vera Sans, DejaVu Sans, Liberation Sans, Arial, Helvetica, sans&quot;,fontsize=10,height=0.25,shape=box,style=&quot;setlinewidth(0.5),filled&quot;,target=&quot;_top&quot;,tooltip=&quot;Concrete class that applies ordinal encoding over a dataset. The categorical features&quot;];
+  &quot;DataEncoding&quot; -&gt; &quot;EncoderOrdinal&quot; [arrowsize=0.5,style=&quot;setlinewidth(0.5)&quot;];
+}
+<section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>
