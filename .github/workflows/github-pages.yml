@@ -26,6 +26,7 @@ jobs:
       - name: Build
         run: |
           sudo apt install pandoc
+          sudo apt install graphviz
           make html
         working-directory: docs
 

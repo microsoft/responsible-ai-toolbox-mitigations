@@ -10,7 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
+import os, shutil
 import sys
 import sphinx_rtd_theme
 
@@ -23,7 +23,6 @@ project = "RAI Error Mitigation"
 copyright = '2022, Microsoft'
 author = 'Microsoft'
 
-
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
@@ -35,6 +34,8 @@ extensions = [
                 "sphinx_rtd_theme",
                 "nbsphinx",
                 "sphinx_gallery.load_style",
+                "sphinx.ext.graphviz",
+                "sphinx.ext.inheritance_diagram",
             ]
 
 # Add any paths that contain templates here, relative to this directory.

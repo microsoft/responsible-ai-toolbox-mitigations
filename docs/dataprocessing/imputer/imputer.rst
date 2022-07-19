@@ -16,12 +16,18 @@ The following is a list of all imputers implemented in this module. All of the c
 the **DataImputer** class, and thus, have access to all of the methods previously shown.
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
+   :caption: Child Classes
 
    basic
 
-Example
-*******
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: dataprocessing.BasicImputer
+     :parts: 1
+
+Examples
+********
 
 .. nbgallery::
    ../notebooks/module_tests/imputation

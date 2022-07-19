@@ -4,11 +4,11 @@ import pandas as pd
 from sklearn.datasets import make_classification, make_regression
 
 
-def create_num_var(samples: int, regression: bool, n_features: int, n_correlated: int):
+def _create_num_var(samples: int, regression: bool, n_features: int, n_correlated: int):
     """
     Creates an artificial dataset with the column 'label' representing
-    the label column (binary) and the remaining columns represent the
-    features that should be used to predict the label.
+    the label column (binary or float values) and the remaining columns
+    represent the features that should be used to predict the label.
 
     :param samples: the number of samples to be created
     :param n_features: the number of features to be created
@@ -43,7 +43,7 @@ def create_num_var(samples: int, regression: bool, n_features: int, n_correlated
 
 
 # -----------------------------------
-def add_cor_num_num_var_det(df: pd.DataFrame, n_correlated: int, num_num_noise: list):
+def _add_cor_num_num_var_det(df: pd.DataFrame, n_correlated: int, num_num_noise: list):
     """
     Creates n_correlated new numerical features. Each new column created is based on
     one of the existing columns in the dataset. The ith new column created uses the
@@ -80,7 +80,7 @@ def add_cor_num_num_var_det(df: pd.DataFrame, n_correlated: int, num_num_noise: 
 
 
 # -----------------------------------
-def add_cor_num_cat_var_det(df: pd.DataFrame, n_categorical: int, pct_change: list = [0.1, 0.3], name: str = "cat"):
+def _add_cor_num_cat_var_det(df: pd.DataFrame, n_categorical: int, pct_change: list = [0.1, 0.3], name: str = "cat"):
     """
     Creates a set of categorical features that are correlated to the
     existing numerical features in the dataframe 'df'. The ith new
@@ -185,8 +185,8 @@ def create_dummy_dataset(
             + "n_cat_num >= n_cat_cat."
         )
 
-    df = create_num_var(samples, regression, n_features, 0)
-    df = add_cor_num_num_var_det(df, n_num_num, num_num_noise)
-    df, _ = add_cor_num_cat_var_det(df, n_cat_num, pct_change, name="CN")
-    df, _ = add_cor_num_cat_var_det(df, n_cat_cat, pct_change, name="CC")
+    df = _create_num_var(samples, regression, n_features, 0)
+    df = _add_cor_num_num_var_det(df, n_num_num, num_num_noise)
+    df, _ = _add_cor_num_cat_var_det(df, n_cat_num, pct_change, name="CN")
+    df, _ = _add_cor_num_cat_var_det(df, n_cat_cat, pct_change, name="CC")
     return df

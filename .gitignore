@@ -1,4 +1,4 @@
-/datasets/hr_promotion/
+/datasets/
 test/datasets/
 build/
 dist/
@@ -13,4 +13,5 @@ catboost_info/
 *.egg-info/
 **.coverage**
 docs/dataprocessing/notebooks/
+docs/_build/
 htmlcov/
