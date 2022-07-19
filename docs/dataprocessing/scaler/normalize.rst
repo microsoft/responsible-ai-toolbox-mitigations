@@ -6,6 +6,12 @@ DataNormalizer
    :show-inheritance:
 
 
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: dataprocessing.DataNormalizer
+     :parts: 1
+
+
 Example
 -------
 

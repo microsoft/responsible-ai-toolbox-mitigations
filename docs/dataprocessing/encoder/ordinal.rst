@@ -7,6 +7,11 @@ EncoderOrdinal
    :members:
    :show-inheritance:
 
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: dataprocessing.EncoderOrdinal
+     :parts: 1
+
 Example
 -------
 

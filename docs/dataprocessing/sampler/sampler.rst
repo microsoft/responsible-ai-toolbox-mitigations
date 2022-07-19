@@ -10,11 +10,19 @@ Since the sampling methods implemented here are very different from each other, 
 for the sampling methods. Therefore, each sampling class here inherits directly from the **DataProcessing**
 abstract class. Below is a list of the sampling methods present in the **dataprocessing** module:
 
+
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+   :caption: Child Classes
 
    rebalance
    synthesizer
+
+
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: dataprocessing.Rebalance dataprocessing.Synthesizer
+     :parts: 1
 
 
 Examples

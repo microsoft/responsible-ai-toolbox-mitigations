@@ -5,6 +5,11 @@ Rebalance
    :members:
    :show-inheritance:
 
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: dataprocessing.Rebalance
+     :parts: 1
+
 Example
 -------
 

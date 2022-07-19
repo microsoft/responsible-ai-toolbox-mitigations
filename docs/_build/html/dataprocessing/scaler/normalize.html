@@ -7,6 +7,7 @@
   <title>DataNormalizer &mdash; RAI Error Mitigation  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
@@ -21,7 +22,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Case Studies" href="../case_studies.html" />
+    <link rel="next" title="Model Utils" href="../model_utils.html" />
     <link rel="prev" title="DataRobustScaler" href="robust.html" /> 
 </head>
 
@@ -52,6 +53,8 @@
 <li class="toctree-l4"><a class="reference internal" href="../imputer/imputer.html">Imputers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sampler/sampler.html">Sampling</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="scaler.html">Scalers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../model_utils.html">Model Utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -174,7 +177,13 @@ isn’t reversed because it appears between two non-scaler objects: BasicImputer
 </dl>
 </dd></dl>
 
-<section id="example">
+<p class="rubric">Class Diagram</p>
+<div class="graphviz"><img src="../../_images/inheritance-d492e823af17b5196731a4d0c9cd62fb08763299.png" alt="Inheritance diagram of dataprocessing.DataNormalizer" usemap="#inheritance3fa7faac01" class="inheritance graphviz" /></div>
+<map id="inheritance3fa7faac01" name="inheritance3fa7faac01">
+<area shape="rect" id="node4" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node2" href="#dataprocessing.DataNormalizer" target="_top" title="Concrete class that applies the Normalizer scaler over a given dataset. This class" alt="" coords="437,5,563,31"/>
+<area shape="rect" id="node3" href="scaler.html#dataprocessing.DataScaler" target="_top" title="Base class used by all data scaling or data transformation classes." alt="" coords="296,5,389,31"/>
+</map><section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>
@@ -198,7 +207,7 @@ isn’t reversed because it appears between two non-scaler objects: BasicImputer
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="robust.html" class="btn btn-neutral float-left" title="DataRobustScaler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../case_studies.html" class="btn btn-neutral float-right" title="Case Studies" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../model_utils.html" class="btn btn-neutral float-right" title="Model Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

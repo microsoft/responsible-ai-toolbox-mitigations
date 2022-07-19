@@ -7,6 +7,7 @@
   <title>DataProcessing &mdash; RAI Error Mitigation  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -52,6 +53,8 @@
 <li class="toctree-l4"><a class="reference internal" href="imputer/imputer.html">Imputers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sampler/sampler.html">Sampling</a></li>
 <li class="toctree-l4"><a class="reference internal" href="scaler/scaler.html">Scalers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="model_utils.html">Model Utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -159,7 +162,7 @@ and those that should be scaled.</p>
 <li class="toctree-l1"><a class="reference internal" href="encoder/encoder.html">Encoders</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="encoder/ordinal.html">EncoderOrdinal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="encoder/ohe.html">EncoderOHE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="encoder/encoder.html#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoder/encoder.html#examples">Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="feat_sel/feat_sel.html">Feature Selection</a><ul>
@@ -171,7 +174,7 @@ and those that should be scaled.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="imputer/imputer.html">Imputers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="imputer/basic.html">BasicImputer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="imputer/imputer.html#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="imputer/imputer.html#examples">Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="sampler/sampler.html">Sampling</a><ul>
@@ -187,9 +190,26 @@ and those that should be scaled.</p>
 <li class="toctree-l2"><a class="reference internal" href="scaler/power.html">DataPowerTransformer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scaler/robust.html">DataRobustScaler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scaler/normalize.html">DataNormalizer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scaler/scaler.html#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scaler/scaler.html#examples">Examples</a></li>
 </ul>
 </li>
+</ul>
+</div>
+<p class="rubric">Class Diagram</p>
+<div class="graphviz"><img src="../_images/inheritance-6a710b89d1fcc6c31f567f8f2fa45ea0e758adfb.png" alt="Inheritance diagram of dataprocessing.DataEncoding, dataprocessing.FeatureSelection, dataprocessing.DataImputer, dataprocessing.DataScaler, dataprocessing.Rebalance, dataprocessing.Synthesizer" usemap="#inheritance162add4c09" class="inheritance graphviz" /></div>
+<map id="inheritance162add4c09" name="inheritance162add4c09">
+<area shape="rect" id="node3" href="#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,129,248,155"/>
+<area shape="rect" id="node2" href="encoder/encoder.html#dataprocessing.DataEncoding" target="_top" title="Base class for all encoding subclasses. Implements basic functionalities" alt="" coords="305,5,417,31"/>
+<area shape="rect" id="node4" href="imputer/imputer.html#dataprocessing.DataImputer" target="_top" title="Base class for all imputer subclasses. Implements basic functionalities" alt="" coords="309,55,413,80"/>
+<area shape="rect" id="node5" href="scaler/scaler.html#dataprocessing.DataScaler" target="_top" title="Base class used by all data scaling or data transformation classes." alt="" coords="315,104,408,129"/>
+<area shape="rect" id="node6" href="feat_sel/feat_sel.html#dataprocessing.FeatureSelection" target="_top" title="Base class for all feature selection subclasses. Implements basic" alt="" coords="296,153,427,179"/>
+<area shape="rect" id="node7" href="sampler/rebalance.html#dataprocessing.Rebalance" target="_top" title="Concrete class that uses under and oversampling approaches (implemented" alt="" coords="316,203,407,228"/>
+<area shape="rect" id="node8" href="sampler/synthesizer.html#dataprocessing.Synthesizer" target="_top" title="Concrete class that uses generative models (implemented in the sdv library)" alt="" coords="312,252,411,277"/>
+</map><div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="model_utils.html">Model Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="toy_data.html">Toy Dataset</a></li>
 </ul>
 </div>
 </section>

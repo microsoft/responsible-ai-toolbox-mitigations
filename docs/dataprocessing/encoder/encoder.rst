@@ -17,12 +17,19 @@ the **DataEncoding** class, and thus, have access to all of the methods previous
 
 .. toctree::
    :maxdepth: 1
+   :titlesonly:
+   :caption: Child Classes
 
    ordinal
    ohe
 
-Example
-*******
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: dataprocessing.EncoderOHE dataprocessing.EncoderOrdinal
+     :parts: 1
+
+Examples
+********
 
 .. nbgallery::
    ../notebooks/module_tests/encoding

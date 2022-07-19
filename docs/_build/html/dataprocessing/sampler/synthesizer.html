@@ -7,6 +7,7 @@
   <title>Synthesizer &mdash; RAI Error Mitigation  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
@@ -52,6 +53,8 @@
 <li class="toctree-l4"><a class="reference internal" href="../imputer/imputer.html">Imputers</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="sampler.html">Sampling</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../scaler/scaler.html">Scalers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../model_utils.html">Model Utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -279,7 +282,12 @@ If None, the default value is set to “auto”, which is the same as “minorit
 
 </dd></dl>
 
-<section id="example">
+<p class="rubric">Class Diagram</p>
+<div class="graphviz"><img src="../../_images/inheritance-a2e2c3603acfdf26ab2fb4e8c65c5489942c5287.png" alt="Inheritance diagram of dataprocessing.Synthesizer" usemap="#inheritance460ff31641" class="inheritance graphviz" /></div>
+<map id="inheritance460ff31641" name="inheritance460ff31641">
+<area shape="rect" id="node2" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node3" href="#dataprocessing.Synthesizer" target="_top" title="Concrete class that uses generative models (implemented in the sdv library)" alt="" coords="296,5,395,31"/>
+</map><section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>

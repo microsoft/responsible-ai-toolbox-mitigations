@@ -7,7 +7,7 @@ Welcome to RAI Toolbox Mitigations documentation!
 =================================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    databalanceanalysis/databalanceanalysis
    dataprocessing/intro

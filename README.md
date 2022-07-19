@@ -1,4 +1,4 @@
-# Project
+# Responsible AI Toolbox Mitigations
 
 This repo consists of a python library that aims to help users including data scientists debug and mitigate errors in their data so that they can build more fair and unbiased models starting from the data cleaning stage.
 
@@ -8,6 +8,17 @@ There are two main functions of this library:
 The goal of this module is to provide a unified interface for different mitigation methods scattered around
 multiple machine learning libraries, such as scikit-learn, mlxtend, sdv, among others.
 
+## Installation
+
+To install this package, follow these steps:
+- clone this repo
+- move to the root folder of the repo
+- install the package using:
+```console
+> pip install -e .
+```
+
+**NOTE:** The installation process will be updated when the package is released publicly in PyPi.
 
 ## Data Balance Analysis: Examples
 
@@ -41,6 +52,23 @@ module in order to train a model for a real-world dataset.
 ## Documentation
 
 The documentation of the **raimitigation** library [can be found here.](https://sturdy-barnacle-3b9f911d.pages.github.io/index.html)
+
+## Dependencies
+
+**RAI Toolbox Mitigations** uses several libraries internally. The direct dependencies are the following:
+
+- [Numpy](https://numpy.org/)
+- [Pandas](https://pandas.pydata.org/)
+- [SciPy](https://scipy.org/)
+- [Scikit Learn](https://scikit-learn.org/stable/index.html)
+- [ResearchPY](https://pypi.org/project/researchpy/)
+- [Statsmodels](https://www.statsmodels.org/stable/index.html)
+- [Imbalanced Learn](https://imbalanced-learn.org/stable/)
+- [SDV](https://pypi.org/project/sdv/)
+- [CatBoost](https://catboost.ai/en/docs/)
+- [XGBoost](https://xgboost.readthedocs.io/en/stable/python/python_intro.html)
+- [MLxtend](https://pypi.org/project/mlxtend/)
+- [UCI Dataset](https://pypi.org/project/uci-dataset/)
 
 ## Contributing
 
@@ -77,6 +105,23 @@ After installed, navigate to the root directory of this repository and activate 
 
 With pre-commit installed and activated, whenever you do a new commit, pre-commit will check all new code using the pre-commit hooks configured in the *.pre-commit-config.yaml* file, located in the root of the repository. Some of the hooks might make formatting changes to some of the files commited. If any file is changed or if any other hook fails, the commit will fail. If that happens, make the necessary modifications, add the files to the commit and try commiting one more time. Do this until all hooks are successful. Note that these same checks will be done after pushing anything, so if your commit was successful while using pre-commit, it will pass in the format check workflow as well.
 
+### Updating the Docs
+
+The documentation is built using [Sphinx](https://www.sphinx-doc.org/en/master/) and [Graphviz](https://graphviz.org/) (to build the class diagrams). Graphviz must be installed separately using:
+
+```console
+> sudo apt install graphviz
+```
+
+Make sure Graphviz is installed before recompiling the docs. After that, update the documentation files, which are all located inside the ```docs/``` folder. Finally, use:
+
+```console
+> cd docs/
+> make html
+```
+
+To view the documentation, open the file ```docs/_build/html/index.html``` in your browser.
+
 ## Trademarks
 
 This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
@@ -85,7 +130,7 @@ trademarks or logos is subject to and must follow
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
 
-# Research and Acknowledgements
+## Research and Acknowledgements
 
 **Current Maintainers:** [Matheus Mendonça](https://github.com/mrfmendonca), [Dany Rouhana](https://github.com/danyrouh), [Mark Encarnación](https://github.com/markenc)
 

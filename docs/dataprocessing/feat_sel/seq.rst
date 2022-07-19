@@ -5,6 +5,11 @@ SeqFeatSelection
    :members:
    :show-inheritance:
 
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: dataprocessing.SeqFeatSelection
+     :parts: 1
+
 Example
 -------
 

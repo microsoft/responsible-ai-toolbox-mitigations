@@ -7,6 +7,7 @@
   <title>Sampling &mdash; RAI Error Mitigation  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
@@ -52,6 +53,8 @@
 <li class="toctree-l4"><a class="reference internal" href="../imputer/imputer.html">Imputers</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Sampling</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../scaler/scaler.html">Scalers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../model_utils.html">Model Utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -122,18 +125,19 @@ lies in how the artificial data is created.</p>
 for the sampling methods. Therefore, each sampling class here inherits directly from the <strong>DataProcessing</strong>
 abstract class. Below is a list of the sampling methods present in the <strong>dataprocessing</strong> module:</p>
 <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Child Classes</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="rebalance.html">Rebalance</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="rebalance.html#example">Example</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="synthesizer.html">Synthesizer</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="synthesizer.html#example">Example</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="rebalance.html">Rebalance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synthesizer.html">Synthesizer</a></li>
 </ul>
 </div>
-<section id="examples">
+<p class="rubric">Class Diagram</p>
+<div class="graphviz"><img src="../../_images/inheritance-1f1e9b3ce4c777d85dd5e81d3d77a212ade95dff.png" alt="Inheritance diagram of dataprocessing.Rebalance, dataprocessing.Synthesizer" usemap="#inheritance640d60957b" class="inheritance graphviz" /></div>
+<map id="inheritance640d60957b" name="inheritance640d60957b">
+<area shape="rect" id="node2" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,31,248,56"/>
+<area shape="rect" id="node3" href="rebalance.html#dataprocessing.Rebalance" target="_top" title="Concrete class that uses under and oversampling approaches (implemented" alt="" coords="300,5,391,31"/>
+<area shape="rect" id="node4" href="synthesizer.html#dataprocessing.Synthesizer" target="_top" title="Concrete class that uses generative models (implemented in the sdv library)" alt="" coords="296,55,395,80"/>
+</map><section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>

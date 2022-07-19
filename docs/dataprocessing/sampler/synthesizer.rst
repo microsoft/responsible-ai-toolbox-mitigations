@@ -5,6 +5,11 @@ Synthesizer
    :members:
    :show-inheritance:
 
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: dataprocessing.Synthesizer
+     :parts: 1
+
 
 Example
 -------

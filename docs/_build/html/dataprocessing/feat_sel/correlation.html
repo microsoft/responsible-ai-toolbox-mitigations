@@ -7,6 +7,7 @@
   <title>CorrelatedFeatures &mdash; RAI Error Mitigation  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
@@ -52,6 +53,8 @@
 <li class="toctree-l4"><a class="reference internal" href="../imputer/imputer.html">Imputers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sampler/sampler.html">Sampling</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../scaler/scaler.html">Scalers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../model_utils.html">Model Utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -414,7 +417,13 @@ the information of the pairs of variables considered NOT to be correlated (with 
 
 </dd></dl>
 
-<section id="examples">
+<p class="rubric">Class Diagram</p>
+<div class="graphviz"><img src="../../_images/inheritance-1dc05e70ff55d8c0903b149391413fa8a086ed05.png" alt="Inheritance diagram of dataprocessing.CorrelatedFeatures" usemap="#inheritancedcb80b3939" class="inheritance graphviz" /></div>
+<map id="inheritancedcb80b3939" name="inheritancedcb80b3939">
+<area shape="rect" id="node4" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node2" href="#dataprocessing.CorrelatedFeatures" target="_top" title="Concrete class that measures the correlation between variables" alt="" coords="475,5,621,31"/>
+<area shape="rect" id="node3" href="feat_sel.html#dataprocessing.FeatureSelection" target="_top" title="Base class for all feature selection subclasses. Implements basic" alt="" coords="296,5,427,31"/>
+</map><section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>

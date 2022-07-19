@@ -5,6 +5,11 @@ CorrelatedFeatures
    :members:
    :show-inheritance:
 
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: dataprocessing.CorrelatedFeatures
+     :parts: 1
+
 Examples
 --------
 
