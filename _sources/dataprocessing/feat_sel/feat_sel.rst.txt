@@ -15,11 +15,20 @@ of the classes below inherit from the **FeatureSelection** class, and thus, have
 all of the methods previously shown.
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
+   :titlesonly:
+   :caption: Child Classes
 
    seq
    catboost
    correlation
+
+
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: dataprocessing.CatBoostSelection dataprocessing.SeqFeatSelection dataprocessing.CorrelatedFeatures
+     :parts: 1
+
 
 Examples
 ********
@@ -29,6 +38,3 @@ Examples
    ../notebooks/module_tests/feat_sel_catboost
    ../notebooks/module_tests/feat_sel_corr
    ../notebooks/module_tests/feat_sel_corr_tutorial
-
-
-

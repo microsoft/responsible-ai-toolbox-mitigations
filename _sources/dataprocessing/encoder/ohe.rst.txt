@@ -7,6 +7,11 @@ EncoderOHE
    :members:
    :show-inheritance:
 
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: dataprocessing.EncoderOHE
+     :parts: 1
+
 Example
 -------
 

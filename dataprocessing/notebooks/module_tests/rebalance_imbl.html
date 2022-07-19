@@ -7,6 +7,7 @@
   <title>Rebalance Class (imblearn) &mdash; RAI Error Mitigation  documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
@@ -54,6 +55,8 @@
 <li class="toctree-l4"><a class="reference internal" href="../../imputer/imputer.html">Imputers</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="../../sampler/sampler.html">Sampling</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../scaler/scaler.html">Scalers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../model_utils.html">Model Utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -376,9 +379,13 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../notebooks&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">Rebalance</span>
+<span class="kn">from</span> <span class="nn">notebooks.download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
 </pre></div>
 </div>
 </div>
@@ -388,8 +395,9 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/hr_promotion&#39;</span>
-<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;/train.csv&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/&#39;</span>
+<span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
 <span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;employee_id&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">dataset</span>
 </pre></div>
@@ -427,6 +435,7 @@ div.rendered_html tbody tr:hover {
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -444,6 +453,7 @@ div.rendered_html tbody tr:hover {
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -460,6 +470,7 @@ div.rendered_html tbody tr:hover {
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -474,6 +485,7 @@ div.rendered_html tbody tr:hover {
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -490,6 +502,7 @@ div.rendered_html tbody tr:hover {
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -505,11 +518,13 @@ div.rendered_html tbody tr:hover {
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -535,6 +550,7 @@ div.rendered_html tbody tr:hover {
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -550,6 +566,7 @@ div.rendered_html tbody tr:hover {
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -564,6 +581,7 @@ div.rendered_html tbody tr:hover {
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -580,6 +598,7 @@ div.rendered_html tbody tr:hover {
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -595,12 +614,13 @@ div.rendered_html tbody tr:hover {
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 12 columns</p>
+<p>54808 rows × 13 columns</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">

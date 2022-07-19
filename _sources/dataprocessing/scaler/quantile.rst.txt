@@ -5,6 +5,10 @@ DataQuantileTransformer
    :members:
    :show-inheritance:
 
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: dataprocessing.DataQuantileTransformer
+     :parts: 1
 
 
 Example

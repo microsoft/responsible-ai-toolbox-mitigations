@@ -7,6 +7,7 @@
   <title>Encoders &mdash; RAI Error Mitigation  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
@@ -52,6 +53,8 @@
 <li class="toctree-l4"><a class="reference internal" href="../imputer/imputer.html">Imputers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sampler/sampler.html">Sampling</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../scaler/scaler.html">Scalers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../model_utils.html">Model Utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -176,13 +179,21 @@ col_encode parameter. Returns a dataset with the encoded columns.</p>
 <p>The following is a list of all encoders implemented in this module. All of the classes below inherit from
 the <strong>DataEncoding</strong> class, and thus, have access to all of the methods previously shown.</p>
 <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Child Classes</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="ordinal.html">EncoderOrdinal</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ohe.html">EncoderOHE</a></li>
 </ul>
 </div>
-<section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
+<p class="rubric">Class Diagram</p>
+<div class="graphviz"><img src="../../_images/inheritance-c4a52dfea46c77bfdd2d18fd3c4e37cf391b65b7.png" alt="Inheritance diagram of dataprocessing.EncoderOHE, dataprocessing.EncoderOrdinal" usemap="#inheritancec682faed38" class="inheritance graphviz" /></div>
+<map id="inheritancec682faed38" name="inheritancec682faed38">
+<area shape="rect" id="node3" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,31,248,56"/>
+<area shape="rect" id="node2" href="#dataprocessing.DataEncoding" target="_top" title="Base class for all encoding subclasses. Implements basic functionalities" alt="" coords="296,31,408,56"/>
+<area shape="rect" id="node4" href="ohe.html#dataprocessing.EncoderOHE" target="_top" title="Concrete class that applies one&#45;hot encoding over a dataset. The categorical" alt="" coords="465,5,568,31"/>
+<area shape="rect" id="node5" href="ordinal.html#dataprocessing.EncoderOrdinal" target="_top" title="Concrete class that applies ordinal encoding over a dataset. The categorical features" alt="" coords="456,55,577,80"/>
+</map><section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>
 <div class="sphx-glr-thumbcontainer">

@@ -7,6 +7,7 @@
   <title>EncoderOHE &mdash; RAI Error Mitigation  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
@@ -52,6 +53,8 @@
 <li class="toctree-l4"><a class="reference internal" href="../imputer/imputer.html">Imputers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sampler/sampler.html">Sampling</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../scaler/scaler.html">Scalers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../model_utils.html">Model Utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -158,7 +161,13 @@ that replaced the original columns.</p>
 
 </dd></dl>
 
-<section id="example">
+<p class="rubric">Class Diagram</p>
+<div class="graphviz"><img src="../../_images/inheritance-b99fec4e0a368506d08f1840923ca49681173e19.png" alt="Inheritance diagram of dataprocessing.EncoderOHE" usemap="#inheritance2b43edf393" class="inheritance graphviz" /></div>
+<map id="inheritance2b43edf393" name="inheritance2b43edf393">
+<area shape="rect" id="node3" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node2" href="encoder.html#dataprocessing.DataEncoding" target="_top" title="Base class for all encoding subclasses. Implements basic functionalities" alt="" coords="296,5,408,31"/>
+<area shape="rect" id="node4" href="#dataprocessing.EncoderOHE" target="_top" title="Concrete class that applies one&#45;hot encoding over a dataset. The categorical" alt="" coords="456,5,559,31"/>
+</map><section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>

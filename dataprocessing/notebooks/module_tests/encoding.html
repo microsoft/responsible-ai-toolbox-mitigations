@@ -7,6 +7,7 @@
   <title>Encoding Examples &mdash; RAI Error Mitigation  documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
@@ -381,9 +382,14 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../notebooks&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">EncoderOHE</span><span class="p">,</span> <span class="n">EncoderOrdinal</span>
+
+<span class="kn">from</span> <span class="nn">notebooks.download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
 </pre></div>
 </div>
 </div>
@@ -395,8 +401,9 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/hr_promotion&#39;</span>
-<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;/train.csv&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/&#39;</span>
+<span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
 <span class="n">dataset</span>
 </pre></div>
 </div>
@@ -434,6 +441,7 @@ div.rendered_html tbody tr:hover {
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -452,6 +460,7 @@ div.rendered_html tbody tr:hover {
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -469,6 +478,7 @@ div.rendered_html tbody tr:hover {
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -484,6 +494,7 @@ div.rendered_html tbody tr:hover {
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -501,6 +512,7 @@ div.rendered_html tbody tr:hover {
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -517,11 +529,13 @@ div.rendered_html tbody tr:hover {
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -549,6 +563,7 @@ div.rendered_html tbody tr:hover {
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -565,6 +580,7 @@ div.rendered_html tbody tr:hover {
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -580,6 +596,7 @@ div.rendered_html tbody tr:hover {
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -597,6 +614,7 @@ div.rendered_html tbody tr:hover {
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -613,12 +631,13 @@ div.rendered_html tbody tr:hover {
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 13 columns</p>
+<p>54808 rows × 14 columns</p>
 </div></div>
 </div>
 <p>Here we don’t specify any columns that should be encoded. We let the class automatically identify which columns should be encoded.</p>
@@ -678,6 +697,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -696,6 +716,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -713,6 +734,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -728,6 +750,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -745,6 +768,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -761,11 +785,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -793,6 +819,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -809,6 +836,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -824,6 +852,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -841,6 +870,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -857,12 +887,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 13 columns</p>
+<p>54808 rows × 14 columns</p>
 </div></div>
 </div>
 <p>We can then get the mapping dictionary used by the encoder by calling the <strong>get_mapping()</strong> method:</p>
@@ -1034,6 +1065,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -1052,6 +1084,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -1069,6 +1102,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -1084,6 +1118,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -1101,6 +1136,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -1117,11 +1153,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -1149,6 +1187,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -1165,6 +1204,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -1180,6 +1220,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -1197,6 +1238,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -1213,12 +1255,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 13 columns</p>
+<p>54808 rows × 14 columns</p>
 </div></div>
 </div>
 <p>We can also specify which columns to encode using the column names:</p>
@@ -1269,6 +1312,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -1287,6 +1331,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -1304,6 +1349,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -1319,6 +1365,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -1336,6 +1383,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -1352,11 +1400,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -1384,6 +1434,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -1400,6 +1451,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -1415,6 +1467,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -1432,6 +1485,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -1448,12 +1502,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 13 columns</p>
+<p>54808 rows × 14 columns</p>
 </div></div>
 </div>
 <p>or the column indices:</p>
@@ -1504,6 +1559,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -1522,6 +1578,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -1539,6 +1596,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -1554,6 +1612,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -1571,6 +1630,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -1587,11 +1647,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -1619,6 +1681,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -1635,6 +1698,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -1650,6 +1714,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -1667,6 +1732,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -1683,12 +1749,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 13 columns</p>
+<p>54808 rows × 14 columns</p>
 </div></div>
 </div>
 <p>We can also specify the order of the encodings for the ordinal encoder. For example, let’s specify the order of the labels for the ‘education’ column.</p>
@@ -1758,6 +1825,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -1776,6 +1844,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -1793,6 +1862,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -1808,6 +1878,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -1825,6 +1896,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -1841,11 +1913,13 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -1873,6 +1947,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -1889,6 +1964,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -1904,6 +1980,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -1921,6 +1998,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -1937,12 +2015,13 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 13 columns</p>
+<p>54808 rows × 14 columns</p>
 </div></div>
 </div>
 <p>The <strong>get_encoded_columns()</strong> method returns the list of columns encoded. For the ordinal encoding, this is the same list passed to the <strong>col_encode</strong> parameter if it’s provided or the list of categorical features if the latter parameter is not provided.</p>
@@ -2006,6 +2085,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -2024,6 +2104,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -2041,6 +2122,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -2056,6 +2138,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -2073,6 +2156,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -2089,11 +2173,13 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -2121,6 +2207,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -2137,6 +2224,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -2152,6 +2240,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -2169,6 +2258,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -2185,12 +2275,13 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 13 columns</p>
+<p>54808 rows × 14 columns</p>
 </div></div>
 </div>
 </section>
@@ -2200,8 +2291,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/hr_promotion&#39;</span>
-<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;/train.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">dataset</span>
 </pre></div>
@@ -2242,6 +2332,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <th>10</th>
       <th>11</th>
       <th>12</th>
+      <th>13</th>
     </tr>
   </thead>
   <tbody>
@@ -2256,6 +2347,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -2272,6 +2364,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -2286,6 +2379,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -2302,6 +2396,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -2317,11 +2412,13 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -2347,6 +2444,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -2362,6 +2460,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -2376,6 +2475,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -2392,6 +2492,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -2407,12 +2508,13 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 12 columns</p>
+<p>54808 rows × 13 columns</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
@@ -2465,6 +2567,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <th>9</th>
       <th>10</th>
       <th>11</th>
+      <th>12</th>
     </tr>
   </thead>
   <tbody>
@@ -2479,6 +2582,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -2495,6 +2599,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -2509,6 +2614,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -2525,6 +2631,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -2540,11 +2647,13 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -2570,6 +2679,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -2585,6 +2695,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -2599,6 +2710,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -2615,6 +2727,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -2630,12 +2743,13 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 12 columns</p>
+<p>54808 rows × 13 columns</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
@@ -2682,6 +2796,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <th>9</th>
       <th>10</th>
       <th>11</th>
+      <th>12</th>
     </tr>
   </thead>
   <tbody>
@@ -2696,6 +2811,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -2712,6 +2828,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -2726,6 +2843,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -2742,6 +2860,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -2757,11 +2876,13 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -2787,6 +2908,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -2802,6 +2924,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -2816,6 +2939,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -2832,6 +2956,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -2847,12 +2972,13 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 12 columns</p>
+<p>54808 rows × 13 columns</p>
 </div></div>
 </div>
 </section>
@@ -2864,8 +2990,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/hr_promotion&#39;</span>
-<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;/train.csv&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
 <span class="n">dataset</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 
 <span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -2912,11 +3037,11 @@ No columns specified for encoding. These columns have been automatically identfi
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
       <th>department_Finance</th>
-      <th>department_HR</th>
       <th>...</th>
       <th>region_region_6</th>
       <th>region_region_7</th>
@@ -2938,9 +3063,9 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
-      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
@@ -2963,8 +3088,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
-      <td>60</td>
       <td>0</td>
+      <td>60</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
@@ -2987,8 +3112,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>7</td>
       <td>0</td>
-      <td>50</td>
       <td>0</td>
+      <td>50</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
@@ -3011,8 +3136,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
-      <td>50</td>
       <td>0</td>
+      <td>50</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
@@ -3035,8 +3160,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
-      <td>73</td>
       <td>0</td>
+      <td>73</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
@@ -3083,8 +3208,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
-      <td>78</td>
       <td>0</td>
+      <td>78</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
@@ -3107,8 +3232,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
-      <td>56</td>
       <td>0</td>
+      <td>56</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
@@ -3130,9 +3255,9 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
-      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
@@ -3155,8 +3280,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
-      <td>45</td>
       <td>0</td>
+      <td>45</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
@@ -3179,10 +3304,10 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
       <td>0</td>
-      <td>1</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -3197,7 +3322,7 @@ No columns specified for encoding. These columns have been automatically identfi
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 55 columns</p>
+<p>54808 rows × 56 columns</p>
 </div></div>
 </div>
 <p>When using the EncoderOHE, the <strong>get_encoded_columns()</strong> method will return the list of all new columns created with the one-hot encodings, since the columns originally encoded were replaced by one or more one-hot encoded columns (one for each value in the column).</p>
@@ -3308,6 +3433,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -3328,6 +3454,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -3347,6 +3474,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
       <td>0</td>
@@ -3364,6 +3492,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -3383,6 +3512,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
       <td>0</td>
@@ -3401,6 +3531,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
       <td>0</td>
@@ -3409,6 +3540,7 @@ No columns specified for encoding. These columns have been automatically identfi
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -3437,6 +3569,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
       <td>0</td>
@@ -3455,6 +3588,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
       <td>0</td>
@@ -3472,6 +3606,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -3491,6 +3626,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
       <td>0</td>
@@ -3509,6 +3645,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
       <td>0</td>
@@ -3517,7 +3654,7 @@ No columns specified for encoding. These columns have been automatically identfi
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 15 columns</p>
+<p>54808 rows × 16 columns</p>
 </div></div>
 </div>
 <p>or the column indices:</p>
@@ -3564,6 +3701,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -3584,6 +3722,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -3603,6 +3742,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
       <td>0</td>
@@ -3620,6 +3760,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -3639,6 +3780,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
       <td>0</td>
@@ -3657,6 +3799,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
       <td>0</td>
@@ -3665,6 +3808,7 @@ No columns specified for encoding. These columns have been automatically identfi
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -3693,6 +3837,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
       <td>0</td>
@@ -3711,6 +3856,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
       <td>0</td>
@@ -3728,6 +3874,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -3747,6 +3894,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
       <td>0</td>
@@ -3765,6 +3913,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
       <td>0</td>
@@ -3773,7 +3922,7 @@ No columns specified for encoding. These columns have been automatically identfi
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 15 columns</p>
+<p>54808 rows × 16 columns</p>
 </div></div>
 </div>
 <p>We can also revert the encoded column to their original state by using the inverse_transform() method.</p>
@@ -3819,6 +3968,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -3837,6 +3987,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -3854,6 +4005,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -3869,6 +4021,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -3886,6 +4039,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -3902,11 +4056,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -3934,6 +4090,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -3950,6 +4107,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -3965,6 +4123,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -3982,6 +4141,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -3998,12 +4158,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 13 columns</p>
+<p>54808 rows × 14 columns</p>
 </div></div>
 </div>
 <p>Let us now test the ‘drop’ parameter. For that, we will repeat the same procedure as the previous cell, but this time use drop = False, since drop = True is the default behavior. We can see that the cell that uses drop = False (below) has one extra column: education_Bachelor’s, while the cell that uses drop = True (above) doesn’t have this column, since it was droped.</p>
@@ -4050,6 +4211,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -4071,6 +4233,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -4091,6 +4254,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
       <td>1</td>
@@ -4109,6 +4273,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -4129,6 +4294,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
       <td>1</td>
@@ -4148,6 +4314,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
       <td>1</td>
@@ -4157,6 +4324,7 @@ No columns specified for encoding. These columns have been automatically identfi
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -4186,6 +4354,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
       <td>1</td>
@@ -4205,6 +4374,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
       <td>0</td>
@@ -4223,6 +4393,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -4243,6 +4414,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
       <td>0</td>
@@ -4262,6 +4434,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
       <td>1</td>
@@ -4271,7 +4444,7 @@ No columns specified for encoding. These columns have been automatically identfi
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 16 columns</p>
+<p>54808 rows × 17 columns</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
@@ -4316,6 +4489,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -4334,6 +4508,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -4351,6 +4526,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -4366,6 +4542,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -4383,6 +4560,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -4399,11 +4577,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -4431,6 +4611,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -4447,6 +4628,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -4462,6 +4644,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -4479,6 +4662,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -4495,12 +4679,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 13 columns</p>
+<p>54808 rows × 14 columns</p>
 </div></div>
 </div>
 <section id="id1">
@@ -4509,8 +4694,7 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/hr_promotion&#39;</span>
-<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;/train.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">dataset</span>
 </pre></div>
@@ -4551,6 +4735,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <th>10</th>
       <th>11</th>
       <th>12</th>
+      <th>13</th>
     </tr>
   </thead>
   <tbody>
@@ -4565,6 +4750,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -4581,6 +4767,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -4595,6 +4782,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -4611,6 +4799,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -4626,11 +4815,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -4656,6 +4847,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -4671,6 +4863,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -4685,6 +4878,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -4701,6 +4895,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -4716,12 +4911,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 12 columns</p>
+<p>54808 rows × 13 columns</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
@@ -4791,9 +4987,9 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
-      <td>0</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -4816,8 +5012,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
-      <td>60</td>
       <td>0</td>
+      <td>60</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -4840,8 +5036,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>7</td>
       <td>0</td>
-      <td>50</td>
       <td>0</td>
+      <td>50</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -4864,8 +5060,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
-      <td>50</td>
       <td>0</td>
+      <td>50</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -4888,8 +5084,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
-      <td>73</td>
       <td>0</td>
+      <td>73</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -4936,8 +5132,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
-      <td>78</td>
       <td>0</td>
+      <td>78</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -4960,8 +5156,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
-      <td>56</td>
       <td>0</td>
+      <td>56</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -4983,9 +5179,9 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
-      <td>0</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -5008,8 +5204,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
-      <td>45</td>
       <td>0</td>
+      <td>45</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -5032,8 +5228,8 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
-      <td>49</td>
       <td>0</td>
+      <td>49</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -5048,7 +5244,7 @@ No columns specified for encoding. These columns have been automatically identfi
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 46 columns</p>
+<p>54808 rows × 47 columns</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
@@ -5095,6 +5291,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <th>9</th>
       <th>10</th>
       <th>11</th>
+      <th>12</th>
     </tr>
   </thead>
   <tbody>
@@ -5109,6 +5306,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -5125,6 +5323,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -5139,6 +5338,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -5155,6 +5355,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -5170,11 +5371,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -5200,6 +5403,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -5215,6 +5419,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -5229,6 +5434,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -5245,6 +5451,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -5260,12 +5467,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 12 columns</p>
+<p>54808 rows × 13 columns</p>
 </div></div>
 </div>
 </section>

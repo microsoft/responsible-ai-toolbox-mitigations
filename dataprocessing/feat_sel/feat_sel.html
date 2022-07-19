@@ -7,6 +7,7 @@
   <title>Feature Selection &mdash; RAI Error Mitigation  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
@@ -52,6 +53,8 @@
 <li class="toctree-l4"><a class="reference internal" href="../imputer/imputer.html">Imputers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sampler/sampler.html">Sampling</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../scaler/scaler.html">Scalers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../model_utils.html">Model Utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -237,32 +240,22 @@ different behavior, just override this method.</p>
 of the classes below inherit from the <strong>FeatureSelection</strong> class, and thus, have access to
 all of the methods previously shown.</p>
 <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Child Classes</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="seq.html">SeqFeatSelection</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="seq.html#example">Example</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../notebooks/module_tests/feat_sel_sequential.html">SeqFeatSelection Example</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="catboost.html">CatBoostSelection</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="catboost.html#example">Example</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../notebooks/module_tests/feat_sel_catboost.html">CatBoostSelection Example</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="correlation.html">CorrelatedFeatures</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="correlation.html#examples">Examples</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../notebooks/module_tests/feat_sel_corr.html">CorrelatedFeatures Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../notebooks/module_tests/feat_sel_corr_tutorial.html">Checking Correlations Between Variables - A Comprehensive Guide</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="seq.html">SeqFeatSelection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="catboost.html">CatBoostSelection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="correlation.html">CorrelatedFeatures</a></li>
 </ul>
 </div>
-<section id="examples">
+<p class="rubric">Class Diagram</p>
+<div class="graphviz"><img src="../../_images/inheritance-e0f519a917a67c56b7b6195de77458e22a2c29b7.png" alt="Inheritance diagram of dataprocessing.CatBoostSelection, dataprocessing.SeqFeatSelection, dataprocessing.CorrelatedFeatures" usemap="#inheritance328fd41a57" class="inheritance graphviz" /></div>
+<map id="inheritance328fd41a57" name="inheritance328fd41a57">
+<area shape="rect" id="node5" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,55,248,80"/>
+<area shape="rect" id="node2" href="catboost.html#dataprocessing.CatBoostSelection" target="_top" title="Concrete class that uses the CatBoost model and its feature&#39;s" alt="" coords="477,5,619,31"/>
+<area shape="rect" id="node3" href="#dataprocessing.FeatureSelection" target="_top" title="Base class for all feature selection subclasses. Implements basic" alt="" coords="296,55,427,80"/>
+<area shape="rect" id="node4" href="correlation.html#dataprocessing.CorrelatedFeatures" target="_top" title="Concrete class that measures the correlation between variables" alt="" coords="475,55,621,80"/>
+<area shape="rect" id="node6" href="seq.html#dataprocessing.SeqFeatSelection" target="_top" title="Concrete class that uses sequential feature selection over a dataset." alt="" coords="481,104,615,129"/>
+</map><section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>

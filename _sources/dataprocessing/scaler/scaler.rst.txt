@@ -15,7 +15,8 @@ The following is a list of all scalers implemented in this module. All of the cl
 the **DataScaler** class, and thus, have access to all of the methods previously shown.
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
+   :caption: Child Classes
 
    standard
    minmax
@@ -24,10 +25,14 @@ the **DataScaler** class, and thus, have access to all of the methods previously
    robust
    normalize
 
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: dataprocessing.DataRobustScaler dataprocessing.DataPowerTransformer dataprocessing.DataQuantileTransformer dataprocessing.DataMinMaxScaler dataprocessing.DataStandardScaler dataprocessing.DataNormalizer
+     :parts: 1
 
 
-Example
-*******
+Examples
+********
 
 .. nbgallery::
    ../notebooks/module_tests/scaler

@@ -5,7 +5,10 @@ DataRobustScaler
    :members:
    :show-inheritance:
 
+.. rubric:: Class Diagram
 
+.. inheritance-diagram:: dataprocessing.DataRobustScaler
+     :parts: 1
 
 Example
 -------

@@ -5,6 +5,11 @@ CatBoostSelection
    :members:
    :show-inheritance:
 
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: dataprocessing.CatBoostSelection
+     :parts: 1
+
 
 Example
 -------

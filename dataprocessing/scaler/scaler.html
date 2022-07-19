@@ -7,6 +7,7 @@
   <title>Scalers &mdash; RAI Error Mitigation  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
@@ -52,6 +53,8 @@
 <li class="toctree-l4"><a class="reference internal" href="../imputer/imputer.html">Imputers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sampler/sampler.html">Sampling</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Scalers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../model_utils.html">Model Utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -216,53 +219,29 @@ current scaler over the preprocessed dataset and return a new dataset.</p>
 <p>The following is a list of all scalers implemented in this module. All of the classes below inherit from
 the <strong>DataScaler</strong> class, and thus, have access to all of the methods previously shown.</p>
 <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Child Classes</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="standard.html">DataStandardScaler</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="standard.html#example">Example</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../notebooks/module_tests/scaler.html">Data Scaling</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="minmax.html">DataMinMaxScaler</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="minmax.html#example">Example</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../notebooks/module_tests/scaler.html">Data Scaling</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="quantile.html">DataQuantileTransformer</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quantile.html#example">Example</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../notebooks/module_tests/scaler.html">Data Scaling</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="power.html">DataPowerTransformer</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="power.html#example">Example</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../notebooks/module_tests/scaler.html">Data Scaling</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="robust.html">DataRobustScaler</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="robust.html#example">Example</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../notebooks/module_tests/scaler.html">Data Scaling</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="normalize.html">DataNormalizer</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="normalize.html#example">Example</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../notebooks/module_tests/scaler.html">Data Scaling</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="standard.html">DataStandardScaler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minmax.html">DataMinMaxScaler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quantile.html">DataQuantileTransformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="power.html">DataPowerTransformer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="robust.html">DataRobustScaler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="normalize.html">DataNormalizer</a></li>
 </ul>
 </div>
-<section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
+<p class="rubric">Class Diagram</p>
+<div class="graphviz"><img src="../../_images/inheritance-30892fc244f7bd6fd6b159b554e2cd55a1d7010f.png" alt="Inheritance diagram of dataprocessing.DataRobustScaler, dataprocessing.DataPowerTransformer, dataprocessing.DataQuantileTransformer, dataprocessing.DataMinMaxScaler, dataprocessing.DataStandardScaler, dataprocessing.DataNormalizer" usemap="#inheritance5413ed9d62" class="inheritance graphviz" /></div>
+<map id="inheritance5413ed9d62" name="inheritance5413ed9d62">
+<area shape="rect" id="node6" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,129,248,155"/>
+<area shape="rect" id="node2" href="minmax.html#dataprocessing.DataMinMaxScaler" target="_top" title="Concrete class that applies the Min Max scaler over a given dataset. This class" alt="" coords="458,5,603,31"/>
+<area shape="rect" id="node3" href="#dataprocessing.DataScaler" target="_top" title="Base class used by all data scaling or data transformation classes." alt="" coords="296,129,389,155"/>
+<area shape="rect" id="node4" href="normalize.html#dataprocessing.DataNormalizer" target="_top" title="Concrete class that applies the Normalizer scaler over a given dataset. This class" alt="" coords="468,55,593,80"/>
+<area shape="rect" id="node5" href="power.html#dataprocessing.DataPowerTransformer" target="_top" title="Concrete class that applies the PowerTransformer scaler over a given dataset." alt="" coords="445,104,616,129"/>
+<area shape="rect" id="node7" href="quantile.html#dataprocessing.DataQuantileTransformer" target="_top" title="Concrete class that applies the QuantileTransformer scaler over a given dataset." alt="" coords="437,153,624,179"/>
+<area shape="rect" id="node8" href="robust.html#dataprocessing.DataRobustScaler" target="_top" title="Concrete class that applies the RobustScaler scaler over a given dataset. This class" alt="" coords="461,203,600,228"/>
+<area shape="rect" id="node9" href="standard.html#dataprocessing.DataStandardScaler" target="_top" title="Concrete class that applies the StandardScaler scaler over a given dataset." alt="" coords="455,252,606,277"/>
+</map><section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>
 <div class="sphx-glr-thumbcontainer">

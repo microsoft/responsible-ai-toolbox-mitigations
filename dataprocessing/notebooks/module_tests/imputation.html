@@ -7,6 +7,7 @@
   <title>BasicImputer Example &mdash; RAI Error Mitigation  documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
@@ -381,9 +382,14 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../notebooks&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">BasicImputer</span>
+
+<span class="kn">from</span> <span class="nn">notebooks.download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
 </pre></div>
 </div>
 </div>
@@ -393,8 +399,9 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/hr_promotion&#39;</span>
-<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;/train.csv&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/&#39;</span>
+<span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
 <span class="n">dataset</span>
 </pre></div>
 </div>
@@ -432,6 +439,7 @@ div.rendered_html tbody tr:hover {
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -450,6 +458,7 @@ div.rendered_html tbody tr:hover {
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -467,6 +476,7 @@ div.rendered_html tbody tr:hover {
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -482,6 +492,7 @@ div.rendered_html tbody tr:hover {
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -499,6 +510,7 @@ div.rendered_html tbody tr:hover {
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -515,11 +527,13 @@ div.rendered_html tbody tr:hover {
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -547,6 +561,7 @@ div.rendered_html tbody tr:hover {
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -563,6 +578,7 @@ div.rendered_html tbody tr:hover {
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -578,6 +594,7 @@ div.rendered_html tbody tr:hover {
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -595,6 +612,7 @@ div.rendered_html tbody tr:hover {
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -611,12 +629,13 @@ div.rendered_html tbody tr:hover {
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 13 columns</p>
+<p>54808 rows × 14 columns</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
@@ -644,6 +663,7 @@ no_of_trainings         False
 age                     False
 previous_year_rating     True
 length_of_service       False
+KPIs_met &gt;80%           False
 awards_won?             False
 avg_training_score      False
 is_promoted             False
@@ -711,6 +731,7 @@ No columns specified for imputation. These columns have been automatically ident
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -719,83 +740,88 @@ No columns specified for imputation. These columns have been automatically ident
   <tbody>
     <tr>
       <th>0</th>
-      <td>65438.0</td>
+      <td>65438</td>
       <td>Sales &amp; Marketing</td>
       <td>region_7</td>
       <td>Master's &amp; above</td>
       <td>f</td>
       <td>sourcing</td>
-      <td>1.0</td>
-      <td>35.0</td>
+      <td>1</td>
+      <td>35</td>
       <td>5.0</td>
-      <td>8.0</td>
-      <td>0.0</td>
-      <td>49.0</td>
-      <td>0.0</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0</td>
+      <td>49</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>65141.0</td>
+      <td>65141</td>
       <td>Operations</td>
       <td>region_22</td>
       <td>Bachelor's</td>
       <td>m</td>
       <td>other</td>
-      <td>1.0</td>
-      <td>30.0</td>
+      <td>1</td>
+      <td>30</td>
       <td>5.0</td>
-      <td>4.0</td>
-      <td>0.0</td>
-      <td>60.0</td>
-      <td>0.0</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>7513.0</td>
+      <td>7513</td>
       <td>Sales &amp; Marketing</td>
       <td>region_19</td>
       <td>Bachelor's</td>
       <td>m</td>
       <td>sourcing</td>
-      <td>1.0</td>
-      <td>34.0</td>
+      <td>1</td>
+      <td>34</td>
       <td>3.0</td>
-      <td>7.0</td>
-      <td>0.0</td>
-      <td>50.0</td>
-      <td>0.0</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>2542.0</td>
+      <td>2542</td>
       <td>Sales &amp; Marketing</td>
       <td>region_23</td>
       <td>Bachelor's</td>
       <td>m</td>
       <td>other</td>
-      <td>2.0</td>
-      <td>39.0</td>
+      <td>2</td>
+      <td>39</td>
       <td>1.0</td>
-      <td>10.0</td>
-      <td>0.0</td>
-      <td>50.0</td>
-      <td>0.0</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>48945.0</td>
+      <td>48945</td>
       <td>Technology</td>
       <td>region_26</td>
       <td>Bachelor's</td>
       <td>m</td>
       <td>other</td>
-      <td>1.0</td>
-      <td>45.0</td>
+      <td>1</td>
+      <td>45</td>
       <td>3.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>73.0</td>
-      <td>0.0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>73</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>...</th>
@@ -812,90 +838,96 @@ No columns specified for imputation. These columns have been automatically ident
       <td>...</td>
       <td>...</td>
       <td>...</td>
+      <td>...</td>
     </tr>
     <tr>
       <th>54803</th>
-      <td>3030.0</td>
+      <td>3030</td>
       <td>Technology</td>
       <td>region_14</td>
       <td>Bachelor's</td>
       <td>m</td>
       <td>sourcing</td>
-      <td>1.0</td>
-      <td>48.0</td>
+      <td>1</td>
+      <td>48</td>
       <td>3.0</td>
-      <td>17.0</td>
-      <td>0.0</td>
-      <td>78.0</td>
-      <td>0.0</td>
+      <td>17</td>
+      <td>0</td>
+      <td>0</td>
+      <td>78</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>54804</th>
-      <td>74592.0</td>
+      <td>74592</td>
       <td>Operations</td>
       <td>region_27</td>
       <td>Master's &amp; above</td>
       <td>f</td>
       <td>other</td>
-      <td>1.0</td>
-      <td>37.0</td>
+      <td>1</td>
+      <td>37</td>
       <td>2.0</td>
-      <td>6.0</td>
-      <td>0.0</td>
-      <td>56.0</td>
-      <td>0.0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>56</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>54805</th>
-      <td>13918.0</td>
+      <td>13918</td>
       <td>Analytics</td>
       <td>region_1</td>
       <td>Bachelor's</td>
       <td>m</td>
       <td>other</td>
-      <td>1.0</td>
-      <td>27.0</td>
+      <td>1</td>
+      <td>27</td>
       <td>5.0</td>
-      <td>3.0</td>
-      <td>0.0</td>
-      <td>79.0</td>
-      <td>0.0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>79</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>54806</th>
-      <td>13614.0</td>
+      <td>13614</td>
       <td>Sales &amp; Marketing</td>
       <td>region_9</td>
       <td>NULL</td>
       <td>m</td>
       <td>sourcing</td>
+      <td>1</td>
+      <td>29</td>
       <td>1.0</td>
-      <td>29.0</td>
-      <td>1.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>45.0</td>
-      <td>0.0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>45</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>54807</th>
-      <td>51526.0</td>
+      <td>51526</td>
       <td>HR</td>
       <td>region_22</td>
       <td>Bachelor's</td>
       <td>m</td>
       <td>other</td>
+      <td>1</td>
+      <td>27</td>
       <td>1.0</td>
-      <td>27.0</td>
-      <td>1.0</td>
-      <td>5.0</td>
-      <td>0.0</td>
-      <td>49.0</td>
-      <td>0.0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>49</td>
+      <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 13 columns</p>
+<p>54808 rows × 14 columns</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
@@ -923,6 +955,7 @@ no_of_trainings         False
 age                     False
 previous_year_rating    False
 length_of_service       False
+KPIs_met &gt;80%           False
 awards_won?             False
 avg_training_score      False
 is_promoted             False
@@ -982,6 +1015,7 @@ dtype: bool
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -1000,6 +1034,7 @@ dtype: bool
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -1017,6 +1052,7 @@ dtype: bool
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -1032,6 +1068,7 @@ dtype: bool
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -1049,6 +1086,7 @@ dtype: bool
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -1065,11 +1103,13 @@ dtype: bool
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -1097,6 +1137,7 @@ dtype: bool
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -1113,6 +1154,7 @@ dtype: bool
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -1128,6 +1170,7 @@ dtype: bool
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -1145,6 +1188,7 @@ dtype: bool
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -1161,12 +1205,13 @@ dtype: bool
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 13 columns</p>
+<p>54808 rows × 14 columns</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1194,6 +1239,7 @@ no_of_trainings         False
 age                     False
 previous_year_rating    False
 length_of_service       False
+KPIs_met &gt;80%           False
 awards_won?             False
 avg_training_score      False
 is_promoted             False
@@ -1313,6 +1359,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -1331,6 +1378,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -1348,6 +1396,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -1363,6 +1412,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -1380,6 +1430,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -1396,11 +1447,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -1428,6 +1481,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -1444,6 +1498,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -1459,6 +1514,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -1476,6 +1532,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -1492,12 +1549,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 13 columns</p>
+<p>54808 rows × 14 columns</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1528,7 +1586,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.8757525998905309
+0.8881590950556468
 </pre></div></div>
 </div>
 </section>
@@ -1538,8 +1596,7 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/hr_promotion&#39;</span>
-<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;/train.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">dataset</span>
 </pre></div>
@@ -1580,6 +1637,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <th>10</th>
       <th>11</th>
       <th>12</th>
+      <th>13</th>
     </tr>
   </thead>
   <tbody>
@@ -1594,6 +1652,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -1610,6 +1669,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -1624,6 +1684,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -1640,6 +1701,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -1655,11 +1717,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -1685,6 +1749,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -1700,6 +1765,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -1714,6 +1780,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -1730,6 +1797,7 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -1745,12 +1813,13 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 12 columns</p>
+<p>54808 rows × 13 columns</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1780,6 +1849,7 @@ No columns specified for encoding. These columns have been automatically identfi
 10    False
 11    False
 12    False
+13    False
 dtype: bool
 [&#34;Master&#39;s &amp; above&#34; &#34;Bachelor&#39;s&#34; nan &#39;Below Secondary&#39;]
 [ 5.  3.  1.  4. nan  2.]
@@ -1837,6 +1907,7 @@ dtype: bool
       <th>9</th>
       <th>10</th>
       <th>11</th>
+      <th>12</th>
     </tr>
   </thead>
   <tbody>
@@ -1851,6 +1922,7 @@ dtype: bool
       <td>35</td>
       <td>5.0</td>
       <td>8</td>
+      <td>1</td>
       <td>0</td>
       <td>49</td>
       <td>0</td>
@@ -1867,6 +1939,7 @@ dtype: bool
       <td>5.0</td>
       <td>4</td>
       <td>0</td>
+      <td>0</td>
       <td>60</td>
       <td>0</td>
     </tr>
@@ -1881,6 +1954,7 @@ dtype: bool
       <td>34</td>
       <td>3.0</td>
       <td>7</td>
+      <td>0</td>
       <td>0</td>
       <td>50</td>
       <td>0</td>
@@ -1897,6 +1971,7 @@ dtype: bool
       <td>1.0</td>
       <td>10</td>
       <td>0</td>
+      <td>0</td>
       <td>50</td>
       <td>0</td>
     </tr>
@@ -1912,11 +1987,13 @@ dtype: bool
       <td>3.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -1942,6 +2019,7 @@ dtype: bool
       <td>3.0</td>
       <td>17</td>
       <td>0</td>
+      <td>0</td>
       <td>78</td>
       <td>0</td>
     </tr>
@@ -1957,6 +2035,7 @@ dtype: bool
       <td>2.0</td>
       <td>6</td>
       <td>0</td>
+      <td>0</td>
       <td>56</td>
       <td>0</td>
     </tr>
@@ -1971,6 +2050,7 @@ dtype: bool
       <td>27</td>
       <td>5.0</td>
       <td>3</td>
+      <td>1</td>
       <td>0</td>
       <td>79</td>
       <td>0</td>
@@ -1987,6 +2067,7 @@ dtype: bool
       <td>1.0</td>
       <td>2</td>
       <td>0</td>
+      <td>0</td>
       <td>45</td>
       <td>0</td>
     </tr>
@@ -2002,12 +2083,13 @@ dtype: bool
       <td>1.0</td>
       <td>5</td>
       <td>0</td>
+      <td>0</td>
       <td>49</td>
       <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 12 columns</p>
+<p>54808 rows × 13 columns</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
@@ -2037,6 +2119,7 @@ dtype: bool
 9     False
 10    False
 11    False
+12    False
 dtype: bool
 [&#34;Master&#39;s &amp; above&#34; &#34;Bachelor&#39;s&#34; &#39;NULL&#39; &#39;Below Secondary&#39;]
 [   5.    3.    1.    4. -100.    2.]
