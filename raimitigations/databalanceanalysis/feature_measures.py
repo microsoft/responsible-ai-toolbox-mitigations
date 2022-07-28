@@ -89,7 +89,6 @@ class FeatureBalanceMeasure(BalanceMeasure):
         return pd.concat(gap_list)
 
     def measures(self, df: pd.DataFrame) -> pd.DataFrame:
-        _feature_measures = self._get_all_gaps(df, self._sensitive_cols, self._label_col)
         """
          The output is a dictionary that maps the sensitive column table to Pandas dataframe containing the following
         * A feature value within the sensitive feature.
@@ -110,4 +109,6 @@ class FeatureBalanceMeasure(BalanceMeasure):
         the 3rd column is a different possible value of that feature and the last column is a dictionary which indicates
         :rtype: pd.DataFrame
         """
+        _feature_measures = self._get_all_gaps(df, self._sensitive_cols, self._label_col)
+
         return _feature_measures
