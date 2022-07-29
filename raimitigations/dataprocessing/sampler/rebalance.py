@@ -73,8 +73,8 @@ class Rebalance(DataProcessing):
 
             - **Float:** a value between [0, 1] that represents the desired ratio between the
               number of instances of the minority class over the majority class. The ratio 'r'
-              is given by: $r = N_m/N_M$ where $N_m$ is the number of instances of the minority
-              class after applying oversample and $N_M$ is the number of instances of the
+              is given by: :math:`r = N_m/N_M` where :math:`N_m` is the number of instances of the minority
+              class after applying oversample and :math:`N_M` is the number of instances of the
               majority class;
             - **String:** a string value must be one of the following, which identifies preset
               oversampling strategies (explanations retrieved from the imblearn's SMOTE
@@ -117,8 +117,8 @@ class Rebalance(DataProcessing):
 
             - **Float:** a value between [0, 1] that represents the desired ratio between the
               number of instances of the minority class over the majority class after undersampling.
-              The ratio 'r' is given by: $r = N_m/N_M$ where $N_m$ is the number of instances of the
-              minority class and $N_M$ is the number of instances of the majority class after
+              The ratio 'r' is given by: :math:`r = N_m/N_M` where :math:`N_m` is the number of instances of the
+              minority class and :math:`N_M` is the number of instances of the majority class after
               undersampling. Note: this parameter only works with undersampling approaches that allows
               controlling the number of instances to be undersampled, such as RandomUnderSampler,
               ClusterCentroids (from imblearn). If any other undersampler is provided in the

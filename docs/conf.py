@@ -36,6 +36,7 @@ extensions = [
                 "sphinx_gallery.load_style",
                 "sphinx.ext.graphviz",
                 "sphinx.ext.inheritance_diagram",
+                "sphinx.ext.mathjax"
             ]
 
 # Add any paths that contain templates here, relative to this directory.

@@ -326,8 +326,8 @@ class Synthesizer(DataProcessing):
               an error will be raised;
             - Float: a value between [0, 1] that represents the desired ratio between
               the number of instances of the minority class over the majority class
-              after undersampling. The ratio 'r' is given by: $r = N_m/N_M$ where
-              $N_m$ is the number of instances of the minority class and $N_M$ is the
+              after undersampling. The ratio 'r' is given by: :math:`r = N_m/N_M` where
+              :math:`N_m` is the number of instances of the minority class and :math:`N_M` is the
               number of instances of the majority class after undersampling. Note: this
               parameter only works with undersampling approaches that allow controlling
               the number of instances to be undersampled, such as RandomUnderSampler,
@@ -544,8 +544,8 @@ class Synthesizer(DataProcessing):
               an error will be raised;
             - **Float:** a value between [0, 1] that represents the desired ratio between
               the number of instances of the minority class over the majority class
-              after undersampling. The ratio 'r' is given by: $r = N_m/N_M$ where
-              $N_m$ is the number of instances of the minority class and $N_M$ is the
+              after undersampling. The ratio 'r' is given by: :math:`r = N_m/N_M` where
+              :math:`N_m` is the number of instances of the minority class and :math:`N_M` is the
               number of instances of the majority class after undersampling. Note: this
               parameter only works with undersampling approaches that allow controlling
               the number of instances to be undersampled, such as RandomUnderSampler,
