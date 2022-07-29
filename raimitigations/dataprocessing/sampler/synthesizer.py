@@ -19,25 +19,25 @@ class Synthesizer(DataProcessing):
 
     :param df: the dataset to be rebalanced, which is used during the fit method.
         This data frame must contain all the features, including the label
-        column (specified in the 'label_col' parameter). This parameter is
-        mandatory if 'label_col' is also provided. The user can also provide
-        this dataset (along with the 'label_col') when calling the fit()
+        column (specified in the  ``label_col`` parameter). This parameter is
+        mandatory if  ``label_col`` is also provided. The user can also provide
+        this dataset (along with the  ``label_col``) when calling the fit()
         method. If df is provided during the class instantiation, it is not
         necessary to provide it again when calling fit(). It is also possible
-        to use the 'X' and 'y' instead of 'df' and 'label_col', although it is
+        to use the  ``X`` and  ``y`` instead of  ``df`` and  ``label_col``, although it is
         mandatory to pass the pair of parameters (X,y) or (df, label_col) either
         during the class instantiation or during the fit() method;
 
     :param label_col: the name or index of the label column. This parameter is
-        mandatory if 'df' is provided;
+        mandatory if  ``df`` is provided;
 
     :param X: contains only the features of the original dataset, that is, does
         not contain the label column. This is useful if the user has already
         separated the features from the label column prior to calling this class.
-        This parameter is mandatory if 'y' is provided;
+        This parameter is mandatory if  ``y`` is provided;
 
     :param y: contains only the label column of the original dataset. This parameter
-        is mandatory if 'X' is provided;
+        is mandatory if  ``X`` is provided;
 
     :param transform_pipe: a list of transformations to be used as a pre-processing
         pipeline. Each transformation in this list must be a valid subclass of the

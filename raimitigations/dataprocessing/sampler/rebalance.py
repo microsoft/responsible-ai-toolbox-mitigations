@@ -23,26 +23,26 @@ class Rebalance(DataProcessing):
 
     :param df: the dataset to be rebalanced, which is used during the fit method.
         This data frame must contain all the features, including the rebalance
-        column (specified in the 'rebalance_col' parameter). This parameter is
-        mandatory if 'rebalance_col' is also provided. The user can also provide
-        this dataset (along with the 'rebalance_col') when calling the fit()
+        column (specified in the  ``rebalance_col`` parameter). This parameter is
+        mandatory if  ``rebalance_col`` is also provided. The user can also provide
+        this dataset (along with the  ``rebalance_col``) when calling the fit()
         method. If df is provided during the class instantiation, it is not
         necessary to provide it again when calling fit(). It is also possible
-        to use the 'X' and 'y' instead of 'df' and 'rebalance_col', although it is
+        to use the  ``X`` and  ``y`` instead of  ``df`` and  ``rebalance_col``, although it is
         mandatory to pass the pair of parameters (X,y) or (df, rebalance_col) either
         during the class instantiation or during the fit() method;
 
     :param rebalance_col: the name or index of the column used to do the rebalance
-        operation. This parameter is mandatory if 'df' is provided;
+        operation. This parameter is mandatory if  ``df`` is provided;
 
     :param X: contains only the features of the original dataset, that is, does
         not contain the column used for rebalancing. This is useful if the user has
         already separated the features from the label column prior to calling this
-        class. This parameter is mandatory if 'y' is provided;
+        class. This parameter is mandatory if  ``y`` is provided;
 
     :param y: contains only the rebalance column of the original dataset. The rebalance
         operation is executed based on the data distribution of this column. This parameter
-        is mandatory if 'X' is provided;
+        is mandatory if  ``X`` is provided;
 
     :param transform_pipe: a list of transformations to be used as a pre-processing
         pipeline. Each transformation in this list must be a valid subclass of the
@@ -570,22 +570,22 @@ class Rebalance(DataProcessing):
         :param X: contains only the features of the original dataset, that is, does
             not contain the column used for rebalancing. This is useful if the user has
             already separated the features from the label column prior to calling this
-            class. This parameter is mandatory if 'y' is provided;
+            class. This parameter is mandatory if  ``y`` is provided;
         :param y: contains only the rebalance column of the original dataset. The rebalance
             operation is executed based on the data distribution of this column. This parameter
-            is mandatory if 'X' is provided;
+            is mandatory if  ``X`` is provided;
         :param df: the dataset to be rebalanced, which is used during the fit method.
             This data frame must contain all the features, including the rebalance
-            column (specified in the 'rebalance_col' parameter). This parameter is
-            mandatory if 'rebalance_col' is also provided. The user can also provide
-            this dataset (along with the 'rebalance_col') when calling the fit()
+            column (specified in the  ``rebalance_col`` parameter). This parameter is
+            mandatory if  ``rebalance_col`` is also provided. The user can also provide
+            this dataset (along with the  ``rebalance_col``) when calling the fit()
             method. If df is provided during the class instantiation, it is not
             necessary to provide it again when calling fit(). It is also possible
-            to use the 'X' and 'y' instead of 'df' and 'rebalance_col', although it is
+            to use the  ``X`` and  ``y`` instead of  ``df`` and  ``rebalance_col``, although it is
             mandatory to pass the pair of parameters (X,y) or (df, rebalance_col) either
             during the class instantiation or during the fit() method;
         :param rebalance_col: the name or index of the column used to do the rebalance
-            operation. This parameter is mandatory if 'df' is provided;
+            operation. This parameter is mandatory if  ``df`` is provided;
         """
         self._set_df_mult(df, rebalance_col, X, y, require_set=True)
         self._check_rebalance_col()
