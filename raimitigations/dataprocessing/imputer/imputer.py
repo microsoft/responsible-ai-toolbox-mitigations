@@ -77,7 +77,7 @@ class DataImputer(DataProcessing):
         class. The following steps are executed: (i) set the self.df attribute,
         (ii) set the list of columns to impute (or create a default one if needed),
         (iii) check if the dataset provided is valid (contains all columns that
-        should be imputed), and (iv) call the concrete class's specific _fit method.
+        should be imputed), and (iv) call the concrete class's specific ``_fit`` method.
 
         :param df: the full dataset;
         :param y: ignored. This exists for compatibility with the sklearn's Pipeline class.

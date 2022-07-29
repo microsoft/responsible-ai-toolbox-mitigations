@@ -11,8 +11,8 @@ from .selector import FeatureSelection
 
 class SeqFeatSelection(FeatureSelection):
     """
-    Concrete class that uses sequential feature selection over a dataset.
-    Implements the sequential feature selection method using the mlxtend
+    Concrete class that uses ``SequentialFeatureSelector`` over a dataset.
+    Implements the sequential feature selection method using the``mlextend``
     library. This approach uses a classifier and sequentially changes the
     set of features used for training the model. There are two ways to
     perform this: (i) forward feature selection or (ii) backward feature
@@ -30,12 +30,12 @@ class SeqFeatSelection(FeatureSelection):
         This data frame must contain all the features, including the label
         column (specified in the ``label_col`` parameter). This parameter is
         mandatory if ``label_col`` is also provided. The user can also provide
-        this dataset (along with the ``label_col``) when calling the fit()
-        method. If df is provided during the class instantiation, it is not
-        necessary to provide it again when calling fit(). It is also possible
+        this dataset (along with the ``label_col``) when calling the :meth:`fit`
+        method. If ``df`` is provided during the class instantiation, it is not
+        necessary to provide it again when calling :meth:`fit`. It is also possible
         to use the  ``X`` and  ``y`` instead of  ``df`` and ``label_col``, although it is
         mandatory to pass the pair or parameters (X,y) or (df, label_col) either
-        during the class instantiation or during the fit() method;
+        during the class instantiation or during the :meth:`fit` method;
 
     :param label_col: the name or index of the label column. This parameter is
         mandatory if  ``df`` is provided;
@@ -50,7 +50,7 @@ class SeqFeatSelection(FeatureSelection):
 
     :param transform_pipe: a list of transformations to be used as a pre-processing
         pipeline. Each transformation in this list must be a valid subclass of the
-        current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+        current library (:class:`~raimitigations.dataprocessing.EncoderOrdinal`, :class:`~raimitigations.dataprocessing.BasicImputer`, etc.). Some feature selection
         methods require a dataset with no categorical features or with no missing values
         (depending on the approach). If no transformations are provided, a set of default
         transformations will be used, which depends on the feature selection approach

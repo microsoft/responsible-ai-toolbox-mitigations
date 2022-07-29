@@ -9,10 +9,10 @@ from .encoder import DataEncoding
 class EncoderOrdinal(DataEncoding):
     """
     Concrete class that applies ordinal encoding over a dataset. The categorical features
-    are encoded using the ordinal encoding class from sklearn. The main difference between
-    using the sklearn implementation directly is that we allow the user to pass a list of
-    columns to be encoded when creating the class, instead of having to explicitly use the
-    sklearn class over each column individually.
+    are encoded using the ordinal encoding class from``sklearn``. The main difference between
+    using the``sklearn`` implementation directly is that we allow the user to pass a list of
+    columns to be encoded when creating the class, instead of having to explicitly use
+    the ``sklearn`` class over each column individually.
 
     :param df: pandas data frame that contains the columns to be encoded;
 
@@ -22,17 +22,17 @@ class EncoderOrdinal(DataEncoding):
 
     :param categories: can be a dict or a string:
 
-        - **dict:** a dict that indicates the order of the values for each column in col_encode.
+        - **dict:** a dict that indicates the order of the values for each column in ``col_encode``.
           That is, a dict of lists, where the keys must be valid column names and the
           value associated to key k is a list of size n, where n is the number of
           different values that exist in column k, and this list represents the order of
           the encoding for that column;
         - **string:** the only string value allowed is "auto". When categories = "auto", the
-          categories dict used by sklearn is generated automatically;
+          categories dict used by``sklearn`` is generated automatically;
 
     :param unknown_err: if True, an error will occur when the transform method is called upon a
         dataset with a new category in one of the encoded columns that were not present in
-        the training dataset (provided to the fit method). If False, no error will occur in
+        the training dataset (provided to the :meth:`fit` method). If False, no error will occur in
         the previous situation. Instead, every unknown category in a given encoded column
         will be replaced by the label unknown_value;
 
@@ -124,7 +124,7 @@ class EncoderOrdinal(DataEncoding):
     # -----------------------------------
     def _auto_complete_categories(self, df: pd.DataFrame):
         """
-        Generates the 'categories' parameter used by OrdinalEncoder (from sklearn)
+        Generates the 'categories' parameter used by OrdinalEncoder (from``sklearn``)
         based on the value provided to the categories parameter. If a categorical
         column in col_encode is missing from the categories parameter, it is auto-
         matically generated.

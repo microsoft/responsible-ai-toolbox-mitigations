@@ -12,13 +12,13 @@ from ..data_utils import get_cat_cols, err_float_01
 
 class CatBoostSelection(FeatureSelection):
     """
-    Concrete class that uses the CatBoost model and its feature's
-    importance values to select the most important features. CatBoost
+    Concrete class that uses the ``CatBoost`` model and its feature's
+    importance values to select the most important features. ``CatBoost``
     is a tree boosting method capable of handling categorical features.
     This method creates internally an importance score for each feature.
     This way, these scores can be used to perform feature selection. The
-    CatBoost implementation (from the catboost lib) has already prepared
-    a functionality for this purpose. The subclass CatBoostSelection simply
+    ``CatBoost`` implementation (from the ``catboost`` lib) has already prepared
+    a functionality for this purpose. The subclass :class:`~raimitigations.dataprocessing.CatBoostSelection` simply
     encapsulates all the complexities associated with this functionality and
     makes it easier for the user feature selection over a dataset.
 
@@ -26,12 +26,12 @@ class CatBoostSelection(FeatureSelection):
         This data frame must contain all the features, including the label
         column (specified in the  ``label_col`` parameter). This parameter is
         mandatory if  ``label_col`` is also provided. The user can also provide
-        this dataset (along with the  ``label_col``) when calling the fit()
+        this dataset (along with the  ``label_col``) when calling the :meth:`fit`
         method. If df is provided during the class instantiation, it is not
-        necessary to provide it again when calling fit(). It is also possible
+        necessary to provide it again when calling :meth:`fit`. It is also possible
         to use the  ``X`` and  ``y`` instead of  ``df`` and  ``label_col``, although it is
         mandatory to pass the pair of parameters (X,y) or (df, label_col) either
-        during the class instantiation or during the fit() method;
+        during the class instantiation or during the :meth:`fit` method;
 
     :param label_col: the name or index of the label column. This parameter is
         mandatory if  ``df`` is provided;
@@ -46,7 +46,7 @@ class CatBoostSelection(FeatureSelection):
 
     :param transform_pipe: a list of transformations to be used as a pre-processing
         pipeline. Each transformation in this list must be a valid subclass of the
-        current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+        current library (:class:`~raimitigations.dataprocessing.EncoderOrdinal`, :class:`~raimitigations.dataprocessing.BasicImputer`, etc.). Some feature selection
         methods require a dataset with no categorical features or with no missing values
         (depending on the approach). If no transformations are provided, a set of default
         transformations will be used, which depends on the feature selection approach
@@ -56,13 +56,13 @@ class CatBoostSelection(FeatureSelection):
         CatBoostRegressor. If False, a CatBoostClassifier is created instead. This parameter
         is ignored if an estimator is provided using the  ``estimator`` parameter;
 
-    :param estimator: a CatBoostClassifier or CatBoostRegressor object that will be used
+    :param estimator: a :class:`~catboost.CatBoostClassifier` or :class:`~catboost.CatBoostRegressor` object that will be used
         for filtering the most important features. If no estimator is provided, a default
-        CatBoostClassifier or CatBoostRegressor is used, where the latter is used if
+        :class:`~catboost.CatBoostClassifier` or :class:`~catboost.CatBoostRegressor` is used, where the latter is used if
         regression is set to True or if the type of the label column is float, while the
         former is used otherwise;
 
-    :param in_place: indicates if the original dataset will be saved internally (df_org)
+    :param in_place: indicates if the original dataset will be saved internally (``df_org``)
         or not. If True, then the feature selection transformation is saved over the
         original dataset. If False, the original dataset is saved separately (default
         value);
@@ -74,7 +74,7 @@ class CatBoostSelection(FeatureSelection):
         the classifier to be used. This parameter is automatically set to False if 'verbose'
         is False;
 
-    :param catboost_plot: if True, uses CatBoost's plot feature: if running on a python
+    :param catboost_plot: if True, uses ``CatBoost``'s plot feature: if running on a python
         notebook environment, an interactive plot will be created, which shows the loss
         function for both training and test sets, as well as the error obtained when removing
         an increasing number of features. If running on a script environment, a web interface
@@ -83,17 +83,17 @@ class CatBoostSelection(FeatureSelection):
         when creating the default classifier, which is not the case when the user specifies
         the classifier to be used;
 
-    :param test_size: the size of the test set used to train the CatBoost method, which
+    :param test_size: the size of the test set used to train the ``CatBoost`` method, which
         is used to create the importance score of each feature;
 
     :param cat_col: a list with the name or index of all categorical columns. These columns
-        do not need to be encoded, since CatBoost does this encoding internally. If None, this
+        do not need to be encoded, since ``CatBoost`` does this encoding internally. If None, this
         list will be automatically set as a list with all categorical features found in the
         dataset;
 
     :param n_feat: the number of features to be selected. If None, then the following procedure
         is followed: (i) half of the existing features will be selected, (ii) after the feature
-        selection method from CatBoost is executed, it generates a 'loss_graph', that indicates
+        selection method from ``CatBoost`` is executed, it generates a 'loss_graph', that indicates
         the loss function for each feature removed: the loss when 0 features were removed, the
         loss when 1 feature was removed, etc., up until half of the features were removed. With
         this loss graph, we get the number of features removed that resulted in the best loss
@@ -105,22 +105,22 @@ class CatBoostSelection(FeatureSelection):
         than n_feat, otherwise there is nothing for the class to do (that is:
         len(fixed_cols) < n_feat);
 
-    :param algorithm: the algorithm used to do feature selection. CatBoost uses a Recursive
+    :param algorithm: the algorithm used to do feature selection. ``CatBoost`` uses a Recursive
         Feature Selection approach, where each feature is removed at a time. The feature
         selected to be removed is the one with the least importance. The difference between
         each algorithm is how this importance is computed. This parameter can be one of the
         following string values: ['predict', 'loss', 'shap']. Here is a description of each of
-        the algorithms allowed according to CatBoost's own documentation (text in double quotation
-        marks were extracted from Catboost's official documentation):
+        the algorithms allowed according to ``CatBoost``'s own documentation (text in double quotation
+        marks were extracted from ``Catboost``'s official documentation):
 
-            * **'predict':** uses the caboost.EFeaturesSelectionAlgorithm.RecursiveByPredictionValuesChange
-              algorithm. According to CatBoost's own documentation: "the fastest algorithm
+            * **'predict':** uses the :class:`catboost.EFeaturesSelectionAlgorithm.RecursiveByPredictionValuesChange`
+              algorithm. According to ``CatBoost``'s own documentation: "the fastest algorithm
               and the least accurate method (not recommended for ranking losses)" - "For each
               feature, PredictionValuesChange shows how much on average the prediction changes
               if the feature value changes. The bigger the value of the importance the bigger
               on average is the change to the prediction value, if this feature is changed.";
-            * **'loss':** uses the caboost.EFeaturesSelectionAlgorithm.RecursiveByLossFunctionChange
-              algorithm. According to CatBoost's own documentation: "the optimal option
+            * **'loss':** uses the :class:`catboost.EFeaturesSelectionAlgorithm.RecursiveByLossFunctionChange`
+              algorithm. According to ``CatBoost``'s own documentation: "the optimal option
               according to accuracy/speed balance" - "For each feature the value represents the
               difference between the loss value of the model with this feature and without it.
               The model without this feature is equivalent to the one that would have been trained
@@ -129,9 +129,9 @@ class CatBoostSelection(FeatureSelection):
               using the original model with this feature removed from all the trees in the ensemble.
               The calculation of this feature importance requires a dataset and, therefore, the
               calculated value is dataset-dependent.";
-            * **'shap':** uses the caboost.EFeaturesSelectionAlgorithm.RecursiveByShapValues algorithm.
-              According to CatBoost's own documentation: "the most accurate method.". For this
-              algorithm, CatBoost uses Shap Values to determine the importance of each feature;
+            * **'shap':** uses the :class:`catboost.EFeaturesSelectionAlgorithm.RecursiveByShapValues` algorithm.
+              According to ``CatBoost``'s own documentation: "the most accurate method.". For this
+              algorithm, ``CatBoost`` uses Shap Values to determine the importance of each feature;
 
     :param steps: the number of times the model is trained. The greater the number of steps, the more
         accurate is the importance score of each feature;
@@ -474,9 +474,9 @@ class CatBoostSelection(FeatureSelection):
     # -----------------------------------
     def get_summary(self):
         """
-        Public method that returns the summary generated by the CatBoost model.
+        Public method that returns the summary generated by the ``CatBoost`` model.
         For more information on the data contained in this summary, please check
-        CatBoost's official documentation:
+        ``CatBoost``'s official documentation:
         https://catboost.ai/en/docs/concepts/output-data_features-selection
         """
         return self.summary.copy()

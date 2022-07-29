@@ -18,12 +18,12 @@ class FeatureSelection(DataProcessing):
         This data frame must contain all the features, including the label
         column (specified in the  ``label_col`` parameter). This parameter is
         mandatory if  ``label_col`` is also provided. The user can also provide
-        this dataset (along with the  ``label_col``) when calling the fit()
-        method. If df is provided during the class instantiation, it is not
-        necessary to provide it again when calling fit(). It is also possible
+        this dataset (along with the  ``label_col``) when calling the:meth:`fit`
+        method. If ``df`` is provided during the class instantiation, it is not
+        necessary to provide it again when calling:meth:`fit`. It is also possible
         to use the  ``X`` and  ``y`` instead of  ``df`` and  ``label_col``, although it is
         mandatory to pass the pair of parameters (X,y) or (df, label_col) either
-        during the class instantiation or during the fit() method;
+        during the class instantiation or during the:meth:`fit` method;
 
     :param label_col: the name or index of the label column. This parameter is
         mandatory if  ``df`` is provided;
@@ -38,13 +38,13 @@ class FeatureSelection(DataProcessing):
 
     :param transform_pipe: a list of transformations to be used as a pre-processing
         pipeline. Each transformation in this list must be a valid subclass of the
-        current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+        current library (:class:`~raimitigations.dataprocessing.EncoderOrdinal`, :class:`~raimitigations.dataprocessing.BasicImputer`, etc.). Some feature selection
         methods require a dataset with no categorical features or with no missing values
         (depending on the approach). If no transformations are provided, a set of default
         transformations will be used, which depends on the feature selection approach
         (subclass dependent);
 
-    :param in_place: indicates if the original dataset will be saved internally (df_org)
+    :param in_place: indicates if the original dataset will be saved internally (``df_org``)
         or not. If True, then the feature selection transformation is saved over the
         original dataset. If False, the original dataset is saved separately (default
         value);
@@ -78,9 +78,9 @@ class FeatureSelection(DataProcessing):
         Several feature selection approaches require a dataset containing only numerical
         features and without any missing values. Therefore, by default, any concrete
         feature selection class that inherits from the current abstract class must
-        have a self.transform_pipe with at least one object that inherits from DataImputer
+        have a ``self.transform_pipe`` with at least one object that inherits from :class:`~raimitigations.dataprocessing.DataImputer`
         and one object that inherits from DataEncoding. The default objects created in
-        case one of the requirements is not met are BasicImputer and EncoderOrdinal,
+        case one of the requirements is not met are :class:`~raimitigations.dataprocessing.BasicImputer` and :class:`~raimitigations.dataprocessing.EncoderOrdinal`
         respectively.
         """
         requirements = {
@@ -106,7 +106,7 @@ class FeatureSelection(DataProcessing):
     # -----------------------------------
     def set_selected_features(self, selected: list = None):
         """
-        Sets the self.selected_feat attribute, which indicates the currently selected
+        Sets the ``self.selected_feat`` attribute, which indicates the currently selected
         features. Receives a list of column names that should be set as the currently
         selected features. If this list is None, then the features selected by the
         feature selection method (implemented by a concrete class that inherits
@@ -150,11 +150,11 @@ class FeatureSelection(DataProcessing):
     ):
         """
         Default fit method for all feature selection classes that inherit from
-        the current class. The following steps are executed: (i) set the self.df
-        and self.y attributes, (ii) set the transform list (or create a default
+        the current class. The following steps are executed: (i) set the ``self.df``
+        and ``self.y`` attributes, (ii) set the transform list (or create a default
         one if needed), (iii) fit and then apply the transformations in the
-        self.transform_pipe attribute to the dataset, (iv) call the concrete
-        class's specific _fit method, and (v) set the self.selected_feat attribute.
+        ``self.transform_pipe`` attribute to the dataset, (iv) call the concrete
+        class's specific :meth:`_fit` method, and (v) set the ``self.selected_feat`` attribute.
 
         :param X: contains only the features of the original dataset, that is, does not
             contain the label column;
