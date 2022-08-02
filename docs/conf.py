@@ -15,6 +15,7 @@ import sys
 import sphinx_rtd_theme
 
 sys.path.insert(0, os.path.abspath("../raimitigations"))
+sys.path.insert(0, os.path.abspath("../notebooks/dataprocessing/case_study"))
 
 
 # -- Project information -----------------------------------------------------
@@ -67,7 +68,7 @@ html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 
 html_context = {
-    'display_github': False,
+    'display_github': True,
     "github_repo": "microsoft/responsible-ai-toolbox-mitigations", # Repo name
     "github_version": "main", # Version
     "conf_py_path": "/docs/", # Path in the checkout to the docs root

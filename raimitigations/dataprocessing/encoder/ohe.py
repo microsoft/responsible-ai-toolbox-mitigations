@@ -71,12 +71,11 @@ class EncoderOHE(DataEncoding):
         new_col_dict = {col: [] for col in self.col_encode}
         for i, col in enumerate(self.col_encode):
             values = self.encoder.categories_[i]
-            if len(values) > 1:
-                for j, value in enumerate(values):
-                    if not self.drop or j != self.encoder.drop_idx_[i]:
-                        col_name = f"{col}_{value}"
-                        new_df_col.append(col_name)
-                        new_col_dict[col].append(col_name)
+            for j, value in enumerate(values):
+                if not self.drop or j != self.encoder.drop_idx_[i]:
+                    col_name = f"{col}_{value}"
+                    new_df_col.append(col_name)
+                    new_col_dict[col].append(col_name)
 
         self.ohe_col_dict = new_col_dict
         return new_df_col

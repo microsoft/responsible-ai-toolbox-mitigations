@@ -107,13 +107,13 @@ With pre-commit installed and activated, whenever you do a new commit, pre-commi
 
 ### Updating the Docs
 
-The documentation is built using [Sphinx](https://www.sphinx-doc.org/en/master/) and [Graphviz](https://graphviz.org/) (to build the class diagrams). Graphviz must be installed separately using:
+The documentation is built using [Sphinx](https://www.sphinx-doc.org/en/master/), [Pandoc](https://pandoc.org/installing.html), and [Graphviz](https://graphviz.org/) (to build the class diagrams). Graphviz and Pandoc must be installed separately using:
 
 ```console
-> sudo apt install graphviz
+> sudo apt install graphviz pandoc
 ```
 
-Make sure Graphviz is installed before recompiling the docs. After that, update the documentation files, which are all located inside the ```docs/``` folder. Finally, use:
+Make sure Graphviz and Pandoc are installed before recompiling the docs. After that, update the documentation files, which are all located inside the ```docs/``` folder. Finally, use:
 
 ```console
 > cd docs/
@@ -121,6 +121,14 @@ Make sure Graphviz is installed before recompiling the docs. After that, update 
 ```
 
 To view the documentation, open the file ```docs/_build/html/index.html``` in your browser.
+
+**Note for Windows users:** if you are trying to update the docs in a Windows environment, you might get an error regarding the *_sqlite3* module:
+
+```
+ImportError: DLL load failed while importing _sqlite3: The specified module could not be found.
+```
+
+To fix this, following the instructions found [in this link](https://www.dev2qa.com/how-to-fix-importerror-dll-load-failed-while-importing-_sqlite3-the-specified-module-could-not-be-found/).
 
 ## Trademarks
 
