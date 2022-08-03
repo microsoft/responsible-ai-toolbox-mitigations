@@ -29,4 +29,3 @@ Notebooks
    notebooks/case_study/case1_stat
    notebooks/case_study/case2_stat
    notebooks/case_study/case3_stat
-   notebooks/case_study/case4_stat
