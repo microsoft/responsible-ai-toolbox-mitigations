@@ -8,8 +8,8 @@ from .encoder import DataEncoding
 class EncoderOHE(DataEncoding):
     """
     Concrete class that applies one-hot encoding over a dataset. The categorical
-    features are encoded using the One-Hot encoding class from sklearn. The main
-    difference between using the sklearn implementation directly is that the
+    features are encoded using the One-Hot encoding class from ``sklearn``. The main
+    difference between using the ``sklearn`` implementation directly is that the
     transform method implemented here returns a data frame instead of a numpy array.
     This is useful when it is important to maintain the data frame format without
     losing the name of the columns. The new columns created for the one-hot encoding

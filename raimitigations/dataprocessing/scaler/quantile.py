@@ -6,21 +6,21 @@ from .scaler import DataScaler
 
 class DataQuantileTransformer(DataScaler):
     """
-    Concrete class that applies the QuantileTransformer scaler over a given dataset.
-    This class uses the sklearn's implementation of this scaler (QuantileTransformer)
+    Concrete class that applies the :class:`~sklearn.preprocessing.QuantileTransformer` scaler over a given dataset.
+    This class uses the :mod:`sklearn`'s implementation of this scaler (:class:`~sklearn.preprocessing.QuantileTransformer`)
     at its root, but also makes it more simple to be applied to a dataset. For example,
     the user can use a dataset with categorical columns and the scaler will be applied
     only to the numerical columns. Also, the user can provide a pipeline of scalers, and
-    all of the scalers in the pipeline will be applied before the QuantileTransformer
+    all of the scalers in the pipeline will be applied before the :class:`~sklearn.preprocessing.QuantileTransformer`
     scaler. The user can also use a list of transformations using other non-scaler
     classes implemented in this library (feature selection, encoding, imputation, etc.).
-    For more details on how the QuantileTransformer changes the data, check the official
-    documentation from sklearn:
+    For more details on how the :class:`~sklearn.preprocessing.QuantileTransformer` changes the data, check the official
+    documentation from :mod:`sklearn`:
     https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.QuantileTransformer.html
 
-    :param scaler_obj: an object from the QuantileTransformer class.
-        This sklearn scaler will be used to perform the scaling process. If None, a
-        QuantileTransformer is created using default values;
+    :param scaler_obj: an object from the :class:`~sklearn.preprocessing.QuantileTransformer` class.
+        This :mod:`sklearn` scaler will be used to perform the scaling process. If None, a
+        :class:`~sklearn.preprocessing.QuantileTransformer` is created using default values;
 
     :param df: pandas data frame that contains the columns to be scaled
         and/or transformed;
@@ -31,31 +31,31 @@ class DataQuantileTransformer(DataScaler):
         unmodified. This is useful if the dataset contains a set of binary columns
         that should be left as is, or a set of categorical columns (which can't
         be scaled or transformed). If the categorical columns are not added in this
-        list (exclude_cols), the categorical columns will be automatically identified
-        and added into the 'exclude_cols' list. If None, this parameter will be set
+        list (``exclude_cols``), the categorical columns will be automatically identified
+        and added into the ``exclude_cols`` list. If None, this parameter will be set
         automatically as being a list of all categorical variables in the dataset;
 
     :param transform_pipe: a list of transformations to be used as a pre-processing
         pipeline. Each transformation in this list must be a valid subclass of the
-        current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+        current library (:class:`~raimitigations.dataprocessing.EncoderOrdinal`, :class:`~raimitigations.dataprocessing.BasicImputer`, etc.). Some feature selection
         methods require a dataset with no categorical features or with no missing values
         (depending on the approach). If no transformations are provided, a set of default
         transformations will be used, which depends on the feature selection approach
         (subclass dependent). This parameter also accepts other scalers in the list. When
-        this happens and the inverse_transform() method of self is called, the
-        inverse_transform() method of all scaler objects that appear in the transform_pipe
+        this happens and the :meth:`inverse_transform` method of self is called, the
+        :meth:`inverse_transform` method of all scaler objects that appear in the ``transform_pipe``
         list after the last non-scaler object are called in a reversed order. For example,
-        if DataMinMaxScaler is instantiated with transform_pipe=[BasicImputer(), DataQuantileTransformer(),
-        EncoderOHE(), DataPowerTransformer()], then, when calling the fit() method of the
-        DataMinMaxScaler object, first the dataset will be fitted and transformed using
+        if :class:`~raimitigations.datapreprocessing.DataMinMaxScaler. is instantiated with transform_pipe=[BasicImputer(), DataQuantileTransformer(),
+        EncoderOHE(), DataPowerTransformer()], then, when calling :meth:`fit` on the
+        ``DataMinMaxScaler`` object, first the dataset will be fitted and transformed using
         BasicImputer, followed by DataQuantileTransformer, EncoderOHE, and DataPowerTransformer,
         and only then it will be fitted and transformed using the current DataMinMaxScaler.
-        The transform() method works in a similar way, the difference being that it doesn't call
-        the fit method for the data scaler in the transform_pipe. For the inverse_transform()
+        The :meth:`transform` method works in a similar way, the difference being that it doesn't call
+        :meth:`fit` for the data scaler in the ``transform_pipe``. For the :meth:`inverse_transform`
         method, the inverse transforms are applied in reverse order, but only the scaler objects
-        that appear after the last non-scaler object in the transform_pipe: first, we inverse the
-        DataMinMaxScaler, followed by the inversion of the DataPowerTransformer. The DataQuantileTransformer
-        isn't reversed because it appears between two non-scaler objects: BasicImputer and EncoderOHE;
+        that appear after the last non-scaler object in the ``transform_pipe``: first, we inverse the
+        ``DataMinMaxScaler``, followed by the inversion of the ``DataPowerTransformer``. The ``DataQuantileTransformer``
+        isn't reversed because it appears between two non-scaler objects: ``BasicImputer`` and ``EncoderOHE``;
 
     :param verbose: indicates whether internal messages should be printed or not.
     """

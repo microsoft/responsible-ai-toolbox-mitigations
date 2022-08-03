@@ -107,10 +107,14 @@ With pre-commit installed and activated, whenever you do a new commit, pre-commi
 
 ### Updating the Docs
 
-The documentation is built using [Sphinx](https://www.sphinx-doc.org/en/master/), [Pandoc](https://pandoc.org/installing.html), and [Graphviz](https://graphviz.org/) (to build the class diagrams). Graphviz and Pandoc must be installed separately using:
+The documentation is built using [Sphinx](https://www.sphinx-doc.org/en/master/), [Pandoc](https://pandoc.org/installing.html), and [Graphviz](https://graphviz.org/) (to build the class diagrams). Graphviz and Pandoc must be installed separately ([detailed instructions here for Graphviz](https://graphviz.org/download/) and [here for Pandoc](https://pandoc.org/installing.html)). On Linux, this can be done with `apt` or `yum` (depending on your distribution):
 
 ```console
 > sudo apt install graphviz pandoc
+```
+
+```console
+> sudo yum install graphviz pandoc
 ```
 
 Make sure Graphviz and Pandoc are installed before recompiling the docs. After that, update the documentation files, which are all located inside the ```docs/``` folder. Finally, use:

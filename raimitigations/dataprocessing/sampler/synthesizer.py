@@ -11,73 +11,73 @@ from ..data_processing import DataProcessing
 
 class Synthesizer(DataProcessing):
     """
-    Concrete class that uses generative models (implemented in the sdv library)
+    Concrete class that uses generative models (implemented in the :mod:`sdv` library)
     to create synthetic data for imbalanced datasets. This class allows the creation
     of synthetic data according to a set of conditions specified by the user or
     according to a predefined strategies based on the minority and majority
     classes (both considering the label column only).
 
-    :param df: the dataset to be rebalanced, which is used during the fit method.
+    :param df: the dataset to be rebalanced, which is used during the :meth:`fit` method.
         This data frame must contain all the features, including the label
-        column (specified in the 'label_col' parameter). This parameter is
-        mandatory if 'label_col' is also provided. The user can also provide
-        this dataset (along with the 'label_col') when calling the fit()
+        column (specified in the  ``label_col`` parameter). This parameter is
+        mandatory if  ``label_col`` is also provided. The user can also provide
+        this dataset (along with the  ``label_col``) when calling the :meth:`fit`
         method. If df is provided during the class instantiation, it is not
-        necessary to provide it again when calling fit(). It is also possible
-        to use the 'X' and 'y' instead of 'df' and 'label_col', although it is
+        necessary to provide it again when calling :meth:`fit`. It is also possible
+        to use the  ``X`` and  ``y`` instead of  ``df`` and  ``label_col``, although it is
         mandatory to pass the pair of parameters (X,y) or (df, label_col) either
-        during the class instantiation or during the fit() method;
+        during the class instantiation or during the :meth:`fit` method;
 
     :param label_col: the name or index of the label column. This parameter is
-        mandatory if 'df' is provided;
+        mandatory if  ``df`` is provided;
 
     :param X: contains only the features of the original dataset, that is, does
         not contain the label column. This is useful if the user has already
         separated the features from the label column prior to calling this class.
-        This parameter is mandatory if 'y' is provided;
+        This parameter is mandatory if  ``y`` is provided;
 
     :param y: contains only the label column of the original dataset. This parameter
-        is mandatory if 'X' is provided;
+        is mandatory if  ``X`` is provided;
 
     :param transform_pipe: a list of transformations to be used as a pre-processing
         pipeline. Each transformation in this list must be a valid subclass of the
-        current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+        current library (:class:`~raimitigations.dataprocessing.EncoderOrdinal`, :class:`~raimitigations.dataprocessing.BasicImputer`, etc.). Some feature selection
         methods require a dataset with no categorical features or with no missing values
         (depending on the approach). If no transformations are provided, a set of default
         transformations will be used, which depends on the feature selection approach
         (subclass dependent);
 
-    :param in_place: indicates if the original dataset will be saved internally (df_org)
+    :param in_place: indicates if the original dataset will be saved internally (``df_org``)
         or not. If True, then the feature selection transformation is saved over the
         original dataset. If False, the original dataset is saved separately (default
         value);
 
     :param model: the model that should be used to generate the synthetic instances. Can
-        be a string or an object that inherits from sdv.tabular.base.BaseTabularModel:
+        be a string or an object that inherits from :class:`sdv.tabular.base.BaseTabularModel`:
 
-            - **BaseTabularModel:** an object from one of the following classes: CTGAN, TVAE,
-              GaussianCopula, or CopulaGAN, all from the sdv.tabular module;
+            - **BaseTabularModel:** an object from one of the following classes: :class:`~sdv.tabular.ctgan.CTGAN`, :class:`~sdv.tabular.ctgan.TVAE`,
+              :class:`~sdv.tabular.copulas.GaussianCopula, or :class:`~sdv.tabular.copulagan.CopulaGAN`, all from the :class:`sdv.tabular` module;
             - **str:** a string that identifies which base model should be created. The base
-              models supported are: CTGAN, TVAE, GaussianCopula, and CopulaGAN. The string
+              models supported are: :class:`~sdv.tabular.ctgan.CTGAN`, :class:`~sdv.tabular.ctgan.TVAE`, :class:`~sdv.tabular.copulas.GaussianCopula`, and :class:`~sdv.tabular.copulagan.CopulaGAN`. The string
               values allowed associated to each of the previous models are (respectively):
               "ctgan", "tvae", "copula", and "copula_gan";
 
-    :param epochs: the number of epochs that the model (specified by the 'model' parameter)
+    :param epochs: the number of epochs that the model (specified by the ``model`` parameter)
         should be trained. This parameter is not used when the selected model is from the
         class GaussianCopula;
 
     :param save_file: the name of the file containing the data of the trained model. After
-        training the model (when calling the fit method), the model's weights are saved in
+        training the model (when calling :meth:`fit`), the model's weights are saved in
         the path specified by this parameter, which can then be loaded and reused for future
         use. This is useful when training over a large dataset since this results in an
         extended training time. If the provided value is None, then a default name will be
-        created based on the model's type and number of epochs. If load_existing is True,
+        created based on the model's type and number of epochs. If ``load_existing`` is True,
         then this parameter will indicate which save file should be loaded;
 
     :param load_existing: a boolean value indicating if the model should be loaded or not.
         If False, a new save file will be created (or overwritten if the file specified in
-        save_file already exists) containing the model's wights of a new model. If True, the
-        model will be loaded from the file save_file;
+        ``save_file`` already exists) containing the model's wights of a new model. If True, the
+        model will be loaded from the file ``save_file``;
 
     :param verbose: indicates whether internal messages should be printed or not
     """
@@ -254,8 +254,8 @@ class Synthesizer(DataProcessing):
         label_col: str = None,
     ):
         """
-        Prepare the dataset and then call the model's fit method. If the model was loaded,
-        then there is no need to call the fit method.
+        Prepare the dataset and then call :meth:`fit`. If the model was loaded,
+        then there is no need to call :meth:`fit`.
 
         :param X: contains only the features of the original dataset, that is, does not
             contain the label column;
@@ -437,9 +437,9 @@ class Synthesizer(DataProcessing):
     # -----------------------------------
     def sample(self, n_samples: int, conditions: dict = None):
         """
-        Encapsulates the method sample() from the models that inherit from
-        sdv.tabular.baseBaseTabularModel. This allows users to use this method
-        without requiring to directly access the model object (self.model).
+        Encapsulates :meth:`sample` from the models that inherit from
+        :class:`sdv.tabular.baseBaseTabularModel`. This allows users to use this method
+        without requiring to directly access the model object (``self.model``).
         """
         samples = self.model.sample(n_samples, conditions=conditions)
         return samples
@@ -448,19 +448,19 @@ class Synthesizer(DataProcessing):
     def _arrange_transform_df(self, df: pd.DataFrame = None, X: pd.DataFrame = None, y: pd.DataFrame = None):
         """
         Arranges the data provided to the transform method to a standardized pattern, which is:
-        a dataframe where the label column is named after the attribute self.label_col_name, and
+        a dataframe where the label column is named after the attribute ``self.label_col_name``, and
         the remaining columns are the feature columns. If the dataset is provided through the df
         parameter, no changes are made, but df must follow the same structure as the dataset
-        provided during the fit method. If the data is provided through X and Y, then a new dataset
-        is created such that it contains all columns in X plus the label column y.
+        provided during :meth:`fit`. If the data is provided through ``X`` and ``y``, then a new dataset
+        is created such that it contains all columns in ``X`` plus the label column ``y``.
 
         :param df: the full dataset to be transformed, which contains the label column
-            (specified during the fit method);
+            (specified during :meth:`fit`);
         :param X: contains only the features of the dataset, that is, does not contain the
             label column;
         :param y: contains only the label column of the dataset to be transformed. If the
-            user provides df, X and y must be left as None. Alternatively, if the user
-            provides (X, y), df must be left as None;
+            user provides ``df``, ``X`` and ``y`` must be left as None. Alternatively, if the user
+            provides (X, y), ``df`` must be left as None;
         """
         input_mode = self.INPUT_DF
         if df is not None:
@@ -508,12 +508,12 @@ class Synthesizer(DataProcessing):
         data generated.
 
         :param df: the full dataset to be transformed, which contains the label column
-            (specified during the fit method);
+            (specified during :meth:`fit`);
         :param X: contains only the features of the dataset, that is, does not contain the
             label column;
         :param y: contains only the label column of the dataset to be transformed. If the
-            user provides df, X and y must be left as None. Alternatively, if the user
-            provides (X, y), df must be left as None;
+            user provides ``df``, ``X`` and ``y`` must be left as None. Alternatively, if the user
+            provides (X, y), ``df`` must be left as None;
         :param n_samples: the number of samples that should be created using the set of
             conditions specified by the 'conditions' parameter;
         :param conditions: a set of conditions, specified by a dictionary, that defines the
@@ -522,7 +522,7 @@ class Synthesizer(DataProcessing):
             have. If None, then no restrictions will be imposed on how to generate the
             synthetic data;
         :param strategy: represents the strategy used to generate the artificial instances.
-            This parameter is ignored when n_samples is provided. Strategy can assume the
+            This parameter is ignored when ``n_samples`` is provided. Strategy can assume the
             following values:
 
             - **String:** one of the following predefined strategies:
@@ -538,9 +538,9 @@ class Synthesizer(DataProcessing):
               found in the label column, and the value associated with each key represents the
               number of instances desired for that class after the undersampling process is done.
               Note: this parameter only works with undersampling approaches that allow
-              controlling the number of instances to be undersampled, such as RandomUnderSampler,
-              ClusterCentroids (from imblearn). If any other undersampler is provided in the
-              under_sampler parameter along with a float value for the strategy_under parameter,
+              controlling the number of instances to be undersampled, such as :class:`~imblearn.under_sampling.RandomUnderSampler`,
+              :class:`~imblearn.under_sampling.ClusterCentroids` (from :mod:`imblearn`). If any other undersampler is provided in the
+              ``under_sampler`` parameter along with a float value for the strategy_under parameter,
               an error will be raised;
             - **Float:** a value between [0, 1] that represents the desired ratio between
               the number of instances of the minority class over the majority class
@@ -548,9 +548,9 @@ class Synthesizer(DataProcessing):
               :math:`N_m` is the number of instances of the minority class and :math:`N_M` is the
               number of instances of the majority class after undersampling. Note: this
               parameter only works with undersampling approaches that allow controlling
-              the number of instances to be undersampled, such as RandomUnderSampler,
-              ClusterCentroids (from imblearn). If any other undersampler is provided in
-              the under_sampler parameter along with a float value for the strategy_under
+              the number of instances to be undersampled, such as :class:`~imblearn.under_sampling.RandomUnderSampler`,
+              :class:`~imblearn.under_sampling.ClusterCentroids` (from :mod:`imblearn`). If any other undersampler is provided in
+              the under_sampler parameter along with a float value for the ``strategy_under``
               parameter, an error will be raised;
               If None, the default value is set to "auto", which is the same as "minority".
         """

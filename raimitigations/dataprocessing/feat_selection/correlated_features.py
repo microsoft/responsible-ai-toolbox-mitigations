@@ -78,36 +78,36 @@ class CorrelatedFeatures(FeatureSelection):
 
     :param df: the data frame to be used during the fit method.
         This data frame must contain all the features, including the label
-        column (specified in the 'label_col' parameter). This parameter is
-        mandatory if 'label_col' is also provided. The user can also provide
-        this dataset (along with the 'label_col') when calling the fit()
+        column (specified in the  ``label_col`` parameter). This parameter is
+        mandatory if  ``label_col`` is also provided. The user can also provide
+        this dataset (along with the  ``label_col``) when calling the :meth:`fit`
         method. If df is provided during the class instantiation, it is not
-        necessary to provide it again when calling fit(). It is also possible
-        to use the 'X' and 'y' instead of 'df' and 'label_col', although it is
+        necessary to provide it again when calling :meth:`fit`. It is also possible
+        to use the  ``X`` and  ``y`` instead of  ``df`` and  ``label_col``, although it is
         mandatory to pass the pair of parameters (X,y) or (df, label_col) either
-        during the class instantiation or during the fit() method;
+        during the class instantiation or during the :meth:`fit` method;
 
     :param label_col: the name or index of the label column. This parameter is
-        mandatory if 'df' is provided;
+        mandatory if  ``df`` is provided;
 
     :param X: contains only the features of the original dataset, that is, does not
         contain the label column. This is useful if the user has already separated
         the features from the label column prior to calling this class. This parameter
-        is mandatory if 'y' is provided;
+        is mandatory if  ``y`` is provided;
 
     :param y: contains only the label column of the original dataset.
-        This parameter is mandatory if 'X' is provided;
+        This parameter is mandatory if  ``X`` is provided;
 
     :param transform_pipe: a list of transformations to be used as a pre-processing
         pipeline. Each transformation in this list must be a valid subclass of the
-        current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+        current library (:class:`~raimitigations.dataprocessing.EncoderOrdinal`, :class:`~raimitigations.dataprocessing.BasicImputer`, etc.). Some feature selection
         methods require a dataset with no categorical features or with no missing
         values (depending on the approach). If no transformations are provided, a set
         of default transformations will be used, which depends on the feature selection
         approach (subclass dependent);
 
     :param in_place: indicates if the original dataset will be saved internally
-        (df_org) or not. If True, then the feature selection transformation is saved
+        (``df_org``) or not. If True, then the feature selection transformation is saved
         over the original dataset. If False, the original dataset is saved separately
         (default value);
 
@@ -124,13 +124,13 @@ class CorrelatedFeatures(FeatureSelection):
     :param num_corr_th: the correlation coefficient value used as a threshold for
         considering if there is a correlation between two numerical variables.
         That is, given two variables with a correlation coefficient of 'x' (depends on
-        the correlation used, specified by method_num_num), a correlation is considered
+        the correlation used, specified by ``method_num_num``), a correlation is considered
         only if abs(x) >= method_num_num and if the associated p-value 'p' is smaller than
         'p' <= num_pvalue_th;
 
     :param num_pvalue_th: the p-value used as a threshold when considering if there is a
         correlation between two variables. That is, given two variables with a correlation
-        coefficient of 'x' (depends on the correlation used, specified by method_num_num),
+        coefficient of 'x' (depends on the correlation used, specified by ``method_num_num``),
         a correlation is considered only if abs(x) >= method_num_num and if the associated
         p-value 'p' is smaller than 'p' <= num_pvalue_th;
 
@@ -141,22 +141,22 @@ class CorrelatedFeatures(FeatureSelection):
               test to see if the numerical variable has a similar variance across the
               different values of the categorical variable (Homoscedastic data). If
               the test passes (that is if the p-value of the Levene test is greater
-              than 'levene_pvalue'), then we can perform the ANOVA test, in which we
+              than ``levene_pvalue``), then we can perform the ANOVA test, in which we
               compute the F-statistic to see if there is a correlation between the
               numerical and categorical variables and its associated p-value. We also
-              compute the omega-squared metric. If the p-value is less than 'anova_pvalue'
-              and the omega-squared is greater than 'omega_th', then both variables
+              compute the omega-squared metric. If the p-value is less than ``anova_pvalue``
+              and the omega-squared is greater than ``omega_th``, then both variables
               are considered to be correlated;
             * **'jensen':** first we clusterize the numerical values according to their respective
               values of the categorical data. We then compute the probability density
               function of the numerical variable for each cluster (we approximate the
-              PDF with the histogram using 'jensen_n_bins' different bins). The next
+              PDF with the histogram using ``jensen_n_bins`` different bins). The next
               step is to compute the Jensen-Shannon Distance metric between the distribution
               functions of each pair of clusters. This distance metric varies from 0 to 1,
               where values closer to 0 mean that both distributions tested are similar and
               values closer to 1 mean that the distributions are different. If all pairs
               of distributions tested are considered different (a Jensen-Shannon metric above
-              'jensen_th' for all pairs tested), then both variables are considered to be
+              ``jensen_th`` for all pairs tested), then both variables are considered to be
               correlated;
             * **'model':** trains a simple decision tree using the numerical variable and predicts the
               categorical variable. Both variables are first divided into a training and
@@ -165,8 +165,8 @@ class CorrelatedFeatures(FeatureSelection):
               by the model is the numerical variable and the predicted label is the different
               values within the categorical variable. After training, the model is used to
               predict the values of the test set and a set of metrics is computed to assess the
-              performance of the model (the metrics computed are defined by 'model_metrics').
-              If all metrics computed are above the threshold 'metric_th', then both variables
+              performance of the model (the metrics computed are defined by ``model_metrics``).
+              If all metrics computed are above the threshold ``metric_th``, then both variables
               are considered to be correlated;
 
         If set to None, then none of the correlations between numerical and categorical variables will
@@ -231,11 +231,11 @@ class CorrelatedFeatures(FeatureSelection):
 
         If set to None, then none of the correlations between two categorical variables will be tested;
 
-    :param cat_corr_th: the threshold used for the Cramer's V correlation coefficient. Values greater than cat_corr_th
+    :param cat_corr_th: the threshold used for the Cramer's V correlation coefficient. Values greater than ``cat_corr_th``
         indicates a high correlation between two variables, but only if the p-value associated with this coefficient
-        is smaller than cat_pvalue_th;
+        is smaller than ``cat_pvalue_th``;
 
-    :param cat_pvalue_th: check the description for the parameter cat_corr_th for more information;
+    :param cat_pvalue_th: check the description for the parameter ``cat_corr_th`` for more information;
 
     :param tie_method: the method used to choose the variable to remove in case a correlation
         between them is identified. This is used for all types of correlations:
@@ -253,8 +253,8 @@ class CorrelatedFeatures(FeatureSelection):
         In all three cases, if both variables are tied (same dispersion, same number of missing
         values, or same cardinality), the variable to be removed will be selected randomly;
 
-    :param save_json: if True, the summary jsons are saved according to the paths json_summary, json_corr, and
-        json_uncorr. If False, these json files are not saved;
+    :param save_json: if True, the summary jsons are saved according to the paths ``json_summary``, ``json_corr``, and
+        ``json_uncorr``. If False, these json files are not saved;
 
     :param json_summary: when calling the fit method, all correlations will be computed according to the many
         parameters detailed previously. After computing all this data, everything is saved in a JSON file,
@@ -262,14 +262,14 @@ class CorrelatedFeatures(FeatureSelection):
         This parameter indicates the name of the file where the JSON should be saved (including the path
         to the file). If set to None no JSON file will be saved;
 
-    :param json_corr: similar to json_summary, but corresponds to the name of the JSON file that contains only
+    :param json_corr: similar to ``json_summary``, but corresponds to the name of the JSON file that contains only
         the information of the pairs of variables considered to be correlated (with no repetitions);
 
-    :param json_uncorr: similar to json_summary, but corresponds to the name of the JSON file that contains only
+    :param json_uncorr: similar to ``json_summary``, but corresponds to the name of the JSON file that contains only
         the information of the pairs of variables considered NOT to be correlated (with no repetitions);
 
     :param compute_exact_matches: if True, compute the number of exact matches between two variables and save
-        this information in the json_summary, json_uncorr, and json_corr;
+        this information in the ``json_summary``, ``json_uncorr``, and ``json_corr``;
 
     :param verbose: indicates whether internal messages should be printed or not.
     """
@@ -1551,18 +1551,18 @@ class CorrelatedFeatures(FeatureSelection):
         expensive depending on the size of the dataset. The only parameters allowed to be
         changed are the ones accepted by this method. If another parameter not listed here
         needs to be changed, then it is necessary to instantiate a different object and call
-        the fit() method again.
+        the :meth:`fit` method again.
 
         :param num_corr_th: the correlation coefficient value used as a threshold for
             considering if there is a correlation between two numerical variables.
             That is, given two variables with a correlation coefficient of 'x' (depends on
-            the correlation used, specified by method_num_num), a correlation is considered
+            the correlation used, specified by ``method_num_num``), a correlation is considered
             only if abs(x) >= method_num_num and if the associated p-value 'p' is smaller than
             'p' <= num_pvalue_th;
 
         :param num_pvalue_th: the p-value used as a threshold when considering if there is a
             correlation between two variables. That is, given two variables with a correlation
-            coefficient of 'x' (depends on the correlation used, specified by method_num_num),
+            coefficient of 'x' (depends on the correlation used, specified by ``method_num_num``),
             a correlation is considered only if abs(x) >= method_num_num and if the associated
             p-value 'p' is smaller than 'p' <= num_pvalue_th;
 
@@ -1585,7 +1585,7 @@ class CorrelatedFeatures(FeatureSelection):
             varies between 0 and 1 that indicates the effect of a categorical variable over the variance of
             a numerical variable. A value closer to 0 indicates a weak effect, while values closer to 1 show
             that the categorical variable has a significant impact on the variance of the numerical variable,
-            thus showing a high correlation. If the omega squared is greater than omega_th, then both variables
+            thus showing a high correlation. If the omega squared is greater than ``omega_th``, then both variables
             being analyzed are considered to be correlated. This parameter is ignored if method_num_cat != 'anova';
 
         :param jensen_th: when method_num_cat = 'jensen', we compare the distribution of each cluster of data
@@ -1597,24 +1597,24 @@ class CorrelatedFeatures(FeatureSelection):
 
         :param model_metrics: a list of metric names that should be used when evaluating if a model trained using
             a single numerical variable to predict a categorical variable is good enough. If the trained model
-            presents a good performance for the metrics in model_metrics, then both variables being analyzed are
+            presents a good performance for the metrics in ``model_metrics``, then both variables being analyzed are
             considered to be correlated. This parameter must be a list, and the allowed values in this list are:
             ["f1", "auc", "accuracy", "precision", "recall"]. This parameter is ignored if
             method_num_cat != 'model';
 
-        :param metric_th: given the metrics provided by model_metrics, a pair of variables being analyzed are only
-            considered correlated if all metrics in model_metrics achieve a score greater than metric_th over the
+        :param metric_th: given the metrics provided by ``model_metrics``, a pair of variables being analyzed are only
+            considered correlated if all metrics in ``model_metrics`` achieve a score greater than metric_th over the
             test set (the variables being analyzed are split into training and test set internally). This parameter
             is ignored if method_num_cat != 'model';
 
-        :param cat_corr_th: the threshold used for the Cramer's V correlation coefficient. Values greater than cat_corr_th
+        :param cat_corr_th: the threshold used for the Cramer's V correlation coefficient. Values greater than ``cat_corr_th``
             indicates a high correlation between two variables, but only if the p-value associated with this coefficient
-            is smaller than cat_pvalue_th;
+            is smaller than ``cat_pvalue_th``;
 
-        :param cat_pvalue_th: check the description for the parameter cat_corr_th for more information;
+        :param cat_pvalue_th: check the description for the parameter ``cat_corr_th`` for more information;
 
-        :param save_json: if True, the summary jsons are saved according to the paths json_summary, json_corr, and
-            json_uncorr. If False, these json files are not saved;
+        :param save_json: if True, the summary jsons are saved according to the paths ``json_summary``, ``json_corr``, and
+            ``json_uncorr``. If False, these json files are not saved;
 
         :param json_summary: when calling the fit method, all correlations will be computed according to the many
             parameters detailed previously. After computing all this data, everything is saved in a JSON file,
@@ -1622,10 +1622,10 @@ class CorrelatedFeatures(FeatureSelection):
             This parameter indicates the name of the file where the JSON should be saved (including the path
             to the file). If set to None no JSON file will be saved;
 
-        :param json_corr: similar to json_summary, but corresponds to the name of the JSON file that contains only
+        :param json_corr: similar to ``json_summary``, but corresponds to the name of the JSON file that contains only
             the information of the pairs of variables considered to be correlated (with no repetitions);
 
-        :param json_uncorr: similar to json_summary, but corresponds to the name of the JSON file that contains only
+        :param json_uncorr: similar to ``json_summary``, but corresponds to the name of the JSON file that contains only
             the information of the pairs of variables considered NOT to be correlated (with no repetitions);
         """
         update_num_num = self._update_thresholds_num_num(num_corr_th, num_pvalue_th)

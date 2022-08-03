@@ -23,37 +23,37 @@ class DataScaler(DataProcessing):
         unmodified. This is useful if the dataset contains a set of binary columns
         that should be left as is, or a set of categorical columns (which can't
         be scaled or transformed). If the categorical columns are not added in this
-        list (exclude_cols), the categorical columns will be automatically identified
-        and added into the 'exclude_cols' list. If None, this parameter will be set
+        list (``exclude_cols``), the categorical columns will be automatically identified
+        and added into the ``exclude_cols`` list. If None, this parameter will be set
         automatically as being a list of all categorical variables in the dataset;
 
     :param include_cols:  list of the column names or indexes that should be
         transformed, that is, a list of columns to be included in the dataset being
-        transformed. This parameter uses an inverse logic from the exclude_cols, and
+        transformed. This parameter uses an inverse logic from the ``exclude_cols``, and
         thus these two parameters shouldn't be used at the same time. The user must
-        used either the include_cols, or the exclude_cols, or neither of them;
+        used either the ``include_cols``, or the ``exclude_cols``, or neither of them;
 
     :param transform_pipe: a list of transformations to be used as a pre-processing
         pipeline. Each transformation in this list must be a valid subclass of the
-        current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+        current library (:class:`~raimitigations.dataprocessing.EncoderOrdinal`, :class:`~raimitigations.dataprocessing.BasicImputer`, etc.). Some feature selection
         methods require a dataset with no categorical features or with no missing values
         (depending on the approach). If no transformations are provided, a set of default
         transformations will be used, which depends on the feature selection approach
         (subclass dependent). This parameter also accepts other scalers in the list. When
-        this happens and the inverse_transform() method of self is called, the
-        inverse_transform() method of all scaler objects that appear in the transform_pipe
+        this happens and the :meth:`inverse_transform` method of self is called, the
+        :meth:`inverse_transform` method of all scaler objects that appear in the ``transform_pipe``
         list after the last non-scaler object are called in a reversed order. For example,
-        if DataMinMaxScaler is instantiated with transform_pipe=[BasicImputer(), DataQuantileTransformer(),
-        EncoderOHE(), DataPowerTransformer()], then, when calling the fit() method of the
-        DataMinMaxScaler object, first the dataset will be fitted and transformed using
+        if :class:`~raimitigations.datapreprocessing.DataMinMaxScaler. is instantiated with transform_pipe=[BasicImputer(), DataQuantileTransformer(),
+        EncoderOHE(), DataPowerTransformer()], then, when calling :meth:`fit` on the
+        ``DataMinMaxScaler`` object, first the dataset will be fitted and transformed using
         BasicImputer, followed by DataQuantileTransformer, EncoderOHE, and DataPowerTransformer,
         and only then it will be fitted and transformed using the current DataMinMaxScaler.
-        The transform() method works in a similar way, the difference being that it doesn't call
-        the fit method for the data scaler in the transform_pipe. For the inverse_transform()
+        The :meth:`transform` method works in a similar way, the difference being that it doesn't call
+        :meth:`fit` for the data scaler in the ``transform_pipe``. For the :meth:`inverse_transform`
         method, the inverse transforms are applied in reverse order, but only the scaler objects
-        that appear after the last non-scaler object in the transform_pipe: first, we inverse the
-        DataMinMaxScaler, followed by the inversion of the DataPowerTransformer. The DataQuantileTransformer
-        isn't reversed because it appears between two non-scaler objects: BasicImputer and EncoderOHE;
+        that appear after the last non-scaler object in the ``transform_pipe``: first, we inverse the
+        ``DataMinMaxScaler``, followed by the inversion of the ``DataPowerTransformer``. The ``DataQuantileTransformer``
+        isn't reversed because it appears between two non-scaler objects: ``BasicImputer`` and ``EncoderOHE``;
 
     :param verbose: indicates whether internal messages should be printed or not.
     """
@@ -193,7 +193,7 @@ class DataScaler(DataProcessing):
         dataset.
 
         :param df: the full dataset containing the columns that should be scaled;
-        :param y: ignored. This exists for compatibility with the sklearn's Pipeline class.
+        :param y: ignored. This exists for compatibility with the :mod:`sklearn`'s Pipeline class.
         """
         self._set_df(df, require_set=True)
         self._check_error_col_filters()
