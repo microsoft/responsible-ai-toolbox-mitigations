@@ -36,7 +36,6 @@ methods offered in the **dataprocessing** module.
 - [Imputers](notebooks/dataprocessing/module_tests/imputation.ipynb)
 - [Sequential Feature Selection](notebooks/dataprocessing/module_tests/feat_sel_sequential.ipynb)
 - [Feature Selection using Catboost](notebooks/dataprocessing/module_tests/feat_sel_catboost.ipynb)
-- [Feature Selection based on correlated features](notebooks/dataprocessing/module_tests/feat_sel_corr.ipynb)
 - [Identifying correlated features: tutorial](notebooks/dataprocessing/module_tests/feat_sel_corr_tutorial.ipynb)
 - [Data Rebalance using imblearn](notebooks/dataprocessing/module_tests/rebalance_imbl.ipynb)
 - [Data Rebalance using SDV](notebooks/dataprocessing/module_tests/rebalance_sdv.ipynb)
