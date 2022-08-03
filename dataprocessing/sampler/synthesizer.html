@@ -19,6 +19,8 @@
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -84,7 +86,7 @@
           <li><a href="sampler.html">Sampling</a> &raquo;</li>
       <li>Synthesizer</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/dataprocessing/sampler/synthesizer.rst.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/sampler/synthesizer.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -122,7 +124,7 @@
 <dt class="sig sig-object py" id="dataprocessing.Synthesizer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">Synthesizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseTabularModel</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ctgan'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_existing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Synthesizer" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../dataprocessing.html#dataprocessing.DataProcessing" title="dataprocessing.data_processing.DataProcessing"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataProcessing</span></code></a></p>
-<p>Concrete class that uses generative models (implemented in the sdv library)
+<p>Concrete class that uses generative models (implemented in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">sdv</span></code> library)
 to create synthetic data for imbalanced datasets. This class allows the creation
 of synthetic data according to a set of conditions specified by the user or
 according to a predefined strategies based on the minority and majority
@@ -130,62 +132,62 @@ classes (both considering the label column only).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> – the dataset to be rebalanced, which is used during the fit method.
+<li><p><strong>df</strong> – the dataset to be rebalanced, which is used during the <a class="reference internal" href="#dataprocessing.Synthesizer.fit" title="dataprocessing.Synthesizer.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a> method.
 This data frame must contain all the features, including the label
-column (specified in the ‘label_col’ parameter). This parameter is
-mandatory if ‘label_col’ is also provided. The user can also provide
-this dataset (along with the ‘label_col’) when calling the fit()
+column (specified in the  <code class="docutils literal notranslate"><span class="pre">label_col</span></code> parameter). This parameter is
+mandatory if  <code class="docutils literal notranslate"><span class="pre">label_col</span></code> is also provided. The user can also provide
+this dataset (along with the  <code class="docutils literal notranslate"><span class="pre">label_col</span></code>) when calling the <a class="reference internal" href="#dataprocessing.Synthesizer.fit" title="dataprocessing.Synthesizer.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a>
 method. If df is provided during the class instantiation, it is not
-necessary to provide it again when calling fit(). It is also possible
-to use the ‘X’ and ‘y’ instead of ‘df’ and ‘label_col’, although it is
+necessary to provide it again when calling <a class="reference internal" href="#dataprocessing.Synthesizer.fit" title="dataprocessing.Synthesizer.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a>. It is also possible
+to use the  <code class="docutils literal notranslate"><span class="pre">X</span></code> and  <code class="docutils literal notranslate"><span class="pre">y</span></code> instead of  <code class="docutils literal notranslate"><span class="pre">df</span></code> and  <code class="docutils literal notranslate"><span class="pre">label_col</span></code>, although it is
 mandatory to pass the pair of parameters (X,y) or (df, label_col) either
-during the class instantiation or during the fit() method;</p></li>
+during the class instantiation or during the <a class="reference internal" href="#dataprocessing.Synthesizer.fit" title="dataprocessing.Synthesizer.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a> method;</p></li>
 <li><p><strong>label_col</strong> – the name or index of the label column. This parameter is
-mandatory if ‘df’ is provided;</p></li>
+mandatory if  <code class="docutils literal notranslate"><span class="pre">df</span></code> is provided;</p></li>
 <li><p><strong>X</strong> – contains only the features of the original dataset, that is, does
 not contain the label column. This is useful if the user has already
 separated the features from the label column prior to calling this class.
-This parameter is mandatory if ‘y’ is provided;</p></li>
+This parameter is mandatory if  <code class="docutils literal notranslate"><span class="pre">y</span></code> is provided;</p></li>
 <li><p><strong>y</strong> – contains only the label column of the original dataset. This parameter
-is mandatory if ‘X’ is provided;</p></li>
+is mandatory if  <code class="docutils literal notranslate"><span class="pre">X</span></code> is provided;</p></li>
 <li><p><strong>transform_pipe</strong> – a list of transformations to be used as a pre-processing
 pipeline. Each transformation in this list must be a valid subclass of the
-current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+current library (<code class="xref py py-class docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BasicImputer</span></code>, etc.). Some feature selection
 methods require a dataset with no categorical features or with no missing values
 (depending on the approach). If no transformations are provided, a set of default
 transformations will be used, which depends on the feature selection approach
 (subclass dependent);</p></li>
-<li><p><strong>in_place</strong> – indicates if the original dataset will be saved internally (df_org)
+<li><p><strong>in_place</strong> – indicates if the original dataset will be saved internally (<code class="docutils literal notranslate"><span class="pre">df_org</span></code>)
 or not. If True, then the feature selection transformation is saved over the
 original dataset. If False, the original dataset is saved separately (default
 value);</p></li>
 <li><p><strong>model</strong> – <p>the model that should be used to generate the synthetic instances. Can
-be a string or an object that inherits from sdv.tabular.base.BaseTabularModel:</p>
+be a string or an object that inherits from <code class="xref py py-class docutils literal notranslate"><span class="pre">sdv.tabular.base.BaseTabularModel</span></code>:</p>
 <blockquote>
 <div><ul>
-<li><p><strong>BaseTabularModel:</strong> an object from one of the following classes: CTGAN, TVAE,
-GaussianCopula, or CopulaGAN, all from the sdv.tabular module;</p></li>
+<li><p><strong>BaseTabularModel:</strong> an object from one of the following classes: <code class="xref py py-class docutils literal notranslate"><span class="pre">CTGAN</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">TVAE</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">CopulaGAN</span></code>, all from the <code class="xref py py-class docutils literal notranslate"><span class="pre">sdv.tabular</span></code> module;</p></li>
 <li><p><strong>str:</strong> a string that identifies which base model should be created. The base
-models supported are: CTGAN, TVAE, GaussianCopula, and CopulaGAN. The string
+models supported are: <code class="xref py py-class docutils literal notranslate"><span class="pre">CTGAN</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">TVAE</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianCopula</span></code>, and <code class="xref py py-class docutils literal notranslate"><span class="pre">CopulaGAN</span></code>. The string
 values allowed associated to each of the previous models are (respectively):
 “ctgan”, “tvae”, “copula”, and “copula_gan”;</p></li>
 </ul>
 </div></blockquote>
 </p></li>
-<li><p><strong>epochs</strong> – the number of epochs that the model (specified by the ‘model’ parameter)
+<li><p><strong>epochs</strong> – the number of epochs that the model (specified by the <code class="docutils literal notranslate"><span class="pre">model</span></code> parameter)
 should be trained. This parameter is not used when the selected model is from the
 class GaussianCopula;</p></li>
 <li><p><strong>save_file</strong> – the name of the file containing the data of the trained model. After
-training the model (when calling the fit method), the model’s weights are saved in
+training the model (when calling <a class="reference internal" href="#dataprocessing.Synthesizer.fit" title="dataprocessing.Synthesizer.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a>), the model’s weights are saved in
 the path specified by this parameter, which can then be loaded and reused for future
 use. This is useful when training over a large dataset since this results in an
 extended training time. If the provided value is None, then a default name will be
-created based on the model’s type and number of epochs. If load_existing is True,
+created based on the model’s type and number of epochs. If <code class="docutils literal notranslate"><span class="pre">load_existing</span></code> is True,
 then this parameter will indicate which save file should be loaded;</p></li>
 <li><p><strong>load_existing</strong> – a boolean value indicating if the model should be loaded or not.
 If False, a new save file will be created (or overwritten if the file specified in
-save_file already exists) containing the model’s wights of a new model. If True, the
-model will be loaded from the file save_file;</p></li>
+<code class="docutils literal notranslate"><span class="pre">save_file</span></code> already exists) containing the model’s wights of a new model. If True, the
+model will be loaded from the file <code class="docutils literal notranslate"><span class="pre">save_file</span></code>;</p></li>
 <li><p><strong>verbose</strong> – indicates whether internal messages should be printed or not</p></li>
 </ul>
 </dd>
@@ -193,8 +195,8 @@ model will be loaded from the file save_file;</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="dataprocessing.Synthesizer.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Series</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Synthesizer.fit" title="Permalink to this definition"></a></dt>
-<dd><p>Prepare the dataset and then call the model’s fit method. If the model was loaded,
-then there is no need to call the fit method.</p>
+<dd><p>Prepare the dataset and then call <a class="reference internal" href="#dataprocessing.Synthesizer.fit" title="dataprocessing.Synthesizer.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a>. If the model was loaded,
+then there is no need to call <a class="reference internal" href="#dataprocessing.Synthesizer.fit" title="dataprocessing.Synthesizer.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -211,9 +213,9 @@ contain the label column;</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="dataprocessing.Synthesizer.sample">
 <span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Synthesizer.sample" title="Permalink to this definition"></a></dt>
-<dd><p>Encapsulates the method sample() from the models that inherit from
-sdv.tabular.baseBaseTabularModel. This allows users to use this method
-without requiring to directly access the model object (self.model).</p>
+<dd><p>Encapsulates <a class="reference internal" href="#dataprocessing.Synthesizer.sample" title="dataprocessing.Synthesizer.sample"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sample()</span></code></a> from the models that inherit from
+<code class="xref py py-class docutils literal notranslate"><span class="pre">sdv.tabular.baseBaseTabularModel</span></code>. This allows users to use this method
+without requiring to directly access the model object (<code class="docutils literal notranslate"><span class="pre">self.model</span></code>).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -227,12 +229,12 @@ data generated.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> – the full dataset to be transformed, which contains the label column
-(specified during the fit method);</p></li>
+(specified during <a class="reference internal" href="#dataprocessing.Synthesizer.fit" title="dataprocessing.Synthesizer.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a>);</p></li>
 <li><p><strong>X</strong> – contains only the features of the dataset, that is, does not contain the
 label column;</p></li>
 <li><p><strong>y</strong> – contains only the label column of the dataset to be transformed. If the
-user provides df, X and y must be left as None. Alternatively, if the user
-provides (X, y), df must be left as None;</p></li>
+user provides <code class="docutils literal notranslate"><span class="pre">df</span></code>, <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> must be left as None. Alternatively, if the user
+provides (X, y), <code class="docutils literal notranslate"><span class="pre">df</span></code> must be left as None;</p></li>
 <li><p><strong>n_samples</strong> – the number of samples that should be created using the set of
 conditions specified by the ‘conditions’ parameter;</p></li>
 <li><p><strong>conditions</strong> – a set of conditions, specified by a dictionary, that defines the
@@ -241,7 +243,7 @@ indicates the values for certain features that the synthetic instances should
 have. If None, then no restrictions will be imposed on how to generate the
 synthetic data;</p></li>
 <li><p><strong>strategy</strong> – <p>represents the strategy used to generate the artificial instances.
-This parameter is ignored when n_samples is provided. Strategy can assume the
+This parameter is ignored when <code class="docutils literal notranslate"><span class="pre">n_samples</span></code> is provided. Strategy can assume the
 following values:</p>
 <ul>
 <li><p><strong>String:</strong> one of the following predefined strategies:</p>
@@ -258,19 +260,19 @@ majority class;</p></li>
 found in the label column, and the value associated with each key represents the
 number of instances desired for that class after the undersampling process is done.
 Note: this parameter only works with undersampling approaches that allow
-controlling the number of instances to be undersampled, such as RandomUnderSampler,
-ClusterCentroids (from imblearn). If any other undersampler is provided in the
-under_sampler parameter along with a float value for the strategy_under parameter,
+controlling the number of instances to be undersampled, such as <code class="xref py py-class docutils literal notranslate"><span class="pre">RandomUnderSampler</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">ClusterCentroids</span></code> (from <code class="xref py py-mod docutils literal notranslate"><span class="pre">imblearn</span></code>). If any other undersampler is provided in the
+<code class="docutils literal notranslate"><span class="pre">under_sampler</span></code> parameter along with a float value for the strategy_under parameter,
 an error will be raised;</p></li>
 <li><p><strong>Float:</strong> a value between [0, 1] that represents the desired ratio between
 the number of instances of the minority class over the majority class
-after undersampling. The ratio ‘r’ is given by: $r = N_m/N_M$ where
-$N_m$ is the number of instances of the minority class and $N_M$ is the
+after undersampling. The ratio ‘r’ is given by: <span class="math notranslate nohighlight">\(r = N_m/N_M\)</span> where
+<span class="math notranslate nohighlight">\(N_m\)</span> is the number of instances of the minority class and <span class="math notranslate nohighlight">\(N_M\)</span> is the
 number of instances of the majority class after undersampling. Note: this
 parameter only works with undersampling approaches that allow controlling
-the number of instances to be undersampled, such as RandomUnderSampler,
-ClusterCentroids (from imblearn). If any other undersampler is provided in
-the under_sampler parameter along with a float value for the strategy_under
+the number of instances to be undersampled, such as <code class="xref py py-class docutils literal notranslate"><span class="pre">RandomUnderSampler</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">ClusterCentroids</span></code> (from <code class="xref py py-mod docutils literal notranslate"><span class="pre">imblearn</span></code>). If any other undersampler is provided in
+the under_sampler parameter along with a float value for the <code class="docutils literal notranslate"><span class="pre">strategy_under</span></code>
 parameter, an error will be raised;
 If None, the default value is set to “auto”, which is the same as “minority”.</p></li>
 </ul>
@@ -283,10 +285,10 @@ If None, the default value is set to “auto”, which is the same as “minorit
 </dd></dl>
 
 <p class="rubric">Class Diagram</p>
-<div class="graphviz"><img src="../../_images/inheritance-a2e2c3603acfdf26ab2fb4e8c65c5489942c5287.png" alt="Inheritance diagram of dataprocessing.Synthesizer" usemap="#inheritance460ff31641" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../_images/inheritance-ecdfdeffd79555c3b6040a459dddf9c1936f620e.png" alt="Inheritance diagram of dataprocessing.Synthesizer" usemap="#inheritance460ff31641" class="inheritance graphviz" /></div>
 <map id="inheritance460ff31641" name="inheritance460ff31641">
 <area shape="rect" id="node2" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
-<area shape="rect" id="node3" href="#dataprocessing.Synthesizer" target="_top" title="Concrete class that uses generative models (implemented in the sdv library)" alt="" coords="296,5,395,31"/>
+<area shape="rect" id="node3" href="#dataprocessing.Synthesizer" target="_top" title="Concrete class that uses generative models (implemented in the :mod:`sdv` library)" alt="" coords="296,5,395,31"/>
 </map><section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">

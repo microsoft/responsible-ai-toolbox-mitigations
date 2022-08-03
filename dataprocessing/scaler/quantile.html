@@ -84,7 +84,7 @@
           <li><a href="scaler.html">Scalers</a> &raquo;</li>
       <li>DataQuantileTransformer</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/dataprocessing/scaler/quantile.rst.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/scaler/quantile.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -122,23 +122,23 @@
 <dt class="sig sig-object py" id="dataprocessing.DataQuantileTransformer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">DataQuantileTransformer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scaler_obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">QuantileTransformer</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.DataQuantileTransformer" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="scaler.html#dataprocessing.DataScaler" title="dataprocessing.scaler.scaler.DataScaler"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataScaler</span></code></a></p>
-<p>Concrete class that applies the QuantileTransformer scaler over a given dataset.
-This class uses the sklearn’s implementation of this scaler (QuantileTransformer)
+<p>Concrete class that applies the <code class="xref py py-class docutils literal notranslate"><span class="pre">QuantileTransformer</span></code> scaler over a given dataset.
+This class uses the <code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn</span></code>’s implementation of this scaler (<code class="xref py py-class docutils literal notranslate"><span class="pre">QuantileTransformer</span></code>)
 at its root, but also makes it more simple to be applied to a dataset. For example,
 the user can use a dataset with categorical columns and the scaler will be applied
 only to the numerical columns. Also, the user can provide a pipeline of scalers, and
-all of the scalers in the pipeline will be applied before the QuantileTransformer
+all of the scalers in the pipeline will be applied before the <code class="xref py py-class docutils literal notranslate"><span class="pre">QuantileTransformer</span></code>
 scaler. The user can also use a list of transformations using other non-scaler
 classes implemented in this library (feature selection, encoding, imputation, etc.).
-For more details on how the QuantileTransformer changes the data, check the official
-documentation from sklearn:
+For more details on how the <code class="xref py py-class docutils literal notranslate"><span class="pre">QuantileTransformer</span></code> changes the data, check the official
+documentation from <code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn</span></code>:
 <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.QuantileTransformer.html">https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.QuantileTransformer.html</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>scaler_obj</strong> – an object from the QuantileTransformer class.
-This sklearn scaler will be used to perform the scaling process. If None, a
-QuantileTransformer is created using default values;</p></li>
+<li><p><strong>scaler_obj</strong> – an object from the <code class="xref py py-class docutils literal notranslate"><span class="pre">QuantileTransformer</span></code> class.
+This <code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn</span></code> scaler will be used to perform the scaling process. If None, a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">QuantileTransformer</span></code> is created using default values;</p></li>
 <li><p><strong>df</strong> – pandas data frame that contains the columns to be scaled
 and/or transformed;</p></li>
 <li><p><strong>exclude_cols</strong> – a list of the column names or indexes that shouldn’t be
@@ -147,30 +147,30 @@ possible to transform only certain columns and leave other columns
 unmodified. This is useful if the dataset contains a set of binary columns
 that should be left as is, or a set of categorical columns (which can’t
 be scaled or transformed). If the categorical columns are not added in this
-list (exclude_cols), the categorical columns will be automatically identified
-and added into the ‘exclude_cols’ list. If None, this parameter will be set
+list (<code class="docutils literal notranslate"><span class="pre">exclude_cols</span></code>), the categorical columns will be automatically identified
+and added into the <code class="docutils literal notranslate"><span class="pre">exclude_cols</span></code> list. If None, this parameter will be set
 automatically as being a list of all categorical variables in the dataset;</p></li>
 <li><p><strong>transform_pipe</strong> – a list of transformations to be used as a pre-processing
 pipeline. Each transformation in this list must be a valid subclass of the
-current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+current library (<code class="xref py py-class docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BasicImputer</span></code>, etc.). Some feature selection
 methods require a dataset with no categorical features or with no missing values
 (depending on the approach). If no transformations are provided, a set of default
 transformations will be used, which depends on the feature selection approach
 (subclass dependent). This parameter also accepts other scalers in the list. When
-this happens and the inverse_transform() method of self is called, the
-inverse_transform() method of all scaler objects that appear in the transform_pipe
+this happens and the <code class="xref py py-meth docutils literal notranslate"><span class="pre">inverse_transform()</span></code> method of self is called, the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">inverse_transform()</span></code> method of all scaler objects that appear in the <code class="docutils literal notranslate"><span class="pre">transform_pipe</span></code>
 list after the last non-scaler object are called in a reversed order. For example,
-if DataMinMaxScaler is instantiated with transform_pipe=[BasicImputer(), DataQuantileTransformer(),
-EncoderOHE(), DataPowerTransformer()], then, when calling the fit() method of the
-DataMinMaxScaler object, first the dataset will be fitted and transformed using
+if <code class="xref py py-class docutils literal notranslate"> <span class="pre">is</span> <span class="pre">instantiated</span> <span class="pre">with</span> <span class="pre">transform_pipe=[BasicImputer(),</span> <span class="pre">DataQuantileTransformer(),</span>
+<span class="pre">EncoderOHE(),</span> <span class="pre">DataPowerTransformer()],</span> <span class="pre">then,</span> <span class="pre">when</span> <span class="pre">calling</span> <span class="pre">:meth:`fit</span></code> on the
+<code class="docutils literal notranslate"><span class="pre">DataMinMaxScaler</span></code> object, first the dataset will be fitted and transformed using
 BasicImputer, followed by DataQuantileTransformer, EncoderOHE, and DataPowerTransformer,
 and only then it will be fitted and transformed using the current DataMinMaxScaler.
-The transform() method works in a similar way, the difference being that it doesn’t call
-the fit method for the data scaler in the transform_pipe. For the inverse_transform()
+The <code class="xref py py-meth docutils literal notranslate"><span class="pre">transform()</span></code> method works in a similar way, the difference being that it doesn’t call
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code> for the data scaler in the <code class="docutils literal notranslate"><span class="pre">transform_pipe</span></code>. For the <code class="xref py py-meth docutils literal notranslate"><span class="pre">inverse_transform()</span></code>
 method, the inverse transforms are applied in reverse order, but only the scaler objects
-that appear after the last non-scaler object in the transform_pipe: first, we inverse the
-DataMinMaxScaler, followed by the inversion of the DataPowerTransformer. The DataQuantileTransformer
-isn’t reversed because it appears between two non-scaler objects: BasicImputer and EncoderOHE;</p></li>
+that appear after the last non-scaler object in the <code class="docutils literal notranslate"><span class="pre">transform_pipe</span></code>: first, we inverse the
+<code class="docutils literal notranslate"><span class="pre">DataMinMaxScaler</span></code>, followed by the inversion of the <code class="docutils literal notranslate"><span class="pre">DataPowerTransformer</span></code>. The <code class="docutils literal notranslate"><span class="pre">DataQuantileTransformer</span></code>
+isn’t reversed because it appears between two non-scaler objects: <code class="docutils literal notranslate"><span class="pre">BasicImputer</span></code> and <code class="docutils literal notranslate"><span class="pre">EncoderOHE</span></code>;</p></li>
 <li><p><strong>verbose</strong> – indicates whether internal messages should be printed or not.</p></li>
 </ul>
 </dd>
@@ -178,11 +178,11 @@ isn’t reversed because it appears between two non-scaler objects: BasicImputer
 </dd></dl>
 
 <p class="rubric">Class Diagram</p>
-<div class="graphviz"><img src="../../_images/inheritance-f21a91cf3a4be70fbc8e865ed73b0bac3aef7912.png" alt="Inheritance diagram of dataprocessing.DataQuantileTransformer" usemap="#inheritancee9f1d05a96" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../_images/inheritance-999500e554c4a4e4420a2b86257ec138883797f3.png" alt="Inheritance diagram of dataprocessing.DataQuantileTransformer" usemap="#inheritancee9f1d05a96" class="inheritance graphviz" /></div>
 <map id="inheritancee9f1d05a96" name="inheritancee9f1d05a96">
 <area shape="rect" id="node2" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
 <area shape="rect" id="node4" href="scaler.html#dataprocessing.DataScaler" target="_top" title="Base class used by all data scaling or data transformation classes." alt="" coords="296,5,389,31"/>
-<area shape="rect" id="node3" href="#dataprocessing.DataQuantileTransformer" target="_top" title="Concrete class that applies the QuantileTransformer scaler over a given dataset." alt="" coords="437,5,624,31"/>
+<area shape="rect" id="node3" href="#dataprocessing.DataQuantileTransformer" target="_top" title="Concrete class that applies the :class:`~sklearn.preprocessing.QuantileTransformer` scaler over a given dataset." alt="" coords="437,5,624,31"/>
 </map><section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">

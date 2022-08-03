@@ -84,7 +84,7 @@
           <li><a href="imputer.html">Imputers</a> &raquo;</li>
       <li>BasicImputer</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/dataprocessing/imputer/basic.rst.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/imputer/basic.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -126,9 +126,10 @@
 strategies. Implements a simple imputation approach, where the missing values
 are filled with the mean, median, constant value, or the most frequent value,
 where mean and median are only valid for numerical values. This subclass uses
-the SimpleImputer class from sklearn in the background. The main advantage is
+the <code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleImputer</span></code> class from <code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn</span></code> in the background. The main advantage is
 that this subclass allows using the simple imputation approach over several
-different columns at once, each with its own set of parameters.</p>
+different columns at once, each with its own set of parameters. For more details see:
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.impute.SimpleImputer.html">https://scikit-learn.org/stable/modules/generated/sklearn.impute.SimpleImputer.html</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -136,10 +137,10 @@ different columns at once, each with its own set of parameters.</p>
 <li><p><strong>col_impute</strong> – a list of the column names or indexes that will be imputed.
 If None, this parameter will be set automatically as being a list of all
 columns with any NaN value;</p></li>
-<li><p><strong>categorical</strong> – <p>a dict indicating the parameters used by the
-SimpleImputer. Represents the parameters of the SimpleImputer
+<li><p><strong>categorical</strong> – <p>a dict indicating the parameters used by
+<code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleImputer</span></code>. Represents the parameters of  <code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleImputer</span></code>
 used on all categorical columns not represented in the
-‘specific_col’ param. The dict has the following structure:</p>
+<code class="docutils literal notranslate"><span class="pre">specific_col</span></code> param. The dict has the following structure:</p>
 <blockquote>
 <div><div class="line-block">
 <div class="line">{</div>
@@ -155,9 +156,9 @@ used on all categorical columns not represented in the
 the parameters used by sklearn’s SimpleImputer. If None,
 this dict will be auto-filled as the one above;</p>
 </p></li>
-<li><p><strong>numerical</strong> – <p>similar to ‘categorical’, but instead, represents
+<li><p><strong>numerical</strong> – <p>similar to <code class="docutils literal notranslate"><span class="pre">categorical</span></code>, but instead, represents
 the parameters of the SimpleImputer to be used on all
-numerical columns not present in the ‘specific_col’ param.
+numerical columns not present in the <code class="docutils literal notranslate"><span class="pre">specific_col</span></code> param.
 If None, this dict will be auto-filled as follows:</p>
 <blockquote>
 <div><div class="line-block">
@@ -172,13 +173,13 @@ If None, this dict will be auto-filled as follows:</p>
 </div></blockquote>
 </p></li>
 <li><p><strong>specific_col</strong> – <p>a dict of dicts. Each key of the main dict must be a
-column name present in the ‘col_impute’ param. This key must
-be associated with a dict similar to the one in ‘categorical’ param,
+column name present in the <code class="docutils literal notranslate"><span class="pre">col_impute</span></code> param. This key must
+be associated with a dict similar to the one in <code class="docutils literal notranslate"><span class="pre">categorical</span></code> param,
 which indicates the parameters to be used by the SimpleImputer for
-the specified column (key). If one of the columns in ‘col_impute’
+the specified column (key). If one of the columns in <code class="docutils literal notranslate"><span class="pre">col_impute</span></code>
 are not present in the main dict, then the type of this column is
 automatically identified as being either numeric or categorical.
-And then, the ‘categorical’ or ‘numeric’ parameters are used for those
+And then, the <code class="docutils literal notranslate"><span class="pre">categorical</span></code> or <code class="docutils literal notranslate"><span class="pre">numerical</span></code> parameters are used for those
 columns. The dict structure is given by:</p>
 <blockquote>
 <div><div class="line-block">

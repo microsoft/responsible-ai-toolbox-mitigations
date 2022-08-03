@@ -22,7 +22,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="CorrelatedFeatures Example" href="../notebooks/module_tests/feat_sel_corr.html" />
+    <link rel="next" title="Checking Correlations Between Variables - A Comprehensive Guide" href="../notebooks/module_tests/feat_sel_corr_tutorial.html" />
     <link rel="prev" title="CatBoostSelection Example" href="../notebooks/module_tests/feat_sel_catboost.html" /> 
 </head>
 
@@ -84,7 +84,7 @@
           <li><a href="feat_sel.html">Feature Selection</a> &raquo;</li>
       <li>CorrelatedFeatures</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/dataprocessing/feat_sel/correlation.rst.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/feat_sel/correlation.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -130,31 +130,31 @@ and drop features that are correlated to another feature.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> – the data frame to be used during the fit method.
 This data frame must contain all the features, including the label
-column (specified in the ‘label_col’ parameter). This parameter is
-mandatory if ‘label_col’ is also provided. The user can also provide
-this dataset (along with the ‘label_col’) when calling the fit()
+column (specified in the  <code class="docutils literal notranslate"><span class="pre">label_col</span></code> parameter). This parameter is
+mandatory if  <code class="docutils literal notranslate"><span class="pre">label_col</span></code> is also provided. The user can also provide
+this dataset (along with the  <code class="docutils literal notranslate"><span class="pre">label_col</span></code>) when calling the <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code>
 method. If df is provided during the class instantiation, it is not
-necessary to provide it again when calling fit(). It is also possible
-to use the ‘X’ and ‘y’ instead of ‘df’ and ‘label_col’, although it is
+necessary to provide it again when calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code>. It is also possible
+to use the  <code class="docutils literal notranslate"><span class="pre">X</span></code> and  <code class="docutils literal notranslate"><span class="pre">y</span></code> instead of  <code class="docutils literal notranslate"><span class="pre">df</span></code> and  <code class="docutils literal notranslate"><span class="pre">label_col</span></code>, although it is
 mandatory to pass the pair of parameters (X,y) or (df, label_col) either
-during the class instantiation or during the fit() method;</p></li>
+during the class instantiation or during the <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code> method;</p></li>
 <li><p><strong>label_col</strong> – the name or index of the label column. This parameter is
-mandatory if ‘df’ is provided;</p></li>
+mandatory if  <code class="docutils literal notranslate"><span class="pre">df</span></code> is provided;</p></li>
 <li><p><strong>X</strong> – contains only the features of the original dataset, that is, does not
 contain the label column. This is useful if the user has already separated
 the features from the label column prior to calling this class. This parameter
-is mandatory if ‘y’ is provided;</p></li>
+is mandatory if  <code class="docutils literal notranslate"><span class="pre">y</span></code> is provided;</p></li>
 <li><p><strong>y</strong> – contains only the label column of the original dataset.
-This parameter is mandatory if ‘X’ is provided;</p></li>
+This parameter is mandatory if  <code class="docutils literal notranslate"><span class="pre">X</span></code> is provided;</p></li>
 <li><p><strong>transform_pipe</strong> – a list of transformations to be used as a pre-processing
 pipeline. Each transformation in this list must be a valid subclass of the
-current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+current library (<code class="xref py py-class docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BasicImputer</span></code>, etc.). Some feature selection
 methods require a dataset with no categorical features or with no missing
 values (depending on the approach). If no transformations are provided, a set
 of default transformations will be used, which depends on the feature selection
 approach (subclass dependent);</p></li>
 <li><p><strong>in_place</strong> – indicates if the original dataset will be saved internally
-(df_org) or not. If True, then the feature selection transformation is saved
+(<code class="docutils literal notranslate"><span class="pre">df_org</span></code>) or not. If True, then the feature selection transformation is saved
 over the original dataset. If False, the original dataset is saved separately
 (default value);</p></li>
 <li><p><strong>cor_features</strong> – a list of the column names or indexes that should have their
@@ -168,12 +168,12 @@ two numerical variables will be tested;</p></li>
 <li><p><strong>num_corr_th</strong> – the correlation coefficient value used as a threshold for
 considering if there is a correlation between two numerical variables.
 That is, given two variables with a correlation coefficient of ‘x’ (depends on
-the correlation used, specified by method_num_num), a correlation is considered
+the correlation used, specified by <code class="docutils literal notranslate"><span class="pre">method_num_num</span></code>), a correlation is considered
 only if abs(x) &gt;= method_num_num and if the associated p-value ‘p’ is smaller than
 ‘p’ &lt;= num_pvalue_th;</p></li>
 <li><p><strong>num_pvalue_th</strong> – the p-value used as a threshold when considering if there is a
 correlation between two variables. That is, given two variables with a correlation
-coefficient of ‘x’ (depends on the correlation used, specified by method_num_num),
+coefficient of ‘x’ (depends on the correlation used, specified by <code class="docutils literal notranslate"><span class="pre">method_num_num</span></code>),
 a correlation is considered only if abs(x) &gt;= method_num_num and if the associated
 p-value ‘p’ is smaller than ‘p’ &lt;= num_pvalue_th;</p></li>
 <li><p><strong>method_num_cat</strong> – <p>the method used to compute the correlation between a categorical and
@@ -184,22 +184,22 @@ a numerical variable. There are currently three approaches implemented:</p>
 test to see if the numerical variable has a similar variance across the
 different values of the categorical variable (Homoscedastic data). If
 the test passes (that is if the p-value of the Levene test is greater
-than ‘levene_pvalue’), then we can perform the ANOVA test, in which we
+than <code class="docutils literal notranslate"><span class="pre">levene_pvalue</span></code>), then we can perform the ANOVA test, in which we
 compute the F-statistic to see if there is a correlation between the
 numerical and categorical variables and its associated p-value. We also
-compute the omega-squared metric. If the p-value is less than ‘anova_pvalue’
-and the omega-squared is greater than ‘omega_th’, then both variables
+compute the omega-squared metric. If the p-value is less than <code class="docutils literal notranslate"><span class="pre">anova_pvalue</span></code>
+and the omega-squared is greater than <code class="docutils literal notranslate"><span class="pre">omega_th</span></code>, then both variables
 are considered to be correlated;</p></li>
 <li><p><strong>’jensen’:</strong> first we clusterize the numerical values according to their respective
 values of the categorical data. We then compute the probability density
 function of the numerical variable for each cluster (we approximate the
-PDF with the histogram using ‘jensen_n_bins’ different bins). The next
+PDF with the histogram using <code class="docutils literal notranslate"><span class="pre">jensen_n_bins</span></code> different bins). The next
 step is to compute the Jensen-Shannon Distance metric between the distribution
 functions of each pair of clusters. This distance metric varies from 0 to 1,
 where values closer to 0 mean that both distributions tested are similar and
 values closer to 1 mean that the distributions are different. If all pairs
 of distributions tested are considered different (a Jensen-Shannon metric above
-‘jensen_th’ for all pairs tested), then both variables are considered to be
+<code class="docutils literal notranslate"><span class="pre">jensen_th</span></code> for all pairs tested), then both variables are considered to be
 correlated;</p></li>
 <li><p><strong>’model’:</strong> trains a simple decision tree using the numerical variable and predicts the
 categorical variable. Both variables are first divided into a training and
@@ -208,8 +208,8 @@ training set is used to train the decision tree, where the only feature used
 by the model is the numerical variable and the predicted label is the different
 values within the categorical variable. After training, the model is used to
 predict the values of the test set and a set of metrics is computed to assess the
-performance of the model (the metrics computed are defined by ‘model_metrics’).
-If all metrics computed are above the threshold ‘metric_th’, then both variables
+performance of the model (the metrics computed are defined by <code class="docutils literal notranslate"><span class="pre">model_metrics</span></code>).
+If all metrics computed are above the threshold <code class="docutils literal notranslate"><span class="pre">metric_th</span></code>, then both variables
 are considered to be correlated;</p></li>
 </ul>
 </div></blockquote>
@@ -270,10 +270,10 @@ are considered to be correlated.</p></li>
 </div></blockquote>
 <p>If set to None, then none of the correlations between two categorical variables will be tested;</p>
 </p></li>
-<li><p><strong>cat_corr_th</strong> – the threshold used for the Cramer’s V correlation coefficient. Values greater than cat_corr_th
+<li><p><strong>cat_corr_th</strong> – the threshold used for the Cramer’s V correlation coefficient. Values greater than <code class="docutils literal notranslate"><span class="pre">cat_corr_th</span></code>
 indicates a high correlation between two variables, but only if the p-value associated with this coefficient
-is smaller than cat_pvalue_th;</p></li>
-<li><p><strong>cat_pvalue_th</strong> – check the description for the parameter cat_corr_th for more information;</p></li>
+is smaller than <code class="docutils literal notranslate"><span class="pre">cat_pvalue_th</span></code>;</p></li>
+<li><p><strong>cat_pvalue_th</strong> – check the description for the parameter <code class="docutils literal notranslate"><span class="pre">cat_corr_th</span></code> for more information;</p></li>
 <li><p><strong>tie_method</strong> – <p>the method used to choose the variable to remove in case a correlation
 between them is identified. This is used for all types of correlations:
 numerical x numerical, categorical x numerical, and categorical x categorical. The
@@ -292,19 +292,19 @@ cardinality approach internally;</p></li>
 <p>In all three cases, if both variables are tied (same dispersion, same number of missing
 values, or same cardinality), the variable to be removed will be selected randomly;</p>
 </p></li>
-<li><p><strong>save_json</strong> – if True, the summary jsons are saved according to the paths json_summary, json_corr, and
-json_uncorr. If False, these json files are not saved;</p></li>
+<li><p><strong>save_json</strong> – if True, the summary jsons are saved according to the paths <code class="docutils literal notranslate"><span class="pre">json_summary</span></code>, <code class="docutils literal notranslate"><span class="pre">json_corr</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">json_uncorr</span></code>. If False, these json files are not saved;</p></li>
 <li><p><strong>json_summary</strong> – when calling the fit method, all correlations will be computed according to the many
 parameters detailed previously. After computing all this data, everything is saved in a JSON file,
 which can then be accessed and analyzed carefully. We recommend using a JSON viewing tool for this.
 This parameter indicates the name of the file where the JSON should be saved (including the path
 to the file). If set to None no JSON file will be saved;</p></li>
-<li><p><strong>json_corr</strong> – similar to json_summary, but corresponds to the name of the JSON file that contains only
+<li><p><strong>json_corr</strong> – similar to <code class="docutils literal notranslate"><span class="pre">json_summary</span></code>, but corresponds to the name of the JSON file that contains only
 the information of the pairs of variables considered to be correlated (with no repetitions);</p></li>
-<li><p><strong>json_uncorr</strong> – similar to json_summary, but corresponds to the name of the JSON file that contains only
+<li><p><strong>json_uncorr</strong> – similar to <code class="docutils literal notranslate"><span class="pre">json_summary</span></code>, but corresponds to the name of the JSON file that contains only
 the information of the pairs of variables considered NOT to be correlated (with no repetitions);</p></li>
 <li><p><strong>compute_exact_matches</strong> – if True, compute the number of exact matches between two variables and save
-this information in the json_summary, json_uncorr, and json_corr;</p></li>
+this information in the <code class="docutils literal notranslate"><span class="pre">json_summary</span></code>, <code class="docutils literal notranslate"><span class="pre">json_uncorr</span></code>, and <code class="docutils literal notranslate"><span class="pre">json_corr</span></code>;</p></li>
 <li><p><strong>verbose</strong> – indicates whether internal messages should be printed or not.</p></li>
 </ul>
 </dd>
@@ -345,19 +345,19 @@ without requiring to recompute all of the correlations, which can be computation
 expensive depending on the size of the dataset. The only parameters allowed to be
 changed are the ones accepted by this method. If another parameter not listed here
 needs to be changed, then it is necessary to instantiate a different object and call
-the fit() method again.</p>
+the <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code> method again.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>num_corr_th</strong> – the correlation coefficient value used as a threshold for
 considering if there is a correlation between two numerical variables.
 That is, given two variables with a correlation coefficient of ‘x’ (depends on
-the correlation used, specified by method_num_num), a correlation is considered
+the correlation used, specified by <code class="docutils literal notranslate"><span class="pre">method_num_num</span></code>), a correlation is considered
 only if abs(x) &gt;= method_num_num and if the associated p-value ‘p’ is smaller than
 ‘p’ &lt;= num_pvalue_th;</p></li>
 <li><p><strong>num_pvalue_th</strong> – the p-value used as a threshold when considering if there is a
 correlation between two variables. That is, given two variables with a correlation
-coefficient of ‘x’ (depends on the correlation used, specified by method_num_num),
+coefficient of ‘x’ (depends on the correlation used, specified by <code class="docutils literal notranslate"><span class="pre">method_num_num</span></code>),
 a correlation is considered only if abs(x) &gt;= method_num_num and if the associated
 p-value ‘p’ is smaller than ‘p’ &lt;= num_pvalue_th;</p></li>
 <li><p><strong>levene_pvalue</strong> – the threshold used to check if a set of samples are homoscedastic (similar
@@ -377,7 +377,7 @@ For that, we use the Omega-Squared metric. This parameter is ignored if method_n
 varies between 0 and 1 that indicates the effect of a categorical variable over the variance of
 a numerical variable. A value closer to 0 indicates a weak effect, while values closer to 1 show
 that the categorical variable has a significant impact on the variance of the numerical variable,
-thus showing a high correlation. If the omega squared is greater than omega_th, then both variables
+thus showing a high correlation. If the omega squared is greater than <code class="docutils literal notranslate"><span class="pre">omega_th</span></code>, then both variables
 being analyzed are considered to be correlated. This parameter is ignored if method_num_cat != ‘anova’;</p></li>
 <li><p><strong>jensen_th</strong> – when method_num_cat = ‘jensen’, we compare the distribution of each cluster of data
 using the Jensen-Shannon distance metric. If the distance is close to 1, then the distributions are
@@ -387,28 +387,28 @@ metric is high or not: if distance &gt; jensen_th, then the distributions being 
 different. Must be a float value within [0, 1]. This parameter is ignored if method_num_cat != ‘jensen’;</p></li>
 <li><p><strong>model_metrics</strong> – a list of metric names that should be used when evaluating if a model trained using
 a single numerical variable to predict a categorical variable is good enough. If the trained model
-presents a good performance for the metrics in model_metrics, then both variables being analyzed are
+presents a good performance for the metrics in <code class="docutils literal notranslate"><span class="pre">model_metrics</span></code>, then both variables being analyzed are
 considered to be correlated. This parameter must be a list, and the allowed values in this list are:
 [“f1”, “auc”, “accuracy”, “precision”, “recall”]. This parameter is ignored if
 method_num_cat != ‘model’;</p></li>
-<li><p><strong>metric_th</strong> – given the metrics provided by model_metrics, a pair of variables being analyzed are only
-considered correlated if all metrics in model_metrics achieve a score greater than metric_th over the
+<li><p><strong>metric_th</strong> – given the metrics provided by <code class="docutils literal notranslate"><span class="pre">model_metrics</span></code>, a pair of variables being analyzed are only
+considered correlated if all metrics in <code class="docutils literal notranslate"><span class="pre">model_metrics</span></code> achieve a score greater than metric_th over the
 test set (the variables being analyzed are split into training and test set internally). This parameter
 is ignored if method_num_cat != ‘model’;</p></li>
-<li><p><strong>cat_corr_th</strong> – the threshold used for the Cramer’s V correlation coefficient. Values greater than cat_corr_th
+<li><p><strong>cat_corr_th</strong> – the threshold used for the Cramer’s V correlation coefficient. Values greater than <code class="docutils literal notranslate"><span class="pre">cat_corr_th</span></code>
 indicates a high correlation between two variables, but only if the p-value associated with this coefficient
-is smaller than cat_pvalue_th;</p></li>
-<li><p><strong>cat_pvalue_th</strong> – check the description for the parameter cat_corr_th for more information;</p></li>
-<li><p><strong>save_json</strong> – if True, the summary jsons are saved according to the paths json_summary, json_corr, and
-json_uncorr. If False, these json files are not saved;</p></li>
+is smaller than <code class="docutils literal notranslate"><span class="pre">cat_pvalue_th</span></code>;</p></li>
+<li><p><strong>cat_pvalue_th</strong> – check the description for the parameter <code class="docutils literal notranslate"><span class="pre">cat_corr_th</span></code> for more information;</p></li>
+<li><p><strong>save_json</strong> – if True, the summary jsons are saved according to the paths <code class="docutils literal notranslate"><span class="pre">json_summary</span></code>, <code class="docutils literal notranslate"><span class="pre">json_corr</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">json_uncorr</span></code>. If False, these json files are not saved;</p></li>
 <li><p><strong>json_summary</strong> – when calling the fit method, all correlations will be computed according to the many
 parameters detailed previously. After computing all this data, everything is saved in a JSON file,
 which can then be accessed and analyzed carefully. We recommend using a JSON viewing tool for this.
 This parameter indicates the name of the file where the JSON should be saved (including the path
 to the file). If set to None no JSON file will be saved;</p></li>
-<li><p><strong>json_corr</strong> – similar to json_summary, but corresponds to the name of the JSON file that contains only
+<li><p><strong>json_corr</strong> – similar to <code class="docutils literal notranslate"><span class="pre">json_summary</span></code>, but corresponds to the name of the JSON file that contains only
 the information of the pairs of variables considered to be correlated (with no repetitions);</p></li>
-<li><p><strong>json_uncorr</strong> – similar to json_summary, but corresponds to the name of the JSON file that contains only
+<li><p><strong>json_uncorr</strong> – similar to <code class="docutils literal notranslate"><span class="pre">json_summary</span></code>, but corresponds to the name of the JSON file that contains only
 the information of the pairs of variables considered NOT to be correlated (with no repetitions);</p></li>
 </ul>
 </dd>
@@ -432,18 +432,6 @@ the information of the pairs of variables considered NOT to be correlated (with 
     <img alt="thumbnail" src="../../_static/no_image.png" />
     <p class="caption">
       <span class="caption-text">
-        <a class="reference internal" href="../notebooks/module_tests/feat_sel_corr.html">
-          <span class="std std-ref">CorrelatedFeatures Example</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="../../_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
         <a class="reference internal" href="../notebooks/module_tests/feat_sel_corr_tutorial.html">
           <span class="std std-ref">Checking Correlations Between Variables - A Comprehensive Guide</span>
         </a>
@@ -459,7 +447,7 @@ the information of the pairs of variables considered NOT to be correlated (with 
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../notebooks/module_tests/feat_sel_catboost.html" class="btn btn-neutral float-left" title="CatBoostSelection Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../notebooks/module_tests/feat_sel_corr.html" class="btn btn-neutral float-right" title="CorrelatedFeatures Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../notebooks/module_tests/feat_sel_corr_tutorial.html" class="btn btn-neutral float-right" title="Checking Correlations Between Variables - A Comprehensive Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

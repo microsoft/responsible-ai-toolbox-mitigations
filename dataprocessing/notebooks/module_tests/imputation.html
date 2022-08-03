@@ -57,7 +57,6 @@
 <li class="toctree-l4 current"><a class="current reference internal" href="#">BasicImputer Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="feat_sel_sequential.html">SeqFeatSelection Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="feat_sel_catboost.html">CatBoostSelection Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="feat_sel_corr.html">CorrelatedFeatures Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="feat_sel_corr_tutorial.html">Checking Correlations Between Variables - A Comprehensive Guide</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rebalance_imbl.html">Rebalance Class (imblearn)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rebalance_sdv.html">Synthesizer Class (SDV)</a></li>
@@ -90,7 +89,7 @@
           <li><a href="../../imputer/basic.html">BasicImputer</a> &raquo;</li>
       <li>BasicImputer Example</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/dataprocessing/notebooks/module_tests/imputation.ipynb.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/notebooks/module_tests/imputation.ipynb" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -378,6 +377,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <section id="BasicImputer-Example">
 <h1>BasicImputer Example<a class="headerlink" href="#BasicImputer-Example" title="Permalink to this heading"></a></h1>
+<p>In this example, we will explore how to perform imputation with the HR promotion dataset.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -672,6 +672,7 @@ dtype: bool
 [ 5.  3.  1.  4. nan  2.]
 </pre></div></div>
 </div>
+<p>As we can see above, both the <strong>education</strong> and <strong>previous_year_rating</strong> have missing values. Below, we will not specify the columns to use for imputation (<code class="docutils literal notranslate"><span class="pre">BasicImputer</span></code> will determine this for us), but we will specify an imputation strategy (<strong>constant</strong> value = -100) for <strong>previous_year_rating</strong>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -1301,6 +1302,7 @@ No columns specified for imputation. These columns have been automatically ident
 [ 5.  3.  1.  4. -5.  2.]
 </pre></div></div>
 </div>
+<p>Now the the missing values have been filled, we can encode the categorical variables and fit a decision tree.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
@@ -1592,6 +1594,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </section>
 <section id="Handling-a-DataFrame-without-column-names">
 <h2>Handling a DataFrame without column names<a class="headerlink" href="#Handling-a-DataFrame-without-column-names" title="Permalink to this heading"></a></h2>
+<p>Even if the dataset contains no header columns, we can perform the same operations, instead with the column index. The next few cells will demonstrate how to do this.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>

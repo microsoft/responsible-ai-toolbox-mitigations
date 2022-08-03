@@ -19,6 +19,8 @@
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -84,7 +86,7 @@
           <li><a href="sampler.html">Sampling</a> &raquo;</li>
       <li>Rebalance</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/dataprocessing/sampler/rebalance.rst.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/sampler/rebalance.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -123,64 +125,64 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">Rebalance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rebalance_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy_over</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_neighbors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">over_sampler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseSampler</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy_under</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">under_sampler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseSampler</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.Rebalance" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../dataprocessing.html#dataprocessing.DataProcessing" title="dataprocessing.data_processing.DataProcessing"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataProcessing</span></code></a></p>
 <p>Concrete class that uses under and oversampling approaches (implemented
-in the imblearn library) to rebalance a dataset. This class serves as a
-facilitation layer over the imblearn library: it implements several
+in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">imblearn</span></code> library) to rebalance a dataset. This class serves as a
+facilitation layer over the <code class="xref py py-mod docutils literal notranslate"><span class="pre">imblearn</span></code> library: it implements several
 automation processes and default parameters, making it easier to rebalance
-a dataset using approaches implemented in the imblearn library.</p>
+a dataset using approaches implemented in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">imblearn</span></code> library.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> – the dataset to be rebalanced, which is used during the fit method.
 This data frame must contain all the features, including the rebalance
-column (specified in the ‘rebalance_col’ parameter). This parameter is
-mandatory if ‘rebalance_col’ is also provided. The user can also provide
-this dataset (along with the ‘rebalance_col’) when calling the fit()
+column (specified in the  <code class="docutils literal notranslate"><span class="pre">rebalance_col</span></code> parameter). This parameter is
+mandatory if  <code class="docutils literal notranslate"><span class="pre">rebalance_col</span></code> is also provided. The user can also provide
+this dataset (along with the  <code class="docutils literal notranslate"><span class="pre">rebalance_col</span></code>) when calling the <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code>
 method. If df is provided during the class instantiation, it is not
-necessary to provide it again when calling fit(). It is also possible
-to use the ‘X’ and ‘y’ instead of ‘df’ and ‘rebalance_col’, although it is
+necessary to provide it again when calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code>. It is also possible
+to use the  <code class="docutils literal notranslate"><span class="pre">X</span></code> and  <code class="docutils literal notranslate"><span class="pre">y</span></code> instead of  <code class="docutils literal notranslate"><span class="pre">df</span></code> and  <code class="docutils literal notranslate"><span class="pre">rebalance_col</span></code>, although it is
 mandatory to pass the pair of parameters (X,y) or (df, rebalance_col) either
-during the class instantiation or during the fit() method;</p></li>
+during the class instantiation or during the <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code> method;</p></li>
 <li><p><strong>rebalance_col</strong> – the name or index of the column used to do the rebalance
-operation. This parameter is mandatory if ‘df’ is provided;</p></li>
+operation. This parameter is mandatory if  <code class="docutils literal notranslate"><span class="pre">df</span></code> is provided;</p></li>
 <li><p><strong>X</strong> – contains only the features of the original dataset, that is, does
 not contain the column used for rebalancing. This is useful if the user has
 already separated the features from the label column prior to calling this
-class. This parameter is mandatory if ‘y’ is provided;</p></li>
+class. This parameter is mandatory if  <code class="docutils literal notranslate"><span class="pre">y</span></code> is provided;</p></li>
 <li><p><strong>y</strong> – contains only the rebalance column of the original dataset. The rebalance
 operation is executed based on the data distribution of this column. This parameter
-is mandatory if ‘X’ is provided;</p></li>
+is mandatory if  <code class="docutils literal notranslate"><span class="pre">X</span></code> is provided;</p></li>
 <li><p><strong>transform_pipe</strong> – a list of transformations to be used as a pre-processing
 pipeline. Each transformation in this list must be a valid subclass of the
-current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+current library (<code class="xref py py-class docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BasicImputer</span></code>, etc.). Some feature selection
 methods require a dataset with no categorical features or with no missing values
 (depending on the approach). If no transformations are provided, a set of default
 transformations will be used, which depends on the feature selection approach
 (subclass dependent);</p></li>
-<li><p><strong>in_place</strong> – indicates if the original dataset will be saved internally (df_org)
+<li><p><strong>in_place</strong> – indicates if the original dataset will be saved internally (<code class="docutils literal notranslate"><span class="pre">df_org</span></code>)
 or not. If True, then the feature selection transformation is saved over the
 original dataset. If False, the original dataset is saved separately (default
 value);</p></li>
 <li><p><strong>cat_col</strong> – a list of names or indexes of categorical columns. If None, this
-parameter will be set automatically as being a list of all categorical variables
-in the dataset. These columns are used to determine the default SMOTE type that
-should be used: if cat_col is None, then use SMOTE; if cat_col represents all
-columns of the dataset, then use SMOTEN; if cat_col is a subset of columns of
-the dataset, then use SMOTENC. If a specific SMOTE object is provided in the
-constructor (using the over_sampler parameter), then the columns in cat_col
-will be automatically encoded using One-Hot encoding (EncoderOHE), unless
+parameter will be set automatically as a list of all categorical variables
+in the dataset. These columns are used to determine the default <code class="docutils literal notranslate"><span class="pre">SMOTE</span></code> type that
+should be used: if <code class="docutils literal notranslate"><span class="pre">cat_col</span></code> is None, then use <code class="docutils literal notranslate"><span class="pre">SMOTE</span></code>; if <code class="docutils literal notranslate"><span class="pre">cat_col</span></code> represents all
+columns of the dataset, then use <code class="docutils literal notranslate"><span class="pre">SMOTEN</span></code>; if <code class="docutils literal notranslate"><span class="pre">cat_col</span></code> is a subset of columns of
+the dataset, then use <code class="docutils literal notranslate"><span class="pre">SMOTENC</span></code>. If a specific <code class="docutils literal notranslate"><span class="pre">SMOTE</span></code> object is provided in the
+constructor (using the <code class="docutils literal notranslate"><span class="pre">over_sampler</span></code> parameter), then the columns in <code class="docutils literal notranslate"><span class="pre">cat_col</span></code>
+will be automatically encoded using One-Hot encoding (<code class="xref py py-class docutils literal notranslate"><span class="pre">EncoderOHE</span></code>), unless
 another encoding transformer is provided in the transform_pipe parameter;</p></li>
 <li><p><strong>strategy_over</strong> – <p>indicates which oversampling strategy should be used. This
 parameter can be a string, a float, or a dictionary, and their meaning are similar
-to what is used by the imblearn library for SMOTE classes:</p>
+to what is used by the <code class="xref py py-mod docutils literal notranslate"><span class="pre">imblearn</span></code> library for <code class="docutils literal notranslate"><span class="pre">SMOTE</span></code> classes:</p>
 <blockquote>
 <div><ul>
 <li><p><strong>Float:</strong> a value between [0, 1] that represents the desired ratio between the
 number of instances of the minority class over the majority class. The ratio ‘r’
-is given by: $r = N_m/N_M$ where $N_m$ is the number of instances of the minority
-class after applying oversample and $N_M$ is the number of instances of the
+is given by: <span class="math notranslate nohighlight">\(r = N_m/N_M\)</span> where <span class="math notranslate nohighlight">\(N_m\)</span> is the number of instances of the minority
+class after applying oversample and <span class="math notranslate nohighlight">\(N_M\)</span> is the number of instances of the
 majority class;</p></li>
 <li><p><strong>String:</strong> a string value must be one of the following, which identifies preset
-oversampling strategies (explanations retrieved from the imblearn’s SMOTE
+oversampling strategies (explanations retrieved from the <code class="xref py py-mod docutils literal notranslate"><span class="pre">imblearn</span></code>’s SMOTE
 documentation):</p>
 <blockquote>
 <div><ul class="simple">
@@ -199,50 +201,50 @@ number of instances desired for that class after the oversampling process is don
 </div></blockquote>
 </p></li>
 <li><p><strong>k_neighbors</strong> – an integer value representing the number of neighbors that should be
-used when creating the artificial samples using the SMOTE oversampling. This value is
+used when creating the artificial samples using the <code class="docutils literal notranslate"><span class="pre">SMOTE</span></code> oversampling. This value is
 only valid if no oversampling object is passed, that is, over_sampler=True;</p></li>
-<li><p><strong>over_sampler</strong> – <p>this parameter can be a boolean value or a sampler object from imblearn:</p>
+<li><p><strong>over_sampler</strong> – <p>this parameter can be a boolean value or a sampler object from <code class="xref py py-mod docutils literal notranslate"><span class="pre">imblearn</span></code>:</p>
 <ul>
 <li><p>Boolean: if a boolean value is passed, it indicates if the current class should
-use an oversampling method or not. If True, a default SMOTE is created internally using
-the parameters provided (such as k_neighbors, n_jobs, strategy_over, etc.), where the
-SMOTE type (SMOTE, SMOTEN, SMOTENC) used is determined automatically based on the dataset
+use an oversampling method or not. If True, a default <code class="docutils literal notranslate"><span class="pre">SMOTE</span></code> is created internally using
+the parameters provided (such as <code class="docutils literal notranslate"><span class="pre">k_neighbors</span></code>, <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code>, <code class="docutils literal notranslate"><span class="pre">strategy_over</span></code>, etc.), where the
+<code class="docutils literal notranslate"><span class="pre">SMOTE</span></code> type (<code class="docutils literal notranslate"><span class="pre">SMOTE</span></code>, <code class="docutils literal notranslate"><span class="pre">SMOTEN</span></code>, <code class="docutils literal notranslate"><span class="pre">SMOTENC</span></code>) used is determined automatically based on the dataset
 provided: if the dataset contains only numerical data, then SMOTE is used, if the dataset
-contains only categorical features, then SMOTEN is used, and if the dataset contains
-numerical and categorical data, SMOTENC is used;</p></li>
-<li><p>BaseSampler object: if the value provided is an object that inherits from BaseSampler, then
+contains only categorical features, then <code class="docutils literal notranslate"><span class="pre">SMOTEN</span></code> is used, and if the dataset contains
+numerical and categorical data, <code class="docutils literal notranslate"><span class="pre">SMOTENC</span></code> is used;</p></li>
+<li><p>BaseSampler object: if the value provided is an object that inherits from <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSampler</span></code>, then
 this sampler is used instead of creating a new sampler. The preprocessing steps
 automatically applied to the dataset changes based on which SMOTE type is passed: if
-the object is SMOTE, then all categorical data is encoded using one-hot encoding
-(EncoderOHE) and all missing values are imputed using the BasicImputer, but if the object
-is another SMOTE type (SMOTEN or SMOTENC), then only the imputation preprocessing is
+the object is <code class="docutils literal notranslate"><span class="pre">SMOTE</span></code>, then all categorical data is encoded using one-hot encoding
+(<code class="xref py py-class docutils literal notranslate"><span class="pre">EncoderOHE</span></code>) and all missing values are imputed using the BasicImputer, but if the object
+is another <code class="docutils literal notranslate"><span class="pre">SMOTE</span></code> type (<code class="docutils literal notranslate"><span class="pre">SMOTEN</span></code> or <code class="docutils literal notranslate"><span class="pre">SMOTENC</span></code>), then only the imputation preprocessing is
 applied;</p></li>
 </ul>
 </p></li>
 <li><p><strong>strategy_under</strong> – <p>similar to strategy_over, but instead specifies the strategy to be used for
 the undersampling approach. This parameter can be a string, a float, or a dictionary, and their
-meaning are similar to what is used by the imblearn library for the ClusterCentroids class:</p>
+meaning are similar to what is used by the <code class="xref py py-mod docutils literal notranslate"><span class="pre">imblearn</span></code> library for the ClusterCentroids class:</p>
 <blockquote>
 <div><ul>
 <li><p><strong>Float:</strong> a value between [0, 1] that represents the desired ratio between the
 number of instances of the minority class over the majority class after undersampling.
-The ratio ‘r’ is given by: $r = N_m/N_M$ where $N_m$ is the number of instances of the
-minority class and $N_M$ is the number of instances of the majority class after
+The ratio ‘r’ is given by: <span class="math notranslate nohighlight">\(r = N_m/N_M\)</span> where <span class="math notranslate nohighlight">\(N_m\)</span> is the number of instances of the
+minority class and <span class="math notranslate nohighlight">\(N_M\)</span> is the number of instances of the majority class after
 undersampling. Note: this parameter only works with undersampling approaches that allows
-controlling the number of instances to be undersampled, such as RandomUnderSampler,
-ClusterCentroids (from imblearn). If any other undersampler is provided in the
-under_sampler parameter along with a float value for the strategy_under parameter, an
+controlling the number of instances to be undersampled, such as <code class="xref py py-class docutils literal notranslate"><span class="pre">RandomUnderSampler</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">ClusterCentroids</span></code> (from <code class="xref py py-mod docutils literal notranslate"><span class="pre">imblearn</span></code>). If any other undersampler is provided in the
+<code class="docutils literal notranslate"><span class="pre">under_sampler</span></code> parameter along with a float value for the <cite>strategy_under</cite> parameter, an
 error will be raised;</p></li>
 <li><p><strong>Dictionary:</strong> the dictionary must have one key for each of the possible classes
 found in the label column, and the value associated to each key represents the
 number of instances desired for that class after the undersampling process is done.
 Note: this parameter only works with undersampling approaches that allow
-controlling the number of instances to be undersampled, such as RandomUnderSampler,
-ClusterCentroids (from imblearn). If any other undersampler is provided in the
-under_sampler parameter along with a float value for the strategy_under parameter,
+controlling the number of instances to be undersampled, such as <code class="xref py py-class docutils literal notranslate"><span class="pre">RandomUnderSampler</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">ClusterCentroids</span></code> (from <code class="xref py py-mod docutils literal notranslate"><span class="pre">imblearn</span></code>). If any other undersampler is provided in the
+<code class="docutils literal notranslate"><span class="pre">under_sampler</span></code> parameter along with a float value for the <code class="docutils literal notranslate"><span class="pre">strategy_under</span></code> parameter,
 an error will be raised;</p></li>
 <li><p><strong>String:</strong> a string value must be one of the following, which identifies preset
-oversampling strategies (explanations retrieved from the imblearn’s ClusterCentroids
+oversampling strategies (explanations retrieved from the <code class="xref py py-mod docutils literal notranslate"><span class="pre">imblearn</span></code>’s <code class="xref py py-class docutils literal notranslate"><span class="pre">ClusterCentroids</span></code>
 documentation):</p>
 <blockquote>
 <div><ul class="simple">
@@ -257,13 +259,13 @@ documentation):</p>
 </ul>
 </div></blockquote>
 </p></li>
-<li><p><strong>under_sampler</strong> – <p>this parameter can be a boolean value or a sampler object from imblearn:</p>
+<li><p><strong>under_sampler</strong> – <p>this parameter can be a boolean value or a sampler object from <code class="xref py py-mod docutils literal notranslate"><span class="pre">imblearn</span></code>:</p>
 <ul>
 <li><p><strong>Boolean:</strong> if a boolean value is passed, it indicates if the current class should
 use an undersampling method or not. If True, a default undersampler is created internally.
-There are two possible default undersamplers that can be created: (i) a ClusterCentroids
-is created if the value provided to the strategy_under parameter is a float value or a
-dictionary (the ClusterCentroids allows control over the number of instances that should
+There are two possible default undersamplers that can be created: (i) a <code class="xref py py-class docutils literal notranslate"><span class="pre">ClusterCentroids</span></code>
+is created if the value provided to the <code class="docutils literal notranslate"><span class="pre">strategy_under</span></code> parameter is a float value or a
+dictionary (the <code class="xref py py-class docutils literal notranslate"><span class="pre">ClusterCentroids</span></code> allows control over the number of instances that should
 be undersampled), and (ii) a TomekLinks otherwise;</p></li>
 <li><p><strong>BaseSampler object:</strong> if the value provided is an object that inherits from BaseSampler, then
 this sampler is used instead of creating a new sampler;</p></li>
@@ -271,7 +273,7 @@ this sampler is used instead of creating a new sampler;</p></li>
 </p></li>
 <li><p><strong>n_jobs</strong> – the number of workers used to run the sampling methods. This value is only used
 when a default sampler (under or over) is created, where this parameter is provided to the
-n_jobs parameter of the imblearn’s classes;</p></li>
+<code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> parameter of the <code class="xref py py-mod docutils literal notranslate"><span class="pre">imblearn</span></code>’s classes;</p></li>
 <li><p><strong>verbose</strong> – indicates whether internal messages should be printed or not</p></li>
 </ul>
 </dd>
@@ -282,7 +284,7 @@ n_jobs parameter of the imblearn’s classes;</p></li>
 <dd><p>Runs the over and/or undersampling methods specified by the parameters provided in
 the constructor method. The following steps are performed: (i) set the dataset, (ii)
 set the list of categorical columns in the dataset, (iii) check for errors in the
-inputs provided, (iv) set, fit and apply the transforms in the transform_pipe (if any),
+inputs provided, (iv) set, fit and apply the transforms in the <code class="docutils literal notranslate"><span class="pre">transform_pipe</span></code> (if any),
 (v) set the oversampler to be used, (vi) set the undersampler to be used, (vii) run
 the oversampler, (viii) run the undersampler, and finally (ix) create a new data frame
 with the modified data.</p>
@@ -292,22 +294,22 @@ with the modified data.</p>
 <li><p><strong>X</strong> – contains only the features of the original dataset, that is, does
 not contain the column used for rebalancing. This is useful if the user has
 already separated the features from the label column prior to calling this
-class. This parameter is mandatory if ‘y’ is provided;</p></li>
+class. This parameter is mandatory if  <code class="docutils literal notranslate"><span class="pre">y</span></code> is provided;</p></li>
 <li><p><strong>y</strong> – contains only the rebalance column of the original dataset. The rebalance
 operation is executed based on the data distribution of this column. This parameter
-is mandatory if ‘X’ is provided;</p></li>
-<li><p><strong>df</strong> – the dataset to be rebalanced, which is used during the fit method.
+is mandatory if  <code class="docutils literal notranslate"><span class="pre">X</span></code> is provided;</p></li>
+<li><p><strong>df</strong> – the dataset to be rebalanced, which is used during the <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code> method.
 This data frame must contain all the features, including the rebalance
-column (specified in the ‘rebalance_col’ parameter). This parameter is
-mandatory if ‘rebalance_col’ is also provided. The user can also provide
-this dataset (along with the ‘rebalance_col’) when calling the fit()
-method. If df is provided during the class instantiation, it is not
-necessary to provide it again when calling fit(). It is also possible
-to use the ‘X’ and ‘y’ instead of ‘df’ and ‘rebalance_col’, although it is
+column (specified in the  <code class="docutils literal notranslate"><span class="pre">rebalance_col</span></code> parameter). This parameter is
+mandatory if  <code class="docutils literal notranslate"><span class="pre">rebalance_col</span></code> is also provided. The user can also provide
+this dataset (along with the  <code class="docutils literal notranslate"><span class="pre">rebalance_col</span></code>) when calling the <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code>
+method. If <code class="docutils literal notranslate"><span class="pre">df</span></code> is provided during the class instantiation, it is not
+necessary to provide it again when calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code>. It is also possible
+to use the  <code class="docutils literal notranslate"><span class="pre">X</span></code> and  <code class="docutils literal notranslate"><span class="pre">y</span></code> instead of  <code class="docutils literal notranslate"><span class="pre">df</span></code> and  <code class="docutils literal notranslate"><span class="pre">rebalance_col</span></code>, although it is
 mandatory to pass the pair of parameters (X,y) or (df, rebalance_col) either
-during the class instantiation or during the fit() method;</p></li>
+during the class instantiation or during the <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code> method;</p></li>
 <li><p><strong>rebalance_col</strong> – the name or index of the column used to do the rebalance
-operation. This parameter is mandatory if ‘df’ is provided;</p></li>
+operation. This parameter is mandatory if  <code class="docutils literal notranslate"><span class="pre">df</span></code> is provided;</p></li>
 </ul>
 </dd>
 </dl>

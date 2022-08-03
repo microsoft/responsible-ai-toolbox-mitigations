@@ -87,7 +87,7 @@
           <li><a href="../../scaler/standard.html">DataStandardScaler</a> &raquo;</li>
       <li>Data Scaling</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/dataprocessing/notebooks/module_tests/scaler.ipynb.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/notebooks/module_tests/scaler.ipynb" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -2418,7 +2418,7 @@ memory usage: 304.8+ KB
 <h2>Using Multiple Scalers: Fit and Transform<a class="headerlink" href="#Using-Multiple-Scalers:-Fit-and-Transform" title="Permalink to this heading"></a></h2>
 <p>In case the user wants to use multiple scalers in succession, they can use the <strong>transform_pipe</strong> parameter. This parameter is used by many other classes in this library, and it allows users to provide other class objects that has a fit and transform methods from the current library to be used internally. To do this, instantiate different scaler classes implemented in the <strong>dataprocessing</strong> module, create a list of these objects, and provide this list to the <strong>transform_pipe</strong> parameter. In the
 example below, we created a list with the following scalers: DataRobustScaler, DataMinMaxScaler, and DataQuantileTransformer. These scalers are passed as a parameter when creating an object of the DataRobustScaler class. Note however that we also pass an object from the class BasicImputer() into this list. The order of the list is important: it dictates the order by which the fit() and transform() methods will be called. In this case for example, when the fit method is called, we call the fit
-method of all transforms in the transform_pipe before calling the fit mehtod of the main scaler (DataRobustScaler in this case). Therefore, we first call the fit and transform for the BasicImputer class, the resulting data frame is used to call the fit and transform methods of the DataRobustScaler class, and so on. This same process is used for the transform method as well.</p>
+method of all transforms in the transform_pipe before calling the fit method of the main scaler (DataRobustScaler in this case). Therefore, we first call the fit and transform for the BasicImputer class, the resulting data frame is used to call the fit and transform methods of the DataRobustScaler class, and so on. This same process is used for the transform method as well.</p>
 <p>Note that this time, instead of using the default values for each scaler, we are also providing a specific sklearn scaler to each of the scalers created. For instance, when creating the DataPowerTransformer object, we specify that instead of creating a default PowerTransformer (from sklearn) internally, we want to use a specific object of this PowerTransformer class. This allows the users to customize their sklearn instances that should be used inside each scaler class.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:

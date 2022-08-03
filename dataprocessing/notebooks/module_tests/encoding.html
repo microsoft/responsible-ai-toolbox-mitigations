@@ -57,7 +57,6 @@
 <li class="toctree-l4"><a class="reference internal" href="imputation.html">BasicImputer Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="feat_sel_sequential.html">SeqFeatSelection Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="feat_sel_catboost.html">CatBoostSelection Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="feat_sel_corr.html">CorrelatedFeatures Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="feat_sel_corr_tutorial.html">Checking Correlations Between Variables - A Comprehensive Guide</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rebalance_imbl.html">Rebalance Class (imblearn)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rebalance_sdv.html">Synthesizer Class (SDV)</a></li>
@@ -90,7 +89,7 @@
           <li><a href="../../encoder/ordinal.html">EncoderOrdinal</a> &raquo;</li>
       <li>Encoding Examples</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/dataprocessing/notebooks/module_tests/encoding.ipynb.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/notebooks/module_tests/encoding.ipynb" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -378,6 +377,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <section id="Encoding-Examples">
 <h1>Encoding Examples<a class="headerlink" href="#Encoding-Examples" title="Permalink to this heading"></a></h1>
+<p>In this notebook, we will demonstrate the different ways the Encoder classes can be used.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -395,6 +395,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <section id="Ordinal-Encoding">
 <h2>Ordinal Encoding<a class="headerlink" href="#Ordinal-Encoding" title="Permalink to this heading"></a></h2>
+<p>In Ordinal Encoding, an integer is given to each value of the categorical variable. This is typically used when the categorical variable is ordered (e.g. education, where High School &lt; Bachelors &lt; Masters). In this example, we will see the different ways <code class="docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code> can be used.</p>
 <section id="Using-a-dataset-with-headers">
 <h3>Using a dataset with headers<a class="headerlink" href="#Using-a-dataset-with-headers" title="Permalink to this heading"></a></h3>
 <div class="nbinput docutils container">
@@ -2287,6 +2288,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 </section>
 <section id="Using-a-dataset-without-headers">
 <h3>Using a dataset without headers<a class="headerlink" href="#Using-a-dataset-without-headers" title="Permalink to this heading"></a></h3>
+<p>The same proceedure can be performed with a dataset without headers. Here, column indices are used instead.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>

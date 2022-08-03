@@ -51,14 +51,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../intro.html#api">API</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../intro.html#examples">Examples</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../case_studies.html">Case Studies</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="../module_tests/model_test.html">Simple Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="case1.html">Case Study 1</a></li>
-<li class="toctree-l4"><a class="reference internal" href="case2.html">Case Study 2</a></li>
-<li class="toctree-l4"><a class="reference internal" href="case3.html">Case Study 3</a></li>
-<li class="toctree-l4"><a class="reference internal" href="case1_stat.html">Case Study 1 - Multiple Runs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="case2_stat.html">Case Study 2 - Multiple Runs</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">Case Study 3 - Multiple Runs</a></li>
-<li class="toctree-l4"><a class="reference internal" href="case4_stat.html">Case Study 4 - Multiple Runs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../case_studies.html#utilities">Utilities</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../../case_studies.html#notebooks">Notebooks</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../module_tests.html">Tutorials</a></li>
@@ -87,7 +81,7 @@
           <li><a href="../../case_studies.html">Case Studies</a> &raquo;</li>
       <li>Case Study 3 - Multiple Runs</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/dataprocessing/notebooks/case_study/case3_stat.ipynb.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/notebooks/case_study/case3_stat.ipynb" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -375,36 +369,36 @@ div.rendered_html tbody tr:hover {
 </style>
 <section id="Case-Study-3---Multiple-Runs">
 <h1>Case Study 3 - Multiple Runs<a class="headerlink" href="#Case-Study-3---Multiple-Runs" title="Permalink to this heading"></a></h1>
+<p>This notebook uses the <code class="docutils literal notranslate"><span class="pre">seaborn</span></code>, which is not listed as a requirement for this library. Therefore, make sure to install it before running this notebook. To install it, use the following:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&gt; pip install seaborn</span>
+</pre></div>
+</div>
+<p>This notebook, as in <strong>case3.ipynb</strong>, we will explore the <strong>thyroid disease</strong> dataset. Similar to <strong>case1_stat.ipynb/case2_stat.ipynb</strong>, we will run the same experiment multiple times in order to see if a preprocessing step improves the model’s performance with statistical significance.</p>
 <section id="0---Defining-Basic-Functionalities">
 <h2>0 - Defining Basic Functionalities<a class="headerlink" href="#0---Defining-Basic-Functionalities" title="Permalink to this heading"></a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">uci_dataset</span> <span class="k">as</span> <span class="nn">database</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">figure</span>
 
 <span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
+<span class="kn">import</span> <span class="nn">case_study_utils</span> <span class="k">as</span> <span class="nn">cs</span>
 
 <span class="n">N_EXEC</span> <span class="o">=</span> <span class="mi">50</span>
 
 <span class="n">USE_AUC_TH</span> <span class="o">=</span> <span class="kc">False</span>
-
-<span class="n">RESULT_KEYS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;roc&quot;</span><span class="p">,</span> <span class="s2">&quot;pr&quot;</span><span class="p">,</span> <span class="s2">&quot;rc&quot;</span><span class="p">,</span> <span class="s2">&quot;f1&quot;</span><span class="p">]</span>
-<span class="n">COL_METRIC</span> <span class="o">=</span> <span class="s2">&quot;Metric&quot;</span>
-<span class="n">COL_VALUE</span> <span class="o">=</span> <span class="s2">&quot;Value&quot;</span>
-<span class="n">COL_TEST</span> <span class="o">=</span> <span class="s2">&quot;Test Case&quot;</span>
-
-<span class="n">SEQ_FWD</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">SEQ_BWD</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">CATBOOST</span> <span class="o">=</span> <span class="mi">2</span>
-
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">encode_case3</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">encode_case3</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="n">enc_ohe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">enc_ohe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="n">proc_df</span> <span class="o">=</span> <span class="n">enc_ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
@@ -423,9 +417,9 @@ div.rendered_html tbody tr:hover {
 <span class="c1"># -----------------------------------</span>
 <span class="k">def</span> <span class="nf">impute_case3</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
     <span class="n">imputer</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span>      <span class="n">numerical</span><span class="o">=</span><span class="p">{</span>     <span class="s1">&#39;missing_values&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                                                                                    <span class="s1">&#39;strategy&#39;</span><span class="p">:</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span>
-                                                                                    <span class="s1">&#39;fill_value&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span>
-                                                            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                                            <span class="s1">&#39;strategy&#39;</span><span class="p">:</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span>
+                                            <span class="s1">&#39;fill_value&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span>
+                                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="n">proc_df</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">proc_df</span>
@@ -434,143 +428,30 @@ div.rendered_html tbody tr:hover {
 <span class="c1"># -----------------------------------</span>
 <span class="k">def</span> <span class="nf">impute_case3_train_test</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">):</span>
     <span class="n">imputer</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span>      <span class="n">numerical</span><span class="o">=</span><span class="p">{</span>     <span class="s1">&#39;missing_values&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                                                                                    <span class="s1">&#39;strategy&#39;</span><span class="p">:</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span>
-                                                                                    <span class="s1">&#39;fill_value&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span>
-                                                            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                                            <span class="s1">&#39;strategy&#39;</span><span class="p">:</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span>
+                                            <span class="s1">&#39;fill_value&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span>
+                                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
     <span class="n">train_x_enc</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
     <span class="n">test_x_enc</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">train_x_enc</span><span class="p">,</span> <span class="n">test_x_enc</span>
-
-
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">remove_corr_feat</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">):</span>
-    <span class="n">cor_feat</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">CorrelatedFeatures</span><span class="p">(</span>
-                                    <span class="n">method_num_num</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;kendall&quot;</span><span class="p">],</span>                              <span class="c1"># Used for Numerical x Numerical correlations</span>
-                                    <span class="n">num_corr_th</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>                                                                                                <span class="c1"># Used for Numerical x Numerical correlations</span>
-                                    <span class="n">num_pvalue_th</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>                                                                                             <span class="c1"># Used for Numerical x Numerical correlations</span>
-                                    <span class="n">method_num_cat</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">,</span>                                                                                 <span class="c1"># Used for Numerical x Categorical correlations</span>
-                                    <span class="n">model_metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;auc&quot;</span><span class="p">],</span>                                                                    <span class="c1"># Used for Numerical x Categorical correlations</span>
-                                    <span class="n">metric_th</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>                                                                                                  <span class="c1"># Used for Numerical x Categorical correlations</span>
-                                    <span class="n">cat_corr_th</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>                                                                                                <span class="c1"># Used for Categorical x Categorical correlations</span>
-                                    <span class="n">cat_pvalue_th</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>                                                                                             <span class="c1"># Used for Categorical x Categorical correlations</span>
-                                    <span class="n">save_json</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
-                            <span class="p">)</span>
-    <span class="n">cor_feat</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="n">label_col</span><span class="p">)</span>
-    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cor_feat</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">proc_df</span>
-
-
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">transform_num_data</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="p">,</span> <span class="n">num_col</span><span class="p">):</span>
-    <span class="n">ignore</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="n">num_col</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">ignore</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">train_x</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">num_col</span><span class="p">]</span>
-    <span class="n">transformer</span> <span class="o">=</span> <span class="n">scaler_ref</span><span class="p">(</span><span class="n">exclude_cols</span><span class="o">=</span><span class="n">ignore</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">transformer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-    <span class="n">train_x_scl</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-    <span class="n">test_x_scl</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">train_x_scl</span><span class="p">,</span> <span class="n">test_x_scl</span>
-
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">feature_selection</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">feat_sel_type</span> <span class="o">==</span> <span class="n">SEQ_FWD</span><span class="p">:</span>
-            <span class="n">feat_sel</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">forward</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">feat_sel_type</span> <span class="o">==</span> <span class="n">SEQ_BWD</span><span class="p">:</span>
-            <span class="n">feat_sel</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">forward</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-            <span class="n">feat_sel</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">CatBoostSelection</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">train_x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">)</span>
-    <span class="n">train_x_sel</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-    <span class="n">test_x_sel</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-
-    <span class="n">features</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">train_x_sel</span><span class="p">,</span> <span class="n">test_x_sel</span>
-
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">artificial_smote</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">strategy</span><span class="p">,</span> <span class="n">under_sample</span><span class="p">):</span>
-    <span class="n">rebalance</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span>
-                            <span class="n">X</span><span class="o">=</span><span class="n">train_x</span><span class="p">,</span>
-                            <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span>
-                            <span class="n">strategy_over</span><span class="o">=</span><span class="n">strategy</span><span class="p">,</span>
-                            <span class="n">over_sampler</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">under_sampler</span><span class="o">=</span><span class="n">under_sample</span><span class="p">,</span>
-                            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
-                    <span class="p">)</span>
-    <span class="n">train_x_res</span><span class="p">,</span> <span class="n">train_y_res</span> <span class="o">=</span> <span class="n">rebalance</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">train_x_res</span><span class="p">,</span> <span class="n">train_y_res</span>
-
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">artificial_ctgan</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">strategy</span><span class="p">,</span> <span class="n">savefile</span><span class="p">):</span>
-    <span class="n">synth</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Synthesizer</span><span class="p">(</span>
-                            <span class="n">X</span><span class="o">=</span><span class="n">train_x</span><span class="p">,</span>
-                            <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span>
-                            <span class="n">epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-                            <span class="n">model</span><span class="o">=</span><span class="s2">&quot;ctgan&quot;</span><span class="p">,</span>
-                            <span class="n">load_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">save_file</span><span class="o">=</span><span class="n">savefile</span><span class="p">,</span>
-                            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
-                    <span class="p">)</span>
-    <span class="n">synth</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-    <span class="n">syn_train_x</span><span class="p">,</span> <span class="n">syn_train_y</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">train_x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="n">strategy</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">syn_train_x</span><span class="p">,</span> <span class="n">syn_train_y</span>
-
-<span class="c1"># -----------------------------------</span>
-<span class="c1"># -----------------------------------</span>
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">):</span>
-    <span class="n">result_stat</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">result_list</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">RESULT_KEYS</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">result_stat</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                            <span class="n">result_stat</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
-                    <span class="k">else</span><span class="p">:</span>
-                            <span class="n">result_stat</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span>
-
-    <span class="c1">#for key in RESULT_KEYS:</span>
-    <span class="c1">#       mean = np.mean(result_stat[key])</span>
-    <span class="c1">#       std = np.std(result_stat[key])</span>
-    <span class="c1">#       result_stat[key] = {&#39;mean&#39;:mean, &#39;std&#39;:std}</span>
-
-    <span class="k">return</span> <span class="n">result_stat</span>
-
-
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_stat</span><span class="p">,</span> <span class="n">test_name</span><span class="p">):</span>
-    <span class="n">col_test</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">col_metric</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">col_value</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">metric</span> <span class="ow">in</span> <span class="n">RESULT_KEYS</span><span class="p">:</span>
-            <span class="n">col_value</span> <span class="o">+=</span> <span class="n">result_stat</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span>
-            <span class="n">col_test</span> <span class="o">+=</span> <span class="p">[</span><span class="n">test_name</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">result_stat</span><span class="p">[</span><span class="n">metric</span><span class="p">]))]</span>
-            <span class="n">col_metric</span> <span class="o">+=</span> <span class="p">[</span><span class="n">metric</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">result_stat</span><span class="p">[</span><span class="n">metric</span><span class="p">]))]</span>
-
-    <span class="n">new_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-    <span class="n">new_df</span><span class="p">[</span><span class="n">COL_VALUE</span><span class="p">]</span> <span class="o">=</span> <span class="n">col_value</span>
-    <span class="n">new_df</span><span class="p">[</span><span class="n">COL_TEST</span><span class="p">]</span> <span class="o">=</span> <span class="n">col_test</span>
-    <span class="n">new_df</span><span class="p">[</span><span class="n">COL_METRIC</span><span class="p">]</span> <span class="o">=</span> <span class="n">col_metric</span>
-    <span class="n">new_df</span><span class="p">[</span><span class="n">COL_VALUE</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_df</span><span class="p">[</span><span class="n">COL_VALUE</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">result_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">new_df</span>
-
-    <span class="n">result_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">result_df</span><span class="p">,</span> <span class="n">new_df</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">result_df</span>
-
-
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
     <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">proc_df</span> <span class="o">=</span> <span class="n">encode_case3</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="n">proc_df</span> <span class="o">=</span> <span class="n">impute_case3</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
-            <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
+    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">result_stat</span>
 
@@ -578,15 +459,15 @@ div.rendered_html tbody tr:hover {
 <span class="c1"># -----------------------------------</span>
 <span class="k">def</span> <span class="nf">test_corr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
     <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
     <span class="n">proc_df</span> <span class="o">=</span> <span class="n">encode_case3</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
     <span class="n">proc_df</span> <span class="o">=</span> <span class="n">impute_case3</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
-            <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
+    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">result_stat</span>
 
@@ -594,16 +475,16 @@ div.rendered_html tbody tr:hover {
 <span class="c1"># -----------------------------------</span>
 <span class="k">def</span> <span class="nf">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
     <span class="n">proc_df</span> <span class="o">=</span> <span class="n">encode_case3</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
     <span class="n">proc_df</span> <span class="o">=</span> <span class="n">impute_case3</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">transform_num_data</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
-            <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">transform_num_data</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
+    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">result_stat</span>
 
@@ -612,21 +493,21 @@ div.rendered_html tbody tr:hover {
     <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">proc_df</span> <span class="o">=</span> <span class="n">df</span>
     <span class="k">if</span> <span class="n">rcorr</span><span class="p">:</span>
-            <span class="n">proc_df</span> <span class="o">=</span> <span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
+        <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
     <span class="n">proc_df</span> <span class="o">=</span> <span class="n">encode_case3</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
     <span class="n">proc_df</span> <span class="o">=</span> <span class="n">impute_case3</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">art_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="n">artificial_smote</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">art_str</span><span class="p">,</span> <span class="n">under</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">feat_sel_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">feature_selection</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">scaler_ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">transform_num_data</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
-            <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">art_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">artificial_smote</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">art_str</span><span class="p">,</span> <span class="n">under</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">feat_sel_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">feature_selection</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scaler_ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">transform_num_data</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
+    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">result_stat</span>
 
@@ -637,46 +518,23 @@ div.rendered_html tbody tr:hover {
     <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">proc_df</span> <span class="o">=</span> <span class="n">df</span>
     <span class="k">if</span> <span class="n">rcorr</span><span class="p">:</span>
-            <span class="n">proc_df</span> <span class="o">=</span> <span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
+        <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">art_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="n">artificial_ctgan</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">art_str</span><span class="p">,</span> <span class="n">savefile</span><span class="p">)</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">encode_case3_train_test</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">)</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">impute_case3_train_test</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">feat_sel_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">feature_selection</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">scaler_ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">transform_num_data</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
-            <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">art_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">artificial_ctgan</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">art_str</span><span class="p">,</span> <span class="n">savefile</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">encode_case3_train_test</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">)</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">impute_case3_train_test</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">feat_sel_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">feature_selection</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scaler_ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">transform_num_data</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
+    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">result_stat</span>
-
-<span class="c1"># -----------------------------------</span>
-<span class="c1"># -----------------------------------</span>
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">plot_results</span><span class="p">(</span><span class="n">res_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
-
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="c1">#fig.set_dpi(100)</span>
-
-    <span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">y_lim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_lim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">COL_METRIC</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">COL_VALUE</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="n">COL_TEST</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">res_df</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.02</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">borderaxespad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-    <span class="c1">#ax.axes.set_title(&quot;Title&quot;,fontsize=50)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">COL_METRIC</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">COL_VALUE</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -684,7 +542,7 @@ div.rendered_html tbody tr:hover {
 <section id="1---Understanding-the-Data">
 <h2>1 - Understanding the Data<a class="headerlink" href="#1---Understanding-the-Data" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">database</span><span class="o">.</span><span class="n">load_thyroid_disease</span><span class="p">()</span>
@@ -695,7 +553,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1011,7 +869,7 @@ div.rendered_html tbody tr:hover {
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
@@ -1059,7 +917,7 @@ memory usage: 642.6+ KB
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_col</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;TSH&#39;</span><span class="p">,</span> <span class="s1">&#39;T3&#39;</span><span class="p">,</span> <span class="s1">&#39;TT4&#39;</span><span class="p">,</span> <span class="s1">&#39;T4U&#39;</span><span class="p">,</span> <span class="s1">&#39;FTI&#39;</span><span class="p">,</span> <span class="s1">&#39;TBG&#39;</span><span class="p">]</span>
@@ -1073,35 +931,47 @@ memory usage: 642.6+ KB
 <h3>KNN Model<a class="headerlink" href="#KNN-Model" title="Permalink to this heading"></a></h3>
 <section id="Data-Transformations">
 <h4>Data Transformations<a class="headerlink" href="#Data-Transformations" title="Permalink to this heading"></a></h4>
+<p>Here we compare 8 different training pipelines with a KNN model. For each pipeline, 50 runs are performed, and the mean and stdev of the metrics are computed and plotted in the graph below.</p>
+<ul class="simple">
+<li><p>baseline dataset</p></li>
+<li><p>baseline dataset, removal of correlated features</p></li>
+<li><p>baseline dataset, removal of correlated features, standard scaler</p></li>
+<li><p>baseline dataset, removal of correlated features, minmax scaler</p></li>
+<li><p>baseline dataset, removal of correlated features, quantile transformer</p></li>
+<li><p>baseline dataset, removal of correlated features, data normalizer</p></li>
+<li><p>baseline dataset, removal of correlated features, robust scaler</p></li>
+<li><p>baseline dataset, removal of correlated features, power transformer</p></li>
+</ul>
+<p>Note: Some of the experiments below take 10+ min to run. You may change <code class="docutils literal notranslate"><span class="pre">N_EXEC</span></code> to a smaller number to decrease the time it takes to run the notebook.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;knn&quot;</span>
 
 <span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
 
 <span class="n">result_cor</span> <span class="o">=</span> <span class="n">test_corr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_cor</span><span class="p">,</span> <span class="s2">&quot;Corr.&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_cor</span><span class="p">,</span> <span class="s2">&quot;Corr.&quot;</span><span class="p">)</span>
 
 <span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
 
 <span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Min/Max.&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Min/Max.&quot;</span><span class="p">)</span>
 
 <span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Quantile&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Quantile&quot;</span><span class="p">)</span>
 
 <span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataNormalizer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Normalizer&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Normalizer&quot;</span><span class="p">)</span>
 
 <span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataRobustScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Robust&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Robust&quot;</span><span class="p">)</span>
 
 <span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataPowerTransformer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Power&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Power&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1110,181 +980,43 @@ memory usage: 642.6+ KB
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case3_stat_8_0.png" src="../../../_images/dataprocessing_notebooks_case_study_case3_stat_8_0.png" />
-</div>
-</div>
-</section>
-<section id="Sequential-Feature-Selection---Forward">
-<h4>Sequential Feature Selection - Forward<a class="headerlink" href="#Sequential-Feature-Selection---Forward" title="Permalink to this heading"></a></h4>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
-
-<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
-
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="n">SEQ_FWD</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq. Fwd.&quot;</span><span class="p">)</span>
-
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="n">SEQ_FWD</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Corr.Seq.Fwd&quot;</span><span class="p">)</span>
-
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="n">SEQ_FWD</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Corr.Seq.Fwd.Std.&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case3_stat_11_0.png" src="../../../_images/dataprocessing_notebooks_case_study_case3_stat_11_0.png" />
-</div>
-</div>
-</section>
-<section id="Sequential-Feature-Selection---Forward-x-Backward-x-CatBoost-Feature-Selection">
-<h4>Sequential Feature Selection - Forward x Backward x CatBoost Feature Selection<a class="headerlink" href="#Sequential-Feature-Selection---Forward-x-Backward-x-CatBoost-Feature-Selection" title="Permalink to this heading"></a></h4>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
-
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="n">SEQ_FWD</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq. Fwd.&quot;</span><span class="p">)</span>
-
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="n">SEQ_BWD</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq. Bwd.&quot;</span><span class="p">)</span>
-
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="n">SEQ_BWD</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq.Bwd.Std.&quot;</span><span class="p">)</span>
-
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="n">CATBOOST</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CatBoost Std.&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
 </pre></div></div>
 </div>
@@ -1292,7 +1024,7 @@ memory usage: 642.6+ KB
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1300,33 +1032,39 @@ memory usage: 642.6+ KB
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case3_stat_14_0.png" src="../../../_images/dataprocessing_notebooks_case_study_case3_stat_14_0.png" />
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case3_stat_10_0.png" src="../../../_images/dataprocessing_notebooks_case_study_case3_stat_10_0.png" />
 </div>
 </div>
+<p>The standard scaler performs best here, and we will use it as a baseline in the following experiments.</p>
 </section>
-<section id="Artificial-Instances---SMOTE">
-<h4>Artificial Instances - SMOTE<a class="headerlink" href="#Artificial-Instances---SMOTE" title="Permalink to this heading"></a></h4>
+<section id="Sequential-Feature-Selection---Forward">
+<h4>Sequential Feature Selection - Forward<a class="headerlink" href="#Sequential-Feature-Selection---Forward" title="Permalink to this heading"></a></h4>
+<p>Now we will perform feature selection, where all features are first removed from the dataset, and then re-added to see if they improve the model performance. We will compare three different feature selection pipelines with two baseline models.</p>
+<ul class="simple">
+<li><p>Baseline KNN model</p></li>
+<li><p>KNN model with standard scaler scaler and correlated features removed</p></li>
+<li><p>KNN model, sequential feature selection</p></li>
+<li><p>KNN model, removal of correlated features, sequential feature selection</p></li>
+<li><p>KNN model, standard scaler, removal of correlated features, sequential feature selection</p></li>
+</ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
 
 <span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM&quot;</span><span class="p">)</span>
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq. Fwd.&quot;</span><span class="p">)</span>
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM Std.&quot;</span><span class="p">)</span>
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Corr.Seq.Fwd&quot;</span><span class="p">)</span>
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM+TK&quot;</span><span class="p">)</span>
-
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM+TK Std.&quot;</span><span class="p">)</span>
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Corr.Seq.Fwd.Std.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1335,13 +1073,29 @@ memory usage: 642.6+ KB
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
 </pre></div></div>
 </div>
@@ -1349,7 +1103,7 @@ memory usage: 642.6+ KB
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1357,28 +1111,190 @@ memory usage: 642.6+ KB
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case3_stat_17_0.png" src="../../../_images/dataprocessing_notebooks_case_study_case3_stat_17_0.png" />
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case3_stat_13_0.png" src="../../../_images/dataprocessing_notebooks_case_study_case3_stat_13_0.png" />
 </div>
 </div>
 </section>
+<section id="Sequential-Feature-Selection---Forward-x-Backward-x-CatBoost-Feature-Selection">
+<h4>Sequential Feature Selection - Forward x Backward x CatBoost Feature Selection<a class="headerlink" href="#Sequential-Feature-Selection---Forward-x-Backward-x-CatBoost-Feature-Selection" title="Permalink to this heading"></a></h4>
+<p>We now compare forward and backward feature selection. We then add in the standard scaler, and compare with CatBoost.</p>
+<ul class="simple">
+<li><p>Baseline KNN model</p></li>
+<li><p>KNN model, forward sequential feature selection</p></li>
+<li><p>KNN model, backward sequential feature selection</p></li>
+<li><p>KNN model, standard scaler, backward sequential feature selection</p></li>
+<li><p>KNN model, standard scaler, catboost feature selection</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
+
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq. Fwd.&quot;</span><span class="p">)</span>
+
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;backward&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq. Bwd.&quot;</span><span class="p">)</span>
+
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;backward&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq.Bwd.Std.&quot;</span><span class="p">)</span>
+
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;catboost&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CatBoost Std.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case3_stat_16_0.png" src="../../../_images/dataprocessing_notebooks_case_study_case3_stat_16_0.png" />
+</div>
+</div>
+</section>
+<section id="Artificial-Instances---SMOTE">
+<h4>Artificial Instances - SMOTE<a class="headerlink" href="#Artificial-Instances---SMOTE" title="Permalink to this heading"></a></h4>
+<p>We generate artificial instances for the minority class.</p>
+<ul class="simple">
+<li><p>baseline KNN model</p></li>
+<li><p>baseline KNN model with standard scaler and removal of correlated features</p></li>
+<li><p>KNN model, remove correlated features, SMOTE artificial data</p></li>
+<li><p>KNN model, remove correlated features, standard scaler, SMOTE artificial data</p></li>
+<li><p>KNN model, remove correlated features, SMOTE artificial data, TomekLink under sampling</p></li>
+<li><p>KNN model, remove correlated features, standard scaler, SMOTE artificial data, TomekLink under sampling</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
+
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
+
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM&quot;</span><span class="p">)</span>
+
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM Std.&quot;</span><span class="p">)</span>
+
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM+TK&quot;</span><span class="p">)</span>
+
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM+TK Std.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case3_stat_19_0.png" src="../../../_images/dataprocessing_notebooks_case_study_case3_stat_19_0.png" />
+</div>
+</div>
+<p>With this dataset, the standard scaler and feature selection improves the model. But the artificial instances generated here do not improve the model.</p>
+</section>
 <section id="Artificial-Instances---CTGAN">
 <h4>Artificial Instances - CTGAN<a class="headerlink" href="#Artificial-Instances---CTGAN" title="Permalink to this heading"></a></h4>
+<p>Next, we attempt to improve the model with CTGAN generated instances.</p>
+<ul class="simple">
+<li><p>KNN baseline model</p></li>
+<li><p>baseline KNN model with standard scaler and removal of correlated features</p></li>
+<li><p>KNN model, standard scaler, removal of correlated features, over sampling with CTGAN ratio of 0.2</p></li>
+<li><p>KNN model, standard scaler, removal of correlated features, over sampling with CTGAN ratio of 0.6</p></li>
+</ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;knn&quot;</span>
 <span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
 
 <span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
 
 <span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="s2">&quot;3_1.pkl&quot;</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.2 Std.&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.2 Std.&quot;</span><span class="p">)</span>
 
 <span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="s2">&quot;3_2.pkl&quot;</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.6 Std.&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.6 Std.&quot;</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -1387,29 +1303,31 @@ memory usage: 642.6+ KB
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1417,108 +1335,52 @@ memory usage: 642.6+ KB
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case3_stat_20_0.png" src="../../../_images/dataprocessing_notebooks_case_study_case3_stat_20_0.png" />
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case3_stat_22_0.png" src="../../../_images/dataprocessing_notebooks_case_study_case3_stat_22_0.png" />
 </div>
 </div>
+<p>Again, adding the artificial instances does not improve the model.</p>
 </section>
 </section>
 <section id="XGBoost">
 <h3>XGBoost<a class="headerlink" href="#XGBoost" title="Permalink to this heading"></a></h3>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<p>The above experiments were performed with a KNN model. Below, we perform the same experiments with an XGBoost model to see how it affects model performance.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;xgb&quot;</span>
 
 <span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
 
 <span class="n">result_cor</span> <span class="o">=</span> <span class="n">test_corr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_cor</span><span class="p">,</span> <span class="s2">&quot;Corr.&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_cor</span><span class="p">,</span> <span class="s2">&quot;Corr.&quot;</span><span class="p">)</span>
 
 <span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
 
 <span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Min/Max.&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Min/Max.&quot;</span><span class="p">)</span>
 
 <span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Quantile&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Quantile&quot;</span><span class="p">)</span>
 
 <span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataNormalizer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Normalizer&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Normalizer&quot;</span><span class="p">)</span>
 
 <span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataRobustScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Robust&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Robust&quot;</span><span class="p">)</span>
 
 <span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataPowerTransformer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Power&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Power&quot;</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.75</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case3_stat_23_0.png" src="../../../_images/dataprocessing_notebooks_case_study_case3_stat_23_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
-
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="n">SEQ_BWD</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq.Bwd.Qtl.&quot;</span><span class="p">)</span>
-
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="n">CATBOOST</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CatBoost Qtl.&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.75</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.75</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1530,22 +1392,18 @@ memory usage: 642.6+ KB
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;xgb&quot;</span>
-<span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
 
-<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Qtl.&quot;</span><span class="p">)</span>
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;backward&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq.Bwd.Qtl.&quot;</span><span class="p">)</span>
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="s2">&quot;3_3.pkl&quot;</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.2 Qtl.&quot;</span><span class="p">)</span>
-
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="s2">&quot;3_4.pkl&quot;</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.6 Qtl.&quot;</span><span class="p">)</span>
-<br/></pre></div>
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;catboost&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CatBoost Qtl.&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1553,27 +1411,21 @@ memory usage: 642.6+ KB
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-../../errorsmitigation/dataprocessing/utils_model.py:65: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.75</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1582,6 +1434,53 @@ memory usage: 642.6+ KB
 </div>
 <div class="output_area docutils container">
 <img alt="../../../_images/dataprocessing_notebooks_case_study_case3_stat_27_0.png" src="../../../_images/dataprocessing_notebooks_case_study_case3_stat_27_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;xgb&quot;</span>
+<span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
+
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Qtl.&quot;</span><span class="p">)</span>
+
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="s2">&quot;3_3.pkl&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.2 Qtl.&quot;</span><span class="p">)</span>
+
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="s2">&quot;3_4.pkl&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.6 Qtl.&quot;</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case3_stat_29_0.png" src="../../../_images/dataprocessing_notebooks_case_study_case3_stat_29_0.png" />
 </div>
 </div>
 </section>

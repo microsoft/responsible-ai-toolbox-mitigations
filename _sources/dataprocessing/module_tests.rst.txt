@@ -11,7 +11,6 @@ methods offered in the **dataprocessing** module.
    notebooks/module_tests/imputation
    notebooks/module_tests/feat_sel_sequential
    notebooks/module_tests/feat_sel_catboost
-   notebooks/module_tests/feat_sel_corr
    notebooks/module_tests/feat_sel_corr_tutorial
    notebooks/module_tests/rebalance_imbl
    notebooks/module_tests/rebalance_sdv

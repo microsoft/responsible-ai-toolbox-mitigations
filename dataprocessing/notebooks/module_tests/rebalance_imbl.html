@@ -87,7 +87,7 @@
           <li><a href="../../sampler/rebalance.html">Rebalance</a> &raquo;</li>
       <li>Rebalance Class (imblearn)</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/dataprocessing/notebooks/module_tests/rebalance_imbl.ipynb.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/notebooks/module_tests/rebalance_imbl.ipynb" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -375,6 +375,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <section id="Rebalance-Class-(imblearn)">
 <h1>Rebalance Class (imblearn)<a class="headerlink" href="#Rebalance-Class-(imblearn)" title="Permalink to this heading"></a></h1>
+<p>This notebook explroes the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class, which allows the user to create synthetic data and fix imbalanced data.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -391,6 +392,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <section id="1---Dataset-with-Headers">
 <h2>1 - Dataset with Headers<a class="headerlink" href="#1---Dataset-with-Headers" title="Permalink to this heading"></a></h2>
+<p>First, we will load the HR promotions dataset, which includes information about whether an employee was promoted or not.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -623,6 +625,7 @@ div.rendered_html tbody tr:hover {
 <p>54808 rows × 13 columns</p>
 </div></div>
 </div>
+<p>We can check that this dataset is imbalanced.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -642,6 +645,7 @@ div.rendered_html tbody tr:hover {
 Name: is_promoted, dtype: int64
 </pre></div></div>
 </div>
+<p>In order to rebalance a column, we specify the column to rebalance (<strong>rebalance_col</strong>). By default, the class will use the SMOTE oversampling method, and create enough samples of the minority class to equal the majority class. We specify the number of neighbors to use for the SMOTE, and suppress the output.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -700,6 +704,7 @@ Name: is_promoted, dtype: int64
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -713,12 +718,13 @@ Name: is_promoted, dtype: int64
       <td>Master's &amp; above</td>
       <td>f</td>
       <td>sourcing</td>
-      <td>1.0</td>
-      <td>35.000000</td>
+      <td>1</td>
+      <td>35</td>
       <td>5.000000</td>
-      <td>8.000000</td>
-      <td>0.0</td>
-      <td>49.000000</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0</td>
+      <td>49</td>
       <td>0</td>
     </tr>
     <tr>
@@ -728,12 +734,13 @@ Name: is_promoted, dtype: int64
       <td>Bachelor's</td>
       <td>m</td>
       <td>other</td>
-      <td>1.0</td>
-      <td>30.000000</td>
+      <td>1</td>
+      <td>30</td>
       <td>5.000000</td>
-      <td>4.000000</td>
-      <td>0.0</td>
-      <td>60.000000</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
       <td>0</td>
     </tr>
     <tr>
@@ -743,12 +750,13 @@ Name: is_promoted, dtype: int64
       <td>Bachelor's</td>
       <td>m</td>
       <td>sourcing</td>
-      <td>1.0</td>
-      <td>34.000000</td>
+      <td>1</td>
+      <td>34</td>
       <td>3.000000</td>
-      <td>7.000000</td>
-      <td>0.0</td>
-      <td>50.000000</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
       <td>0</td>
     </tr>
     <tr>
@@ -758,12 +766,13 @@ Name: is_promoted, dtype: int64
       <td>Bachelor's</td>
       <td>m</td>
       <td>other</td>
-      <td>2.0</td>
-      <td>39.000000</td>
+      <td>2</td>
+      <td>39</td>
       <td>1.000000</td>
-      <td>10.000000</td>
-      <td>0.0</td>
-      <td>50.000000</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
       <td>0</td>
     </tr>
     <tr>
@@ -773,16 +782,18 @@ Name: is_promoted, dtype: int64
       <td>Bachelor's</td>
       <td>m</td>
       <td>other</td>
-      <td>1.0</td>
-      <td>45.000000</td>
+      <td>1</td>
+      <td>45</td>
       <td>3.000000</td>
-      <td>2.000000</td>
-      <td>0.0</td>
-      <td>73.000000</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>73</td>
       <td>0</td>
     </tr>
     <tr>
       <th>...</th>
+      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -801,81 +812,87 @@ Name: is_promoted, dtype: int64
       <td>Operations</td>
       <td>region_2</td>
       <td>Master's &amp; above</td>
-      <td>m</td>
+      <td>f</td>
       <td>sourcing</td>
-      <td>1.0</td>
-      <td>48.218391</td>
-      <td>2.109195</td>
-      <td>19.109195</td>
-      <td>0.0</td>
-      <td>62.781609</td>
+      <td>1</td>
+      <td>36</td>
+      <td>3.000000</td>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>70</td>
       <td>1</td>
     </tr>
     <tr>
       <th>100276</th>
       <td>Sales &amp; Marketing</td>
-      <td>region_25</td>
-      <td>Master's &amp; above</td>
+      <td>region_22</td>
+      <td>Bachelor's</td>
       <td>m</td>
       <td>other</td>
-      <td>1.0</td>
-      <td>37.000000</td>
-      <td>1.603526</td>
-      <td>6.698237</td>
-      <td>0.0</td>
-      <td>50.000000</td>
+      <td>1</td>
+      <td>24</td>
+      <td>3.329256</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>51</td>
       <td>1</td>
     </tr>
     <tr>
       <th>100277</th>
-      <td>Sales &amp; Marketing</td>
-      <td>region_25</td>
-      <td>Master's &amp; above</td>
+      <td>Technology</td>
+      <td>region_2</td>
+      <td>Bachelor's</td>
       <td>m</td>
-      <td>other</td>
-      <td>1.0</td>
-      <td>35.000000</td>
-      <td>5.000000</td>
-      <td>4.299350</td>
-      <td>0.0</td>
-      <td>47.000000</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>24</td>
+      <td>4.941969</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>85</td>
       <td>1</td>
     </tr>
     <tr>
       <th>100278</th>
-      <td>Finance</td>
-      <td>region_22</td>
-      <td>Bachelor's</td>
-      <td>f</td>
-      <td>sourcing</td>
-      <td>1.0</td>
-      <td>27.924155</td>
-      <td>3.924155</td>
-      <td>4.000000</td>
-      <td>0.0</td>
-      <td>58.000000</td>
+      <td>Sales &amp; Marketing</td>
+      <td>region_2</td>
+      <td>Master's &amp; above</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>50</td>
+      <td>3.234562</td>
+      <td>15</td>
+      <td>1</td>
+      <td>0</td>
+      <td>51</td>
       <td>1</td>
     </tr>
     <tr>
       <th>100279</th>
-      <td>Sales &amp; Marketing</td>
-      <td>region_20</td>
+      <td>Analytics</td>
+      <td>region_22</td>
       <td>Bachelor's</td>
       <td>m</td>
-      <td>sourcing</td>
-      <td>1.0</td>
-      <td>26.577511</td>
+      <td>other</td>
+      <td>1</td>
+      <td>26</td>
       <td>3.329256</td>
-      <td>1.000000</td>
-      <td>0.0</td>
-      <td>49.000000</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>80</td>
       <td>1</td>
     </tr>
   </tbody>
 </table>
-<p>100280 rows × 12 columns</p>
+<p>100280 rows × 13 columns</p>
 </div></div>
 </div>
+<p>If we do not want the samples of each class to be equal, we can specify the number of samples for each class with a dictionary in the <strong>strategy_over</strong> parameter.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -907,6 +924,8 @@ Running oversampling...
 Name: is_promoted, dtype: int64
 </pre></div></div>
 </div>
+<p>The Rebalance class can take in a pandas DataFrame or (X,y) set, in either the <code class="docutils literal notranslate"><span class="pre">init()</span></code> or <code class="docutils literal notranslate"><span class="pre">fit_resample()</span></code> methods. Additionally, if we do not want the Rebalance class to consider all columns, we remove them first from the dataframe.</p>
+<p>Additionally, we can instead specify a float representing the ratio of instances of each class, instead of a dict.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
@@ -951,6 +970,7 @@ Running oversampling...
 Name: is_promoted, dtype: int64
 </pre></div></div>
 </div>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> uses a SMOTE method (SMOTE [numerical columns only], SMOTEN [categorical only], or SMOTENC [categorical and numerical]) from <code class="docutils literal notranslate"><span class="pre">imblearn</span></code>. But, we could specify this directly by passing an over sampling method to <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> in the <code class="docutils literal notranslate"><span class="pre">over_sampler</span></code> parameter.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
@@ -1017,12 +1037,12 @@ Name: is_promoted, dtype: int64
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>department_Finance</th>
       <th>department_HR</th>
       <th>department_Legal</th>
-      <th>department_Operations</th>
       <th>...</th>
       <th>region_region_7</th>
       <th>region_region_8</th>
@@ -1039,13 +1059,13 @@ Name: is_promoted, dtype: int64
   <tbody>
     <tr>
       <th>0</th>
-      <td>1.000000</td>
-      <td>35.000000</td>
+      <td>1</td>
+      <td>35</td>
       <td>5.000000</td>
-      <td>8.000000</td>
-      <td>0.0</td>
-      <td>49.000000</td>
+      <td>8</td>
+      <td>1</td>
       <td>0</td>
+      <td>49</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1063,16 +1083,16 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>1</th>
-      <td>1.000000</td>
-      <td>30.000000</td>
-      <td>5.000000</td>
-      <td>4.000000</td>
-      <td>0.0</td>
-      <td>60.000000</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
       <td>1</td>
+      <td>30</td>
+      <td>5.000000</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -1087,13 +1107,13 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>2</th>
-      <td>1.000000</td>
-      <td>34.000000</td>
+      <td>1</td>
+      <td>34</td>
       <td>3.000000</td>
-      <td>7.000000</td>
-      <td>0.0</td>
-      <td>50.000000</td>
+      <td>7</td>
       <td>0</td>
+      <td>0</td>
+      <td>50</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1111,13 +1131,13 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>3</th>
-      <td>2.000000</td>
-      <td>39.000000</td>
+      <td>2</td>
+      <td>39</td>
       <td>1.000000</td>
-      <td>10.000000</td>
-      <td>0.0</td>
-      <td>50.000000</td>
+      <td>10</td>
       <td>0</td>
+      <td>0</td>
+      <td>50</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1135,13 +1155,13 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>4</th>
-      <td>1.000000</td>
-      <td>45.000000</td>
+      <td>1</td>
+      <td>45</td>
       <td>3.000000</td>
-      <td>2.000000</td>
-      <td>0.0</td>
-      <td>73.000000</td>
+      <td>2</td>
       <td>0</td>
+      <td>0</td>
+      <td>73</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1183,14 +1203,14 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>100275</th>
-      <td>1.000000</td>
-      <td>33.274008</td>
+      <td>1</td>
+      <td>33</td>
       <td>5.000000</td>
-      <td>7.725992</td>
-      <td>0.0</td>
-      <td>57.274008</td>
+      <td>7</td>
       <td>1</td>
       <td>0</td>
+      <td>57</td>
+      <td>1</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
@@ -1207,13 +1227,13 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>100276</th>
-      <td>1.550476</td>
-      <td>30.449524</td>
+      <td>1</td>
+      <td>29</td>
       <td>3.000000</td>
-      <td>4.000000</td>
-      <td>0.0</td>
-      <td>87.000000</td>
+      <td>4</td>
+      <td>1</td>
       <td>0</td>
+      <td>87</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1231,13 +1251,13 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>100277</th>
-      <td>1.986988</td>
-      <td>50.973976</td>
+      <td>1</td>
+      <td>50</td>
       <td>3.013012</td>
-      <td>6.000000</td>
-      <td>0.0</td>
-      <td>63.013012</td>
+      <td>6</td>
+      <td>1</td>
       <td>0</td>
+      <td>63</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1255,16 +1275,16 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>100278</th>
-      <td>1.000000</td>
-      <td>32.000000</td>
-      <td>4.763964</td>
-      <td>2.763964</td>
-      <td>0.0</td>
-      <td>60.000000</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
       <td>1</td>
+      <td>32</td>
+      <td>4.763964</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+      <td>60</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -1274,18 +1294,18 @@ Name: is_promoted, dtype: int64
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
+      <td>1</td>
       <td>1</td>
     </tr>
     <tr>
       <th>100279</th>
-      <td>1.000000</td>
-      <td>34.139206</td>
-      <td>3.860794</td>
-      <td>10.139206</td>
-      <td>0.0</td>
-      <td>97.139206</td>
+      <td>1</td>
+      <td>33</td>
+      <td>4.000000</td>
+      <td>9</td>
       <td>0</td>
+      <td>0</td>
+      <td>97</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1294,7 +1314,7 @@ Name: is_promoted, dtype: int64
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1303,9 +1323,12 @@ Name: is_promoted, dtype: int64
     </tr>
   </tbody>
 </table>
-<p>100280 rows × 54 columns</p>
+<p>100280 rows × 55 columns</p>
 </div></div>
 </div>
+<p>We can perform both over and under sampling in the same function call. Over sampling is performed first, then under sampling. For undersampling, two different default methods can be used, by setting <code class="docutils literal notranslate"><span class="pre">strategy_under</span></code> to different values. - If <strong>Float</strong> or <strong>Dictionary</strong>, ClusterCentroids will be used (since we need a specific number of each class) - If <strong>String</strong>, then TomekLinks will be used. Options for a which classes to resample are ‘majority, ’not minority’, ‘not majority’, ‘all’, or
+‘auto’ (‘auto’ is equivalent to ‘not minority’). - If <strong>None</strong>, the default is also TomekLinks</p>
+<p>Here we specify ‘auto’ (i.e. ‘not minority’), so a <code class="docutils literal notranslate"><span class="pre">TomekLinks</span></code> method will be used, and all but the minority class will be resampled.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -1335,7 +1358,7 @@ Running oversampling...
 ...finished
 Running undersampling...
 ...finished
-0    49358
+0    49208
 1    10000
 Name: is_promoted, dtype: int64
 </pre></div></div>
@@ -1367,12 +1390,12 @@ Name: is_promoted, dtype: int64
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>department_Finance</th>
       <th>department_HR</th>
       <th>department_Legal</th>
-      <th>department_Operations</th>
       <th>...</th>
       <th>region_region_7</th>
       <th>region_region_8</th>
@@ -1389,13 +1412,13 @@ Name: is_promoted, dtype: int64
   <tbody>
     <tr>
       <th>0</th>
-      <td>1.0</td>
-      <td>35.000000</td>
-      <td>5.000000</td>
-      <td>8.000000</td>
-      <td>0.000000</td>
-      <td>49.000000</td>
+      <td>1</td>
+      <td>35</td>
+      <td>5.0</td>
+      <td>8</td>
+      <td>1</td>
       <td>0</td>
+      <td>49</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1413,16 +1436,16 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>1</th>
-      <td>1.0</td>
-      <td>30.000000</td>
-      <td>5.000000</td>
-      <td>4.000000</td>
-      <td>0.000000</td>
-      <td>60.000000</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
       <td>1</td>
+      <td>30</td>
+      <td>5.0</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -1437,13 +1460,13 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>2</th>
-      <td>1.0</td>
-      <td>34.000000</td>
-      <td>3.000000</td>
-      <td>7.000000</td>
-      <td>0.000000</td>
-      <td>50.000000</td>
+      <td>1</td>
+      <td>34</td>
+      <td>3.0</td>
+      <td>7</td>
       <td>0</td>
+      <td>0</td>
+      <td>50</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1461,13 +1484,13 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>3</th>
-      <td>2.0</td>
-      <td>39.000000</td>
-      <td>1.000000</td>
-      <td>10.000000</td>
-      <td>0.000000</td>
-      <td>50.000000</td>
+      <td>2</td>
+      <td>39</td>
+      <td>1.0</td>
+      <td>10</td>
       <td>0</td>
+      <td>0</td>
+      <td>50</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1485,13 +1508,13 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>4</th>
-      <td>1.0</td>
-      <td>45.000000</td>
-      <td>3.000000</td>
-      <td>2.000000</td>
-      <td>0.000000</td>
-      <td>73.000000</td>
+      <td>1</td>
+      <td>45</td>
+      <td>3.0</td>
+      <td>2</td>
       <td>0</td>
+      <td>0</td>
+      <td>73</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1532,14 +1555,14 @@ Name: is_promoted, dtype: int64
       <td>...</td>
     </tr>
     <tr>
-      <th>59353</th>
-      <td>1.0</td>
-      <td>32.764739</td>
-      <td>4.117631</td>
-      <td>7.882369</td>
-      <td>0.117631</td>
-      <td>95.000000</td>
+      <th>59203</th>
+      <td>1</td>
+      <td>31</td>
+      <td>5.0</td>
+      <td>6</td>
+      <td>1</td>
       <td>0</td>
+      <td>49</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1556,38 +1579,14 @@ Name: is_promoted, dtype: int64
       <td>1</td>
     </tr>
     <tr>
-      <th>59354</th>
-      <td>1.0</td>
-      <td>43.790991</td>
-      <td>2.790991</td>
-      <td>2.790991</td>
-      <td>0.000000</td>
-      <td>75.790991</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <th>59204</th>
       <td>1</td>
+      <td>31</td>
+      <td>3.0</td>
+      <td>6</td>
       <td>1</td>
-    </tr>
-    <tr>
-      <th>59355</th>
-      <td>1.0</td>
-      <td>28.000000</td>
-      <td>4.458665</td>
-      <td>2.541335</td>
-      <td>1.000000</td>
-      <td>84.458665</td>
       <td>0</td>
+      <td>88</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1604,21 +1603,18 @@ Name: is_promoted, dtype: int64
       <td>1</td>
     </tr>
     <tr>
-      <th>59356</th>
-      <td>1.0</td>
-      <td>33.594383</td>
-      <td>5.000000</td>
-      <td>3.000000</td>
-      <td>0.000000</td>
-      <td>72.000000</td>
+      <th>59205</th>
+      <td>1</td>
+      <td>28</td>
+      <td>3.0</td>
+      <td>4</td>
       <td>0</td>
+      <td>0</td>
+      <td>88</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1626,16 +1622,19 @@ Name: is_promoted, dtype: int64
       <td>0</td>
       <td>0</td>
       <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
     </tr>
     <tr>
-      <th>59357</th>
-      <td>1.0</td>
-      <td>56.000000</td>
-      <td>3.000000</td>
-      <td>28.499621</td>
-      <td>0.000000</td>
-      <td>86.997725</td>
+      <th>59206</th>
+      <td>1</td>
+      <td>34</td>
+      <td>3.0</td>
+      <td>3</td>
       <td>0</td>
+      <td>0</td>
+      <td>62</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1644,7 +1643,31 @@ Name: is_promoted, dtype: int64
       <td>0</td>
       <td>0</td>
       <td>0</td>
+      <td>1</td>
       <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>59207</th>
+      <td>1</td>
+      <td>35</td>
+      <td>3.0</td>
+      <td>8</td>
+      <td>0</td>
+      <td>0</td>
+      <td>83</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1653,9 +1676,10 @@ Name: is_promoted, dtype: int64
     </tr>
   </tbody>
 </table>
-<p>59358 rows × 54 columns</p>
+<p>59208 rows × 55 columns</p>
 </div></div>
 </div>
+<p>Here, instead of setting setting <strong>strategy_under</strong>, we set “under_sampler=True”, which will use the default <strong>under_sampler</strong>. Since “strategy_under=None”, the <code class="docutils literal notranslate"><span class="pre">TomekLinks</span></code> undersampler will be used again.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -1685,7 +1709,7 @@ Running oversampling...
 ...finished
 Running undersampling...
 ...finished
-0    49337
+0    49199
 1    10000
 Name: is_promoted, dtype: int64
 </pre></div></div>
@@ -1717,12 +1741,12 @@ Name: is_promoted, dtype: int64
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>department_Finance</th>
       <th>department_HR</th>
       <th>department_Legal</th>
-      <th>department_Operations</th>
       <th>...</th>
       <th>region_region_7</th>
       <th>region_region_8</th>
@@ -1739,13 +1763,13 @@ Name: is_promoted, dtype: int64
   <tbody>
     <tr>
       <th>0</th>
-      <td>1.000000</td>
-      <td>35.000000</td>
+      <td>1</td>
+      <td>35</td>
       <td>5.000000</td>
-      <td>8.000000</td>
-      <td>0.0</td>
-      <td>49.000000</td>
+      <td>8</td>
+      <td>1</td>
       <td>0</td>
+      <td>49</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1763,16 +1787,16 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>1</th>
-      <td>1.000000</td>
-      <td>30.000000</td>
-      <td>5.000000</td>
-      <td>4.000000</td>
-      <td>0.0</td>
-      <td>60.000000</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
       <td>1</td>
+      <td>30</td>
+      <td>5.000000</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
@@ -1787,13 +1811,13 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>2</th>
-      <td>1.000000</td>
-      <td>34.000000</td>
+      <td>1</td>
+      <td>34</td>
       <td>3.000000</td>
-      <td>7.000000</td>
-      <td>0.0</td>
-      <td>50.000000</td>
+      <td>7</td>
       <td>0</td>
+      <td>0</td>
+      <td>50</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1811,13 +1835,13 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>3</th>
-      <td>2.000000</td>
-      <td>39.000000</td>
+      <td>2</td>
+      <td>39</td>
       <td>1.000000</td>
-      <td>10.000000</td>
-      <td>0.0</td>
-      <td>50.000000</td>
+      <td>10</td>
       <td>0</td>
+      <td>0</td>
+      <td>50</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1835,13 +1859,13 @@ Name: is_promoted, dtype: int64
     </tr>
     <tr>
       <th>4</th>
-      <td>1.000000</td>
-      <td>45.000000</td>
+      <td>1</td>
+      <td>45</td>
       <td>3.000000</td>
-      <td>2.000000</td>
-      <td>0.0</td>
-      <td>73.000000</td>
+      <td>2</td>
       <td>0</td>
+      <td>0</td>
+      <td>73</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1882,14 +1906,38 @@ Name: is_promoted, dtype: int64
       <td>...</td>
     </tr>
     <tr>
-      <th>59332</th>
-      <td>1.948997</td>
-      <td>30.000000</td>
+      <th>59194</th>
+      <td>1</td>
+      <td>30</td>
+      <td>3.229203</td>
+      <td>6</td>
+      <td>1</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>59195</th>
+      <td>1</td>
+      <td>32</td>
       <td>5.000000</td>
-      <td>4.000000</td>
-      <td>0.0</td>
-      <td>84.000000</td>
+      <td>6</td>
+      <td>1</td>
       <td>0</td>
+      <td>64</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1906,71 +1954,23 @@ Name: is_promoted, dtype: int64
       <td>1</td>
     </tr>
     <tr>
-      <th>59333</th>
-      <td>1.511305</td>
-      <td>38.488695</td>
-      <td>4.488695</td>
-      <td>11.000000</td>
-      <td>0.0</td>
-      <td>60.000000</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <th>59196</th>
       <td>1</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>59334</th>
-      <td>1.000000</td>
-      <td>25.475312</td>
-      <td>3.329256</td>
-      <td>1.000000</td>
-      <td>0.0</td>
-      <td>52.000000</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>59335</th>
-      <td>1.111413</td>
-      <td>26.111413</td>
+      <td>38</td>
       <td>3.000000</td>
-      <td>3.111413</td>
-      <td>0.0</td>
-      <td>71.888587</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>6</td>
       <td>1</td>
+      <td>0</td>
+      <td>58</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
       <td>...</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
+      <td>1</td>
       <td>0</td>
       <td>1</td>
       <td>0</td>
@@ -1978,14 +1978,14 @@ Name: is_promoted, dtype: int64
       <td>1</td>
     </tr>
     <tr>
-      <th>59336</th>
-      <td>1.681280</td>
-      <td>27.681280</td>
-      <td>4.000000</td>
-      <td>4.681280</td>
-      <td>0.0</td>
-      <td>94.637441</td>
+      <th>59197</th>
+      <td>1</td>
+      <td>35</td>
+      <td>3.000000</td>
+      <td>4</td>
       <td>0</td>
+      <td>0</td>
+      <td>82</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1996,21 +1996,46 @@ Name: is_promoted, dtype: int64
       <td>0</td>
       <td>0</td>
       <td>0</td>
+      <td>0</td>
+      <td>0</td>
       <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>59198</th>
+      <td>1</td>
+      <td>31</td>
+      <td>5.000000</td>
+      <td>9</td>
+      <td>1</td>
+      <td>0</td>
+      <td>69</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
       <td>0</td>
       <td>1</td>
       <td>1</td>
     </tr>
   </tbody>
 </table>
-<p>59337 rows × 54 columns</p>
+<p>59199 rows × 55 columns</p>
 </div></div>
 </div>
+<p>Resampling does not need to be performed on a column with binary values. Below, we perform resampling on <strong>no_of_trainings</strong>, which has 10 values. We set “strategy_over” to be a dict, since there are multiple classes that have the fewest instances.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;no_of_trainings&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;no_of_trainings&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2020,7 +2045,17 @@ Name: is_promoted, dtype: int64
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([ 1,  2,  3,  4,  7,  5,  6,  8, 10,  9])
+1     44378
+2      7987
+3      1776
+4       468
+5       128
+6        44
+7        12
+8         5
+10        5
+9         5
+Name: no_of_trainings, dtype: int64
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -2030,11 +2065,11 @@ array([ 1,  2,  3,  4,  7,  5,  6,  8, 10,  9])
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rebalance</span> <span class="o">=</span> <span class="n">Rebalance</span><span class="p">(</span>
                             <span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
                             <span class="n">rebalance_col</span><span class="o">=</span><span class="s1">&#39;no_of_trainings&#39;</span><span class="p">,</span>
-                            <span class="n">strategy_over</span><span class="o">=</span><span class="s2">&quot;minority&quot;</span><span class="p">,</span>
+                            <span class="n">strategy_over</span><span class="o">=</span><span class="p">{</span><span class="mi">8</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">:</span><span class="mi">12</span><span class="p">},</span>
                             <span class="n">under_sampler</span><span class="o">=</span><span class="kc">False</span>
                     <span class="p">)</span>
 <span class="n">df_resample</span> <span class="o">=</span> <span class="n">rebalance</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df_resample</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_resample</span><span class="p">[</span><span class="s1">&#39;no_of_trainings&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
 <span class="n">df_resample</span>
 </pre></div>
 </div>
@@ -2050,9 +2085,17 @@ No columns specified for imputation. These columns have been automatically ident
 [&#39;education&#39;, &#39;previous_year_rating&#39;]
 Running oversampling...
 ...finished
-0.0    94513
-1.0     4668
-Name: is_promoted, dtype: int64
+1     44378
+2      7987
+3      1776
+4       468
+5       128
+6        44
+7        12
+8        12
+10       12
+9        12
+Name: no_of_trainings, dtype: int64
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -2086,6 +2129,7 @@ Name: is_promoted, dtype: int64
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
       <th>is_promoted</th>
@@ -2100,12 +2144,13 @@ Name: is_promoted, dtype: int64
       <td>Master's &amp; above</td>
       <td>f</td>
       <td>sourcing</td>
-      <td>35.000000</td>
+      <td>35</td>
       <td>5.000000</td>
-      <td>8.000000</td>
-      <td>0.0</td>
-      <td>49.000000</td>
-      <td>0.0</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0</td>
+      <td>49</td>
+      <td>0</td>
       <td>1</td>
     </tr>
     <tr>
@@ -2115,12 +2160,13 @@ Name: is_promoted, dtype: int64
       <td>Bachelor's</td>
       <td>m</td>
       <td>other</td>
-      <td>30.000000</td>
+      <td>30</td>
       <td>5.000000</td>
-      <td>4.000000</td>
-      <td>0.0</td>
-      <td>60.000000</td>
-      <td>0.0</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+      <td>0</td>
       <td>1</td>
     </tr>
     <tr>
@@ -2130,12 +2176,13 @@ Name: is_promoted, dtype: int64
       <td>Bachelor's</td>
       <td>m</td>
       <td>sourcing</td>
-      <td>34.000000</td>
+      <td>34</td>
       <td>3.000000</td>
-      <td>7.000000</td>
-      <td>0.0</td>
-      <td>50.000000</td>
-      <td>0.0</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
       <td>1</td>
     </tr>
     <tr>
@@ -2145,12 +2192,13 @@ Name: is_promoted, dtype: int64
       <td>Bachelor's</td>
       <td>m</td>
       <td>other</td>
-      <td>39.000000</td>
+      <td>39</td>
       <td>1.000000</td>
-      <td>10.000000</td>
-      <td>0.0</td>
-      <td>50.000000</td>
-      <td>0.0</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
       <td>2</td>
     </tr>
     <tr>
@@ -2160,12 +2208,13 @@ Name: is_promoted, dtype: int64
       <td>Bachelor's</td>
       <td>m</td>
       <td>other</td>
-      <td>45.000000</td>
+      <td>45</td>
       <td>3.000000</td>
-      <td>2.000000</td>
-      <td>0.0</td>
-      <td>73.000000</td>
-      <td>0.0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>73</td>
+      <td>0</td>
       <td>1</td>
     </tr>
     <tr>
@@ -2182,85 +2231,91 @@ Name: is_promoted, dtype: int64
       <td>...</td>
       <td>...</td>
       <td>...</td>
+      <td>...</td>
     </tr>
     <tr>
-      <th>99176</th>
-      <td>Procurement</td>
-      <td>region_22</td>
-      <td>Bachelor's</td>
-      <td>m</td>
-      <td>sourcing</td>
-      <td>40.646478</td>
-      <td>3.215493</td>
-      <td>3.000000</td>
-      <td>0.0</td>
-      <td>71.476995</td>
-      <td>0.0</td>
-      <td>8</td>
-    </tr>
-    <tr>
-      <th>99177</th>
+      <th>54824</th>
       <td>Procurement</td>
       <td>region_2</td>
       <td>Bachelor's</td>
       <td>m</td>
       <td>sourcing</td>
-      <td>31.844303</td>
-      <td>1.538924</td>
-      <td>2.730538</td>
-      <td>0.0</td>
-      <td>69.461076</td>
-      <td>0.0</td>
-      <td>8</td>
+      <td>33</td>
+      <td>3.000000</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>70</td>
+      <td>0</td>
+      <td>10</td>
     </tr>
     <tr>
-      <th>99178</th>
+      <th>54825</th>
       <td>Procurement</td>
       <td>region_2</td>
-      <td>Master's &amp; above</td>
-      <td>m</td>
-      <td>sourcing</td>
-      <td>28.271698</td>
-      <td>3.000000</td>
-      <td>2.757233</td>
-      <td>0.0</td>
-      <td>69.135849</td>
-      <td>0.0</td>
-      <td>8</td>
-    </tr>
-    <tr>
-      <th>99179</th>
-      <td>Procurement</td>
-      <td>region_31</td>
       <td>Bachelor's</td>
       <td>m</td>
-      <td>sourcing</td>
-      <td>34.674388</td>
-      <td>1.224796</td>
-      <td>3.000000</td>
-      <td>0.0</td>
-      <td>70.149864</td>
-      <td>0.0</td>
-      <td>8</td>
+      <td>other</td>
+      <td>43</td>
+      <td>1.815431</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0</td>
+      <td>67</td>
+      <td>0</td>
+      <td>10</td>
     </tr>
     <tr>
-      <th>99180</th>
+      <th>54826</th>
       <td>Procurement</td>
-      <td>region_12</td>
+      <td>region_2</td>
       <td>Bachelor's</td>
       <td>m</td>
-      <td>sourcing</td>
-      <td>30.448099</td>
-      <td>1.887975</td>
-      <td>2.556012</td>
-      <td>0.0</td>
-      <td>69.112025</td>
-      <td>0.0</td>
+      <td>other</td>
+      <td>56</td>
+      <td>3.000000</td>
       <td>8</td>
+      <td>0</td>
+      <td>0</td>
+      <td>69</td>
+      <td>0</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>54827</th>
+      <td>Procurement</td>
+      <td>region_2</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>49</td>
+      <td>2.436705</td>
+      <td>11</td>
+      <td>0</td>
+      <td>0</td>
+      <td>68</td>
+      <td>0</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>54828</th>
+      <td>Procurement</td>
+      <td>region_2</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>46</td>
+      <td>3.000000</td>
+      <td>12</td>
+      <td>0</td>
+      <td>0</td>
+      <td>56</td>
+      <td>0</td>
+      <td>10</td>
     </tr>
   </tbody>
 </table>
-<p>99181 rows × 12 columns</p>
+<p>54829 rows × 13 columns</p>
 </div></div>
 </div>
 <div class="nbinput nblast docutils container">

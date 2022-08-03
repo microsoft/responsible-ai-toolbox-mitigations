@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Imputers" href="../../imputer/imputer.html" />
-    <link rel="prev" title="CorrelatedFeatures Example" href="feat_sel_corr.html" /> 
+    <link rel="prev" title="CorrelatedFeatures" href="../../feat_sel/correlation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -57,7 +57,6 @@
 <li class="toctree-l4"><a class="reference internal" href="imputation.html">BasicImputer Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="feat_sel_sequential.html">SeqFeatSelection Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="feat_sel_catboost.html">CatBoostSelection Example</a></li>
-<li class="toctree-l4"><a class="reference internal" href="feat_sel_corr.html">CorrelatedFeatures Example</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Checking Correlations Between Variables - A Comprehensive Guide</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rebalance_imbl.html">Rebalance Class (imblearn)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="rebalance_sdv.html">Synthesizer Class (SDV)</a></li>
@@ -90,7 +89,7 @@
           <li><a href="../../feat_sel/correlation.html">CorrelatedFeatures</a> &raquo;</li>
       <li>Checking Correlations Between Variables - A Comprehensive Guide</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/dataprocessing/notebooks/module_tests/feat_sel_corr_tutorial.ipynb.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/notebooks/module_tests/feat_sel_corr_tutorial.ipynb" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -1120,7 +1119,7 @@ No correlations detected. Nothing to be done here.
 </section>
 <section id="4---A-Pro-User’s-View-of-the-CorrelatedFeatures-class">
 <h2>4 - A Pro User’s View of the CorrelatedFeatures class<a class="headerlink" href="#4---A-Pro-User’s-View-of-the-CorrelatedFeatures-class" title="Permalink to this heading"></a></h2>
-<p>Let us now consider the scenario where a pro data scientist wants to use the <strong>CorrelatedFeatures</strong> class to compute different correlation metrics. Differently to the previous scenarios, this user doesn’t want to rely on the class to automatically select the best features. Instead, the user wants to access all correlation metrics computed, even those for pairs of variables defined as not correlated. To this end, the user can use the <strong>get_summary</strong> method, which returns 3 JSON files:</p>
+<p>Let us now consider the scenario where a pro data scientist wants to use the <strong>CorrelatedFeatures</strong> class to compute different correlation metrics. In contrast to the previous scenarios, this user doesn’t want to rely on the class to automatically select the best features. Instead, the user wants to access all correlation metrics computed, even those for pairs of variables defined as not correlated. To this end, the user can use the <strong>get_summary</strong> method, which returns 3 JSON files:</p>
 <ul class="simple">
 <li><p><strong>Full Summary</strong>: when calling the fit method, all correlations will be computed according to the many parameters detailed previously. After computing all these data, everything is saved in a JSON file, which can then be accessed and analyzed carefully. We recommend using a JSON viewing tool for this. This JSON is saved in the file specified by the parameter <strong>json_summary</strong>;</p></li>
 <li><p><strong>Correlated JSON</strong>: similar to the full summary, but stores only information of pairs of correlated variables (with no repetitions). This JSON is saved in the file specified by the parameter <strong>json_corr</strong>;</p></li>
@@ -2592,7 +2591,7 @@ instead.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="feat_sel_corr.html" class="btn btn-neutral float-left" title="CorrelatedFeatures Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../feat_sel/correlation.html" class="btn btn-neutral float-left" title="CorrelatedFeatures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="../../imputer/imputer.html" class="btn btn-neutral float-right" title="Imputers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

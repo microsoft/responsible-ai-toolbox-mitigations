@@ -84,7 +84,7 @@
           <li><a href="feat_sel.html">Feature Selection</a> &raquo;</li>
       <li>CatBoostSelection</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/dataprocessing/feat_sel/catboost.rst.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/feat_sel/catboost.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -122,13 +122,13 @@
 <dt class="sig sig-object py" id="dataprocessing.CatBoostSelection">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">CatBoostSelection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">CatBoostClassifier</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">CatBoostRegressor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catboost_log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catboost_plot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_feat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'loss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_json</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_summary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cb_feat_summary.json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.CatBoostSelection" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="feat_sel.html#dataprocessing.FeatureSelection" title="dataprocessing.feat_selection.selector.FeatureSelection"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureSelection</span></code></a></p>
-<p>Concrete class that uses the CatBoost model and its feature’s
-importance values to select the most important features. CatBoost
+<p>Concrete class that uses the <code class="docutils literal notranslate"><span class="pre">CatBoost</span></code> model and its feature’s
+importance values to select the most important features. <code class="docutils literal notranslate"><span class="pre">CatBoost</span></code>
 is a tree boosting method capable of handling categorical features.
 This method creates internally an importance score for each feature.
 This way, these scores can be used to perform feature selection. The
-CatBoost implementation (from the catboost lib) has already prepared
-a functionality for this purpose. The subclass CatBoostSelection simply
+<code class="docutils literal notranslate"><span class="pre">CatBoost</span></code> implementation (from the <code class="docutils literal notranslate"><span class="pre">catboost</span></code> lib) has already prepared
+a functionality for this purpose. The subclass <code class="xref py py-class docutils literal notranslate"><span class="pre">CatBoostSelection</span></code> simply
 encapsulates all the complexities associated with this functionality and
 makes it easier for the user feature selection over a dataset.</p>
 <dl class="field-list simple">
@@ -136,64 +136,64 @@ makes it easier for the user feature selection over a dataset.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> – the data frame to be used during the fit method.
 This data frame must contain all the features, including the label
-column (specified in the ‘label_col’ parameter). This parameter is
-mandatory if ‘label_col’ is also provided. The user can also provide
-this dataset (along with the ‘label_col’) when calling the fit()
+column (specified in the  <code class="docutils literal notranslate"><span class="pre">label_col</span></code> parameter). This parameter is
+mandatory if  <code class="docutils literal notranslate"><span class="pre">label_col</span></code> is also provided. The user can also provide
+this dataset (along with the  <code class="docutils literal notranslate"><span class="pre">label_col</span></code>) when calling the <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code>
 method. If df is provided during the class instantiation, it is not
-necessary to provide it again when calling fit(). It is also possible
-to use the ‘X’ and ‘y’ instead of ‘df’ and ‘label_col’, although it is
+necessary to provide it again when calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code>. It is also possible
+to use the  <code class="docutils literal notranslate"><span class="pre">X</span></code> and  <code class="docutils literal notranslate"><span class="pre">y</span></code> instead of  <code class="docutils literal notranslate"><span class="pre">df</span></code> and  <code class="docutils literal notranslate"><span class="pre">label_col</span></code>, although it is
 mandatory to pass the pair of parameters (X,y) or (df, label_col) either
-during the class instantiation or during the fit() method;</p></li>
+during the class instantiation or during the <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code> method;</p></li>
 <li><p><strong>label_col</strong> – the name or index of the label column. This parameter is
-mandatory if ‘df’ is provided;</p></li>
+mandatory if  <code class="docutils literal notranslate"><span class="pre">df</span></code> is provided;</p></li>
 <li><p><strong>X</strong> – contains only the features of the original dataset, that
 is, does not contain the label column. This is useful if the user has
 already separated the features from the label column prior to calling this
-class. This parameter is mandatory if ‘y’ is provided;</p></li>
+class. This parameter is mandatory if  <code class="docutils literal notranslate"><span class="pre">y</span></code> is provided;</p></li>
 <li><p><strong>y</strong> – contains only the label column of the original dataset.
-This parameter is mandatory if ‘X’ is provided;</p></li>
+This parameter is mandatory if  <code class="docutils literal notranslate"><span class="pre">X</span></code> is provided;</p></li>
 <li><p><strong>transform_pipe</strong> – a list of transformations to be used as a pre-processing
 pipeline. Each transformation in this list must be a valid subclass of the
-current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+current library (<code class="xref py py-class docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BasicImputer</span></code>, etc.). Some feature selection
 methods require a dataset with no categorical features or with no missing values
 (depending on the approach). If no transformations are provided, a set of default
 transformations will be used, which depends on the feature selection approach
 (subclass dependent);</p></li>
 <li><p><strong>regression</strong> – if True and no estimator is provided, then create a default
 CatBoostRegressor. If False, a CatBoostClassifier is created instead. This parameter
-is ignored if an estimator is provided using the ‘estimator’ parameter;</p></li>
-<li><p><strong>estimator</strong> – a CatBoostClassifier or CatBoostRegressor object that will be used
+is ignored if an estimator is provided using the  <code class="docutils literal notranslate"><span class="pre">estimator</span></code> parameter;</p></li>
+<li><p><strong>estimator</strong> – a <code class="xref py py-class docutils literal notranslate"><span class="pre">CatBoostClassifier</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">CatBoostRegressor</span></code> object that will be used
 for filtering the most important features. If no estimator is provided, a default
-CatBoostClassifier or CatBoostRegressor is used, where the latter is used if
+<code class="xref py py-class docutils literal notranslate"><span class="pre">CatBoostClassifier</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">CatBoostRegressor</span></code> is used, where the latter is used if
 regression is set to True or if the type of the label column is float, while the
 former is used otherwise;</p></li>
-<li><p><strong>in_place</strong> – indicates if the original dataset will be saved internally (df_org)
+<li><p><strong>in_place</strong> – indicates if the original dataset will be saved internally (<code class="docutils literal notranslate"><span class="pre">df_org</span></code>)
 or not. If True, then the feature selection transformation is saved over the
 original dataset. If False, the original dataset is saved separately (default
 value);</p></li>
 <li><p><strong>catboost_log</strong> – if True, the default estimator will print logging
 messages during its training phase. If False, no log will be printed. This
-parameter is only used when ‘estimator’ is None, since this parameter is only used
+parameter is only used when  <code class="docutils literal notranslate"><span class="pre">estimator</span></code> is None, since this parameter is only used
 when creating the default classifier, which is not the case when the user specifies
 the classifier to be used. This parameter is automatically set to False if ‘verbose’
 is False;</p></li>
-<li><p><strong>catboost_plot</strong> – if True, uses CatBoost’s plot feature: if running on a python
+<li><p><strong>catboost_plot</strong> – if True, uses <code class="docutils literal notranslate"><span class="pre">CatBoost</span></code>’s plot feature: if running on a python
 notebook environment, an interactive plot will be created, which shows the loss
 function for both training and test sets, as well as the error obtained when removing
 an increasing number of features. If running on a script environment, a web interface
 will be opened showing this plot. If False, no plot will be generated.  This
-parameter is only used when ‘estimator’ is None, since this parameter is only used
+parameter is only used when  <code class="docutils literal notranslate"><span class="pre">estimator</span></code> is None, since this parameter is only used
 when creating the default classifier, which is not the case when the user specifies
 the classifier to be used;</p></li>
-<li><p><strong>test_size</strong> – the size of the test set used to train the CatBoost method, which
+<li><p><strong>test_size</strong> – the size of the test set used to train the <code class="docutils literal notranslate"><span class="pre">CatBoost</span></code> method, which
 is used to create the importance score of each feature;</p></li>
 <li><p><strong>cat_col</strong> – a list with the name or index of all categorical columns. These columns
-do not need to be encoded, since CatBoost does this encoding internally. If None, this
+do not need to be encoded, since <code class="docutils literal notranslate"><span class="pre">CatBoost</span></code> does this encoding internally. If None, this
 list will be automatically set as a list with all categorical features found in the
 dataset;</p></li>
 <li><p><strong>n_feat</strong> – the number of features to be selected. If None, then the following procedure
 is followed: (i) half of the existing features will be selected, (ii) after the feature
-selection method from CatBoost is executed, it generates a ‘loss_graph’, that indicates
+selection method from <code class="docutils literal notranslate"><span class="pre">CatBoost</span></code> is executed, it generates a ‘loss_graph’, that indicates
 the loss function for each feature removed: the loss when 0 features were removed, the
 loss when 1 feature was removed, etc., up until half of the features were removed. With
 this loss graph, we get the number of features removed that resulted in the best loss
@@ -203,23 +203,23 @@ point;</p></li>
 set of selected features. Note that the number of columns included here must be smaller
 than n_feat, otherwise there is nothing for the class to do (that is:
 len(fixed_cols) &lt; n_feat);</p></li>
-<li><p><strong>algorithm</strong> – <p>the algorithm used to do feature selection. CatBoost uses a Recursive
+<li><p><strong>algorithm</strong> – <p>the algorithm used to do feature selection. <code class="docutils literal notranslate"><span class="pre">CatBoost</span></code> uses a Recursive
 Feature Selection approach, where each feature is removed at a time. The feature
 selected to be removed is the one with the least importance. The difference between
 each algorithm is how this importance is computed. This parameter can be one of the
 following string values: [‘predict’, ‘loss’, ‘shap’]. Here is a description of each of
-the algorithms allowed according to CatBoost’s own documentation (text in double quotation
-marks were extracted from Catboost’s official documentation):</p>
+the algorithms allowed according to <code class="docutils literal notranslate"><span class="pre">CatBoost</span></code>’s own documentation (text in double quotation
+marks were extracted from <code class="docutils literal notranslate"><span class="pre">Catboost</span></code>’s official documentation):</p>
 <blockquote>
 <div><ul>
-<li><p><strong>’predict’:</strong> uses the caboost.EFeaturesSelectionAlgorithm.RecursiveByPredictionValuesChange
-algorithm. According to CatBoost’s own documentation: “the fastest algorithm
+<li><p><strong>’predict’:</strong> uses the <code class="xref py py-class docutils literal notranslate"><span class="pre">catboost.EFeaturesSelectionAlgorithm.RecursiveByPredictionValuesChange</span></code>
+algorithm. According to <code class="docutils literal notranslate"><span class="pre">CatBoost</span></code>’s own documentation: “the fastest algorithm
 and the least accurate method (not recommended for ranking losses)” - “For each
 feature, PredictionValuesChange shows how much on average the prediction changes
 if the feature value changes. The bigger the value of the importance the bigger
 on average is the change to the prediction value, if this feature is changed.”;</p></li>
-<li><p><strong>’loss’:</strong> uses the caboost.EFeaturesSelectionAlgorithm.RecursiveByLossFunctionChange
-algorithm. According to CatBoost’s own documentation: “the optimal option
+<li><p><strong>’loss’:</strong> uses the <code class="xref py py-class docutils literal notranslate"><span class="pre">catboost.EFeaturesSelectionAlgorithm.RecursiveByLossFunctionChange</span></code>
+algorithm. According to <code class="docutils literal notranslate"><span class="pre">CatBoost</span></code>’s own documentation: “the optimal option
 according to accuracy/speed balance” - “For each feature the value represents the
 difference between the loss value of the model with this feature and without it.
 The model without this feature is equivalent to the one that would have been trained
@@ -228,9 +228,9 @@ to retrain the model without one of the features, this model is built approximat
 using the original model with this feature removed from all the trees in the ensemble.
 The calculation of this feature importance requires a dataset and, therefore, the
 calculated value is dataset-dependent.”;</p></li>
-<li><p><strong>’shap’:</strong> uses the caboost.EFeaturesSelectionAlgorithm.RecursiveByShapValues algorithm.
-According to CatBoost’s own documentation: “the most accurate method.”. For this
-algorithm, CatBoost uses Shap Values to determine the importance of each feature;</p></li>
+<li><p><strong>’shap’:</strong> uses the <code class="xref py py-class docutils literal notranslate"><span class="pre">catboost.EFeaturesSelectionAlgorithm.RecursiveByShapValues</span></code> algorithm.
+According to <code class="docutils literal notranslate"><span class="pre">CatBoost</span></code>’s own documentation: “the most accurate method.”. For this
+algorithm, <code class="docutils literal notranslate"><span class="pre">CatBoost</span></code> uses Shap Values to determine the importance of each feature;</p></li>
 </ul>
 </div></blockquote>
 </p></li>
@@ -243,19 +243,19 @@ accurate is the importance score of each feature;</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="dataprocessing.CatBoostSelection.get_summary">
 <span class="sig-name descname"><span class="pre">get_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.CatBoostSelection.get_summary" title="Permalink to this definition"></a></dt>
-<dd><p>Public method that returns the summary generated by the CatBoost model.
+<dd><p>Public method that returns the summary generated by the <code class="docutils literal notranslate"><span class="pre">CatBoost</span></code> model.
 For more information on the data contained in this summary, please check
-CatBoost’s official documentation:
+<code class="docutils literal notranslate"><span class="pre">CatBoost</span></code>’s official documentation:
 <a class="reference external" href="https://catboost.ai/en/docs/concepts/output-data_features-selection">https://catboost.ai/en/docs/concepts/output-data_features-selection</a></p>
 </dd></dl>
 
 </dd></dl>
 
 <p class="rubric">Class Diagram</p>
-<div class="graphviz"><img src="../../_images/inheritance-2828d6b7b9c00e3ccc48b69dfdecdcad2e71fec7.png" alt="Inheritance diagram of dataprocessing.CatBoostSelection" usemap="#inheritance799a511ebb" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../_images/inheritance-d144d3e76edd771bff55b0ade6edee4e12ec6734.png" alt="Inheritance diagram of dataprocessing.CatBoostSelection" usemap="#inheritance799a511ebb" class="inheritance graphviz" /></div>
 <map id="inheritance799a511ebb" name="inheritance799a511ebb">
 <area shape="rect" id="node4" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
-<area shape="rect" id="node2" href="#dataprocessing.CatBoostSelection" target="_top" title="Concrete class that uses the CatBoost model and its feature&#39;s" alt="" coords="475,5,616,31"/>
+<area shape="rect" id="node2" href="#dataprocessing.CatBoostSelection" target="_top" title="Concrete class that uses the ``CatBoost`` model and its feature&#39;s" alt="" coords="475,5,616,31"/>
 <area shape="rect" id="node3" href="feat_sel.html#dataprocessing.FeatureSelection" target="_top" title="Base class for all feature selection subclasses. Implements basic" alt="" coords="296,5,427,31"/>
 </map><section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>

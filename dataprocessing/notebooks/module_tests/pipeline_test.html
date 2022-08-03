@@ -78,7 +78,7 @@
           <li><a href="../../pipeline.html">Pipeline Support</a> &raquo;</li>
       <li>Using Pipelines</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/dataprocessing/notebooks/module_tests/pipeline_test.ipynb.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/notebooks/module_tests/pipeline_test.ipynb" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -995,7 +995,7 @@ ROC AUC =  0.9362782731943543
 </section>
 <section id="Using-SKLearn-and-Dataprocessing-transformers-in-the-same-Pipeline">
 <h2>Using SKLearn and Dataprocessing transformers in the same Pipeline<a class="headerlink" href="#Using-SKLearn-and-Dataprocessing-transformers-in-the-same-Pipeline" title="Permalink to this heading"></a></h2>
-<p>The transformations in SKLearn always return a numpy array, while the transformers in our <strong>dataprocessing</strong> library usually operate over a Pandas DataFrame (although these transformers also accepts numpy arrays as input). The latter uses dataframes in order to allow it to filter specific columns, just like we did when we created the DataStandardScaler object and specified that only the columns in the <strong>float_cols</strong> list should be scaled. With a numpy array, we can also do this, but instead of
+<p>The transformations in SKLearn always return a numpy array, while the transformers in our <strong>dataprocessing</strong> library usually operate over a Pandas DataFrame (although these transformers also accept numpy arrays as input). The latter uses dataframes in order to allow it to filter specific columns, just like we did when we created the DataStandardScaler object and specified that only the columns in the <strong>float_cols</strong> list should be scaled. With a numpy array, we can also do this, but instead of
 using column names, we are forced to use the column indices instead, since numpy arrays doesn’t have column names.</p>
 <p>In this scenario, when we place a transformer from the SKLearn library before a transformer from the <strong>dataprocessing</strong> library in a Pipeline, we must be aware that we’ll lose the column names (considering that the input to the Pipeline is indeed a Pandas dataframe) after the sklearn transformer calls its transform() method. This way, all of the transformers after this point will have to use column indices instead of column names, as depicted in the following example. In this example, we’ll use
 the SKLearn’s <strong>SimpleImputer</strong> instead of using our similar class, the <strong>BasicImputer</strong>, just so we can test the behavior of the Pipeline class with transformers from both SKLearn and <strong>dataprocessing</strong> libraries. We’ll execute the following steps in this pipeline: 1) encode the columns “sex” and “on_thyroxine” using one-hot encoding, 2) impute missing data by replacing it with a -100 value, 3) apply a min-max scaler over the column “age”, 4) apply an ordinal encoding over all of the remaining
@@ -1666,11 +1666,11 @@ categorical variables.</p>
 </div></div>
 </div>
 <p>Using column indices is not as intuitive as using column names. Using indices is also more error prone, especially when dealing with a pipeline with transformations that could change the order of the columns, such as the EncoderOHE and feature selection methods. In these scenarios, the index of a column might change in the middle of the pipeline, making it harder for the user to know exactly the column index that they should use to apply a specific operation over a specific column. Therefore, it
-is interesting that the user continues to use only column names when possible. In the remainder of this section, we’ll present three solutions to this problem.</p>
+is of interest to the user to continue to use only column names when possible. In the remainder of this section, we’ll present three solutions to this problem.</p>
 <section id="Solution-1:-use-the-Pipeline-class-with-only-transformers-from-the-dataprocessing-library">
 <h3>Solution 1: use the Pipeline class with only transformers from the dataprocessing library<a class="headerlink" href="#Solution-1:-use-the-Pipeline-class-with-only-transformers-from-the-dataprocessing-library" title="Permalink to this heading"></a></h3>
 <p>The first solution is pretty straightforward: use only transformers from the <strong>dataprocessing</strong> library. Note that an estimator from SKLearn or other libraries could still be used in the end of the pipeline, but the transformers used must be always from the <strong>dataprocessing</strong> library. Since all transformers from this library operate over Pandas Dataframes, and if all transformers in the pipeline return dataframes, then at no point in the pipeline this dataframe will be lost. This guarantees that
-all transformers will receive a dataframe as input, without loosing the column names. As a result, all transformers are allowed to use filters based on column names.</p>
+all transformers will receive a dataframe as input, without losing the column names. As a result, all transformers are allowed to use filters based on column names.</p>
 <p>Let’s recreate the previous pipeline using only transformers from our library. For this, we’ll replace the <strong>SimpleImputer</strong> by the <strong>BasicImputer</strong>. This allows us to use column names when specifying which columns the <strong>DataMinMaxScaler</strong> should be applied on:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:

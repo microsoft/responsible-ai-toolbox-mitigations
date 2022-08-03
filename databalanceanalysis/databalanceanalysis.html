@@ -69,7 +69,7 @@
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
       <li>databalanceanalysis</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/databalanceanalysis/databalanceanalysis.rst.txt" rel="nofollow"> View page source</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/databalanceanalysis/databalanceanalysis.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -218,7 +218,38 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="databalanceanalysis.feature_measures.FeatureBalanceMeasure.measures">
 <span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.measures" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><blockquote>
+<div><p>The output is a dictionary that maps the sensitive column table to Pandas dataframe containing the following</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>A feature value within the sensitive feature.</p></li>
+<li><p>Another feature value within the sensitive feature.</p></li>
+<li><dl class="simple">
+<dt>It contains the following measures of the gaps between the two classes</dt><dd><ul>
+<li><p>Demographic Parity - <a class="reference external" href="https://en.wikipedia.org/wiki/Fairness_(machine_learning">https://en.wikipedia.org/wiki/Fairness_(machine_learning</a>)</p></li>
+<li><p>Pointwise Mutual Information - <a class="reference external" href="https://en.wikipedia.org/wiki/Pointwise_mutual_information">https://en.wikipedia.org/wiki/Pointwise_mutual_information</a></p></li>
+<li><p>Sorensen-Dice Coefficient - <a class="reference external" href="https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient">https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient</a></p></li>
+<li><p>Jaccard Index - <a class="reference external" href="https://en.wikipedia.org/wiki/Jaccard_index">https://en.wikipedia.org/wiki/Jaccard_index</a></p></li>
+<li><p>Kendall Rank Correlation - <a class="reference external" href="https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient">https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient</a></p></li>
+<li><p>Log-Likelihood Ratio - <a class="reference external" href="https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio">https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio</a></p></li>
+<li><p>t-test - <a class="reference external" href="https://en.wikipedia.org/wiki/Student's_t-test">https://en.wikipedia.org/wiki/Student’s_t-test</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>This output dataframe contains a row per combination of feature values for each sensitive feature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – the df to calculate all of the feature balance measures on</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dataframe that contains 4 columns, first column is the sensitive feature’s name, 2nd column is one possible value of that sensitive feature,</p>
+</dd>
+</dl>
+<p>the 3rd column is a different possible value of that feature and the last column is a dictionary which indicates
+:rtype: pd.DataFrame</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -341,7 +372,38 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="databalanceanalysis.FeatureBalanceMeasure.measures">
 <span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.FeatureBalanceMeasure.measures" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><blockquote>
+<div><p>The output is a dictionary that maps the sensitive column table to Pandas dataframe containing the following</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>A feature value within the sensitive feature.</p></li>
+<li><p>Another feature value within the sensitive feature.</p></li>
+<li><dl class="simple">
+<dt>It contains the following measures of the gaps between the two classes</dt><dd><ul>
+<li><p>Demographic Parity - <a class="reference external" href="https://en.wikipedia.org/wiki/Fairness_(machine_learning">https://en.wikipedia.org/wiki/Fairness_(machine_learning</a>)</p></li>
+<li><p>Pointwise Mutual Information - <a class="reference external" href="https://en.wikipedia.org/wiki/Pointwise_mutual_information">https://en.wikipedia.org/wiki/Pointwise_mutual_information</a></p></li>
+<li><p>Sorensen-Dice Coefficient - <a class="reference external" href="https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient">https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient</a></p></li>
+<li><p>Jaccard Index - <a class="reference external" href="https://en.wikipedia.org/wiki/Jaccard_index">https://en.wikipedia.org/wiki/Jaccard_index</a></p></li>
+<li><p>Kendall Rank Correlation - <a class="reference external" href="https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient">https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient</a></p></li>
+<li><p>Log-Likelihood Ratio - <a class="reference external" href="https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio">https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio</a></p></li>
+<li><p>t-test - <a class="reference external" href="https://en.wikipedia.org/wiki/Student's_t-test">https://en.wikipedia.org/wiki/Student’s_t-test</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>This output dataframe contains a row per combination of feature values for each sensitive feature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – the df to calculate all of the feature balance measures on</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dataframe that contains 4 columns, first column is the sensitive feature’s name, 2nd column is one possible value of that sensitive feature,</p>
+</dd>
+</dl>
+<p>the 3rd column is a different possible value of that feature and the last column is a dictionary which indicates
+:rtype: pd.DataFrame</p>
+</dd></dl>
 
 </dd></dl>
 
