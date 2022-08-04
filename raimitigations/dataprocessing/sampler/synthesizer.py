@@ -139,6 +139,7 @@ class Synthesizer(DataProcessing):
             )
         super()._set_df_mult(df, label_col, X, y, require_set)
         if self.df is not None:
+            self.df = self.df.copy()
             self.df[self.label_col_name] = self.y
 
     # -----------------------------------
@@ -482,7 +483,7 @@ class Synthesizer(DataProcessing):
                 )
 
         elif X is not None and y is not None:
-            df = X
+            df = X.copy()
             df[self.label_col_name] = y
             df = self._fix_col_transform(df)
             input_mode = self.INPUT_XY
