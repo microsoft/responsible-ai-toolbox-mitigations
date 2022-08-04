@@ -368,12 +368,13 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[85]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">uci_dataset</span> <span class="k">as</span> <span class="nn">database</span>
+<span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
 </pre></div>
@@ -381,12 +382,37 @@ div.rendered_html tbody tr:hover {
 </div>
 <section id="Case-Study-2">
 <h1>Case Study 2<a class="headerlink" href="#Case-Study-2" title="Permalink to this heading"></a></h1>
+<section id="Fixing-a-seed">
+<h2>Fixing a seed<a class="headerlink" href="#Fixing-a-seed" title="Permalink to this heading"></a></h2>
+<p>To avoid randomness in the following experiments, we’ll fix the seeds to guarantee that the results obtained are the same each time we run this notebook. Feel free to comment the next cell or test different seeds to see how this affects the results.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[86]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="n">SEED</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[86]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;torch._C.Generator at 0x7fbb89512070&gt;
+</pre></div></div>
+</div>
+</section>
 <section id="1---Understanding-the-Data">
 <h2>1 - Understanding the Data<a class="headerlink" href="#1---Understanding-the-Data" title="Permalink to this heading"></a></h2>
 <p>In this example, we will build a classifier to detect diseased trees using the <code class="docutils literal notranslate"><span class="pre">dataprocessing</span></code> library, with data from the <code class="docutils literal notranslate"><span class="pre">uci_dataset</span></code>. The data itself comes from spectral imagery, and the data columns relate to features in the imagery.</p>
 <p>The data columns have the following meaning: - class: ‘w’ (diseased trees), ‘n’ (all other land cover) - GLCM_Pan: GLCM mean texture (Pan band) - Mean_G: Mean green value - Mean_R: Mean red value - Mean_NIR: Mean NIR value - SD_Pan: Standard deviation (Pan band)</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[87]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">database</span><span class="o">.</span><span class="n">load_wilt</span><span class="p">()</span>
@@ -396,7 +422,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[87]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -532,7 +558,7 @@ div.rendered_html tbody tr:hover {
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[88]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">&quot;w&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
@@ -561,7 +587,7 @@ memory usage: 264.6 KB
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[89]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
@@ -569,7 +595,7 @@ memory usage: 264.6 KB
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[89]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -585,7 +611,7 @@ dtype: bool
 </div>
 <p>First, we will try to determine if any of the features are correlated, and remove the correlated features.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[90]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_feat</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">CorrelatedFeatures</span><span class="p">(</span>
@@ -614,12 +640,12 @@ No correlations detected. Nothing to be done here.
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[90]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;raimitigations.dataprocessing.feat_selection.correlated_features.CorrelatedFeatures at 0x2759e35b940&gt;
+&lt;raimitigations.dataprocessing.feat_selection.correlated_features.CorrelatedFeatures at 0x7fbb35ccab20&gt;
 </pre></div></div>
 </div>
 <p>Remember to look through the JSON files generated in the previous cell. But, according to the thresholds we have set, no features are correlated.</p>
@@ -627,7 +653,7 @@ No correlations detected. Nothing to be done here.
 <section id="2---Baseline-Models">
 <h2>2 - Baseline Models<a class="headerlink" href="#2---Baseline-Models" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[91]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
@@ -635,7 +661,7 @@ No correlations detected. Nothing to be done here.
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[91]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -648,7 +674,7 @@ Name: class, dtype: int64
 <p>In this example, we have an imbalanced dataset (most trees are not diseased). While we will take a look at a number of different metrics, we will be focused on improved the F1 score for this dataset.</p>
 <p>After splitting the data into train and test sets, we will build two baseline models, one with XGBoost, and the other with KNN.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[92]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
@@ -656,7 +682,7 @@ Name: class, dtype: int64
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[93]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -671,15 +697,15 @@ Name: class, dtype: int64
 ------------
 TEST
 ------------
-[[1100   45]
- [   3   62]]
+[[1115   30]
+ [   6   59]]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_12_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_12_1.png" />
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_14_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_14_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -687,19 +713,19 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 96.03%
+Acuracy: 97.02%
 
-Precision:  0.7883596986976893
+Precision:  0.8287844921769287
 
-Recall:  0.957272421901243
+Recall:  0.9407457171649312
 
-F1 =  0.8497889596954399
+F1 =  0.8751733703190014
 
-ROC AUC =  0.9898958683238159
+ROC AUC =  0.9681558616056434
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[94]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -714,7 +740,7 @@ ROC AUC =  0.9898958683238159
 ------------
 TEST
 ------------
-[[1100   45]
+[[1120   25]
  [   8   57]]
 </pre></div></div>
 </div>
@@ -722,7 +748,7 @@ TEST
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_13_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_13_1.png" />
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_15_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_15_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -730,15 +756,15 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 95.62%
+Acuracy: 97.27%
 
-Precision:  0.7758016564026333
+Precision:  0.8440148763189759
 
-Recall:  0.9188108834397044
+Recall:  0.9275445078938529
 
-F1 =  0.829555270284996
+F1 =  0.8804959731362849
 
-ROC AUC =  0.9331877729257643
+ROC AUC =  0.9348202888814242
 </pre></div></div>
 </div>
 <p>For a baseline, XGBoost and KNN have F1 scores around 0.86 (this will depend on your train/test split if you rerun this notebook). We will now proceed to try and improve on these results.</p>
@@ -749,7 +775,7 @@ ROC AUC =  0.9331877729257643
 <h3>DataMinMaxScaler<a class="headerlink" href="#DataMinMaxScaler" title="Permalink to this heading"></a></h3>
 <p>The first data transformation we will perform is a MinMaxScaler, which will scale each feature to have a range between zero and one. This does not improve the results.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[95]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">()</span>
@@ -768,15 +794,15 @@ ROC AUC =  0.9331877729257643
 ------------
 TEST
 ------------
-[[1003  142]
- [  15   50]]
+[[1018  127]
+ [  23   42]]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_18_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_18_1.png" />
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_20_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_20_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -784,15 +810,15 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 87.02%
+Acuracy: 87.60%
 
-Precision:  0.6228409462999345
+Precision:  0.6132132849047058
 
-Recall:  0.8226066509909304
+Recall:  0.7676184077930803
 
-F1 =  0.6582603424052558
+F1 =  0.6451779388650385
 
-ROC AUC =  0.8433053409472623
+ROC AUC =  0.7821296607322807
 </pre></div></div>
 </div>
 </section>
@@ -800,7 +826,7 @@ ROC AUC =  0.8433053409472623
 <h3>DataNormalizer<a class="headerlink" href="#DataNormalizer" title="Permalink to this heading"></a></h3>
 <p>Next we try <code class="docutils literal notranslate"><span class="pre">DataNormalizer</span></code>, which will scale the vectors to have unit norm (i.e. vector of length one). This is often used in text classification, but we will use it here as well. But it does not improve the results.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[96]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataNormalizer</span><span class="p">()</span>
@@ -821,15 +847,15 @@ No columns specified for imputation. These columns have been automatically ident
 ------------
 TEST
 ------------
-[[1100   45]
- [   5   60]]
+[[1089   56]
+ [   6   59]]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_21_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_21_1.png" />
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_23_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_23_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -837,15 +863,15 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 95.87%
+Acuracy: 94.88%
 
-Precision:  0.7834518422753717
+Precision:  0.7537820131030375
 
-Recall:  0.9418878065166275
+Recall:  0.9293920053745381
 
-F1 =  0.8418300653594771
+F1 =  0.8139384920634921
 
-ROC AUC =  0.9543836076587169
+ROC AUC =  0.9453745381256298
 </pre></div></div>
 </div>
 </section>
@@ -853,7 +879,7 @@ ROC AUC =  0.9543836076587169
 <h3>DataStandardScaler<a class="headerlink" href="#DataStandardScaler" title="Permalink to this heading"></a></h3>
 <p>The standard scaler sets the mean to zero and scales the vectors to have unit variance.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[97]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">()</span>
@@ -872,15 +898,15 @@ ROC AUC =  0.9543836076587169
 ------------
 TEST
 ------------
-[[1076   69]
- [  11   54]]
+[[1088   57]
+ [  15   50]]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_24_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_24_1.png" />
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_26_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_26_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -888,15 +914,15 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 93.39%
+Acuracy: 94.05%
 
-Precision:  0.7144523975138556
+Precision:  0.7268452224604096
 
-Recall:  0.8852536110178032
+Recall:  0.8597245549210615
 
-F1 =  0.7693128955997866
+F1 =  0.7746834395431599
 
-ROC AUC =  0.9034329862277461
+ROC AUC =  0.8714746388982196
 </pre></div></div>
 </div>
 </section>
@@ -904,7 +930,7 @@ ROC AUC =  0.9034329862277461
 <h3>DataQuantileTransformer<a class="headerlink" href="#DataQuantileTransformer" title="Permalink to this heading"></a></h3>
 <p>The Quantile Transformer transforms the each feature to have a normal distribution.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[98]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">()</span>
@@ -923,52 +949,8 @@ ROC AUC =  0.9034329862277461
 ------------
 TEST
 ------------
-[[1094   51]
- [   5   60]]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_26_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_26_1.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Acuracy: 95.37%
-
-Precision:  0.7679954750018445
-
-Recall:  0.939267719180383
-
-F1 =  0.8284313725490196
-
-ROC AUC =  0.955115888478334
-</pre></div></div>
-</div>
-<p>As we can see, this transformation had some impact in the results (depends on the seed used) when we use KNN. Let’s check how this data transformation impacts the XGBoost model:</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-------------
-TEST
-------------
-[[1100   45]
- [   3   62]]
+[[1113   32]
+ [  10   55]]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -983,67 +965,15 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 96.03%
+Acuracy: 96.53%
 
-Precision:  0.7883596986976893
+Precision:  0.8116395942723207
 
-Recall:  0.957272421901243
+Recall:  0.9091031239502856
 
-F1 =  0.8497889596954399
+F1 =  0.8525828460038987
 
-ROC AUC =  0.9899361773597581
-</pre></div></div>
-</div>
-<p>As depicted above, the results for the XGBoost remains the same as before. This shows us that data transformations are more impactful in certain models and less meaningful in others.</p>
-</section>
-<section id="DataRobustScaler">
-<h3>DataRobustScaler<a class="headerlink" href="#DataRobustScaler" title="Permalink to this heading"></a></h3>
-<p>The robust scaler centers the data (median=zero) and scales the data based on the interquartile range (IQR).</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataRobustScaler</span><span class="p">()</span>
-<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-<span class="n">train_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-<span class="n">test_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-------------
-TEST
-------------
-[[1105   40]
- [   5   60]]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_31_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_31_1.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Acuracy: 96.28%
-
-Precision:  0.7977477477477477
-
-Recall:  0.9440712126301647
-
-F1 =  0.853658536585366
-
-ROC AUC =  0.9577426939872354
+ROC AUC =  0.917991266375546
 </pre></div></div>
 </div>
 </section>
@@ -1051,7 +981,7 @@ ROC AUC =  0.9577426939872354
 <h3>DataPowerTransformer<a class="headerlink" href="#DataPowerTransformer" title="Permalink to this heading"></a></h3>
 <p>The power transformer makes the data more Gaussian-like (by default using the Yeo-Johnson transform).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[99]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataPowerTransformer</span><span class="p">()</span>
@@ -1070,7 +1000,58 @@ ROC AUC =  0.9577426939872354
 ------------
 TEST
 ------------
-[[1105   40]
+[[1118   27]
+ [   7   58]]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_31_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_31_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Acuracy: 97.19%
+
+Precision:  0.8380653594771241
+
+Recall:  0.9343634531407458
+
+F1 =  0.8791776798825257
+
+ROC AUC =  0.9416392341283171
+</pre></div></div>
+</div>
+</section>
+<section id="DataRobustScaler">
+<h3>DataRobustScaler<a class="headerlink" href="#DataRobustScaler" title="Permalink to this heading"></a></h3>
+<p>The robust scaler centers the data (median=zero) and scales the data based on the interquartile range (IQR).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[100]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">scaler</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataRobustScaler</span><span class="p">()</span>
+<span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
+<span class="n">train_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
+<span class="n">test_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+------------
+TEST
+------------
+[[1121   24]
  [   5   60]]
 </pre></div></div>
 </div>
@@ -1078,7 +1059,7 @@ TEST
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_34_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_34_1.png" />
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_33_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_33_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1086,30 +1067,23 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 96.28%
+Acuracy: 97.60%
 
-Precision:  0.7977477477477477
+Precision:  0.8549226084750063
 
-Recall:  0.9440712126301647
+Recall:  0.9510581121934834
 
-F1 =  0.853658536585366
+F1 =  0.8962997112704985
 
-ROC AUC =  0.9568558951965066
+ROC AUC =  0.9579711118575748
 </pre></div></div>
 </div>
-</section>
-</section>
-<section id="4---Feature-Selection">
-<h2>4 - Feature Selection<a class="headerlink" href="#4---Feature-Selection" title="Permalink to this heading"></a></h2>
-<p>Without much success at improving the F1-score using the data scalers, we will proceed to feature selection to improve the model. We start out with 5 features, and use feature selection to remove unneeded features.</p>
+<p>As we can see, this transformation had some impact in the results (depends on the seed used) when we use KNN. Let’s check how this data transformation impacts the XGBoost model:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[101]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">)</span>
-<span class="n">train_x_sel</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">)</span>
-<span class="n">test_x_sel</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x_scl</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1118,34 +1092,63 @@ ROC AUC =  0.9568558951965066
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-No columns specified for imputation. These columns have been automatically identified:
-[]
-No columns specified for encoding. These columns have been automatically identfied as the following:
-[]
+------------
+TEST
+------------
+[[1115   30]
+ [   6   59]]
 </pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_35_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_35_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Acuracy: 97.02%
+
+Precision:  0.8287844921769287
+
+Recall:  0.9407457171649312
+
+F1 =  0.8751733703190014
+
+ROC AUC =  0.9681558616056434
+</pre></div></div>
+</div>
+<p>As depicted above, the results for the XGBoost remains the same as before. This shows us that data transformations are more impactful in certain models and less meaningful in others.</p>
+</section>
+</section>
+<section id="4---Feature-Selection">
+<h2>4 - Feature Selection<a class="headerlink" href="#4---Feature-Selection" title="Permalink to this heading"></a></h2>
+<p>By using data scaling (Robust Scaler), we managed to get a small performance increase. We now proceed to use feature selection over the dataset and see if we can manage to get an even higher performance. We start out with 5 features, and use feature selection to remove unneeded features.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[102]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">CatBoostSelection</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">)</span>
+<span class="n">train_x_sel</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">)</span>
+<span class="n">test_x_sel</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x_scl</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
-[Parallel(n_jobs=4)]: Done   5 out of   5 | elapsed:    3.6s finished
-
-[2022-08-02 12:30:10] Features: 4/1 -- score: 0.8853169756008183[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
-[Parallel(n_jobs=4)]: Done   4 out of   4 | elapsed:    0.0s finished
-
-[2022-08-02 12:30:10] Features: 3/1 -- score: 0.836481331623253[Parallel(n_jobs=3)]: Using backend LokyBackend with 3 concurrent workers.
-[Parallel(n_jobs=3)]: Done   3 out of   3 | elapsed:    3.4s finished
-
-[2022-08-02 12:30:14] Features: 2/1 -- score: 0.8715549855287846[Parallel(n_jobs=2)]: Using backend LokyBackend with 2 concurrent workers.
-[Parallel(n_jobs=2)]: Done   2 out of   2 | elapsed:    3.2s finished
-
-[2022-08-02 12:30:18] Features: 1/1 -- score: 0.5507882838618479
+The number of features selection steps (5) is greater than the number of features to eliminate (3). The number of steps was reduced to 3.
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[103]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
@@ -1153,7 +1156,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[103]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1161,9 +1164,9 @@ No columns specified for encoding. These columns have been automatically identfi
 [&#39;Mean_Green&#39;, &#39;Mean_Red&#39;, &#39;Mean_NIR&#39;, &#39;SD_pan&#39;]
 </pre></div></div>
 </div>
-<p>Here, sequential feature selection has removed one of the features (SD_pan), which has led to a slight improvement in F1-score.</p>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">CatBoostSelection</span></code> feature selection has removed one of the features (GLCM_pan).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[104]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_sel</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1178,15 +1181,15 @@ No columns specified for encoding. These columns have been automatically identfi
 ------------
 TEST
 ------------
-[[1119   26]
- [   4   61]]
+[[1124   21]
+ [   5   60]]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_40_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_40_1.png" />
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_42_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_42_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1194,17 +1197,18 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 97.52%
+Acuracy: 97.85%
 
-Precision:  0.8487937687434111
+Precision:  0.8681560213889709
 
-Recall:  0.9578770574403762
+Recall:  0.9523681558616057
 
-F1 =  0.8947020328599276
+F1 =  0.9052421055168011
 
-ROC AUC =  0.9660194827007055
+ROC AUC =  0.9586362109506215
 </pre></div></div>
 </div>
+<p>From the previous results, we can see that we removed one of the features, but without any noticeable gains in performance. However, we are now achieving the same metrics using less data, so we can already call it successful pre-processing step.</p>
 </section>
 <section id="5---Synthetic-Data">
 <h2>5 - Synthetic Data<a class="headerlink" href="#5---Synthetic-Data" title="Permalink to this heading"></a></h2>
@@ -1212,7 +1216,7 @@ ROC AUC =  0.9660194827007055
 <h3>imblearn Library<a class="headerlink" href="#imblearn-Library" title="Permalink to this heading"></a></h3>
 <p>With unbalanced classes, we can instead choose to create synthetic data for the minority class. Here we use <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code>, which connects to the <code class="docutils literal notranslate"><span class="pre">imblearn</span></code> library.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[105]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
@@ -1220,7 +1224,7 @@ ROC AUC =  0.9660194827007055
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[105]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1231,7 +1235,7 @@ Name: class, dtype: int64
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[106]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rebalance</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span>
@@ -1258,7 +1262,7 @@ Running oversampling...
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[106]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1269,7 +1273,7 @@ Name: class, dtype: int64
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[107]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_res</span><span class="p">,</span> <span class="n">train_y_res</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1284,15 +1288,15 @@ Name: class, dtype: int64
 ------------
 TEST
 ------------
-[[1117   28]
- [   3   62]]
+[[1122   23]
+ [   5   60]]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_44_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_44_1.png" />
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_47_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_47_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1300,33 +1304,34 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 97.44%
+Acuracy: 97.69%
 
-Precision:  0.8431051587301588
+Precision:  0.8592275045167359
 
-Recall:  0.9646960026872691
+Recall:  0.9514947934161908
 
-F1 =  0.8931567328918323
+F1 =  0.8992434335744195
 
-ROC AUC =  0.9732616728249917
+ROC AUC =  0.9583338931810548
 </pre></div></div>
 </div>
+<p>Similarly to the feature selection step, using the <strong>Rebalance</strong> class didn’t provide any considerable gains.</p>
 </section>
 <section id="Creating-Artificial-Data-using-Deep-Learning">
 <h3>Creating Artificial Data using Deep Learning<a class="headerlink" href="#Creating-Artificial-Data-using-Deep-Learning" title="Permalink to this heading"></a></h3>
 <section id="CTGAN">
 <h4>CTGAN<a class="headerlink" href="#CTGAN" title="Permalink to this heading"></a></h4>
-<p>Let’s use the dataset with the original categorical variables, since CTGAN is capable of dealing with categorical variables internally. We will start by re-encoding the ordinal variables. We then proceed to split the dataset before using the CTGAN. This guarantees that we don’t contaminate our test set.</p>
+<p>Let’s now test rebalancing the dataset using CTGAN:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[108]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">synth</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Synthesizer</span><span class="p">(</span>
                             <span class="n">X</span><span class="o">=</span><span class="n">train_x_sel</span><span class="p">,</span>
                             <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span>
-                            <span class="n">epochs</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
+                            <span class="n">epochs</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
                             <span class="n">model</span><span class="o">=</span><span class="s2">&quot;ctgan&quot;</span><span class="p">,</span>
-                            <span class="n">load_existing</span><span class="o">=</span><span class="kc">True</span>
+                            <span class="n">load_existing</span><span class="o">=</span><span class="kc">False</span>
                     <span class="p">)</span>
 <span class="n">synth</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 
@@ -1340,14 +1345,44 @@ ROC AUC =  0.9732616728249917
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
+<div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-Loading existing sythesizer model (CTGAN_400.pkl)...
-LOADED model of class CTGAN.
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  data[column_name] = data[column_name].to_numpy().flatten()
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  data[column_name] = data[column_name].to_numpy().flatten()
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  data[column_name] = data[column_name].to_numpy().flatten()
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  data[column_name] = data[column_name].to_numpy().flatten()
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[108]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1358,11 +1393,30 @@ Name: class, dtype: int64
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[109]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">syn_train_x</span><span class="p">,</span> <span class="n">syn_train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+------------
+TEST
+------------
+[[1083   62]
+ [   4   61]]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_51_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_51_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1370,100 +1424,20 @@ Name: class, dtype: int64
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">ValueError</span>                                Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">c:\Users\morrissharp\Repos\responsible-ai-toolbox-mitigations\notebooks\dataprocessing\case_study\case2.ipynb Cell 47</span> in <span class="ansi-cyan-fg">&lt;cell line: 1&gt;</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; &lt;a href=&#39;vscode-notebook-cell:/c%3A/Users/morrissharp/Repos/responsible-ai-toolbox-mitigations/notebooks/dataprocessing/case_study/case2.ipynb#ch0000035?line=0&#39;&gt;1&lt;/a&gt;</span> model = dp.train_model_plot_results(syn_train_x, syn_train_y, test_x_sel, test_y, model_name=&#34;knn&#34;, train_result=False, plot_pr=False)
+Acuracy: 94.55%
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\users\morrissharp\repos\responsible-ai-toolbox-mitigations\raimitigations\dataprocessing\model_utils.py:262</span>, in <span class="ansi-cyan-fg">train_model_plot_results</span><span class="ansi-blue-intense-fg ansi-bold">(x, y, x_test, y_test, model_name, train_result, plot_pr, best_th_auc)</span>
-<span class="ansi-green-fg">    237</span> &#34;&#34;&#34;
-<span class="ansi-green-fg">    238</span> Given a train and test sets, and a model name, this function instantiates the model,
-<span class="ansi-green-fg">    239</span> fits the model to the train dataset, predicts the output for the train and test sets,
-<span class="ansi-green-intense-fg ansi-bold">   (...)</span>
-<span class="ansi-green-fg">    259</span>     the threshold is computed using the precision x recall graph.
-<span class="ansi-green-fg">    260</span> &#34;&#34;&#34;
-<span class="ansi-green-fg">    261</span> model = _get_model(model_name)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 262</span> model.fit(x, y)
-<span class="ansi-green-fg">    264</span> pred_train = model.predict_proba(x)[:, 1]
-<span class="ansi-green-fg">    265</span> pred_test = model.predict_proba(x_test)[:, 1]
+Precision:  0.7461275532718529
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\morrissharp\Miniconda3\envs\rai\lib\site-packages\sklearn\neighbors\_classification.py:198</span>, in <span class="ansi-cyan-fg">KNeighborsClassifier.fit</span><span class="ansi-blue-intense-fg ansi-bold">(self, X, y)</span>
-<span class="ansi-green-fg">    179</span> &#34;&#34;&#34;Fit the k-nearest neighbors classifier from the training dataset.
-<span class="ansi-green-fg">    180</span>
-<span class="ansi-green-fg">    181</span> Parameters
-<span class="ansi-green-intense-fg ansi-bold">   (...)</span>
-<span class="ansi-green-fg">    194</span>     The fitted k-nearest neighbors classifier.
-<span class="ansi-green-fg">    195</span> &#34;&#34;&#34;
-<span class="ansi-green-fg">    196</span> self.weights = _check_weights(self.weights)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 198</span> return self._fit(X, y)
+Recall:  0.942156533422909
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\morrissharp\Miniconda3\envs\rai\lib\site-packages\sklearn\neighbors\_base.py:400</span>, in <span class="ansi-cyan-fg">NeighborsBase._fit</span><span class="ansi-blue-intense-fg ansi-bold">(self, X, y)</span>
-<span class="ansi-green-fg">    398</span> if self._get_tags()[&#34;requires_y&#34;]:
-<span class="ansi-green-fg">    399</span>     if not isinstance(X, (KDTree, BallTree, NeighborsBase)):
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 400</span>         X, y = self._validate_data(X, y, accept_sparse=&#34;csr&#34;, multi_output=True)
-<span class="ansi-green-fg">    402</span>     if is_classifier(self):
-<span class="ansi-green-fg">    403</span>         # Classification targets require a specific format
-<span class="ansi-green-fg">    404</span>         if y.ndim == 1 or y.ndim == 2 and y.shape[1] == 1:
+F1 =  0.8096831388698238
 
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\morrissharp\Miniconda3\envs\rai\lib\site-packages\sklearn\base.py:581</span>, in <span class="ansi-cyan-fg">BaseEstimator._validate_data</span><span class="ansi-blue-intense-fg ansi-bold">(self, X, y, reset, validate_separately, **check_params)</span>
-<span class="ansi-green-fg">    579</span>         y = check_array(y, **check_y_params)
-<span class="ansi-green-fg">    580</span>     else:
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 581</span>         X, y = check_X_y(X, y, **check_params)
-<span class="ansi-green-fg">    582</span>     out = X, y
-<span class="ansi-green-fg">    584</span> if not no_val_X and check_params.get(&#34;ensure_2d&#34;, True):
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\morrissharp\Miniconda3\envs\rai\lib\site-packages\sklearn\utils\validation.py:964</span>, in <span class="ansi-cyan-fg">check_X_y</span><span class="ansi-blue-intense-fg ansi-bold">(X, y, accept_sparse, accept_large_sparse, dtype, order, copy, force_all_finite, ensure_2d, allow_nd, multi_output, ensure_min_samples, ensure_min_features, y_numeric, estimator)</span>
-<span class="ansi-green-fg">    961</span> if y is None:
-<span class="ansi-green-fg">    962</span>     raise ValueError(&#34;y cannot be None&#34;)
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 964</span> X = check_array(
-<span class="ansi-green-fg">    965</span>     X,
-<span class="ansi-green-fg">    966</span>     accept_sparse=accept_sparse,
-<span class="ansi-green-fg">    967</span>     accept_large_sparse=accept_large_sparse,
-<span class="ansi-green-fg">    968</span>     dtype=dtype,
-<span class="ansi-green-fg">    969</span>     order=order,
-<span class="ansi-green-fg">    970</span>     copy=copy,
-<span class="ansi-green-fg">    971</span>     force_all_finite=force_all_finite,
-<span class="ansi-green-fg">    972</span>     ensure_2d=ensure_2d,
-<span class="ansi-green-fg">    973</span>     allow_nd=allow_nd,
-<span class="ansi-green-fg">    974</span>     ensure_min_samples=ensure_min_samples,
-<span class="ansi-green-fg">    975</span>     ensure_min_features=ensure_min_features,
-<span class="ansi-green-fg">    976</span>     estimator=estimator,
-<span class="ansi-green-fg">    977</span> )
-<span class="ansi-green-fg">    979</span> y = _check_y(y, multi_output=multi_output, y_numeric=y_numeric)
-<span class="ansi-green-fg">    981</span> check_consistent_length(X, y)
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\morrissharp\Miniconda3\envs\rai\lib\site-packages\sklearn\utils\validation.py:800</span>, in <span class="ansi-cyan-fg">check_array</span><span class="ansi-blue-intense-fg ansi-bold">(array, accept_sparse, accept_large_sparse, dtype, order, copy, force_all_finite, ensure_2d, allow_nd, ensure_min_samples, ensure_min_features, estimator)</span>
-<span class="ansi-green-fg">    794</span>         raise ValueError(
-<span class="ansi-green-fg">    795</span>             &#34;Found array with dim %d. %s expected &lt;= 2.&#34;
-<span class="ansi-green-fg">    796</span>             % (array.ndim, estimator_name)
-<span class="ansi-green-fg">    797</span>         )
-<span class="ansi-green-fg">    799</span>     if force_all_finite:
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 800</span>         _assert_all_finite(array, allow_nan=force_all_finite == &#34;allow-nan&#34;)
-<span class="ansi-green-fg">    802</span> if ensure_min_samples &gt; 0:
-<span class="ansi-green-fg">    803</span>     n_samples = _num_samples(array)
-
-File <span class="ansi-green-intense-fg ansi-bold">c:\Users\morrissharp\Miniconda3\envs\rai\lib\site-packages\sklearn\utils\validation.py:114</span>, in <span class="ansi-cyan-fg">_assert_all_finite</span><span class="ansi-blue-intense-fg ansi-bold">(X, allow_nan, msg_dtype)</span>
-<span class="ansi-green-fg">    107</span>     if (
-<span class="ansi-green-fg">    108</span>         allow_nan
-<span class="ansi-green-fg">    109</span>         and np.isinf(X).any()
-<span class="ansi-green-fg">    110</span>         or not allow_nan
-<span class="ansi-green-fg">    111</span>         and not np.isfinite(X).all()
-<span class="ansi-green-fg">    112</span>     ):
-<span class="ansi-green-fg">    113</span>         type_err = &#34;infinity&#34; if allow_nan else &#34;NaN, infinity&#34;
-<span class="ansi-green-intense-fg ansi-bold">--&gt; 114</span>         raise ValueError(
-<span class="ansi-green-fg">    115</span>             msg_err.format(
-<span class="ansi-green-fg">    116</span>                 type_err, msg_dtype if msg_dtype is not None else X.dtype
-<span class="ansi-green-fg">    117</span>             )
-<span class="ansi-green-fg">    118</span>         )
-<span class="ansi-green-fg">    119</span> # for object dtype data, we only check for NaNs (GH-13254)
-<span class="ansi-green-fg">    120</span> elif X.dtype == np.dtype(&#34;object&#34;) and not allow_nan:
-
-<span class="ansi-red-intense-fg ansi-bold">ValueError</span>: Input contains NaN, infinity or a value too large for dtype(&#39;float64&#39;).
+ROC AUC =  0.9631776956667787
 </pre></div></div>
 </div>
 <p>Let’s try creating more artificial instances and check how this impacts the model’s performance.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[110]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">{</span><span class="n">label_col</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>  <span class="c1"># create more of the undersampled class</span>
@@ -1473,36 +1447,143 @@ File <span class="ansi-green-intense-fg ansi-bold">c:\Users\morrissharp\Minicond
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+------------
+TEST
+------------
+[[1100   45]
+ [   6   59]]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_53_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_53_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Acuracy: 95.79%
+
+Precision:  0.7809413687578244
+
+Recall:  0.9341954988243197
+
+F1 =  0.8377841275015181
+
+ROC AUC =  0.9658649647295936
+</pre></div></div>
+</div>
 </section>
 <section id="TVAE">
 <h4>TVAE<a class="headerlink" href="#TVAE" title="Permalink to this heading"></a></h4>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[111]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">synth</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Synthesizer</span><span class="p">(</span>
                             <span class="n">X</span><span class="o">=</span><span class="n">train_x_sel</span><span class="p">,</span>
                             <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span>
-                            <span class="n">epochs</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
+                            <span class="n">epochs</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
                             <span class="n">model</span><span class="o">=</span><span class="s2">&quot;tvae&quot;</span><span class="p">,</span>
-                            <span class="n">load_existing</span><span class="o">=</span><span class="kc">True</span>
+                            <span class="n">load_existing</span><span class="o">=</span><span class="kc">False</span>
                     <span class="p">)</span>
 <span class="n">synth</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 
 <span class="n">conditions</span> <span class="o">=</span> <span class="p">{</span><span class="n">label_col</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>  <span class="c1"># create more of the undersampled class</span>
 <span class="n">syn2_train_x</span><span class="p">,</span> <span class="n">syn2_train_y</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">train_x_sel</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">conditions</span><span class="o">=</span><span class="n">conditions</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">syn2_train_x</span><span class="p">,</span> <span class="n">syn2_train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  data[column_name] = data[column_name].to_numpy().flatten()
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  data[column_name] = data[column_name].to_numpy().flatten()
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  data[column_name] = data[column_name].to_numpy().flatten()
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  data[column_name] = data[column_name].to_numpy().flatten()
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[112]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">syn2_train_x</span><span class="p">,</span> <span class="n">syn2_train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+------------
+TEST
+------------
+[[1037  108]
+ [   2   63]]
+</pre></div></div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/dataprocessing_notebooks_case_study_case2_56_1.png" src="../../../_images/dataprocessing_notebooks_case_study_case2_56_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Acuracy: 90.91%
+
+Precision:  0.683248062408186
+
+Recall:  0.9374538125629829
+
+F1 =  0.7417660023592227
+
+ROC AUC =  0.9730332549546523
+</pre></div></div>
 </div>
 </section>
 </section>
