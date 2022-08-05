@@ -170,7 +170,7 @@ def create_dummy_dataset(
         fraction of p values will be swapped randomly. Here, p is a value selected
         randomly in the range [pct_change[0], pct_change[1]];
     :param regression: if True, the label column consists of float values. If False,
-        the label column is created to resamble a classification task.
+        the label column is created to resemble a classification task.
     """
     error = False
     if n_num_num > n_features or n_cat_num > n_features or n_cat_cat > n_features:

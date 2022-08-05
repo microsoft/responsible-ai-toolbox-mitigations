@@ -15,3 +15,5 @@ catboost_info/
 docs/dataprocessing/notebooks/
 docs/_build/
 htmlcov/
+.vscode/*
+!.vscode/launch.json

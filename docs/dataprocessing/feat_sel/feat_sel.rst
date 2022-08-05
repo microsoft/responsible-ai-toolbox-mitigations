@@ -36,5 +36,4 @@ Examples
 .. nbgallery::
    ../notebooks/module_tests/feat_sel_sequential
    ../notebooks/module_tests/feat_sel_catboost
-   ../notebooks/module_tests/feat_sel_corr
    ../notebooks/module_tests/feat_sel_corr_tutorial

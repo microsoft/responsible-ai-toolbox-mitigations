@@ -26,9 +26,9 @@ def split_data(df: pd.DataFrame, label: str, test_size: float = 0.2, full_df: bo
     :param label: the name of the label column;
     :param test_size: a value between [0.0, 1.0] that indicates the size of the test dataset. For example,
         if test_size = 0.2, then 20% of the original dataset will be used as a test set;
-    :param full_df: If 'full_df' is set to True, this function
+    :param full_df: If ``full_df`` is set to True, this function
         returns 2 dataframes: a train and a test dataframe, where both datasets include the label column
-        given by the parameter 'label'. Otherwise, 4 values are returned:
+        given by the parameter ``label``. Otherwise, 4 values are returned:
 
             * **train_x:** the train dataset containing all features (all columns except the label column);
             * **test_x:**  the test dataset containing all features (all columns except the label column);

@@ -12,9 +12,10 @@ class BasicImputer(DataImputer):
     strategies. Implements a simple imputation approach, where the missing values
     are filled with the mean, median, constant value, or the most frequent value,
     where mean and median are only valid for numerical values. This subclass uses
-    the SimpleImputer class from sklearn in the background. The main advantage is
+    the :class:`~sklearn.impute.SimpleImputer` class from :mod:`sklearn` in the background. The main advantage is
     that this subclass allows using the simple imputation approach over several
-    different columns at once, each with its own set of parameters.
+    different columns at once, each with its own set of parameters. For more details see:
+    https://scikit-learn.org/stable/modules/generated/sklearn.impute.SimpleImputer.html
 
     :param df: pandas data frame that contains the columns to be encoded;
 
@@ -22,10 +23,10 @@ class BasicImputer(DataImputer):
         If None, this parameter will be set automatically as being a list of all
         columns with any NaN value;
 
-    :param categorical: a dict indicating the parameters used by the
-        SimpleImputer. Represents the parameters of the SimpleImputer
+    :param categorical: a dict indicating the parameters used by
+        :class:`~sklearn.impute.SimpleImputer`. Represents the parameters of  :class:`~sklearn.impute.SimpleImputer`
         used on all categorical columns not represented in the
-        'specific_col' param. The dict has the following structure:
+        ``specific_col`` param. The dict has the following structure:
 
             | {
             |   **'missing_values'**:np.nan,
@@ -37,9 +38,9 @@ class BasicImputer(DataImputer):
         the parameters used by sklearn's SimpleImputer. If None,
         this dict will be auto-filled as the one above;
 
-    :param numerical: similar to 'categorical', but instead, represents
+    :param numerical: similar to ``categorical``, but instead, represents
         the parameters of the SimpleImputer to be used on all
-        numerical columns not present in the 'specific_col' param.
+        numerical columns not present in the ``specific_col`` param.
         If None, this dict will be auto-filled as follows:
 
             | {
@@ -49,13 +50,13 @@ class BasicImputer(DataImputer):
             | }
 
     :param specific_col: a dict of dicts. Each key of the main dict must be a
-        column name present in the 'col_impute' param. This key must
-        be associated with a dict similar to the one in 'categorical' param,
+        column name present in the ``col_impute`` param. This key must
+        be associated with a dict similar to the one in ``categorical`` param,
         which indicates the parameters to be used by the SimpleImputer for
-        the specified column (key). If one of the columns in 'col_impute'
+        the specified column (key). If one of the columns in ``col_impute``
         are not present in the main dict, then the type of this column is
         automatically identified as being either numeric or categorical.
-        And then, the 'categorical' or 'numeric' parameters are used for those
+        And then, the ``categorical`` or ``numerical`` parameters are used for those
         columns. The dict structure is given by:
 
             | {

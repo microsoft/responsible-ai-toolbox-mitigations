@@ -14,5 +14,4 @@ Examples
 --------
 
 .. nbgallery::
-   ../notebooks/module_tests/feat_sel_corr
    ../notebooks/module_tests/feat_sel_corr_tutorial

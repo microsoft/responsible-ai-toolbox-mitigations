@@ -36,7 +36,6 @@ methods offered in the **dataprocessing** module.
 - [Imputers](notebooks/dataprocessing/module_tests/imputation.ipynb)
 - [Sequential Feature Selection](notebooks/dataprocessing/module_tests/feat_sel_sequential.ipynb)
 - [Feature Selection using Catboost](notebooks/dataprocessing/module_tests/feat_sel_catboost.ipynb)
-- [Feature Selection based on correlated features](notebooks/dataprocessing/module_tests/feat_sel_corr.ipynb)
 - [Identifying correlated features: tutorial](notebooks/dataprocessing/module_tests/feat_sel_corr_tutorial.ipynb)
 - [Data Rebalance using imblearn](notebooks/dataprocessing/module_tests/rebalance_imbl.ipynb)
 - [Data Rebalance using SDV](notebooks/dataprocessing/module_tests/rebalance_sdv.ipynb)
@@ -107,13 +106,17 @@ With pre-commit installed and activated, whenever you do a new commit, pre-commi
 
 ### Updating the Docs
 
-The documentation is built using [Sphinx](https://www.sphinx-doc.org/en/master/) and [Graphviz](https://graphviz.org/) (to build the class diagrams). Graphviz must be installed separately using:
+The documentation is built using [Sphinx](https://www.sphinx-doc.org/en/master/), [Pandoc](https://pandoc.org/installing.html), and [Graphviz](https://graphviz.org/) (to build the class diagrams). Graphviz and Pandoc must be installed separately ([detailed instructions here for Graphviz](https://graphviz.org/download/) and [here for Pandoc](https://pandoc.org/installing.html)). On Linux, this can be done with `apt` or `yum` (depending on your distribution):
 
 ```console
-> sudo apt install graphviz
+> sudo apt install graphviz pandoc
 ```
 
-Make sure Graphviz is installed before recompiling the docs. After that, update the documentation files, which are all located inside the ```docs/``` folder. Finally, use:
+```console
+> sudo yum install graphviz pandoc
+```
+
+Make sure Graphviz and Pandoc are installed before recompiling the docs. After that, update the documentation files, which are all located inside the ```docs/``` folder. Finally, use:
 
 ```console
 > cd docs/
@@ -121,6 +124,14 @@ Make sure Graphviz is installed before recompiling the docs. After that, update 
 ```
 
 To view the documentation, open the file ```docs/_build/html/index.html``` in your browser.
+
+**Note for Windows users:** if you are trying to update the docs in a Windows environment, you might get an error regarding the *_sqlite3* module:
+
+```
+ImportError: DLL load failed while importing _sqlite3: The specified module could not be found.
+```
+
+To fix this, following the instructions found [in this link](https://www.dev2qa.com/how-to-fix-importerror-dll-load-failed-while-importing-_sqlite3-the-specified-module-could-not-be-found/).
 
 ## Trademarks
 

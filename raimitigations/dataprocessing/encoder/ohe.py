@@ -8,8 +8,8 @@ from .encoder import DataEncoding
 class EncoderOHE(DataEncoding):
     """
     Concrete class that applies one-hot encoding over a dataset. The categorical
-    features are encoded using the One-Hot encoding class from sklearn. The main
-    difference between using the sklearn implementation directly is that the
+    features are encoded using the One-Hot encoding class from ``sklearn``. The main
+    difference between using the ``sklearn`` implementation directly is that the
     transform method implemented here returns a data frame instead of a numpy array.
     This is useful when it is important to maintain the data frame format without
     losing the name of the columns. The new columns created for the one-hot encoding
@@ -71,12 +71,11 @@ class EncoderOHE(DataEncoding):
         new_col_dict = {col: [] for col in self.col_encode}
         for i, col in enumerate(self.col_encode):
             values = self.encoder.categories_[i]
-            if len(values) > 1:
-                for j, value in enumerate(values):
-                    if not self.drop or j != self.encoder.drop_idx_[i]:
-                        col_name = f"{col}_{value}"
-                        new_df_col.append(col_name)
-                        new_col_dict[col].append(col_name)
+            for j, value in enumerate(values):
+                if not self.drop or j != self.encoder.drop_idx_[i]:
+                    col_name = f"{col}_{value}"
+                    new_df_col.append(col_name)
+                    new_col_dict[col].append(col_name)
 
         self.ohe_col_dict = new_col_dict
         return new_df_col

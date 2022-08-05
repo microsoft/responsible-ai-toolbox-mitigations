@@ -16,68 +16,68 @@ from ..data_utils import get_cat_cols
 class Rebalance(DataProcessing):
     """
     Concrete class that uses under and oversampling approaches (implemented
-    in the imblearn library) to rebalance a dataset. This class serves as a
-    facilitation layer over the imblearn library: it implements several
+    in the :mod:`imblearn` library) to rebalance a dataset. This class serves as a
+    facilitation layer over the :mod:`imblearn` library: it implements several
     automation processes and default parameters, making it easier to rebalance
-    a dataset using approaches implemented in the imblearn library.
+    a dataset using approaches implemented in the :mod:`imblearn` library.
 
     :param df: the dataset to be rebalanced, which is used during the fit method.
         This data frame must contain all the features, including the rebalance
-        column (specified in the 'rebalance_col' parameter). This parameter is
-        mandatory if 'rebalance_col' is also provided. The user can also provide
-        this dataset (along with the 'rebalance_col') when calling the fit()
+        column (specified in the  ``rebalance_col`` parameter). This parameter is
+        mandatory if  ``rebalance_col`` is also provided. The user can also provide
+        this dataset (along with the  ``rebalance_col``) when calling the :meth:`fit`
         method. If df is provided during the class instantiation, it is not
-        necessary to provide it again when calling fit(). It is also possible
-        to use the 'X' and 'y' instead of 'df' and 'rebalance_col', although it is
+        necessary to provide it again when calling :meth:`fit`. It is also possible
+        to use the  ``X`` and  ``y`` instead of  ``df`` and  ``rebalance_col``, although it is
         mandatory to pass the pair of parameters (X,y) or (df, rebalance_col) either
-        during the class instantiation or during the fit() method;
+        during the class instantiation or during the :meth:`fit` method;
 
     :param rebalance_col: the name or index of the column used to do the rebalance
-        operation. This parameter is mandatory if 'df' is provided;
+        operation. This parameter is mandatory if  ``df`` is provided;
 
     :param X: contains only the features of the original dataset, that is, does
         not contain the column used for rebalancing. This is useful if the user has
         already separated the features from the label column prior to calling this
-        class. This parameter is mandatory if 'y' is provided;
+        class. This parameter is mandatory if  ``y`` is provided;
 
     :param y: contains only the rebalance column of the original dataset. The rebalance
         operation is executed based on the data distribution of this column. This parameter
-        is mandatory if 'X' is provided;
+        is mandatory if  ``X`` is provided;
 
     :param transform_pipe: a list of transformations to be used as a pre-processing
         pipeline. Each transformation in this list must be a valid subclass of the
-        current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+        current library (:class:`~raimitigations.dataprocessing.EncoderOrdinal`, :class:`~raimitigations.dataprocessing.BasicImputer`, etc.). Some feature selection
         methods require a dataset with no categorical features or with no missing values
         (depending on the approach). If no transformations are provided, a set of default
         transformations will be used, which depends on the feature selection approach
         (subclass dependent);
 
-    :param in_place: indicates if the original dataset will be saved internally (df_org)
+    :param in_place: indicates if the original dataset will be saved internally (``df_org``)
         or not. If True, then the feature selection transformation is saved over the
         original dataset. If False, the original dataset is saved separately (default
         value);
 
     :param cat_col: a list of names or indexes of categorical columns. If None, this
-        parameter will be set automatically as being a list of all categorical variables
-        in the dataset. These columns are used to determine the default SMOTE type that
-        should be used: if cat_col is None, then use SMOTE; if cat_col represents all
-        columns of the dataset, then use SMOTEN; if cat_col is a subset of columns of
-        the dataset, then use SMOTENC. If a specific SMOTE object is provided in the
-        constructor (using the over_sampler parameter), then the columns in cat_col
-        will be automatically encoded using One-Hot encoding (EncoderOHE), unless
+        parameter will be set automatically as a list of all categorical variables
+        in the dataset. These columns are used to determine the default ``SMOTE`` type that
+        should be used: if ``cat_col`` is None, then use ``SMOTE``; if ``cat_col`` represents all
+        columns of the dataset, then use ``SMOTEN``; if ``cat_col`` is a subset of columns of
+        the dataset, then use ``SMOTENC``. If a specific ``SMOTE`` object is provided in the
+        constructor (using the ``over_sampler`` parameter), then the columns in ``cat_col``
+        will be automatically encoded using One-Hot encoding (:class:`~raimitigations.dataprocessing.EncoderOHE`), unless
         another encoding transformer is provided in the transform_pipe parameter;
 
     :param strategy_over: indicates which oversampling strategy should be used. This
         parameter can be a string, a float, or a dictionary, and their meaning are similar
-        to what is used by the imblearn library for SMOTE classes:
+        to what is used by the :mod:`imblearn` library for ``SMOTE`` classes:
 
             - **Float:** a value between [0, 1] that represents the desired ratio between the
               number of instances of the minority class over the majority class. The ratio 'r'
-              is given by: $r = N_m/N_M$ where $N_m$ is the number of instances of the minority
-              class after applying oversample and $N_M$ is the number of instances of the
+              is given by: :math:`r = N_m/N_M` where :math:`N_m` is the number of instances of the minority
+              class after applying oversample and :math:`N_M` is the number of instances of the
               majority class;
             - **String:** a string value must be one of the following, which identifies preset
-              oversampling strategies (explanations retrieved from the imblearn's SMOTE
+              oversampling strategies (explanations retrieved from the :mod:`imblearn`'s SMOTE
               documentation):
 
                 * **'minority':** resample only the minority class;
@@ -91,49 +91,49 @@ class Rebalance(DataProcessing):
               number of instances desired for that class after the oversampling process is done;
 
     :param k_neighbors: an integer value representing the number of neighbors that should be
-        used when creating the artificial samples using the SMOTE oversampling. This value is
+        used when creating the artificial samples using the ``SMOTE`` oversampling. This value is
         only valid if no oversampling object is passed, that is, over_sampler=True;
 
-    :param over_sampler: this parameter can be a boolean value or a sampler object from imblearn:
+    :param over_sampler: this parameter can be a boolean value or a sampler object from :mod:`imblearn`:
 
         - Boolean: if a boolean value is passed, it indicates if the current class should
-          use an oversampling method or not. If True, a default SMOTE is created internally using
-          the parameters provided (such as k_neighbors, n_jobs, strategy_over, etc.), where the
-          SMOTE type (SMOTE, SMOTEN, SMOTENC) used is determined automatically based on the dataset
+          use an oversampling method or not. If True, a default ``SMOTE`` is created internally using
+          the parameters provided (such as ``k_neighbors``, ``n_jobs``, ``strategy_over``, etc.), where the
+          ``SMOTE`` type (``SMOTE``, ``SMOTEN``, ``SMOTENC``) used is determined automatically based on the dataset
           provided: if the dataset contains only numerical data, then SMOTE is used, if the dataset
-          contains only categorical features, then SMOTEN is used, and if the dataset contains
-          numerical and categorical data, SMOTENC is used;
-        - BaseSampler object: if the value provided is an object that inherits from BaseSampler, then
+          contains only categorical features, then ``SMOTEN`` is used, and if the dataset contains
+          numerical and categorical data, ``SMOTENC`` is used;
+        - BaseSampler object: if the value provided is an object that inherits from :class:`~raimitigations.dataprocessing.BaseSampler`, then
           this sampler is used instead of creating a new sampler. The preprocessing steps
           automatically applied to the dataset changes based on which SMOTE type is passed: if
-          the object is SMOTE, then all categorical data is encoded using one-hot encoding
-          (EncoderOHE) and all missing values are imputed using the BasicImputer, but if the object
-          is another SMOTE type (SMOTEN or SMOTENC), then only the imputation preprocessing is
+          the object is ``SMOTE``, then all categorical data is encoded using one-hot encoding
+          (:class:`~raimitigations.dataprocessing.EncoderOHE`) and all missing values are imputed using the BasicImputer, but if the object
+          is another ``SMOTE`` type (``SMOTEN`` or ``SMOTENC``), then only the imputation preprocessing is
           applied;
 
     :param strategy_under: similar to strategy_over, but instead specifies the strategy to be used for
         the undersampling approach. This parameter can be a string, a float, or a dictionary, and their
-        meaning are similar to what is used by the imblearn library for the ClusterCentroids class:
+        meaning are similar to what is used by the :mod:`imblearn` library for the ClusterCentroids class:
 
             - **Float:** a value between [0, 1] that represents the desired ratio between the
               number of instances of the minority class over the majority class after undersampling.
-              The ratio 'r' is given by: $r = N_m/N_M$ where $N_m$ is the number of instances of the
-              minority class and $N_M$ is the number of instances of the majority class after
+              The ratio 'r' is given by: :math:`r = N_m/N_M` where :math:`N_m` is the number of instances of the
+              minority class and :math:`N_M` is the number of instances of the majority class after
               undersampling. Note: this parameter only works with undersampling approaches that allows
-              controlling the number of instances to be undersampled, such as RandomUnderSampler,
-              ClusterCentroids (from imblearn). If any other undersampler is provided in the
-              under_sampler parameter along with a float value for the strategy_under parameter, an
+              controlling the number of instances to be undersampled, such as :class:`~imblearn.under_sampling.RandomUnderSampler`,
+              :class:`~imblearn.under_sampling.ClusterCentroids` (from :mod:`imblearn`). If any other undersampler is provided in the
+              ``under_sampler`` parameter along with a float value for the `strategy_under` parameter, an
               error will be raised;
             - **Dictionary:** the dictionary must have one key for each of the possible classes
               found in the label column, and the value associated to each key represents the
               number of instances desired for that class after the undersampling process is done.
               Note: this parameter only works with undersampling approaches that allow
-              controlling the number of instances to be undersampled, such as RandomUnderSampler,
-              ClusterCentroids (from imblearn). If any other undersampler is provided in the
-              under_sampler parameter along with a float value for the strategy_under parameter,
+              controlling the number of instances to be undersampled, such as :class:`~imblearn.under_sampling.RandomUnderSampler`,
+              :class:`~imblearn.under_sampling.ClusterCentroids` (from :mod:`imblearn`). If any other undersampler is provided in the
+              ``under_sampler`` parameter along with a float value for the ``strategy_under`` parameter,
               an error will be raised;
             - **String:** a string value must be one of the following, which identifies preset
-              oversampling strategies (explanations retrieved from the imblearn's ClusterCentroids
+              oversampling strategies (explanations retrieved from the :mod:`imblearn`'s :class:`~imblearn.under_sampling.ClusterCentroids`
               documentation):
 
                 * **'majority':** resample only the majority class;
@@ -142,20 +142,20 @@ class Rebalance(DataProcessing):
                 * **'all':** resample all classes;
                 * **'auto':** equivalent to 'not minority';
 
-    :param under_sampler: this parameter can be a boolean value or a sampler object from imblearn:
+    :param under_sampler: this parameter can be a boolean value or a sampler object from :mod:`imblearn`:
 
         - **Boolean:** if a boolean value is passed, it indicates if the current class should
           use an undersampling method or not. If True, a default undersampler is created internally.
-          There are two possible default undersamplers that can be created: (i) a ClusterCentroids
-          is created if the value provided to the strategy_under parameter is a float value or a
-          dictionary (the ClusterCentroids allows control over the number of instances that should
+          There are two possible default undersamplers that can be created: (i) a :class:`~imblearn.under_sampling.ClusterCentroids`
+          is created if the value provided to the ``strategy_under`` parameter is a float value or a
+          dictionary (the :class:`~imblearn.under_sampling.ClusterCentroids` allows control over the number of instances that should
           be undersampled), and (ii) a TomekLinks otherwise;
         - **BaseSampler object:** if the value provided is an object that inherits from BaseSampler, then
           this sampler is used instead of creating a new sampler;
 
     :param n_jobs: the number of workers used to run the sampling methods. This value is only used
         when a default sampler (under or over) is created, where this parameter is provided to the
-        n_jobs parameter of the imblearn's classes;
+        ``n_jobs`` parameter of the :mod:`imblearn`'s classes;
 
     :param verbose: indicates whether internal messages should be printed or not
     """
@@ -309,7 +309,7 @@ class Rebalance(DataProcessing):
         attribute that determines which oversampler should be created. If
         no categorical columns are present in the dataset, then use the
         base SMOTE type. If using an undersampler, set the undersampler to
-        be SMOTE, since the existing undersamplers in imblearn can only
+        be SMOTE, since the existing undersamplers in :mod:`imblearn` can only
         handle numerical data (and SMOTE also only handles numerical data).
         Otherwise, if no undersampler is used and the dataset contains only
         categorical columns, use a SMOTEN object instead of SMOTE. If the
@@ -562,7 +562,7 @@ class Rebalance(DataProcessing):
         Runs the over and/or undersampling methods specified by the parameters provided in
         the constructor method. The following steps are performed: (i) set the dataset, (ii)
         set the list of categorical columns in the dataset, (iii) check for errors in the
-        inputs provided, (iv) set, fit and apply the transforms in the transform_pipe (if any),
+        inputs provided, (iv) set, fit and apply the transforms in the ``transform_pipe`` (if any),
         (v) set the oversampler to be used, (vi) set the undersampler to be used, (vii) run
         the oversampler, (viii) run the undersampler, and finally (ix) create a new data frame
         with the modified data.
@@ -570,22 +570,22 @@ class Rebalance(DataProcessing):
         :param X: contains only the features of the original dataset, that is, does
             not contain the column used for rebalancing. This is useful if the user has
             already separated the features from the label column prior to calling this
-            class. This parameter is mandatory if 'y' is provided;
+            class. This parameter is mandatory if  ``y`` is provided;
         :param y: contains only the rebalance column of the original dataset. The rebalance
             operation is executed based on the data distribution of this column. This parameter
-            is mandatory if 'X' is provided;
-        :param df: the dataset to be rebalanced, which is used during the fit method.
+            is mandatory if  ``X`` is provided;
+        :param df: the dataset to be rebalanced, which is used during the :meth:`fit` method.
             This data frame must contain all the features, including the rebalance
-            column (specified in the 'rebalance_col' parameter). This parameter is
-            mandatory if 'rebalance_col' is also provided. The user can also provide
-            this dataset (along with the 'rebalance_col') when calling the fit()
-            method. If df is provided during the class instantiation, it is not
-            necessary to provide it again when calling fit(). It is also possible
-            to use the 'X' and 'y' instead of 'df' and 'rebalance_col', although it is
+            column (specified in the  ``rebalance_col`` parameter). This parameter is
+            mandatory if  ``rebalance_col`` is also provided. The user can also provide
+            this dataset (along with the  ``rebalance_col``) when calling the :meth:`fit`
+            method. If ``df`` is provided during the class instantiation, it is not
+            necessary to provide it again when calling :meth:`fit`. It is also possible
+            to use the  ``X`` and  ``y`` instead of  ``df`` and  ``rebalance_col``, although it is
             mandatory to pass the pair of parameters (X,y) or (df, rebalance_col) either
-            during the class instantiation or during the fit() method;
+            during the class instantiation or during the :meth:`fit` method;
         :param rebalance_col: the name or index of the column used to do the rebalance
-            operation. This parameter is mandatory if 'df' is provided;
+            operation. This parameter is mandatory if  ``df`` is provided;
         """
         self._set_df_mult(df, rebalance_col, X, y, require_set=True)
         self._check_rebalance_col()
