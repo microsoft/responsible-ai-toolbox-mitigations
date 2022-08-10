@@ -1,9 +1,12 @@
 import os
 import pytest
 import pickle
+import warnings
 
 import conftest as utils
 from raimitigations.dataprocessing import Synthesizer, EncoderOrdinal, BasicImputer
+
+warnings.filterwarnings('ignore')
 
 
 # -----------------------------------
@@ -52,7 +55,7 @@ def _run_main_commands(df, label_col, transf, df_in_fit=True):
         _ = transf.sample(10)
     except Exception as error:
         error_msg = str(error)
-        if "valid rows" not in error_msg:
+        if "Unable to sample any rows for the given conditions" not in error_msg:
             raise ValueError(f"ERROR: the following error occured while generating synthetic data: {error_msg}")
 
     try:
@@ -66,7 +69,7 @@ def _run_main_commands(df, label_col, transf, df_in_fit=True):
         _ = transf.transform(df=df, n_samples=10)
     except Exception as error:
         error_msg = str(error)
-        if "valid rows" not in error_msg:
+        if "Unable to sample any rows for the given conditions" not in error_msg:
             raise ValueError(f"ERROR: the following error occured while generating synthetic data: {error_msg}")
 
     X = df.drop(columns=[label_col])
@@ -75,7 +78,7 @@ def _run_main_commands(df, label_col, transf, df_in_fit=True):
         _ = transf.transform(X=X, y=y, n_samples=5, conditions=conditions)
     except Exception as error:
         error_msg = str(error)
-        if "valid rows" not in error_msg:
+        if "Unable to sample any rows for the given conditions" not in error_msg:
             raise ValueError(f"ERROR: the following error occured while generating synthetic data: {error_msg}")
 
 

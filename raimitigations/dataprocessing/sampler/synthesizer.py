@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from sdv.tabular.base import BaseTabularModel
 from sdv.tabular import GaussianCopula, CTGAN, CopulaGAN, TVAE
+from sdv.sampling import Condition
 
 from ..data_processing import DataProcessing
 
@@ -427,8 +428,8 @@ class Synthesizer(DataProcessing):
         all_samples = None
         for label_value, n_sample in samples_dict.items():
             if n_sample > 0:
-                condition = {self.label_col_name: label_value}
-                samples = self.model.sample(n_sample, conditions=condition)
+                condition_dict = {self.label_col_name: label_value}
+                samples = self.sample(n_sample, condition_dict)
                 if all_samples is None:
                     all_samples = samples
                 else:
@@ -441,8 +442,19 @@ class Synthesizer(DataProcessing):
         Encapsulates :meth:`sample` from the models that inherit from
         :class:`sdv.tabular.baseBaseTabularModel`. This allows users to use this method
         without requiring to directly access the model object (``self.model``).
+
+        :param n_samples: the number of samples to be generated;
+        :param conditions: a set of conditions, specified by a dictionary, that defines the
+            characteristics of the synthetic instances that should be created. This parameter
+            indicates the values for certain features that the synthetic instances should
+            have. If None, then no restrictions will be imposed on how to generate the
+            synthetic data;
         """
-        samples = self.model.sample(n_samples, conditions=conditions)
+        if conditions is None:
+            samples = self.model.sample(num_rows=n_samples, max_tries_per_batch=200)
+        else:
+            conditions_obj = Condition(conditions, num_rows=n_samples)
+            samples = self.model.sample_conditions(conditions=[conditions_obj], max_tries_per_batch=200)
         return samples
 
     # -----------------------------------
@@ -562,9 +574,9 @@ class Synthesizer(DataProcessing):
             df = self._apply_transforms(df)
 
         if n_samples is None and conditions is not None:
-            raise ValueError("ERROR: if 'condition_dict' is provided, the parameter 'n_samples' is also required.")
+            raise ValueError("ERROR: if 'conditions' is provided, the parameter 'n_samples' is also required.")
         if n_samples is not None:
-            samples = self.model.sample(n_samples, conditions=conditions)
+            samples = self.sample(n_samples, conditions)
         else:
             samples = self._generate_samples_strategy(df, strategy)
 
