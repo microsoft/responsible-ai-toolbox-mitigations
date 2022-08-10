@@ -216,6 +216,18 @@ contain the label column;</p></li>
 <dd><p>Encapsulates <a class="reference internal" href="#dataprocessing.Synthesizer.sample" title="dataprocessing.Synthesizer.sample"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sample()</span></code></a> from the models that inherit from
 <code class="xref py py-class docutils literal notranslate"><span class="pre">sdv.tabular.baseBaseTabularModel</span></code>. This allows users to use this method
 without requiring to directly access the model object (<code class="docutils literal notranslate"><span class="pre">self.model</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_samples</strong> – the number of samples to be generated;</p></li>
+<li><p><strong>conditions</strong> – a set of conditions, specified by a dictionary, that defines the
+characteristics of the synthetic instances that should be created. This parameter
+indicates the values for certain features that the synthetic instances should
+have. If None, then no restrictions will be imposed on how to generate the
+synthetic data;</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
