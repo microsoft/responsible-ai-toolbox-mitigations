@@ -133,6 +133,20 @@ ImportError: DLL load failed while importing _sqlite3: The specified module coul
 
 To fix this, following the instructions found [in this link](https://www.dev2qa.com/how-to-fix-importerror-dll-load-failed-while-importing-_sqlite3-the-specified-module-could-not-be-found/).
 
+
+## Support
+### How to file issues and get help
+
+This project uses GitHub Issues to track bugs and feature requests. Please search the existing
+issues before filing new issues to avoid duplicates.  For new issues, file your bug or
+feature request as a new Issue.
+
+For help and questions about using this project, please post your question in Stack Overflow using the ``raimitigations`` tag.
+
+### Microsoft Support Policy
+
+Support for this package is limited to the resources listed above.
+
 ## Trademarks
 
 This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft

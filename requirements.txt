@@ -35,7 +35,7 @@ cfgv==3.3.1
     # via -r requirements.in
 charset-normalizer==2.0.12
     # via requests
-copulas==0.6.1
+copulas==0.7.0
     # via
     #   sdmetrics
     #   sdv
@@ -167,7 +167,7 @@ matplotlib-inline==0.1.3
     #   ipython
 mistune==0.8.4
     # via nbconvert
-mlxtend==0.19.0
+mlxtend==0.20.0
     # via -r requirements.in
 nbclient==0.6.4
     # via nbconvert
@@ -386,9 +386,9 @@ scipy==1.7.3
     #   statsmodels
     #   uci-dataset
     #   xgboost
-sdmetrics==0.4.1
+sdmetrics==0.5.0
     # via sdv
-sdv==0.13.1
+sdv==0.16.0
     # via -r requirements.in
 send2trash==1.8.0
     # via notebook
@@ -499,7 +499,7 @@ wheel==0.37.1
     #   lightgbm
 widgetsnbextension==3.6.1
     # via ipywidgets
-xgboost==1.5.2
+xgboost==1.6.1
     # via -r requirements.in
 xlrd==2.0.1
     # via uci-dataset
