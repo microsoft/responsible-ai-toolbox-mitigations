@@ -152,6 +152,8 @@ lightgbm==3.3.2
     # via -r requirements.in
 llvmlite==0.38.1
     # via numba
+lxml==4.9.1
+    # via nbconvert
 markupsafe==2.1.1
     # via
     #   jinja2
@@ -171,7 +173,7 @@ mlxtend==0.20.0
     # via -r requirements.in
 nbclient==0.6.4
     # via nbconvert
-nbconvert==6.5.0
+nbconvert==6.5.1
     # via
     #   jupyter
     #   nbsphinx
