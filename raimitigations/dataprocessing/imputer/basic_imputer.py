@@ -1,3 +1,4 @@
+from typing import Union
 import pandas as pd
 import numpy as np
 from sklearn.impute import SimpleImputer
@@ -12,9 +13,9 @@ class BasicImputer(DataImputer):
     strategies. Implements a simple imputation approach, where the missing values
     are filled with the mean, median, constant value, or the most frequent value,
     where mean and median are only valid for numerical values. This subclass uses
-    the :class:`~sklearn.impute.SimpleImputer` class from :mod:`sklearn` in the background. The main advantage is
-    that this subclass allows using the simple imputation approach over several
-    different columns at once, each with its own set of parameters. For more details see:
+    the :class:`~sklearn.impute.SimpleImputer` class from :mod:`sklearn` in the background.
+    The main advantage is that this subclass allows using the simple imputation approach over
+    several different columns at once, each with its own set of parameters. For more details see:
     https://scikit-learn.org/stable/modules/generated/sklearn.impute.SimpleImputer.html
 
     :param df: pandas data frame that contains the columns to be encoded;
@@ -79,7 +80,7 @@ class BasicImputer(DataImputer):
     # -----------------------------------
     def __init__(
         self,
-        df: pd.DataFrame = None,
+        df: Union[pd.DataFrame, np.ndarray] = None,
         col_impute: list = None,
         categorical: dict = None,
         numerical: dict = None,
@@ -226,6 +227,8 @@ class BasicImputer(DataImputer):
     def _transform(self, df: pd.DataFrame):
         """
         Transform method complement used specifically for the current class.
+
+        :param df: the full dataset being transformed.
         """
         transf_df = df.copy()
         for col in self.col_impute:

@@ -55,10 +55,10 @@ class FeatureSelection(DataProcessing):
     # -----------------------------------
     def __init__(
         self,
-        df: pd.DataFrame = None,
+        df: Union[pd.DataFrame, np.ndarray] = None,
         label_col: str = None,
-        X: pd.DataFrame = None,
-        y: pd.DataFrame = None,
+        X: Union[pd.DataFrame, np.ndarray] = None,
+        y: Union[pd.DataFrame, np.ndarray] = None,
         transform_pipe: list = None,
         in_place: bool = False,
         verbose: bool = True,
@@ -145,7 +145,7 @@ class FeatureSelection(DataProcessing):
         self,
         X: Union[pd.DataFrame, np.ndarray] = None,
         y: Union[pd.Series, np.ndarray] = None,
-        df: pd.DataFrame = None,
+        df: Union[pd.DataFrame, np.ndarray] = None,
         label_col: str = None,
     ):
         """

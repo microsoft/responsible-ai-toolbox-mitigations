@@ -1,3 +1,4 @@
+from typing import Union
 import json
 import pandas as pd
 import numpy as np
@@ -328,10 +329,10 @@ class CorrelatedFeatures(FeatureSelection):
     # -----------------------------------
     def __init__(
         self,
-        df: pd.DataFrame = None,
+        df: Union[pd.DataFrame, np.ndarray] = None,
         label_col: str = None,
-        X: pd.DataFrame = None,
-        y: pd.DataFrame = None,
+        X: Union[pd.DataFrame, np.ndarray] = None,
+        y: Union[pd.DataFrame, np.ndarray] = None,
         transform_pipe: list = None,
         in_place: bool = False,
         cor_features: list = None,
@@ -394,7 +395,10 @@ class CorrelatedFeatures(FeatureSelection):
         :param num_pvalue_th: the p-value used as a threshold when considering if there is a correlation
             between two variables.
         """
-        base_err_str = f"ERROR: invalid value for parameter 'method_num_num'. Expected a list with the possible values: {self.VALID_NUM_COR.keys()}."
+        base_err_str = (
+            f"ERROR: invalid value for parameter 'method_num_num'. "
+            f"Expected a list with the possible values: {self.VALID_NUM_COR.keys()}."
+        )
         if method_num_num is not None:
             if type(method_num_num) != list:
                 raise ValueError(base_err_str)
@@ -1066,15 +1070,20 @@ class CorrelatedFeatures(FeatureSelection):
         All features start as unblocked. Whenever a feature f_x is selected
         to be removed, all the other features f_y correlated to f_x are
         blocked. This avoids removing both features of a correlated pair,
-        which could result in ​losing some information. This could happen,
+        which could result in losing some information. This could happen,
         for example, if we have the correlated pairs (f_1, f_2), (f_1, f_3),
         and (f_2, f_4), and then we select to remove features f_1 from the
         first pair (f_1, f_2) and feature f_2 from the pair (f_2, f_4). Since
         f_1 was already removed, no other feature needs to be removed for the
         pair (f_1, f_3). In this scenario, we removed both f_1 and f_2 from
-        the pair (f_1, f_2), which means that we could ​lose some information
+        the pair (f_1, f_2), which means that we could lose some information
         by dropping both of the correlated variables. The blocking mechanism
         is to try to avoid this scenario.
+
+        :param feat_degree: a dictionary that has one key for each feature in
+            the dataset, and the value of each key is the degree of each feature.
+            The degree of a feature represents the number of other features that
+            are correlated to it.
         """
         max_degree = 0
         selected = None
@@ -1098,6 +1107,9 @@ class CorrelatedFeatures(FeatureSelection):
         Given two features (feat_x and feat_y), return the feature that
         has more missing values. This is used to determine which feature
         should be dropped (considering that feat_x and feat_y are correlated).
+
+        :param feat_x: the first feature name being compared;
+        :param feat_x: the second feature name being compared.
         """
         if self.missing_count[feat_x] > self.missing_count[feat_y]:
             return feat_x
@@ -1110,6 +1122,9 @@ class CorrelatedFeatures(FeatureSelection):
         has the lowest ​cardinality, that is, different number of unique
         values. This is used to determine which feature should be dropped
         (considering that feat_x and feat_y are correlated).
+
+        :param feat_x: the first feature name being compared;
+        :param feat_x: the second feature name being compared.
         """
         if self.feat_nunique[feat_x] < self.feat_nunique[feat_y]:
             return feat_x
@@ -1127,6 +1142,9 @@ class CorrelatedFeatures(FeatureSelection):
         the variable, and so it is better to remove the one with the least
         variance. This is used to determine which feature should be dropped
         (considering that feat_x and feat_y are correlated).
+
+        :param feat_x: the first feature name being compared;
+        :param feat_x: the second feature name being compared.
         """
         selected = feat_x
         x_type = self.feature_types[feat_x]
@@ -1315,7 +1333,6 @@ class CorrelatedFeatures(FeatureSelection):
 
     # -----------------------------------
     def _update_thresholds_num_num(self, num_corr_th: float = None, num_pvalue_th: float = None):
-        """ """
         if num_corr_th is None and num_pvalue_th is None:
             return False
 
