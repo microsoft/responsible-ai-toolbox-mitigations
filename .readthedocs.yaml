@@ -7,7 +7,6 @@ build:
   apt_packages:
     - pandoc
     - graphviz
-    - seaborn
   jobs:
     pre_build:
       - cp -r notebooks/dataprocessing/ docs/dataprocessing/notebooks/
@@ -17,3 +16,5 @@ python:
   install:
     - method: pip
       path: .
+      extra_requirements:
+        - seaborn
