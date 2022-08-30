@@ -4,6 +4,9 @@ build:
   os: "ubuntu-20.04"
   tools:
     python: "3.9"
+  apt_packages:
+    - pandoc
+    - graphviz
 
 python:
   # Install our python package before building the docs
