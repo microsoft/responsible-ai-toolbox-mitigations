@@ -6,4 +6,4 @@ sklearn's **Pipeline** class.
 
 
 .. nbgallery::
-   notebooks/module_tests/pipeline_test
+   ../notebooks/dataprocessing/module_tests/pipeline_test

@@ -1,3 +1,5 @@
+.. _Sampler:
+
 Sampling
 ========
 
@@ -29,5 +31,5 @@ Examples
 ********
 
 .. nbgallery::
-   ../notebooks/module_tests/rebalance_sdv
-   ../notebooks/module_tests/rebalance_imbl
+   ../../notebooks/dataprocessing/module_tests/rebalance_sdv
+   ../../notebooks/dataprocessing/module_tests/rebalance_imbl

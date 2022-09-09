@@ -1,137 +1,127 @@
-Welcome to RAI Toolbox Mitigations documentation!
-=================================================
+Responsible AI Mitigations Library
+==================================
 
-The Responsible AI Toolbox Mitigations library brings together a set of functionalities that aim to help Machine Learning practitioners and
-data scientists in ideating and implementing programmatic steps for mitigating Responsible AI concerns in Machine Learning models. In particular,
-the library encourages a targeted approach to mitigation that is informed by previous diagnostic analyses on the model highlighting areas for
-which the model performs worse.
+The goal of responsible AI is to create trustworthy AI systems that benefit people while mitigating harms, which can occur when AI systems fail to
+perform with fair, reliable, or safe outputs for various stakeholders. Teams tasked with developing AI systems must work to identify, diagnose, and
+mitigate potential harms as much as possible. In this initial release, **the Responsible AI Mitigations Library helps AI practitioners explore different
+mitigation steps that may be most appropriate when the model underperforms for a given cohort.** The library currently has two modules:
 
-Why a targeted approach to RAI mitigations?
--------------------------------------------
+    * :ref:`DataProcessing<dataproc>`: offers mitigation techniques for improving model performance for specific cohorts.
+    * :ref:`DataBalanceAnalysis<databalance>`: provides metrics for diagnosing errors that originate from data imbalance either on class labels or feature values.
 
-Many of the traditional model improvement techniques take a blanket approach aimed at maximizing single-score performance numbers, e.g., overall
-model accuracy. Such blanket approaches may increase the size of the training data, the size of the model architecture, or search for better
-parameters. There are two issues with these approaches. First, they may not always be feasible for the ML and Data Science teams. Collecting a
-much larger dataset or training a much larger model requires expenses or computational resources that are not available for all teams. Second,
-even when a blanket approach may be feasible, it may still not be the most cost-effective way of improving the model, especially when the goal of
-the mitigation is to improve the model on areas for which it performs worse. For example, if a model trained to predict credit reliability of
-customers has a good overall accuracy but performs worse for older citizens because some of their feature data may be missing from records, then
-merely adding more data for all citizens will most likely not help with this failure mode.
+Exploring potential mitigations
+-------------------------------
 
-.. figure:: imgs/measure_compare_error.png
-  :scale: 80
-  :alt: Measure and compare errors
-
-  Figure 1 - Blanket approaches are often not feasible or cost-effective. They also do not target specific failure modes that the ML/DS team may
-  be interested in mitigating.
-
-Since it is common for ML models to perform worse in certain cohorts and the fact that such discrepancies may lead to critical ramifications on the
-fairness, reliability, and safety of AI systems, it becomes important for ML/DS teams to be able to address failure modes in a principled and informed
-manner.
-
-.. figure:: imgs/cohort_compare.png
-  :scale: 60
-  :alt: Cohort error comparison
-
-  Figure 2 – Machine Learning models may perform worse for particular cohorts, which leads to different failure modes. Each failure mode may in turn
-  happen for different underlying reasons (e.g. lack of data representation, noise, missing features).
-
-Therefore, the RAI Toolbox Mitigations library offers functionalities that simplify the process of applying known and new mitigations to given failure
-modes and cohorts of interest.
-
-.. figure:: imgs/diagnose_mitigate.png
-  :scale: 50
-  :alt: Diagnose and mitigate
-
-  Figure 3 - The targeted approach to RAI mitigations focuses the mitigation process on previously identified and diagnosed failure modes.
-
-
-
-
-
-Scope and goals
----------------
-
-The library is built with the following goals in mind:
-    * **Convenience and usability:** The library provides a unified interface to mitigation functionalities scattered across several
-      well-established packages in the community. As such it brings in the advantage of creating data processing pipelines, without
-      worrying about making sure that the output from one mitigation (found in one library) is compatible with the output of a second
-      mitigation (found in a separate library). Every mitigation step fits in the .fit() .transform() convention and can be combined
-      together in end-to-end mitigation pipelines. Moreover, most function calls are adapted to support the targeted approach to RAI
-      mitigations by extending existing calls either with target cohorts or features. As the library grows, we aim to offer a larger and
-      more diverse set of mitigations in a simple and easy-to-use programmatic interface.
-    * **Education:** There exists no automated silver bullet when it comes to model improvement. As such, the ML/DS practitioner using the
-      library remains the main stakeholder deciding which mitigation strategies to apply and deploy for their project. However, thanks to
-      longstanding foundational research in Machine Learning there exist several mature algorithms and techniques that can alleviate commonly
-      found problems. Our aspiration is to summarize techniques that have stood the test of time and that help in several scenarios. We hope
-      that this hub will expose practitioners to commonly used methods and describe to them when and how to use each mitigation step. The best
-      way to get started is to go through the notebook tutorials showcasing the benefits and usage of each mitigation.
-
-Note that there exist several other mitigation steps in Responsible AI that are not in the scope of this library. Responsible AI remains a
-highly sociotechnical field and development tools or libraries are only one piece of the larger picture. Successful adoption of the library
-requires active collaboration with related efforts in sociology, policy, and education. For instance, decisions around whether it is ethically
-appropriate to deploy a ML model for a prediction task, changes in the design and user experience, responsible data collection and governance
-are all examples of critical mitigation steps that are not in the scope of this library.
-
-Structure
----------
-
-The library has two main modules:
-
-    * **dataprocessing** - A set of data-oriented mitigation steps for data balancing, scaling, missing value imputation, sampling, and encoding.
-    * **databalanceanalysis** - A set of metrics for diagnosing and measuring data imbalance. This module is supposed to be used as part of the
-      error diagnosis process for failure modes that happen due to class or feature imbalance.
-
-In the future, we plan to integrate more functionalities around data and model-oriented mitigations. Some top-of-mind improvements for the team
-include bagging and boosting, better data synthesis, constrained optimizers, handling data noise etc. If you would like to collaborate or contribute
-to any of these ideas, feel free to contact us at placeholder@microsoft.com.
-
-Audience
---------
-
-This library was designed to assist Machine Learning and Data Science practitioners as they work on model improvement and Responsible AI mitigations.
-Note that while Responsible AI is a broad term that encompasses several aspects (e.g., reliability, robustness, fairness, interpretability, safety,
-and privacy), the goal of the library is to encourage and facilitate rigorous ML engineering processes by ideating and implementing improvement steps
-in an informed manner. The targeted approach to RAI mitigations prompts a careful thinking mindset that first understands failure modes prior to planning
-how to address them.
-
-Related Responsible AI tools
-----------------------------
-
-The RAI Toolbox Mitigations library is part of the `Responsible AI Toolbox`_, a larger effort for integrating and building development tools for Responsible AI.
-One of the central contributions of the toolbox is the Responsible AI Dashboard, which combines together mature functionalities from relevant tools such as
-Error Analysis, Fairlearn, InterpretML, and DiCE. A practitioner using the RAI Toolbox Mitigations library may rely on the dashboard to identify and diagnose
-failure modes. Take a look at this technical blog on how to leverage the dashboard for these pre-mitigation steps. At a high level, components in the dashboard
-such as Error Analysis and Model Overview help with the identification stage by discovering cohorts of data for which the model underperforms. Other components
-like the Data Explorer, Interpretability, and Counterfactual Analysis assist with understanding underlying reasons for why the model is underperforming. These
-components go back to the data (Data Explorer) or to the model (Interpretability) to highlight data statistics and feature importances. As the practitioner
-investigates the data or the model, they may create hypotheses about how to map the diagnoses to mitigation steps and then implement them through the RAI Toolbox
-Mitigations library.
+The Responsible AI Mitigations Library brings together in **one interface and compatible end-to-end data-processing pipelines** a series of well-known machine
+learning techniques (based on popular implementations in scikit-learn, mlxtend, sdv, among others) that have been adapted to help AI practitioners **target
+problems after they have identified model errors** using diagnostic tools such as those in the `Responsible AI Toolbox`_. :ref:`See more<integration_other_libs>`
+about how this library works with the Responsible AI Toolbox.
 
 .. _Responsible AI Toolbox: https://responsibleaitoolbox.ai/
 
-From a mitigation perspective, Fairlearn is a closely relevant library in particular for mitigating fairness-related concerns. The set of mitigations in Fairlearn
-approach the problem of mitigating model underperformance for given cohorts by framing it as a cost-sensitive classification problem, where samples that satisfy
-a particular constraint (similar to the cohort definition) are weighed differently in the optimization process. These mitigations are complementary to the ones
-provided here and can be used in combination together.
+After you've identified a model as underperforming for a specific cohort, the Responsible AI Mitigations Library can help inform your decisions for appropriate
+mitigation. The library enables you to **explore potential mitigations for targeted cohorts and sub-cohorts** through:
 
-In addition, we also encourage practitioners to rigorously validate new post-mitigation models and compare them with previous versions to make sure that the
-mitigation step indeed improved the model in the way the practitioner expected and that the mitigation step did not lead to new mistakes. To assist with these
-steps, BackwardCompatibilityML is a package for an extended support on model comparison and backward compatible training.
+    * Balancing and synthesizing data.
+    * Selecting or creating features with different encodings with different encodings.
+    * Scaling numerical features.
+    * Imputing missing values.
+
+**Note:** Although the Responsible AI Mitigations Library currently focuses on data problems, it will expand over time to include mitigations for model errors,
+through customized loss functions, architectures, and new training algorithms.
+
+.. figure:: imgs/diagnose_mitigate.png
+  :scale: 60
+  :alt: Diagnose and mitigate
+
+  Figure 1 - The targeted approach to responsible AI mitigations focuses the mitigation process on previously identified and diagnosed failure modes.
 
 
+Benefits of targeted error mitigations
+--------------------------------------
 
+Traditional methods of improving model performance often take a blanket approach, aiming at maximizing a single-score performance number, such as overall accuracy.
+Blanket approaches may involve increasing the size of training data or model architecture—approaches that are not only costly but also **ineffective** for improving the
+model in areas of poorest performance.
 
+.. figure:: imgs/balance_cohort.png
+  :scale: 60
+  :alt: Balancing over cohorts
 
+  Figure 2 – Example of how blanket approaches may not help in mitigating the underlying issue for a given cohort (in this case flipped class imbalance).
 
+Imagine the following example. A model that predicts customer credit reliability is underperforming for a given cohort X. When analyzing class balance for the data, it
+becomes clear that overall there are more examples in the data for which a loan has been assigned. However, for the cohort of interest X, this distribution looks very
+different with more examples of loans being declined. The discrepancy also leads to a higher error for this cohort as the model learns to over-decline. Merely adding
+more data to adjust overall class imbalance (Scenario 1 in the figure) will not address class imbalance for cohort X. In fact, it might make it worse by accentuating
+class imbalance for this cohort and declining more loans. A more targeted approach (Scenario 2 in the figure) would focus the class balance mitigation only on cohort X
+by sampling or synthesizing more data within that cohort where loans have been assigned. At this time, the Responsible AI Mitigations library can implement the second
+scenario by synthesizing data only for a given cohort (see the :ref:`DataProcessing.Synthesizer<syhtesizer>` class for more information). In the future, we expect to
+enable similar capabilities for the :ref:`DataProcessing.Rebalance<rebalance>` class.
 
-Modules
--------
+In contrast, the Responsible AI Mitigations Library offers a **targeted approach that lets you save time and resources by**:
+
+    * **Testing your hypotheses for why a model is underperforming** in specific data cohorts through exploring data imbalance, features, label noise, or missing values.
+    * **Improving your understanding of model failures** by zeroing in on:
+
+        * A set of features in the dataset, allowing changing format or encoding only the features that are problematic.
+        * A sub-cohort only, not touching any other data.
+
+    * **Simplifying the implementation and customization of mitigations** for specific data problems by providing mitigations that are compatible with each other and can be
+      combined into a single pipeline.
+
+Two modules for targeting data
+------------------------------
+
+The Responsible AI Mitigations Library consists of **two modules that work in complement** for targeting and mitigating data problems: DataProcessing and DataBalanceAnalysis.
+
+DataProcessing
+##############
+
+A set of data-oriented mitigation steps for data balancing, scaling, missing value imputation, sampling, and encoding, using proven machine learning mitigation techniques
+in a single interface and compatible environment. The goal of this module is to provide a unified interface for different mitigation methods scattered around multiple machine
+learning libraries, such as scikit-learn, mlxtend, sdv, and others.
+
+**Highlights include:**
+
+    * A simple interface for mitigation steps that follows the ``.fit()`` and ``.transform()`` convention.
+    * transformer classes that can be combined together in end-to-end mitigation pipelines.
+    * Function calls adapted for responsible AI by extending existing calls either with target features or cohorts.
+    * Predetermined parameter values, eliminating the need to know or to configure all available parameters.
+    * Unique solutions for tabular data.
+    * Automation of various mitigation steps, with some transformer classes acting as a wrapper to others in the library.
+    * Customization options, helpful for the more experienced AI practitioner.
+
+DataBalanceAnalysis
+###################
+
+A set of metrics for diagnosing and measuring data imbalance. This module is intended to be used as part of the error diagnosis process for failure modes that are due to class
+or feature imbalance. After measuring with DataBalanceAnalysis, AI practitioners can then work to mitigate the failure through techniques available in the library's DataProcessing
+module.
+
+**Example:**
+
+A model trained for house-price prediction is discovered to be underperforming for houses that do not have an attached garage. The AI practitioner determines that this failure is
+due to the underrepresentation of houses with no garage in the training data. The practitioner can use metrics in the DataBalanceAnalysis module to measure the feature imbalance
+(“garage” vs. “no garage”), then work to mitigate the issue by using one of the sampling techniques available in the library's DataProcessing module for augmenting data.
+
 
 .. toctree::
-   :maxdepth: 3
+    :maxdepth: 1
+    :caption: Overview
 
-   databalanceanalysis/databalanceanalysis
+    install_guide
+    getting_started
+    integration_to_libs
+    api
+    gallery
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Modules
+
+   databalanceanalysis/intro
    dataprocessing/intro
 
 Indices and tables

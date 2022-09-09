@@ -1,4 +1,6 @@
-dataprocessing
+.. _dataproc:
+
+DataProcessing
 ==============
 
 This module contains several transformer classes that aim to change or mitigate certain aspects of a dataset.

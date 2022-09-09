@@ -1,3 +1,5 @@
+.. _DataImputer:
+
 Imputers
 ========
 
@@ -30,4 +32,4 @@ Examples
 ********
 
 .. nbgallery::
-   ../notebooks/module_tests/imputation
+   ../../notebooks/dataprocessing/module_tests/imputation

@@ -14,4 +14,4 @@ Example
 -------
 
 .. nbgallery::
-   ../notebooks/module_tests/scaler
+   ../../notebooks/dataprocessing/module_tests/scaler

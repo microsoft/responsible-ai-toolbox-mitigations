@@ -12,7 +12,7 @@ catboost_info/
 **/*.obj
 *.egg-info/
 **.coverage**
-docs/dataprocessing/notebooks/
+docs/notebooks/
 docs/_build/
 htmlcov/
 .vscode/*

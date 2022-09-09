@@ -21,7 +21,7 @@ In this library, we take a **targeted approach to mitigating errors** in Machine
 
 ## Installation
 
-Use the following pip command to install the Responsible AI Toolbox.
+Use the following pip command to install the Responsible AI Toolbox. Make sure you are using Python 3.7, 3.8, or 3.9.
 
 If running in jupyter, please make sure to restart the jupyter kernel after installing.
 

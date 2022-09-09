@@ -1,5 +1,7 @@
+.. _DataScaler:
+
 Scalers
-========
+=======
 
 This sub-module of the **dataprocessing** package collects all scaler transformers implemented here.
 Scalers are responsible scaling numeric features in order to make these features comparable and have similar
@@ -35,7 +37,7 @@ Examples
 ********
 
 .. nbgallery::
-   ../notebooks/module_tests/scaler
+   ../../notebooks/dataprocessing/module_tests/scaler
 
 
 
