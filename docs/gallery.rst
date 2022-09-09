@@ -39,8 +39,8 @@ Case Studies
    notebooks/dataprocessing/case_study/case2_stat
    notebooks/dataprocessing/case_study/case3_stat
 
-Using Sklearn's Pipeline
-########################
+Using scikit-learn's Pipeline
+#############################
 
 .. nbgallery::
    notebooks/dataprocessing/module_tests/pipeline_test

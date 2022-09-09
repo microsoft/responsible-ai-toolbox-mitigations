@@ -2,7 +2,7 @@ Pipeline Support
 ================
 
 In the following notebook we show how the **dataprocessing** module supports
-sklearn's **Pipeline** class.
+scikit-learn's **Pipeline** class.
 
 
 .. nbgallery::

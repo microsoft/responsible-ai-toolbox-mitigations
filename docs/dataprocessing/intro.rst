@@ -60,8 +60,8 @@ All notebooks listed here can be found in the folder **notebooks/dataprocessing/
    module_tests
 
 
-Sklearn's Pipeline Support
---------------------------
+scikit-learn's Pipeline Support
+-------------------------------
 
 .. toctree::
    :maxdepth: 1

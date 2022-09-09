@@ -19,6 +19,12 @@ about how this library works with the Responsible AI Toolbox.
 
 .. _Responsible AI Toolbox: https://responsibleaitoolbox.ai/
 
+.. figure:: imgs/diagnose_mitigate.png
+  :scale: 18
+  :alt: Diagnose and mitigate
+
+  Figure 1 - The targeted approach to responsible AI mitigations focuses the mitigation process on previously identified and diagnosed failure modes.
+
 After you've identified a model as underperforming for a specific cohort, the Responsible AI Mitigations Library can help inform your decisions for appropriate
 mitigation. The library enables you to **explore potential mitigations for targeted cohorts and sub-cohorts** through:
 
@@ -30,12 +36,6 @@ mitigation. The library enables you to **explore potential mitigations for targe
 **Note:** Although the Responsible AI Mitigations Library currently focuses on data problems, it will expand over time to include mitigations for model errors,
 through customized loss functions, architectures, and new training algorithms.
 
-.. figure:: imgs/diagnose_mitigate.png
-  :scale: 60
-  :alt: Diagnose and mitigate
-
-  Figure 1 - The targeted approach to responsible AI mitigations focuses the mitigation process on previously identified and diagnosed failure modes.
-
 
 Benefits of targeted error mitigations
 --------------------------------------
@@ -45,7 +45,7 @@ Blanket approaches may involve increasing the size of training data or model arc
 model in areas of poorest performance.
 
 .. figure:: imgs/balance_cohort.png
-  :scale: 60
+  :scale: 20
   :alt: Balancing over cohorts
 
   Figure 2 – Example of how blanket approaches may not help in mitigating the underlying issue for a given cohort (in this case flipped class imbalance).
