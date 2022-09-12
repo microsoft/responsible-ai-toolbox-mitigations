@@ -1,4 +1,4 @@
-# Responsible AI Toolbox Mitigations
+# Responsible AI Mitigations
 
 
 This Responsible-AI-Toolbox-Mitigations repo consists of a python library that aims to empower data scientists and ML developers to measure their dataset balance and representation of different dataset cohorts, while having access to mitigation techniques they could incorporate to mitigate errors and fairness issues in their datasets. Together with the measurement and mitigation steps, ML professionals are empowered to build more accurate and fairer models.
@@ -22,11 +22,11 @@ Use the following pip command to install the Responsible AI Toolbox.
 If running in jupyter, please make sure to restart the jupyter kernel after installing.
 
 ```
-pip install raimitigation
+pip install raimitigations
 ```
 ## Documentation
 
-To learn more about the supported dataset measurements and mitigation techniques covered in the **raimitigation** package, [please check out this documentation.](https://sturdy-barnacle-3b9f911d.pages.github.io/index.html)
+To learn more about the supported dataset measurements and mitigation techniques covered in the **raimitigations** package, [please check out this documentation.](https://sturdy-barnacle-3b9f911d.pages.github.io/index.html)
 
 
 
@@ -169,4 +169,4 @@ Any use of third-party trademarks or logos are subject to those third-party's po
 
 **Past Maintainers:** [Akshara Ramakrishnan](https://github.com/akshara-msft), [Irina Spiridonova](https://github.com/irinasp)
 
-**Research Contributors:** [Besmira Nushi](https://github.com/nushib), [Rahee Ghosh](https://github.com/raghoshMSFT), [Ece Kamar](https://www.ecekamar.com/)
+**Research Contributors:** [Besmira Nushi](https://github.com/nushib), [Rahee Ghosh Peshawaria](https://github.com/raghoshMSFT), [Ece Kamar](https://www.ecekamar.com/)
