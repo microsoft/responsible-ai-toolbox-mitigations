@@ -397,5 +397,10 @@ class SeqFeatSelection(FeatureSelection):
         where each key represents a different run, which is associated
         with a secondary dictionary with all the relevant data regarding
         that particular run.
+
+        :return: a dictionary where each key represents a different run,
+            which is associated with a secondary dictionary with all the
+            relevant data regarding that particular run.
+        :rtype: dict
         """
         return self.selector.subsets_.copy()

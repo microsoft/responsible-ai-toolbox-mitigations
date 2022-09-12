@@ -589,7 +589,9 @@ class Rebalance(DataProcessing):
             mandatory to pass the pair of parameters (X,y) or (df, rebalance_col) either
             during the class instantiation or during the :meth:`fit` method;
         :param rebalance_col: the name or index of the column used to do the rebalance
-            operation. This parameter is mandatory if  ``df`` is provided;
+            operation. This parameter is mandatory if  ``df`` is provided.
+        :return: the transformed dataset.
+        :rtype: pd.DataFrame or np.ndarray
         """
         self._set_df_mult(df, rebalance_col, X, y, require_set=True)
         self._check_rebalance_col()

@@ -79,6 +79,13 @@ class DataProcessing(ABC):
         and guarantee that the indices provided by the user for a given transformation
         (provided before any transformation is applied) are maped to the correct columns
         even if these columns are changed by other transforms in the transform_pipe.
+
+        :param df: the full dataset;
+        :param label_col: the name or index of the label column;
+        :return: if label_col is None, returns only the fixed dataset. Otherwise, return
+            a tuple (df, label_col) containing the fixed dataset and the fixed label
+            column, respectively.
+        :rtype: pd.DataFrame or a tuple
         """
         column_type = self.COL_NAME
         if type(df.columns[0]) != str:
@@ -112,6 +119,10 @@ class DataProcessing(ABC):
         """
         Checks if the column names of the dataset are present or not. If not, create
         valid column names using the index number (converted to string) of each column.
+
+        :param df: the full dataset;
+        :return: the fixed dataset.
+        :rtype: pd.DataFrame
         """
         if isinstance(df, np.ndarray):
             df = self._numpy_array_to_df(df)
@@ -136,6 +147,12 @@ class DataProcessing(ABC):
         information. This is used by transform objects inside a transform_pipe, where these
         objects must always use the same dataset column structure used by the main transform
         object.
+
+        :param col_index_to_name: a dictionary mapping each column index to their respective
+            column names. This is useful when a transformation changes the dataset structure;
+        :param column_type: indicates if the indexing is done by column names or column index.
+            This depends if the dataset has a header or not.
+        :param label_col_name: the label column name.
         """
         self.col_index_to_name = col_index_to_name
         self.column_type = column_type
@@ -146,6 +163,10 @@ class DataProcessing(ABC):
     def _get_column_from_index(self, column_index: int):
         """
         Get the column name associated to a given column index.
+
+        :param column_index: the column index.
+        :return: the column name associated to the column specified by the index column_index.
+        :rtype: str
         """
         if column_index not in self.col_index_to_name.keys():
             raise ValueError(
@@ -159,7 +180,9 @@ class DataProcessing(ABC):
         """
         For a given dataset df, check if all column names in col_list are present
         in df. col_list can be a list of column names of column indexes. If one of
-        the column names or indexes is not present in df, a ValuError is raised.
+        the column names or indexes is not present in df, a ValuError is raised. If
+        the col_list parameter is made up of integer values (indices) and the dataframe
+        has column names, return a new column list using the column names instead.
 
         :param df: the dataframe that should be checked;
         :param col_list: a list of column names or column indexes;
@@ -167,6 +190,10 @@ class DataProcessing(ABC):
             ValueError is raised). This method can be called from many child classes,
             so this parameter shows the name of the parameter from the child class
             that caused the error.
+        :return: the col_list parameter. If the col_list parameter is made up of integer
+            values (indices) and the dataframe has column names, return a new column list
+            using the column names instead.
+        :rtype: list
         """
         if type(col_list) != list:
             raise ValueError(
@@ -206,6 +233,8 @@ class DataProcessing(ABC):
         :param df: the full dataset;
         :param col_list: list of column names or indexes that should be present in the
             subset of df.
+        :return: a dataset containing only the columns in col_list.
+        :rtype: pd.DataFrame
         """
         if type(col_list) != list:
             raise ValueError("ERROR: calling the _get_df_subset method with an invalid col_list parameter.")
@@ -247,6 +276,15 @@ class DataProcessing(ABC):
         :param X: contains only the features of the original dataset, that is, does not
             contain the label column;
         :param y: contains only the label column of the original dataset.
+        :return: an integer value representing the input scheme used by the fit() method of the
+            child class. Can be one of the following values:
+
+                * INPUT_DF: when the fit() method requires only the full dataframe;
+                * INPUT_XY: when the fit() method requires a dataframe containing only the features
+                  (X) and a dataframe with only the label column (Y);
+                * INPUT_NULL: when the fit() method doesn't require any input.
+
+        :rtype: one of the following values: self.INPUT_DF, self.INPUT_XY, self.INPUT_NULL
         """
 
         def error_message(param1: str, param2: str):
@@ -289,6 +327,10 @@ class DataProcessing(ABC):
         Sets the current dataset self.df using a new dataset df. If both
         self.df and df are None, then a ValueError is raised. df can be None
         if a valid self.df has already been set beforehand.
+
+        :param df: the full dataset;
+        :param require_set: a boolean value indicating if the df parameter must
+            be a valid dataframe or not. If true and df is None, an error is raised.
         """
         self._check_error_df(df)
         if self.df is None and df is None and require_set:
@@ -400,6 +442,10 @@ class DataProcessing(ABC):
         classes returned by the _get_preprocessing_requirements method.
         This method is only called if the user doesn't specify any preprocessing
         transformations.
+
+        :return: a list containing default objects from the current class, which
+            represents the required preprocessing steps for the current child class.
+        :rtype: list
         """
         tf_list = []
         requirements = self._get_preprocessing_requirements()
@@ -515,6 +561,11 @@ class DataProcessing(ABC):
         transformation of the last object is applied over the dataset that
         results from the transform method of the last but one object in the
         transform_pipe. Check the documentation of _fit_transforms for more details.
+
+        :param df: the dataset to which the transformations should be applied.
+        :return: the dataset df after calling the transform() method of all objects
+            in the self.transform_pipe internal parameter.
+        :rtype: pd.DataFrame or np.ndarray
         """
         for tf in self.transform_pipe:
             df = tf.transform(df)
@@ -541,6 +592,10 @@ class DataProcessing(ABC):
         :param df: the dataframe to be scaled containing all
             original columns, that is, all columns that should be ignored
             and those that should be scaled.
+        :return: the dataset df after calling the _inverse_transform() method of
+            all objects in the self.transform_pipe internal parameter (in reversed
+            order).
+        :rtype: pd.DataFrame or np.ndarray
         """
         has_inverse = hasattr(self.__class__, "_inverse_transform")
         reversible = has_inverse and callable(getattr(self.__class__, "_inverse_transform"))

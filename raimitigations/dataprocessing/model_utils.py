@@ -39,6 +39,15 @@ def split_data(df: pd.DataFrame, label: str, test_size: float = 0.2, full_df: bo
         train and test is random, without any stratification. If False, then the problem is treated as a
         classification problem, where the label column is treated as a list of labels. This way, the split
         tries to maintain the same proportion of classes in the train and test sets.
+    :return: if ``full_df`` is set to True, this function returns 2 dataframes: a train and a test dataframe,
+        where both datasets include the label column given by the parameter ``label``. Otherwise, 4 values are
+        returned:
+
+            * **train_x:** the train dataset containing all features (all columns except the label column);
+            * **test_x:**  the test dataset containing all features (all columns except the label column);
+            * **train_y:** the train dataset containing only the label column;
+            * **test_y:** the test dataset containing only the label column;
+    :rtype: tuple
     """
     X = df.drop(columns=[label])
     y = df[label]
@@ -164,6 +173,19 @@ def fetch_results(Y: np.ndarray, y_pred: np.ndarray, best_th_auc: bool):
     :param y_pred: an arry with the prediction probabilities for each label;
     :param best_th_auc: if True, the best threshold is computed using ROC graph. If False,
         the threshold is computed using the precision x recall graph.
+    :return: a tuple with the computed metrics and the binarized predictions. The tuple
+        returned contains (in this order):
+
+        * ROC AUC
+        * Best threshold found to binarize the results. The predictions are binarized
+          using this threshold before computing the precision, recall, F,1 and accuracy
+        * Precision
+        * Recall
+        * F1 score
+        * Accuracy
+        * Binarized predictions.
+
+    :rtype: tuple
     """
     roc, auc_th = _roc_evaluation(Y, y_pred)
     pr_th = _get_precision_recall_th(Y, y_pred)
@@ -206,6 +228,15 @@ def evaluate_set(
         different threshold values;
     :param best_th_auc: if True, the best threshold is computed using ROC graph. If False,
         the threshold is computed using the precision x recall graph.
+    :return: the following computed metrics:
+
+        * ROC AUC
+        * Precision
+        * Recall
+        * Best threshold found to binarize the results. The predictions are binarized
+          using this threshold before computing the precision, recall, F,1 and accuracy
+
+    :rtype: tuple
     """
     if is_train:
         print("------------\nTRAIN\n------------")
@@ -257,6 +288,8 @@ def train_model_plot_results(
         different threshold values;
     :param best_th_auc: if True, the best threshold is computed using ROC graph. If False,
         the threshold is computed using the precision x recall graph.
+    :return: returns the model object used to fit the dataset provided.
+    :rtype: reference to the model object used
     """
     model = _get_model(model_name)
     model.fit(x, y)
@@ -306,6 +339,23 @@ def train_model_fetch_results(x, y, x_test, y_test, model_name=DECISION_TREE, be
 
     :param best_th_auc: if True, the best threshold is computed using ROC graph. If False,
         the threshold is computed using the precision x recall graph.
+    :return: a dictionary with the computed metrics, with the following keys:
+
+        * **"roc":** the ROC AUC obtained for the test set;
+        * **"th":** the best threshold found for binarizing the predicted probabilities for
+          label. This threshold is found by using the ROC graph, or the precision x recall
+          graph. The approach used is determined by the 'best_th_auc' parameter;
+        * **"pr":** the precision obtained after binarizing the outputs using the previously
+          mentioned threshold;
+        * **"rc":** the recall obtained after binarizing the outputs using the previously
+          mentioned threshold;
+        * **"f1":** the F1 score obtained after binarizing the outputs using the previously
+          mentioned threshold;
+        * **"accuracy":** the accuracy obtained after binarizing the outputs using the previously
+          mentioned threshold;
+        * **"y_pred":** the binarized predictions.
+
+    :rtype: dict
     """
     model = _get_model(model_name)
     model.fit(x, y)

@@ -222,6 +222,8 @@ class DataScaler(DataProcessing):
         current scaler over the preprocessed dataset and return a new dataset.
 
         :param df: the full dataset containing the columns that should be scaled.
+        :return: the transformed dataset.
+        :rtype: pd.DataFrame or np.ndarray
         """
         self._check_if_fitted()
         df = self._fix_col_transform(df)

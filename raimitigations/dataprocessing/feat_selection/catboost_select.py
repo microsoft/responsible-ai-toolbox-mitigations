@@ -486,6 +486,10 @@ class CatBoostSelection(FeatureSelection):
         For more information on the data contained in this summary, please check
         ``CatBoost``'s official documentation:
         https://catboost.ai/en/docs/concepts/output-data_features-selection
+
+        :return: a dictionary with the results obtained by the feature
+            selection method.
+        :rtype: dict
         """
         return self.summary.copy()
 

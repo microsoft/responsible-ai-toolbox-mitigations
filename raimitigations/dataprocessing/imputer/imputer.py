@@ -122,6 +122,8 @@ class DataImputer(DataProcessing):
         imputation methods.
 
         :param df: the full dataset with the columns to be imputed.
+        :return: the transformed dataset.
+        :rtype: pd.DataFrame or np.ndarray
         """
         self._check_if_fitted()
         transf_df = self._fix_col_transform(df)

@@ -105,6 +105,8 @@ class DataEncoding(DataProcessing):
         col_encode parameter. Returns a dataset with the encoded columns.
 
         :param df: the full dataset with the columns to be encoded.
+        :return: the transformed dataset.
+        :rtype: pd.DataFrame or np.ndarray
         """
         self._check_if_fitted()
         transf_df = self._fix_col_transform(df)
@@ -116,5 +118,9 @@ class DataEncoding(DataProcessing):
         """
         Returns a list with the column names or column indices of the
         encoded columns.
+
+        :return: a list with the column names or column indices of the
+            encoded columns.
+        :rtype: list
         """
         return self.col_encode.copy()

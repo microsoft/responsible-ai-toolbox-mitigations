@@ -240,7 +240,7 @@ class EncoderOrdinal(DataEncoding):
         performed by the ordinal encoder. The dictionary contains the following
         structure:
 
-        * One key for each column. Each key is associated ​with a secondary
+        * One key for each column. Each key is associated with a secondary
           dictionary with the following keys:
 
           - **"values":** the unique values encountered in the column;
@@ -249,6 +249,10 @@ class EncoderOrdinal(DataEncoding):
             list, that is, mapping[column]["labels][i] is the
             label assigned to the value mapping[column]["values][i].
           - **"n_labels":** the number of labels. If unknown_err is set to False,
-            this will account for the label for ​unknown values.
+            this will account for the label for unknown values.
+
+        :return: a dictionary with all the information regarding the mapping
+            performed by the ordinal encoder.
+        :rtype: dict
         """
-        return self.mapping
+        return self.mapping.copy()

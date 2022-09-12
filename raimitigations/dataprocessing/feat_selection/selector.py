@@ -185,6 +185,10 @@ class FeatureSelection(DataProcessing):
         feature selection method, wheres the current method returns the
         list of selected features currently assigned to self.selected_feat,
         which can be manually changed by the user.
+
+        :return: list containing the name of indices of the currently
+            selected features.
+        :rtype: list
         """
         return self.selected_feat.copy()
 
@@ -196,6 +200,8 @@ class FeatureSelection(DataProcessing):
         different behavior, just override this method.
 
         :param df: the dataset used for inference.
+        :return: the transformed dataset.
+        :rtype: pd.DataFrame or np.ndarray
         """
         self._check_if_fitted()
         df = self._fix_col_transform(df)

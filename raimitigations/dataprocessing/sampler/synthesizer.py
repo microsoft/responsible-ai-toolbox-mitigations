@@ -448,7 +448,9 @@ class Synthesizer(DataProcessing):
             characteristics of the synthetic instances that should be created. This parameter
             indicates the values for certain features that the synthetic instances should
             have. If None, then no restrictions will be imposed on how to generate the
-            synthetic data;
+            synthetic data.
+        :return: a dataset containing the artificial samples.
+        :rtype: pd.DataFrame
         """
         if conditions is None:
             samples = self.model.sample(num_rows=n_samples, max_tries_per_batch=200)
@@ -566,6 +568,8 @@ class Synthesizer(DataProcessing):
               the under_sampler parameter along with a float value for the ``strategy_under``
               parameter, an error will be raised;
               If None, the default value is set to "auto", which is the same as "minority".
+        :return: the transformed dataset.
+        :rtype: pd.DataFrame or np.ndarray
         """
         self._check_if_fitted()
         df, input_mode = self._arrange_transform_df(df, X, y)

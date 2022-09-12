@@ -1687,6 +1687,8 @@ class CorrelatedFeatures(FeatureSelection):
         :param print_summary: if True, print the values stored in the correlated
             and the uncorrelated dictionary. If False, just return the three
             dictionaries previously mentioned.
+        :return: three internal dictionaries that summurizes the correlations found.
+        :rtype: tuple
         """
         if print_summary:
             print("\nCORRELATION SUMMARY\n")
@@ -1705,4 +1707,12 @@ class CorrelatedFeatures(FeatureSelection):
 
     # -----------------------------------
     def get_correlated_pairs(self):
+        """
+        Returns a copy of the dictionary mapping all correlated pairs
+        found.
+
+        :return: a copy of the dictionary mapping all correlated pairs
+            found.
+        :rtype: dict
+        """
         return self.corr_pairs.copy()

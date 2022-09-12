@@ -16,6 +16,8 @@ def _create_num_var(samples: int, regression: bool, n_features: int, n_correlate
         n_correlated > 0, some features will be correlated to each other
     :param regression: if True, the label column consists of float values. If False,
         the label column is created to resamble a classification task.
+    :return: a dataframe containing only numerical features.
+    :rtype: pd.DataFrame
     """
     n_informative = n_features - n_correlated
     if regression:
@@ -62,6 +64,8 @@ def _add_cor_num_num_var_det(df: pd.DataFrame, n_correlated: int, num_num_noise:
         by copying the ith existing numerical feature in the dataset df and adding a noise
         to it. The standard deviation used for generating the noise is a random value
         between num_num_noise[0] and num_num_noise[1].
+    :return: a dataframe containing correlated features.
+    :rtype: pd.DataFrame
     """
     num_col = [col for col in df.columns if "num_" in col]
 
@@ -107,6 +111,8 @@ def _add_cor_num_cat_var_det(df: pd.DataFrame, n_categorical: int, pct_change: l
         in the range [pct_change[0], pct_change[1]];
     :param name: the prefix used to create the column name of the new
         categorical features.
+    :return: a dataframe containing correlated features.
+    :rtype: pd.DataFrame
     """
     num_col = [col for col in df.columns if "num_" in col]
     new_col_list = []
@@ -171,6 +177,8 @@ def create_dummy_dataset(
         randomly in the range [pct_change[0], pct_change[1]];
     :param regression: if True, the label column consists of float values. If False,
         the label column is created to resemble a classification task.
+    :return: a dataframe containing correlated features.
+    :rtype: pd.DataFrame
     """
     error = False
     if n_num_num > n_features or n_cat_num > n_features or n_cat_cat > n_features:
