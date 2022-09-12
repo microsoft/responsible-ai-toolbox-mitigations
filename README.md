@@ -1,24 +1,34 @@
 # Responsible AI Toolbox Mitigations
 
-This repo consists of a python library that aims to help users including data scientists debug and mitigate errors in their data so that they can build more fair and unbiased models starting from the data cleaning stage.
 
-There are two main functions of this library:
-- **Data Balance Analysis:** the goal of Data Balance Analysis to provide metrics that help to determine how balanced the data that is being trained on is.
-- **Data Processing:** this module contains several transformer classes that aim to change or mitigate certain aspects of a dataset.
+This Responsible-AI-Toolbox-Mitigations repo consists of a python library that aims to empower data scientists and ML developers to measure their dataset balance and representation of different dataset cohorts, while having access to mitigation techniques they could incorporate to mitigate errors and fairness issues in their datasets. Together with the measurement and mitigation steps, ML professionals are empowered to build more accurate and fairer models.
+
+This repo is a part of the [Responsible AI Toolbox](https://github.com/microsoft/responsible-ai-toolbox#responsible-ai-toolbox), a suite of tools providing a collection of model and data exploration and assessment user interfaces and libraries that enable a better understanding of AI systems. These interfaces and libraries empower developers and stakeholders of AI systems to develop and monitor AI more responsibly, and take better data-driven actions.
+
+
+<p align="center">
+<img src="./img/responsible-ai-toolbox-mitigations.png" alt="ResponsibleAIToolboxMitigationsOverview" width="550"/>
+
+There are two main functions covered in this library:
+- **Data Balance Analysis:** covering metrics that help to determine how balanced is your dataset.
+- **Data Processing:** covering several transformer classes that aim to change or mitigate certain aspects of a dataset.
 The goal of this module is to provide a unified interface for different mitigation methods scattered around
 multiple machine learning libraries, such as scikit-learn, mlxtend, sdv, among others.
 
 ## Installation
 
-To install this package, follow these steps:
-- clone this repo
-- move to the root folder of the repo
-- install the package using:
-```console
-> pip install -e .
-```
+Use the following pip command to install the Responsible AI Toolbox.
 
-**NOTE:** The installation process will be updated when the package is released publicly in PyPi.
+If running in jupyter, please make sure to restart the jupyter kernel after installing.
+
+```
+pip install raimitigation
+```
+## Documentation
+
+To learn more about the supported dataset measurements and mitigation techniques covered in the **raimitigation** package, [please check out this documentation.](https://sturdy-barnacle-3b9f911d.pages.github.io/index.html)
+
+
 
 ## Data Balance Analysis: Examples
 
@@ -26,7 +36,7 @@ To install this package, follow these steps:
 - [Data Balance Analysis Adult Census Example](notebooks/databalanceanalysis/data_balance_census.ipynb)
 - [End to End Notebook](notebooks/data_balance_e2e.ipynb)
 
-## Data Processing: Examples
+## Data Processing/Mitigations: Examples
 
 Here is a set of tutorial notebooks that aim to explain how to use each one of the mitigation
 methods offered in the **dataprocessing** module.
@@ -48,9 +58,7 @@ module in order to train a model for a real-world dataset.
 - [Case Study 2](notebooks/dataprocessing/case_study/case2.ipynb)
 - [Case Study 3](notebooks/dataprocessing/case_study/case3.ipynb)
 
-## Documentation
 
-The documentation of the **raimitigation** library [can be found here.](https://sturdy-barnacle-3b9f911d.pages.github.io/index.html)
 
 ## Dependencies
 
