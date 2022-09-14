@@ -16,7 +16,7 @@ The goal of this module is to provide a unified interface for different mitigati
 multiple machine learning libraries, such as scikit-learn, mlxtend, sdv, among others.
 
 
-
+In this library, we take a **targeted approach to mitigating errors** in Machine Learning models. This is complementary and different from the traditional blanket approaches which aim at maximizing a single-score performance number, such as overall accuracy, by merely increasing the size of traning data or model architecture. Since blanket approaches are often costly but also ineffective for improving the model in areas of poorest performance, with targeted approaches to model improvement we focus the improvement efforts in areas previously identified to have more errors and their underlying diagnoses of error. For example, if a practitioner has identified that the model is underperforming for a cohort of interest by using Error Analysis in the Responsible AI Dashboard, they may also continue the debugging process by finding out through Data Balance Analysis and find out that there is class imbalance for this particular cohort. To mitigate the issue, they then focus on improving class imbalance for the cohort of interest by using the Responsible AI Mitigations library. This and several other examples in the documentation of each mitigation function illustrate how targeted approaches may help practitioner best at mitigation giving them more control in the model improvement process.
 
 
 ## Installation
