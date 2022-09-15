@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sampling &mdash; RAI Error Mitigation  documentation</title>
+  <title>Sampling &mdash; Responsible AI Mitigations  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -23,7 +23,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Rebalance" href="rebalance.html" />
-    <link rel="prev" title="BasicImputer Example" href="../notebooks/module_tests/imputation.html" /> 
+    <link rel="prev" title="BasicImputer Example" href="../../notebooks/dataprocessing/module_tests/imputation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -31,7 +31,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> RAI Error Mitigation
+            <a href="../../index.html" class="icon icon-home"> Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -41,10 +41,18 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../databalanceanalysis/databalanceanalysis.html">databalanceanalysis</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../intro.html">dataprocessing</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../intro.html#target-audience">Target Audience</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../intro.html">DataProcessing</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../intro.html#structure">Structure</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../intro.html#api">API</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../dataprocessing.html">DataProcessing</a><ul class="current">
@@ -60,7 +68,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../intro.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../intro.html#sklearn-s-pipeline-support">Sklearn’s Pipeline Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a></li>
 </ul>
 </li>
 </ul>
@@ -71,7 +79,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">RAI Error Mitigation</a>
+          <a href="../../index.html">Responsible AI Mitigations</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -79,7 +87,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../intro.html">dataprocessing</a> &raquo;</li>
+          <li><a href="../../api.html">API reference</a> &raquo;</li>
           <li><a href="../dataprocessing.html">DataProcessing</a> &raquo;</li>
       <li>Sampling</li>
       <li class="wy-breadcrumbs-aside">
@@ -116,7 +124,7 @@
 }
 </style>
 <section id="sampling">
-<h1>Sampling<a class="headerlink" href="#sampling" title="Permalink to this heading"></a></h1>
+<span id="sampler"></span><h1>Sampling<a class="headerlink" href="#sampling" title="Permalink to this heading"></a></h1>
 <p>This sub-module of the <strong>dataprocessing</strong> package collects all sampling transformers implemented here.
 Sampling transformers are responsible for creating artificial data for a dataset. This is useful when
 a dataset is imbalanced when considering a given class or feature. The difference between sampling methods
@@ -146,7 +154,7 @@ abstract class. Below is a list of the sampling methods present in the <strong>d
     <img alt="thumbnail" src="../../_static/no_image.png" />
     <p class="caption">
       <span class="caption-text">
-        <a class="reference internal" href="../notebooks/module_tests/rebalance_sdv.html">
+        <a class="reference internal" href="../../notebooks/dataprocessing/module_tests/rebalance_sdv.html">
           <span class="std std-ref">Synthesizer Class (SDV)</span>
         </a>
       </span>
@@ -158,7 +166,7 @@ abstract class. Below is a list of the sampling methods present in the <strong>d
     <img alt="thumbnail" src="../../_static/no_image.png" />
     <p class="caption">
       <span class="caption-text">
-        <a class="reference internal" href="../notebooks/module_tests/rebalance_imbl.html">
+        <a class="reference internal" href="../../notebooks/dataprocessing/module_tests/rebalance_imbl.html">
           <span class="std std-ref">Rebalance Class (imblearn)</span>
         </a>
       </span>
@@ -172,7 +180,7 @@ abstract class. Below is a list of the sampling methods present in the <strong>d
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../notebooks/module_tests/imputation.html" class="btn btn-neutral float-left" title="BasicImputer Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../notebooks/dataprocessing/module_tests/imputation.html" class="btn btn-neutral float-left" title="BasicImputer Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="rebalance.html" class="btn btn-neutral float-right" title="Rebalance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

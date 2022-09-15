@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Synthesizer Class (SDV) &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Scalers" href="../../../dataprocessing/scaler/scaler.html" />
+    <link rel="prev" title="Synthesizer" href="../../../dataprocessing/sampler/synthesizer.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../gallery.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#dataprocessing">DataProcessing</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="encoding.html">Encoding Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scaler.html">Data Scaling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="imputation.html">BasicImputer Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="feat_sel_sequential.html">SeqFeatSelection Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="feat_sel_catboost.html">CatBoostSelection Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="feat_sel_corr_tutorial.html">Checking Correlations Between Variables - A Comprehensive Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rebalance_imbl.html">Rebalance Class (imblearn)</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Synthesizer Class (SDV)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dataprocessing/intro.html">DataProcessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../api.html">API reference</a> &raquo;</li>
+          <li><a href="../../../dataprocessing/dataprocessing.html">DataProcessing</a> &raquo;</li>
+          <li><a href="../../../dataprocessing/sampler/sampler.html">Sampling</a> &raquo;</li>
+          <li><a href="../../../dataprocessing/sampler/synthesizer.html">Synthesizer</a> &raquo;</li>
+      <li>Synthesizer Class (SDV)</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/dataprocessing/module_tests/rebalance_sdv.ipynb" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../notebooks&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">Synthesizer</span>
+<span class="kn">from</span> <span class="nn">notebooks.download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
+</pre></div>
+</div>
+</div>
+<section id="Synthesizer-Class-(SDV)">
+<h1>Synthesizer Class (SDV)<a class="headerlink" href="#Synthesizer-Class-(SDV)" title="Permalink to this heading"></a></h1>
+<p>This class is a wrapper over the generative models for tabular data available in the SDV library. The <strong>Synthesizer</strong> enhances the interface of these models by allowing the user to specify predefined strategies similar to those used in the imblearn library. This notebook will explore different ways to use this class for generating synthetic data and for data balance.</p>
+<p>First of all, let’s load the dataset.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/&#39;</span>
+<span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;employee_id&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">dataset</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>department</th>
+      <th>region</th>
+      <th>education</th>
+      <th>gender</th>
+      <th>recruitment_channel</th>
+      <th>no_of_trainings</th>
+      <th>age</th>
+      <th>previous_year_rating</th>
+      <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
+      <th>awards_won?</th>
+      <th>avg_training_score</th>
+      <th>is_promoted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_7</td>
+      <td>Master's &amp; above</td>
+      <td>f</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>35</td>
+      <td>5.0</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0</td>
+      <td>49</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Operations</td>
+      <td>region_22</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>30</td>
+      <td>5.0</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_19</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>34</td>
+      <td>3.0</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_23</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>2</td>
+      <td>39</td>
+      <td>1.0</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Technology</td>
+      <td>region_26</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>45</td>
+      <td>3.0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>73</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>54803</th>
+      <td>Technology</td>
+      <td>region_14</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>48</td>
+      <td>3.0</td>
+      <td>17</td>
+      <td>0</td>
+      <td>0</td>
+      <td>78</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54804</th>
+      <td>Operations</td>
+      <td>region_27</td>
+      <td>Master's &amp; above</td>
+      <td>f</td>
+      <td>other</td>
+      <td>1</td>
+      <td>37</td>
+      <td>2.0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>56</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54805</th>
+      <td>Analytics</td>
+      <td>region_1</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>27</td>
+      <td>5.0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>79</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54806</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_9</td>
+      <td>NaN</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>29</td>
+      <td>1.0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>45</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54807</th>
+      <td>HR</td>
+      <td>region_22</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>27</td>
+      <td>1.0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>49</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>54808 rows × 13 columns</p>
+</div></div>
+</div>
+<p>We can check that this dataset is imbalanced.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0    50140
+1     4668
+Name: is_promoted, dtype: int64
+</pre></div></div>
+</div>
+<p>We can now instantiate the class. We’ll use the default values for the constructor for now, with the exception of the epochs parameter: we’ll use a lower number of epochs just to run the fit method faster. But usually, the more epochs, the more the model manages to understand the structure of the dataset provided, and thus is capable of generating more realistic artificial data.</p>
+<p>The fit method will train the generative model specified. The default model used is called CTGAN, but there are also other models, which can be changed using the “model” parameter. The allowed values for this parameter are: [“ctgan”, “copula”, “copula_gan”, “tvae”]. It is important to note that these models are usually large, and it takes a considerable amount of time to train them.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">synth</span> <span class="o">=</span> <span class="n">Synthesizer</span><span class="p">(</span><span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">synth</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mmendonca/anaconda3/envs/resp/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/resp/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (6) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+  cluster.KMeans(
+/home/mmendonca/anaconda3/envs/resp/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/resp/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/resp/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  data[column_name] = data[column_name].to_numpy().flatten()
+/home/mmendonca/anaconda3/envs/resp/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  data[column_name] = data[column_name].to_numpy().flatten()
+/home/mmendonca/anaconda3/envs/resp/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  data[column_name] = data[column_name].to_numpy().flatten()
+/home/mmendonca/anaconda3/envs/resp/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  data[column_name] = data[column_name].to_numpy().flatten()
+/home/mmendonca/anaconda3/envs/resp/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  data[column_name] = data[column_name].to_numpy().flatten()
+</pre></div></div>
+</div>
+<p>We can now generate synthetic data. First of all, let’s just create a sample of synthetic data without specify anything else. We can do this using the sample() method, where we must specify the number of samples to be generated, and we can also pass a set of conditions for these samples (this last parameter is optional). For now, let’s just create 500 samples without any specific set of conditions:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_sample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">df_sample</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>department</th>
+      <th>region</th>
+      <th>education</th>
+      <th>gender</th>
+      <th>recruitment_channel</th>
+      <th>no_of_trainings</th>
+      <th>age</th>
+      <th>previous_year_rating</th>
+      <th>length_of_service</th>
+      <th>awards_won?</th>
+      <th>avg_training_score</th>
+      <th>is_promoted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>HR</td>
+      <td>region_10</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>28</td>
+      <td>4.0</td>
+      <td>11</td>
+      <td>1</td>
+      <td>52</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Operations</td>
+      <td>region_26</td>
+      <td>Bachelor's</td>
+      <td>f</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>21</td>
+      <td>3.0</td>
+      <td>12</td>
+      <td>0</td>
+      <td>91</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>HR</td>
+      <td>region_28</td>
+      <td>Bachelor's</td>
+      <td>f</td>
+      <td>other</td>
+      <td>1</td>
+      <td>34</td>
+      <td>3.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>64</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Analytics</td>
+      <td>region_7</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>50</td>
+      <td>NaN</td>
+      <td>1</td>
+      <td>0</td>
+      <td>50</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Operations</td>
+      <td>region_34</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>2</td>
+      <td>20</td>
+      <td>3.0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>57</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>495</th>
+      <td>HR</td>
+      <td>region_22</td>
+      <td>Bachelor's</td>
+      <td>f</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>29</td>
+      <td>3.0</td>
+      <td>9</td>
+      <td>0</td>
+      <td>67</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>496</th>
+      <td>Operations</td>
+      <td>region_8</td>
+      <td>Bachelor's</td>
+      <td>f</td>
+      <td>other</td>
+      <td>1</td>
+      <td>27</td>
+      <td>NaN</td>
+      <td>6</td>
+      <td>0</td>
+      <td>74</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>497</th>
+      <td>Technology</td>
+      <td>region_2</td>
+      <td>Master's &amp; above</td>
+      <td>f</td>
+      <td>other</td>
+      <td>1</td>
+      <td>34</td>
+      <td>3.0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>498</th>
+      <td>Operations</td>
+      <td>region_23</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>4</td>
+      <td>37</td>
+      <td>2.0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>62</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>499</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_26</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>2</td>
+      <td>22</td>
+      <td>NaN</td>
+      <td>3</td>
+      <td>1</td>
+      <td>95</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>500 rows × 12 columns</p>
+</div></div>
+</div>
+<p>We can also create a set of samples and automatically add it to the original dataset. For that, we use the transform() method, which must receive a dataset as a mandatory parameter, along with the number of samples to be created (optional):</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_resample</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0    51038
+1     4770
+Name: is_promoted, dtype: int64
+</pre></div></div>
+</div>
+<p>If we don’t specify any of the optional parameters to the transform() method, the default behavior will be to use the “minority” strategy, which creates synthetic data of the minority class until the number of samples of the minority class is equal to the majority class.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_resample</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0    50140
+1    50140
+Name: is_promoted, dtype: int64
+</pre></div></div>
+</div>
+<p>The <strong>strategy</strong> parameter is similar to imblearn’s strategy parameter: it specifies predefined behaviors for balancing the dataset. Here is the description for this parameter:</p>
+<ul class="simple">
+<li><p><strong>strategy:</strong> represents the strategy used to generate the artificial instances. This parameter is ignored when n_samples is provided. Strategy can assume the following values:</p>
+<ul>
+<li><p>String: one of the following predefined strategies:</p>
+<ul>
+<li><p>‘minority’: generates synthetic samples for only the minority class;</p></li>
+<li><p>‘not majority’: generates synthetic samples for all classes but the majority class;</p></li>
+<li><p>‘auto’: equivalent to ‘minority’; Note that for a binary classification problem, “minority” is similar to “not majority”;</p></li>
+</ul>
+</li>
+<li><p>Dictionary: the dictionary must have one key for each of the possible classes found in the label column, and the value associated with each key represents the number of instances desired for that class after the undersampling process is done. Note: this parameter only works with undersampling approaches that allow controlling the number of instances to be undersampled, such as RandomUnderSampler, ClusterCentroids (from imblearn). If any other undersampler is provided in the under_sampler
+parameter along with a float value for the strategy_under parameter, an error will be raised;</p></li>
+<li><p>Float: a value between [0, 1] that represents the desired ratio between the number of instances of the minority class over the majority class after undersampling. The ratio ‘r’ is given by: <span class="math notranslate nohighlight">\(r = N_m/N_M\)</span> where <span class="math notranslate nohighlight">\(N_m\)</span> is the number of instances of the minority class and <span class="math notranslate nohighlight">\(N_M\)</span> is the number of instances of the majority class after undersampling. Note: this parameter only works with undersampling approaches that allow controlling the number of instances to be undersampled,
+such as RandomUnderSampler, ClusterCentroids (from imblearn). If any other undersampler is provided in the under_sampler parameter along with a float value for the strategy_under parameter, an error will be raised; If None, the default value is set to “auto”, which is the same as “minority”.</p></li>
+</ul>
+</li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;not majority&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_resample</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0    50140
+1    50140
+Name: is_promoted, dtype: int64
+</pre></div></div>
+</div>
+<p>Let’s show an example of how to use the <strong>conditions</strong> parameter. Here is a description of this parameter: * <strong>conditions:</strong> a set of conditions, specified by a dictionary, that defines the characteristics of the synthetic instances that should be created. This parameter indicates the values for certain features that the synthetic instances should have. If None, then no restrictions will be imposed on how to generate the synthetic data;</p>
+<p>Let’s use the following conditions: the <strong>education</strong> feature must be “Below Secondary” and the <strong>is_promoted</strong> feature must be set to 1.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;education&quot;</span><span class="p">:</span> <span class="s2">&quot;Below Secondary&quot;</span><span class="p">,</span> <span class="s2">&quot;is_promoted&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
+<span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">conditions</span><span class="o">=</span><span class="n">conditions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_resample</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+<span class="n">df_resample</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0    50140
+1     9668
+Name: is_promoted, dtype: int64
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>department</th>
+      <th>region</th>
+      <th>education</th>
+      <th>gender</th>
+      <th>recruitment_channel</th>
+      <th>no_of_trainings</th>
+      <th>age</th>
+      <th>previous_year_rating</th>
+      <th>length_of_service</th>
+      <th>awards_won?</th>
+      <th>avg_training_score</th>
+      <th>is_promoted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_7</td>
+      <td>Master's &amp; above</td>
+      <td>f</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>35</td>
+      <td>5.0</td>
+      <td>8</td>
+      <td>0</td>
+      <td>49</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Operations</td>
+      <td>region_22</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>30</td>
+      <td>5.0</td>
+      <td>4</td>
+      <td>0</td>
+      <td>60</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_19</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>34</td>
+      <td>3.0</td>
+      <td>7</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_23</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>2</td>
+      <td>39</td>
+      <td>1.0</td>
+      <td>10</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Technology</td>
+      <td>region_26</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>45</td>
+      <td>3.0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>73</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>4995</th>
+      <td>Operations</td>
+      <td>region_23</td>
+      <td>Below Secondary</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>24</td>
+      <td>3.0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>99</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4996</th>
+      <td>Technology</td>
+      <td>region_2</td>
+      <td>Below Secondary</td>
+      <td>f</td>
+      <td>other</td>
+      <td>1</td>
+      <td>23</td>
+      <td>3.0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>79</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4997</th>
+      <td>Procurement</td>
+      <td>region_2</td>
+      <td>Below Secondary</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>37</td>
+      <td>3.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>65</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4998</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_22</td>
+      <td>Below Secondary</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>22</td>
+      <td>NaN</td>
+      <td>6</td>
+      <td>0</td>
+      <td>57</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4999</th>
+      <td>Procurement</td>
+      <td>region_16</td>
+      <td>Below Secondary</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>25</td>
+      <td>4.0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>67</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>59808 rows × 12 columns</p>
+</div></div>
+</div>
+<p>We can see that the new 5000 data instances created were automatically merged to the original dataset. This is because we are using the transform()) method. If we just want to create these samples with the predefined conditions, without the original dataset, we can use the sample() method, as previously mentioned.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;education&quot;</span><span class="p">:</span> <span class="s2">&quot;Below Secondary&quot;</span><span class="p">,</span> <span class="s2">&quot;is_promoted&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
+<span class="n">sample_df</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">conditions</span><span class="o">=</span><span class="n">conditions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sample_df</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+<span class="n">sample_df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1    5000
+Name: is_promoted, dtype: int64
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>department</th>
+      <th>region</th>
+      <th>education</th>
+      <th>gender</th>
+      <th>recruitment_channel</th>
+      <th>no_of_trainings</th>
+      <th>age</th>
+      <th>previous_year_rating</th>
+      <th>length_of_service</th>
+      <th>awards_won?</th>
+      <th>avg_training_score</th>
+      <th>is_promoted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_15</td>
+      <td>Below Secondary</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>23</td>
+      <td>3.0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>53</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Technology</td>
+      <td>region_23</td>
+      <td>Below Secondary</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>23</td>
+      <td>NaN</td>
+      <td>3</td>
+      <td>0</td>
+      <td>95</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Technology</td>
+      <td>region_2</td>
+      <td>Below Secondary</td>
+      <td>f</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>37</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>0</td>
+      <td>93</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_27</td>
+      <td>Below Secondary</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>28</td>
+      <td>3.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>65</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Procurement</td>
+      <td>region_8</td>
+      <td>Below Secondary</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>39</td>
+      <td>3.0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>77</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>4995</th>
+      <td>Operations</td>
+      <td>region_9</td>
+      <td>Below Secondary</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>2</td>
+      <td>29</td>
+      <td>3.0</td>
+      <td>14</td>
+      <td>0</td>
+      <td>67</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4996</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_17</td>
+      <td>Below Secondary</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>33</td>
+      <td>3.0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>66</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4997</th>
+      <td>Operations</td>
+      <td>region_2</td>
+      <td>Below Secondary</td>
+      <td>f</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>26</td>
+      <td>4.0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>57</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4998</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_23</td>
+      <td>Below Secondary</td>
+      <td>f</td>
+      <td>other</td>
+      <td>4</td>
+      <td>30</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>0</td>
+      <td>65</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4999</th>
+      <td>HR</td>
+      <td>region_31</td>
+      <td>Below Secondary</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>27</td>
+      <td>3.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>92</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>5000 rows × 12 columns</p>
+</div></div>
+</div>
+<p>As we can see, now the sampled dataset contains only instances where the conditions are True.</p>
+<p>Note that generating data using the <strong>conditions</strong> parameter is slower than not using it.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../../dataprocessing/sampler/synthesizer.html" class="btn btn-neutral float-left" title="Synthesizer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../dataprocessing/scaler/scaler.html" class="btn btn-neutral float-right" title="Scalers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

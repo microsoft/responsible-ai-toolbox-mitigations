@@ -22,10 +22,10 @@ Notebooks
 ---------
 
 .. nbgallery::
-   notebooks/module_tests/model_test
-   notebooks/case_study/case1
-   notebooks/case_study/case2
-   notebooks/case_study/case3
-   notebooks/case_study/case1_stat
-   notebooks/case_study/case2_stat
-   notebooks/case_study/case3_stat
+   ../notebooks/dataprocessing/module_tests/model_test
+   ../notebooks/dataprocessing/case_study/case1
+   ../notebooks/dataprocessing/case_study/case2
+   ../notebooks/dataprocessing/case_study/case3
+   ../notebooks/dataprocessing/case_study/case1_stat
+   ../notebooks/dataprocessing/case_study/case2_stat
+   ../notebooks/dataprocessing/case_study/case3_stat

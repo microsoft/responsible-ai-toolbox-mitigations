@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DistributionBalanceMeasure &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FeatureBalanceMeasure" href="feature_measures.html" />
+    <link rel="prev" title="AggregateBalanceMeasure" href="aggregate_measures.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="intro.html">DataBalanceAnalysis</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="databalanceanalysis.html">DataBalanceAnalysis</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="aggregate_measures.html">AggregateBalanceMeasure</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">DistributionBalanceMeasure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="feature_measures.html">FeatureBalanceMeasure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dataprocessing/intro.html">DataProcessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API reference</a> &raquo;</li>
+          <li><a href="databalanceanalysis.html">DataBalanceAnalysis</a> &raquo;</li>
+      <li>DistributionBalanceMeasure</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/databalanceanalysis/distribution_measures.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="distributionbalancemeasure">
+<span id="distribution-measures"></span><h1>DistributionBalanceMeasure<a class="headerlink" href="#distributionbalancemeasure" title="Permalink to this heading"></a></h1>
+<p>These metrics compare the data with a reference distribution (currently only uniform distribution is supported). They are calculated per sensitive feature
+column and do not depend on the class label column.</p>
+<table class="colwidths-given longtable docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Measure</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Interpretation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">KL divergence</a></p></td>
+<td><p>Kullbeck–Leibler (KL) divergence <br />
+measures how one probability <br />
+distribution is different from <br />
+a second reference probability <br />
+distribution. It is the measure <br />
+of the information gained when <br />
+one revises one’s beliefs from <br />
+the prior probability distribution <br />
+Q to the posterior probability <br />
+distribution P. In other words, <br />
+it is the amount of information <br />
+lost when Q is used to approximate P.</p></td>
+<td><p>Non-negative. <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> means <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">=</span> <span class="pre">Q</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Jensen%E2%80%93Shannon_divergence">JS distance</a></p></td>
+<td><p>The Jensen-Shannon (JS) distance <br />
+measures the similarity between two <br />
+probability distributions. It is the <br />
+symmetrized and smoothed version of <br />
+the Kullback–Leibler (KL) divergence <br />
+and is the square root of JS divergence.</p></td>
+<td><p>Range <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> means perfectly same to <br />
+balanced distribution.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Wasserstein_metric">Wasserstein distance</a></p></td>
+<td><p>This distance is also known as the <br />
+Earth mover’s distance (EMD), since <br />
+it can be seen as the minimum amount <br />
+of “work” required to transform <code class="docutils literal notranslate"><span class="pre">u</span></code> <br />
+into <code class="docutils literal notranslate"><span class="pre">v</span></code>, where “work” is measured <br />
+as the amount of distribution weight <br />
+that must be moved, multiplied by the <br />
+distance it has to be moved.</p></td>
+<td><p>Non-negative. <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> means <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">=</span> <span class="pre">Q</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Chebyshev_distance">Infinite norm distance</a></p></td>
+<td><p>Also known as the Chebyshev distance <br />
+or chessboard distance, this is the <br />
+distance between two vectors that is <br />
+the greatest of their differences along <br />
+any coordinate dimension.</p></td>
+<td><p>Non-negative. <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> means <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">=</span> <span class="pre">Q</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Total_variation_distance_of_probability_measures">Total variation distance</a></p></td>
+<td><p>The total variation distance is equal <br />
+to half the L1 (Manhattan) distance <br />
+between the two distributions. Take the <br />
+difference between the two proportions <br />
+in each category, add up the absolute <br />
+values of all the differences, and then <br />
+divide the sum by 2.</p></td>
+<td><p>Non-negative. <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> means <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">=</span> <span class="pre">Q</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Chi-squared_test">Chi-square test</a></p></td>
+<td><p>The chi-square test is used to test the <br />
+null hypothesis that the categorical <br />
+data has the given expected frequencies <br />
+in each category.</p></td>
+<td><p>The p-value gives evidence <br />
+against null-hypothesis that <br />
+the difference in observed and <br />
+expected frequencies is by <br />
+random chance.</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="module-databalanceanalysis.distribution_measures"></span><dl class="py class">
+<dt class="sig sig-object py" id="databalanceanalysis.distribution_measures.DistributionBalanceMeasure">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.distribution_measures.</span></span><span class="sig-name descname"><span class="pre">DistributionBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.distribution_measures.DistributionBalanceMeasure" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BalanceMeasure</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="databalanceanalysis.distribution_measures.DistributionBalanceMeasure.DISTRIBUTION_METRICS">
+<span class="sig-name descname"><span class="pre">DISTRIBUTION_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.CHISQ_PVALUE:</span> <span class="pre">&lt;function</span> <span class="pre">get_chisq_pvalue&gt;,</span> <span class="pre">Measures.CHISQ:</span> <span class="pre">&lt;function</span> <span class="pre">get_chi_squared&gt;,</span> <span class="pre">Measures.INF_NORM_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_infinity_norm_distance&gt;,</span> <span class="pre">Measures.JS_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_js_distance&gt;,</span> <span class="pre">Measures.KL_DIVERGENCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_kl_divergence&gt;,</span> <span class="pre">Measures.TOTAL_VARIANCE_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_total_variation_distance&gt;,</span> <span class="pre">Measures.WS_DISTANCE:</span> <span class="pre">&lt;function</span> <span class="pre">get_ws_distance&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.distribution_measures.DistributionBalanceMeasure.DISTRIBUTION_METRICS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="databalanceanalysis.distribution_measures.DistributionBalanceMeasure.measures">
+<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.distribution_measures.DistributionBalanceMeasure.measures" title="Permalink to this definition"></a></dt>
+<dd><dl>
+<dt>The output is a dataframe that maps the sensitive column name to another dictionary:</dt><dd><p>the dictionary for each sensitive column contains a mapping of the name of a measure to its value</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Kullback-Leibler Divergence - <a class="reference external" href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence</a></p></li>
+<li><p>Jensen-Shannon Distance - <a class="reference external" href="https://en.wikipedia.org/wiki/Jensen%E2%80%93Shannon_divergence">https://en.wikipedia.org/wiki/Jensen%E2%80%93Shannon_divergence</a></p></li>
+<li><p>Wasserstein Distance - <a class="reference external" href="https://en.wikipedia.org/wiki/Wasserstein_metric">https://en.wikipedia.org/wiki/Wasserstein_metric</a></p></li>
+<li><p>Infinity Norm Distance - <a class="reference external" href="https://en.wikipedia.org/wiki/Chebyshev_distance">https://en.wikipedia.org/wiki/Chebyshev_distance</a></p></li>
+<li><p>Total Variation Distance - <a class="reference external" href="https://en.wikipedia.org/wiki/Total_variation_distance_of_probability_measures">https://en.wikipedia.org/wiki/Total_variation_distance_of_probability_measures</a></p></li>
+<li><p>Chi-Squared Test - <a class="reference external" href="https://en.wikipedia.org/wiki/Chi-squared_test">https://en.wikipedia.org/wiki/Chi-squared_test</a></p></li>
+</ul>
+</div></blockquote>
+<p>There is one dictionary for each of the sensitive columns specified</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – the df to calculate all of the distribution measures on</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dataframe that has one column with the sensitive column name and column that contains the dictionary that has the mapping of the name of the measure to its value for that sensitive feature.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="aggregate_measures.html" class="btn btn-neutral float-left" title="AggregateBalanceMeasure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="feature_measures.html" class="btn btn-neutral float-right" title="FeatureBalanceMeasure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

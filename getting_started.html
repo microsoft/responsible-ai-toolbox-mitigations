@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="How this library works with the Responsible AI Toolbox" href="integration_to_libs.html" />
+    <link rel="prev" title="Installation guide" href="install_guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install_guide.html">Installation guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#encoder-api"><span class="xref std std-ref">Encoder API</span></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#when-is-feature-encoding-a-useful-mitigation-technique">When is feature encoding a useful mitigation technique?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#responsible-ai-tip-about-feature-encoding">Responsible AI tip about feature encoding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#feature-selection"><span class="xref std std-ref">Feature Selection</span></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#when-is-feature-selection-a-useful-mitigation-technique">When is feature selection a useful mitigation technique?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#responsible-ai-tip-about-feature-selection">Responsible AI tip about feature selection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#imputers"><span class="xref std std-ref">Imputers</span></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#when-is-the-imputer-api-a-useful-mitigation-technique">When is the Imputer API a useful mitigation technique?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#responsible-ai-tip-about-imputing-value">Responsible AI tip about imputing value</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#sampling"><span class="xref std std-ref">Sampling</span></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#when-is-the-sampling-api-a-useful-mitigation-technique">When is the Sampling API a useful mitigation technique?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#responsible-ai-tip-about-sampling">Responsible AI tip about sampling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#scalers"><span class="xref std std-ref">Scalers</span></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#when-is-scaling-feature-values-a-useful-mitigation-technique">When is scaling feature values a useful mitigation technique?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#responsible-ai-tip-about-scalers">Responsible AI tip about scalers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-balance-metrics"><span class="xref std std-ref">Data Balance Metrics</span></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aggregate-measures"><span class="xref std std-ref">Aggregate measures</span></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distribution-measures"><span class="xref std std-ref">Distribution measures</span></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#feature-measures"><span class="xref std std-ref">Feature measures</span></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get-involved">Get involved</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataprocessing/intro.html">DataProcessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Getting Started</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/getting_started.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="getting-started">
+<span id="id1"></span><h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
+<p>Here we provide an overview of the library, while also providing useful links within the documentation.</p>
+<section id="encoder-api">
+<h2><a class="reference internal" href="dataprocessing/encoder/encoder.html#dataencoding"><span class="std std-ref">Encoder API</span></a><a class="headerlink" href="#encoder-api" title="Permalink to this heading"></a></h2>
+<p>The <a class="reference internal" href="dataprocessing/encoder/encoder.html#dataencoding"><span class="std std-ref">Encoder API</span></a> allows for ordinal or one-hot encoding of categorical features.</p>
+<section id="when-is-feature-encoding-a-useful-mitigation-technique">
+<h3>When is feature encoding a useful mitigation technique?<a class="headerlink" href="#when-is-feature-encoding-a-useful-mitigation-technique" title="Permalink to this heading"></a></h3>
+<p>The <a class="reference internal" href="dataprocessing/encoder/encoder.html#dataencoding"><span class="std std-ref">Encoder API</span></a> can be useful in cases where a feature does not contain sufficient information about the task because (1) the semantic
+information of the feature content has been hidden by the original encoding format or (2) because the model may not have the capacity to interpret the semantic
+information.</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<p>If a feature contains values such as {“agree”, “mostly agree”, “neutral”, “mostly disagree”, “disagree”}, the string interpretation (or
+ordering) of these values cannot express the fact that the “agree” value is better than “mostly agree”. In other cases, if the data contains a
+categorical feature with high cardinality but there is no inherent ordering between the feature values, the training algorithm may still assign an
+inappropriate ordering to the values.</p>
+</div>
+</section>
+<section id="responsible-ai-tip-about-feature-encoding">
+<h3>Responsible AI tip about feature encoding<a class="headerlink" href="#responsible-ai-tip-about-feature-encoding" title="Permalink to this heading"></a></h3>
+<p>Although feature encoding is a generally useful technique in machine learning, it’s important to be aware that encoding can sometimes affect different data
+cohorts differently, which could result in fairness-related harms or reliability and safety failures. To illustrate, imagine you have two cohorts of interest:
+“non-immigrants” and “immigrants”. If the data contains the “country of birth” as a feature, and the value of that feature is mostly uniform within the
+“non-immigrant” cohort but highly variable across the “immigrant” cohort, then the wrong ordering interpretation will negatively impact the “immigrant” cohort
+more because there are more possible values of the “country of birth” feature.</p>
+</section>
+</section>
+<section id="feature-selection">
+<h2><a class="reference internal" href="dataprocessing/feat_sel/feat_sel.html#featureselection"><span class="std std-ref">Feature Selection</span></a><a class="headerlink" href="#feature-selection" title="Permalink to this heading"></a></h2>
+<p>The <a class="reference internal" href="dataprocessing/feat_sel/feat_sel.html#featureselection"><span class="std std-ref">Feature Selection API</span></a> enables selecting a subset of features that are the most informative for the prediction task.</p>
+<section id="when-is-feature-selection-a-useful-mitigation-technique">
+<h3>When is feature selection a useful mitigation technique?<a class="headerlink" href="#when-is-feature-selection-a-useful-mitigation-technique" title="Permalink to this heading"></a></h3>
+<p>Sometimes training datasets may contain features that either have very little information about the task or are redundant in the context of other existing
+features. Selecting the right feature subset may improve the predictive power of models, their generalization properties, and their inference time. Focusing
+only on a subset of features also helps practitioners in the process of model understanding and interpretation.</p>
+</section>
+<section id="responsible-ai-tip-about-feature-selection">
+<h3>Responsible AI tip about feature selection<a class="headerlink" href="#responsible-ai-tip-about-feature-selection" title="Permalink to this heading"></a></h3>
+<p>It’s important to be aware that although feature selection is a generally useful machine-learning technique, it can sometimes affect various data cohorts
+differently, with the potential to result in fairness-related harms or reliability and safety failures. For example, it may be the case that within a particular
+cohort there exists full correlation between two features, but not with the rest of the data. In addition, if this cohort is also a minority group, the meaning
+and weight of a feature value can be drastically different.</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<p>In the United States there are both private and public undergraduate schools, while in some countries all degree-granting schools are public. A university
+in the United States deciding which applicants to interview for graduate school uses the feature <code class="docutils literal notranslate"><span class="pre">previous</span> <span class="pre">program</span> <span class="pre">type</span></code> (meaning either private or public
+university). The university is interested in several location-based cohorts indicating where applicants did recent undergrad studies. However, a small group
+of applicants are from a country where all schools are public, thus their “previous program type” is always set to “public”. The feature <code class="docutils literal notranslate"><span class="pre">previous</span> <span class="pre">program</span>
+<span class="pre">type</span></code> is redundant for this cohort and not helpful to the prediction task of recommending who to interview. Furthermore, this feature selection could be even
+more harmful if the model, due to existing correlations in the larger data, has learned a negative correlation between “public” undergrad studies to acceptance
+rates in grad school. For the grad school program, this may even lead to harms of underrepresentation or even erasure of individuals from the countries with
+only “public” education.</p>
+</div>
+</section>
+</section>
+<section id="imputers">
+<h2><a class="reference internal" href="dataprocessing/imputer/imputer.html#dataimputer"><span class="std std-ref">Imputers</span></a><a class="headerlink" href="#imputers" title="Permalink to this heading"></a></h2>
+<p>The <a class="reference internal" href="dataprocessing/imputer/imputer.html#dataimputer"><span class="std std-ref">Imputer API</span></a> enables a simple approach for replacing missing values across several columns with different parameters, simultaneously replacing with the mean,
+median, most constant, or most frequent value in a dataset.</p>
+<section id="when-is-the-imputer-api-a-useful-mitigation-technique">
+<h3>When is the Imputer API a useful mitigation technique?<a class="headerlink" href="#when-is-the-imputer-api-a-useful-mitigation-technique" title="Permalink to this heading"></a></h3>
+<p>Sometimes because of data collection practices, a given cohort may be missing data on a feature that is particularly helpful for prediction. This happens frequently
+when the training data comes from different sources of data collection (e.g., different hospitals collect different health indicators) or when the training data
+spans long periods of time, during which the data collection protocol may have changed.</p>
+</section>
+<section id="responsible-ai-tip-about-imputing-value">
+<h3>Responsible AI tip about imputing value<a class="headerlink" href="#responsible-ai-tip-about-imputing-value" title="Permalink to this heading"></a></h3>
+<p>It’s important to be aware that although imputing values is a generally useful machine-learning technique, it has the potential to result in fairness-related harms
+of over- or underrepresentation, which can impact quality of service or allocation of opportunities or resources, as well as reliability and safety.</p>
+<p>It is recommended, for documentation and provenance purposes, to <strong>rename features</strong> after applying this mitigation so that the name conveys the information of which
+values have been imputed and how.</p>
+<p>To <strong>avoid overfitting</strong>, it is important that feature imputation for testing datasets is performed based on statistics (e.g., minimum, maximum, mean, frequency)
+that are retrieved from the training set only. This approach ensures no information from the other samples in the test set is used to improve the prediction on an
+individual test sample.</p>
+</section>
+</section>
+<section id="sampling">
+<h2><a class="reference internal" href="dataprocessing/sampler/sampler.html#sampler"><span class="std std-ref">Sampling</span></a><a class="headerlink" href="#sampling" title="Permalink to this heading"></a></h2>
+<p>The <a class="reference internal" href="dataprocessing/sampler/sampler.html#sampler"><span class="std std-ref">Sampling API</span></a> enables data augmentation by rebalancing existing data or synthesizing new data.</p>
+<section id="when-is-the-sampling-api-a-useful-mitigation-technique">
+<h3>When is the Sampling API a useful mitigation technique?<a class="headerlink" href="#when-is-the-sampling-api-a-useful-mitigation-technique" title="Permalink to this heading"></a></h3>
+<p>Sampling helps address data imbalance in a given class or feature, a common problem in machine learning.</p>
+</section>
+<section id="responsible-ai-tip-about-sampling">
+<h3>Responsible AI tip about sampling<a class="headerlink" href="#responsible-ai-tip-about-sampling" title="Permalink to this heading"></a></h3>
+<p>The problem of data imbalance is most commonly studied in the context of class imbalance. However, from the responsible AI perspective the problem is much broader:
+Feature-value imbalance may lead to not enough data for cohorts of interest, which in turn may lead to lower quality predictions.</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<p>Consider the task of predicting whether a house will sell for higher or lower than the asking price. Even when the class is balanced, there still may be feature
+imbalance for the geographic location because population densities vary in different areas. As such, if the goal is to improve model performance for areas with
+a lower population density, oversampling for this group may help the model to better represent these cohorts.</p>
+</div>
+</section>
+</section>
+<section id="scalers">
+<h2><a class="reference internal" href="dataprocessing/scaler/scaler.html#datascaler"><span class="std std-ref">Scalers</span></a><a class="headerlink" href="#scalers" title="Permalink to this heading"></a></h2>
+<p>The <a class="reference internal" href="dataprocessing/scaler/scaler.html#datascaler"><span class="std std-ref">Scaler API</span></a> enables applying numerical scaling transformations to several features at the same time.</p>
+<section id="when-is-scaling-feature-values-a-useful-mitigation-technique">
+<h3>When is scaling feature values a useful mitigation technique?<a class="headerlink" href="#when-is-scaling-feature-values-a-useful-mitigation-technique" title="Permalink to this heading"></a></h3>
+<p>In general, scaling feature values is important for training algorithms that compute distances between different data samples based on several numerical features
+(e.g., KNNs, PCA). But because the semantic meaning of different features can vary significantly, computing distances across scaled versions of such features is
+more meaningful.</p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<p>Consider training data has the two numerical features, <code class="docutils literal notranslate"><span class="pre">age</span></code> and <code class="docutils literal notranslate"><span class="pre">yearly</span> <span class="pre">wage</span></code>. When computing distances across samples, the <code class="docutils literal notranslate"><span class="pre">yearly</span> <span class="pre">wage</span></code> feature will
+impact the distance significantly more than the <code class="docutils literal notranslate"><span class="pre">age</span></code> - not because it is more important but because it has a higher range of values.</p>
+</div>
+<p>Scaling is also critical for the convergence of popular gradient-based optimization algorithms for neural networks. Scaling also prevents the phenomenon of fast
+saturation of activation functions (e.g., sigmoids) in neural networks.</p>
+</section>
+<section id="responsible-ai-tip-about-scalers">
+<h3>Responsible AI tip about scalers<a class="headerlink" href="#responsible-ai-tip-about-scalers" title="Permalink to this heading"></a></h3>
+<p>Note that scalers transform the feature values globally, meaning that they scale the feature based on all samples of the dataset. This may not always be the most
+fair or inclusive approach, depending on the use case.</p>
+<p>For example, if a training dataset for predicting credit reliability combines data from several countries, individuals with a relatively high salary for their
+particular country may still fall in the lower-than-average range when minimum and maximum values for scaling are computed based on data from countries where
+salaries are a lot higher. This misinterpretation of their salary may then lead to a wrong prediction, potentially resulting in the withholding of opportunities
+and resources.</p>
+<p>Similarly in the medical domain, people with different ancestry may have varied minimum and maximum values for specific disease indicators. Scaling globally could
+lead the algorithm to underdiagnose the disease of interest for some ancestry cohorts. Of course, depending on the capacity and non-linearity of the training
+algorithm, the algorithm itself may find other ways of circumventing such issues. Nevertheless, it may still be a good idea for AI practitioners to apply a more
+cohort-aware approach by scaling one cohort at a time.</p>
+</section>
+</section>
+<section id="data-balance-metrics">
+<h2><a class="reference internal" href="databalanceanalysis/databalanceanalysis.html#databalance-api"><span class="std std-ref">Data Balance Metrics</span></a><a class="headerlink" href="#data-balance-metrics" title="Permalink to this heading"></a></h2>
+<section id="aggregate-measures">
+<h3><a class="reference internal" href="databalanceanalysis/aggregate_measures.html#aggregate-measures"><span class="std std-ref">Aggregate measures</span></a><a class="headerlink" href="#aggregate-measures" title="Permalink to this heading"></a></h3>
+<p>These measures look at the distribution of records across all value combinations of sensitive feature columns. For example, if <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">race</span></code> are specified as
+sensitive features, the API tries to quantify imbalance across all combinations of the specified features (e.g., <code class="docutils literal notranslate"><span class="pre">[Male,</span> <span class="pre">Black]</span></code>, <code class="docutils literal notranslate"><span class="pre">[Female,</span> <span class="pre">White]</span></code>, <code class="docutils literal notranslate"><span class="pre">[Male,</span> <span class="pre">Asian</span>
+<span class="pre">Pacific</span> <span class="pre">Islander]</span></code>)</p>
+<table class="colwidths-given longtable docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Measure</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Interpretation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Atkinson_index">Atkinson index</a></p></td>
+<td><p>The Atkinson index presents the <br />
+percentage of total income that <br />
+a given society would have to <br />
+forego in order to have more equal <br />
+shares of income among its <br />
+citizens. This measure depends on <br />
+the degree of societal aversion to <br />
+inequality (a theoretical parameter <br />
+decided by the researcher), where a <br />
+higher value entails greater social <br />
+utility or willingness by individuals <br />
+to accept smaller incomes in exchange <br />
+for a more equal distribution. <br /> <br />
+An important feature of the Atkinson <br />
+index is that it can be decomposed <br />
+into within-group and between-group <br />
+inequality.</p></td>
+<td><p>Range <code class="docutils literal notranslate"><span class="pre">[0,1]</span></code> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> = perfect equality <br />
+<code class="docutils literal notranslate"><span class="pre">1</span></code> = maximum inequality <br /> <br />
+In this case, it is the <br />
+proportion of records for a <br />
+sensitive column’s combination.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Theil_index">Theil T index</a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">GE(1)</span> <span class="pre">=</span> <span class="pre">Theil</span> <span class="pre">T</span></code>, which is more <br />
+sensitive to differences at the <br />
+top of the distribution. The Theil <br />
+index is a statistic used to measure <br />
+economic inequality. The Theil index <br />
+measures an entropic “distance” the <br />
+population is away from the “ideal” <br />
+egalitarian state of everyone having <br />
+the same income.</p></td>
+<td><p>If everyone has the same income, <br />
+then <code class="docutils literal notranslate"><span class="pre">T_T</span></code> equals 0. <br /> <br />
+If one person has all the income, <br />
+then <code class="docutils literal notranslate"><span class="pre">T_T</span></code> gives the result ln(N). <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> means equal income and larger <br />
+values mean higher level of <br />
+disproportion.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Theil_index">Theil L index</a></p></td>
+<td><p>GE(0) = Theil L, which is more <br />
+sensitive to differences at the <br />
+lower end of the distribution. <br />
+Thiel L is the logarithm of <br />
+(mean income)/(income i), over <br />
+all the incomes included in the <br />
+summation. It is also referred <br />
+to as the mean log deviation <br />
+measure. Because a transfer from <br />
+a larger income to a smaller one <br />
+will change the smaller income’s <br />
+ratio more than it changes the <br />
+larger income’s ratio, the <br />
+transfer-principle is satisfied <br />
+by this index.</p></td>
+<td><p>Same interpretation as <br />
+Theil T index.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="distribution-measures">
+<h3><a class="reference internal" href="databalanceanalysis/distribution_measures.html#distribution-measures"><span class="std std-ref">Distribution measures</span></a><a class="headerlink" href="#distribution-measures" title="Permalink to this heading"></a></h3>
+<p>These metrics compare the data with a reference distribution (currently only uniform distribution is supported). They are calculated per sensitive feature
+column and do not depend on the class label column.</p>
+<table class="colwidths-given longtable docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Measure</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Interpretation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">KL divergence</a></p></td>
+<td><p>Kullbeck–Leibler (KL) divergence <br />
+measures how one probability <br />
+distribution is different from <br />
+a second reference probability <br />
+distribution. It is the measure <br />
+of the information gained when <br />
+one revises one’s beliefs from <br />
+the prior probability distribution <br />
+Q to the posterior probability <br />
+distribution P. In other words, <br />
+it is the amount of information <br />
+lost when Q is used to approximate P.</p></td>
+<td><p>Non-negative. <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> means <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">=</span> <span class="pre">Q</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Jensen%E2%80%93Shannon_divergence">JS distance</a></p></td>
+<td><p>The Jensen-Shannon (JS) distance <br />
+measures the similarity between two <br />
+probability distributions. It is the <br />
+symmetrized and smoothed version of <br />
+the Kullback–Leibler (KL) divergence <br />
+and is the square root of JS divergence.</p></td>
+<td><p>Range <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> means perfectly same to <br />
+balanced distribution.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Wasserstein_metric">Wasserstein distance</a></p></td>
+<td><p>This distance is also known as the <br />
+Earth mover’s distance (EMD), since <br />
+it can be seen as the minimum amount <br />
+of “work” required to transform <code class="docutils literal notranslate"><span class="pre">u</span></code> <br />
+into <code class="docutils literal notranslate"><span class="pre">v</span></code>, where “work” is measured <br />
+as the amount of distribution weight <br />
+that must be moved, multiplied by the <br />
+distance it has to be moved.</p></td>
+<td><p>Non-negative. <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> means <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">=</span> <span class="pre">Q</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Chebyshev_distance">Infinite norm distance</a></p></td>
+<td><p>Also known as the Chebyshev distance <br />
+or chessboard distance, this is the <br />
+distance between two vectors that is <br />
+the greatest of their differences along <br />
+any coordinate dimension.</p></td>
+<td><p>Non-negative. <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> means <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">=</span> <span class="pre">Q</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Total_variation_distance_of_probability_measures">Total variation distance</a></p></td>
+<td><p>The total variation distance is equal <br />
+to half the L1 (Manhattan) distance <br />
+between the two distributions. Take the <br />
+difference between the two proportions <br />
+in each category, add up the absolute <br />
+values of all the differences, and then <br />
+divide the sum by 2.</p></td>
+<td><p>Non-negative. <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> means <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">=</span> <span class="pre">Q</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Chi-squared_test">Chi-square test</a></p></td>
+<td><p>The chi-square test is used to test the <br />
+null hypothesis that the categorical <br />
+data has the given expected frequencies <br />
+in each category.</p></td>
+<td><p>The p-value gives evidence <br />
+against null-hypothesis that <br />
+the difference in observed and <br />
+expected frequencies is by <br />
+random chance.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="feature-measures">
+<h3><a class="reference internal" href="databalanceanalysis/feature_measures.html#feature-measures"><span class="std std-ref">Feature measures</span></a><a class="headerlink" href="#feature-measures" title="Permalink to this heading"></a></h3>
+<p>These measure whether each combination of sensitive features is receiving the positive outcome (true prediction) at balanced probabilities. Many of these
+metrics were influenced by the paper, Measuring Model Biases in the Absence of Ground Truth (Osman Aka, Ken Burke, Alex Bäuerle, Christina Greer, Margaret
+Mitchell).</p>
+<table class="colwidths-given longtable docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Association <br />
+Metric</p></th>
+<th class="head"><p>Family</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Interpretation / <br /> Formula</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Fairness_%28machine_learning%29">Statistical parity</a></p></td>
+<td><p>Fairness</p></td>
+<td><p>The proportion of each segment <br />
+of a protected class (e.g., <br />
+gender) should receive the <br />
+positive outcome at equal <br />
+rates.</p></td>
+<td><p>Parity increases with <br />
+proximity to 0. <br /> <br />
+DP = P(Y|A=“Male”)- <br />
+P(Y|A=“Female”)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointwise <br /> mutual <br />
+information <br /> (<a class="reference external" href="https://en.wikipedia.org/wiki/Pointwise_mutual_information">PMI</a>), <br />
+normalized PMI</p></td>
+<td><p>Entropy</p></td>
+<td><p>The PMI of a pair of feature <br />
+values (e.g.,  Gender=Male <br />
+and Gender=Female) quantifies <br />
+the discrepancy between the <br />
+probability of their <br />
+coincidence, given their <br />
+joint distribution and their <br />
+individual distributions <br />
+(assuming independence).</p></td>
+<td><p>Range (normalized) <code class="docutils literal notranslate"><span class="pre">[−1,1]</span></code> <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">-1</span></code> for no co-occurences <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> for co-occurences at <br />
+random <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">1</span></code> for complete <br />
+co-occurences</p></td>
+</tr>
+<tr class="row-even"><td><p>Sorensen-Dice <br />
+coefficient <br /> (<a class="reference external" href="https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient">SDC</a>)</p></td>
+<td><p>Intersection <br />
+over union</p></td>
+<td><p>The SDC is used to gauge the <br />
+similarity of two samples <br />
+and is related to F1 score.</p></td>
+<td><p>Equals twice the number of <br />
+elements common to both <br />
+sets divided by the sum <br />
+of the number of elements <br />
+in each set.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Jaccard_index">Jaccard index</a></p></td>
+<td><p>Intersection <br />
+over union</p></td>
+<td><p>Similar to SDC, the Jaccard <br />
+index guages the similarity <br />
+and diversity of sample sets.</p></td>
+<td><p>Equals the size of the <br />
+intersection divided by <br />
+the size of the union of <br />
+the sample sets.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient">Kendall rank</a> <br /> <a class="reference external" href="https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient">correlation</a></p></td>
+<td><p>Correlation <br />
+and <br /> statistical <br />
+tests</p></td>
+<td><p>This is used to measure the <br />
+ordinal association between <br />
+two measured quantities.</p></td>
+<td><p>High when observations <br />
+have a similar rank <br />
+between the two variables <br />
+and low when observations <br />
+have a dissimilar rank.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio">Log-</a> <br />
+<a class="reference external" href="https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio">likelihood</a> <br />
+<a class="reference external" href="https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio">ratio</a></p></td>
+<td><p>Correlation <br />
+and <br />
+statistical <br />
+tests</p></td>
+<td><p>This metric calculates the <br />
+degree to which data <br />
+supports one variable versus <br />
+another. The log-likelihood <br />
+ratio gives the probability <br />
+of correctly predicting the <br />
+label in ratio to <br />
+probability of incorrectly <br />
+predicting label.</p></td>
+<td><p>If likelihoods are similar, <br />
+it should be close to 0.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Student's_t-test">T-test</a></p></td>
+<td><p>Correlation <br />
+and <br />
+statistical <br />
+tests</p></td>
+<td><p>The t-test is used to <br />
+compare the means of two <br />
+groups (pairwise).</p></td>
+<td><p>The value that is being <br />
+assessed for statistical <br />
+significance in the <br />
+t-distribution.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="get-involved">
+<h2>Get involved<a class="headerlink" href="#get-involved" title="Permalink to this heading"></a></h2>
+<p>In the future, we plan to integrate more functionalities around data and model-oriented mitigations. Some top-of-mind improvements for the team include bagging and
+boosting, better data synthesis, constrained optimizers, and handling data noise. If you would like to collaborate or contribute to any of these ideas, contact us
+at <a class="reference external" href="mailto:responsible-ai-toolbox&#37;&#52;&#48;microsoft&#46;com">responsible-ai-toolbox<span>&#64;</span>microsoft<span>&#46;</span>com</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="install_guide.html" class="btn btn-neutral float-left" title="Installation guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="integration_to_libs.html" class="btn btn-neutral float-right" title="How this library works with the Responsible AI Toolbox" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Data Balance Analysis using the Adult Census Income dataset" href="notebooks/databalanceanalysis/data_balance_census.html" />
+    <link rel="prev" title="Toy Dataset" href="dataprocessing/toy_data.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Gallery</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#databalanceanalysis">DataBalanceAnalysis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/databalanceanalysis/data_balance_census.html">Data Balance Analysis using the Adult Census Income dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/databalanceanalysis/data_balance_census.html#Summary​">Summary​</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/databalanceanalysis/data_balance_census.html#Analysis:">Analysis:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/databalanceanalysis/data_balance_overall.html">Python Data Balance Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/databalanceanalysis/data_balance_overall.html#Context">Context</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/databalanceanalysis/data_balance_overall.html#Usage">Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/databalanceanalysis/data_balance_overall.html#Example-Notebook">Example Notebook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/databalanceanalysis/data_balance_overall.html#Explanations-of-Data-Balance-Measures">Explanations of Data Balance Measures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/databalanceanalysis/data_balance_overall.html#Mitigation">Mitigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/data_balance_e2e.html">End to End Data Balance and Error Mitigation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dataprocessing">DataProcessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/module_tests/encoding.html">Encoding Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/module_tests/scaler.html">Data Scaling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/module_tests/imputation.html">BasicImputer Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/module_tests/feat_sel_sequential.html">SeqFeatSelection Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/module_tests/feat_sel_catboost.html">CatBoostSelection Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/module_tests/feat_sel_corr_tutorial.html">Checking Correlations Between Variables - A Comprehensive Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/module_tests/rebalance_imbl.html">Rebalance Class (imblearn)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/module_tests/rebalance_sdv.html">Synthesizer Class (SDV)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#case-studies">Case Studies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/module_tests/model_test.html">Simple Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/case_study/case1.html">Case Study 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/case_study/case2.html">Case Study 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/case_study/case3.html">Case Study 3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/case_study/case1_stat.html">Case Study 1 - Multiple Runs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/case_study/case2_stat.html">Case Study 2 - Multiple Runs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/case_study/case3_stat.html">Case Study 3 - Multiple Runs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="notebooks/dataprocessing/module_tests/pipeline_test.html">Using Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataprocessing/intro.html">DataProcessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Gallery</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/gallery.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="gallery">
+<span id="id1"></span><h1>Gallery<a class="headerlink" href="#gallery" title="Permalink to this heading"></a></h1>
+<p>The best way to get started is to go through the notebook tutorials, which showcase the benefits and usage of each mitigation and metrics available
+in the Responsible AI Mitigations Library. Here you can find all notebooks grouped according to their goals.</p>
+<section id="databalanceanalysis">
+<h2>DataBalanceAnalysis<a class="headerlink" href="#databalanceanalysis" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/databalanceanalysis/data_balance_census.html">
+          <span class="std std-ref">Data Balance Analysis using the Adult Census Income dataset</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/databalanceanalysis/data_balance_overall.html">
+          <span class="std std-ref">Python Data Balance Analysis</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/data_balance_e2e.html">
+          <span class="std std-ref">End to End Data Balance and Error Mitigation</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-clear"></div></section>
+<section id="dataprocessing">
+<h2>DataProcessing<a class="headerlink" href="#dataprocessing" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/module_tests/encoding.html">
+          <span class="std std-ref">Encoding Examples</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/module_tests/scaler.html">
+          <span class="std std-ref">Data Scaling</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/module_tests/imputation.html">
+          <span class="std std-ref">BasicImputer Example</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/module_tests/feat_sel_sequential.html">
+          <span class="std std-ref">SeqFeatSelection Example</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/module_tests/feat_sel_catboost.html">
+          <span class="std std-ref">CatBoostSelection Example</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/module_tests/feat_sel_corr_tutorial.html">
+          <span class="std std-ref">Checking Correlations Between Variables - A Comprehensive Guide</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/module_tests/rebalance_imbl.html">
+          <span class="std std-ref">Rebalance Class (imblearn)</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/module_tests/rebalance_sdv.html">
+          <span class="std std-ref">Synthesizer Class (SDV)</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-clear"></div></section>
+<section id="case-studies">
+<h2>Case Studies<a class="headerlink" href="#case-studies" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/module_tests/model_test.html">
+          <span class="std std-ref">Simple Example</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/case_study/case1.html">
+          <span class="std std-ref">Case Study 1</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/case_study/case2.html">
+          <span class="std std-ref">Case Study 2</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/case_study/case3.html">
+          <span class="std std-ref">Case Study 3</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/case_study/case1_stat.html">
+          <span class="std std-ref">Case Study 1 - Multiple Runs</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/case_study/case2_stat.html">
+          <span class="std std-ref">Case Study 2 - Multiple Runs</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/case_study/case3_stat.html">
+          <span class="std std-ref">Case Study 3 - Multiple Runs</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-clear"></div></section>
+<section id="using-scikit-learn-s-pipeline">
+<h2>Using scikit-learn’s Pipeline<a class="headerlink" href="#using-scikit-learn-s-pipeline" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="./_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="notebooks/dataprocessing/module_tests/pipeline_test.html">
+          <span class="std std-ref">Using Pipelines</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-clear"></div></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dataprocessing/toy_data.html" class="btn btn-neutral float-left" title="Toy Dataset" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="notebooks/databalanceanalysis/data_balance_census.html" class="btn btn-neutral float-right" title="Data Balance Analysis using the Adult Census Income dataset" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

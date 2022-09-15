@@ -1,38 +1,15 @@
-databalanceanalysis
+.. _databalance-api:
+
+DataBalanceAnalysis
 ===================
 
-Submodules
-----------
+The balance metrics implemented here are separated into three modules: **AggregateBalanceMeasure**, **DistributionBalanceMeasure**, and
+**FeatureBalanceMeasure**. Check the following links for more details on each of these modules.
 
-databalanceanalysis.aggregate\_measures module
-----------------------------------------------
+.. toctree::
+   :maxdepth: 2
 
-.. automodule:: databalanceanalysis.aggregate_measures
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   aggregate_measures
+   distribution_measures
+   feature_measures
 
-
-databalanceanalysis.distribution\_measures module
--------------------------------------------------
-
-.. automodule:: databalanceanalysis.distribution_measures
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-databalanceanalysis.feature\_measures module
---------------------------------------------
-
-.. automodule:: databalanceanalysis.feature_measures
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: databalanceanalysis
-   :members:
-   :undoc-members:
-   :show-inheritance:

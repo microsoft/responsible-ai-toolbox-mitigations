@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to RAI Toolbox Mitigations documentation! &mdash; RAI Error Mitigation  documentation</title>
+  <title>Responsible AI Mitigations Library &mdash; Responsible AI Mitigations  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -22,7 +22,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="databalanceanalysis" href="databalanceanalysis/databalanceanalysis.html" /> 
+    <link rel="next" title="Installation guide" href="install_guide.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -30,7 +30,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> RAI Error Mitigation
+            <a href="#" class="icon icon-home"> Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -40,9 +40,18 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/databalanceanalysis.html">databalanceanalysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dataprocessing/intro.html">dataprocessing</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataprocessing/intro.html">DataProcessing</a></li>
 </ul>
 
         </div>
@@ -51,7 +60,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">RAI Error Mitigation</a>
+          <a href="#">Responsible AI Mitigations</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -59,7 +68,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>Welcome to RAI Toolbox Mitigations documentation!</li>
+      <li>Responsible AI Mitigations Library</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/index.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -93,38 +102,138 @@
     text-align: unset;
 }
 </style>
-<section id="welcome-to-rai-toolbox-mitigations-documentation">
-<h1>Welcome to RAI Toolbox Mitigations documentation!<a class="headerlink" href="#welcome-to-rai-toolbox-mitigations-documentation" title="Permalink to this heading"></a></h1>
+<section id="responsible-ai-mitigations-library">
+<h1>Responsible AI Mitigations Library<a class="headerlink" href="#responsible-ai-mitigations-library" title="Permalink to this heading"></a></h1>
+<p>The goal of responsible AI is to create trustworthy AI systems that benefit people while mitigating harms, which can occur when AI systems fail to
+perform with fair, reliable, or safe outputs for various stakeholders. Teams tasked with developing AI systems must work to identify, diagnose, and
+mitigate potential harms as much as possible. In this initial release, <strong>the Responsible AI Mitigations Library helps AI practitioners explore different
+mitigation steps that may be most appropriate when the model underperforms for a given cohort.</strong> The library currently has two modules:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="dataprocessing/intro.html#dataproc"><span class="std std-ref">DataProcessing</span></a>: offers mitigation techniques for improving model performance for specific cohorts.</p></li>
+<li><p><a class="reference internal" href="databalanceanalysis/intro.html#databalance"><span class="std std-ref">DataBalanceAnalysis</span></a>: provides metrics for diagnosing errors that originate from data imbalance either on class labels or feature values.</p></li>
+</ul>
+</div></blockquote>
+<section id="exploring-potential-mitigations">
+<h2>Exploring potential mitigations<a class="headerlink" href="#exploring-potential-mitigations" title="Permalink to this heading"></a></h2>
+<p>The Responsible AI Mitigations Library brings together in <strong>one interface and compatible end-to-end data-processing pipelines</strong> a series of well-known machine
+learning techniques (based on popular implementations in scikit-learn, mlxtend, sdv, among others) that have been adapted to help AI practitioners <strong>target
+problems after they have identified model errors</strong> using diagnostic tools such as those in the <a class="reference external" href="https://responsibleaitoolbox.ai/">Responsible AI Toolbox</a>. <a class="reference internal" href="integration_to_libs.html#integration-other-libs"><span class="std std-ref">See more</span></a>
+about how this library works with the Responsible AI Toolbox.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="_images/diagnose_mitigate.png"><img alt="Diagnose and mitigate" src="_images/diagnose_mitigate.png" style="width: 651.9599999999999px; height: 402.47999999999996px;" /></a>
+<figcaption>
+<p><span class="caption-text">Figure 1 - The targeted approach to responsible AI mitigations focuses the mitigation process on previously identified and diagnosed failure modes.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>After you’ve identified a model as underperforming for a specific cohort, the Responsible AI Mitigations Library can help inform your decisions for appropriate
+mitigation. The library enables you to <strong>explore potential mitigations for targeted cohorts and sub-cohorts</strong> through:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Balancing and synthesizing data.</p></li>
+<li><p>Selecting or creating features with different encodings with different encodings.</p></li>
+<li><p>Scaling numerical features.</p></li>
+<li><p>Imputing missing values.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Note:</strong> Although the Responsible AI Mitigations Library currently focuses on data problems, it will expand over time to include mitigations for model errors,
+through customized loss functions, architectures, and new training algorithms.</p>
+</section>
+<section id="benefits-of-targeted-error-mitigations">
+<h2>Benefits of targeted error mitigations<a class="headerlink" href="#benefits-of-targeted-error-mitigations" title="Permalink to this heading"></a></h2>
+<p>Traditional methods of improving model performance often take a blanket approach, aiming at maximizing a single-score performance number, such as overall accuracy.
+Blanket approaches may involve increasing the size of training data or model architecture—approaches that are not only costly but also <strong>ineffective</strong> for improving the
+model in areas of poorest performance.</p>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="_images/balance_cohort.png"><img alt="Balancing over cohorts" src="_images/balance_cohort.png" style="width: 596.6px; height: 425.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">Figure 2 – Example of how blanket approaches may not help in mitigating the underlying issue for a given cohort (in this case flipped class imbalance).</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>Imagine the following example. A model that predicts customer credit reliability is underperforming for a given cohort X. When analyzing class balance for the data, it
+becomes clear that overall there are more examples in the data for which a loan has been assigned. However, for the cohort of interest X, this distribution looks very
+different with more examples of loans being declined. The discrepancy also leads to a higher error for this cohort as the model learns to over-decline. Merely adding
+more data to adjust overall class imbalance (Scenario 1 in the figure) will not address class imbalance for cohort X. In fact, it might make it worse by accentuating
+class imbalance for this cohort and declining more loans. A more targeted approach (Scenario 2 in the figure) would focus the class balance mitigation only on cohort X
+by sampling or synthesizing more data within that cohort where loans have been assigned. At this time, the Responsible AI Mitigations library can implement the second
+scenario by synthesizing data only for a given cohort (see the <a class="reference internal" href="dataprocessing/sampler/synthesizer.html#syhtesizer"><span class="std std-ref">DataProcessing.Synthesizer</span></a> class for more information). In the future, we expect to
+enable similar capabilities for the <a class="reference internal" href="dataprocessing/sampler/rebalance.html#rebalance"><span class="std std-ref">DataProcessing.Rebalance</span></a> class.</p>
+<p>In contrast, the Responsible AI Mitigations Library offers a <strong>targeted approach that lets you save time and resources by</strong>:</p>
+<blockquote>
+<div><ul>
+<li><p><strong>Testing your hypotheses for why a model is underperforming</strong> in specific data cohorts through exploring data imbalance, features, label noise, or missing values.</p></li>
+<li><p><strong>Improving your understanding of model failures</strong> by zeroing in on:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A set of features in the dataset, allowing changing format or encoding only the features that are problematic.</p></li>
+<li><p>A sub-cohort only, not touching any other data.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>Simplifying the implementation and customization of mitigations</strong> for specific data problems by providing mitigations that are compatible with each other and can be
+combined into a single pipeline.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="two-modules-for-targeting-data">
+<h2>Two modules for targeting data<a class="headerlink" href="#two-modules-for-targeting-data" title="Permalink to this heading"></a></h2>
+<p>The Responsible AI Mitigations Library consists of <strong>two modules that work in complement</strong> for targeting and mitigating data problems: DataProcessing and DataBalanceAnalysis.</p>
+<section id="dataprocessing">
+<h3>DataProcessing<a class="headerlink" href="#dataprocessing" title="Permalink to this heading"></a></h3>
+<p>A set of data-oriented mitigation steps for data balancing, scaling, missing value imputation, sampling, and encoding, using proven machine learning mitigation techniques
+in a single interface and compatible environment. The goal of this module is to provide a unified interface for different mitigation methods scattered around multiple machine
+learning libraries, such as scikit-learn, mlxtend, sdv, and others.</p>
+<p><strong>Highlights include:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A simple interface for mitigation steps that follows the <code class="docutils literal notranslate"><span class="pre">.fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">.transform()</span></code> convention.</p></li>
+<li><p>transformer classes that can be combined together in end-to-end mitigation pipelines.</p></li>
+<li><p>Function calls adapted for responsible AI by extending existing calls either with target features or cohorts.</p></li>
+<li><p>Predetermined parameter values, eliminating the need to know or to configure all available parameters.</p></li>
+<li><p>Unique solutions for tabular data.</p></li>
+<li><p>Automation of various mitigation steps, with some transformer classes acting as a wrapper to others in the library.</p></li>
+<li><p>Customization options, helpful for the more experienced AI practitioner.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="databalanceanalysis">
+<h3>DataBalanceAnalysis<a class="headerlink" href="#databalanceanalysis" title="Permalink to this heading"></a></h3>
+<p>A set of metrics for diagnosing and measuring data imbalance. This module is intended to be used as part of the error diagnosis process for failure modes that are due to class
+or feature imbalance. After measuring with DataBalanceAnalysis, AI practitioners can then work to mitigate the failure through techniques available in the library’s DataProcessing
+module.</p>
+<p><strong>Example:</strong></p>
+<p>A model trained for house-price prediction is discovered to be underperforming for houses that do not have an attached garage. The AI practitioner determines that this failure is
+due to the underrepresentation of houses with no garage in the training data. The practitioner can use metrics in the DataBalanceAnalysis module to measure the feature imbalance
+(“garage” vs. “no garage”), then work to mitigate the issue by using one of the sampling techniques available in the library’s DataProcessing module for augmenting data.</p>
 <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Overview</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/databalanceanalysis.html">databalanceanalysis</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/databalanceanalysis.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/databalanceanalysis.html#module-databalanceanalysis.aggregate_measures">databalanceanalysis.aggregate_measures module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/databalanceanalysis.html#module-databalanceanalysis.distribution_measures">databalanceanalysis.distribution_measures module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/databalanceanalysis.html#module-databalanceanalysis.feature_measures">databalanceanalysis.feature_measures module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/databalanceanalysis.html#module-databalanceanalysis">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/intro.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/intro.html#examples">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dataprocessing/intro.html">dataprocessing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#target-audience">Target Audience</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataprocessing/intro.html">DataProcessing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#structure">Structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#api">API</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="dataprocessing/dataprocessing.html">DataProcessing</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#examples">Examples</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="dataprocessing/case_studies.html">Case Studies</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dataprocessing/module_tests.html">Tutorials</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#sklearn-s-pipeline-support">Sklearn’s Pipeline Support</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="dataprocessing/pipeline.html">Pipeline Support</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a></li>
 </ul>
 </li>
 </ul>
 </div>
+</section>
+</section>
 </section>
 <section id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h1>
@@ -138,7 +247,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="databalanceanalysis/databalanceanalysis.html" class="btn btn-neutral float-right" title="databalanceanalysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="install_guide.html" class="btn btn-neutral float-right" title="Installation guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

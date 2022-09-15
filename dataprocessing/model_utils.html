@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Model Utils &mdash; RAI Error Mitigation  documentation</title>
+  <title>Model Utils &mdash; Responsible AI Mitigations  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -31,7 +31,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> RAI Error Mitigation
+            <a href="../index.html" class="icon icon-home"> Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -41,10 +41,18 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/databalanceanalysis.html">databalanceanalysis</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="intro.html">dataprocessing</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="intro.html#target-audience">Target Audience</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="intro.html">DataProcessing</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="intro.html#structure">Structure</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="dataprocessing.html">DataProcessing</a><ul class="current">
@@ -60,7 +68,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="intro.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="intro.html#sklearn-s-pipeline-support">Sklearn’s Pipeline Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a></li>
 </ul>
 </li>
 </ul>
@@ -71,7 +79,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">RAI Error Mitigation</a>
+          <a href="../index.html">Responsible AI Mitigations</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -79,7 +87,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="intro.html">dataprocessing</a> &raquo;</li>
+          <li><a href="../api.html">API reference</a> &raquo;</li>
           <li><a href="dataprocessing.html">DataProcessing</a> &raquo;</li>
       <li>Model Utils</li>
       <li class="wy-breadcrumbs-aside">
@@ -146,6 +154,20 @@ different threshold values;</p></li>
 the threshold is computed using the precision x recall graph.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>the following computed metrics:</p>
+<ul class="simple">
+<li><p>ROC AUC</p></li>
+<li><p>Precision</p></li>
+<li><p>Recall</p></li>
+<li><p>Best threshold found to binarize the results. The predictions are binarized
+using this threshold before computing the precision, recall, F,1 and accuracy</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -175,6 +197,24 @@ using this threshold before computing the precision, recall, F,1 and accuracy</p
 <li><p><strong>best_th_auc</strong> – if True, the best threshold is computed using ROC graph. If False,
 the threshold is computed using the precision x recall graph.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a tuple with the computed metrics and the binarized predictions. The tuple
+returned contains (in this order):</p>
+<ul class="simple">
+<li><p>ROC AUC</p></li>
+<li><p>Best threshold found to binarize the results. The predictions are binarized
+using this threshold before computing the precision, recall, F,1 and accuracy</p></li>
+<li><p>Precision</p></li>
+<li><p>Recall</p></li>
+<li><p>F1 score</p></li>
+<li><p>Accuracy</p></li>
+<li><p>Binarized predictions.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
@@ -207,6 +247,23 @@ train and test is random, without any stratification. If False, then the problem
 classification problem, where the label column is treated as a list of labels. This way, the split
 tries to maintain the same proportion of classes in the train and test sets.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>if <code class="docutils literal notranslate"><span class="pre">full_df</span></code> is set to True, this function returns 2 dataframes: a train and a test dataframe,
+where both datasets include the label column given by the parameter <code class="docutils literal notranslate"><span class="pre">label</span></code>. Otherwise, 4 values are
+returned:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>train_x:</strong> the train dataset containing all features (all columns except the label column);</p></li>
+<li><p><strong>test_x:</strong>  the test dataset containing all features (all columns except the label column);</p></li>
+<li><p><strong>train_y:</strong> the train dataset containing only the label column;</p></li>
+<li><p><strong>test_y:</strong> the test dataset containing only the label column;</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
@@ -254,6 +311,28 @@ mentioned threshold;</p></li>
 the threshold is computed using the precision x recall graph.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a dictionary with the computed metrics, with the following keys:</p>
+<ul class="simple">
+<li><p><strong>”roc”:</strong> the ROC AUC obtained for the test set;</p></li>
+<li><p><strong>”th”:</strong> the best threshold found for binarizing the predicted probabilities for
+label. This threshold is found by using the ROC graph, or the precision x recall
+graph. The approach used is determined by the ‘best_th_auc’ parameter;</p></li>
+<li><p><strong>”pr”:</strong> the precision obtained after binarizing the outputs using the previously
+mentioned threshold;</p></li>
+<li><p><strong>”rc”:</strong> the recall obtained after binarizing the outputs using the previously
+mentioned threshold;</p></li>
+<li><p><strong>”f1”:</strong> the F1 score obtained after binarizing the outputs using the previously
+mentioned threshold;</p></li>
+<li><p><strong>”accuracy”:</strong> the accuracy obtained after binarizing the outputs using the previously
+mentioned threshold;</p></li>
+<li><p><strong>”y_pred”:</strong> the binarized predictions.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -286,6 +365,12 @@ different threshold values;</p></li>
 <li><p><strong>best_th_auc</strong> – if True, the best threshold is computed using ROC graph. If False,
 the threshold is computed using the precision x recall graph.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns the model object used to fit the dataset provided.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>reference to the model object used</p>
 </dd>
 </dl>
 </dd></dl>

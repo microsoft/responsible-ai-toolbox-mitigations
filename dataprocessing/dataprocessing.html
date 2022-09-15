@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DataProcessing &mdash; RAI Error Mitigation  documentation</title>
+  <title>DataProcessing &mdash; Responsible AI Mitigations  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -23,7 +23,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Encoders" href="encoder/encoder.html" />
-    <link rel="prev" title="dataprocessing" href="intro.html" /> 
+    <link rel="prev" title="FeatureBalanceMeasure" href="../databalanceanalysis/feature_measures.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -31,7 +31,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> RAI Error Mitigation
+            <a href="../index.html" class="icon icon-home"> Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -41,10 +41,18 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/databalanceanalysis.html">databalanceanalysis</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="intro.html">dataprocessing</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="intro.html#target-audience">Target Audience</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="intro.html">DataProcessing</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="intro.html#structure">Structure</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">DataProcessing</a><ul>
@@ -60,7 +68,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="intro.html#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="intro.html#sklearn-s-pipeline-support">Sklearn’s Pipeline Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a></li>
 </ul>
 </li>
 </ul>
@@ -71,7 +79,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">RAI Error Mitigation</a>
+          <a href="../index.html">Responsible AI Mitigations</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -79,7 +87,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="intro.html">dataprocessing</a> &raquo;</li>
+          <li><a href="../api.html">API reference</a> &raquo;</li>
       <li>DataProcessing</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/dataprocessing.rst" class="fa fa-github"> Edit on GitHub</a>
@@ -150,6 +158,14 @@ the last non-reversible transformer object in the transform_pipe parameter),
 original columns, that is, all columns that should be ignored
 and those that should be scaled.</p>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the dataset df after calling the _inverse_transform() method of
+all objects in the self.transform_pipe internal parameter (in reversed
+order).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame or np.ndarray</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -218,7 +234,7 @@ and those that should be scaled.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="intro.html" class="btn btn-neutral float-left" title="dataprocessing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../databalanceanalysis/feature_measures.html" class="btn btn-neutral float-left" title="FeatureBalanceMeasure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="encoder/encoder.html" class="btn btn-neutral float-right" title="Encoders" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

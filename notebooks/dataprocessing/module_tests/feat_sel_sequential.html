@@ -1,0 +1,2790 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SeqFeatSelection Example &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="CatBoostSelection" href="../../../dataprocessing/feat_sel/catboost.html" />
+    <link rel="prev" title="SeqFeatSelection" href="../../../dataprocessing/feat_sel/seq.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../gallery.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#dataprocessing">DataProcessing</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="encoding.html">Encoding Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="scaler.html">Data Scaling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="imputation.html">BasicImputer Example</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">SeqFeatSelection Example</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#1---Dataset-with-Headers">1 - Dataset with Headers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#2---DataFrame-without-column-names">2 - DataFrame without column names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#3---Regression-Task">3 - Regression Task</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="feat_sel_catboost.html">CatBoostSelection Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="feat_sel_corr_tutorial.html">Checking Correlations Between Variables - A Comprehensive Guide</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rebalance_imbl.html">Rebalance Class (imblearn)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rebalance_sdv.html">Synthesizer Class (SDV)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dataprocessing/intro.html">DataProcessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../api.html">API reference</a> &raquo;</li>
+          <li><a href="../../../dataprocessing/dataprocessing.html">DataProcessing</a> &raquo;</li>
+          <li><a href="../../../dataprocessing/feat_sel/feat_sel.html">Feature Selection</a> &raquo;</li>
+          <li><a href="../../../dataprocessing/feat_sel/seq.html">SeqFeatSelection</a> &raquo;</li>
+      <li>SeqFeatSelection Example</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/dataprocessing/module_tests/feat_sel_sequential.ipynb" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="SeqFeatSelection-Example">
+<h1>SeqFeatSelection Example<a class="headerlink" href="#SeqFeatSelection-Example" title="Permalink to this heading"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../notebooks&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">SeqFeatSelection</span>
+
+<span class="kn">from</span> <span class="nn">notebooks.download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
+</pre></div>
+</div>
+</div>
+<section id="1---Dataset-with-Headers">
+<h2>1 - Dataset with Headers<a class="headerlink" href="#1---Dataset-with-Headers" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/&#39;</span>
+<span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;employee_id&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">dataset</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>department</th>
+      <th>region</th>
+      <th>education</th>
+      <th>gender</th>
+      <th>recruitment_channel</th>
+      <th>no_of_trainings</th>
+      <th>age</th>
+      <th>previous_year_rating</th>
+      <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
+      <th>awards_won?</th>
+      <th>avg_training_score</th>
+      <th>is_promoted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_7</td>
+      <td>Master's &amp; above</td>
+      <td>f</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>35</td>
+      <td>5.0</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0</td>
+      <td>49</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Operations</td>
+      <td>region_22</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>30</td>
+      <td>5.0</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_19</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>34</td>
+      <td>3.0</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_23</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>2</td>
+      <td>39</td>
+      <td>1.0</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Technology</td>
+      <td>region_26</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>45</td>
+      <td>3.0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>73</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>54803</th>
+      <td>Technology</td>
+      <td>region_14</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>48</td>
+      <td>3.0</td>
+      <td>17</td>
+      <td>0</td>
+      <td>0</td>
+      <td>78</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54804</th>
+      <td>Operations</td>
+      <td>region_27</td>
+      <td>Master's &amp; above</td>
+      <td>f</td>
+      <td>other</td>
+      <td>1</td>
+      <td>37</td>
+      <td>2.0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>56</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54805</th>
+      <td>Analytics</td>
+      <td>region_1</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>27</td>
+      <td>5.0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>79</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54806</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_9</td>
+      <td>NaN</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>29</td>
+      <td>1.0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>45</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54807</th>
+      <td>HR</td>
+      <td>region_22</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>27</td>
+      <td>1.0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>49</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>54808 rows × 13 columns</p>
+</div></div>
+</div>
+<p>This class implements the sequential feature selection method. It represents a wrapper of the <strong>SequentialFeatureSelector</strong> class from the <strong>mlxtend</strong> library, offering certain simplifications and abstractions.</p>
+<p>We can call this subclass using the default parameters and passing the dataframe only when calling the .fit() method. We can choose to pass the whole dataset along the label column using the “df=” and “label_col=” parameters.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+No columns specified for imputation. These columns have been automatically identified:
+[&#39;education&#39;, &#39;previous_year_rating&#39;]
+No columns specified for encoding. These columns have been automatically identfied as the following:
+[&#39;department&#39;, &#39;region&#39;, &#39;education&#39;, &#39;gender&#39;, &#39;recruitment_channel&#39;]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:    0.8s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:    0.8s finished
+
+[2022-07-27 10:46:16] Features: 1/12 -- score: 0.6895577479869736[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  11 out of  11 | elapsed:    0.1s finished
+
+[2022-07-27 10:46:16] Features: 2/12 -- score: 0.7872499546962967[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:16] Features: 3/12 -- score: 0.8804506473945294[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   7 out of   9 | elapsed:    0.2s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   9 out of   9 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:17] Features: 4/12 -- score: 0.8807940412342802[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   6 out of   8 | elapsed:    0.2s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   8 out of   8 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:17] Features: 5/12 -- score: 0.8691371715375045[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   4 out of   7 | elapsed:    0.1s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   7 out of   7 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:17] Features: 6/12 -- score: 0.8522627614734568[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   3 out of   6 | elapsed:    0.1s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   6 out of   6 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:17] Features: 7/12 -- score: 0.826864693465736[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   5 out of   5 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:18] Features: 8/12 -- score: 0.7964693834478135[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   4 out of   4 | elapsed:    0.1s finished
+
+[2022-07-27 10:46:18] Features: 9/12 -- score: 0.7454954052081013[Parallel(n_jobs=3)]: Using backend LokyBackend with 3 concurrent workers.
+[Parallel(n_jobs=3)]: Done   3 out of   3 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:18] Features: 10/12 -- score: 0.6768912367800968[Parallel(n_jobs=2)]: Using backend LokyBackend with 2 concurrent workers.
+[Parallel(n_jobs=2)]: Done   2 out of   2 | elapsed:    0.7s finished
+
+[2022-07-27 10:46:19] Features: 11/12 -- score: 0.6747642727989089[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s finished
+
+[2022-07-27 10:46:19] Features: 12/12 -- score: 0.65839797929155
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;department&#39;, &#39;KPIs_met &gt;80%&#39;, &#39;awards_won?&#39;, &#39;avg_training_score&#39;]
+</pre></div></div>
+</div>
+<p>After calling the fit() method, we can access the summary generated by the <strong>SequentialFeatureSelector</strong> class (from the mlxtend library) used inside our <strong>SeqFeatSelection</strong>. This summary dictionary can be accessed by using the <strong>get_summary()</strong> method, and it follows the following structure: each key is assigned to a different set of features tested, and for each key we have a secondary dictionary that informs all the relevant data for that particular run, such as the features used in that
+run, the results obtained for each fold (using cross-validation), where the results are associated to the metric specified by the <strong>scoring</strong> parameter.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">get_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{1: {&#39;feature_idx&#39;: (9,),
+  &#39;cv_scores&#39;: array([0.68984489, 0.69184529, 0.68698306]),
+  &#39;avg_score&#39;: 0.6895577479869736,
+  &#39;feature_names&#39;: (&#39;KPIs_met &gt;80%&#39;,)},
+ 2: {&#39;feature_idx&#39;: (9, 11),
+  &#39;cv_scores&#39;: array([0.78949578, 0.78515037, 0.78710372]),
+  &#39;avg_score&#39;: 0.7872499546962967,
+  &#39;feature_names&#39;: (&#39;KPIs_met &gt;80%&#39;, &#39;avg_training_score&#39;)},
+ 3: {&#39;feature_idx&#39;: (0, 9, 11),
+  &#39;cv_scores&#39;: array([0.88126278, 0.87977412, 0.88031504]),
+  &#39;avg_score&#39;: 0.8804506473945294,
+  &#39;feature_names&#39;: (&#39;department&#39;, &#39;KPIs_met &gt;80%&#39;, &#39;avg_training_score&#39;)},
+ 4: {&#39;feature_idx&#39;: (0, 9, 10, 11),
+  &#39;cv_scores&#39;: array([0.87817067, 0.8822343 , 0.88197716]),
+  &#39;avg_score&#39;: 0.8807940412342802,
+  &#39;feature_names&#39;: (&#39;department&#39;,
+   &#39;KPIs_met &gt;80%&#39;,
+   &#39;awards_won?&#39;,
+   &#39;avg_training_score&#39;)},
+ 5: {&#39;feature_idx&#39;: (0, 3, 9, 10, 11),
+  &#39;cv_scores&#39;: array([0.86445397, 0.87210534, 0.87085221]),
+  &#39;avg_score&#39;: 0.8691371715375045,
+  &#39;feature_names&#39;: (&#39;department&#39;,
+   &#39;gender&#39;,
+   &#39;KPIs_met &gt;80%&#39;,
+   &#39;awards_won?&#39;,
+   &#39;avg_training_score&#39;)},
+ 6: {&#39;feature_idx&#39;: (0, 3, 5, 9, 10, 11),
+  &#39;cv_scores&#39;: array([0.85145133, 0.8523202 , 0.85301676]),
+  &#39;avg_score&#39;: 0.8522627614734568,
+  &#39;feature_names&#39;: (&#39;department&#39;,
+   &#39;gender&#39;,
+   &#39;no_of_trainings&#39;,
+   &#39;KPIs_met &gt;80%&#39;,
+   &#39;awards_won?&#39;,
+   &#39;avg_training_score&#39;)},
+ 7: {&#39;feature_idx&#39;: (0, 3, 4, 5, 9, 10, 11),
+  &#39;cv_scores&#39;: array([0.82663561, 0.82188557, 0.8320729 ]),
+  &#39;avg_score&#39;: 0.826864693465736,
+  &#39;feature_names&#39;: (&#39;department&#39;,
+   &#39;gender&#39;,
+   &#39;recruitment_channel&#39;,
+   &#39;no_of_trainings&#39;,
+   &#39;KPIs_met &gt;80%&#39;,
+   &#39;awards_won?&#39;,
+   &#39;avg_training_score&#39;)},
+ 8: {&#39;feature_idx&#39;: (0, 2, 3, 4, 5, 9, 10, 11),
+  &#39;cv_scores&#39;: array([0.78944963, 0.79337527, 0.80658324]),
+  &#39;avg_score&#39;: 0.7964693834478135,
+  &#39;feature_names&#39;: (&#39;department&#39;,
+   &#39;education&#39;,
+   &#39;gender&#39;,
+   &#39;recruitment_channel&#39;,
+   &#39;no_of_trainings&#39;,
+   &#39;KPIs_met &gt;80%&#39;,
+   &#39;awards_won?&#39;,
+   &#39;avg_training_score&#39;)},
+ 9: {&#39;feature_idx&#39;: (0, 2, 3, 4, 5, 7, 9, 10, 11),
+  &#39;cv_scores&#39;: array([0.75337184, 0.73867261, 0.74444176]),
+  &#39;avg_score&#39;: 0.7454954052081013,
+  &#39;feature_names&#39;: (&#39;department&#39;,
+   &#39;education&#39;,
+   &#39;gender&#39;,
+   &#39;recruitment_channel&#39;,
+   &#39;no_of_trainings&#39;,
+   &#39;previous_year_rating&#39;,
+   &#39;KPIs_met &gt;80%&#39;,
+   &#39;awards_won?&#39;,
+   &#39;avg_training_score&#39;)},
+ 10: {&#39;feature_idx&#39;: (0, 2, 3, 4, 5, 7, 8, 9, 10, 11),
+  &#39;cv_scores&#39;: array([0.6835053 , 0.67103064, 0.67613777]),
+  &#39;avg_score&#39;: 0.6768912367800968,
+  &#39;feature_names&#39;: (&#39;department&#39;,
+   &#39;education&#39;,
+   &#39;gender&#39;,
+   &#39;recruitment_channel&#39;,
+   &#39;no_of_trainings&#39;,
+   &#39;previous_year_rating&#39;,
+   &#39;length_of_service&#39;,
+   &#39;KPIs_met &gt;80%&#39;,
+   &#39;awards_won?&#39;,
+   &#39;avg_training_score&#39;)},
+ 11: {&#39;feature_idx&#39;: (0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11),
+  &#39;cv_scores&#39;: array([0.67921611, 0.67021602, 0.67486069]),
+  &#39;avg_score&#39;: 0.6747642727989089,
+  &#39;feature_names&#39;: (&#39;department&#39;,
+   &#39;region&#39;,
+   &#39;education&#39;,
+   &#39;gender&#39;,
+   &#39;recruitment_channel&#39;,
+   &#39;no_of_trainings&#39;,
+   &#39;previous_year_rating&#39;,
+   &#39;length_of_service&#39;,
+   &#39;KPIs_met &gt;80%&#39;,
+   &#39;awards_won?&#39;,
+   &#39;avg_training_score&#39;)},
+ 12: {&#39;feature_idx&#39;: (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11),
+  &#39;cv_scores&#39;: array([0.65248237, 0.66616091, 0.65655066]),
+  &#39;avg_score&#39;: 0.65839797929155,
+  &#39;feature_names&#39;: (&#39;department&#39;,
+   &#39;region&#39;,
+   &#39;education&#39;,
+   &#39;gender&#39;,
+   &#39;recruitment_channel&#39;,
+   &#39;no_of_trainings&#39;,
+   &#39;age&#39;,
+   &#39;previous_year_rating&#39;,
+   &#39;length_of_service&#39;,
+   &#39;KPIs_met &gt;80%&#39;,
+   &#39;awards_won?&#39;,
+   &#39;avg_training_score&#39;)}}
+</pre></div></div>
+</div>
+<p>It is also possible to save this summary automatically after calling the fit() method by using the <strong>save_json</strong> and <strong>json_summary</strong> parameters. By default, <strong>save_json</strong> is set to False, which means that no JSON files are saved. By setting it to True, the summary will be saved in the file specified by <strong>json_summary</strong>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">save_json</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">json_summary</span><span class="o">=</span><span class="s2">&quot;json_files/seq_feat.json&quot;</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+No columns specified for imputation. These columns have been automatically identified:
+[&#39;education&#39;, &#39;previous_year_rating&#39;]
+No columns specified for encoding. These columns have been automatically identfied as the following:
+[&#39;department&#39;, &#39;region&#39;, &#39;education&#39;, &#39;gender&#39;, &#39;recruitment_channel&#39;]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:    0.8s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:    0.8s finished
+
+[2022-07-27 10:46:22] Features: 1/12 -- score: 0.6895577479869736[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  11 out of  11 | elapsed:    0.1s finished
+
+[2022-07-27 10:46:22] Features: 2/12 -- score: 0.7872499546962967[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:23] Features: 3/12 -- score: 0.8805863398406606[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   7 out of   9 | elapsed:    0.2s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   9 out of   9 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:23] Features: 4/12 -- score: 0.8796917785634855[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   6 out of   8 | elapsed:    0.2s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   8 out of   8 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:23] Features: 5/12 -- score: 0.8700911766983669[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   4 out of   7 | elapsed:    0.1s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   7 out of   7 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:24] Features: 6/12 -- score: 0.8521535196777906[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   3 out of   6 | elapsed:    0.1s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   6 out of   6 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:24] Features: 7/12 -- score: 0.8297866606603811[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   5 out of   5 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:24] Features: 8/12 -- score: 0.7976130766687802[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   4 out of   4 | elapsed:    0.1s finished
+
+[2022-07-27 10:46:24] Features: 9/12 -- score: 0.7430020885354774[Parallel(n_jobs=3)]: Using backend LokyBackend with 3 concurrent workers.
+[Parallel(n_jobs=3)]: Done   3 out of   3 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:25] Features: 10/12 -- score: 0.6820033653384551[Parallel(n_jobs=2)]: Using backend LokyBackend with 2 concurrent workers.
+[Parallel(n_jobs=2)]: Done   2 out of   2 | elapsed:    0.6s finished
+
+[2022-07-27 10:46:26] Features: 11/12 -- score: 0.6601517758791042[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s finished
+
+[2022-07-27 10:46:26] Features: 12/12 -- score: 0.6579024385880693
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;raimitigations.dataprocessing.feat_selection.sequential_select.SeqFeatSelection at 0x7f12141ec3a0&gt;
+</pre></div></div>
+</div>
+<p>The user can then open this JSON file using any JSON viewing tool and check all the results presented there. In the following images, we show an example of the JSON file generated using the “JSON Viewer” extension for VSCode.</p>
+<p><img alt="seq_feat" src="../../../_images/seq_feat_1.png" /></p>
+<p>In the previous image, we can see that each run is associated to a different numerical key. The key “6” represents a run that used 6 features, specified in the <em>feature_names</em> sub-key. We can also look into the results obtained by each model in the cross-validation scenario (in this case, using 3 folds), as well as the mean score. This JSON file allows users to inspect the finer details of the feature selection process and decide by themselves if the final features selected is the ones they want
+or if they want to change it.</p>
+<p>If the users disagrees (partially or fully) with the selected features, they can manually choose the features to be selected by using the <em>set_selected_features</em> method. This method accepts a list of columns, which will be set as the columns to be selected (can be different from the features selected by the fit method). If we then call the <em>get_selected_features</em>, we can see that the selected features are now the ones defined by the user:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">set_selected_features</span><span class="p">([</span><span class="s2">&quot;department&quot;</span><span class="p">,</span> <span class="s2">&quot;previous_year_rating&quot;</span><span class="p">])</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;department&#39;, &#39;previous_year_rating&#39;]
+</pre></div></div>
+</div>
+<p>We can also set the selected features using the column’s indexes instead of their names:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">set_selected_features</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;region&#39;, &#39;education&#39;]
+</pre></div></div>
+</div>
+<p>If we want to reset the selected features using the ones defined by the fit method, we only need to call <em>set_selected_features</em> again, but this time don’t provide any list of columns. By doing this, the selected features will be set as those originally selected by the fit method.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">set_selected_features</span><span class="p">()</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;department&#39;, &#39;KPIs_met &gt;80%&#39;, &#39;avg_training_score&#39;]
+</pre></div></div>
+</div>
+<p>We can also separate the whole dataframe into the X datframe containing the features, and the Y dataframe containing the labels. This way, we use the “X=” and “y=” parameters and ignore the “df=” and “label_col=” parameters. We can also change the scoring function used.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">])</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span>
+
+<span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Y</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+No columns specified for imputation. These columns have been automatically identified:
+[&#39;education&#39;, &#39;previous_year_rating&#39;]
+No columns specified for encoding. These columns have been automatically identfied as the following:
+[&#39;department&#39;, &#39;region&#39;, &#39;education&#39;, &#39;gender&#39;, &#39;recruitment_channel&#39;]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:    0.7s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:    0.7s finished
+
+[2022-07-27 10:46:28] Features: 1/12 -- score: 0.19351656953830262[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  11 out of  11 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:29] Features: 2/12 -- score: 0.49702858853465043[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:29] Features: 3/12 -- score: 0.5024861528381374[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   7 out of   9 | elapsed:    0.2s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   9 out of   9 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:29] Features: 4/12 -- score: 0.5019562862803734[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   6 out of   8 | elapsed:    0.2s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   8 out of   8 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:29] Features: 5/12 -- score: 0.49882611496675605[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   4 out of   7 | elapsed:    0.1s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   7 out of   7 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:30] Features: 6/12 -- score: 0.48888552734189306[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   3 out of   6 | elapsed:    0.1s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   6 out of   6 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:30] Features: 7/12 -- score: 0.47494684134297466[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   5 out of   5 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:30] Features: 8/12 -- score: 0.46829347831133433[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   4 out of   4 | elapsed:    0.1s finished
+
+[2022-07-27 10:46:30] Features: 9/12 -- score: 0.4449834067043737[Parallel(n_jobs=3)]: Using backend LokyBackend with 3 concurrent workers.
+[Parallel(n_jobs=3)]: Done   3 out of   3 | elapsed:    0.2s finished
+
+[2022-07-27 10:46:31] Features: 10/12 -- score: 0.4015465436267724[Parallel(n_jobs=2)]: Using backend LokyBackend with 2 concurrent workers.
+[Parallel(n_jobs=2)]: Done   2 out of   2 | elapsed:    0.9s finished
+
+[2022-07-27 10:46:32] Features: 11/12 -- score: 0.38470406126502166[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s finished
+
+[2022-07-27 10:46:32] Features: 12/12 -- score: 0.36287745706651586
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;department&#39;, &#39;awards_won?&#39;, &#39;avg_training_score&#39;]
+</pre></div></div>
+</div>
+<p>The <em>SeqFeatSelection</em> implements the Sequential Feature Selection approach using the <em>mlxtend</em> library. This method uses an estimator, which is used to test the performance of the model using different sets of features. The default estimator used is a decision tree classifier (DecisionTreeClassifier from sklearn). But the user might be interested in using other sklearn estimators to see if they can achieve better results. Therefore, we created the <em>estimator</em> parameter, which accepts a sklearn
+classifier or <em>None</em> if the user wants to use the default one. Let’s see how we can use the <em>SeqFeatSelection</em> subclass while specifying a different classifier. Note that in the following cell we also (i) specify the “label_col” using the index of the label column instead of its name (just to show a different approach when specifying this attribute), and (ii) provide the dataset when instantiating the subclass instead of providing it during the fit method.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+
+<span class="n">estimator</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+No columns specified for imputation. These columns have been automatically identified:
+[&#39;education&#39;, &#39;previous_year_rating&#39;]
+No columns specified for encoding. These columns have been automatically identfied as the following:
+[&#39;department&#39;, &#39;region&#39;, &#39;education&#39;, &#39;gender&#39;, &#39;recruitment_channel&#39;]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:   22.9s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:   22.9s finished
+
+[2022-07-27 10:46:58] Features: 1/12 -- score: 0.07325640058383107[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+[Parallel(n_jobs=4)]: Done  11 out of  11 | elapsed:    7.5s finished
+
+[2022-07-27 10:47:05] Features: 2/12 -- score: 0.10067900107726384[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    6.1s finished
+
+[2022-07-27 10:47:11] Features: 3/12 -- score: 0.10719246197152053[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+[Parallel(n_jobs=4)]: Done   7 out of   9 | elapsed:    4.7s remaining:    1.3s
+[Parallel(n_jobs=4)]: Done   9 out of   9 | elapsed:    6.0s finished
+
+[2022-07-27 10:47:17] Features: 4/12 -- score: 0.10540453099546042[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+[Parallel(n_jobs=4)]: Done   6 out of   8 | elapsed:    4.0s remaining:    1.3s
+[Parallel(n_jobs=4)]: Done   8 out of   8 | elapsed:    4.8s finished
+
+[2022-07-27 10:47:22] Features: 5/12 -- score: 0.1044739769466601[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+[Parallel(n_jobs=4)]: Done   4 out of   7 | elapsed:    3.0s remaining:    2.3s
+[Parallel(n_jobs=4)]: Done   7 out of   7 | elapsed:    4.4s finished
+
+[2022-07-27 10:47:27] Features: 6/12 -- score: 0.10179179486070188[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+[Parallel(n_jobs=4)]: Done   3 out of   6 | elapsed:    2.8s remaining:    2.8s
+[Parallel(n_jobs=4)]: Done   6 out of   6 | elapsed:    3.9s finished
+
+[2022-07-27 10:47:31] Features: 7/12 -- score: 0.09294258224479195[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+[Parallel(n_jobs=4)]: Done   5 out of   5 | elapsed:    3.6s finished
+
+[2022-07-27 10:47:35] Features: 8/12 -- score: 0.09215810680398327[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+[Parallel(n_jobs=4)]: Done   4 out of   4 | elapsed:    2.9s finished
+
+[2022-07-27 10:47:37] Features: 9/12 -- score: 0.0910450393828115[Parallel(n_jobs=3)]: Using backend LokyBackend with 3 concurrent workers.
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+[Parallel(n_jobs=3)]: Done   3 out of   3 | elapsed:    3.2s finished
+
+[2022-07-27 10:47:41] Features: 10/12 -- score: 0.08617349577068416[Parallel(n_jobs=2)]: Using backend LokyBackend with 2 concurrent workers.
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+[Parallel(n_jobs=2)]: Done   2 out of   2 | elapsed:    3.4s finished
+
+[2022-07-27 10:47:45] Features: 11/12 -- score: 0.0777988658594773[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=3.
+  warnings.warn(
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    2.3s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    2.3s finished
+
+[2022-07-27 10:47:47] Features: 12/12 -- score: 0.06568385280411117
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;department&#39;, &#39;education&#39;, &#39;is_promoted&#39;]
+</pre></div></div>
+</div>
+<p>Finally, in order to actually transform the desired dataset by selecting only the chosen features, we call the <em>transform</em> method. Following the same pattern of other subclasses, we must always provide a valid dataset for this method and this dataset doesn’t need to be the same as the one used during the <em>fit</em> method.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_df</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="n">new_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>department</th>
+      <th>education</th>
+      <th>is_promoted</th>
+      <th>avg_training_score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7</td>
+      <td>2</td>
+      <td>0</td>
+      <td>49</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>8</td>
+      <td>0</td>
+      <td>0</td>
+      <td>73</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<section id="Setting-a-list-of-transformations-before-using-feature-selection">
+<h3>Setting a list of transformations before using feature selection<a class="headerlink" href="#Setting-a-list-of-transformations-before-using-feature-selection" title="Permalink to this heading"></a></h3>
+<p>Sometimes we would like to prepare the data before performing feature selection. In this example, we use <code class="docutils literal notranslate"><span class="pre">BasicImputer</span></code> to fill missing values, and both <code class="docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code> and <code class="docutils literal notranslate"><span class="pre">EncoderOHE</span></code> to deal with categorical variables. These transformations are passed in the <code class="docutils literal notranslate"><span class="pre">transform_pipe</span></code> parameter as a list. When <code class="docutils literal notranslate"><span class="pre">transform()</span></code> is called on this or another dataset, these three transformations will be performed prior to <code class="docutils literal notranslate"><span class="pre">SeqFeatSelection</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
+<span class="n">dataset</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 54808 entries, 0 to 54807
+Data columns (total 13 columns):
+ #   Column                Non-Null Count  Dtype
+---  ------                --------------  -----
+ 0   department            54808 non-null  object
+ 1   region                54808 non-null  object
+ 2   education             52399 non-null  object
+ 3   gender                54808 non-null  object
+ 4   recruitment_channel   54808 non-null  object
+ 5   no_of_trainings       54808 non-null  int64
+ 6   age                   54808 non-null  int64
+ 7   previous_year_rating  50684 non-null  float64
+ 8   length_of_service     54808 non-null  int64
+ 9   KPIs_met &gt;80%         54808 non-null  int64
+ 10  awards_won?           54808 non-null  int64
+ 11  avg_training_score    54808 non-null  int64
+ 12  is_promoted           54808 non-null  int64
+dtypes: float64(1), int64(7), object(5)
+memory usage: 5.4+ MB
+None
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>department</th>
+      <th>region</th>
+      <th>education</th>
+      <th>gender</th>
+      <th>recruitment_channel</th>
+      <th>no_of_trainings</th>
+      <th>age</th>
+      <th>previous_year_rating</th>
+      <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
+      <th>awards_won?</th>
+      <th>avg_training_score</th>
+      <th>is_promoted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_7</td>
+      <td>Master's &amp; above</td>
+      <td>f</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>35</td>
+      <td>5.0</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0</td>
+      <td>49</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Operations</td>
+      <td>region_22</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>30</td>
+      <td>5.0</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_19</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>34</td>
+      <td>3.0</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_23</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>2</td>
+      <td>39</td>
+      <td>1.0</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Technology</td>
+      <td>region_26</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>45</td>
+      <td>3.0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>73</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>54803</th>
+      <td>Technology</td>
+      <td>region_14</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>48</td>
+      <td>3.0</td>
+      <td>17</td>
+      <td>0</td>
+      <td>0</td>
+      <td>78</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54804</th>
+      <td>Operations</td>
+      <td>region_27</td>
+      <td>Master's &amp; above</td>
+      <td>f</td>
+      <td>other</td>
+      <td>1</td>
+      <td>37</td>
+      <td>2.0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>56</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54805</th>
+      <td>Analytics</td>
+      <td>region_1</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>27</td>
+      <td>5.0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>79</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54806</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_9</td>
+      <td>NaN</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>29</td>
+      <td>1.0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>45</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54807</th>
+      <td>HR</td>
+      <td>region_22</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>27</td>
+      <td>1.0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>49</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>54808 rows × 13 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;Below Secondary&#39;],
+      dtype=object)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">EncoderOHE</span><span class="p">,</span> <span class="n">EncoderOrdinal</span>
+<span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">BasicImputer</span>
+
+<span class="n">imputer</span> <span class="o">=</span> <span class="n">BasicImputer</span><span class="p">(</span>
+                            <span class="n">col_impute</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">specific_col</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;previous_year_rating&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;missing_values&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                                                                                                            <span class="s1">&#39;strategy&#39;</span><span class="p">:</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span>
+                                                                                                            <span class="s1">&#39;fill_value&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span> <span class="p">}</span> <span class="p">}</span>
+                    <span class="p">)</span>
+<span class="n">ordinal</span> <span class="o">=</span> <span class="n">EncoderOrdinal</span><span class="p">(</span>
+                            <span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">],</span>
+                            <span class="n">categories</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;education&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Below Secondary&quot;</span><span class="p">,</span> <span class="s2">&quot;Bachelor&#39;s&quot;</span><span class="p">,</span> <span class="s2">&quot;Master&#39;s &amp; above&quot;</span><span class="p">]}</span>
+                    <span class="p">)</span>
+<span class="n">ohe</span> <span class="o">=</span> <span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;department&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">,</span> <span class="s2">&quot;gender&quot;</span><span class="p">,</span> <span class="s2">&quot;recruitment_channel&quot;</span><span class="p">])</span>
+
+<span class="n">transform_pipe</span> <span class="o">=</span> <span class="p">[</span><span class="n">imputer</span><span class="p">,</span> <span class="n">ordinal</span><span class="p">,</span> <span class="n">ohe</span><span class="p">]</span>
+
+<span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">transform_pipe</span><span class="o">=</span><span class="n">transform_pipe</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+No columns specified for imputation. These columns have been automatically identified:
+[&#39;education&#39;, &#39;previous_year_rating&#39;]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  41 tasks      | elapsed:    0.9s
+[Parallel(n_jobs=4)]: Done  52 out of  52 | elapsed:    1.0s finished
+
+[2022-07-27 10:47:50] Features: 1/52 -- score: 0.6895577479869736[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  51 out of  51 | elapsed:    0.5s finished
+
+[2022-07-27 10:47:51] Features: 2/52 -- score: 0.7872499546962967[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  50 out of  50 | elapsed:    0.8s finished
+
+[2022-07-27 10:47:52] Features: 3/52 -- score: 0.83642750785164[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  49 out of  49 | elapsed:    0.8s finished
+
+[2022-07-27 10:47:53] Features: 4/52 -- score: 0.866985302389267[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  48 out of  48 | elapsed:    0.8s finished
+
+[2022-07-27 10:47:54] Features: 5/52 -- score: 0.8765245610911356[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  47 out of  47 | elapsed:    0.8s finished
+
+[2022-07-27 10:47:55] Features: 6/52 -- score: 0.8799218756368746[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  46 out of  46 | elapsed:    0.7s finished
+
+[2022-07-27 10:47:55] Features: 7/52 -- score: 0.8822123483721973[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  45 out of  45 | elapsed:    0.8s finished
+
+[2022-07-27 10:47:56] Features: 8/52 -- score: 0.8825335299087659[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  37 out of  44 | elapsed:    0.7s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done  44 out of  44 | elapsed:    0.8s finished
+
+[2022-07-27 10:47:57] Features: 9/52 -- score: 0.8824764223523092[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  36 out of  43 | elapsed:    0.7s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done  43 out of  43 | elapsed:    0.8s finished
+
+[2022-07-27 10:47:58] Features: 10/52 -- score: 0.8826109087104701[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  42 out of  42 | elapsed:    0.8s finished
+
+[2022-07-27 10:47:59] Features: 11/52 -- score: 0.8820841123146065[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  34 out of  41 | elapsed:    0.8s remaining:    0.2s
+[Parallel(n_jobs=4)]: Done  41 out of  41 | elapsed:    0.8s finished
+
+[2022-07-27 10:48:00] Features: 12/52 -- score: 0.8824994409310958[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  40 out of  40 | elapsed:    0.9s finished
+
+[2022-07-27 10:48:01] Features: 13/52 -- score: 0.88131439273642[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  39 out of  39 | elapsed:    0.9s finished
+
+[2022-07-27 10:48:02] Features: 14/52 -- score: 0.8813604472046684[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  38 out of  38 | elapsed:    0.8s finished
+
+[2022-07-27 10:48:03] Features: 15/52 -- score: 0.8804924898095458[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  30 out of  37 | elapsed:    0.9s remaining:    0.2s
+[Parallel(n_jobs=4)]: Done  37 out of  37 | elapsed:    1.0s finished
+
+[2022-07-27 10:48:04] Features: 16/52 -- score: 0.879256221965207[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  36 out of  36 | elapsed:    0.9s finished
+
+[2022-07-27 10:48:05] Features: 17/52 -- score: 0.8783063165665314[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  28 out of  35 | elapsed:    0.8s remaining:    0.2s
+[Parallel(n_jobs=4)]: Done  35 out of  35 | elapsed:    0.9s finished
+
+[2022-07-27 10:48:06] Features: 18/52 -- score: 0.8765803207831038[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  34 out of  34 | elapsed:    0.9s finished
+
+[2022-07-27 10:48:07] Features: 19/52 -- score: 0.8756175226003494[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  26 out of  33 | elapsed:    0.9s remaining:    0.2s
+[Parallel(n_jobs=4)]: Done  33 out of  33 | elapsed:    1.0s finished
+
+[2022-07-27 10:48:08] Features: 20/52 -- score: 0.8739821646328595[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  32 out of  32 | elapsed:    0.9s finished
+
+[2022-07-27 10:48:09] Features: 21/52 -- score: 0.8731880599812847[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  31 out of  31 | elapsed:    0.9s finished
+
+[2022-07-27 10:48:10] Features: 22/52 -- score: 0.8715491264910891[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  30 out of  30 | elapsed:    0.9s finished
+
+[2022-07-27 10:48:11] Features: 23/52 -- score: 0.8693456428081054[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  22 out of  29 | elapsed:    0.7s remaining:    0.2s
+[Parallel(n_jobs=4)]: Done  29 out of  29 | elapsed:    0.9s finished
+
+[2022-07-27 10:48:12] Features: 24/52 -- score: 0.8681427343726945[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  21 out of  28 | elapsed:    0.8s remaining:    0.3s
+[Parallel(n_jobs=4)]: Done  28 out of  28 | elapsed:    0.9s finished
+
+[2022-07-27 10:48:13] Features: 25/52 -- score: 0.8660444870160423[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  20 out of  27 | elapsed:    0.9s remaining:    0.3s
+[Parallel(n_jobs=4)]: Done  27 out of  27 | elapsed:    1.0s finished
+
+[2022-07-27 10:48:14] Features: 26/52 -- score: 0.8628526559709279[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  26 out of  26 | elapsed:    1.0s finished
+
+[2022-07-27 10:48:15] Features: 27/52 -- score: 0.8603961388270603[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  18 out of  25 | elapsed:    0.8s remaining:    0.3s
+[Parallel(n_jobs=4)]: Done  25 out of  25 | elapsed:    0.9s finished
+
+[2022-07-27 10:48:16] Features: 28/52 -- score: 0.8583971419846481[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  24 out of  24 | elapsed:    0.9s finished
+
+[2022-07-27 10:48:17] Features: 29/52 -- score: 0.8572540964551741[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  23 out of  23 | elapsed:    1.0s finished
+
+[2022-07-27 10:48:18] Features: 30/52 -- score: 0.8523029606818974[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  22 out of  22 | elapsed:    0.8s finished
+
+[2022-07-27 10:48:19] Features: 31/52 -- score: 0.8511240267050649[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  14 out of  21 | elapsed:    0.6s remaining:    0.3s
+[Parallel(n_jobs=4)]: Done  21 out of  21 | elapsed:    0.9s finished
+
+[2022-07-27 10:48:20] Features: 32/52 -- score: 0.8477236712628895[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  20 out of  20 | elapsed:    0.8s finished
+
+[2022-07-27 10:48:21] Features: 33/52 -- score: 0.8459631494456881[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  12 out of  19 | elapsed:    0.7s remaining:    0.4s
+[Parallel(n_jobs=4)]: Done  19 out of  19 | elapsed:    0.8s finished
+
+[2022-07-27 10:48:22] Features: 34/52 -- score: 0.8428610442355481[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  18 out of  18 | elapsed:    0.8s finished
+
+[2022-07-27 10:48:23] Features: 35/52 -- score: 0.8401036051673718[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  10 out of  17 | elapsed:    0.6s remaining:    0.5s
+[Parallel(n_jobs=4)]: Done  17 out of  17 | elapsed:    0.8s finished
+
+[2022-07-27 10:48:24] Features: 36/52 -- score: 0.8361276573467237[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  16 out of  16 | elapsed:    0.7s finished
+
+[2022-07-27 10:48:25] Features: 37/52 -- score: 0.8332970689914444[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  15 out of  15 | elapsed:    0.7s finished
+
+[2022-07-27 10:48:25] Features: 38/52 -- score: 0.8301985107591306[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  14 out of  14 | elapsed:    0.7s finished
+
+[2022-07-27 10:48:26] Features: 39/52 -- score: 0.8245966816746299[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  13 out of  13 | elapsed:    0.6s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  13 out of  13 | elapsed:    0.6s finished
+
+[2022-07-27 10:48:27] Features: 40/52 -- score: 0.8204300249621478[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:    0.6s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:    0.6s finished
+
+[2022-07-27 10:48:28] Features: 41/52 -- score: 0.8189924299706502[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  11 out of  11 | elapsed:    0.5s finished
+
+[2022-07-27 10:48:28] Features: 42/52 -- score: 0.8146435410934924[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    0.5s finished
+
+[2022-07-27 10:48:29] Features: 43/52 -- score: 0.8078289467042064[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   7 out of   9 | elapsed:    0.4s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   9 out of   9 | elapsed:    0.5s finished
+
+[2022-07-27 10:48:29] Features: 44/52 -- score: 0.7967527130014775[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   6 out of   8 | elapsed:    0.4s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   8 out of   8 | elapsed:    0.4s finished
+
+[2022-07-27 10:48:30] Features: 45/52 -- score: 0.7926074075965114[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   4 out of   7 | elapsed:    0.2s remaining:    0.2s
+[Parallel(n_jobs=4)]: Done   7 out of   7 | elapsed:    0.4s finished
+
+[2022-07-27 10:48:30] Features: 46/52 -- score: 0.7743038548882368[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   3 out of   6 | elapsed:    0.2s remaining:    0.2s
+[Parallel(n_jobs=4)]: Done   6 out of   6 | elapsed:    0.4s finished
+
+[2022-07-27 10:48:31] Features: 47/52 -- score: 0.7496559681177949[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   5 out of   5 | elapsed:    0.3s finished
+
+[2022-07-27 10:48:31] Features: 48/52 -- score: 0.7272615668144816[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   4 out of   4 | elapsed:    0.3s finished
+
+[2022-07-27 10:48:32] Features: 49/52 -- score: 0.7093266736980682[Parallel(n_jobs=3)]: Using backend LokyBackend with 3 concurrent workers.
+[Parallel(n_jobs=3)]: Done   3 out of   3 | elapsed:    0.3s finished
+
+[2022-07-27 10:48:32] Features: 50/52 -- score: 0.6810674191630524[Parallel(n_jobs=2)]: Using backend LokyBackend with 2 concurrent workers.
+[Parallel(n_jobs=2)]: Done   2 out of   2 | elapsed:    0.7s finished
+
+[2022-07-27 10:48:33] Features: 51/52 -- score: 0.6608504797245924[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s finished
+
+[2022-07-27 10:48:33] Features: 52/52 -- score: 0.6531054329005759
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;KPIs_met &gt;80%&#39;,
+ &#39;awards_won?&#39;,
+ &#39;avg_training_score&#39;,
+ &#39;department_HR&#39;,
+ &#39;department_Operations&#39;,
+ &#39;department_Procurement&#39;,
+ &#39;department_Sales &amp; Marketing&#39;,
+ &#39;department_Technology&#39;,
+ &#39;region_region_18&#39;,
+ &#39;region_region_9&#39;]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_df</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="n">new_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>KPIs_met &gt;80%</th>
+      <th>awards_won?</th>
+      <th>avg_training_score</th>
+      <th>department_HR</th>
+      <th>department_Operations</th>
+      <th>department_Procurement</th>
+      <th>department_Sales &amp; Marketing</th>
+      <th>department_Technology</th>
+      <th>region_region_18</th>
+      <th>region_region_9</th>
+      <th>is_promoted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>0</td>
+      <td>49</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>73</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+</section>
+<section id="2---DataFrame-without-column-names">
+<h2>2 - DataFrame without column names<a class="headerlink" href="#2---DataFrame-without-column-names" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">SeqFeatSelection</span></code> can be performed on datasets without column names. The next few cells demonstrate how to use <code class="docutils literal notranslate"><span class="pre">SeqFeatSelection</span></code> on datasets without column names, similar to the example above.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">dataset</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>10</th>
+      <th>11</th>
+      <th>12</th>
+      <th>13</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_7</td>
+      <td>Master's &amp; above</td>
+      <td>f</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>35</td>
+      <td>5.0</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0</td>
+      <td>49</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Operations</td>
+      <td>region_22</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>30</td>
+      <td>5.0</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_19</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>34</td>
+      <td>3.0</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_23</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>2</td>
+      <td>39</td>
+      <td>1.0</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Technology</td>
+      <td>region_26</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>45</td>
+      <td>3.0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>73</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>54803</th>
+      <td>Technology</td>
+      <td>region_14</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>48</td>
+      <td>3.0</td>
+      <td>17</td>
+      <td>0</td>
+      <td>0</td>
+      <td>78</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54804</th>
+      <td>Operations</td>
+      <td>region_27</td>
+      <td>Master's &amp; above</td>
+      <td>f</td>
+      <td>other</td>
+      <td>1</td>
+      <td>37</td>
+      <td>2.0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>56</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54805</th>
+      <td>Analytics</td>
+      <td>region_1</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>27</td>
+      <td>5.0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>79</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54806</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_9</td>
+      <td>NaN</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>29</td>
+      <td>1.0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>45</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>54807</th>
+      <td>HR</td>
+      <td>region_22</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>27</td>
+      <td>1.0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>49</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>54808 rows × 13 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+No columns specified for imputation. These columns have been automatically identified:
+[&#39;2&#39;, &#39;7&#39;]
+No columns specified for encoding. These columns have been automatically identfied as the following:
+[&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.0s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done  12 out of  12 | elapsed:    0.3s finished
+
+[2022-07-27 10:48:36] Features: 1/12 -- score: 0.6895577479869736[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.0s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done  11 out of  11 | elapsed:    0.3s finished
+
+[2022-07-27 10:48:36] Features: 2/12 -- score: 0.7872499546962967[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.0s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done  10 out of  10 | elapsed:    0.5s finished
+
+[2022-07-27 10:48:37] Features: 3/12 -- score: 0.8808119002453035[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   9 out of   9 | elapsed:    0.5s finished
+
+[2022-07-27 10:48:37] Features: 4/12 -- score: 0.8798465038933846[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   8 out of   8 | elapsed:    0.5s finished
+
+[2022-07-27 10:48:38] Features: 5/12 -- score: 0.8718241205396499[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   7 out of   7 | elapsed:    0.5s finished
+
+[2022-07-27 10:48:38] Features: 6/12 -- score: 0.8500875690014796[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   6 out of   6 | elapsed:    0.4s finished
+
+[2022-07-27 10:48:39] Features: 7/12 -- score: 0.8301586131548361[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   5 out of   5 | elapsed:    0.3s finished
+
+[2022-07-27 10:48:39] Features: 8/12 -- score: 0.7965278481347339[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   4 out of   4 | elapsed:    0.3s finished
+
+[2022-07-27 10:48:39] Features: 9/12 -- score: 0.7486532193434772[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   3 out of   3 | elapsed:    0.3s finished
+
+[2022-07-27 10:48:40] Features: 10/12 -- score: 0.6843054388422951[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   2 out of   2 | elapsed:    0.2s finished
+
+[2022-07-27 10:48:40] Features: 11/12 -- score: 0.6654508689096956[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s finished
+
+[2022-07-27 10:48:40] Features: 12/12 -- score: 0.663366868314892
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;0&#39;, &#39;9&#39;, &#39;11&#39;]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">set_selected_features</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">])</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;1&#39;, &#39;8&#39;]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">set_selected_features</span><span class="p">()</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;0&#39;, &#39;9&#39;, &#39;11&#39;]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_df</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="n">new_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>9</th>
+      <th>11</th>
+      <th>12</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7</td>
+      <td>1</td>
+      <td>49</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>0</td>
+      <td>60</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7</td>
+      <td>0</td>
+      <td>50</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>8</td>
+      <td>0</td>
+      <td>73</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="3---Regression-Task">
+<h2>3 - Regression Task<a class="headerlink" href="#3---Regression-Task" title="Permalink to this heading"></a></h2>
+<p>So far, we only showed examples of the <strong>SeqFeatSelection</strong> for classification tasks. However, this class also works for regression tasks. First of all, let’s create a dummy regression dataset so we can build a few examples. For this, we’ll use the <strong>create_dummy_dataset</strong> function:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">create_dummy_dataset</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">create_dummy_dataset</span><span class="p">(</span>
+        <span class="n">samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">n_features</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">n_num_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">n_cat_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">n_cat_cat</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">num_num_noise</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">],</span>
+        <span class="n">pct_change</span><span class="o">=</span><span class="p">[</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">],</span>
+        <span class="n">regression</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>num_2</th>
+      <th>num_3</th>
+      <th>num_4</th>
+      <th>num_5</th>
+      <th>label</th>
+      <th>num_c0_num_0</th>
+      <th>num_c1_num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.410174</td>
+      <td>1.013603</td>
+      <td>-0.832691</td>
+      <td>0.367173</td>
+      <td>0.567124</td>
+      <td>-0.759324</td>
+      <td>27.539174</td>
+      <td>0.404645</td>
+      <td>1.012075</td>
+      <td>val0_0</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.049380</td>
+      <td>1.025313</td>
+      <td>-1.205273</td>
+      <td>1.060657</td>
+      <td>1.028810</td>
+      <td>0.608497</td>
+      <td>97.544801</td>
+      <td>0.067120</td>
+      <td>1.007892</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.175892</td>
+      <td>-0.287463</td>
+      <td>-1.603577</td>
+      <td>-0.471347</td>
+      <td>0.735466</td>
+      <td>1.022698</td>
+      <td>-51.398235</td>
+      <td>-0.165907</td>
+      <td>-0.300760</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.253181</td>
+      <td>0.210460</td>
+      <td>0.934032</td>
+      <td>1.532367</td>
+      <td>-0.410205</td>
+      <td>0.051906</td>
+      <td>96.124444</td>
+      <td>-0.231510</td>
+      <td>0.218974</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.255014</td>
+      <td>0.357865</td>
+      <td>-0.608587</td>
+      <td>0.454078</td>
+      <td>-0.583506</td>
+      <td>1.106965</td>
+      <td>88.526727</td>
+      <td>0.254427</td>
+      <td>0.317064</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>995</th>
+      <td>0.032016</td>
+      <td>0.038192</td>
+      <td>0.506141</td>
+      <td>0.329018</td>
+      <td>0.353782</td>
+      <td>-0.385402</td>
+      <td>22.558860</td>
+      <td>0.022259</td>
+      <td>0.025872</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>996</th>
+      <td>0.242831</td>
+      <td>-0.106563</td>
+      <td>-0.072470</td>
+      <td>0.006590</td>
+      <td>1.748496</td>
+      <td>2.133973</td>
+      <td>152.801772</td>
+      <td>0.245658</td>
+      <td>-0.111039</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>997</th>
+      <td>1.801105</td>
+      <td>0.231289</td>
+      <td>0.190427</td>
+      <td>-0.423817</td>
+      <td>0.568846</td>
+      <td>0.793511</td>
+      <td>194.216915</td>
+      <td>1.791196</td>
+      <td>0.188060</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>998</th>
+      <td>-0.639458</td>
+      <td>-1.512235</td>
+      <td>-1.107102</td>
+      <td>-0.857749</td>
+      <td>0.038708</td>
+      <td>-1.332841</td>
+      <td>-289.448911</td>
+      <td>-0.634394</td>
+      <td>-1.533487</td>
+      <td>val0_0</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>999</th>
+      <td>0.695254</td>
+      <td>-0.430597</td>
+      <td>0.460556</td>
+      <td>-0.418865</td>
+      <td>-1.593463</td>
+      <td>2.280759</td>
+      <td>146.007750</td>
+      <td>0.692414</td>
+      <td>-0.419846</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>1000 rows × 11 columns</p>
+</div></div>
+</div>
+<p>The <strong>SeqFeatSelection</strong> class will automatically detect if a problem is a classification or regression task by looking at the label column: if the data type of the label column is a variation of the float data type, then the task is considered to be a regression. Otherwise, it is considered a classification task. Note that we can explicitly determine if we want to solve a classification or a regression task by setting the ‘regression’ parameter when instantiating the <strong>SeqFeatSelection</strong> class:
+if the ‘regression’ parameter is set to True, then the task will be considered a regression task, and if set to False, it will be treated as a classification task. The default value of this parameter is None, and in this case, the task will be determined by looking at the data type of the label column, as previously mentioned. If we have a classification problem, but the label column is set with float values (1.0 for class 1, 2.0 for class 2, and so on), then we must set the ‘regression’
+parameter to True.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;num_0&#39;,
+ &#39;num_1&#39;,
+ &#39;num_2&#39;,
+ &#39;num_3&#39;,
+ &#39;num_5&#39;,
+ &#39;num_c0_num_0&#39;,
+ &#39;num_c1_num_1&#39;,
+ &#39;CN_0_num_0&#39;,
+ &#39;CN_1_num_1&#39;]
+</pre></div></div>
+</div>
+<p>The internal variable ‘regression’ will indicate if the task is a regression or a classification:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">regression</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>We can also specify which regression model we want to use when doing the sequential feature selection procedure. The default regressor used is a Decision Tree Regressor.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+
+<span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="n">LinearRegression</span><span class="p">())</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;num_0&#39;, &#39;num_1&#39;, &#39;num_2&#39;, &#39;num_3&#39;, &#39;num_4&#39;, &#39;num_5&#39;, &#39;num_c0_num_0&#39;]
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../../dataprocessing/feat_sel/seq.html" class="btn btn-neutral float-left" title="SeqFeatSelection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../dataprocessing/feat_sel/catboost.html" class="btn btn-neutral float-right" title="CatBoostSelection" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>dataprocessing &mdash; RAI Error Mitigation  documentation</title>
+  <title>DataProcessing &mdash; Responsible AI Mitigations  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -22,8 +22,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="DataProcessing" href="dataprocessing.html" />
-    <link rel="prev" title="databalanceanalysis" href="../databalanceanalysis/databalanceanalysis.html" /> 
+    <link rel="next" title="Case Studies" href="case_studies.html" />
+    <link rel="prev" title="DataBalanceAnalysis" href="../databalanceanalysis/intro.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -31,7 +31,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> RAI Error Mitigation
+            <a href="../index.html" class="icon icon-home"> Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -41,10 +41,18 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/databalanceanalysis.html">databalanceanalysis</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">dataprocessing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#target-audience">Target Audience</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DataProcessing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#api">API</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="dataprocessing.html">DataProcessing</a></li>
@@ -55,7 +63,7 @@
 <li class="toctree-l3"><a class="reference internal" href="module_tests.html">Tutorials</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#sklearn-s-pipeline-support">Sklearn’s Pipeline Support</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="pipeline.html">Pipeline Support</a></li>
 </ul>
 </li>
@@ -69,7 +77,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">RAI Error Mitigation</a>
+          <a href="../index.html">Responsible AI Mitigations</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -77,7 +85,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>dataprocessing</li>
+      <li>DataProcessing</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/intro.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -112,7 +120,7 @@
 }
 </style>
 <section id="dataprocessing">
-<h1>dataprocessing<a class="headerlink" href="#dataprocessing" title="Permalink to this heading"></a></h1>
+<span id="dataproc"></span><h1>DataProcessing<a class="headerlink" href="#dataprocessing" title="Permalink to this heading"></a></h1>
 <p>This module contains several transformer classes that aim to change or mitigate certain aspects of a dataset.
 The goal of this module is to provide a unified interface for different mitigation methods scattered around
 multiple machine learning libraries, such as scikit-learn, mlxtend, sdv, among others. The advantage of using
@@ -126,12 +134,6 @@ classes offer unique solutions to a given aspect found in the area of data prepr
 offer a simple interface, with pre-determined parameter values, making it easier to use when the user doesn’t know
 (or doesn’t want) to configure all of the available parameters. At the same time, the classes found here provide
 several different customization options, making the module ideal for those with more experience.</p>
-<section id="target-audience">
-<h2>Target Audience<a class="headerlink" href="#target-audience" title="Permalink to this heading"></a></h2>
-<p>This module was designed mainly for data scientists. The <strong>dataprocessing</strong> module aims to offer
-classes that provide automated solutions, which helps the more unexperienced data scientists, while also allowing a wide
-variety of customizations, making it a good option for the more experienced as well.</p>
-</section>
 <section id="structure">
 <h2>Structure<a class="headerlink" href="#structure" title="Permalink to this heading"></a></h2>
 <p>The <strong>dataprocessing</strong> module uses a base class (<strong>DataProcessing</strong>) that implements several tasks shared
@@ -171,8 +173,8 @@ different encoding approaches (<a class="reference internal" href="encoder/ohe.h
 </ul>
 </div>
 </section>
-<section id="sklearn-s-pipeline-support">
-<h2>Sklearn’s Pipeline Support<a class="headerlink" href="#sklearn-s-pipeline-support" title="Permalink to this heading"></a></h2>
+<section id="scikit-learn-s-pipeline-support">
+<h2>scikit-learn’s Pipeline Support<a class="headerlink" href="#scikit-learn-s-pipeline-support" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pipeline.html">Pipeline Support</a></li>
@@ -185,8 +187,8 @@ different encoding approaches (<a class="reference internal" href="encoder/ohe.h
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../databalanceanalysis/databalanceanalysis.html" class="btn btn-neutral float-left" title="databalanceanalysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="dataprocessing.html" class="btn btn-neutral float-right" title="DataProcessing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../databalanceanalysis/intro.html" class="btn btn-neutral float-left" title="DataBalanceAnalysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="case_studies.html" class="btn btn-neutral float-right" title="Case Studies" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

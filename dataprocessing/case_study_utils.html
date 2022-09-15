@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Utilities (Case Study) &mdash; RAI Error Mitigation  documentation</title>
+  <title>Utilities (Case Study) &mdash; Responsible AI Mitigations  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -22,7 +22,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Simple Example" href="notebooks/module_tests/model_test.html" />
+    <link rel="next" title="Tutorials" href="module_tests.html" />
     <link rel="prev" title="Case Studies" href="case_studies.html" /> 
 </head>
 
@@ -31,7 +31,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> RAI Error Mitigation
+            <a href="../index.html" class="icon icon-home"> Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -41,10 +41,18 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/databalanceanalysis.html">databalanceanalysis</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="intro.html">dataprocessing</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="intro.html#target-audience">Target Audience</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="intro.html">DataProcessing</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="intro.html#structure">Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="intro.html#api">API</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="intro.html#examples">Examples</a><ul class="current">
@@ -56,7 +64,7 @@
 <li class="toctree-l3"><a class="reference internal" href="module_tests.html">Tutorials</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="intro.html#sklearn-s-pipeline-support">Sklearn’s Pipeline Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a></li>
 </ul>
 </li>
 </ul>
@@ -67,7 +75,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">RAI Error Mitigation</a>
+          <a href="../index.html">Responsible AI Mitigations</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -75,7 +83,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="intro.html">dataprocessing</a> &raquo;</li>
+          <li><a href="intro.html">DataProcessing</a> &raquo;</li>
           <li><a href="case_studies.html">Case Studies</a> &raquo;</li>
       <li>Utilities (Case Study)</li>
       <li class="wy-breadcrumbs-aside">
@@ -111,8 +119,177 @@
     text-align: unset;
 }
 </style>
-<section id="utilities-case-study">
-<h1>Utilities (Case Study)<a class="headerlink" href="#utilities-case-study" title="Permalink to this heading"></a></h1>
+<section id="module-case_study_utils">
+<span id="utilities-case-study"></span><h1>Utilities (Case Study)<a class="headerlink" href="#module-case_study_utils" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="case_study_utils.add_results_df">
+<span class="sig-prename descclassname"><span class="pre">case_study_utils.</span></span><span class="sig-name descname"><span class="pre">add_results_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_stat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#case_study_utils.add_results_df" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a new experiment in a data frame containing multiple
+experiment results. The new experiment is identified by the
+test_name parameter, and it is defined by the result dictionary
+given by the result_stat parameter. Returns the result_df data
+frame with the data of the new experiment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>result_df</strong> – a data frame containing the data of experiments
+executed previously (or None if this is the first experiment);</p></li>
+<li><p><strong>result_stat</strong> – the result dictionary returned by the
+result_statistics function containing the metrics for the new
+experiment to be added to the result_df data frame;</p></li>
+<li><p><strong>test_name</strong> – the name of the new experiment.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="case_study_utils.artificial_ctgan">
+<span class="sig-prename descclassname"><span class="pre">case_study_utils.</span></span><span class="sig-name descname"><span class="pre">artificial_ctgan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savefile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#case_study_utils.artificial_ctgan" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a Synthesizer object with the CTGAN model and using the strategy
+specified by the strategy parameter. Fit this object using the train_x and
+train_y datasets, and then create new artificial instances. Returns the
+original train_x and train_y sets with the new artificial instances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_x</strong> – the data frame containing only the feature columns of the
+training set;</p></li>
+<li><p><strong>train_y</strong> – the data frame containing only the label column of the
+training set;</p></li>
+<li><p><strong>strategy</strong> – the strategy used for the transform method of the
+Synthesizer class;</p></li>
+<li><p><strong>epochs</strong> – the number of epochs that the Synthesizer class should train for.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="case_study_utils.artificial_smote">
+<span class="sig-prename descclassname"><span class="pre">case_study_utils.</span></span><span class="sig-name descname"><span class="pre">artificial_smote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">under_sample</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#case_study_utils.artificial_smote" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a Rebalance object using the oversampling strategy specified
+by the strategy parameter and the under sampling method specified by the
+under_sample parameter. Fit this object using the train_x and train_y
+datasets, and then resample the training set provided. Returns the resampled
+train_x and train_y sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_x</strong> – the data frame containing only the feature columns of the
+training set;</p></li>
+<li><p><strong>train_y</strong> – the data frame containing only the label column of the
+training set;</p></li>
+<li><p><strong>strategy</strong> – the strategy used for the oversampling method. This is the
+same as the strategy_over parameter from the Rebalance class;</p></li>
+<li><p><strong>under_sample</strong> – the under sampling method used. This is the same as
+the under_sampler parameter from the Rebalance class.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="case_study_utils.feature_selection">
+<span class="sig-prename descclassname"><span class="pre">case_study_utils.</span></span><span class="sig-name descname"><span class="pre">feature_selection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feat_sel_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fwd'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#case_study_utils.feature_selection" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a feature selection object, fit this object
+using the dataset train_x, and then remove a set of the
+correlated features from the datasets train_x and test_x.
+Returns the datasets train_x and test_x containing only
+the selected features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_x</strong> – the data frame containing only the feature columns of the
+training set;</p></li>
+<li><p><strong>train_y</strong> – the data frame containing only the label column of the
+training set;</p></li>
+<li><p><strong>test_x</strong> – the data frame containing only the feature columns of the
+test set;</p></li>
+<li><p><strong>feat_sel_type</strong> – <p>specifies which feature selection approach is used:</p>
+<ul>
+<li><p>’forward’: SeqFeatSelection object using the forward strategy;</p></li>
+<li><p>’backward’: SeqFeatSelection object using the backward strategy;</p></li>
+<li><p>’catboost’: CatBoostSelection object.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="case_study_utils.plot_results">
+<span class="sig-prename descclassname"><span class="pre">case_study_utils.</span></span><span class="sig-name descname"><span class="pre">plot_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_lim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.5,</span> <span class="pre">0.75]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#case_study_utils.plot_results" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a bar plot with the metrics of multiple experiments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>res_df</strong> – the data frame containing the metrics of one or
+more experiments. Must be a data frame returned by the
+add_results_df function;</p></li>
+<li><p><strong>y_lim</strong> – a list with two float values specifying the range
+of the Y axis of the bar plot.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="case_study_utils.remove_corr_feat">
+<span class="sig-prename descclassname"><span class="pre">case_study_utils.</span></span><span class="sig-name descname"><span class="pre">remove_corr_feat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#case_study_utils.remove_corr_feat" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a CorrelatedFeatures object, fit this object
+using the dataset df, and then remove a set of the
+correlated features from the dataset. Returns the
+dataset without a set of the correlated features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – the full data frame to be analyzed;</p></li>
+<li><p><strong>label_col</strong> – the column name or column index of
+the label column.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="case_study_utils.result_statistics">
+<span class="sig-prename descclassname"><span class="pre">case_study_utils.</span></span><span class="sig-name descname"><span class="pre">result_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#case_study_utils.result_statistics" title="Permalink to this definition"></a></dt>
+<dd><p>Build a dictionary with the statistics of the results
+obtained.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>result_list</strong> – a list of result metrics. Each index
+in this list must be a list of result metrics returned
+by the dataprocessing.train_model_fetch_results function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="case_study_utils.transform_num_data">
+<span class="sig-prename descclassname"><span class="pre">case_study_utils.</span></span><span class="sig-name descname"><span class="pre">transform_num_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaler_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_col</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#case_study_utils.transform_num_data" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a scaler object (specified by the scaler_ref parameter), fit
+it to the train_x dataset, and then apply the scaler to the train_x and
+test_x datasets. Return the train_x and test_x datasets with all numerical
+columns specified by num_col scaled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_x</strong> – the data frame containing only the feature columns of the
+training set;</p></li>
+<li><p><strong>test_x</strong> – the data frame containing only the feature columns of the
+test set;</p></li>
+<li><p><strong>scaler_ref</strong> – the class reference for the scaler to be used. Must be
+one of the scalers implemented in the scaler dataprocessing.scaler
+submodule;</p></li>
+<li><p><strong>num_col</strong> – a list with the name of the numerical columns.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -120,7 +297,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="case_studies.html" class="btn btn-neutral float-left" title="Case Studies" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="notebooks/module_tests/model_test.html" class="btn btn-neutral float-right" title="Simple Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="module_tests.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

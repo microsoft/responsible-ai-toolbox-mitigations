@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FeatureBalanceMeasure &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="DataProcessing" href="../dataprocessing/dataprocessing.html" />
+    <link rel="prev" title="DistributionBalanceMeasure" href="distribution_measures.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="intro.html">DataBalanceAnalysis</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="databalanceanalysis.html">DataBalanceAnalysis</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="aggregate_measures.html">AggregateBalanceMeasure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="distribution_measures.html">DistributionBalanceMeasure</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">FeatureBalanceMeasure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dataprocessing/intro.html">DataProcessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API reference</a> &raquo;</li>
+          <li><a href="databalanceanalysis.html">DataBalanceAnalysis</a> &raquo;</li>
+      <li>FeatureBalanceMeasure</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/databalanceanalysis/feature_measures.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="featurebalancemeasure">
+<span id="feature-measures"></span><h1>FeatureBalanceMeasure<a class="headerlink" href="#featurebalancemeasure" title="Permalink to this heading"></a></h1>
+<p>These measure whether each combination of sensitive features is receiving the positive outcome (true prediction) at balanced probabilities. Many of these
+metrics were influenced by the paper, Measuring Model Biases in the Absence of Ground Truth (Osman Aka, Ken Burke, Alex Bäuerle, Christina Greer, Margaret
+Mitchell).</p>
+<table class="colwidths-given longtable docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Association <br />
+Metric</p></th>
+<th class="head"><p>Family</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Interpretation / <br /> Formula</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Fairness_%28machine_learning%29">Statistical parity</a></p></td>
+<td><p>Fairness</p></td>
+<td><p>The proportion of each segment <br />
+of a protected class (e.g., <br />
+gender) should receive the <br />
+positive outcome at equal <br />
+rates.</p></td>
+<td><p>Parity increases with <br />
+proximity to 0. <br /> <br />
+DP = P(Y|A=“Male”)- <br />
+P(Y|A=“Female”)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pointwise <br /> mutual <br />
+information <br /> (<a class="reference external" href="https://en.wikipedia.org/wiki/Pointwise_mutual_information">PMI</a>), <br />
+normalized PMI</p></td>
+<td><p>Entropy</p></td>
+<td><p>The PMI of a pair of feature <br />
+values (e.g.,  Gender=Male <br />
+and Gender=Female) quantifies <br />
+the discrepancy between the <br />
+probability of their <br />
+coincidence, given their <br />
+joint distribution and their <br />
+individual distributions <br />
+(assuming independence).</p></td>
+<td><p>Range (normalized) <code class="docutils literal notranslate"><span class="pre">[−1,1]</span></code> <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">-1</span></code> for no co-occurences <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> for co-occurences at <br />
+random <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">1</span></code> for complete <br />
+co-occurences</p></td>
+</tr>
+<tr class="row-even"><td><p>Sorensen-Dice <br />
+coefficient <br /> (<a class="reference external" href="https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient">SDC</a>)</p></td>
+<td><p>Intersection <br />
+over union</p></td>
+<td><p>The SDC is used to gauge the <br />
+similarity of two samples <br />
+and is related to F1 score.</p></td>
+<td><p>Equals twice the number of <br />
+elements common to both <br />
+sets divided by the sum <br />
+of the number of elements <br />
+in each set.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Jaccard_index">Jaccard index</a></p></td>
+<td><p>Intersection <br />
+over union</p></td>
+<td><p>Similar to SDC, the Jaccard <br />
+index guages the similarity <br />
+and diversity of sample sets.</p></td>
+<td><p>Equals the size of the <br />
+intersection divided by <br />
+the size of the union of <br />
+the sample sets.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient">Kendall rank</a> <br /> <a class="reference external" href="https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient">correlation</a></p></td>
+<td><p>Correlation <br />
+and <br /> statistical <br />
+tests</p></td>
+<td><p>This is used to measure the <br />
+ordinal association between <br />
+two measured quantities.</p></td>
+<td><p>High when observations <br />
+have a similar rank <br />
+between the two variables <br />
+and low when observations <br />
+have a dissimilar rank.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio">Log-</a> <br />
+<a class="reference external" href="https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio">likelihood</a> <br />
+<a class="reference external" href="https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio">ratio</a></p></td>
+<td><p>Correlation <br />
+and <br />
+statistical <br />
+tests</p></td>
+<td><p>This metric calculates the <br />
+degree to which data <br />
+supports one variable versus <br />
+another. The log-likelihood <br />
+ratio gives the probability <br />
+of correctly predicting the <br />
+label in ratio to <br />
+probability of incorrectly <br />
+predicting label.</p></td>
+<td><p>If likelihoods are similar, <br />
+it should be close to 0.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Student's_t-test">T-test</a></p></td>
+<td><p>Correlation <br />
+and <br />
+statistical <br />
+tests</p></td>
+<td><p>The t-test is used to <br />
+compare the means of two <br />
+groups (pairwise).</p></td>
+<td><p>The value that is being <br />
+assessed for statistical <br />
+significance in the <br />
+t-distribution.</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="module-databalanceanalysis.feature_measures"></span><dl class="py class">
+<dt class="sig sig-object py" id="databalanceanalysis.feature_measures.FeatureBalanceMeasure">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.feature_measures.</span></span><span class="sig-name descname"><span class="pre">FeatureBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BalanceMeasure</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="databalanceanalysis.feature_measures.FeatureBalanceMeasure.CLASS_A">
+<span class="sig-name descname"><span class="pre">CLASS_A</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ClassA'</span></em><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.CLASS_A" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="databalanceanalysis.feature_measures.FeatureBalanceMeasure.CLASS_B">
+<span class="sig-name descname"><span class="pre">CLASS_B</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ClassB'</span></em><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.CLASS_B" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="databalanceanalysis.feature_measures.FeatureBalanceMeasure.FEATURE_METRICS">
+<span class="sig-name descname"><span class="pre">FEATURE_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.DEMOGRAPHIC_PARITY:</span> <span class="pre">&lt;function</span> <span class="pre">get_demographic_parity&gt;,</span> <span class="pre">Measures.JACCARD_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_jaccard_index&gt;,</span> <span class="pre">Measures.KR_CORRELATION:</span> <span class="pre">&lt;function</span> <span class="pre">get_kr_correlation&gt;,</span> <span class="pre">Measures.LOG_LIKELIHOOD:</span> <span class="pre">&lt;function</span> <span class="pre">get_log_likelihood_ratio&gt;,</span> <span class="pre">Measures.POINTWISE_MUTUAL_INFO:</span> <span class="pre">&lt;function</span> <span class="pre">get_point_mutual&gt;,</span> <span class="pre">Measures.SD_COEF:</span> <span class="pre">&lt;function</span> <span class="pre">get_sorenson_dice&gt;,</span> <span class="pre">Measures.TTEST:</span> <span class="pre">&lt;function</span> <span class="pre">get_t_test_stat&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.FEATURE_METRICS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="databalanceanalysis.feature_measures.FeatureBalanceMeasure.OVERALL_METRICS">
+<span class="sig-name descname"><span class="pre">OVERALL_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Measures</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{(&lt;Measures.TTEST_PVALUE:</span> <span class="pre">'ttest_pvalue'&gt;,</span> <span class="pre">&lt;Measures.TTEST:</span> <span class="pre">'t_test'&gt;):</span> <span class="pre">&lt;function</span> <span class="pre">get_t_test_p_value&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.OVERALL_METRICS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="databalanceanalysis.feature_measures.FeatureBalanceMeasure.measures">
+<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.feature_measures.FeatureBalanceMeasure.measures" title="Permalink to this definition"></a></dt>
+<dd><p>The output is a dictionary that maps the sensitive column table to Pandas dataframe containing the following</p>
+<blockquote>
+<div><ul>
+<li><p>A feature value within the sensitive feature.</p></li>
+<li><p>Another feature value within the sensitive feature.</p></li>
+<li><p>It contains the following measures of the gaps between the two classes</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Demographic Parity - <a class="reference external" href="https://en.wikipedia.org/wiki/Fairness_(machine_learning">https://en.wikipedia.org/wiki/Fairness_(machine_learning</a>)</p></li>
+<li><p>Pointwise Mutual Information - <a class="reference external" href="https://en.wikipedia.org/wiki/Pointwise_mutual_information">https://en.wikipedia.org/wiki/Pointwise_mutual_information</a></p></li>
+<li><p>Sorensen-Dice Coefficient - <a class="reference external" href="https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient">https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient</a></p></li>
+<li><p>Jaccard Index - <a class="reference external" href="https://en.wikipedia.org/wiki/Jaccard_index">https://en.wikipedia.org/wiki/Jaccard_index</a></p></li>
+<li><p>Kendall Rank Correlation - <a class="reference external" href="https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient">https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient</a></p></li>
+<li><p>Log-Likelihood Ratio - <a class="reference external" href="https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio">https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio</a></p></li>
+<li><p>t-test - <a class="reference external" href="https://en.wikipedia.org/wiki/Student's_t-test">https://en.wikipedia.org/wiki/Student’s_t-test</a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<p>This output dataframe contains a row per combination of feature values for each sensitive feature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – the df to calculate all of the feature balance measures on</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dataframe that contains 4 columns, first column is the sensitive feature’s name, 2nd column is one possible value of that sensitive feature,
+the 3rd column is a different possible value of that feature and the last column is a dictionary which indicates</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="distribution_measures.html" class="btn btn-neutral float-left" title="DistributionBalanceMeasure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../dataprocessing/dataprocessing.html" class="btn btn-neutral float-right" title="DataProcessing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

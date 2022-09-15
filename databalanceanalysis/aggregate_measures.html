@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AggregateBalanceMeasure &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="DistributionBalanceMeasure" href="distribution_measures.html" />
+    <link rel="prev" title="DataBalanceAnalysis" href="databalanceanalysis.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="intro.html">DataBalanceAnalysis</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="databalanceanalysis.html">DataBalanceAnalysis</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">AggregateBalanceMeasure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="distribution_measures.html">DistributionBalanceMeasure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="feature_measures.html">FeatureBalanceMeasure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dataprocessing/intro.html">DataProcessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API reference</a> &raquo;</li>
+          <li><a href="databalanceanalysis.html">DataBalanceAnalysis</a> &raquo;</li>
+      <li>AggregateBalanceMeasure</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/databalanceanalysis/aggregate_measures.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="aggregatebalancemeasure">
+<span id="aggregate-measures"></span><h1>AggregateBalanceMeasure<a class="headerlink" href="#aggregatebalancemeasure" title="Permalink to this heading"></a></h1>
+<p>These measures look at the distribution of records across all value combinations of sensitive feature columns. For example, if <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">race</span></code> are specified as
+sensitive features, the API tries to quantify imbalance across all combinations of the specified features (e.g., <code class="docutils literal notranslate"><span class="pre">[Male,</span> <span class="pre">Black]</span></code>, <code class="docutils literal notranslate"><span class="pre">[Female,</span> <span class="pre">White]</span></code>, <code class="docutils literal notranslate"><span class="pre">[Male,</span> <span class="pre">Asian</span>
+<span class="pre">Pacific</span> <span class="pre">Islander]</span></code>)</p>
+<table class="colwidths-given longtable docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Measure</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Interpretation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Atkinson_index">Atkinson index</a></p></td>
+<td><p>The Atkinson index presents the <br />
+percentage of total income that <br />
+a given society would have to <br />
+forego in order to have more equal <br />
+shares of income among its <br />
+citizens. This measure depends on <br />
+the degree of societal aversion to <br />
+inequality (a theoretical parameter <br />
+decided by the researcher), where a <br />
+higher value entails greater social <br />
+utility or willingness by individuals <br />
+to accept smaller incomes in exchange <br />
+for a more equal distribution. <br /> <br />
+An important feature of the Atkinson <br />
+index is that it can be decomposed <br />
+into within-group and between-group <br />
+inequality.</p></td>
+<td><p>Range <code class="docutils literal notranslate"><span class="pre">[0,1]</span></code> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> = perfect equality <br />
+<code class="docutils literal notranslate"><span class="pre">1</span></code> = maximum inequality <br /> <br />
+In this case, it is the <br />
+proportion of records for a <br />
+sensitive column’s combination.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Theil_index">Theil T index</a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">GE(1)</span> <span class="pre">=</span> <span class="pre">Theil</span> <span class="pre">T</span></code>, which is more <br />
+sensitive to differences at the <br />
+top of the distribution. The Theil <br />
+index is a statistic used to measure <br />
+economic inequality. The Theil index <br />
+measures an entropic “distance” the <br />
+population is away from the “ideal” <br />
+egalitarian state of everyone having <br />
+the same income.</p></td>
+<td><p>If everyone has the same income, <br />
+then <code class="docutils literal notranslate"><span class="pre">T_T</span></code> equals 0. <br /> <br />
+If one person has all the income, <br />
+then <code class="docutils literal notranslate"><span class="pre">T_T</span></code> gives the result ln(N). <br /> <br />
+<code class="docutils literal notranslate"><span class="pre">0</span></code> means equal income and larger <br />
+values mean higher level of <br />
+disproportion.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://en.wikipedia.org/wiki/Theil_index">Theil L index</a></p></td>
+<td><p>GE(0) = Theil L, which is more <br />
+sensitive to differences at the <br />
+lower end of the distribution. <br />
+Thiel L is the logarithm of <br />
+(mean income)/(income i), over <br />
+all the incomes included in the <br />
+summation. It is also referred <br />
+to as the mean log deviation <br />
+measure. Because a transfer from <br />
+a larger income to a smaller one <br />
+will change the smaller income’s <br />
+ratio more than it changes the <br />
+larger income’s ratio, the <br />
+transfer-principle is satisfied <br />
+by this index.</p></td>
+<td><p>Same interpretation as <br />
+Theil T index.</p></td>
+</tr>
+</tbody>
+</table>
+<span class="target" id="module-databalanceanalysis.aggregate_measures"></span><dl class="py class">
+<dt class="sig sig-object py" id="databalanceanalysis.aggregate_measures.AggregateBalanceMeasure">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">databalanceanalysis.aggregate_measures.</span></span><span class="sig-name descname"><span class="pre">AggregateBalanceMeasure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensitive_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#databalanceanalysis.aggregate_measures.AggregateBalanceMeasure" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BalanceMeasure</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="databalanceanalysis.aggregate_measures.AggregateBalanceMeasure.AGGREGATE_METRICS">
+<span class="sig-name descname"><span class="pre">AGGREGATE_METRICS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Measures</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{Measures.ATKINSON_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_atkinson_index&gt;,</span> <span class="pre">Measures.THEIL_L_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_theil_l_index&gt;,</span> <span class="pre">Measures.THEIL_T_INDEX:</span> <span class="pre">&lt;function</span> <span class="pre">get_theil_t_index&gt;}</span></em><a class="headerlink" href="#databalanceanalysis.aggregate_measures.AggregateBalanceMeasure.AGGREGATE_METRICS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="databalanceanalysis.aggregate_measures.AggregateBalanceMeasure.measures">
+<span class="sig-name descname"><span class="pre">measures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#databalanceanalysis.aggregate_measures.AggregateBalanceMeasure.measures" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>The output is a dataframe that maps the names of the different aggregate measures to their values:</dt><dd><p>The following measures are computed:</p>
+<ul class="simple">
+<li><p>Atkinson Index - <a class="reference external" href="https://en.wikipedia.org/wiki/Atkinson_index">https://en.wikipedia.org/wiki/Atkinson_index</a></p></li>
+<li><p>Theil Index (L and T) - <a class="reference external" href="https://en.wikipedia.org/wiki/Theil_index">https://en.wikipedia.org/wiki/Theil_index</a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – the df to calculate aggregate measures on</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns a dataframe that has one column that is the name of the aggregate measure, the second column contains the values for each of the metrics of interest.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="databalanceanalysis.html" class="btn btn-neutral float-left" title="DataBalanceAnalysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="distribution_measures.html" class="btn btn-neutral float-right" title="DistributionBalanceMeasure" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -32,4 +32,4 @@ Examples
 ********
 
 .. nbgallery::
-   ../notebooks/module_tests/encoding
+   ../../notebooks/dataprocessing/module_tests/encoding
