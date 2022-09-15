@@ -3,6 +3,10 @@
 How this library works with the Responsible AI Toolbox
 ======================================================
 
+.. figure:: imgs/responsible-ai-toolbox-mitigations.png
+  :scale: 35
+  :alt: Responsible AI Toolbox
+
 The Responsible AI Mitigations Library is part of the `Responsible AI Toolbox`_, a larger effort for integrating and building development tools for responsible AI.
 One of the central contributions of the Toolbox is the `dashboard`_, which bringing together several mature Responsible AI tools in the areas of `machine learning
 interpretability`_, `unfairness assessment and mitigation`_, `error analysis`_, `causal inference`_, and `counterfactual analysis`_ for a holistic assessment and debugging of

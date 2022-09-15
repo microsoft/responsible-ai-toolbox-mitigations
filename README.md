@@ -7,7 +7,7 @@ This repo is a part of the [Responsible AI Toolbox](https://github.com/microsoft
 
 
 <p align="center">
-<img src="./img/responsible-ai-toolbox-mitigations.png" alt="ResponsibleAIToolboxMitigationsOverview" width="750"/>
+<img src="./docs/imgs/responsible-ai-toolbox-mitigations.png" alt="ResponsibleAIToolboxMitigationsOverview" width="750"/>
 
 There are two main functions covered in this library:
 - **Data Balance Analysis** (Exploratory Data Analysis): covering metrics that help to determine how balanced is your dataset.
@@ -30,7 +30,7 @@ pip install raimitigations
 ```
 ## Documentation
 
-To learn more about the supported dataset measurements and mitigation techniques covered in the **raimitigations** package, [please check out this documentation.](https://sturdy-barnacle-3b9f911d.pages.github.io/index.html)
+To learn more about the supported dataset measurements and mitigation techniques covered in the **raimitigations** package, [please check out this documentation.](https://responsible-ai-toolbox-mitigations.readthedocs.io/en/latest/)
 
 
 
