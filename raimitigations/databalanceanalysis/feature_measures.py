@@ -90,23 +90,26 @@ class FeatureBalanceMeasure(BalanceMeasure):
 
     def measures(self, df: pd.DataFrame) -> pd.DataFrame:
         """
-         The output is a dictionary that maps the sensitive column table to Pandas dataframe containing the following
-        * A feature value within the sensitive feature.
-        * Another feature value within the sensitive feature.
-        * It contains the following measures of the gaps between the two classes
-            * Demographic Parity - https://en.wikipedia.org/wiki/Fairness_(machine_learning)
-            * Pointwise Mutual Information - https://en.wikipedia.org/wiki/Pointwise_mutual_information
-            * Sorensen-Dice Coefficient - https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient
-            * Jaccard Index - https://en.wikipedia.org/wiki/Jaccard_index
-            * Kendall Rank Correlation - https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient
-            * Log-Likelihood Ratio - https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio
-            * t-test - https://en.wikipedia.org/wiki/Student's_t-test
+        The output is a dictionary that maps the sensitive column table to Pandas dataframe containing the following
+
+            * A feature value within the sensitive feature.
+            * Another feature value within the sensitive feature.
+            * It contains the following measures of the gaps between the two classes
+
+                * Demographic Parity - https://en.wikipedia.org/wiki/Fairness_(machine_learning)
+                * Pointwise Mutual Information - https://en.wikipedia.org/wiki/Pointwise_mutual_information
+                * Sorensen-Dice Coefficient - https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient
+                * Jaccard Index - https://en.wikipedia.org/wiki/Jaccard_index
+                * Kendall Rank Correlation - https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient
+                * Log-Likelihood Ratio - https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio
+                * t-test - https://en.wikipedia.org/wiki/Student's_t-test
+
         This output dataframe contains a row per combination of feature values for each sensitive feature.
 
         :param df: the df to calculate all of the feature balance measures on
         :type df: pd.DataFrame
-        :return:  a dataframe that contains 4 columns, first column is the sensitive feature's name, 2nd column is one possible value of that sensitive feature,
-        the 3rd column is a different possible value of that feature and the last column is a dictionary which indicates
+        :return: a dataframe that contains 4 columns, first column is the sensitive feature's name, 2nd column is one possible value of that sensitive feature,
+            the 3rd column is a different possible value of that feature and the last column is a dictionary which indicates
         :rtype: pd.DataFrame
         """
         _feature_measures = self._get_all_gaps(df, self._sensitive_cols, self._label_col)

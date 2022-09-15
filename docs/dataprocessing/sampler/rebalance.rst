@@ -1,3 +1,5 @@
+.. _rebalance:
+
 Rebalance
 =========
 
@@ -14,4 +16,4 @@ Example
 -------
 
 .. nbgallery::
-   ../notebooks/module_tests/rebalance_imbl
+   ../../notebooks/dataprocessing/module_tests/rebalance_imbl

@@ -1,4 +1,6 @@
-dataprocessing
+.. _dataproc:
+
+DataProcessing
 ==============
 
 This module contains several transformer classes that aim to change or mitigate certain aspects of a dataset.
@@ -16,12 +18,6 @@ offer a simple interface, with pre-determined parameter values, making it easier
 (or doesn't want) to configure all of the available parameters. At the same time, the classes found here provide
 several different customization options, making the module ideal for those with more experience.
 
-Target Audience
----------------
-
-This module was designed mainly for data scientists. The **dataprocessing** module aims to offer
-classes that provide automated solutions, which helps the more unexperienced data scientists, while also allowing a wide
-variety of customizations, making it a good option for the more experienced as well.
 
 Structure
 ---------
@@ -58,8 +54,8 @@ All notebooks listed here can be found in the folder **notebooks/dataprocessing/
    module_tests
 
 
-Sklearn's Pipeline Support
---------------------------
+scikit-learn's Pipeline Support
+-------------------------------
 
 .. toctree::
    :maxdepth: 1

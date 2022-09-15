@@ -25,7 +25,7 @@ class DataImputer(DataProcessing):
     COL_INDEX = 1
 
     # -----------------------------------
-    def __init__(self, df: pd.DataFrame = None, col_impute: list = None, verbose: bool = True):
+    def __init__(self, df: Union[pd.DataFrame, np.ndarray] = None, col_impute: list = None, verbose: bool = True):
         super().__init__(verbose)
         self.df = None
         self.fitted = False
@@ -110,6 +110,8 @@ class DataImputer(DataProcessing):
         Abstract method. For a given concrete class, this method must execute the
         imputation of a dataset using the imputation method implemented and a new
         dataset with no missing values in the columns in self.col_impute.
+
+        :param df: the full dataset with the columns to be imputed.
         """
         pass
 
@@ -120,6 +122,8 @@ class DataImputer(DataProcessing):
         imputation methods.
 
         :param df: the full dataset with the columns to be imputed.
+        :return: the transformed dataset.
+        :rtype: pd.DataFrame or np.ndarray
         """
         self._check_if_fitted()
         transf_df = self._fix_col_transform(df)

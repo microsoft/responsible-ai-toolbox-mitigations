@@ -27,6 +27,7 @@ jobs:
         run: |
           sudo apt install pandoc
           sudo apt install graphviz
+          pip install seaborn
           make html
         working-directory: docs
 

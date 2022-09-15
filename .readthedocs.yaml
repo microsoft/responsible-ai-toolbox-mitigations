@@ -9,7 +9,7 @@ build:
     - graphviz
   jobs:
     pre_build:
-      - cp -r notebooks/dataprocessing/ docs/dataprocessing/notebooks/
+      - cp -r notebooks/ docs/notebooks/
       - pip install seaborn
 
 python:

@@ -123,10 +123,10 @@ class SeqFeatSelection(FeatureSelection):
     # -----------------------------------
     def __init__(
         self,
-        df: pd.DataFrame = None,
+        df: Union[pd.DataFrame, np.ndarray] = None,
         label_col: str = None,
-        X: pd.DataFrame = None,
-        y: pd.DataFrame = None,
+        X: Union[pd.DataFrame, np.ndarray] = None,
+        y: Union[pd.DataFrame, np.ndarray] = None,
         transform_pipe: list = None,
         in_place: bool = False,
         regression: bool = None,
@@ -397,5 +397,10 @@ class SeqFeatSelection(FeatureSelection):
         where each key represents a different run, which is associated
         with a secondary dictionary with all the relevant data regarding
         that particular run.
+
+        :return: a dictionary where each key represents a different run,
+            which is associated with a secondary dictionary with all the
+            relevant data regarding that particular run.
+        :rtype: dict
         """
         return self.selector.subsets_.copy()

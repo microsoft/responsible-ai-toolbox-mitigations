@@ -18,10 +18,10 @@ help:
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 ifdef OS
-	rmdir dataprocessing\notebooks /s /q
-	xcopy ..\notebooks\dataprocessing dataprocessing\notebooks /S /i
+	rmdir notebooks /s /q
+	xcopy ..\notebooks notebooks /S /i
 else
-	rm -f -r dataprocessing/notebooks/
-	cp -r ../notebooks/dataprocessing/ dataprocessing/notebooks/
+	rm -f -r notebooks/
+	cp -r ../notebooks/ notebooks/
 endif
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

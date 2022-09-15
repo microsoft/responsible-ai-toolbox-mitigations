@@ -14,4 +14,4 @@ Example
 -------
 
 .. nbgallery::
-   ../notebooks/module_tests/feat_sel_sequential
+   ../../notebooks/dataprocessing/module_tests/feat_sel_sequential

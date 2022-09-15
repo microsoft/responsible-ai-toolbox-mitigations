@@ -174,10 +174,10 @@ class Rebalance(DataProcessing):
     # -----------------------------------
     def __init__(
         self,
-        df: pd.DataFrame = None,
+        df: Union[pd.DataFrame, np.ndarray] = None,
         rebalance_col: str = None,
-        X: pd.DataFrame = None,
-        y: pd.DataFrame = None,
+        X: Union[pd.DataFrame, np.ndarray] = None,
+        y: Union[pd.DataFrame, np.ndarray] = None,
         transform_pipe: list = None,
         in_place: bool = False,
         cat_col: list = None,
@@ -556,7 +556,11 @@ class Rebalance(DataProcessing):
 
     # -----------------------------------
     def fit_resample(
-        self, X: pd.DataFrame = None, y: pd.DataFrame = None, df: pd.DataFrame = None, rebalance_col: str = None
+        self,
+        X: Union[pd.DataFrame, np.ndarray] = None,
+        y: Union[pd.DataFrame, np.ndarray] = None,
+        df: Union[pd.DataFrame, np.ndarray] = None,
+        rebalance_col: str = None,
     ):
         """
         Runs the over and/or undersampling methods specified by the parameters provided in
@@ -585,7 +589,9 @@ class Rebalance(DataProcessing):
             mandatory to pass the pair of parameters (X,y) or (df, rebalance_col) either
             during the class instantiation or during the :meth:`fit` method;
         :param rebalance_col: the name or index of the column used to do the rebalance
-            operation. This parameter is mandatory if  ``df`` is provided;
+            operation. This parameter is mandatory if  ``df`` is provided.
+        :return: the transformed dataset.
+        :rtype: pd.DataFrame or np.ndarray
         """
         self._set_df_mult(df, rebalance_col, X, y, require_set=True)
         self._check_rebalance_col()

@@ -1,3 +1,5 @@
+.. _FeatureSelection:
+
 Feature Selection
 =================
 
@@ -34,6 +36,6 @@ Examples
 ********
 
 .. nbgallery::
-   ../notebooks/module_tests/feat_sel_sequential
-   ../notebooks/module_tests/feat_sel_catboost
-   ../notebooks/module_tests/feat_sel_corr_tutorial
+   ../../notebooks/dataprocessing/module_tests/feat_sel_sequential
+   ../../notebooks/dataprocessing/module_tests/feat_sel_catboost
+   ../../notebooks/dataprocessing/module_tests/feat_sel_corr_tutorial

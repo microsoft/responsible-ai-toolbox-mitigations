@@ -1,3 +1,5 @@
+from typing import Union
+import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
@@ -65,7 +67,7 @@ class DataMinMaxScaler(DataScaler):
     def __init__(
         self,
         scaler_obj: MinMaxScaler = None,
-        df: pd.DataFrame = None,
+        df: Union[pd.DataFrame, np.ndarray] = None,
         exclude_cols: list = None,
         include_cols: list = None,
         transform_pipe: list = None,

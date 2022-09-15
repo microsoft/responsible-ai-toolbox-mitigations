@@ -1,3 +1,4 @@
+from typing import Union
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
@@ -40,7 +41,7 @@ class EncoderOHE(DataEncoding):
     # -----------------------------------
     def __init__(
         self,
-        df: pd.DataFrame = None,
+        df: Union[pd.DataFrame, np.ndarray] = None,
         col_encode: list = None,
         drop: bool = True,
         unknown_err: bool = True,
@@ -119,6 +120,8 @@ class EncoderOHE(DataEncoding):
     def _transform(self, df: pd.DataFrame):
         """
         Steps for running the transform method for the current class.
+
+        :param df: the full dataset with the columns to be encoded.
         """
         org_df = df.copy()
         ohe_data = self._get_df_subset(org_df, self.col_encode)
@@ -132,11 +135,15 @@ class EncoderOHE(DataEncoding):
         Returns a list with the column names or column indices of the one-hot
         encoded columns. These are the columns created by the one-hot encoder
         that replaced the original columns.
+
+        :return: a list with the column names or column indices of the one-hot
+            encoded columns.
+        :rtype: list
         """
         return self.new_col_names.copy()
 
     # -----------------------------------
-    def _inverse_transform(self, df: pd.DataFrame):
+    def _inverse_transform(self, df: Union[pd.DataFrame, np.ndarray]):
         self._check_if_fitted()
         org_df = df.copy()
         ohe_data = self._get_df_subset(df, self.new_col_names)

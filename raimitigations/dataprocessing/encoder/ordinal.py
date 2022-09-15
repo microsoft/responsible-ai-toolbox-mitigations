@@ -48,12 +48,12 @@ class EncoderOrdinal(DataEncoding):
     # -----------------------------------
     def __init__(
         self,
-        df: pd.DataFrame = None,
+        df: Union[pd.DataFrame, np.ndarray] = None,
         col_encode: list = None,
         categories: Union[dict, str] = "auto",
-        verbose: bool = True,
         unknown_err: bool = False,
         unknown_value: Union[int, float] = -1,
+        verbose: bool = True,
     ):
         super().__init__(df, col_encode, verbose)
         self.categories = categories
@@ -128,6 +128,8 @@ class EncoderOrdinal(DataEncoding):
         based on the value provided to the categories parameter. If a categorical
         column in col_encode is missing from the categories parameter, it is auto-
         matically generated.
+
+        :param df: the full dataset with the columns to be encoded.
         """
         columns = df.columns
         self.categories_list = []
@@ -207,6 +209,8 @@ class EncoderOrdinal(DataEncoding):
     def _transform(self, df: pd.DataFrame):
         """
         Steps for running the transform method for the current class.
+
+        :param df: the full dataset with the columns to be encoded.
         """
 
         def _to_int(value):
@@ -222,7 +226,7 @@ class EncoderOrdinal(DataEncoding):
         return transf_df
 
     # -----------------------------------
-    def _inverse_transform(self, df: pd.DataFrame):
+    def _inverse_transform(self, df: Union[pd.DataFrame, np.ndarray]):
         self._check_if_fitted()
         transf_df = df.copy()
         df_valid = self._get_df_subset(df, self.col_encode)
@@ -236,7 +240,7 @@ class EncoderOrdinal(DataEncoding):
         performed by the ordinal encoder. The dictionary contains the following
         structure:
 
-        * One key for each column. Each key is associated ​with a secondary
+        * One key for each column. Each key is associated with a secondary
           dictionary with the following keys:
 
           - **"values":** the unique values encountered in the column;
@@ -245,6 +249,10 @@ class EncoderOrdinal(DataEncoding):
             list, that is, mapping[column]["labels][i] is the
             label assigned to the value mapping[column]["values][i].
           - **"n_labels":** the number of labels. If unknown_err is set to False,
-            this will account for the label for ​unknown values.
+            this will account for the label for unknown values.
+
+        :return: a dictionary with all the information regarding the mapping
+            performed by the ordinal encoder.
+        :rtype: dict
         """
-        return self.mapping
+        return self.mapping.copy()

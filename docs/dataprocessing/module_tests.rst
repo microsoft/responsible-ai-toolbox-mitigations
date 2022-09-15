@@ -6,11 +6,11 @@ methods offered in the **dataprocessing** module.
 
 
 .. nbgallery::
-   notebooks/module_tests/encoding
-   notebooks/module_tests/scaler
-   notebooks/module_tests/imputation
-   notebooks/module_tests/feat_sel_sequential
-   notebooks/module_tests/feat_sel_catboost
-   notebooks/module_tests/feat_sel_corr_tutorial
-   notebooks/module_tests/rebalance_imbl
-   notebooks/module_tests/rebalance_sdv
+   ../notebooks/dataprocessing/module_tests/encoding
+   ../notebooks/dataprocessing/module_tests/scaler
+   ../notebooks/dataprocessing/module_tests/imputation
+   ../notebooks/dataprocessing/module_tests/feat_sel_sequential
+   ../notebooks/dataprocessing/module_tests/feat_sel_catboost
+   ../notebooks/dataprocessing/module_tests/feat_sel_corr_tutorial
+   ../notebooks/dataprocessing/module_tests/rebalance_imbl
+   ../notebooks/dataprocessing/module_tests/rebalance_sdv

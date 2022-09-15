@@ -19,10 +19,11 @@ class DataEncoding(DataProcessing):
         If None, this parameter will be set automatically as being a list of all
         categorical variables in the dataset;
 
-    :param verbose: indicates whether internal messages should be printed or not."""
+    :param verbose: indicates whether internal messages should be printed or not.
+    """
 
     # -----------------------------------
-    def __init__(self, df: pd.DataFrame = None, col_encode: list = None, verbose: bool = True):
+    def __init__(self, df: Union[pd.DataFrame, np.ndarray] = None, col_encode: list = None, verbose: bool = True):
         super().__init__(verbose)
         self.df = None
         self._set_df(df)
@@ -92,6 +93,8 @@ class DataEncoding(DataProcessing):
         Abstract method. For a given concrete class, this method must execute the
         transformation of a dataset using the encoding method implemented and
         return the encoded dataset.
+
+        :param df: the full dataset with the columns to be encoded.
         """
         pass
 
@@ -102,6 +105,8 @@ class DataEncoding(DataProcessing):
         col_encode parameter. Returns a dataset with the encoded columns.
 
         :param df: the full dataset with the columns to be encoded.
+        :return: the transformed dataset.
+        :rtype: pd.DataFrame or np.ndarray
         """
         self._check_if_fitted()
         transf_df = self._fix_col_transform(df)
@@ -113,5 +118,9 @@ class DataEncoding(DataProcessing):
         """
         Returns a list with the column names or column indices of the
         encoded columns.
+
+        :return: a list with the column names or column indices of the
+            encoded columns.
+        :rtype: list
         """
         return self.col_encode.copy()

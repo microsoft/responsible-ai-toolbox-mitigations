@@ -61,7 +61,7 @@ class DataScaler(DataProcessing):
     # -----------------------------------
     def __init__(
         self,
-        df: pd.DataFrame = None,
+        df: Union[pd.DataFrame, np.ndarray] = None,
         exclude_cols: list = None,
         include_cols: list = None,
         transform_pipe: list = None,
@@ -162,6 +162,8 @@ class DataScaler(DataProcessing):
         simply call the fit() method of the particular sklearn scaler
         used. If a given scaler requires a different set of operations,
         it should simply overwrite this method.
+
+        :param df: the full dataset containing the columns that should be scaled.
         """
         self.scaler.fit(df)
 
@@ -173,6 +175,8 @@ class DataScaler(DataProcessing):
         called. Here, we simply call the transform() method of the underlying
         sklearn object used. If a given scaler requires a different set
         of operations, it should simply overwrite this method.
+
+        :param df: the full dataset containing the columns that should be scaled
         """
         scaled_df = self.scaler.transform(df)
         return scaled_df
@@ -218,6 +222,8 @@ class DataScaler(DataProcessing):
         current scaler over the preprocessed dataset and return a new dataset.
 
         :param df: the full dataset containing the columns that should be scaled.
+        :return: the transformed dataset.
+        :rtype: pd.DataFrame or np.ndarray
         """
         self._check_if_fitted()
         df = self._fix_col_transform(df)
@@ -233,7 +239,7 @@ class DataScaler(DataProcessing):
         return final_df
 
     # -----------------------------------
-    def _base_inverse_transform(self, df: pd.DataFrame):
+    def _base_inverse_transform(self, df: Union[pd.DataFrame, np.ndarray]):
         """
         Implements the specific behavior for the inverse transformation for
         a given scaler that inherits from the current abstract DataScaler

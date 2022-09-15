@@ -1,3 +1,5 @@
+.. _syhtesizer:
+
 Synthesizer
 ===========
 
@@ -15,4 +17,4 @@ Example
 -------
 
 .. nbgallery::
-   ../notebooks/module_tests/rebalance_sdv
+   ../../notebooks/dataprocessing/module_tests/rebalance_sdv

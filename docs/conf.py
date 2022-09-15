@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath("../notebooks/dataprocessing/case_study"))
 
 # -- Project information -----------------------------------------------------
 
-project = "RAI Error Mitigation"
+project = "Responsible AI Mitigations"
 copyright = '2022, Microsoft'
 author = 'Microsoft'
 

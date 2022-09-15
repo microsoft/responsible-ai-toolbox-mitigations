@@ -23,6 +23,12 @@ def get_cat_cols(df: pd.DataFrame, subset: list = None):
     Returns a list of all categorical columns in the dataset
     df. If subset != None, check for categorical columns
     only in the columns within the subset list.
+
+    :param df: the dataset being analyzed;
+    :param subset: the list of columns that should be analyzed.
+        If subset is None, then check all columns.
+    :return: a list with the name of all categorical columns.
+    :rtype: list
     """
 
     def test_if_categorical(value):
@@ -47,6 +53,14 @@ def ordinal_to_onehot(arr: list, n_class: int):
     Converts a list of ordinal values that ranges
     from [0, n_class] to a one-hot matrix with
     shape (len(arr), n_class).
+
+    :param arr: a list of labels
+    :param n_class: the number of classes in arr
+    :return: a list of lists (a matrix) of one-hot
+        encodings, where each label in arr is one-hot
+        encoded according to the maximum number of
+        classes n_class.
+    :rtype: list of lists
     """
     onehot_matrix = []
     for value in arr:
@@ -63,6 +77,10 @@ def err_float_01(param, param_name):
     param_name represents the name of the parameter 'param'.
     This makes it easier for the user to identify where the
     error occured.
+
+    :param param: the numerical parameter being analyzed;
+    :param param_name: the internal name used for the parameter
+        provided in param.
     """
     if type(param) != float or param < 0.0 or param > 1.0:
         raise ValueError(
