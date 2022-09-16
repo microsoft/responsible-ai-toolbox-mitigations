@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Union
+from typing import Union, Any
 
 import random
 import pandas as pd
@@ -39,6 +39,15 @@ class DataProcessing(ABC):
     def print_message(self, text: str):
         if self.verbose:
             print(text)
+
+
+    # -----------------------------------
+    @staticmethod
+    def obj_has_method(obj: Any, method_name: str):
+        has_att = hasattr(obj.__class__, method_name)
+        has_method = has_att and callable(getattr(obj.__class__, method_name))
+        return has_method
+
 
     # -----------------------------------
     @abstractmethod
@@ -290,7 +299,7 @@ class DataProcessing(ABC):
         def error_message(param1: str, param2: str):
             raise ValueError(
                 f"ERROR: '{param1}' and '{param2}' must be provided together, "
-                + f"but only '{param1}' is valid parameter."
+                + f"but only '{param1}' is a valid parameter."
             )
 
         input_scheme = self.INPUT_DF
@@ -597,8 +606,7 @@ class DataProcessing(ABC):
             order).
         :rtype: pd.DataFrame or np.ndarray
         """
-        has_inverse = hasattr(self.__class__, "_inverse_transform")
-        reversible = has_inverse and callable(getattr(self.__class__, "_inverse_transform"))
+        reversible = self.obj_has_method(self, "_inverse_transform")
         if not reversible:
             raise ValueError(f"ERROR: the class {self.__class__.__name__} is not reversible.")
 
