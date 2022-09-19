@@ -8,6 +8,7 @@ df = pd.DataFrame({
 })
 
 
+
 conditions = [
                 [ ['race', '==', 'elf'], 'or', ['race', '==', 'orc'] ],
                 'and',
@@ -16,6 +17,7 @@ conditions = [
 
 cht_def = CohortDefinition(conditions)
 temp, _, _ = cht_def.get_cohort_subset(df)
+cht_def.save("test.json")
 print(temp)
 
 conditions = [ [ ['height(m)', 'range', [1.1, 1.7]], 'and', ['race', '!=', 'halfling'] ] ]
