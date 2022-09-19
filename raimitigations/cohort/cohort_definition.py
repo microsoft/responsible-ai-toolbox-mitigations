@@ -1,29 +1,25 @@
-from typing import List
-import itertools
-
+from typing import Union
 import pandas as pd
 import numpy as np
-from sklearn.base import BaseEstimator
-from sklearn import metrics
-from sklearn.model_selection import KFold, StratifiedKFold
-from scipy.spatial import distance
+import json
 
 
-'''
+"""
 TODO:
     - in the constructor, allow the cohort_definition parameter to be a json file
     - create a method that saves the cohort definition into a json file
-'''
+"""
+
 
 class CohortFilters:
 
-    GREATER = '>'
-    GREATER_EQUAL = '>='
-    LESS = '<'
-    LESS_EQUAL = '<='
-    EQUAL = '=='
-    RANGE = 'range'
-    DIFFERENT = '!='
+    GREATER = ">"
+    GREATER_EQUAL = ">="
+    LESS = "<"
+    LESS_EQUAL = "<="
+    EQUAL = "=="
+    RANGE = "range"
+    DIFFERENT = "!="
     ALL = [GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, EQUAL, RANGE, DIFFERENT]
 
     OP_ALLOW_LIST = [EQUAL, RANGE, DIFFERENT]
@@ -31,26 +27,43 @@ class CohortFilters:
 
     SIMPLE_OP = [GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, EQUAL, DIFFERENT]
 
-    AND = 'and'
-    OR = 'or'
+    AND = "and"
+    OR = "or"
     CONDITION_CONNECTORS = [AND, OR]
 
-class CohortDefinition():
+
+class CohortDefinition:
 
     STATE_COND1 = 0
     STATE_AND_OR = 1
     STATE_COND2 = 2
 
     # -----------------------------------
-    def __init__(self, cohort_definition: list = None, name: str = "cohort"):
-        self.conditions = cohort_definition
+    def __init__(self, cohort_definition: Union[list, str] = None, name: str = "cohort"):
+        self._set_conditions(cohort_definition)
         self.query = None
         self.columns_used = []
         self.name = name
         self._build_query()
 
+    # -----------------------------------
+
+    def _set_conditions(self, conditions: Union[list, str] = None):
+        if conditions is None:
+            return
+        if type(conditions) == str:
+            conditions = self._load(conditions)
+        elif type(conditions) != list:
+            raise ValueError(
+                (
+                    "ERROR: the cohort_definition parameter must be a string or a list. If cohort_definition is a "
+                    "string, it must be a valid json file name that contains the conditions for a cohort."
+                )
+            )
+        self.conditions = conditions
 
     # -----------------------------------
+
     def _get_condition_parts(self, condition: list):
         instruction_msg = (
             "each condition must be comprised of exactly three values: "
@@ -72,30 +85,34 @@ class CohortDefinition():
         value = condition[2]
 
         if operator not in CohortFilters.ALL:
-            raise ValueError((
-                f"ERROR: invalid operator found. Expected one of the following operators: {CohortFilters.ALL}. "
-                f"Instead, found {operator}."
-            ))
+            raise ValueError(
+                (
+                    f"ERROR: invalid operator found. Expected one of the following operators: {CohortFilters.ALL}. "
+                    f"Instead, found {operator}."
+                )
+            )
 
         if type(value) == list:
             if len(value) == 0:
-                raise ValueError((
-                    "ERROR: invalid list passed as the value for a condition. Expected a list with at least "
-                    f"one value, but got an empty list. Condition: {column} {operator} {value}."
-                ))
+                raise ValueError(
+                    (
+                        "ERROR: invalid list passed as the value for a condition. Expected a list with at least "
+                        f"one value, but got an empty list. Condition: {column} {operator} {value}."
+                    )
+                )
             if operator not in CohortFilters.OP_ALLOW_LIST:
                 raise ValueError(f"ERROR: a list value is not allowed for the operator {operator}.")
             if operator == CohortFilters.RANGE:
                 if len(value) != 2:
-                    raise ValueError(
-                        f"{range_msg}Instead, got the following list with {len(value)} elements: {value}."
-                    )
+                    raise ValueError(f"{range_msg}Instead, got the following list with {len(value)} elements: {value}.")
         elif type(value) == str or type(value) == int or type(value) == float:
             if operator not in CohortFilters.SIMPLE_OP:
-                raise ValueError((
-                    f"ERROR: invalid operator '{operator}' associated to value '{value}'. The allowed "
-                    f"operators for this value are: {CohortFilters.SIMPLE_OP}"
-                ))
+                raise ValueError(
+                    (
+                        f"ERROR: invalid operator '{operator}' associated to value '{value}'. The allowed "
+                        f"operators for this value are: {CohortFilters.SIMPLE_OP}"
+                    )
+                )
             if type(value) == str:
                 value = f"'{value}'"
                 if operator in CohortFilters.OP_REQ_NUMER:
@@ -105,11 +122,10 @@ class CohortDefinition():
         else:
             raise ValueError(f"ERROR: invalid value provided: {value}. Condition: {column} {operator} {value}.")
 
-
         return column, operator, value
 
-
     # -----------------------------------
+
     def _get_single_condition_query(self, condition: list):
         column, operator, value = self._get_condition_parts(condition)
         self.columns_used.append(column)
@@ -127,8 +143,8 @@ class CohortDefinition():
                 query = f"`{column}` {operator} {value}"
         return query
 
-
     # -----------------------------------
+
     def _create_cohort_query(self, conditions: list):
         state = self.STATE_COND1
         query = ""
@@ -145,10 +161,12 @@ class CohortDefinition():
                     query = f"{query}({part_query})"
                     state = self.STATE_COND1
                 else:
-                    raise ValueError((
-                        f"ERROR: expected one of the following connectors: {CohortFilters.CONDITION_CONNECTORS}. "
-                        f"Instead, found another condition: '{condition}'"
-                    ))
+                    raise ValueError(
+                        (
+                            f"ERROR: expected one of the following connectors: {CohortFilters.CONDITION_CONNECTORS}. "
+                            f"Instead, found another condition: '{condition}'"
+                        )
+                    )
             elif type(condition) == str:
                 if condition in CohortFilters.CONDITION_CONNECTORS:
                     connector = "or"
@@ -157,49 +175,68 @@ class CohortDefinition():
                     query += f" {connector} "
                     state = self.STATE_COND2
                 else:
-                    raise ValueError((
-                        f"ERROR: expected one of the following connectors: {CohortFilters.CONDITION_CONNECTORS}. "
-                        f"Instead, found the connector: '{condition}'"
-                    ))
+                    raise ValueError(
+                        (
+                            f"ERROR: expected one of the following connectors: {CohortFilters.CONDITION_CONNECTORS}. "
+                            f"Instead, found the connector: '{condition}'"
+                        )
+                    )
             else:
                 raise ValueError(f"ERROR: invalid value found in cohort condition: {condition}")
 
         if state == self.STATE_COND2:
-            raise ValueError((
+            raise ValueError(
+                (
                     "ERROR: expected a complementary condition associated to the "
                     f"connector '{connector}'. Partial query found: {query}."
-            ))
+                )
+            )
 
         self.columns_used = list(set(self.columns_used))
 
         return query
 
-
     # -----------------------------------
+
     def _build_query(self):
         if self.conditions is None:
             return
 
         self.query = self._create_cohort_query(self.conditions)
 
-
     # -----------------------------------
+
     def check_valid_df(self, df: pd.DataFrame):
         for col in self.columns_used:
             if col not in df.columns:
-                raise ValueError((
-                    "ERROR: one of the columns used by the cohort filter are missing in the dataset provided. "
-                    f"The current cohort uses the following columns: {self.columns_used}. The dataset provided "
-                    f"has the following columns: {df.columns}"
-                ))
-
+                raise ValueError(
+                    (
+                        "ERROR: one of the columns used by the cohort filter are missing in the dataset provided. "
+                        f"The current cohort uses the following columns: {self.columns_used}. The dataset provided "
+                        f"has the following columns: {df.columns}"
+                    )
+                )
 
     # -----------------------------------
+
     def require_remaining_index(self):
         return self.conditions is None or self.conditions == []
 
+    # -----------------------------------
+
+    def save(self, json_file: str):
+        with open(json_file, "w") as file:
+            json.dump(self.conditions, file, indent=4)
 
     # -----------------------------------
+
+    def _load(self, json_file: str):
+        with open(json_file, "r") as file:
+            conditions = json.load(file)
+        return conditions
+
+    # -----------------------------------
+
     def get_cohort_subset(self, df: pd.DataFrame, y: pd.DataFrame = None, index_used: list = None):
         """
         Filters a dataset to fetch only the instances that follow the
@@ -220,11 +257,13 @@ class CohortDefinition():
         subset_y = None
         if self.require_remaining_index():
             if index_used is None:
-                raise ValueError((
-                    "ERROR: when calling the get_cohort_subset() method for a cohort with no conditions, "
-                    "it is necessary to provide the 'index_used' parameter so that the remaining indexes "
-                    "are used."
-                ))
+                raise ValueError(
+                    (
+                        "ERROR: when calling the get_cohort_subset() method for a cohort with no conditions, "
+                        "it is necessary to provide the 'index_used' parameter so that the remaining indexes "
+                        "are used."
+                    )
+                )
             missing_index = [index for index in df.index if index not in index_used]
             subset = df.filter(items=missing_index, axis=0)
         else:

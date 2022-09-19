@@ -1,13 +1,10 @@
-from typing import List, Union
+from typing import Union
 import itertools
 from copy import deepcopy
 
 import pandas as pd
 import numpy as np
-from sklearn.base import BaseEstimator
-from sklearn import metrics
-from sklearn.model_selection import KFold, StratifiedKFold
-from scipy.spatial import distance
+import json
 
 from ..dataprocessing import (
     DataProcessing,
@@ -15,9 +12,12 @@ from ..dataprocessing import (
     EncoderOrdinal,
     SeqFeatSelection,
     CorrelatedFeatures,
-    CatBoostSelection
+    CatBoostSelection,
+    Rebalance,
+    Synthesizer,
 )
 from .cohort_definition import CohortDefinition, CohortFilters
+
 
 class CohortManager(DataProcessing):
 
@@ -26,14 +26,16 @@ class CohortManager(DataProcessing):
         EncoderOrdinal.__name__,
         SeqFeatSelection.__name__,
         CorrelatedFeatures.__name__,
-        CatBoostSelection.__name__
+        CatBoostSelection.__name__,
     ]
+
+    DP_CLASS_NOT_ALLOWED = [Rebalance.__name__, Synthesizer.__name__]
 
     # -----------------------------------
     def __init__(
         self,
         transform_pipe: list,
-        cohort_def: Union[dict, list] = None,
+        cohort_def: Union[dict, list, str] = None,
         cohort_col: list = None,
         df: pd.DataFrame = None,
         label_col: str = None,
@@ -59,19 +61,21 @@ class CohortManager(DataProcessing):
         self._set_cohort_def(cohort_def, cohort_col)
         self._build_cohorts()
 
-
     # -----------------------------------
+
     def _get_fit_input_type(self):
         return self.FIT_INPUT_XY
 
-
     # -----------------------------------
+
     def _set_transforms(self, transform_pipe: list):
         if transform_pipe is None:
-            raise ValueError((
-                "ERROR: the CohortManager class requires a valid list of transformations passed to the "
-                "transform_pipe parameter."
-            ))
+            raise ValueError(
+                (
+                    "ERROR: the CohortManager class requires a valid list of transformations passed to the "
+                    "transform_pipe parameter."
+                )
+            )
         if type(transform_pipe) != list:
             transform_pipe = [transform_pipe]
 
@@ -80,21 +84,25 @@ class CohortManager(DataProcessing):
             class_name = transform.__class__.__name__
             has_fit = self.obj_has_method(transform, "fit")
             if not has_fit:
-                raise ValueError((
-                    f"ERROR: the transform from class {class_name} passed to the "
-                    f"transform_pipe parameter does not have a fit() method."
-                ))
+                raise ValueError(
+                    (
+                        f"ERROR: the transform from class {class_name} passed to the "
+                        f"transform_pipe parameter does not have a fit() method."
+                    )
+                )
 
             has_transf = self.obj_has_method(transform, "transform")
             if has_transf:
                 self._pipe_has_transform = True
             # only the last object is allowed to not have a transform() method
-            if not has_transf and i < len(transform_pipe)-1:
-                raise ValueError((
-                    "ERROR: only the last object in the transform_pipe parameter is allowed to not have "
-                    f"a transform() method, but the object in position {i}, from class {class_name}, doesn't "
-                    "have a transform() method."
-                ))
+            if not has_transf and i < len(transform_pipe) - 1:
+                raise ValueError(
+                    (
+                        "ERROR: only the last object in the transform_pipe parameter is allowed to not have "
+                        f"a transform() method, but the object in position {i}, from class {class_name}, doesn't "
+                        "have a transform() method."
+                    )
+                )
 
             # check if the last object has a predict() or predict_proba() method.
             # only the last object is allowed to have these methods.
@@ -104,22 +112,34 @@ class CohortManager(DataProcessing):
                 self._pipe_has_predict = True
             if has_predict_proba:
                 self._pipe_has_predict_proba = True
-            if (has_predict or has_predict_proba) and i < len(transform_pipe)-1:
-                raise ValueError((
-                    "ERROR: only the last object in the transform_pipe parameter is allowed to have "
-                    f"a predict() or a predict_proba() method, but the object in position {i}, from "
-                    f"class {class_name}, has one of these methods."
-                ))
+            if (has_predict or has_predict_proba) and i < len(transform_pipe) - 1:
+                raise ValueError(
+                    (
+                        "ERROR: only the last object in the transform_pipe parameter is allowed to have "
+                        f"a predict() or a predict_proba() method, but the object in position {i}, from "
+                        f"class {class_name}, has one of these methods."
+                    )
+                )
 
             # if one of the transforms is from one of these classes,
             # then the cohorts are incompatible between each other
             if isinstance(transform, DataProcessing) and class_name in self.DP_CLASS_INCOMPATIBLE_COHORTS:
                 self._cohorts_compatible = False
 
+            if class_name in self.DP_CLASS_NOT_ALLOWED:
+                raise ValueError(
+                    (
+                        "ERROR: one of the transformers in the transform_pipe parameter, from class "
+                        f"{class_name}, is not allowed. The following classes, from the "
+                        "raimitigations.dataprocessing module, are not allowed in the transform_pipe: "
+                        f"{self.DP_CLASS_NOT_ALLOWED}."
+                    )
+                )
+
         self.transform_pipe = transform_pipe
 
-
     # -----------------------------------
+
     def _set_cohort_def(self, cohort_def: Union[dict, list], cohort_col: list):
         if cohort_def is None and cohort_col is None:
             raise ValueError(
@@ -131,17 +151,22 @@ class CohortManager(DataProcessing):
             )
 
         if cohort_def is not None:
+            if type(cohort_def) == str:
+                cohort_def = self._load(cohort_def)
+
             if type(cohort_def) != dict and type(cohort_def) != list:
                 raise ValueError(
-                    "ERROR: 'cohort_def' must be a dict or a list with the definition of all cohorts."
+                    "ERROR: 'cohort_def' must be a dict or a list with the definition of all cohorts, or a string "
+                    + "with the path of a valid json containing the definition of all cohorts."
                 )
+
             if type(cohort_def) == dict:
                 new_cohort_def = []
                 for key in cohort_def:
                     new_cohort_def.append(cohort_def[key])
                     self._cohort_names.append(key)
-                    cohort_def = new_cohort_def
-            else:
+                cohort_def = new_cohort_def
+            elif type(cohort_def) == list:
                 self._cohort_names = [f"cohort_{i}" for i in range(len(cohort_def))]
         else:
             if type(cohort_col) != list or cohort_col == []:
@@ -153,41 +178,37 @@ class CohortManager(DataProcessing):
         self.cohort_col = cohort_col
         self.cohort_def = cohort_def
 
-
     # -----------------------------------
+
     def _get_cohort_def_from_condition(self, cht_values: tuple):
         """
-        Builds a condition dictionary that controls which instances
-        should be included in a cohort or not. The condition dictionary
-        is created based on the tuple provided as a parameter (cohort).
-        The values in this tuple are associated to the columns in
-        self.cohort_cols (also in the same order), and each value
+        Builds a cohort definition list, similar to the one used in the
+        ``cohort_def`` parameter, based on a list of value tuples defining
+        multiple cohorts. This list is created based on the ``cohort_col``
+        parameter. These tuples are associated to the columns in
+        ``cohort_col`` (also in the same order), and each value
         represents the condition for an instance to be considered from
-        the cohort or not. This method also creates a query that
-        manages to filter a data frame to include only the instances
-        from the cohort defined by the tuples 'cohort' using the query
-        method from the Pandas library.
+        the cohort or not.
 
         :param cht_values: a tuple of values that defines a new cohort.
             The values in this tuple are associated with the columns in
-            self.cohort_col (also in the same order), and each value
+            ``cohort_col`` (also in the same order), and each value
             represents the condition for an instance to be considered
             from the cohort or not.
         """
         cht_def = []
         for j, col_name in enumerate(self.cohort_col):
-            op = CohortFilters.EQUAL
             cond_term = [col_name, CohortFilters.EQUAL, cht_values[j]]
             cht_def.append(cond_term)
             # if not the last cohort column name, add a 'and' term
             # between two consecutive conditions
-            if j < len(self.cohort_col)-1:
+            if j < len(self.cohort_col) - 1:
                 cht_def.append(CohortFilters.AND)
 
         return cht_def
 
-
     # -----------------------------------
+
     def _cohort_col_to_def(self):
         if self.df is None:
             return
@@ -207,8 +228,8 @@ class CohortManager(DataProcessing):
             self.cohort_def.append(cht_def)
             self._cohort_names.append(name)
 
-
     # -----------------------------------
+
     def _build_cohorts(self):
         if self.cohorts is not None:
             return
@@ -225,15 +246,39 @@ class CohortManager(DataProcessing):
             cohort_pipe = [deepcopy(tf) for tf in self.transform_pipe]
             self._cohort_pipe.append(cohort_pipe)
 
+    # -----------------------------------
+
+    def save(self, json_file: str):
+        if self.cohorts is None:
+            raise ValueError(
+                (
+                    "ERROR: calling the save() method before building the cohorts. To build the cohorts, either pass "
+                    "a valid dataframe to the constructor of the CohortManager class, or call the fit() method."
+                )
+            )
+        cht_dict = {}
+        for cht in self.cohorts:
+            cht_dict[cht.name] = cht.conditions
+
+        with open(json_file, "w") as file:
+            json.dump(cht_dict, file, indent=4)
 
     # -----------------------------------
+
+    def _load(self, json_file: str):
+        with open(json_file, "r") as file:
+            conditions = json.load(file)
+        return conditions
+
+    # -----------------------------------
+
     def _check_intersection_cohorts(self, index_used: list):
         set_index = list(set(index_used))
         if len(set_index) != len(index_used):
             raise ValueError("ERROR: some rows of the dataset belong to more than one cohort.")
 
-
     # -----------------------------------
+
     def _check_compatibility_between_cohorts(self, cht_df: list):
         self._cohorts_compatible = True
         columns = cht_df[0].columns
@@ -247,17 +292,19 @@ class CohortManager(DataProcessing):
                 self._cohorts_compatible = False
                 break
 
-
     # -----------------------------------
+
     def _merge_cohort_datasets(self, cht_df: list, org_index: list):
         if self._cohorts_compatible is None:
             self._check_compatibility_between_cohorts(cht_df)
 
         if not self._cohorts_compatible:
-            self.print_message((
-                "WARNING: the transformations used over the cohorts resulted in each cohort having different "
-                "columns. The transform() method will return a list of transformed subsets (one for each cohort)."
-            ))
+            self.print_message(
+                (
+                    "WARNING: the transformations used over the cohorts resulted in each cohort having different "
+                    "columns. The transform() method will return a list of transformed subsets (one for each cohort)."
+                )
+            )
             return cht_df
 
         final_df = None
@@ -272,8 +319,8 @@ class CohortManager(DataProcessing):
 
         return final_df
 
-
     # -----------------------------------
+
     def _merge_cohort_predictions(self, cht_pred: list, index_list: list):
         if not self._cohorts_compatible:
             return cht_pred
@@ -290,8 +337,8 @@ class CohortManager(DataProcessing):
 
         return final_pred
 
-
     # -----------------------------------
+
     def _raise_missing_instances_error(self, df: pd.DataFrame, index_list: list):
         """
         Raises an error when there are instances that don't belong to any cohort.
@@ -307,14 +354,15 @@ class CohortManager(DataProcessing):
         set_difference = set(df.index) - set(index_list)
         missing = list(set_difference)
         missing_subset = df.filter(items=missing, axis=0)
-        raise ValueError((
-            "ERROR: a subset of the instances passed to the transform(), predict(), or predict_proba() "
-            "doesn't fit into any of the existing cohorts.\n"
-            + f"The subset is given as follows:\n{missing_subset}"
-        ))
-
+        raise ValueError(
+            (
+                "ERROR: a subset of the instances passed to the transform(), predict(), or predict_proba() "
+                "doesn't fit into any of the existing cohorts.\n" + f"The subset is given as follows:\n{missing_subset}"
+            )
+        )
 
     # -----------------------------------
+
     def fit(
         self,
         X: Union[pd.DataFrame, np.ndarray] = None,
@@ -341,11 +389,10 @@ class CohortManager(DataProcessing):
         return self
 
     # -----------------------------------
+
     def transform(self, df: Union[pd.DataFrame, np.ndarray]):
         if not self._pipe_has_transform:
-            raise ValueError(
-                "ERROR: none of the objects in the transform_pipe parameter have a transform() method."
-            )
+            raise ValueError("ERROR: none of the objects in the transform_pipe parameter have a transform() method.")
         self._check_if_fitted()
         df = self._fix_col_transform(df)
 
@@ -367,13 +414,11 @@ class CohortManager(DataProcessing):
 
         return final_df
 
-
     # -----------------------------------
+
     def _predict(self, X: Union[pd.DataFrame, np.ndarray], prob: bool = False):
         if not prob and not self._pipe_has_predict:
-            raise ValueError(
-                "ERROR: none of the objects in the transform_pipe parameter have a predict() method."
-            )
+            raise ValueError("ERROR: none of the objects in the transform_pipe parameter have a predict() method.")
         if prob and not self._pipe_has_predict_proba:
             raise ValueError(
                 "ERROR: none of the objects in the transform_pipe parameter have a predict_proba() method."
@@ -405,16 +450,14 @@ class CohortManager(DataProcessing):
 
         return final_pred
 
-
     # -----------------------------------
+
     def predict(self, X: Union[pd.DataFrame, np.ndarray]):
         final_pred = self._predict(X, prob=False)
         return final_pred
 
-
     # -----------------------------------
+
     def predict_proba(self, X: Union[pd.DataFrame, np.ndarray]):
         final_pred = self._predict(X, prob=True)
         return final_pred
-
-

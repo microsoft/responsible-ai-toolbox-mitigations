@@ -31,7 +31,6 @@ def create_df():
         num_num_noise=[0.01, 0.05],
         pct_change=[0.05, 0.1],
     )
-    #col_with_nan = ["num_0", "num_1", "CN_0_num_0"]
     col_with_nan = ["num_0", "num_1"]
     for col in col_with_nan:
         if col != "label":
@@ -83,8 +82,15 @@ cohort_set = CohortManager(
     transform_pipe=cohort_pipeline,
     cohort_col=["CN_0_num_0", "CN_1_num_1"]
 )
+cohort_set.fit(X=X, y=y)
+cohort_set.save("cohort.json")
+new_X = cohort_set.transform(X)
 
 
+cohort_set = CohortManager(
+    transform_pipe=cohort_pipeline,
+    cohort_def="cohort.json"
+)
 cohort_set.fit(X=X, y=y)
 new_X = cohort_set.transform(X)
 
@@ -103,3 +109,62 @@ pred = skpipe.predict_proba(X)
 pred = skpipe.predict(X)
 print(pred)
 '''
+
+# -----------------------------------
+
+X, y = create_df()
+
+try:
+    cohort_pipeline = [
+        dp.BasicImputer(verbose=False),
+        dp.DataMinMaxScaler(verbose=False)
+    ]
+    cohort_set = CohortManager(
+        transform_pipe=None,
+        cohort_col=["CN_0_num_0", "CN_1_num_1"]
+    )
+except Exception as e:
+    print(e)
+
+
+try:
+    cohort_pipeline = [
+        dp.BasicImputer(verbose=False),
+        dp.DataMinMaxScaler(verbose=False),
+        dp.Rebalance(verbose=False)
+    ]
+    cohort_set = CohortManager(
+        transform_pipe=cohort_pipeline,
+        cohort_col=["CN_0_num_0", "CN_1_num_1"]
+    )
+except Exception as e:
+    print(e)
+
+
+try:
+    cohort_pipeline = [
+        dp.BasicImputer(verbose=False),
+        dp.DataMinMaxScaler(verbose=False),
+        dp.Synthesizer(verbose=False)
+    ]
+    cohort_set = CohortManager(
+        transform_pipe=cohort_pipeline,
+        cohort_col=["CN_0_num_0", "CN_1_num_1"]
+    )
+except Exception as e:
+    print(e)
+
+
+try:
+    cohort_pipeline = [
+        dp.BasicImputer(verbose=False),
+        get_model(),
+        dp.DataMinMaxScaler(verbose=False),
+    ]
+    cohort_set = CohortManager(
+        transform_pipe=cohort_pipeline,
+        cohort_col=["CN_0_num_0", "CN_1_num_1"]
+    )
+except Exception as e:
+    print(e)
+
