@@ -280,7 +280,8 @@ class CohortManager(DataProcessing):
     # -----------------------------------
 
     def _check_compatibility_between_cohorts(self, cht_df: list):
-        self._cohorts_compatible = True
+        if self._cohorts_compatible is None:
+            self._cohorts_compatible = True
         columns = cht_df[0].columns
         for i in range(1, len(cht_df)):
             if len(cht_df[i].columns) != len(columns):
@@ -295,9 +296,6 @@ class CohortManager(DataProcessing):
     # -----------------------------------
 
     def _merge_cohort_datasets(self, cht_df: list, org_index: list):
-        if self._cohorts_compatible is None:
-            self._check_compatibility_between_cohorts(cht_df)
-
         if not self._cohorts_compatible:
             self.print_message(
                 (
@@ -315,7 +313,7 @@ class CohortManager(DataProcessing):
                 final_df = pd.concat([final_df, df], axis=0)
 
         new_index = [index for index in org_index if index in final_df.index]
-        final_df.reindex(new_index)
+        final_df = final_df.reindex(new_index)
 
         return final_df
 
@@ -332,8 +330,8 @@ class CohortManager(DataProcessing):
             else:
                 final_pred = np.concatenate((final_pred, pred), axis=0)
 
-        index_sort = np.argsort(index_list)
-        final_pred = final_pred[index_sort]
+        new_index = np.argsort(index_list)
+        final_pred = final_pred[new_index]
 
         return final_pred
 
@@ -373,16 +371,21 @@ class CohortManager(DataProcessing):
         self._set_df_mult(df, label_col, X, y, require_set=True)
         self._build_cohorts()
         index_used = []
+        cht_df_list = []
         for i, cohort in enumerate(self.cohorts):
             cht_x, cht_y, index_list = cohort.get_cohort_subset(self.df, self.y, index_used)
             index_used += index_list
+            if cht_x.empty:
+                raise ValueError(f"ERROR: no valid instances found for cohort {cohort.name} in the fit() method.")
             for tf in self._cohort_pipe[i]:
                 tf.fit(cht_x, cht_y)
                 has_transf = self.obj_has_method(tf, "transform")
                 if not has_transf:
                     break
                 cht_x = tf.transform(cht_x)
+            cht_df_list.append(cht_x)
 
+        self._check_compatibility_between_cohorts(cht_df_list)
         self._check_intersection_cohorts(index_used)
 
         self.fitted = True
@@ -398,19 +401,21 @@ class CohortManager(DataProcessing):
 
         index_used = []
         cht_df_list = []
+        org_index = df.index.copy()
         for i, cohort in enumerate(self.cohorts):
             cht_x, _, index_list = cohort.get_cohort_subset(df, y=None, index_used=index_used)
             index_used += index_list
-            for tf in self._cohort_pipe[i]:
-                has_transf = self.obj_has_method(tf, "transform")
-                if not has_transf:
-                    break
-                cht_x = tf.transform(cht_x)
-            cht_df_list.append(cht_x)
+            if not cht_x.empty:
+                for tf in self._cohort_pipe[i]:
+                    has_transf = self.obj_has_method(tf, "transform")
+                    if not has_transf:
+                        break
+                    cht_x = tf.transform(cht_x)
+                cht_df_list.append(cht_x)
 
         self._check_intersection_cohorts(index_used)
         self._raise_missing_instances_error(df, index_used)
-        final_df = self._merge_cohort_datasets(cht_df_list, index_used)
+        final_df = self._merge_cohort_datasets(cht_df_list, org_index)
 
         return final_df
 
@@ -433,16 +438,17 @@ class CohortManager(DataProcessing):
         for i, cohort in enumerate(self.cohorts):
             cht_x, _, index_list = cohort.get_cohort_subset(df, y=None, index_used=index_used)
             index_used += index_list
-            for tf in self._cohort_pipe[i]:
-                has_transf = self.obj_has_method(tf, "transform")
-                if has_transf:
-                    cht_x = tf.transform(cht_x)
-                else:
-                    if not prob:
-                        pred = tf.predict(cht_x)
+            if not cht_x.empty:
+                for tf in self._cohort_pipe[i]:
+                    has_transf = self.obj_has_method(tf, "transform")
+                    if has_transf:
+                        cht_x = tf.transform(cht_x)
                     else:
-                        pred = tf.predict_proba(cht_x)
-            pred_list.append(pred)
+                        if not prob:
+                            pred = tf.predict(cht_x)
+                        else:
+                            pred = tf.predict_proba(cht_x)
+                pred_list.append(pred)
 
         self._check_intersection_cohorts(index_used)
         self._raise_missing_instances_error(df, index_used)
@@ -461,3 +467,8 @@ class CohortManager(DataProcessing):
     def predict_proba(self, X: Union[pd.DataFrame, np.ndarray]):
         final_pred = self._predict(X, prob=True)
         return final_pred
+
+    # -----------------------------------
+
+    def is_valid_dataset(self, df: Union[pd.DataFrame, np.ndarray]):
+        pass

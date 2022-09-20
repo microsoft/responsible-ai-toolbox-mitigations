@@ -49,6 +49,7 @@ class CohortDefinition:
     # -----------------------------------
 
     def _set_conditions(self, conditions: Union[list, str] = None):
+        self.conditions = None
         if conditions is None:
             return
         if type(conditions) == str:

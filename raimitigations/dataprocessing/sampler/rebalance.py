@@ -215,7 +215,7 @@ class Rebalance(DataProcessing):
         (float values are not allowed). This column is used to determine which classes
         should be rebalanced or not. It can be other columns different from the label
         column, but it needs the be a column containing only non-float values. Float values
-        can't be interpreted as classes that should be rebalanced.
+        can't be interpreted as classes that needs to be rebalanced.
         """
 
         def test_if_float(value):
@@ -227,8 +227,8 @@ class Rebalance(DataProcessing):
         if has_null:
             raise ValueError(
                 f"ERROR: the column {self.label_col_name} provided to the 'rebalance_col' parameter contains "
-                + f"null values. The 'rebalance_col' only accepts columns with integer values, which represents the "
-                + f"classes to be rebalanced."
+                + f"null values. The 'rebalance_col' only accepts columns with non-float values, which represents "
+                + f"the classes to be rebalanced."
             )
 
         not_int = self.y.apply(test_if_float)
