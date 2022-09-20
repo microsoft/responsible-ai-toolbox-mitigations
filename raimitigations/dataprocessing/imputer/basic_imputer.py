@@ -234,6 +234,13 @@ class BasicImputer(DataImputer):
         for col in self.col_impute:
             df_valid = self._get_df_subset(df, [col])
             is_int1 = "int" in df_valid[col].dtype.name
+            transf_col = self.imputers[col].transform(df_valid)
+            if transf_col.shape[1] == 0:
+                raise ValueError(
+                    f"ERROR: imputer for column {col} couldn't impute missing data. This could be caused by faulty "
+                    + "input data. The data used for the transform() method has tha following data: "
+                    + f"{df_valid[col].unique()}"
+                )
             transf_df[[col]] = self.imputers[col].transform(df_valid)
             is_int2 = "int" in transf_df[col].dtype.name
             if is_int1 and not is_int2:

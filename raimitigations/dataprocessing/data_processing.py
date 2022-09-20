@@ -40,16 +40,16 @@ class DataProcessing(ABC):
         if self.verbose:
             print(text)
 
-
     # -----------------------------------
+
     @staticmethod
     def obj_has_method(obj: Any, method_name: str):
         has_att = hasattr(obj.__class__, method_name)
         has_method = has_att and callable(getattr(obj.__class__, method_name))
         return has_method
 
-
     # -----------------------------------
+
     @abstractmethod
     def _get_fit_input_type(self):
         """
