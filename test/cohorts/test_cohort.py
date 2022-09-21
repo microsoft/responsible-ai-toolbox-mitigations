@@ -31,9 +31,9 @@ def create_df():
 
     df = dp.create_dummy_dataset(
         samples=1000,
-        n_features=3,
+        n_features=2,
         n_num_num=0,
-        n_cat_num=0,
+        n_cat_num=2,
         n_cat_cat=0,
         num_num_noise=[0.01, 0.05],
         pct_change=[0.05, 0.1],
@@ -155,30 +155,46 @@ def get_classification_metrics(y: Union[np.ndarray, list], y_pred_prob: Union[np
 
 X, y = create_df()
 
-cohort_pipeline = [
-    dp.BasicImputer(verbose=False),
-    dp.DataMinMaxScaler(verbose=False),
-    #dp.EncoderOrdinal(verbose=False),
-    get_model()
-]
+print(f"Original Dataset:\n{y.value_counts(normalize=True)}")
 
-
-c1 = [ ['num_0', '>', -1] ]
-c2 = [ ['num_0', '<', -2] ]
+c1 = [ ['CN_0_num_0', '==', 'val0_1'], 'and', ['num_0', '>', 0.0] ]
+c2 = [ ['CN_0_num_0', '==', 'val0_0'], 'and', ['num_0', '>', 0.0] ]
 c3 = None
-#c3 = [ ['CN_1_num_1', '==', 'val1_1'] ]
 
+print("\nOriginal Cohorts")
 cohort_set = CohortManager(
-    transform_pipe=cohort_pipeline,
     cohort_def=[c1, c2, c3]
 )
 cohort_set.fit(X=X, y=y)
-#new_X = cohort_set.transform(X)
-pred = cohort_set.predict_proba(X)
-print(len(pred))
+subsets = cohort_set.get_subsets(X, y, apply_transform=False)
+for key in subsets.keys():
+    print(subsets[key]["y"].value_counts(normalize=True))
 
-results = get_classification_metrics(y, pred)
-print(results)
+# ---------------
+
+rebalance = dp.Rebalance(verbose=False)
+new_X, new_y = rebalance.fit_resample(X, y)
+print(f"\nRebalanced full dataset:\n{new_y.value_counts(normalize=True)}")
+
+# ---------------
+
+print("\nCohorts after rebalancing the full dataset")
+cohort_set.fit(X=new_X, y=new_y)
+subsets = cohort_set.get_subsets(new_X, new_y, apply_transform=False)
+for key in subsets.keys():
+    print(subsets[key]["y"].value_counts(normalize=True))
+
+# ---------------
+
+rebalance = dp.Rebalance(verbose=False)
+new_X, new_y = rebalance.fit_resample(X, y, cohorts=[c1, c2, c3])
+print("\nCohorts after rebalancing each cohort individually")
+cohort_set.fit(X=new_X, y=new_y)
+subsets = cohort_set.get_subsets(new_X, new_y, apply_transform=False)
+for key in subsets.keys():
+    print(subsets[key]["y"].value_counts(normalize=True))
+
+
 
 
 

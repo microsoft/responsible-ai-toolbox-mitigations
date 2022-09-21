@@ -66,6 +66,34 @@ class DataProcessing(ABC):
         pass
 
     # -----------------------------------
+
+    def _works_with_cohort_manager(self):
+        """
+        Returns True if the current class can be used as one of the transformations in
+        the CohortManager class. For this, this class must have a fit() and transform()
+        methods, and the latter must receive a X dataset containing only the features
+        (not the label column) and return a transformed dataset with only the features.
+        If this is not the case, then this method should return False.
+        """
+        return True
+
+    # -----------------------------------
+
+    def _is_cohort_merging_compatible(self):
+        """
+        Returns True if the current class can be used individually by different cohorts
+        and still result in a valid dataset as a whole. Returns False for classes that
+        should only be processed with the entire dataset, that is, if this class is
+        fitted for each cohort separately, then the resulting transformed subsets can't
+        be merged back together, as they will be inconsistent. For example: data scaling
+        can be performed for each cohort individually, and then merged back together.
+        On the other hand, if a data encoder is used over each cohort individually, the
+        resulting subsets will have incompatible encodings. In the former case, this
+        method returns True, and False in the latter case.
+        """
+        return True
+
+    # -----------------------------------
     def _check_error_df(self, df):
         # Check consistency of the df param
         if df is not None and type(df) != pd.DataFrame and type(df) != np.ndarray:
@@ -148,6 +176,53 @@ class DataProcessing(ABC):
                 + f"{type(self).__name__} does not match with the columns provided during the fit() method."
             )
         return df
+
+    # -----------------------------------
+    def _arrange_transform_df(self, df: pd.DataFrame = None, X: pd.DataFrame = None, y: pd.DataFrame = None):
+        """
+        Arranges the data provided to the transform method to a standardized pattern, which is:
+        a dataframe where the label column is named after the attribute ``self.label_col_name``, and
+        the remaining columns are the feature columns. If the dataset is provided through the df
+        parameter, no changes are made, but df must follow the same structure as the dataset
+        provided during :meth:`fit`. If the data is provided through ``X`` and ``y``, then a new dataset
+        is created such that it contains all columns in ``X`` plus the label column ``y``.
+
+        :param df: the full dataset to be transformed, which contains the label column
+            (specified during :meth:`fit`);
+        :param X: contains only the features of the dataset, that is, does not contain the
+            label column;
+        :param y: contains only the label column of the dataset to be transformed. If the
+            user provides ``df``, ``X`` and ``y`` must be left as None. Alternatively, if the user
+            provides (X, y), ``df`` must be left as None;
+        """
+        input_mode = self.INPUT_DF
+        if df is not None:
+            df = self._fix_col_transform(df)
+            error = False
+            if len(df.columns) != len(self.df.columns):
+                error = True
+            if not error:
+                for col in df.columns:
+                    if col not in self.df.columns:
+                        error = True
+                        break
+            if error:
+                raise ValueError(
+                    "ERROR: the data frame passed to the transform method does not "
+                    + "follow the same structure as the one used during the fit method. "
+                    + f"The data frame used during the fit method had the following columns: {self.df.columns}. "
+                    + f"\nThe data frame passed to the transform method has the following columns: {df.columns}."
+                )
+
+        elif X is not None and y is not None:
+            df = X.copy()
+            df[self.label_col_name] = y
+            df = self._fix_col_transform(df)
+            input_mode = self.INPUT_XY
+        else:
+            input_mode = self.INPUT_NULL
+
+        return df, input_mode
 
     # -----------------------------------
     def _set_col_index_to_name(self, col_index_to_name: dict, column_type: int, label_col_name: str):
@@ -261,9 +336,9 @@ class DataProcessing(ABC):
     def _check_if_fitted(self):
         if not self.fitted:
             raise ValueError(
-                f"ERROR: trying to call the transform() method from an instance of the {self.__class__.__name__} class "
+                f"ERROR: trying to call a method from an instance of the {self.__class__.__name__} class "
                 + "before calling the fit() method. "
-                + "Call the fit() method before using this instance to transform a dataset."
+                + "Call the fit() method before using this instance to do a transformation or prediction."
             )
 
     # -----------------------------------

@@ -6,35 +6,16 @@ import pandas as pd
 import numpy as np
 import json
 
-from ..dataprocessing import (
-    DataProcessing,
-    EncoderOHE,
-    EncoderOrdinal,
-    SeqFeatSelection,
-    CorrelatedFeatures,
-    CatBoostSelection,
-    Rebalance,
-    Synthesizer,
-)
+from ..dataprocessing import DataProcessing
 from .cohort_definition import CohortDefinition, CohortFilters
 
 
 class CohortManager(DataProcessing):
 
-    DP_CLASS_INCOMPATIBLE_COHORTS = [
-        EncoderOHE.__name__,
-        EncoderOrdinal.__name__,
-        SeqFeatSelection.__name__,
-        CorrelatedFeatures.__name__,
-        CatBoostSelection.__name__,
-    ]
-
-    DP_CLASS_NOT_ALLOWED = [Rebalance.__name__, Synthesizer.__name__]
-
     # -----------------------------------
     def __init__(
         self,
-        transform_pipe: list,
+        transform_pipe: list = None,
         cohort_def: Union[dict, list, str] = None,
         cohort_col: list = None,
         df: pd.DataFrame = None,
@@ -70,12 +51,8 @@ class CohortManager(DataProcessing):
 
     def _set_transforms(self, transform_pipe: list):
         if transform_pipe is None:
-            raise ValueError(
-                (
-                    "ERROR: the CohortManager class requires a valid list of transformations passed to the "
-                    "transform_pipe parameter."
-                )
-            )
+            transform_pipe = []
+
         if type(transform_pipe) != list:
             transform_pipe = [transform_pipe]
 
@@ -121,20 +98,18 @@ class CohortManager(DataProcessing):
                     )
                 )
 
-            # if one of the transforms is from one of these classes,
-            # then the cohorts are incompatible between each other
-            if isinstance(transform, DataProcessing) and class_name in self.DP_CLASS_INCOMPATIBLE_COHORTS:
-                self._cohorts_compatible = False
-
-            if class_name in self.DP_CLASS_NOT_ALLOWED:
-                raise ValueError(
-                    (
+            # special checks for classes that inherits from the DataProcessing class
+            if isinstance(transform, DataProcessing):
+                # check if the transformer works for the CohortManager class
+                if not transform._works_with_cohort_manager():
+                    raise ValueError(
                         "ERROR: one of the transformers in the transform_pipe parameter, from class "
-                        f"{class_name}, is not allowed. The following classes, from the "
-                        "raimitigations.dataprocessing module, are not allowed in the transform_pipe: "
-                        f"{self.DP_CLASS_NOT_ALLOWED}."
+                        + f"{class_name}, is not allowed. "
                     )
-                )
+
+                # check if the transformer creates compatible cohorts or not
+                if not transform._is_cohort_merging_compatible():
+                    self._cohorts_compatible = False
 
         self.transform_pipe = transform_pipe
 
@@ -394,8 +369,11 @@ class CohortManager(DataProcessing):
     # -----------------------------------
 
     def transform(self, df: Union[pd.DataFrame, np.ndarray]):
+
         if not self._pipe_has_transform:
-            raise ValueError("ERROR: none of the objects in the transform_pipe parameter have a transform() method.")
+            self.print_message("WARNING: none of the objects in the transform_pipe parameter have a transform() method")
+            return df
+
         self._check_if_fitted()
         df = self._fix_col_transform(df)
 
@@ -470,5 +448,34 @@ class CohortManager(DataProcessing):
 
     # -----------------------------------
 
-    def is_valid_dataset(self, df: Union[pd.DataFrame, np.ndarray]):
-        pass
+    def get_subsets(
+        self,
+        X: Union[pd.DataFrame, np.ndarray] = None,
+        y: Union[pd.Series, np.ndarray] = None,
+        apply_transform: bool = False,
+    ):
+        self._check_if_fitted()
+        X = self._fix_col_transform(X)
+
+        index_used = []
+        out_dict = {}
+        for i, cohort in enumerate(self.cohorts):
+            cht_X, cht_y, index_list = cohort.get_cohort_subset(X, y=y, index_used=index_used)
+            index_used += index_list
+
+            if apply_transform and not cht_X.empty:
+                for tf in self._cohort_pipe[i]:
+                    has_transf = self.obj_has_method(tf, "transform")
+                    if not has_transf:
+                        break
+                    cht_X = tf.transform(cht_X)
+
+            if y is None:
+                out_dict[cohort.name] = {"X": cht_X}
+            else:
+                out_dict[cohort.name] = {"X": cht_X, "y": cht_y}
+
+        self._check_intersection_cohorts(index_used)
+        self._raise_missing_instances_error(X, index_used)
+
+        return out_dict

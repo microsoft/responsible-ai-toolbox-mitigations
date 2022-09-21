@@ -32,6 +32,21 @@ class DataEncoding(DataProcessing):
         self.fitted = False
 
     # -----------------------------------
+    def _get_fit_input_type(self):
+        return self.FIT_INPUT_DF
+
+    # -----------------------------------
+    def _is_cohort_merging_compatible(self):
+        """
+        Overwrites this method from the base class. Returns False, since running
+        an encoding method over each cohort individually may result in each cohort
+        having different features encoding mappings, or different features (in the
+        case of one-hot encoding). This way, the cohorts become incompatible between
+        each other.
+        """
+        return False
+
+    # -----------------------------------
     def _set_column_to_encode(self):
         """
         Sets the columns to encode (col_encode) automatically
@@ -54,10 +69,7 @@ class DataEncoding(DataProcessing):
         self.col_encode = self._check_error_col_list(self.df, self.col_encode, "col_encode")
 
     # -----------------------------------
-    def _get_fit_input_type(self):
-        return self.FIT_INPUT_DF
 
-    # -----------------------------------
     @abstractmethod
     def _fit(self):
         """

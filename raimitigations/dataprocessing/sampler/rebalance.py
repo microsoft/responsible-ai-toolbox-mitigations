@@ -11,6 +11,7 @@ from ..data_processing import DataProcessing
 from ..encoder import DataEncoding, EncoderOHE
 from ..imputer import DataImputer, BasicImputer
 from ..data_utils import get_cat_cols
+from ...cohort.base_cohort import CohortManager
 
 
 class Rebalance(DataProcessing):
@@ -207,6 +208,20 @@ class Rebalance(DataProcessing):
         self.default_smote_type = self.SMOTE_TYPE
         self.default_under_type = self.UNDER_AUTO
         self.njobs = n_jobs
+
+    # -----------------------------------
+    def _get_fit_input_type(self):
+        return self.FIT_INPUT_XY
+
+    # -----------------------------------
+    def _works_with_cohort_manager(self):
+        """
+        Overwrites this method from the base class. Returns False, since the
+        transform() method of this class returns a dataset with the features
+        and the label column, which is not expected when using the CohortManager
+        class.
+        """
+        return False
 
     # -----------------------------------
     def _check_rebalance_col(self):
@@ -551,8 +566,44 @@ class Rebalance(DataProcessing):
             self.under_sampler = TomekLinks(sampling_strategy=self.strategy_under, n_jobs=self.njobs)
 
     # -----------------------------------
-    def _get_fit_input_type(self):
-        return self.FIT_INPUT_XY
+    def _set_cohort_options(self, cohorts: Union[dict, list, str]):
+        self._cohort_manager = None
+        if cohorts is None:
+            return
+
+        if type(cohorts) == dict or type(cohorts) == str:
+            self._cohort_manager = CohortManager(cohort_def=cohorts)
+        elif type(cohorts) == list:
+            if len(cohorts) > 0 and (type(cohorts[0]) == int or type(cohorts[0]) == str):
+                cohorts = self._check_error_col_list(self.df, cohorts, "cohorts")
+                self._cohort_manager = CohortManager(cohort_col=cohorts)
+            else:
+                self._cohort_manager = CohortManager(cohort_def=cohorts)
+
+        self._cohort_manager.fit(X=self.df, y=self.y)
+
+    # -----------------------------------
+    def _fit_resample(
+        self, sampler: BaseSampler, X: Union[pd.DataFrame, np.ndarray], y: Union[pd.DataFrame, np.ndarray]
+    ):
+        if self._cohort_manager is None:
+            new_x, new_y = sampler.fit_resample(X, y)
+        else:
+            new_x = None
+            new_y = None
+            subset_dict = self._cohort_manager.get_subsets(X, y, apply_transform=False)
+            for key in subset_dict.keys():
+                subset_x = subset_dict[key]["X"]
+                subset_y = subset_dict[key]["y"]
+                new_subset_x, new_subset_y = sampler.fit_resample(subset_x, subset_y)
+                if new_x is None:
+                    new_x = new_subset_x
+                    new_y = new_subset_y
+                else:
+                    new_x = pd.concat([new_x, new_subset_x], axis=0)
+                    new_y = pd.concat([new_y, new_subset_y], axis=0)
+
+        return new_x, new_y
 
     # -----------------------------------
     def fit_resample(
@@ -561,6 +612,7 @@ class Rebalance(DataProcessing):
         y: Union[pd.DataFrame, np.ndarray] = None,
         df: Union[pd.DataFrame, np.ndarray] = None,
         rebalance_col: str = None,
+        cohorts: Union[dict, list, str] = None,
     ):
         """
         Runs the over and/or undersampling methods specified by the parameters provided in
@@ -605,17 +657,22 @@ class Rebalance(DataProcessing):
         self._set_over_sampler()
         self._set_under_sampler()
         X_resample = None
+        self._set_cohort_options(cohorts)
+
         if self.over_sampler is not None:
             self.print_message("Running oversampling...")
-            X_resample, y_resample = self.over_sampler.fit_resample(self.df, self.y)
+            X_resample, y_resample = self._fit_resample(self.over_sampler, self.df, self.y)
             self.print_message("...finished")
         if self.under_sampler is not None:
             self.print_message("Running undersampling...")
             if X_resample is None:
-                X_resample, y_resample = self.under_sampler.fit_resample(self.df, self.y)
+                X_resample, y_resample = self._fit_resample(self.under_sampler, self.df, self.y)
             else:
-                X_resample, y_resample = self.under_sampler.fit_resample(X_resample, y_resample)
+                X_resample, y_resample = self._fit_resample(self.under_sampler, X_resample, y_resample)
             self.print_message("...finished")
+
+        X_resample = X_resample.reset_index(drop=True)
+        y_resample = y_resample.reset_index(drop=True)
 
         return_var = [X_resample, y_resample]
         if self.input_scheme == self.INPUT_DF:
