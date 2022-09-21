@@ -106,7 +106,7 @@ class CohortDefinition:
             if operator == CohortFilters.RANGE:
                 if len(value) != 2:
                     raise ValueError(f"{range_msg}Instead, got the following list with {len(value)} elements: {value}.")
-        elif type(value) == str or type(value) == int or type(value) == float:
+        elif type(value) == str or isinstance(value, (int, float, np.integer, np.float)):
             if operator not in CohortFilters.SIMPLE_OP:
                 raise ValueError(
                     (
@@ -121,7 +121,9 @@ class CohortDefinition:
                         f"ERROR: the operator '{operator}' requires a numerical value. Instead, got: {value}."
                     )
         else:
-            raise ValueError(f"ERROR: invalid value provided: {value}. Condition: {column} {operator} {value}.")
+            raise ValueError(
+                f"ERROR: invalid value provided: {value} {type(value)}. Condition: {column} {operator} {value}."
+            )
 
         return column, operator, value
 

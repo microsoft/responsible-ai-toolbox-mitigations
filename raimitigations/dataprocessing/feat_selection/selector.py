@@ -94,6 +94,17 @@ class FeatureSelection(DataProcessing):
         return self.FIT_INPUT_XY
 
     # -----------------------------------
+
+    def _is_cohort_merging_compatible(self):
+        """
+        Overwrites this method from the base class. Returns False, since running
+        a feature selection method over each cohort individually may result in
+        each cohort having different features. This way, the cohorts become
+        incompatible between each other.
+        """
+        return False
+
+    # -----------------------------------
     @abstractmethod
     def _get_selected_features(self):
         """
