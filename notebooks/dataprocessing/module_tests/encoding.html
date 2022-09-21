@@ -387,17 +387,17 @@ div.rendered_html tbody tr:hover {
 <h1>Encoding Examples<a class="headerlink" href="#Encoding-Examples" title="Permalink to this heading"></a></h1>
 <p>In this notebook, we will demonstrate the different ways the Encoder classes can be used.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../notebooks&#39;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../../notebooks&#39;</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">EncoderOHE</span><span class="p">,</span> <span class="n">EncoderOrdinal</span>
 
-<span class="kn">from</span> <span class="nn">notebooks.download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
+<span class="kn">from</span> <span class="nn">download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
 </pre></div>
 </div>
 </div>
@@ -407,7 +407,7 @@ div.rendered_html tbody tr:hover {
 <section id="Using-a-dataset-with-headers">
 <h3>Using a dataset with headers<a class="headerlink" href="#Using-a-dataset-with-headers" title="Permalink to this heading"></a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/&#39;</span>
@@ -418,7 +418,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -651,7 +651,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>Here we don’t specify any columns that should be encoded. We let the class automatically identify which columns should be encoded.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOrdinal</span><span class="p">(</span>
@@ -674,7 +674,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -907,7 +907,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <p>We can then get the mapping dictionary used by the encoder by calling the <strong>get_mapping()</strong> method:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span><span class="o">.</span><span class="n">get_mapping</span><span class="p">()</span>
@@ -915,7 +915,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1022,7 +1022,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <p>We can also provide the dataset only when calling the fit method, instead of providing it when instantiating the object.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -1042,7 +1042,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1275,7 +1275,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <p>We can also specify which columns to encode using the column names:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOrdinal</span><span class="p">(</span>
@@ -1289,7 +1289,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1522,7 +1522,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <p>or the column indices:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOrdinal</span><span class="p">(</span>
@@ -1536,7 +1536,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1769,7 +1769,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <p>We can also specify the order of the encodings for the ordinal encoder. For example, let’s specify the order of the labels for the ‘education’ column.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
@@ -1777,7 +1777,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1787,7 +1787,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOrdinal</span><span class="p">(</span>
@@ -1802,7 +1802,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -2035,7 +2035,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 </div>
 <p>The <strong>get_encoded_columns()</strong> method returns the list of columns encoded. For the ordinal encoding, this is the same list passed to the <strong>col_encode</strong> parameter if it’s provided or the list of categorical features if the latter parameter is not provided.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span><span class="o">.</span><span class="n">get_encoded_columns</span><span class="p">()</span>
@@ -2043,7 +2043,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -2053,7 +2053,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 </div>
 <p>Finally, we can recover the original values by calling the inverse_transform() method:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">org_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">new_df</span><span class="p">)</span>
@@ -2062,7 +2062,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -2298,7 +2298,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 <h3>Using a dataset without headers<a class="headerlink" href="#Using-a-dataset-without-headers" title="Permalink to this heading"></a></h3>
 <p>The same proceedure can be performed with a dataset without headers. Here, column indices are used instead.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -2308,7 +2308,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -2528,7 +2528,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOrdinal</span><span class="p">(</span>
@@ -2543,7 +2543,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -2763,7 +2763,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">org_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">new_df</span><span class="p">)</span>
@@ -2772,7 +2772,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -2997,7 +2997,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 <h2>One-Hot Encoding<a class="headerlink" href="#One-Hot-Encoding" title="Permalink to this heading"></a></h2>
 <p>The following cell shows an example using the one-hot encoding class.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
@@ -3020,7 +3020,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -3337,7 +3337,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <p>When using the EncoderOHE, the <strong>get_encoded_columns()</strong> method will return the list of all new columns created with the one-hot encodings, since the columns originally encoded were replaced by one or more one-hot encoded columns (one for each value in the column).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span><span class="o">.</span><span class="n">get_encoded_columns</span><span class="p">()</span>
@@ -3345,7 +3345,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -3401,7 +3401,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <p>We can also specify which columns to encode using the column names:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">])</span>
@@ -3412,7 +3412,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -3669,7 +3669,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <p>or the column indices:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
@@ -3680,7 +3680,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -3937,7 +3937,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <p>We can also revert the encoded column to their original state by using the inverse_transform() method.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">org_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">new_df</span><span class="p">)</span>
@@ -3946,7 +3946,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -4179,7 +4179,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <p>Let us now test the ‘drop’ parameter. For that, we will repeat the same procedure as the previous cell, but this time use drop = False, since drop = True is the default behavior. We can see that the cell that uses drop = False (below) has one extra column: education_Bachelor’s, while the cell that uses drop = True (above) doesn’t have this column, since it was droped.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">],</span> <span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -4190,7 +4190,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -4458,7 +4458,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">org_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">new_df</span><span class="p">)</span>
@@ -4467,7 +4467,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -4701,7 +4701,7 @@ No columns specified for encoding. These columns have been automatically identfi
 <section id="id1">
 <h3>Using a dataset without headers<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -4711,7 +4711,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -4931,7 +4931,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
@@ -4942,7 +4942,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -5258,7 +5258,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">org_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">new_df</span><span class="p">)</span>
@@ -5267,7 +5267,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
