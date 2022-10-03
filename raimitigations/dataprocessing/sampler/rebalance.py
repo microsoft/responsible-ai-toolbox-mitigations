@@ -11,7 +11,7 @@ from ..data_processing import DataProcessing
 from ..encoder import DataEncoding, EncoderOHE
 from ..imputer import DataImputer, BasicImputer
 from ..data_utils import get_cat_cols
-from ...cohort.base_cohort import CohortManager
+from ...cohort.cohort_manager import CohortManager
 
 
 class Rebalance(DataProcessing):

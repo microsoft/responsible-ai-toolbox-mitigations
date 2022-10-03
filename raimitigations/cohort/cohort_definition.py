@@ -4,13 +4,6 @@ import numpy as np
 import json
 
 
-"""
-TODO:
-    - in the constructor, allow the cohort_definition parameter to be a json file
-    - create a method that saves the cohort definition into a json file
-"""
-
-
 class CohortFilters:
 
     GREATER = ">"
@@ -109,17 +102,17 @@ class CohortDefinition:
         elif type(value) == str or isinstance(value, (int, float, np.integer, np.float)):
             if operator not in CohortFilters.SIMPLE_OP:
                 raise ValueError(
-                    (
-                        f"ERROR: invalid operator '{operator}' associated to value '{value}'. The allowed "
-                        f"operators for this value are: {CohortFilters.SIMPLE_OP}"
-                    )
+                    f"ERROR: invalid operator '{operator}' associated to value '{value}'. The allowed "
+                    + f"operators for this value are: {CohortFilters.SIMPLE_OP}"
                 )
             if type(value) == str:
-                value = f"'{value}'"
                 if operator in CohortFilters.OP_REQ_NUMER:
-                    raise ValueError(
-                        f"ERROR: the operator '{operator}' requires a numerical value. Instead, got: {value}."
-                    )
+                    value = f"`{value}`"
+                    # raise ValueError(
+                    #    f"ERROR: the operator '{operator}' requires a numerical value. Instead, got: {value}."
+                    # )
+                else:
+                    value = f"'{value}'"
         else:
             raise ValueError(
                 f"ERROR: invalid value provided: {value} {type(value)}. Condition: {column} {operator} {value}."
@@ -240,7 +233,9 @@ class CohortDefinition:
 
     # -----------------------------------
 
-    def get_cohort_subset(self, df: pd.DataFrame, y: pd.DataFrame = None, index_used: list = None):
+    def get_cohort_subset(
+        self, df: pd.DataFrame, y: pd.DataFrame = None, index_used: list = None, return_index_list: bool = False
+    ):
         """
         Filters a dataset to fetch only the instances that follow the
         conditions of the current cohort. If the current cohort doesn't
@@ -257,7 +252,6 @@ class CohortDefinition:
             already belongs to some other cohort.
         """
         self.check_valid_df(df)
-        subset_y = None
         if self.require_remaining_index():
             if index_used is None:
                 raise ValueError(
@@ -275,5 +269,12 @@ class CohortDefinition:
         index_list = list(subset.index)
         if y is not None:
             subset_y = y.filter(items=index_list, axis=0)
+            if return_index_list:
+                return subset, subset_y, index_list
+            else:
+                return subset, subset_y
 
-        return subset, subset_y, index_list
+        if return_index_list:
+            return subset, index_list
+        else:
+            return subset

@@ -348,7 +348,7 @@ class CohortManager(DataProcessing):
         index_used = []
         cht_df_list = []
         for i, cohort in enumerate(self.cohorts):
-            cht_x, cht_y, index_list = cohort.get_cohort_subset(self.df, self.y, index_used)
+            cht_x, cht_y, index_list = cohort.get_cohort_subset(self.df, self.y, index_used, return_index_list=True)
             index_used += index_list
             if cht_x.empty:
                 raise ValueError(f"ERROR: no valid instances found for cohort {cohort.name} in the fit() method.")
@@ -381,7 +381,7 @@ class CohortManager(DataProcessing):
         cht_df_list = []
         org_index = df.index.copy()
         for i, cohort in enumerate(self.cohorts):
-            cht_x, _, index_list = cohort.get_cohort_subset(df, y=None, index_used=index_used)
+            cht_x, index_list = cohort.get_cohort_subset(df, y=None, index_used=index_used, return_index_list=True)
             index_used += index_list
             if not cht_x.empty:
                 for tf in self._cohort_pipe[i]:
@@ -414,7 +414,7 @@ class CohortManager(DataProcessing):
         index_used = []
         pred_list = []
         for i, cohort in enumerate(self.cohorts):
-            cht_x, _, index_list = cohort.get_cohort_subset(df, y=None, index_used=index_used)
+            cht_x, index_list = cohort.get_cohort_subset(df, y=None, index_used=index_used, return_index_list=True)
             index_used += index_list
             if not cht_x.empty:
                 for tf in self._cohort_pipe[i]:
@@ -460,7 +460,7 @@ class CohortManager(DataProcessing):
         index_used = []
         out_dict = {}
         for i, cohort in enumerate(self.cohorts):
-            cht_X, cht_y, index_list = cohort.get_cohort_subset(X, y=y, index_used=index_used)
+            cht_X, cht_y, index_list = cohort.get_cohort_subset(X, y=y, index_used=index_used, return_index_list=True)
             index_used += index_list
 
             if apply_transform and not cht_X.empty:

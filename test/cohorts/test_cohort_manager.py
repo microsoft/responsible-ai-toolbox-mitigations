@@ -3,7 +3,7 @@ import random
 import numpy as np
 import pandas as pd
 import xgboost as xgb
-from sklearn.pipeline import Pipeline
+#from sklearn.pipeline import Pipeline
 from sklearn.metrics import (
     roc_auc_score,
     precision_recall_fscore_support,
@@ -12,8 +12,7 @@ from sklearn.metrics import (
 )
 
 import raimitigations.dataprocessing as dp
-from raimitigations.cohort.cohort_definition import CohortDefinition
-from raimitigations.cohort.base_cohort import CohortManager
+from raimitigations.cohort.cohort_manager import CohortManager
 
 SEED = 42
 
