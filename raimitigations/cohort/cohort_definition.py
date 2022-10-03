@@ -225,14 +225,12 @@ class CohortDefinition:
             json.dump(self.conditions, file, indent=4)
 
     # -----------------------------------
-
     def _load(self, json_file: str):
         with open(json_file, "r") as file:
             conditions = json.load(file)
         return conditions
 
     # -----------------------------------
-
     def get_cohort_subset(
         self, df: pd.DataFrame, y: pd.DataFrame = None, index_used: list = None, return_index_list: bool = False
     ):
