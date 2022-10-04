@@ -11,7 +11,6 @@ from ..data_processing import DataProcessing
 from ..encoder import DataEncoding, EncoderOHE
 from ..imputer import DataImputer, BasicImputer
 from ..data_utils import get_cat_cols
-from ...cohort.cohort_manager import CohortManager
 
 
 class Rebalance(DataProcessing):
@@ -214,16 +213,6 @@ class Rebalance(DataProcessing):
         return self.FIT_INPUT_XY
 
     # -----------------------------------
-    def _works_with_cohort_manager(self):
-        """
-        Overwrites this method from the base class. Returns False, since the
-        transform() method of this class returns a dataset with the features
-        and the label column, which is not expected when using the CohortManager
-        class.
-        """
-        return False
-
-    # -----------------------------------
     def _check_rebalance_col(self):
         """
         Checks if the rebalance_col provided contains only integer or string values
@@ -299,7 +288,7 @@ class Rebalance(DataProcessing):
             constructor's parameter: over_sampler or under_sampler.
         """
         if strategy is None:
-            if sampler is not False:
+            if sampler is not False and sampler is not None:
                 strategy = "auto"
             # else, no sampler of this type is being used
         elif type(strategy) == str and strategy not in valid_values:
@@ -453,6 +442,10 @@ class Rebalance(DataProcessing):
                 + f"a boolean value to indicate if {sampler_name} will be used or not."
             )
 
+        if self.over_sampler is None:
+            self.over_sampler = False
+        if self.under_sampler is None:
+            self.under_sampler = False
         if type(self.over_sampler) != bool and not isinstance(self.over_sampler, BaseSampler):
             _invalid_sampler("over_sampler")
         if type(self.under_sampler) != bool and not isinstance(self.under_sampler, BaseSampler):
@@ -566,53 +559,12 @@ class Rebalance(DataProcessing):
             self.under_sampler = TomekLinks(sampling_strategy=self.strategy_under, n_jobs=self.njobs)
 
     # -----------------------------------
-    def _set_cohort_options(self, cohorts: Union[dict, list, str]):
-        self._cohort_manager = None
-        if cohorts is None:
-            return
-
-        if type(cohorts) == dict or type(cohorts) == str:
-            self._cohort_manager = CohortManager(cohort_def=cohorts)
-        elif type(cohorts) == list:
-            if len(cohorts) > 0 and (type(cohorts[0]) == int or type(cohorts[0]) == str):
-                cohorts = self._check_error_col_list(self.df, cohorts, "cohorts")
-                self._cohort_manager = CohortManager(cohort_col=cohorts)
-            else:
-                self._cohort_manager = CohortManager(cohort_def=cohorts)
-
-        self._cohort_manager.fit(X=self.df, y=self.y)
-
-    # -----------------------------------
-    def _fit_resample(
-        self, sampler: BaseSampler, X: Union[pd.DataFrame, np.ndarray], y: Union[pd.DataFrame, np.ndarray]
-    ):
-        if self._cohort_manager is None:
-            new_x, new_y = sampler.fit_resample(X, y)
-        else:
-            new_x = None
-            new_y = None
-            subset_dict = self._cohort_manager.get_subsets(X, y, apply_transform=False)
-            for key in subset_dict.keys():
-                subset_x = subset_dict[key]["X"]
-                subset_y = subset_dict[key]["y"]
-                new_subset_x, new_subset_y = sampler.fit_resample(subset_x, subset_y)
-                if new_x is None:
-                    new_x = new_subset_x
-                    new_y = new_subset_y
-                else:
-                    new_x = pd.concat([new_x, new_subset_x], axis=0)
-                    new_y = pd.concat([new_y, new_subset_y], axis=0)
-
-        return new_x, new_y
-
-    # -----------------------------------
     def fit_resample(
         self,
         X: Union[pd.DataFrame, np.ndarray] = None,
         y: Union[pd.DataFrame, np.ndarray] = None,
         df: Union[pd.DataFrame, np.ndarray] = None,
         rebalance_col: str = None,
-        cohorts: Union[dict, list, str] = None,
     ):
         """
         Runs the over and/or undersampling methods specified by the parameters provided in
@@ -657,18 +609,17 @@ class Rebalance(DataProcessing):
         self._set_over_sampler()
         self._set_under_sampler()
         X_resample = None
-        self._set_cohort_options(cohorts)
 
         if self.over_sampler is not None:
             self.print_message("Running oversampling...")
-            X_resample, y_resample = self._fit_resample(self.over_sampler, self.df, self.y)
+            X_resample, y_resample = self.over_sampler.fit_resample(self.df, self.y)
             self.print_message("...finished")
         if self.under_sampler is not None:
             self.print_message("Running undersampling...")
             if X_resample is None:
-                X_resample, y_resample = self._fit_resample(self.under_sampler, self.df, self.y)
+                X_resample, y_resample = self.under_sampler.fit_resample(self.df, self.y)
             else:
-                X_resample, y_resample = self._fit_resample(self.under_sampler, X_resample, y_resample)
+                X_resample, y_resample = self.under_sampler.fit_resample(X_resample, y_resample)
             self.print_message("...finished")
 
         X_resample = X_resample.reset_index(drop=True)

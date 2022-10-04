@@ -1,56 +1,14 @@
-from typing import Union
-import random
-import numpy as np
-import pandas as pd
+import os
+import pytest
+import conftest as utils
 import xgboost as xgb
-#from sklearn.pipeline import Pipeline
-from sklearn.metrics import (
-    roc_auc_score,
-    precision_recall_fscore_support,
-    accuracy_score,
-    log_loss
-)
+from sklearn.pipeline import Pipeline
 
 import raimitigations.dataprocessing as dp
 from raimitigations.cohort.cohort_manager import CohortManager
 
-SEED = 42
-
-
 # -----------------------------------
-def create_df():
-    np.random.seed(SEED)
-    random.seed(SEED)
-    def add_nan(vec, pct):
-        vec = list(vec)
-        nan_index = random.sample(range(len(vec)), int(pct * len(vec)))
-        for index in nan_index:
-            vec[index] = np.nan
-        return vec
-
-    df = dp.create_dummy_dataset(
-        samples=1000,
-        n_features=2,
-        n_num_num=0,
-        n_cat_num=2,
-        n_cat_cat=0,
-        num_num_noise=[0.01, 0.05],
-        pct_change=[0.05, 0.1],
-    )
-    #col_with_nan = ["num_0", "num_1", "CN_0_num_0"]
-    #for col in col_with_nan:
-    #    if col != "label":
-    #        df[col] = add_nan(df[col], 0.05)
-
-    df = df.sample(frac=1)
-
-    X = df.drop(columns=["label"])
-    y = df[["label"]]
-
-    return X, y
-
-# -----------------------------------
-def get_model():
+def _get_model():
     model = xgb.XGBClassifier(
             objective="binary:logistic",
             learning_rate=0.1,
@@ -66,136 +24,275 @@ def get_model():
     return model
 
 # -----------------------------------
-class MetricNames():
-    RMSE_KEY = "rmse"
-    MSE_KEY = "mse"
-    MAE_KEY = "mae"
-    R2_KEY = "r2"
-    ACC_KEY = "acc"
-    AUC_KEY = "auc"
-    PREC_KEY = "precision"
-    RECALL_KEY = "recall"
-    F1_KEY = "f1"
-    LOG_LOSS_KEY = "log_loss"
+def _get_object_list(df=None, label_col=None, X=None, y=None, use_index=True):
+    utils.check_valid_input(df, label_col, X, y)
 
-# -----------------------------------
+    cht_list = []
 
-# ----------------------------------------
-def _get_auc_metric(y: Union[np.ndarray, list], y_pred: Union[np.ndarray, list]):
-    # Binary classification
-    if y_pred.shape[1] <= 2:
-        if y_pred.shape[1] == 1:
-            y_pred = y_pred[:, 0]
-        else:
-            y_pred = y_pred[:, 1]
-        roc_auc = roc_auc_score(y, y_pred, average="weighted")
-    # Multi-class
+    if use_index:
+        c1 = [ ['2', '==', 'val0_1'], 'and', ['0', '>', 0.0] ]
+        c2 = [ ['2', '==', 'val0_0'], 'and', ['0', '>', 0.0] ]
+        c3 = None
+        cht_col = ['2', '3']
     else:
-        roc_auc = roc_auc_score(y, y_pred, average="weighted", multi_class="ovo")
-    return roc_auc
+        c1 = [ ['CN_0_num_0', '==', 'val0_1'], 'and', ['num_0', '>', 0.0] ]
+        c2 = [ ['CN_0_num_0', '==', 'val0_0'], 'and', ['num_0', '>', 0.0] ]
+        c3 = None
+        cht_col = ['CN_0_num_0', 'CN_1_num_1']
+
+    cohort_pipeline = [
+        dp.BasicImputer(verbose=False),
+        dp.DataMinMaxScaler(verbose=False),
+    ]
+    cohort_set = CohortManager(
+        df=df, label_col=label_col, X=X, y=y,
+        transform_pipe=cohort_pipeline,
+        cohort_def=[c1, c2, c3]
+    )
+    cht_list.append(cohort_set)
+
+    cohort_pipeline = [
+        dp.DataMinMaxScaler(verbose=False),
+        dp.EncoderOrdinal(verbose=False),
+        _get_model()
+    ]
+    cohort_set = CohortManager(
+        df=df, label_col=label_col, X=X, y=y,
+        transform_pipe=cohort_pipeline,
+        cohort_def=[c1, c2, c3]
+    )
+    cht_list.append(cohort_set)
+
+    c1_pipe = [dp.DataMinMaxScaler(verbose=False)]
+    c2_pipe = dp.DataQuantileTransformer(verbose=False)
+    c3_pipe = None
+    cohort_set = CohortManager(
+        df=df, label_col=label_col, X=X, y=y,
+        transform_pipe=[c1_pipe, c2_pipe, c3_pipe],
+        cohort_def=[c1, c2, c3]
+    )
+    cht_list.append(cohort_set)
+
+    cohort_set = CohortManager(
+        df=df, label_col=label_col, X=X, y=y,
+        transform_pipe=dp.DataMinMaxScaler(verbose=False),
+        cohort_def=[c1, c2, c3]
+    )
+    cht_list.append(cohort_set)
+
+    cohort_set = CohortManager(
+        df=df, label_col=label_col, X=X, y=y,
+        cohort_col=cht_col
+    )
+    cht_list.append(cohort_set)
+
+
+    return cht_list
+
 
 # -----------------------------------
-def _probability_to_class_binary(prediction: Union[np.ndarray, list], th: float):
-    classes = []
-    if prediction.shape[1] == 1:
-        prediction = prediction[:, 0]
+def _run_main_commands(X, y, cht_manager, X_in_fit=True):
+    X = X.copy()
+    if X_in_fit:
+        cht_manager.fit(X=X, y=y)
     else:
-        prediction = prediction[:, 1]
+        cht_manager.fit()
 
-    for p in prediction:
-        c = 0
-        if p >= th:
-            c = 1
-        classes.append(c)
-    return classes
+    _ = cht_manager.transform(X)
+    if cht_manager._pipe_has_predict:
+        _ = cht_manager.predict(X)
+    if cht_manager._pipe_has_predict_proba:
+        _ = cht_manager.predict_proba(X)
+    _ = cht_manager.get_subsets(X)
+    _ = cht_manager.get_subsets(X, y, apply_transform=True)
+
+    cht_manager.save("cht.json")
+    _ = CohortManager(
+        cohort_def="cht.json"
+    )
+    os.remove("cht.json")
+
+# -----------------------------------
+def test_df(df_full_cohort, label_col_name):
+    df = df_full_cohort
+    X = df.drop(columns=[label_col_name])
+    y = df[label_col_name]
+
+    obj_list = _get_object_list(df, label_col_name, use_index=False)
+    for obj in obj_list:
+        _run_main_commands(X, y, obj, X_in_fit=False)
 
 
 # -----------------------------------
-def _probability_to_class_multi(prediction: Union[np.ndarray, list]):
-    new_pred = prediction.argmax(axis=1)
-    return new_pred
+def test_xy(df_full_cohort, label_col_name):
+    df = df_full_cohort
+    X = df.drop(columns=[label_col_name])
+    y = df[label_col_name]
+
+    obj_list = _get_object_list(X=X, y=y, use_index=False)
+    for obj in obj_list:
+        _run_main_commands(X, y, obj, X_in_fit=False)
 
 
 # -----------------------------------
-def _probability_to_class(prediction: Union[np.ndarray, list]):
-    if prediction.shape[1] > 2:
-        return _probability_to_class_multi(prediction)
-    return _probability_to_class_binary(prediction, 0.5)
+def test_col_name(df_full_cohort, label_col_name):
+    df = df_full_cohort
+    X = df.drop(columns=[label_col_name])
+    y = df[label_col_name]
+
+    obj_list = _get_object_list(use_index=False)
+    for obj in obj_list:
+        _run_main_commands(X, y, obj, X_in_fit=True)
 
 
 # -----------------------------------
-def _get_precision_recall_fscore(y: Union[np.ndarray, list], y_pred: Union[np.ndarray, list]):
-    precision, recall, f1, sup = precision_recall_fscore_support(y, y_pred)
-    precision_sup = np.sum(precision * sup) / np.sum(sup)
-    recall_sup = np.sum(recall * sup) / np.sum(sup)
-    f1_sup = np.sum(f1 * sup) / np.sum(sup)
-    return precision_sup, recall_sup, f1_sup
+def test_no_col_name(df_full_cohort, label_col_index_cohort):
+    df = df_full_cohort
+    label_col_name = df.columns[label_col_index_cohort]
+    X = df.drop(columns=[label_col_name])
+    y = df[label_col_name]
 
+    X.columns = [i for i in range(X.shape[1])]
+    y.columns = [0]
+    obj_list = _get_object_list(use_index=True)
+    for obj in obj_list:
+        _run_main_commands(X, y, obj, X_in_fit=True)
 
-# ----------------------------------------
-def get_classification_metrics(y: Union[np.ndarray, list], y_pred_prob: Union[np.ndarray, list]):
-    roc_auc = _get_auc_metric(y, y_pred_prob)
-    y_pred = _probability_to_class(y_pred_prob)
-    precision_sup, recall_sup, f1_sup = _get_precision_recall_fscore(y, y_pred)
-    acc = accuracy_score(y, y_pred)
-    loss = log_loss(y, y_pred_prob)
-    results = {
-        MetricNames.ACC_KEY: acc,
-        MetricNames.AUC_KEY: roc_auc,
-        MetricNames.PREC_KEY: precision_sup,
-        MetricNames.RECALL_KEY: recall_sup,
-        MetricNames.F1_KEY: f1_sup,
-        MetricNames.LOG_LOSS_KEY: loss
-    }
+# -----------------------------------
+def test_rebalance(df_full_cohort, label_col_name):
+    df = df_full_cohort
+    X = df.drop(columns=[label_col_name])
+    y = df[label_col_name]
 
-    return results
+    rebalance_cohort = CohortManager(
+        transform_pipe=dp.Rebalance(verbose=False),
+        cohort_col=["CN_0_num_0"]
+    )
+    new_X, new_y = rebalance_cohort.fit_resample(X, y)
+    new_df = rebalance_cohort.fit_resample(df=df, rebalance_col=label_col_name)
+    _ = rebalance_cohort.get_subsets(new_X, new_y, apply_transform=False)
 
-# ----------------------------------------
+# -----------------------------------
+def test_sklearn_pipe(df_full_cohort, label_col_name):
+    df = df_full_cohort
+    X = df.drop(columns=[label_col_name])
+    y = df[label_col_name]
 
-X, y = create_df()
+    cohort_pipeline = [
+        dp.DataMinMaxScaler(verbose=False),
+        _get_model()
+    ]
+    cohort_set = CohortManager(
+        transform_pipe=cohort_pipeline,
+        cohort_col=["CN_0_num_0"]
+    )
+    skpipe = Pipeline([
+        ("encoder", dp.EncoderOrdinal(verbose=False)),
+        ("model", cohort_set)
+    ])
+    skpipe.fit(X, y)
+    _ = skpipe.predict_proba(X)
 
-print(f"Original Dataset:\n{y.value_counts(normalize=True)}")
+# -----------------------------------
+def test_errors_cohorts(df_full_cohort, label_col_name):
+    cht_pipes_err = [
+        [   dp.BasicImputer(verbose=False),
+            dp.DataMinMaxScaler(verbose=False),
+            dp.Rebalance(verbose=False) ],
+        [   dp.BasicImputer(verbose=False),
+            dp.DataMinMaxScaler(verbose=False),
+            dp.Synthesizer(verbose=False) ],
+        [   dp.BasicImputer(verbose=False),
+            _get_model(),
+            dp.DataMinMaxScaler(verbose=False), ],
+        [ [dp.BasicImputer(verbose=False)] ]
+    ]
+    for cht_pipe in cht_pipes_err:
+        cohort_set = CohortManager(
+                transform_pipe=cht_pipe,
+                cohort_col=["CN_0_num_0"]
+            )
+        with pytest.raises(Exception):
+            cohort_set.fit(df=df_full_cohort, label_col=label_col_name)
 
-c1 = [ ['CN_0_num_0', '==', 'val0_1'], 'and', ['num_0', '>', 0.0] ]
-c2 = [ ['CN_0_num_0', '==', 'val0_0'], 'and', ['num_0', '>', 0.0] ]
-c3 = None
+    cohort_set = CohortManager(cohort_col=["CN_0_num_0"])
+    with pytest.raises(Exception):
+        cohort_set.save("cht.json")
+    with pytest.raises(Exception):
+        cohort_set.fit_resample(df=df_full_cohort, rebalance_col=label_col_name)
+    with pytest.raises(Exception):
+        cohort_set.predict(df_full_cohort)
+    with pytest.raises(Exception):
+        cohort_set.predict_proba(df_full_cohort)
 
-print("\nOriginal Cohorts")
-cohort_set = CohortManager(
-    cohort_def=[c1, c2, c3]
-)
-cohort_set.fit(X=X, y=y)
-subsets = cohort_set.get_subsets(X, y, apply_transform=False)
-for key in subsets.keys():
-    print(subsets[key]["y"].value_counts(normalize=True))
+    with pytest.raises(Exception):
+        cohort_set = CohortManager(
+                    cohort_def=[['num_0', '>', 0.0], None],
+                    cohort_col=["CN_0_num_0"]
+                )
+    with pytest.raises(Exception):
+        cohort_set = CohortManager()
+    with pytest.raises(Exception):
+        cohort_set = CohortManager(cohort_def=10)
+    with pytest.raises(Exception):
+        cohort_set = CohortManager(cohort_col=[])
 
-# ---------------
+# -----------------------------------
+def test_errors_cohorts_special_cases(df_full_cohort, label_col_name):
 
-rebalance = dp.Rebalance(verbose=False)
-new_X, new_y = rebalance.fit_resample(X, y)
-print(f"\nRebalanced full dataset:\n{new_y.value_counts(normalize=True)}")
+    class DummyClass1():
+        def __init__(self):
+            pass
+        def fit(self):
+            pass
+        def transform(self):
+            pass
+        def predict(self):
+            pass
 
-# ---------------
+    class DummyClass2():
+        def __init__(self):
+            pass
+        def transform(self):
+            pass
+        def predict(self):
+            pass
 
-print("\nCohorts after rebalancing the full dataset")
-cohort_set.fit(X=new_X, y=new_y)
-subsets = cohort_set.get_subsets(new_X, new_y, apply_transform=False)
-for key in subsets.keys():
-    print(subsets[key]["y"].value_counts(normalize=True))
+    c1 = [ ['CN_0_num_0', '==', 'val0_1'] ]
+    c2 = None
 
-# ---------------
+    pipe = [DummyClass1(), dp.DataMinMaxScaler(verbose=False)]
+    with pytest.raises(Exception):
+        _ = CohortManager(transform_pipe=pipe, cohort_def=[c1, c2])
 
-rebalance = dp.Rebalance(verbose=False)
-new_X, new_y = rebalance.fit_resample(X, y, cohorts=[c1, c2, c3])
-print("\nCohorts after rebalancing each cohort individually")
-cohort_set.fit(X=new_X, y=new_y)
-subsets = cohort_set.get_subsets(new_X, new_y, apply_transform=False)
-for key in subsets.keys():
-    print(subsets[key]["y"].value_counts(normalize=True))
+    pipe = [DummyClass2(), dp.DataMinMaxScaler(verbose=False)]
+    with pytest.raises(Exception):
+        _ = CohortManager(transform_pipe=pipe, cohort_def=[c1, c2])
 
+    c1 = [ ['CN_0_num_0', '==', 'val0_1'], 'and', ['num_0', '>', 0.0] ]
+    c2 = [ ['CN_0_num_0', '==', 'val0_0'], 'and', ['num_0', '>', 0.0] ]
+    cht_set = CohortManager(
+        transform_pipe=dp.DataMinMaxScaler(verbose=False),
+        cohort_def=[c1, c2]
+    )
+    with pytest.raises(Exception):
+        cht_set.fit(df=df_full_cohort, label_col=label_col_name)
 
+    c1 = [ ['num_0', '>', 0.0] ]
+    c2 = [ ['num_0', '>', 0.5] ]
+    c3 = None
+    cht_set = CohortManager(
+        transform_pipe=dp.DataMinMaxScaler(verbose=False),
+        cohort_def=[c1, c2, c3]
+    )
+    with pytest.raises(Exception):
+        cht_set.fit(df=df_full_cohort, label_col=label_col_name)
 
-
-
-
-
+    c1 = [ ['num_0', '>', 90.0] ]
+    c2 = None
+    cht_set = CohortManager(
+        transform_pipe=dp.DataMinMaxScaler(verbose=False),
+        cohort_def=[c1, c2]
+    )
+    with pytest.raises(Exception):
+        cht_set.fit(df=df_full_cohort, label_col=label_col_name)

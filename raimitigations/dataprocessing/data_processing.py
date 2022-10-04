@@ -475,8 +475,11 @@ class DataProcessing(ABC):
             self.df = X
             self.y = y
 
-            if type(self.y) == pd.core.series.Series:
-                self.label_col_name = self.y.name
+            if type(self.y) == pd.core.series.Series or type(self.y) == pd.DataFrame:
+                if type(self.y) == pd.core.series.Series:
+                    self.label_col_name = self.y.name
+                else:
+                    self.label_col_name = self.y.columns[0]
             else:
                 label_col_name = self.DEFAULT_LABEL_NAME
                 while label_col_name in self.df.columns:

@@ -140,12 +140,31 @@ def df_full_nan():
             df[col] = add_nan(df[col], 0.1)
     return df
 
-
 # -----------------------------------
 @pytest.fixture
 def label_col_index():
     return 6
 
+# -----------------------------------
+@pytest.fixture
+def df_full_cohort():
+    _set_seed()
+    df = create_dummy_dataset(
+        samples=1000,
+        n_features=2,
+        n_num_num=0,
+        n_cat_num=2,
+        n_cat_cat=0,
+        num_num_noise=[0.01, 0.05],
+        pct_change=[0.05, 0.1],
+    )
+    df = df.sample(frac=1)
+    return df
+
+# -----------------------------------
+@pytest.fixture
+def label_col_index_cohort():
+    return 2
 
 # -----------------------------------
 def check_valid_columns(final_list, selected, include_label=True):
