@@ -5,11 +5,9 @@ from sklearn import metrics
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import StratifiedKFold
 from sklearn.base import BaseEstimator
 import xgboost as xgb
 import matplotlib.pyplot as plt
-from copy import deepcopy
 
 DECISION_TREE = "tree"
 KNN = "knn"
@@ -91,17 +89,27 @@ def _get_model(model_name: str):
 
 # -----------------------------------
 def _roc_evaluation(Y, y_pred):
-    roc_auc = metrics.roc_auc_score(Y, y_pred, average="weighted")
-    fpr, tpr, th = metrics.roc_curve(Y, y_pred, drop_intermediate=True)
-    target = tpr - fpr
-    index = np.argmax(target)
-    best_th = th[index]
+    # Binary classification
+    if y_pred.shape[1] <= 2:
+        y_pred = y_pred[:, 1]
+        roc_auc = metrics.roc_auc_score(Y, y_pred, average="weighted")
+        fpr, tpr, th = metrics.roc_curve(Y, y_pred, drop_intermediate=True)
+        target = tpr - fpr
+        index = np.argmax(target)
+        best_th = th[index]
+    # Multi-class
+    else:
+        roc_auc = metrics.roc_auc_score(Y, y_pred, average="weighted", multi_class="ovr")
+        best_th = None
 
     return roc_auc, best_th
 
 
 # -----------------------------------
 def _get_precision_recall_th(Y, y_pred):
+    if y_pred.shape[1] > 2:
+        return None
+    y_pred = y_pred[:, 1]
     precision, recall, thresholds = metrics.precision_recall_curve(Y, y_pred)
     fscore = (2 * precision * recall) / (precision + recall)
     index = np.argmax(fscore)
@@ -111,6 +119,9 @@ def _get_precision_recall_th(Y, y_pred):
 
 # -----------------------------------
 def _plot_precision_recall(Y, y_pred, plot_pr):
+    if y_pred.shape[1] > 2:
+        return None, None, None
+    y_pred = y_pred[:, 1]
     precision, recall, thresholds = metrics.precision_recall_curve(Y, y_pred)
     if plot_pr:
         fig, ax = plt.subplots()
@@ -123,14 +134,28 @@ def _plot_precision_recall(Y, y_pred, plot_pr):
 
 
 # -----------------------------------
-def _probability_to_class(prediction, th):
+def probability_to_class_binary(prediction, th):
     classes = []
+    prediction = prediction[:, 1]
     for p in prediction:
         c = 0
         if p >= th:
             c = 1
         classes.append(c)
     return classes
+
+
+# -----------------------------------
+def probability_to_class_multi(prediction):
+    new_pred = prediction.argmax(axis=1)
+    return new_pred
+
+
+# -----------------------------------
+def probability_to_class(prediction, th):
+    if prediction.shape[1] > 2:
+        return probability_to_class_multi(prediction)
+    return probability_to_class_binary(prediction, th)
 
 
 # -----------------------------------
@@ -170,7 +195,8 @@ def fetch_results(Y: np.ndarray, y_pred: np.ndarray, best_th_auc: bool):
         * Binarized predictions.
 
     :param Y: an array with the true labels;
-    :param y_pred: an arry with the prediction probabilities for each label;
+    :param y_pred: an arry with the prediction probabilities for each class, with shape = (N, C),
+        where N is the number of rows and C is the number of classes;
     :param best_th_auc: if True, the best threshold is computed using ROC graph. If False,
         the threshold is computed using the precision x recall graph.
     :return: a tuple with the computed metrics and the binarized predictions. The tuple
@@ -192,7 +218,7 @@ def fetch_results(Y: np.ndarray, y_pred: np.ndarray, best_th_auc: bool):
     best_th = pr_th
     if best_th_auc:
         best_th = auc_th
-    best_y_pred = _probability_to_class(y_pred, best_th)
+    best_y_pred = probability_to_class(y_pred, best_th)
     best_acc = metrics.accuracy_score(Y, best_y_pred)
     best_precision, best_recall, best_f1, s = metrics.precision_recall_fscore_support(Y, best_y_pred)
 
@@ -221,7 +247,8 @@ def evaluate_set(
 
     :param model: the model used to make the predictions given by the **y_pred** parameter;
     :param Y: an array with the true labels;
-    :param y_pred: an arry with the prediction probabilities for each label;
+    :param y_pred: an arry with the prediction probabilities for each class, with shape = (N, C),
+        where N is the number of rows and C is the number of classes;
     :param is_train: a boolean value that indicates if the predictions are for the train
         set or not;
     :param plot_pr: if True, plots a graph showing the precision and recall values for
@@ -294,8 +321,8 @@ def train_model_plot_results(
     model = _get_model(model_name)
     model.fit(x, y)
 
-    pred_train = model.predict_proba(x)[:, 1]
-    pred_test = model.predict_proba(x_test)[:, 1]
+    pred_train = model.predict_proba(x)
+    pred_test = model.predict_proba(x_test)
 
     if train_result:
         evaluate_set(model, y, pred_train, is_train=True, plot_pr=plot_pr, best_th_auc=best_th_auc)
@@ -359,7 +386,7 @@ def train_model_fetch_results(x, y, x_test, y_test, model_name=DECISION_TREE, be
     """
     model = _get_model(model_name)
     model.fit(x, y)
-    pred_test = model.predict_proba(x_test)[:, 1]
+    pred_test = model.predict_proba(x_test)
     roc, best_th, best_pr, best_rc, best_f1, best_acc, best_y_pred = fetch_results(y_test, pred_test, best_th_auc)
 
     result = {
@@ -373,38 +400,3 @@ def train_model_fetch_results(x, y, x_test, y_test, model_name=DECISION_TREE, be
     }
 
     return result
-
-
-# -----------------------------------
-def _get_fold(X, y, train_idx, test_idx, transform_pipe: list):
-    train_x = X.filter(items=train_idx, axis=0)
-    train_y = y.filter(items=train_idx, axis=0)
-    test_x = X.filter(items=test_idx, axis=0)
-    test_y = y.filter(items=test_idx, axis=0)
-
-    transform_copy = [deepcopy(tf) for tf in transform_pipe]
-    for tf in transform_copy:
-        if tf._get_fit_input_type() == tf.FIT_INPUT_DF:
-            tf.fit(train_x)
-        else:
-            tf.fit(train_x, train_y)
-    for tf in transform_copy:
-        train_x = tf.transform(train_x)
-        test_x = tf.transform(test_x)
-
-    return train_x, train_y, test_x, test_y
-
-
-# -----------------------------------
-def evaluate_model_kfold(X: pd.DataFrame, y: pd.Series, transform_pipe: list, model: BaseEstimator):
-    cv = StratifiedKFold(n_splits=10)
-    roc_list = []
-    for train_idx, test_idx in cv.split(X, y):
-        train_x, train_y, test_x, test_y = _get_fold(X, y, train_idx, test_idx, transform_pipe)
-        model.fit(X=train_x, y=train_y)
-        y_pred = model.predict_proba(test_x)
-        if len(y_pred.shape) > 1 and y_pred.shape[1] == 2:
-            y_pred = y_pred[:, 1]
-        roc_auc = metrics.roc_auc_score(test_y, y_pred, average="weighted", multi_class="ovr")
-        roc_list.append(roc_auc)
-    return np.mean(roc_list)

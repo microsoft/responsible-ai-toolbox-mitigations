@@ -19,7 +19,6 @@ from .model_utils import (
     fetch_results,
     train_model_fetch_results,
     evaluate_set,
-    evaluate_model_kfold,
 )
 
 __all__ = [
@@ -29,7 +28,6 @@ __all__ = [
     "train_model_fetch_results",
     "split_data",
     "evaluate_set",
-    "evaluate_model_kfold",
     "DataProcessing",
     "DataEncoding",
     "EncoderOHE",
