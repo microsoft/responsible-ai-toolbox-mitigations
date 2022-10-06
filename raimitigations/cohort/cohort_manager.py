@@ -1,5 +1,4 @@
 from typing import Union
-import itertools
 from copy import deepcopy
 
 import pandas as pd
@@ -201,7 +200,7 @@ class CohortManager(DataProcessing):
         self.cohort_def = cohort_def
 
     # -----------------------------------
-    def _get_cohort_def_from_condition(self, cht_values: tuple):
+    def _get_cohort_def_from_condition(self, cht_values: list):
         """
         Builds a cohort definition list, similar to the one used in the
         ``cohort_def`` parameter, based on a list of value tuples defining
@@ -211,8 +210,8 @@ class CohortManager(DataProcessing):
         represents the condition for an instance to be considered from
         the cohort or not.
 
-        :param cht_values: a tuple of values that defines a new cohort.
-            The values in this tuple are associated with the columns in
+        :param cht_values: a list of values that defines a new cohort.
+            The values in this list are associated with the columns in
             ``cohort_col`` (also in the same order), and each value
             represents the condition for an instance to be considered
             from the cohort or not.
@@ -233,13 +232,11 @@ class CohortManager(DataProcessing):
         if self.df is None:
             return
 
-        sets = []
-        for col in self.cohort_col:
-            subset = self._get_df_subset(self.df, [col])
-            values = subset.iloc[:, 0].unique()
-            sets.append(values)
-
-        cohort_list = list(itertools.product(*sets))
+        subset = self._get_df_subset(self.df, self.cohort_col)
+        unique_df = subset.groupby(self.cohort_col).size().reset_index().rename(columns={0: "count"})
+        unique_df.drop(columns=["count"], inplace=True)
+        unique_arr = unique_df.to_numpy()
+        cohort_list = [list(unique_arr[i]) for i in range(unique_arr.shape[0])]
 
         self.cohort_def = []
         for i, cht in enumerate(cohort_list):
@@ -254,21 +251,25 @@ class CohortManager(DataProcessing):
             return
 
         if self.cohort_def is None:
+            self.cohort_col = self._check_error_col_list(self.df, self.cohort_col, "cohort_col")
             self._cohort_col_to_def()
             if self.cohort_def is None:
                 return
 
         self.cohorts = []
         for i, cohort_def in enumerate(self.cohort_def):
+            if cohort_def is None and i < len(self.cohort_def) - 1:
+                raise ValueError("ERROR: only the last cohort is allowed to have a condition list assigned to 'None'.")
             cohort = CohortDefinition(cohort_def, self._cohort_names[i])
             self.cohorts.append(cohort)
 
     # -----------------------------------
-    def save(self, json_file: str):
+    def save_conditions(self, json_file: str):
         if self.cohorts is None:
             raise ValueError(
-                "ERROR: calling the save() method before building the cohorts. To build the cohorts, either pass "
-                + "a valid dataframe to the constructor of the CohortManager class, or call the fit() method."
+                "ERROR: calling the save_conditions() method before building the cohorts. To build the cohorts, "
+                + "either pass a valid dataframe to the constructor of the CohortManager class, "
+                + " or call the fit() method."
             )
         cht_dict = {}
         for cht in self.cohorts:
@@ -290,22 +291,24 @@ class CohortManager(DataProcessing):
             raise ValueError("ERROR: some rows of the dataset belong to more than one cohort.")
 
     # -----------------------------------
-    def _check_compatibility_between_cohorts(self, cht_df: list):
+    def _check_compatibility_between_cohorts(self, cht_df_dict: dict):
         if self._cohorts_compatible is None:
             self._cohorts_compatible = True
-        columns = cht_df[0].columns
-        for i in range(1, len(cht_df)):
-            if len(cht_df[i].columns) != len(columns):
+        cht_names = list(cht_df_dict.keys())
+        columns = cht_df_dict[cht_names[0]].columns
+        for i in range(1, len(cht_names)):
+            cht = cht_df_dict[cht_names[i]]
+            if len(cht.columns) != len(columns):
                 self._cohorts_compatible = False
                 break
 
-            diff_col = [col for col in columns if col not in cht_df[i].columns]
+            diff_col = [col for col in columns if col not in cht.columns]
             if len(diff_col) > 0:
                 self._cohorts_compatible = False
                 break
 
     # -----------------------------------
-    def _merge_cohort_datasets(self, cht_df: list, org_index: list = None):
+    def _merge_cohort_datasets(self, cht_df: dict, org_index: list = None):
         if not self._cohorts_compatible:
             self.print_message(
                 "WARNING: the transformations used over the cohorts resulted in each cohort having different "
@@ -314,7 +317,7 @@ class CohortManager(DataProcessing):
             return cht_df
 
         final_df = None
-        for df in cht_df:
+        for df in cht_df.values():
             if final_df is None:
                 final_df = df
             else:
@@ -329,12 +332,12 @@ class CohortManager(DataProcessing):
         return final_df
 
     # -----------------------------------
-    def _merge_cohort_predictions(self, cht_pred: list, index_list: list):
+    def _merge_cohort_predictions(self, cht_pred: dict, index_list: list):
         if not self._cohorts_compatible:
             return cht_pred
 
         final_pred = None
-        for pred in cht_pred:
+        for pred in cht_pred.values():
             if final_pred is None:
                 final_pred = pred
             else:
@@ -379,21 +382,24 @@ class CohortManager(DataProcessing):
         self._build_cohorts()
         self._set_transforms()
         index_used = []
-        cht_df_list = []
+        cht_df_dict = {}
         for i, cohort in enumerate(self.cohorts):
             cht_x, cht_y, index_list = cohort.get_cohort_subset(self.df, self.y, index_used, return_index_list=True)
             index_used += index_list
             if cht_x.empty:
-                raise ValueError(f"ERROR: no valid instances found for cohort {cohort.name} in the fit() method.")
+                raise ValueError(
+                    f"ERROR: no valid instances found for cohort {cohort.name} in the fit() method. The query used "
+                    + f"by this cohort is the following: {cohort.query}."
+                )
             for tf in self._cohort_pipe[i]:
                 tf.fit(cht_x, cht_y)
                 has_transf = self.obj_has_method(tf, "transform")
                 if not has_transf:
                     break
                 cht_x = tf.transform(cht_x)
-            cht_df_list.append(cht_x)
+            cht_df_dict[cohort.name] = cht_x
 
-        self._check_compatibility_between_cohorts(cht_df_list)
+        self._check_compatibility_between_cohorts(cht_df_dict)
         self._check_intersection_cohorts(index_used)
         self._raise_missing_instances_error(self.df, index_used)
 
@@ -413,7 +419,7 @@ class CohortManager(DataProcessing):
         df = self._fix_col_transform(df)
 
         index_used = []
-        cht_df_list = []
+        cht_df_dict = {}
         org_index = df.index.copy()
         for i, cohort in enumerate(self.cohorts):
             cht_x, index_list = cohort.get_cohort_subset(df, y=None, index_used=index_used, return_index_list=True)
@@ -424,11 +430,11 @@ class CohortManager(DataProcessing):
                     if not has_transf:
                         break
                     cht_x = tf.transform(cht_x)
-                cht_df_list.append(cht_x)
+                cht_df_dict[cohort.name] = cht_x
 
         self._check_intersection_cohorts(index_used)
         self._raise_missing_instances_error(df, index_used)
-        final_df = self._merge_cohort_datasets(cht_df_list, org_index)
+        final_df = self._merge_cohort_datasets(cht_df_dict, org_index)
 
         return final_df
 
@@ -446,7 +452,7 @@ class CohortManager(DataProcessing):
         df = df.reset_index(drop=True)
 
         index_used = []
-        pred_list = []
+        pred_dict = {}
         for i, cohort in enumerate(self.cohorts):
             cht_x, index_list = cohort.get_cohort_subset(df, y=None, index_used=index_used, return_index_list=True)
             index_used += index_list
@@ -460,11 +466,11 @@ class CohortManager(DataProcessing):
                             pred = tf.predict(cht_x)
                         else:
                             pred = tf.predict_proba(cht_x)
-                pred_list.append(pred)
+                pred_dict[cohort.name] = pred
 
         self._check_intersection_cohorts(index_used)
         self._raise_missing_instances_error(df, index_used)
-        final_pred = self._merge_cohort_predictions(pred_list, index_used)
+        final_pred = self._merge_cohort_predictions(pred_dict, index_used)
 
         return final_pred
 
@@ -494,7 +500,7 @@ class CohortManager(DataProcessing):
             raise ValueError("ERROR: none of the objects in the transform_pipe parameter have a fit_resample() method.")
 
         index_used = []
-        cht_df_list = []
+        cht_df_dict = {}
         for i, cohort in enumerate(self.cohorts):
             cht_x, cht_y, index_list = cohort.get_cohort_subset(self.df, self.y, index_used, return_index_list=True)
             index_used += index_list
@@ -504,12 +510,12 @@ class CohortManager(DataProcessing):
                     if has_fit_resample:
                         cht_x, cht_y = tf.fit_resample(cht_x, cht_y)
                 cht_df = pd.concat([cht_x, cht_y], axis=1)
-                cht_df_list.append(cht_df)
+                cht_df_dict[cohort.name] = cht_df
 
-        self._check_compatibility_between_cohorts(cht_df_list)
+        self._check_compatibility_between_cohorts(cht_df_dict)
         self._check_intersection_cohorts(index_used)
         self._raise_missing_instances_error(self.df, index_used)
-        final_df = self._merge_cohort_datasets(cht_df_list)
+        final_df = self._merge_cohort_datasets(cht_df_dict)
         self.fitted = True
 
         if self.input_scheme == self.INPUT_XY:
@@ -522,7 +528,7 @@ class CohortManager(DataProcessing):
     # -----------------------------------
     def get_subsets(
         self,
-        X: Union[pd.DataFrame, np.ndarray] = None,
+        X: Union[pd.DataFrame, np.ndarray],
         y: Union[pd.Series, np.ndarray] = None,
         apply_transform: bool = False,
     ):
@@ -554,3 +560,12 @@ class CohortManager(DataProcessing):
         self._raise_missing_instances_error(X, index_used)
 
         return out_dict
+
+    # -----------------------------------
+    def get_queries(self):
+        if self.cohorts is None:
+            raise ValueError("ERROR: call the fit() method before fetching the queries.")
+        queries = {}
+        for cht in self.cohorts:
+            queries[cht.name] = cht.query
+        return queries

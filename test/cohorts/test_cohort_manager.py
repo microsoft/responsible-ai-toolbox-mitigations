@@ -106,7 +106,7 @@ def _run_main_commands(X, y, cht_manager, X_in_fit=True):
     _ = cht_manager.get_subsets(X)
     _ = cht_manager.get_subsets(X, y, apply_transform=True)
 
-    cht_manager.save("cht.json")
+    cht_manager.save_conditions("cht.json")
     _ = CohortManager(
         cohort_def="cht.json"
     )
@@ -217,7 +217,7 @@ def test_errors_cohorts(df_full_cohort, label_col_name):
 
     cohort_set = CohortManager(cohort_col=["CN_0_num_0"])
     with pytest.raises(Exception):
-        cohort_set.save("cht.json")
+        cohort_set.save_conditions("cht.json")
     with pytest.raises(Exception):
         cohort_set.fit_resample(df=df_full_cohort, rebalance_col=label_col_name)
     with pytest.raises(Exception):
@@ -236,6 +236,8 @@ def test_errors_cohorts(df_full_cohort, label_col_name):
         cohort_set = CohortManager(cohort_def=10)
     with pytest.raises(Exception):
         cohort_set = CohortManager(cohort_col=[])
+    with pytest.raises(Exception):
+        cohort_set = CohortManager(cohort_def=[[['num_0', '>', 0.0]], None, None])
 
 # -----------------------------------
 def test_errors_cohorts_special_cases(df_full_cohort, label_col_name):
