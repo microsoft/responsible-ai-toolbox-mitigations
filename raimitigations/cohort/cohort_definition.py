@@ -26,11 +26,6 @@ class CohortFilters:
 
 
 class CohortDefinition:
-
-    STATE_COND1 = 0
-    STATE_AND_OR = 1
-    STATE_COND2 = 2
-
     """
     Implements an interface for building and filtering cohorts from any dataset.
     This class is not associated to any specific dataset. It simply converts a
@@ -53,6 +48,10 @@ class CohortDefinition:
     :param name: a string indicating the name of the cohort. This parameter may be accessed
         later using the ``name`` attribute.
     """
+
+    STATE_COND1 = 0
+    STATE_AND_OR = 1
+    STATE_COND2 = 2
 
     # -----------------------------------
     def __init__(self, cohort_definition: Union[list, str] = None, name: str = "cohort"):

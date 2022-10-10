@@ -10,6 +10,70 @@ from .cohort_definition import CohortDefinition, CohortFilters
 
 
 class CohortManager(DataProcessing):
+    """
+    Concrete class that manages multiple cohort pipelines that are
+    applied using the ``fit()``, ``transform()``, fit_resample()``,
+    ``predict()``, and ``predict_proba()`` interfaces. The ``CohortManager``
+    uses multiple ``CohortDefinition`` objects to control the filters
+    of each cohort, while using transformation pipelines to control
+    which transformations should be applied to each cohort.
+
+    :param transform_pipe: the transformation pipeline to be used for each
+        cohort. There are different ways to present this parameter:
+
+            1. **An empty list or ``None``:** in this case, the ``CohortManager``
+               won't apply any transformations over the dataset. The ``transform()``
+               method will simply return the dataset provided;
+            2. **A single transformer:** in this case, this single transformer is
+               placed in a list (a list with a single transformer), which is then
+               replicated such that each cohort has its own list of transformations
+               (pipeline);
+            3. **A list of transformers:** in this case, this pipeline is replicated
+               for each cohort;
+            4. **A list of pipelines:** a list of pipelines is basically a list of
+               lists of transformations. In this case, the list of pipelines should have
+               one pipeline for each cohort created, that is, the length of the
+               ``transform_pipe`` parameter should be the same as the number of cohorts
+               created. The pipelines will be assigned to each cohort following the same
+               order as the ``cohort_def`` parameter (depicted in the following example);
+
+    :param cohort_def: a list of cohort definitions, a dictionary of cohort definitions, or
+        the path to a JSON file containing the definition of all cohorts. A cohort condition
+        is the same variable received by the ``cohort_definition`` parameter of the
+        ``CohortDefinition`` class. When using a list of cohort definitions, the cohorts will
+        be named automatically. For the dictionary of cohort definitions, the key used represents
+        the cohort's name, and the value assigned to each key is given by that cohort's conditions.
+        This parameter can't be used together with the ``cohort_col`` parameter. Only one these two
+        parameters must be used at a time;
+
+    :param cohort_col: a list of column names or indices, from which one cohort is created for each
+        unique combination of values for these columns. This parameter can't be used together with
+        the ``cohort_def`` parameter. Only one these two parameters must be used at a time;
+
+    :param df: the data frame to be used during the fit method.
+        This data frame must contain all the features, including the label
+        column (specified in the  ``label_col`` parameter). This parameter is
+        mandatory if  ``label_col`` is also provided. The user can also provide
+        this dataset (along with the  ``label_col``) when calling the :meth:`fit`
+        method. If df is provided during the class instantiation, it is not
+        necessary to provide it again when calling :meth:`fit`. It is also possible
+        to use the  ``X`` and  ``y`` instead of ``df`` and ``label_col``, although it is
+        mandatory to pass the pair of parameters (X,y) or (df, label_col) either
+        during the class instantiation or during the :meth:`fit` method;
+
+    :param label_col: the name or index of the label column. This parameter is
+        mandatory if ``df`` is provided;
+
+    :param X: contains only the features of the original dataset, that is, does not
+        contain the label column. This is useful if the user has already separated
+        the features from the label column prior to calling this class. This parameter
+        is mandatory if ``y`` is provided;
+
+    :param y: contains only the label column of the original dataset.
+        This parameter is mandatory if ``X`` is provided;
+
+    :param verbose: indicates whether internal messages should be printed or not.
+    """
 
     # -----------------------------------
     def __init__(
@@ -49,6 +113,23 @@ class CohortManager(DataProcessing):
 
     # -----------------------------------
     def _validate_transforms(self, transform_pipe: list):
+        """
+        Validates the transform pipeline provided in the constructor method.
+        This method checks which methods should be unlocked for the
+        ``CohortManager`` based on the pipelines: ``fit``, ``transform``,
+        ``predict``, ``predict_proba``, ``fit_resample``. Also, checks for errors
+        and inconsistencies in the pipeline.
+
+        :param transform_pipe: the transformation pipeline to be used for each
+            cohort. For more details, check the documentation of this parameter in
+            the constructor method of this class.
+        :return: a tuple containing (i) the updated transform pipeline, (ii) a flag
+            indicating if the pipeline has a ``transform`` operation, (iii) a flag
+            indicating if the pipeline has a ``predict`` operation, (iv) a flag
+            indicating if the pipeline has a ``predict_proba`` operation, (v) a flag
+            indicating if the pipeline has a ``fit_resample`` operation, in that order.
+        :rtype: tuple
+        """
         has_fit_resample = False
         has_transform = False
         has_predict = False
@@ -123,6 +204,12 @@ class CohortManager(DataProcessing):
 
     # -----------------------------------
     def _set_transforms(self):
+        """
+        Validates the transform pipeline provided in the constructor method.
+        This method checks if the transform pipeline represents a single pipeline
+        (in which case, the pipeline should be replicated to each cohort), a list
+        of pipelines (one for each cohort), or an empty pipeline.
+        """
         if self._cohort_pipe is not None or self.cohorts is None:
             return
 
@@ -162,6 +249,25 @@ class CohortManager(DataProcessing):
 
     # -----------------------------------
     def _set_cohort_def(self, cohort_def: Union[dict, list], cohort_col: list):
+        """
+        Validate and set the cohort definitions based on the ``cohort_def`` and ``cohort_col``
+        parameters. Checks if only one of these two parameters must be provided (the other one
+        should be set to ``None``), and also if there are any errors or inconsistencies in these
+        parameters. If not cohort names are provided, this method will also create a default
+        name for each cohort.
+
+        :param cohort_def: a list of cohort definitions, a dictionary of cohort definitions, or
+            the path to a JSON file containing the definition of all cohorts. A cohort condition
+            is the same variable received by the ``cohort_definition`` parameter of the
+            ``CohortDefinition`` class. When using a list of cohort definitions, the cohorts will
+            be named automatically. For the dictionary of cohort definitions, the key used represents
+            the cohort's name, and the value assigned to each key is given by that cohort's conditions.
+            This parameter can't be used together with the ``cohort_col`` parameter. Only one these two
+            parameters must be used at a time;
+        :param cohort_col: a list of column names or indices, from which one cohort is created for each
+            unique combination of values for these columns. This parameter can't be used together with
+            the ``cohort_def`` parameter. Only one these two parameters must be used at a time;
+        """
         if cohort_def is None and cohort_col is None:
             raise ValueError(
                 "ERROR: at least one of the following parameters must be provided: [cohort_def, cohort_col]."
@@ -229,15 +335,27 @@ class CohortManager(DataProcessing):
 
     # -----------------------------------
     def _cohort_col_to_def(self):
+        """
+        Converts the ``cohort_col`` to the ``cohort_def`` parameter.
+        The former is a list of columns that should be used to create the
+        cohorts. This way, all unique combination of values present are
+        used to create a new cohort. These value combinations are inserted
+        into a list of conditions, just like the one used by the ``cohort_def``
+        parameter.
+        """
+        # can only convert 'cohort_col to the 'cohort_def'
+        # if the dataset is already set
         if self.df is None:
             return
 
+        # get the list of unique combination of values across all columns in 'cohort_col'
         subset = self._get_df_subset(self.df, self.cohort_col)
         unique_df = subset.groupby(self.cohort_col).size().reset_index().rename(columns={0: "count"})
         unique_df.drop(columns=["count"], inplace=True)
         unique_arr = unique_df.to_numpy()
         cohort_list = [list(unique_arr[i]) for i in range(unique_arr.shape[0])]
 
+        # build the list of conditions based on the list of unique combinations of values
         self.cohort_def = []
         for i, cht in enumerate(cohort_list):
             name = f"cohort_{i}"
@@ -247,6 +365,12 @@ class CohortManager(DataProcessing):
 
     # -----------------------------------
     def _build_cohorts(self):
+        """
+        Creates the ``CohortDefinition`` objects associated to each of the
+        conditions in ``cohort_def``. If the cohorts have already been created,
+        then return without making any changes. If ``cohort_def`` was not provided,
+        then convert ``cohort_col`` to ``cohort_def``.
+        """
         if self.cohorts is not None:
             return
 
@@ -265,6 +389,11 @@ class CohortManager(DataProcessing):
 
     # -----------------------------------
     def save_conditions(self, json_file: str):
+        """
+        Save the definition of all cohorts into a JSON file.
+
+        :param json_file: the path to the JSON file.
+        """
         if self.cohorts is None:
             raise ValueError(
                 "ERROR: calling the save_conditions() method before building the cohorts. To build the cohorts, "
@@ -280,18 +409,44 @@ class CohortManager(DataProcessing):
 
     # -----------------------------------
     def _load(self, json_file: str):
+        """
+        Load the condition list of all cohorts from a JSON file.
+
+        :param json_file: the path to the JSON file;
+        :return: a dictionary with the list of conditions for each of
+            the existing cohorts;
+        :rtype: dict
+        """
         with open(json_file, "r") as file:
             conditions = json.load(file)
         return conditions
 
     # -----------------------------------
     def _check_intersection_cohorts(self, index_used: list):
+        """
+        Checks if there are any index that repeats in the ``index_used`` list.
+        If that happens, this means that at least one instance of the dataset
+        belongs to more than one cohort, which is not allowed.
+
+        :param index_used: a list with the index of all instances that have a
+            mathcing cohort.
+        """
         set_index = list(set(index_used))
         if len(set_index) != len(index_used):
             raise ValueError("ERROR: some rows of the dataset belong to more than one cohort.")
 
     # -----------------------------------
     def _check_compatibility_between_cohorts(self, cht_df_dict: dict):
+        """
+        Check if all cohorts are compatible between each other after
+        applying their transformations. Two cohorts are considered
+        compatible when they have the same number of columns and the
+        exact same column names.
+
+        :param cht_df_dict: a dictionary where each key is a cohort
+            name, and the value associated to each key is a dataframe
+            representing the subset that belongs to that cohort.
+        """
         if self._cohorts_compatible is None:
             self._cohorts_compatible = True
         cht_names = list(cht_df_dict.keys())
@@ -309,6 +464,25 @@ class CohortManager(DataProcessing):
 
     # -----------------------------------
     def _merge_cohort_datasets(self, cht_df: dict, org_index: list = None):
+        """
+        Merges all cohort subsets (after going through their own
+        transformations) into a single dataset. After concatanating all
+        predictions into a single array, it is reordered so that it keeps
+        the same order as the original dataset. The ``org_index`` is
+        is used to determine this order.
+
+        :param cht_df: a dictionary where each key is a cohort
+            name, and the value associated to each key is a dataframe
+            representing the subset that belongs to that cohort;
+        :param org_index: the index list of the original dataset. This
+            is used to define the order that the final predictions should
+            be sorted so that it uses the same instance order used in the
+            original dataset;
+        :return: a dataset containing the subset of cohorts after their
+            transformations. If ``org_index`` is provided, the resulting
+            dataset will follow the same order as the original dataset;
+        :rtype: pd.DataFrame
+        """
         if not self._cohorts_compatible:
             self.print_message(
                 "WARNING: the transformations used over the cohorts resulted in each cohort having different "
@@ -333,6 +507,24 @@ class CohortManager(DataProcessing):
 
     # -----------------------------------
     def _merge_cohort_predictions(self, cht_pred: dict, index_list: list):
+        """
+        Merges all cohort predictions (after going through their own
+        transformations) into a single prediction array. If ``org_index`` is
+        provided, the resulting dataset will follow the same order as
+        the original dataset.
+
+        :param cht_df: a dictionary where each key is a cohort
+            name, and the value associated to each key is a dataframe
+            representing the subset that belongs to that cohort;
+        :param org_index: the index list of the original dataset. When
+            provided, the final dataset returned (with the subset of
+            cohorts transformed) will be sorted so that it uses the same
+            index list, that is, the returned array maintains the same
+            instance order used in the original dataset;
+        :return: an array with the predictions of all instances of the
+            dataset, built from the predictions of each cohort.
+        :rtype: np.ndarray
+        """
         if not self._cohorts_compatible:
             return cht_pred
 
@@ -378,6 +570,25 @@ class CohortManager(DataProcessing):
         df: pd.DataFrame = None,
         label_col: str = None,
     ):
+        """
+        Calls the ``fit()`` method of all transformers in all pipelines. Each cohort
+        has its own pipeline. This way, the following steps are executed: (i) iterate
+        over each cohort, (ii) filter the dataset (``X`` or ``df``) using each cohort's
+        filter, (iii) cycle through each of the transformers in the cohort's pipeline
+        and call the transformer's ``fit()`` method, (iv) after fitting the transformer,
+        call its ``transform()`` method to get the updated subset, which is then used in
+        the ``fit()`` call of the following transformer. Finally, check if all instances
+        belong to only a single cohort.
+
+        :param X: contains only the features of the original dataset, that is, does not
+            contain the label column;
+        :param y: contains only the label column of the original dataset;
+        :param df: the full dataset;
+        :param label_col: the name or index of the label column;
+
+        Check the documentation of the _set_df_mult method (DataProcessing class)
+        for more information on how these parameters work.
+        """
         self._set_df_mult(df, label_col, X, y, require_set=True)
         self._build_cohorts()
         self._set_transforms()
@@ -407,8 +618,21 @@ class CohortManager(DataProcessing):
         return self
 
     # -----------------------------------
-    def transform(self, df: Union[pd.DataFrame, np.ndarray]):
+    def transform(self, X: Union[pd.DataFrame, np.ndarray]):
+        """
+        Calls the ``transform()`` method of all transformers in all pipelines. Each cohort
+        has its own pipeline. This way, the following steps are executed: (i) iterate
+        over each cohort, (ii) filter the dataset ``X`` using eachcohort's filter, (iii)
+        cycle through each of the transformers in the cohort's pipeline and call the
+        transformer's ``transform()`` method, which returns a new transformed subset,
+        that is then used in the ``transform()`` call of the following transformer.
+        Finally, check if all instances belong to only a single cohort, and merge all cohort
+        subsets into a single dataset.
 
+        :param X: contains only the features of the dataset to be transformed;
+        :return: a dataset containing the transformed instances of all cohorts.
+        :rtype: pd.DataFrame
+        """
         if not self._pipe_has_transform:
             self.print_message(
                 "WARNING: a least one of the cohort pipelines doesn't have any transformations that "
@@ -416,7 +640,7 @@ class CohortManager(DataProcessing):
             )
 
         self._check_if_fitted()
-        df = self._fix_col_transform(df)
+        df = self._fix_col_transform(X)
 
         index_used = []
         cht_df_dict = {}
@@ -440,6 +664,26 @@ class CohortManager(DataProcessing):
 
     # -----------------------------------
     def _predict(self, X: Union[pd.DataFrame, np.ndarray], prob: bool = False):
+        """
+        Calls the ``transform()`` method of all transformers in all pipelines, followed
+        by the ``predict()`` or ``predict_proba()`` method for the estimator (which is
+        always the last object in the pipeline). Each cohort has its own pipeline. This way,
+        the following steps are executed: (i) iterate over each cohort, (ii) filter the
+        dataset ``X`` using each cohort's filter, (iii) cycle through each of the transformers
+        in the cohort's pipeline and call the transformer's ``transform()`` method, which
+        returns a new transformed subset, that is then used in the ``transform()`` call of the
+        following transformer, (iv) finally, after cycling through all transformers that are
+        not estimators, call the ``predict()`` or ``predict_proba()`` method of the estimator
+        using the transformed subset as input. Finally, check if all instances belong to only
+        a single cohort, and merge all cohort predictions into a single array.
+
+        :param X: contains only the features of the dataset to be transformed;
+        :param prob: if True, then ``predict_proba()`` is called. Otherwise, ``predict()``
+            is called;
+        :return: an array with the predictions of all instances of the
+            dataset, built from the predictions of each cohort.
+        :rtype: np.ndarray
+        """
         if not prob and not self._pipe_has_predict:
             raise ValueError("ERROR: none of the objects in the transform_pipe parameter have a predict() method.")
         if prob and not self._pipe_has_predict_proba:
@@ -476,11 +720,31 @@ class CohortManager(DataProcessing):
 
     # -----------------------------------
     def predict(self, X: Union[pd.DataFrame, np.ndarray]):
+        """
+        Calls the ``transform()`` method of all transformers in all pipelines, followed
+        by the ``predict()`` method for the estimator (which is always the last object
+        in the pipeline).
+
+        :param X: contains only the features of the dataset to be transformed;
+        :return: an array with the predictions of all instances of the
+            dataset, built from the predictions of each cohort.
+        :rtype: np.ndarray
+        """
         final_pred = self._predict(X, prob=False)
         return final_pred
 
     # -----------------------------------
     def predict_proba(self, X: Union[pd.DataFrame, np.ndarray]):
+        """
+        Calls the ``transform()`` method of all transformers in all pipelines, followed
+        by the ``predict_proba()`` method for the estimator (which is always the last object
+        in the pipeline).
+
+        :param X: contains only the features of the dataset to be transformed;
+        :return: an array with the predictions of all instances of the
+            dataset, built from the predictions of each cohort.
+        :rtype: np.ndarray
+        """
         final_pred = self._predict(X, prob=True)
         return final_pred
 
@@ -492,6 +756,38 @@ class CohortManager(DataProcessing):
         df: Union[pd.DataFrame, np.ndarray] = None,
         rebalance_col: str = None,
     ):
+        """
+        Calls the ``fit_resample()`` method of all transformers in all pipelines. Each
+        cohort has its own pipeline. This way, the following steps are executed:
+        (i) iterate over each cohort, (ii) filter the dataset (``X`` or ``df``) using
+        each cohort's filter, (iii) cycle through each of the transformers in the cohort's
+        pipeline and call the transformer's ``fit_resample()`` method, (iv) after resampling
+        using the current transformer, save the new subset and use it when calling the
+        ``fit_resample()`` of the following transformer. Finally, check if all instances
+        belong to only a single cohort.
+
+        :param X: contains only the features of the original dataset, that is, does
+            not contain the column used for rebalancing. This is useful if the user has
+            already separated the features from the label column prior to calling this
+            class. This parameter is mandatory if  ``y`` is provided;
+        :param y: contains only the rebalance column of the original dataset. The rebalance
+            operation is executed based on the data distribution of this column. This parameter
+            is mandatory if  ``X`` is provided;
+        :param df: the dataset to be rebalanced, which is used during the :meth:`fit` method.
+            This data frame must contain all the features, including the rebalance
+            column (specified in the  ``rebalance_col`` parameter). This parameter is
+            mandatory if  ``rebalance_col`` is also provided. The user can also provide
+            this dataset (along with the  ``rebalance_col``) when calling the :meth:`fit`
+            method. If ``df`` is provided during the class instantiation, it is not
+            necessary to provide it again when calling :meth:`fit`. It is also possible
+            to use the  ``X`` and  ``y`` instead of  ``df`` and  ``rebalance_col``, although it is
+            mandatory to pass the pair of parameters (X,y) or (df, rebalance_col) either
+            during the class instantiation or during the :meth:`fit` method;
+        :param rebalance_col: the name or index of the column used to do the rebalance
+            operation. This parameter is mandatory if  ``df`` is provided.
+        :return: the resampled dataset.
+        :rtype: pd.DataFrame
+        """
         self._set_df_mult(df, rebalance_col, X, y, require_set=True)
         self._build_cohorts()
         self._set_transforms()
@@ -532,6 +828,37 @@ class CohortManager(DataProcessing):
         y: Union[pd.Series, np.ndarray] = None,
         apply_transform: bool = False,
     ):
+        """
+        Fetches a dictionary with the subset associated to all of
+        the existing cohorts and their label column (only if ``y``
+        is provided). If ``apply_transform`` is set to True, then
+        the returned subsets are transformed using the cohort's
+        pipeline before being returned (similar to calling the
+        ``transform()`` method).
+
+        :param X: a dataset that has at least the columns used by
+            the cohorts' filters (this means that the dataset may
+            also have other columns not used by the filters);
+        :param y: a dataset containing only the label column (`y`
+            dataset). This parameter is optional, and it is useful
+            when it is necessary to filter a feature dataset (`X`)
+            and a label dataset (`y`), and get a list of subsets
+            from ``X`` and ``y``;
+        :param apply_transform: boolean value indicating if we want
+            to apply the transformations pipeline used for each cohort
+            or not. If True, this method will behave similarly to the
+            `transform()` method, with the main difference being that
+            this method will always return a list of subsets, even if
+            the cohorts are compatible with each other.
+        :return: a dictionary where the primary keys are the name of the
+            cohorts, and the secondary keys are:
+
+                * `X`: the subset of the features dataset;
+                * `y`: the subset of the label dataset. This key will only
+                  be returned if the `y` dataset is passed in the method's
+                  call.
+        :rtype: dict
+        """
         self._check_if_fitted()
         X = self._fix_col_transform(X)
 
@@ -563,6 +890,15 @@ class CohortManager(DataProcessing):
 
     # -----------------------------------
     def get_queries(self):
+        """
+        Returns a dictionary with one key for each cohort's name, where
+        each key is assigned to the pandas query used for filtering the
+        instances that belongs to the cohort.
+
+        :return: a dictionary containing the pandas queries used by each
+            of the existing cohorts.
+        :rtype: dict
+        """
         if self.cohorts is None:
             raise ValueError("ERROR: call the fit() method before fetching the queries.")
         queries = {}
