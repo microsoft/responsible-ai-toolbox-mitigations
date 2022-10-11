@@ -455,6 +455,31 @@ Mitchell).
 .. _ratio: https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio
 .. _T-test: https://en.wikipedia.org/wiki/Student's_t-test
 
+
+:ref:`Cohort Management<cohort>`
+--------------------------------
+
+The :ref:`Cohort Management<cohort>` feature allows managing multiple cohorts using a simple interface.
+This is an important tool for guaranteeing fairness across different cohorts, as shown in the scenarios
+described here. The :ref:`cohort.CohortManager<cohort_manager>` allows the application of different data
+processing pipelines over each cohort, and therefore represents a powerful tool when dealing with sensitive
+cohorts.
+
+.. admonition:: Example: Imputing missing values for each cohort separately
+
+    Consider the following situation: a dataset that shows several details of similar cars from a specific brand.
+    The column ``price`` stores the price of a car model in US Dollars, while the column ``country`` indicates
+    the country where that price was observed. Due to the differences in economy and local currency, it is expected
+    that the price of these models will vary greatly based on the ``country`` column. Suppose now that we want to
+    impute the missing values in the ``price`` columns using the mean value of that column. Given that the prices
+    differ greatly based on the different country cohorts, then it is expected that this imputation approach
+    will end up inserting a lot of noise into the ``price`` column. Instead, we could use the mean value of the
+    ``price`` column based on each cohort, that is: compute the mean ``price`` value for each cohort and impute
+    the missing values based on the mean value of the cohort to which the instance belongs. This will
+    greatly reduce the noise inserted by the imputation method. This can be easily achieved by using the
+    :ref:`cohort.CohortManager<cohort_manager>` class.
+
+
 Get involved
 ------------
 

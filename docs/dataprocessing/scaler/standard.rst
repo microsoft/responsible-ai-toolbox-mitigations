@@ -1,13 +1,13 @@
 DataStandardScaler
 ==================
 
-.. autoclass:: dataprocessing.DataStandardScaler
+.. autoclass:: raimitigations.dataprocessing.DataStandardScaler
    :members:
    :show-inheritance:
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.DataStandardScaler
+.. inheritance-diagram:: raimitigations.dataprocessing.DataStandardScaler
      :parts: 1
 
 Example

@@ -1,13 +1,13 @@
 BasicImputer
 ============
 
-.. autoclass:: dataprocessing.BasicImputer
+.. autoclass:: raimitigations.dataprocessing.BasicImputer
    :members:
    :show-inheritance:
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.BasicImputer
+.. inheritance-diagram:: raimitigations.dataprocessing.BasicImputer
      :parts: 1
 
 Example

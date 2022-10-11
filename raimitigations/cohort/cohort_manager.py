@@ -241,10 +241,10 @@ class CohortManager(DataProcessing):
                 )
             for transf_pipe in transform_pipe:
                 _pipe, _has_transf, _has_pred, _has_pred_proba, has_resample = self._validate_transforms(transf_pipe)
-                self._pipe_has_transform = self._pipe_has_transform and _has_transf
-                self._pipe_has_predict = self._pipe_has_predict and _has_pred
-                self._pipe_has_predict_proba = self._pipe_has_predict_proba and _has_pred_proba
-                self._pipe_has_fit_resample = self._pipe_has_fit_resample and has_resample
+                self._pipe_has_transform = self._pipe_has_transform or _has_transf
+                self._pipe_has_predict = self._pipe_has_predict or _has_pred
+                self._pipe_has_predict_proba = self._pipe_has_predict_proba or _has_pred_proba
+                self._pipe_has_fit_resample = self._pipe_has_fit_resample or has_resample
                 self._cohort_pipe.append(_pipe)
 
     # -----------------------------------
@@ -634,10 +634,8 @@ class CohortManager(DataProcessing):
         :rtype: pd.DataFrame
         """
         if not self._pipe_has_transform:
-            self.print_message(
-                "WARNING: a least one of the cohort pipelines doesn't have any transformations that "
-                + "have a transform() method"
-            )
+            self.print_message("WARNING: none of the objects in the transform_pipe parameter have a transform() method")
+            return X
 
         self._check_if_fitted()
         df = self._fix_col_transform(X)
@@ -853,8 +851,8 @@ class CohortManager(DataProcessing):
         :return: a dictionary where the primary keys are the name of the
             cohorts, and the secondary keys are:
 
-                * `X`: the subset of the features dataset;
-                * `y`: the subset of the label dataset. This key will only
+                * ``X``: the subset of the features dataset;
+                * ``y``: the subset of the label dataset. This key will only
                   be returned if the `y` dataset is passed in the method's
                   call.
         :rtype: dict

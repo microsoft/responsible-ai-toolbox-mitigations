@@ -267,7 +267,7 @@ class CohortDefinition:
         parameter set to ``None``.
 
         :return: True if the cohort requires the ``index_used`` parameter
-        for the ``get_cohort_subset()`` method. False otherwise.
+            for the ``get_cohort_subset()`` method. False otherwise.
         :rtype: bool
         """
         return self.conditions is None or self.conditions == []

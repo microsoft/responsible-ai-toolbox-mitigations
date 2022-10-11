@@ -1,13 +1,13 @@
 CatBoostSelection
 =================
 
-.. autoclass:: dataprocessing.CatBoostSelection
+.. autoclass:: raimitigations.dataprocessing.CatBoostSelection
    :members:
    :show-inheritance:
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.CatBoostSelection
+.. inheritance-diagram:: raimitigations.dataprocessing.CatBoostSelection
      :parts: 1
 
 

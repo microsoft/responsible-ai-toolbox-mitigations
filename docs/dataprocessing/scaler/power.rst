@@ -1,13 +1,13 @@
 DataPowerTransformer
 ====================
 
-.. autoclass:: dataprocessing.DataPowerTransformer
+.. autoclass:: raimitigations.dataprocessing.DataPowerTransformer
    :members:
    :show-inheritance:
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.DataPowerTransformer
+.. inheritance-diagram:: raimitigations.dataprocessing.DataPowerTransformer
      :parts: 1
 
 Example

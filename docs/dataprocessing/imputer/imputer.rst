@@ -10,7 +10,7 @@ being used to replace a missing value.
 All the imputer methods from the **dataprocessing** package are based on the abstract class presented below, called
 **DataImputer**.
 
-.. autoclass:: dataprocessing.DataImputer
+.. autoclass:: raimitigations.dataprocessing.DataImputer
    :members:
    :show-inheritance:
 
@@ -25,7 +25,7 @@ the **DataImputer** class, and thus, have access to all of the methods previousl
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.BasicImputer
+.. inheritance-diagram:: raimitigations.dataprocessing.BasicImputer
      :parts: 1
 
 Examples

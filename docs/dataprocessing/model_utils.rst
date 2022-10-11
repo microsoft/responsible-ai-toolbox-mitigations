@@ -1,5 +1,5 @@
 Model Utils
 ===========
 
-.. automodule:: dataprocessing.model_utils
+.. automodule:: raimitigations.dataprocessing.model_utils
    :members:

@@ -8,4 +8,5 @@ API reference
 
    databalanceanalysis/databalanceanalysis
    dataprocessing/dataprocessing
+   cohort/cohort
 

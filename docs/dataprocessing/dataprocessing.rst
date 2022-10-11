@@ -1,7 +1,7 @@
 DataProcessing
 ==============
 
-.. autoclass:: dataprocessing.DataProcessing
+.. autoclass:: raimitigations.dataprocessing.DataProcessing
    :members:
 
 The following is a list of all child classes that inherit from the **DataProcessing**:
@@ -18,7 +18,7 @@ The following is a list of all child classes that inherit from the **DataProcess
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.DataEncoding dataprocessing.FeatureSelection dataprocessing.DataImputer dataprocessing.DataScaler dataprocessing.Rebalance dataprocessing.Synthesizer
+.. inheritance-diagram:: raimitigations.dataprocessing.DataEncoding raimitigations.dataprocessing.FeatureSelection raimitigations.dataprocessing.DataImputer raimitigations.dataprocessing.DataScaler raimitigations.dataprocessing.Rebalance raimitigations.dataprocessing.Synthesizer
      :parts: 1
 
 .. toctree::

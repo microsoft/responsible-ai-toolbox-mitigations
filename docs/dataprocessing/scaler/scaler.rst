@@ -9,7 +9,7 @@ value ranges. There are different scaling approaches that can be applied, each w
 All the scaling methods from the **dataprocessing** package are based on the abstract class presented below, called
 **DataScaler**.
 
-.. autoclass:: dataprocessing.DataScaler
+.. autoclass:: raimitigations.dataprocessing.DataScaler
    :members:
    :show-inheritance:
 
@@ -29,7 +29,7 @@ the **DataScaler** class, and thus, have access to all of the methods previously
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.DataRobustScaler dataprocessing.DataPowerTransformer dataprocessing.DataQuantileTransformer dataprocessing.DataMinMaxScaler dataprocessing.DataStandardScaler dataprocessing.DataNormalizer
+.. inheritance-diagram:: raimitigations.dataprocessing.DataRobustScaler raimitigations.dataprocessing.DataPowerTransformer raimitigations.dataprocessing.DataQuantileTransformer raimitigations.dataprocessing.DataMinMaxScaler raimitigations.dataprocessing.DataStandardScaler raimitigations.dataprocessing.DataNormalizer
      :parts: 1
 
 

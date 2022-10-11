@@ -9,7 +9,7 @@ multiple machine learning libraries, such as scikit-learn, mlxtend, sdv, among o
 this module is that it allows users to create their data processing pipelines using a single library, without
 worrying about making sure that the output from one mitigation (found in one library) is compatible with the
 output of a second mitigation (found in a separate library). As this library grows, we aim to offer an even larger
-amount of mitigation, and also offer complex solutions in a simple and ​easy-to-use interface.
+amount of mitigation, and also offer complex solutions in a simple and easy-to-use interface.
 
 Some of the classes available here are meant to be a wrapper for some other class found in one of these libraries,
 with the goal of making simplifications to the usage of these approaches, while also automating certain steps. Other
@@ -24,7 +24,7 @@ Structure
 
 The **dataprocessing** module uses a base class (**DataProcessing**) that implements several tasks shared
 across the different transformation classes. Whenever possible, the classes implemented in this module follow
-the .fit() and .transform() behavior from scikit-learn, making these classes compatible with scikit-learn.
+the ``.fit()`` and ``.transform()`` behavior from scikit-learn, making these classes compatible with scikit-learn.
 Each class aims to mitigate a certain aspect of tabular datasets. For each of these aspects, there might be one
 or more different solutions for it. This way, we create a hierarchy, where each problem category has its own
 abstract class (that inherits from the main abstract **DataProcessing** class), where each of these classes has

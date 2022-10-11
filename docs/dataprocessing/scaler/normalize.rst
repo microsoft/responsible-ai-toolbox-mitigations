@@ -1,14 +1,14 @@
 DataNormalizer
 ==============
 
-.. autoclass:: dataprocessing.DataNormalizer
+.. autoclass:: raimitigations.dataprocessing.DataNormalizer
    :members:
    :show-inheritance:
 
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.DataNormalizer
+.. inheritance-diagram:: raimitigations.dataprocessing.DataNormalizer
      :parts: 1
 
 

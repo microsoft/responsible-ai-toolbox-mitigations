@@ -37,6 +37,8 @@ mitigation. The library enables you to **explore potential mitigations for targe
 through customized loss functions, architectures, and new training algorithms.
 
 
+.. _target_mitigation:
+
 Benefits of targeted error mitigations
 --------------------------------------
 
@@ -55,11 +57,14 @@ becomes clear that overall there are more examples in the data for which a loan 
 different with more examples of loans being declined. The discrepancy also leads to a higher error for this cohort as the model learns to over-decline. Merely adding
 more data to adjust overall class imbalance (Scenario 1 in the figure) will not address class imbalance for cohort X. In fact, it might make it worse by accentuating
 class imbalance for this cohort and declining more loans. A more targeted approach (Scenario 2 in the figure) would focus the class balance mitigation only on cohort X
-by sampling or synthesizing more data within that cohort where loans have been assigned. At this time, the Responsible AI Mitigations library can implement the second
-scenario by synthesizing data only for a given cohort (see the :ref:`DataProcessing.Synthesizer<syhtesizer>` class for more information). In the future, we expect to
-enable similar capabilities for the :ref:`DataProcessing.Rebalance<rebalance>` class.
+by sampling or synthesizing more data within that cohort where loans have been assigned. The Responsible AI Mitigations library can implement the second
+scenario using two approaches:
 
-In contrast, the Responsible AI Mitigations Library offers a **targeted approach that lets you save time and resources by**:
+    1. Synthesizing data only for a given cohort (see the :ref:`dataprocessing.Synthesizer<syhtesizer>` class for more information);
+    2. Use the :ref:`dataprocessing.Rebalance<rebalance>` together with the :ref:`cohort.CohortManager<cohort_manager>` in order to apply a over-sampling over only
+       a set of cohorts (check the ``CohortManager``'s :ref:`Examples<cohort_manager_ex>` section to see how this can be achieved).
+
+This way, the Responsible AI Mitigations Library offers a **targeted approach that lets you save time and resources by**:
 
     * **Testing your hypotheses for why a model is underperforming** in specific data cohorts through exploring data imbalance, features, label noise, or missing values.
     * **Improving your understanding of model failures** by zeroing in on:
@@ -99,11 +104,11 @@ A set of metrics for diagnosing and measuring data imbalance. This module is int
 or feature imbalance. After measuring with DataBalanceAnalysis, AI practitioners can then work to mitigate the failure through techniques available in the library's DataProcessing
 module.
 
-**Example:**
+.. admonition:: Example
 
-A model trained for house-price prediction is discovered to be underperforming for houses that do not have an attached garage. The AI practitioner determines that this failure is
-due to the underrepresentation of houses with no garage in the training data. The practitioner can use metrics in the DataBalanceAnalysis module to measure the feature imbalance
-(“garage” vs. “no garage”), then work to mitigate the issue by using one of the sampling techniques available in the library's DataProcessing module for augmenting data.
+    A model trained for house-price prediction is discovered to be underperforming for houses that do not have an attached garage. The AI practitioner determines that this failure is
+    due to the underrepresentation of houses with no garage in the training data. The practitioner can use metrics in the DataBalanceAnalysis module to measure the feature imbalance
+    (“garage” vs. “no garage”), then work to mitigate the issue by using one of the sampling techniques available in the library's DataProcessing module for augmenting data.
 
 
 .. toctree::
@@ -123,6 +128,7 @@ due to the underrepresentation of houses with no garage in the training data. Th
 
    databalanceanalysis/intro
    dataprocessing/intro
+   cohort/intro
 
 Indices and tables
 ==================
