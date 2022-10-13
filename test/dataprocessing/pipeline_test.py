@@ -5,8 +5,8 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 import pytest
 
+from raimitigations.utils import split_data
 from raimitigations.dataprocessing import (
-    split_data,
     EncoderOHE,
     EncoderOrdinal,
     BasicImputer,

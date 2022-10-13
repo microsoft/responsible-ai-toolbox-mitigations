@@ -10,7 +10,7 @@ from imblearn.under_sampling import TomekLinks
 from ..data_processing import DataProcessing
 from ..encoder import DataEncoding, EncoderOHE
 from ..imputer import DataImputer, BasicImputer
-from ..data_utils import get_cat_cols
+from ...utils.data_utils import get_cat_cols
 
 
 class Rebalance(DataProcessing):

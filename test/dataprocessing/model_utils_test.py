@@ -2,14 +2,16 @@ from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
 import warnings
 
-from raimitigations.dataprocessing import (
+from raimitigations.utils import (
     split_data,
+    train_model_fetch_results,
+    train_model_plot_results,
+)
+from raimitigations.dataprocessing import (
     EncoderOHE,
     BasicImputer,
     DataStandardScaler,
     CatBoostSelection,
-    train_model_fetch_results,
-    train_model_plot_results,
 )
 
 

@@ -12,22 +12,9 @@ from .scaler import (
     DataMinMaxScaler,
     DataQuantileTransformer,
 )
-from .toy_dataset_corr import create_dummy_dataset
-from .model_utils import (
-    train_model_plot_results,
-    split_data,
-    fetch_results,
-    train_model_fetch_results,
-    evaluate_set,
-)
+
 
 __all__ = [
-    "create_dummy_dataset",
-    "fetch_results",
-    "train_model_plot_results",
-    "train_model_fetch_results",
-    "split_data",
-    "evaluate_set",
     "DataProcessing",
     "DataEncoding",
     "EncoderOHE",

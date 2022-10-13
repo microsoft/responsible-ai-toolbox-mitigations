@@ -7,7 +7,7 @@ import json
 
 from .selector import FeatureSelection
 from ..imputer import DataImputer, BasicImputer
-from ..data_utils import get_cat_cols, err_float_01
+from ...utils.data_utils import get_cat_cols, err_float_01
 
 
 class CatBoostSelection(FeatureSelection):

@@ -13,7 +13,7 @@ import researchpy as rp
 
 from .selector import FeatureSelection
 from ..encoder import EncoderOrdinal
-from ..data_utils import get_cat_cols, ordinal_to_onehot, err_float_01
+from ...utils.data_utils import get_cat_cols, ordinal_to_onehot, err_float_01
 
 
 """

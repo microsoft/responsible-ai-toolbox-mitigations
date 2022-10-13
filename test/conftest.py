@@ -5,7 +5,7 @@ import pytest
 import numpy as np
 import torch
 
-from raimitigations.dataprocessing import create_dummy_dataset
+from raimitigations.utils import create_dummy_dataset
 
 
 SEED = 42

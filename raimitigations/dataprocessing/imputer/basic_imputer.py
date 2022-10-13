@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.impute import SimpleImputer
 
 from .imputer import DataImputer
-from ..data_utils import get_cat_cols
+from ...utils.data_utils import get_cat_cols
 
 
 class BasicImputer(DataImputer):

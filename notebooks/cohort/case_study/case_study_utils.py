@@ -1,5 +1,5 @@
 import pandas as pd
-import raimitigations.dataprocessing as dp
+from raimitigations.utils import fetch_results
 from raimitigations.cohort import CohortManager
 
 
@@ -15,7 +15,7 @@ def fetch_cohort_results(X, y_true, y_pred, cohort_col):
         return metric_dict
 
     metrics = {}
-    metrics['all'] = _metric_tuple_to_dict( dp.fetch_results(y_true, y_pred, best_th_auc=True) )
+    metrics['all'] = _metric_tuple_to_dict( fetch_results(y_true, y_pred, best_th_auc=True) )
     metrics['all']['cht_size'] = y_true.shape[0]
 
     cht_manager = CohortManager(cohort_col=cohort_col)
@@ -29,7 +29,7 @@ def fetch_cohort_results(X, y_true, y_pred, cohort_col):
     for cht_name in subsets.keys():
         y_subset = subsets[cht_name]['y']
         y_pred_subset = y_pred_dict[cht_name]
-        metrics[cht_name] = _metric_tuple_to_dict( dp.fetch_results(y_subset, y_pred_subset, best_th_auc=True) )
+        metrics[cht_name] = _metric_tuple_to_dict( fetch_results(y_subset, y_pred_subset, best_th_auc=True) )
         metrics[cht_name]['cht_size'] = y_subset.shape[0]
 
     queries = cht_manager.get_queries()

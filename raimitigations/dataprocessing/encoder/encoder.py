@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 from ..data_processing import DataProcessing
-from ..data_utils import get_cat_cols
+from ...utils.data_utils import get_cat_cols
 
 
 class DataEncoding(DataProcessing):
