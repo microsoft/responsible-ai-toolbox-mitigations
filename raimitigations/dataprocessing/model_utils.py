@@ -64,6 +64,27 @@ def split_data(df: pd.DataFrame, label: str, test_size: float = 0.2, full_df: bo
     return train_x, test_x, train_y, test_y
 
 
+# ----------------------------------------
+def _pred_to_numpy(pred: Union[np.ndarray, list, pd.DataFrame]):
+    if type(pred) == pd.DataFrame:
+        pred = pred.to_numpy()
+    elif type(pred) == list:
+        pred = np.array(pred)
+    elif type(pred) != np.ndarray:
+        raise ValueError(
+            (
+                "ERROR: The y_pred parameter passed to the get_metrics_and_log_mlflow() "
+                "function must be a numpy array, a list, or a pandas dataframe. Instead, "
+                f"got a value from type {type(pred)}."
+            )
+        )
+
+    if len(pred.shape) == 1:
+        pred = np.expand_dims(pred, 1)
+
+    return pred
+
+
 # -----------------------------------
 def _get_model(model_name: Union[BaseEstimator, str]):
     if type(model_name) != str:
@@ -182,7 +203,7 @@ def _print_stats(roc, acc, precision, recall, f1):
 
 
 # -----------------------------------
-def fetch_results(Y: np.ndarray, y_pred: np.ndarray, best_th_auc: bool):
+def fetch_results(Y: np.ndarray, y_pred: Union[np.ndarray, list, pd.DataFrame], best_th_auc: bool):
     """
     Given a set of true labels (Y) and predicted labels (y_pred), compute a series
     of metrics and values to measure the performance of the predictions provided.
@@ -216,6 +237,7 @@ def fetch_results(Y: np.ndarray, y_pred: np.ndarray, best_th_auc: bool):
 
     :rtype: tuple
     """
+    y_pred = _pred_to_numpy(y_pred)
     roc, auc_th = _roc_evaluation(Y, y_pred)
     pr_th = _get_precision_recall_th(Y, y_pred)
     best_th = pr_th

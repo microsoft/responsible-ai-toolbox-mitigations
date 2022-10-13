@@ -867,6 +867,8 @@ class CohortManager(DataProcessing):
         """
         self._check_if_fitted()
         X = self._fix_col_transform(X)
+        y = self._numpy_array_to_df(y)
+        y.index = X.index
 
         index_used = []
         out_dict = {}
