@@ -102,9 +102,10 @@ def _run_main_commands(X, y, cht_manager, X_in_fit=True):
     if cht_manager._pipe_has_predict:
         _ = cht_manager.predict(X)
     if cht_manager._pipe_has_predict_proba:
-        _ = cht_manager.predict_proba(X)
+        _ = cht_manager.predict_proba(X, split_pred=True)
     _ = cht_manager.get_subsets(X)
     _ = cht_manager.get_subsets(X, y, apply_transform=True)
+    _ = cht_manager.get_queries()
 
     cht_manager.save_conditions("cht.json")
     _ = CohortManager(
@@ -216,6 +217,8 @@ def test_errors_cohorts(df_full_cohort, label_col_name):
             cohort_set.fit(df=df_full_cohort, label_col=label_col_name)
 
     cohort_set = CohortManager(cohort_col=["CN_0_num_0"])
+    with pytest.raises(Exception):
+        cohort_set.get_queries()
     with pytest.raises(Exception):
         cohort_set.save_conditions("cht.json")
     with pytest.raises(Exception):

@@ -33,13 +33,13 @@ def test_model_utils(df_full, label_col_name):
     X_test = pipe.transform(test_x)
 
     _ = train_model_fetch_results(X, train_y, X_test, test_y, best_th_auc=True)
-    _ = train_model_fetch_results(X, train_y, X_test, test_y, model_name="xgb", best_th_auc=False)
+    _ = train_model_fetch_results(X, train_y, X_test, test_y, model="xgb", best_th_auc=False)
 
     _ = split_data(df_full, label_col_name, full_df=True, regression=True)
 
     _ = train_model_plot_results(
-        X, train_y, X_test, test_y, model_name="log", train_result=True, plot_pr=True, best_th_auc=False
+        X, train_y, X_test, test_y, model="log", train_result=True, plot_pr=True, best_th_auc=False
     )
     _ = train_model_plot_results(
-        X, train_y, X_test, test_y, model_name="knn", train_result=False, plot_pr=False, best_th_auc=False
+        X, train_y, X_test, test_y, model="knn", train_result=False, plot_pr=False, best_th_auc=False
     )

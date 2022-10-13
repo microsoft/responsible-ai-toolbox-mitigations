@@ -506,7 +506,7 @@ class CohortManager(DataProcessing):
         return final_df
 
     # -----------------------------------
-    def _merge_cohort_predictions(self, cht_pred: dict, index_list: list):
+    def _merge_cohort_predictions(self, cht_pred: dict, index_list: list, split_pred: bool):
         """
         Merges all cohort predictions (after going through their own
         transformations) into a single prediction array. If ``org_index`` is
@@ -521,11 +521,13 @@ class CohortManager(DataProcessing):
             cohorts transformed) will be sorted so that it uses the same
             index list, that is, the returned array maintains the same
             instance order used in the original dataset;
+        :param split_pred: if True, return a dictionary with the predictions
+            for each cohort. If False, return a single predictions array;
         :return: an array with the predictions of all instances of the
             dataset, built from the predictions of each cohort.
         :rtype: np.ndarray
         """
-        if not self._cohorts_compatible:
+        if split_pred:
             return cht_pred
 
         final_pred = None
@@ -661,7 +663,7 @@ class CohortManager(DataProcessing):
         return final_df
 
     # -----------------------------------
-    def _predict(self, X: Union[pd.DataFrame, np.ndarray], prob: bool = False):
+    def _predict(self, X: Union[pd.DataFrame, np.ndarray], prob: bool = False, split_pred: bool = False):
         """
         Calls the ``transform()`` method of all transformers in all pipelines, followed
         by the ``predict()`` or ``predict_proba()`` method for the estimator (which is
@@ -678,6 +680,8 @@ class CohortManager(DataProcessing):
         :param X: contains only the features of the dataset to be transformed;
         :param prob: if True, then ``predict_proba()`` is called. Otherwise, ``predict()``
             is called;
+        :param split_pred: if True, return a dictionary with the predictions
+            for each cohort. If False, return a single predictions array;
         :return: an array with the predictions of all instances of the
             dataset, built from the predictions of each cohort.
         :rtype: np.ndarray
@@ -712,38 +716,42 @@ class CohortManager(DataProcessing):
 
         self._check_intersection_cohorts(index_used)
         self._raise_missing_instances_error(df, index_used)
-        final_pred = self._merge_cohort_predictions(pred_dict, index_used)
+        final_pred = self._merge_cohort_predictions(pred_dict, index_used, split_pred)
 
         return final_pred
 
     # -----------------------------------
-    def predict(self, X: Union[pd.DataFrame, np.ndarray]):
+    def predict(self, X: Union[pd.DataFrame, np.ndarray], split_pred: bool = False):
         """
         Calls the ``transform()`` method of all transformers in all pipelines, followed
         by the ``predict()`` method for the estimator (which is always the last object
         in the pipeline).
 
         :param X: contains only the features of the dataset to be transformed;
+        :param split_pred: if True, return a dictionary with the predictions
+            for each cohort. If False, return a single predictions array;
         :return: an array with the predictions of all instances of the
             dataset, built from the predictions of each cohort.
         :rtype: np.ndarray
         """
-        final_pred = self._predict(X, prob=False)
+        final_pred = self._predict(X, prob=False, split_pred=split_pred)
         return final_pred
 
     # -----------------------------------
-    def predict_proba(self, X: Union[pd.DataFrame, np.ndarray]):
+    def predict_proba(self, X: Union[pd.DataFrame, np.ndarray], split_pred: bool = False):
         """
         Calls the ``transform()`` method of all transformers in all pipelines, followed
         by the ``predict_proba()`` method for the estimator (which is always the last object
         in the pipeline).
 
         :param X: contains only the features of the dataset to be transformed;
+        :param split_pred: if True, return a dictionary with the predictions
+            for each cohort. If False, return a single predictions array;
         :return: an array with the predictions of all instances of the
             dataset, built from the predictions of each cohort.
         :rtype: np.ndarray
         """
-        final_pred = self._predict(X, prob=True)
+        final_pred = self._predict(X, prob=True, split_pred=split_pred)
         return final_pred
 
     # -----------------------------------

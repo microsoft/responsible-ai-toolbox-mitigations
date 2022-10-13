@@ -1,3 +1,4 @@
+from typing import Union
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -64,7 +65,9 @@ def split_data(df: pd.DataFrame, label: str, test_size: float = 0.2, full_df: bo
 
 
 # -----------------------------------
-def _get_model(model_name: str):
+def _get_model(model_name: Union[BaseEstimator, str]):
+    if type(model_name) != str:
+        return model_name
     if model_name == DECISION_TREE:
         model = DecisionTreeClassifier(max_features="sqrt")
     elif model_name == XGBOOST:
@@ -159,11 +162,11 @@ def probability_to_class(prediction, th):
 
 
 # -----------------------------------
-def _plot_confusion_matrix(estimator, y, y_pred):
-    cm = metrics.confusion_matrix(y, y_pred, labels=estimator.classes_)
+def _plot_confusion_matrix(classes, y, y_pred):
+    cm = metrics.confusion_matrix(y, y_pred, labels=classes)
     print(cm)
-    cm = metrics.confusion_matrix(y, y_pred, labels=estimator.classes_, normalize="true")
-    disp = metrics.ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=estimator.classes_)
+    cm = metrics.confusion_matrix(y, y_pred, labels=classes, normalize="true")
+    disp = metrics.ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=classes)
     disp.plot(cmap=plt.cm.Blues)
     disp.ax_.set_title("Confusion Matrix")
     plt.show()
@@ -227,12 +230,13 @@ def fetch_results(Y: np.ndarray, y_pred: np.ndarray, best_th_auc: bool):
 
 # -----------------------------------
 def evaluate_set(
-    model: BaseEstimator,
     Y: np.ndarray,
     y_pred: np.ndarray,
     is_train: bool = True,
     plot_pr: bool = True,
     best_th_auc: bool = True,
+    model: BaseEstimator = None,
+    classes: Union[list, np.ndarray] = None,
 ):
     """
     Evaluates the performance of a model based on its predictions. This function computes
@@ -245,7 +249,6 @@ def evaluate_set(
         * Best threshold found to binarize the results. The predictions are binarized
           using this threshold before computing the precision, recall, F,1 and accuracy
 
-    :param model: the model used to make the predictions given by the **y_pred** parameter;
     :param Y: an array with the true labels;
     :param y_pred: an arry with the prediction probabilities for each class, with shape = (N, C),
         where N is the number of rows and C is the number of classes;
@@ -254,7 +257,14 @@ def evaluate_set(
     :param plot_pr: if True, plots a graph showing the precision and recall values for
         different threshold values;
     :param best_th_auc: if True, the best threshold is computed using ROC graph. If False,
-        the threshold is computed using the precision x recall graph.
+        the threshold is computed using the precision x recall graph;
+    :param model: the model used to make the predictions given by the **y_pred** parameter.
+        This model is only used to get the different classes of the label column. These classes
+        can be provided directly to the ``classes`` parameter instead;
+    :param classes: an array or list with the unique classes of the label column. These classes
+        are used when plotting the confusion matrix. These classes can also be obtained through
+        the fitted model, which can be provided directly to the ``model`` parameter instead. This
+        parameter is ignored if ``model`` is also provided.
     :return: the following computed metrics:
 
         * ROC AUC
@@ -271,10 +281,10 @@ def evaluate_set(
         print("------------\nTEST\n------------")
 
     pr, rc, th = _plot_precision_recall(Y, y_pred, plot_pr)
-
     roc, auc_th, best_pr, best_rc, best_f1, best_acc, best_y_pred = fetch_results(Y, y_pred, best_th_auc)
-
-    _plot_confusion_matrix(model, Y, best_y_pred)
+    if model is not None:
+        classes = model.classes_
+    _plot_confusion_matrix(classes, Y, best_y_pred)
 
     _print_stats(roc, best_acc, best_pr, best_rc, best_f1)
 
@@ -287,7 +297,7 @@ def train_model_plot_results(
     y: pd.Series,
     x_test: pd.DataFrame,
     y_test: pd.Series,
-    model_name: str = DECISION_TREE,
+    model: Union[BaseEstimator, str] = DECISION_TREE,
     train_result: bool = True,
     plot_pr: bool = True,
     best_th_auc: bool = True,
@@ -302,7 +312,8 @@ def train_model_plot_results(
     :param y: the label column of the train dataset;
     :param x_test: the feature columns of the test dataset;
     :param y_test: the label column of the test dataset;
-    :param model_name: a string specifying the model to be used. There are four models allowed:
+    :param model: the object of the model to be used, or a string specifying the model
+        to be used. There are four models allowed:
 
             *  **"tree":** Decision Tree Classifier
             *  **"knn":** KNN Classifier
@@ -318,21 +329,28 @@ def train_model_plot_results(
     :return: returns the model object used to fit the dataset provided.
     :rtype: reference to the model object used
     """
-    model = _get_model(model_name)
+    model = _get_model(model)
     model.fit(x, y)
 
     pred_train = model.predict_proba(x)
     pred_test = model.predict_proba(x_test)
 
     if train_result:
-        evaluate_set(model, y, pred_train, is_train=True, plot_pr=plot_pr, best_th_auc=best_th_auc)
-    evaluate_set(model, y_test, pred_test, is_train=False, plot_pr=plot_pr, best_th_auc=best_th_auc)
+        evaluate_set(y, pred_train, is_train=True, plot_pr=plot_pr, best_th_auc=best_th_auc, model=model)
+    evaluate_set(y_test, pred_test, is_train=False, plot_pr=plot_pr, best_th_auc=best_th_auc, model=model)
 
     return model
 
 
 # -----------------------------------
-def train_model_fetch_results(x, y, x_test, y_test, model_name=DECISION_TREE, best_th_auc=True):
+def train_model_fetch_results(
+    x: pd.DataFrame,
+    y: pd.Series,
+    x_test: pd.DataFrame,
+    y_test: pd.Series,
+    model: Union[BaseEstimator, str] = DECISION_TREE,
+    best_th_auc: bool = True,
+):
     """
     Given a train and test sets, and a model name, this function instantiates the model,
     fits the model to the train dataset, predicts the output for the test set,
@@ -357,7 +375,8 @@ def train_model_fetch_results(x, y, x_test, y_test, model_name=DECISION_TREE, be
     :param y: the label column of the train dataset;
     :param x_test: the feature columns of the test dataset;
     :param y_test: the label column of the test dataset;
-    :param model_name: a string specifying the model to be used. There are four models allowed:
+    :param model: the object of the model to be used, or a string specifying the model
+        to be used. There are four models allowed:
 
             *  **"tree":** Decision Tree Classifier
             *  **"knn":** KNN Classifier
@@ -384,7 +403,7 @@ def train_model_fetch_results(x, y, x_test, y_test, model_name=DECISION_TREE, be
 
     :rtype: dict
     """
-    model = _get_model(model_name)
+    model = _get_model(model)
     model.fit(x, y)
     pred_test = model.predict_proba(x_test)
     roc, best_th, best_pr, best_rc, best_f1, best_acc, best_y_pred = fetch_results(y_test, pred_test, best_th_auc)
