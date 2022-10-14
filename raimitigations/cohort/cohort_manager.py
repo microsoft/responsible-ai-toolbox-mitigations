@@ -821,6 +821,12 @@ class CohortManager(DataProcessing):
         self.fitted = True
 
         if self.input_scheme == self.INPUT_XY:
+            if type(final_df) == dict:
+                final_df_y = {}
+                for cht_name in final_df.keys():
+                    final_df_y[cht_name] = final_df[cht_name][self.label_col_name]
+                    final_df[cht_name] = final_df[cht_name].drop(columns=[self.label_col_name])
+                return final_df, final_df_y
             X_resample = final_df.drop(columns=[self.label_col_name])
             y_resample = final_df[self.label_col_name]
             return X_resample, y_resample

@@ -109,10 +109,10 @@ class EncoderOHE(DataEncoding):
             columns in self.col_encode.
         """
         new_df = pd.DataFrame(ohe_data, columns=self.new_col_names)
+        new_df.index = org_df.index
 
         org_df.drop(columns=self.col_encode, inplace=True)
-        for col in self.new_col_names:
-            org_df[col] = new_df[col].values.tolist()
+        org_df = pd.concat([org_df, new_df], axis=1)
 
         return org_df
 
