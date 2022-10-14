@@ -142,7 +142,7 @@ class CohortDefinition:
                 if operator in CohortFilters.OP_REQ_NUMER:
                     value = f"`{value}`"
                 else:
-                    value = f"'{value}'"
+                    value = f'"{value}"'
         else:
             raise ValueError(
                 f"ERROR: invalid value provided: {value} {type(value)}. Condition: {column} {operator} {value}."
