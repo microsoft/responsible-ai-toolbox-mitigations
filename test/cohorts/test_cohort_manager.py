@@ -4,6 +4,7 @@ import conftest as utils
 import xgboost as xgb
 from sklearn.pipeline import Pipeline
 
+from raimitigations.utils import fetch_cohort_results
 import raimitigations.dataprocessing as dp
 from raimitigations.cohort.cohort_manager import CohortManager
 
@@ -64,7 +65,7 @@ def _get_object_list(df=None, label_col=None, X=None, y=None, use_index=True):
     cht_list.append(cohort_set)
 
     c1_pipe = [dp.DataMinMaxScaler(verbose=False)]
-    c2_pipe = dp.DataQuantileTransformer(verbose=False)
+    c2_pipe = dp.DataRobustScaler(verbose=False)
     c3_pipe = None
     cohort_set = CohortManager(
         df=df, label_col=label_col, X=X, y=y,
@@ -301,3 +302,23 @@ def test_errors_cohorts_special_cases(df_full_cohort, label_col_name):
     )
     with pytest.raises(Exception):
         cht_set.fit(df=df_full_cohort, label_col=label_col_name)
+
+
+# -----------------------------------
+def test_cohort_results(df_full_cohort, label_col_name):
+    df = df_full_cohort
+    X = df.drop(columns=[label_col_name])
+    y = df[label_col_name]
+
+    pipe = Pipeline([
+            ("encoder", dp.EncoderOHE(verbose=False)),
+            ("estimator", _get_model()),
+        ])
+    pipe.fit(X, y)
+    pred = pipe.predict_proba(X)
+    _ = fetch_cohort_results(X, y, pred, cohort_col=["CN_0_num_0"])
+
+    c1 = [ ['CN_0_num_0', '==', 'val0_1'], 'and', ['num_0', '>', 0.0] ]
+    c2 = [ ['CN_0_num_0', '==', 'val0_0'], 'and', ['num_0', '>', 0.0] ]
+    c3 = None
+    _ = fetch_cohort_results(X, y, pred, cohort_def=[c1, c2, c3])
