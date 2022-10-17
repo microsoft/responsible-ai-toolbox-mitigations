@@ -171,8 +171,17 @@ def test_rebalance(df_full_cohort, label_col_name):
         cohort_col=["CN_0_num_0"]
     )
     new_X, new_y = rebalance_cohort.fit_resample(X, y)
-    new_df = rebalance_cohort.fit_resample(df=df, rebalance_col=label_col_name)
+    _ = rebalance_cohort.fit_resample(df=df, rebalance_col=label_col_name)
     _ = rebalance_cohort.get_subsets(new_X, new_y, apply_transform=False)
+
+    c1 = [ ['CN_0_num_0', '==', 'val0_1'], 'and', ['num_0', '>', 0.0], 'and', ['CN_1_num_1', '==', 'val0_1'] ]
+    c2 = [ ['CN_0_num_0', '==', 'val0_0'], 'and', ['num_0', '>', 0.0] ]
+    c3 = None
+    rebalance_cohort = CohortManager(
+        transform_pipe=dp.Rebalance(under_sampler=True, verbose=False),
+        cohort_def=[c1, c2, c3]
+    )
+    _ = rebalance_cohort.fit_resample(X, y)
 
 # -----------------------------------
 def test_sklearn_pipe(df_full_cohort, label_col_name):
@@ -322,3 +331,6 @@ def test_cohort_results(df_full_cohort, label_col_name):
     c2 = [ ['CN_0_num_0', '==', 'val0_0'], 'and', ['num_0', '>', 0.0] ]
     c3 = None
     _ = fetch_cohort_results(X, y, pred, cohort_def=[c1, c2, c3])
+
+    with pytest.raises(Exception):
+        _ = fetch_cohort_results(X, y, pred)

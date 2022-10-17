@@ -350,7 +350,7 @@ class CohortManager(DataProcessing):
 
         # get the list of unique combination of values across all columns in 'cohort_col'
         subset = self._get_df_subset(self.df, self.cohort_col)
-        unique_df = subset.groupby(self.cohort_col).size().reset_index().rename(columns={0: "count"})
+        unique_df = subset.groupby(self.cohort_col, dropna=False).size().reset_index().rename(columns={0: "count"})
         unique_df.drop(columns=["count"], inplace=True)
         unique_arr = unique_df.to_numpy()
         cohort_list = [list(unique_arr[i]) for i in range(unique_arr.shape[0])]
