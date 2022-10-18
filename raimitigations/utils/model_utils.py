@@ -10,8 +10,6 @@ from sklearn.base import BaseEstimator
 import xgboost as xgb
 import matplotlib.pyplot as plt
 
-from ..cohort import CohortManager
-
 DECISION_TREE = "tree"
 KNN = "knn"
 XGBOOST = "xgb"
@@ -475,6 +473,7 @@ def fetch_cohort_results(
         cohorts.
     :rtype: pd.DataFrame
     """
+    from ..cohort import CohortManager
 
     def _metric_tuple_to_dict(metric_tuple):
         metric_dict = {
