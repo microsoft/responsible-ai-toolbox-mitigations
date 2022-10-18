@@ -21,9 +21,3 @@ The following is a list of all child classes that inherit from the **DataProcess
 .. inheritance-diagram:: raimitigations.dataprocessing.DataEncoding raimitigations.dataprocessing.FeatureSelection raimitigations.dataprocessing.DataImputer raimitigations.dataprocessing.DataScaler raimitigations.dataprocessing.Rebalance raimitigations.dataprocessing.Synthesizer
      :parts: 1
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Utilities
-
-   model_utils
-   toy_data

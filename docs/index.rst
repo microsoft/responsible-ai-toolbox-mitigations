@@ -129,6 +129,7 @@ module.
    databalanceanalysis/intro
    dataprocessing/intro
    cohort/intro
+   utils/utils
 
 Indices and tables
 ==================
