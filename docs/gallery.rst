@@ -45,7 +45,14 @@ Case Studies
    notebooks/dataprocessing/case_study/case1_stat
    notebooks/dataprocessing/case_study/case2_stat
    notebooks/dataprocessing/case_study/case3_stat
+
+Cohort Case Studies
+###################
+
+.. nbgallery::
    notebooks/cohort/case_study/case_1
+   notebooks/cohort/case_study/case_2
+   notebooks/cohort/case_study/case_3
 
 Using scikit-learn's Pipeline
 #############################
