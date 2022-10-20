@@ -82,7 +82,7 @@ def err_float_01(param, param_name):
     :param param_name: the internal name used for the parameter
         provided in param.
     """
-    if type(param) != float or param < 0.0 or param > 1.0:
+    if not isinstance(param, (np.floating, float)) or param < 0.0 or param > 1.0:
         raise ValueError(
             f"ERROR: invalid value for parameter '{param_name}'. " + "Expected a float value between [0.0, 1.0]."
         )

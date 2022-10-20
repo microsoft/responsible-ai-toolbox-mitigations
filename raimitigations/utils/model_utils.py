@@ -10,6 +10,8 @@ from sklearn.base import BaseEstimator
 import xgboost as xgb
 import matplotlib.pyplot as plt
 
+from .data_utils import err_float_01
+
 DECISION_TREE = "tree"
 KNN = "knn"
 XGBOOST = "xgb"
@@ -203,7 +205,9 @@ def _print_stats(roc, acc, precision, recall, f1):
 
 
 # -----------------------------------
-def fetch_results(Y: np.ndarray, y_pred: Union[np.ndarray, list, pd.DataFrame], best_th_auc: bool):
+def fetch_results(
+    Y: np.ndarray, y_pred: Union[np.ndarray, list, pd.DataFrame], best_th_auc: bool, fixed_th: float = None
+):
     """
     Given a set of true labels (Y) and predicted labels (y_pred), compute a series
     of metrics and values to measure the performance of the predictions provided.
@@ -222,7 +226,10 @@ def fetch_results(Y: np.ndarray, y_pred: Union[np.ndarray, list, pd.DataFrame], 
     :param y_pred: an arry with the prediction probabilities for each class, with shape = (N, C),
         where N is the number of rows and C is the number of classes;
     :param best_th_auc: if True, the best threshold is computed using ROC graph. If False,
-        the threshold is computed using the precision x recall graph.
+        the threshold is computed using the precision x recall graph. This parameter is ignored
+        if 'fixed_th' is a value different from None;
+    :param fixed_th: a value between [0, 1] that should be used as the threshold for classification
+        tasks.
     :return: a tuple with the computed metrics and the binarized predictions. The tuple
         returned contains (in this order):
 
@@ -243,6 +250,9 @@ def fetch_results(Y: np.ndarray, y_pred: Union[np.ndarray, list, pd.DataFrame], 
     best_th = pr_th
     if best_th_auc:
         best_th = auc_th
+    if fixed_th is not None:
+        err_float_01(fixed_th, "fixed_th")
+        best_th = fixed_th
     best_y_pred = probability_to_class(y_pred, best_th)
     best_acc = metrics.accuracy_score(Y, best_y_pred)
     best_precision, best_recall, best_f1, s = metrics.precision_recall_fscore_support(Y, best_y_pred)
@@ -450,6 +460,7 @@ def fetch_cohort_results(
     y_pred: Union[pd.DataFrame, np.ndarray],
     cohort_def: Union[dict, list, str] = None,
     cohort_col: list = None,
+    shared_th: bool = False,
 ):
     """
     Computes several classification metrics for a given array of predictions
@@ -469,6 +480,9 @@ def fetch_cohort_results(
     :param cohort_col: a list of column names or indices, from which one cohort is created for each
         unique combination of values for these columns. This parameter is ignored if ``cohort_def``
         is provided;
+    :param shared_th: if True, the binarization of the predictions is made using the same threshold
+        for all cohorts. The threshold used is the one computed for the entire dataset. If False,
+        a different threshold is computed for each cohort;
     :return: a dataframe containing the metrics for the entire dataset and for all the defined
         cohorts.
     :rtype: pd.DataFrame
@@ -482,12 +496,17 @@ def fetch_cohort_results(
             "recall": metric_tuple[3],
             "f1": metric_tuple[4],
             "acc": metric_tuple[5],
+            "th": metric_tuple[1],
         }
         return metric_dict
 
-    metrics = {}
-    metrics["all"] = _metric_tuple_to_dict(fetch_results(y_true, y_pred, best_th_auc=True))
-    metrics["all"]["cht_size"] = y_true.shape[0]
+    metrics_dict = {}
+    metrics_dict["all"] = _metric_tuple_to_dict(fetch_results(y_true, y_pred, best_th_auc=True))
+    metrics_dict["all"]["cht_size"] = y_true.shape[0]
+
+    th = None
+    if shared_th:
+        th = metrics_dict["all"]["th"]
 
     if cohort_def is None and cohort_col is None:
         raise ValueError("ERROR: one of the two parameters must be provided: 'cohort_col' or 'cohort_def'.")
@@ -506,24 +525,36 @@ def fetch_cohort_results(
     for cht_name in subsets.keys():
         y_subset = subsets[cht_name]["y"]
         y_pred_subset = y_pred_dict[cht_name]
-        metrics[cht_name] = _metric_tuple_to_dict(fetch_results(y_subset, y_pred_subset, best_th_auc=True))
-        metrics[cht_name]["cht_size"] = y_subset.shape[0]
+        results = fetch_results(y_subset, y_pred_subset, best_th_auc=True, fixed_th=th)
+        metrics_dict[cht_name] = _metric_tuple_to_dict(results)
+        metrics_dict[cht_name]["cht_size"] = y_subset.shape[0]
 
     queries = cht_manager.get_queries()
 
-    df_dict = {"cohort": [], "cht_query": [], "cht_size": [], "roc": [], "pr": [], "recall": [], "f1": [], "acc": []}
-    for key in metrics.keys():
+    df_dict = {
+        "cohort": [],
+        "cht_query": [],
+        "cht_size": [],
+        "roc": [],
+        "threshold": [],
+        "pr": [],
+        "recall": [],
+        "f1": [],
+        "acc": [],
+    }
+    for key in metrics_dict.keys():
         df_dict["cohort"].append(key)
         if key == "all":
             df_dict["cht_query"].append("all")
         else:
             df_dict["cht_query"].append(queries[key])
-        df_dict["cht_size"].append(metrics[key]["cht_size"])
-        df_dict["roc"].append(metrics[key]["roc"])
-        df_dict["pr"].append(metrics[key]["pr"].mean())
-        df_dict["recall"].append(metrics[key]["recall"].mean())
-        df_dict["f1"].append(metrics[key]["f1"].mean())
-        df_dict["acc"].append(metrics[key]["acc"])
+        df_dict["cht_size"].append(metrics_dict[key]["cht_size"])
+        df_dict["roc"].append(metrics_dict[key]["roc"])
+        df_dict["threshold"].append(metrics_dict[key]["th"])
+        df_dict["pr"].append(metrics_dict[key]["pr"].mean())
+        df_dict["recall"].append(metrics_dict[key]["recall"].mean())
+        df_dict["f1"].append(metrics_dict[key]["f1"].mean())
+        df_dict["acc"].append(metrics_dict[key]["acc"])
 
     df = pd.DataFrame(df_dict)
     return df
