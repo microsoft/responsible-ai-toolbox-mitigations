@@ -1,5 +1,6 @@
 from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
+from sklearn.tree import DecisionTreeClassifier
 import warnings
 
 from raimitigations.utils import (
@@ -15,7 +16,8 @@ from raimitigations.dataprocessing import (
 )
 
 
-def test_model_utils(df_full, label_col_name):
+# -----------------------------------
+def test_model_utils_bin(df_full, label_col_name):
 
     plt.switch_backend("Agg")
     warnings.filterwarnings("ignore", "Matplotlib is currently using agg")

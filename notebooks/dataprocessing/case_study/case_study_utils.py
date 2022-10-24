@@ -4,7 +4,7 @@ import seaborn as sns
 import raimitigations.dataprocessing as dp
 
 
-RESULT_KEYS = ["roc", "pr", "rc", "f1"]
+RESULT_KEYS = ["roc", "precision", "recall", "f1"]
 COL_METRIC = "Metric"
 COL_VALUE = "Value"
 COL_TEST = "Test Case"

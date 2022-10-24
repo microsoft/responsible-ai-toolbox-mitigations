@@ -4,9 +4,9 @@ import conftest as utils
 import xgboost as xgb
 from sklearn.pipeline import Pipeline
 
-from raimitigations.utils import fetch_cohort_results
 import raimitigations.dataprocessing as dp
 from raimitigations.cohort.cohort_manager import CohortManager
+from raimitigations.cohort import fetch_cohort_results
 
 # -----------------------------------
 def _get_model():

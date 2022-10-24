@@ -41,7 +41,6 @@ class DataProcessing(ABC):
             print(text)
 
     # -----------------------------------
-
     @staticmethod
     def obj_has_method(obj: Any, method_name: str):
         has_att = hasattr(obj.__class__, method_name)
@@ -49,7 +48,6 @@ class DataProcessing(ABC):
         return has_method
 
     # -----------------------------------
-
     @abstractmethod
     def _get_fit_input_type(self):
         """
@@ -66,7 +64,6 @@ class DataProcessing(ABC):
         pass
 
     # -----------------------------------
-
     def _works_with_cohort_manager(self):
         """
         Returns True if the current class can be used as one of the transformations in
@@ -78,7 +75,6 @@ class DataProcessing(ABC):
         return True
 
     # -----------------------------------
-
     def _is_cohort_merging_compatible(self):
         """
         Returns True if the current class can be used individually by different cohorts
