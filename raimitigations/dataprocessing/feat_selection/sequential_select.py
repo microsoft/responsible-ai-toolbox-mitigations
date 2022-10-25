@@ -256,6 +256,8 @@ class SeqFeatSelection(FeatureSelection):
                 self.scoring = "roc_auc"
                 if self.regression:
                     self.scoring = "r2"
+                elif self.y.nunique() > 2:
+                    self.scoring = "accuracy"
             return
 
         if self.scoring not in self.VALID_SCORING_CLASS and self.scoring not in self.VALID_SCORING_REG:

@@ -1,6 +1,7 @@
 import os
 import pytest
 from sklearn.tree import DecisionTreeClassifier
+from catboost import CatBoostClassifier, CatBoostRegressor
 import conftest as utils
 from raimitigations.dataprocessing import (
     SeqFeatSelection,
@@ -215,6 +216,52 @@ def test_regression_catboost(df_regression, label_col_name):
 
     assert feat_sel.regression, "ERROR: Regression task not detected in the regression test."
 
+    estimator = CatBoostRegressor(loss_function="RMSE", logging_level="Silent")
+    feat_sel = CatBoostSelection(estimator=estimator, verbose=False)
+    feat_sel.fit(df=df, label_col=label_col)
+
+
+# -----------------------------------
+def test_multiclass_seqfeat(df_multiclass, label_col_name):
+    df = df_multiclass
+    label_col = label_col_name
+
+    feat_sel = SeqFeatSelection(verbose=False)
+    feat_sel.fit(df=df, label_col=label_col)
+    new_df = feat_sel.transform(df)
+    feat_sel.get_summary()
+
+    assert utils.check_valid_columns(new_df.columns.to_list(), feat_sel.get_selected_features()), (
+        f"The list of selected columns is different from the columns in the final df:"
+        f"\nnew_df.columns = {new_df.columns.to_list()}\n"
+        f"feat_sel.get_selected_features() = {feat_sel.get_selected_features()}"
+    )
+
+    assert not feat_sel.regression, "ERROR: Regression task detected in the multiclass test."
+
+
+# -----------------------------------
+def test_multiclass_catboost(df_multiclass, label_col_name):
+    df = df_multiclass
+    label_col = label_col_name
+
+    feat_sel = CatBoostSelection(verbose=False)
+    feat_sel.fit(df=df, label_col=label_col)
+    new_df = feat_sel.transform(df)
+    feat_sel.get_summary()
+
+    assert utils.check_valid_columns(new_df.columns.to_list(), feat_sel.get_selected_features()), (
+        f"The list of selected columns is different from the columns in the final df:"
+        f"\nnew_df.columns = {new_df.columns.to_list()}\n"
+        f"feat_sel.get_selected_features() = {feat_sel.get_selected_features()}"
+    )
+
+    assert not feat_sel.regression, "ERROR: Regression task detected in the multiclass test."
+
+    estimator = CatBoostClassifier(loss_function="MultiClass", logging_level="Silent")
+    feat_sel = CatBoostSelection(estimator=estimator, verbose=False)
+    feat_sel.fit(df=df, label_col=label_col)
+
 
 # -----------------------------------
 def test_special_cases(df_full, label_col_name):
@@ -228,15 +275,17 @@ def test_special_cases(df_full, label_col_name):
 
 
 # -----------------------------------
-
-
 def test_errors_seqfeat(df_full, label_col_name):
     with pytest.raises(Exception):
-        SeqFeatSelection(n_feat=None),
+        SeqFeatSelection(n_feat=None)
     with pytest.raises(Exception):
-        SeqFeatSelection(n_feat="b"),
+        SeqFeatSelection(n_feat="b")
     with pytest.raises(Exception):
-        SeqFeatSelection(n_feat=3.0),
+        SeqFeatSelection(n_feat=3.0)
+    with pytest.raises(Exception):
+        SeqFeatSelection(regression=True, scoring="f1")
+    with pytest.raises(Exception):
+        SeqFeatSelection(scoring="test"),
 
     obj_list = [
         SeqFeatSelection(n_feat=99),
@@ -245,6 +294,9 @@ def test_errors_seqfeat(df_full, label_col_name):
         SeqFeatSelection(n_feat=(5, 3)),
         SeqFeatSelection(n_feat=(-1, 5)),
         SeqFeatSelection(n_feat=(3, 99)),
+        SeqFeatSelection(fixed_cols=10),
+        SeqFeatSelection(fixed_cols=["num_0", "num_1", "num_2"], n_feat=3),
+        SeqFeatSelection(fixed_cols=["num_0", "num_1", "num_2"], n_feat=(3,4)),
     ]
     for obj in obj_list:
         df = df_full.copy()
@@ -253,8 +305,6 @@ def test_errors_seqfeat(df_full, label_col_name):
 
 
 # -----------------------------------
-
-
 def test_errors_catboost(df_full, label_col_name):
     with pytest.raises(Exception):
         CatBoostSelection(algorithm="aaa")
@@ -265,6 +315,7 @@ def test_errors_catboost(df_full, label_col_name):
         CatBoostSelection(n_feat=4.0),
         CatBoostSelection(n_feat=-1),
         CatBoostSelection(fixed_cols=["num_0", "num_1", "num_2"], n_feat=3),
+        CatBoostSelection(fixed_cols="num_0", n_feat=3),
         CatBoostSelection(cat_col="aaa"),
     ]
     for obj in obj_list:

@@ -232,9 +232,16 @@ class CatBoostSelection(FeatureSelection):
         if self.regression:
             self.estimator = CatBoostRegressor(loss_function="RMSE", logging_level=log_level, cat_features=self.cat_col)
         else:
-            self.estimator = CatBoostClassifier(
-                loss_function="CrossEntropy", logging_level=log_level, cat_features=self.cat_col
-            )
+            if self.df is not None:
+                n_class = self.y.nunique()
+                # Binary
+                loss = "CrossEntropy"
+                # Multiclass
+                if n_class > 2:
+                    loss = "MultiClass"
+                self.estimator = CatBoostClassifier(
+                    loss_function=loss, logging_level=log_level, cat_features=self.cat_col
+                )
 
     # -----------------------------------
     def _set_estimator(self):
