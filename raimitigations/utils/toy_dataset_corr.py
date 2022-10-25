@@ -4,18 +4,20 @@ import pandas as pd
 from sklearn.datasets import make_classification, make_regression
 
 
-def _create_num_var(samples: int, regression: bool, n_features: int, n_correlated: int):
+def _create_num_var(samples: int, n_classes: int, regression: bool, n_features: int, n_correlated: int):
     """
     Creates an artificial dataset with the column 'label' representing
     the label column (binary or float values) and the remaining columns
     represent the features that should be used to predict the label.
 
     :param samples: the number of samples to be created
+    :param n_classes: the number of classes in the label column. This parameter is
+        ignored if regression is set to True;
+    :param regression: if True, the label column consists of float values. If False,
+        the label column is created to resamble a classification task.
     :param n_features: the number of features to be created
     :param n_correlated: the number of correlated features. If
         n_correlated > 0, some features will be correlated to each other
-    :param regression: if True, the label column consists of float values. If False,
-        the label column is created to resamble a classification task.
     :return: a dataframe containing only numerical features.
     :rtype: pd.DataFrame
     """
@@ -27,14 +29,27 @@ def _create_num_var(samples: int, regression: bool, n_features: int, n_correlate
             n_informative=n_informative,
         )
     else:
+        if n_classes == 2:
+            weights = [0.2]
+        if n_classes == 3:
+            weights = [0.2, 0.4, 0.4]
+        elif n_classes == 4:
+            weights = [0.1, 0.3, 0.2, 0.4]
+        else:
+            # generate an array of weights
+            weights = [random.random() for _ in range(n_classes)]
+            wsum = sum(weights)
+            weights = [value / wsum for value in weights]
+
         X, y = make_classification(
             n_samples=samples,
+            n_classes=n_classes,
             n_features=n_features,
             n_informative=n_informative,
             n_repeated=0,
             n_redundant=n_correlated,
             n_clusters_per_class=1,
-            weights=[0.2],
+            weights=weights,
             class_sep=2,
         )
 
@@ -155,6 +170,7 @@ def create_dummy_dataset(
     n_cat_cat: int,
     num_num_noise: list = [0.1, 0.2],
     pct_change: list = [0.1, 0.3],
+    n_classes: int = 2,
     regression: bool = False,
 ):
     """
@@ -175,6 +191,8 @@ def create_dummy_dataset(
         and both values must be between [0, 1]. For each categorical feature created, a
         fraction of p values will be swapped randomly. Here, p is a value selected
         randomly in the range [pct_change[0], pct_change[1]];
+    :param n_classes: the number of classes in the label column. This parameter is
+        ignored if regression is set to True;
     :param regression: if True, the label column consists of float values. If False,
         the label column is created to resemble a classification task.
     :return: a dataframe containing correlated features.
@@ -193,7 +211,7 @@ def create_dummy_dataset(
             + "n_cat_num >= n_cat_cat."
         )
 
-    df = _create_num_var(samples, regression, n_features, 0)
+    df = _create_num_var(samples, n_classes, regression, n_features, 0)
     df = _add_cor_num_num_var_det(df, n_num_num, num_num_noise)
     df, _ = _add_cor_num_cat_var_det(df, n_cat_num, pct_change, name="CN")
     df, _ = _add_cor_num_cat_var_det(df, n_cat_cat, pct_change, name="CC")

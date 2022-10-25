@@ -283,7 +283,10 @@ def train_model_fetch_results(
     """
     model = _get_model(model)
     model.fit(x, y)
-    pred_test = model.predict_proba(x_test)
+    if regression:
+        pred_test = model.predict(x_test)
+    else:
+        pred_test = model.predict_proba(x_test)
     results_dict = get_metrics(y_test, pred_test, regression=regression, best_th_auc=best_th_auc)
 
     return results_dict

@@ -116,6 +116,23 @@ def df_regression():
 
 # -----------------------------------
 @pytest.fixture
+def df_multiclass():
+    _set_seed()
+    df = create_dummy_dataset(
+        samples=500,
+        n_features=6,
+        n_num_num=2,
+        n_cat_num=2,
+        n_cat_cat=0,
+        num_num_noise=[0.01, 0.02],
+        pct_change=[0.03, 0.05],
+        n_classes=4
+    )
+    return df
+
+
+# -----------------------------------
+@pytest.fixture
 def df_full_nan():
     _set_seed()
     def add_nan(vec, pct):

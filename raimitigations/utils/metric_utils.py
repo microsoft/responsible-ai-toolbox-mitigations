@@ -53,6 +53,7 @@ def _pred_to_numpy(pred: Union[np.ndarray, list, pd.DataFrame]):
     if type(pred) in [pd.DataFrame, pd.Series]:
         pred = pred.to_numpy()
     elif type(pred) == list:
+        print("opa")
         pred = np.array(pred)
     elif type(pred) != np.ndarray:
         raise ValueError(
@@ -84,15 +85,19 @@ def _roc_evaluation(y: np.ndarray, y_pred: np.ndarray):
     """
     # Binary classification
     if y_pred.shape[1] <= 2:
-        y_pred = y_pred[:, 1]
-        roc_auc = roc_auc_score(y, y_pred, average="weighted")
-        fpr, tpr, th = roc_curve(y, y_pred, drop_intermediate=True)
+        if y_pred.shape[1] == 1:
+            y_pred_temp = y_pred[:, 0]
+        else:
+            y_pred_temp = y_pred[:, 1]
+        roc_auc = roc_auc_score(y, y_pred_temp, average="weighted")
+        fpr, tpr, th = roc_curve(y, y_pred_temp, drop_intermediate=True)
         target = tpr - fpr
         index = np.argmax(target)
         best_th = th[index]
     # Multi-class
     else:
-        roc_auc = roc_auc_score(y, y_pred, average="weighted", multi_class="ovo")
+        y_temp = np.squeeze(y)
+        roc_auc = roc_auc_score(y_temp, y_pred, average="weighted", multi_class="ovo")
         best_th = None
 
     return roc_auc, best_th
@@ -120,7 +125,11 @@ def _probability_to_class_binary(prediction: np.ndarray, th: float):
     :rtype: list
     """
     classes = []
-    prediction = prediction[:, 1]
+    if prediction.shape[1] == 1:
+        prediction = prediction[:, 0]
+    else:
+        prediction = prediction[:, 1]
+
     for p in prediction:
         c = 0
         if p >= th:
@@ -168,8 +177,11 @@ def _get_precision_recall_fscore(y: Union[np.ndarray, list], y_pred: Union[np.nd
 def _get_precision_recall_th(y, y_pred):
     if y_pred.shape[1] > 2:
         return None
-    y_pred = y_pred[:, 1]
-    precision, recall, thresholds = precision_recall_curve(y, y_pred)
+    if y_pred.shape[1] == 1:
+        y_pred_temp = y_pred[:, 0]
+    else:
+        y_pred_temp = y_pred[:, 1]
+    precision, recall, thresholds = precision_recall_curve(y, y_pred_temp)
     fscore = (2 * precision * recall) / (precision + recall)
     index = np.argmax(fscore)
     best_th = thresholds[index]

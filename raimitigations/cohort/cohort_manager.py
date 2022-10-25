@@ -805,6 +805,8 @@ class CohortManager(DataProcessing):
         cht_df_dict = {}
         for i, cohort in enumerate(self.cohorts):
             cht_x, cht_y, index_list = cohort.get_cohort_subset(self.df, self.y, index_used, return_index_list=True)
+            print(f"{cohort.name} --- {cohort.query}")
+            print(f"{cht_y.value_counts()}\n")
             index_used += index_list
             if not cht_x.empty:
                 for tf in self._cohort_pipe[i]:
