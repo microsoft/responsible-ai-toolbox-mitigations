@@ -31,7 +31,7 @@ def _create_num_var(samples: int, n_classes: int, regression: bool, n_features: 
     else:
         if n_classes == 2:
             weights = [0.2]
-        if n_classes == 3:
+        elif n_classes == 3:
             weights = [0.2, 0.4, 0.4]
         elif n_classes == 4:
             weights = [0.1, 0.3, 0.2, 0.4]

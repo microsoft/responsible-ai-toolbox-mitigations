@@ -161,8 +161,8 @@ def test_no_col_name(df_full_cohort, label_col_index_cohort):
         _run_main_commands(X, y, obj, X_in_fit=True)
 
 # -----------------------------------
-def test_rebalance(df_full, label_col_name):
-    df = df_full
+def test_rebalance(df_full_cohort, label_col_name):
+    df = df_full_cohort
     X = df.drop(columns=[label_col_name])
     y = df[label_col_name]
 
