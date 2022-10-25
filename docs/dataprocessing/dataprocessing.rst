@@ -4,7 +4,7 @@ DataProcessing
 .. autoclass:: raimitigations.dataprocessing.DataProcessing
    :members:
 
-The following is a list of all child classes that inherit from the **DataProcessing**:
+The following is a list of all child classes that inherit from the **DataProcessing** class:
 
 .. toctree::
    :maxdepth: 2

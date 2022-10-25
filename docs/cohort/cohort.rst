@@ -1,40 +1,14 @@
-.. _cohort_def:
-
 Cohort
 ======
 
-CohortDefinition
-****************
+The ``cohort`` module allows creating and handling multiple cohorts using an intuitive interface. This module allows
+the application of different data processing pipelines over each cohort, as well as computing multiple metrics separately
+to each of the existing cohorts.
 
-.. autoclass:: raimitigations.cohort.CohortDefinition
-   :members:
+.. toctree::
+   :maxdepth: 1
 
-Examples
---------
-
-.. nbgallery::
-   ../notebooks/cohort/cohort_definition
-
-
-
-.. _cohort_manager:
-
-CohortManager
-*************
-
-.. autoclass:: raimitigations.cohort.CohortManager
-   :members:
-
-.. rubric:: Class Diagram
-
-.. inheritance-diagram:: raimitigations.cohort.CohortManager
-     :parts: 1
-
-.. _cohort_manager_ex:
-
-Examples
---------
-
-.. nbgallery::
-   ../notebooks/cohort/cohort_manager
+   cohort_definition
+   cohort_manager
+   utils
 

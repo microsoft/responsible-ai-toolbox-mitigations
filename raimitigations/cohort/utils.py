@@ -16,11 +16,12 @@ def fetch_cohort_results(
     shared_th: bool = False,
 ):
     """
-    Computes several classification metrics for a given array of predictions
+    Computes several classification or regression metrics for a given array of predictions
     for the entire dataset and for a set of cohorts. The cohorts used to compute
     these metrics are defined by the ``cohort_def`` or ``cohort_col`` parameters
     (but not both). These parameters are the ones used in the constructor method
-    of the :class:`~raimitigations.cohort.CohortManager` class.
+    of the :class:`~raimitigations.cohort.CohortManager` class. Each metric is computed
+    separately for each set of predictions belonging to each of the existing cohorts.
 
     :param X: the dataset containing the feature columns. This dataset is used to
         filter the instances that belong to each cohort;

@@ -11,11 +11,9 @@ There are three utility submodules:
     * :ref:`model_utils<model_utils>`: functions for measuring the performance of a model over a test dataset.
 
 
-API
----
-
 .. toctree::
    :maxdepth: 2
+   :caption: API
 
    toy_data
    data_utils
