@@ -3,13 +3,13 @@
 EncoderOrdinal
 ==============
 
-.. autoclass:: dataprocessing.EncoderOrdinal
+.. autoclass:: raimitigations.dataprocessing.EncoderOrdinal
    :members:
    :show-inheritance:
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.EncoderOrdinal
+.. inheritance-diagram:: raimitigations.dataprocessing.EncoderOrdinal
      :parts: 1
 
 Example

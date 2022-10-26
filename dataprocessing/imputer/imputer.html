@@ -18,6 +18,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -56,13 +57,12 @@
 <li class="toctree-l2"><a class="reference internal" href="../intro.html#structure">Structure</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../intro.html#api">API</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../dataprocessing.html">DataProcessing</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../dataprocessing.html#raimitigations.dataprocessing.DataProcessing"><code class="docutils literal notranslate"><span class="pre">DataProcessing</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../encoder/encoder.html">Encoders</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../feat_sel/feat_sel.html">Feature Selection</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Imputers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sampler/sampler.html">Sampling</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../scaler/scaler.html">Scalers</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../model_utils.html">Model Utils</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -71,6 +71,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../intro.html#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -132,9 +134,9 @@ being used to replace a missing value.
 All the imputer methods from the <strong>dataprocessing</strong> package are based on the abstract class presented below, called
 <strong>DataImputer</strong>.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.DataImputer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">DataImputer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_impute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.DataImputer" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../dataprocessing.html#dataprocessing.DataProcessing" title="dataprocessing.data_processing.DataProcessing"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataProcessing</span></code></a></p>
+<dt class="sig sig-object py" id="raimitigations.dataprocessing.DataImputer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raimitigations.dataprocessing.</span></span><span class="sig-name descname"><span class="pre">DataImputer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_impute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.dataprocessing.DataImputer" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../dataprocessing.html#raimitigations.dataprocessing.DataProcessing" title="raimitigations.dataprocessing.data_processing.DataProcessing"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataProcessing</span></code></a></p>
 <p>Base class for all imputer subclasses. Implements basic functionalities
 that can be used by all imputation approaches.</p>
 <dl class="field-list simple">
@@ -149,8 +151,8 @@ with at least one NaN value;</p></li>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.DataImputer.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Series</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.DataImputer.fit" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="raimitigations.dataprocessing.DataImputer.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Series</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.dataprocessing.DataImputer.fit" title="Permalink to this definition"></a></dt>
 <dd><p>Default fit method for all imputation methods that inherits from the current
 class. The following steps are executed: (i) set the self.df attribute,
 (ii) set the list of columns to impute (or create a default one if needed),
@@ -167,8 +169,8 @@ should be imputed), and (iv) call the concrete class’s specific <code class="d
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.DataImputer.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.DataImputer.transform" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="raimitigations.dataprocessing.DataImputer.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.dataprocessing.DataImputer.transform" title="Permalink to this definition"></a></dt>
 <dd><p>Default behavior for transforming the data for the different
 imputation methods.</p>
 <dl class="field-list simple">
@@ -195,11 +197,11 @@ the <strong>DataImputer</strong> class, and thus, have access to all of the meth
 </ul>
 </div>
 <p class="rubric">Class Diagram</p>
-<div class="graphviz"><img src="../../_images/inheritance-8a7250778be268e94700f5013862b37d73143aed.png" alt="Inheritance diagram of dataprocessing.BasicImputer" usemap="#inheritance2f547944e7" class="inheritance graphviz" /></div>
-<map id="inheritance2f547944e7" name="inheritance2f547944e7">
-<area shape="rect" id="node4" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
-<area shape="rect" id="node2" href="basic.html#dataprocessing.BasicImputer" target="_top" title="Concrete class that imputes missing data in a dataset using a set of simple" alt="" coords="448,5,556,31"/>
-<area shape="rect" id="node3" href="#dataprocessing.DataImputer" target="_top" title="Base class for all imputer subclasses. Implements basic functionalities" alt="" coords="296,5,400,31"/>
+<div class="graphviz"><img src="../../_images/inheritance-6845db54df4d26a70087d7a1cd336635f26f0be7.png" alt="Inheritance diagram of raimitigations.dataprocessing.BasicImputer" usemap="#inheritanceb6075cb073" class="inheritance graphviz" /></div>
+<map id="inheritanceb6075cb073" name="inheritanceb6075cb073">
+<area shape="rect" id="node4" href="../dataprocessing.html#raimitigations.dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node2" href="basic.html#raimitigations.dataprocessing.BasicImputer" target="_top" title="Concrete class that imputes missing data in a dataset using a set of simple" alt="" coords="448,5,556,31"/>
+<area shape="rect" id="node3" href="#raimitigations.dataprocessing.DataImputer" target="_top" title="Base class for all imputer subclasses. Implements basic functionalities" alt="" coords="296,5,400,31"/>
 </map><section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">

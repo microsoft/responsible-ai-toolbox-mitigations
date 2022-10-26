@@ -18,6 +18,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -56,13 +57,12 @@
 <li class="toctree-l2"><a class="reference internal" href="../intro.html#structure">Structure</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../intro.html#api">API</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../dataprocessing.html">DataProcessing</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../dataprocessing.html#raimitigations.dataprocessing.DataProcessing"><code class="docutils literal notranslate"><span class="pre">DataProcessing</span></code></a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="encoder.html">Encoders</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../feat_sel/feat_sel.html">Feature Selection</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../imputer/imputer.html">Imputers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sampler/sampler.html">Sampling</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../scaler/scaler.html">Scalers</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../model_utils.html">Model Utils</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -71,6 +71,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../intro.html#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -127,9 +129,9 @@
 <section id="encoderordinal">
 <span id="id1"></span><h1>EncoderOrdinal<a class="headerlink" href="#encoderordinal" title="Permalink to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.EncoderOrdinal">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">EncoderOrdinal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_encode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categories</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_err</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.EncoderOrdinal" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="encoder.html#dataprocessing.DataEncoding" title="dataprocessing.encoder.encoder.DataEncoding"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataEncoding</span></code></a></p>
+<dt class="sig sig-object py" id="raimitigations.dataprocessing.EncoderOrdinal">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raimitigations.dataprocessing.</span></span><span class="sig-name descname"><span class="pre">EncoderOrdinal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_encode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categories</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_err</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.dataprocessing.EncoderOrdinal" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="encoder.html#raimitigations.dataprocessing.DataEncoding" title="raimitigations.dataprocessing.encoder.encoder.DataEncoding"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataEncoding</span></code></a></p>
 <p>Concrete class that applies ordinal encoding over a dataset. The categorical features
 are encoded using the ordinal encoding class from``sklearn``. The main difference between
 using the``sklearn`` implementation directly is that we allow the user to pass a list of
@@ -166,8 +168,8 @@ column(s) with unknown values. We recommend using negative values to avoid confl
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.EncoderOrdinal.get_mapping">
-<span class="sig-name descname"><span class="pre">get_mapping</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.EncoderOrdinal.get_mapping" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="raimitigations.dataprocessing.EncoderOrdinal.get_mapping">
+<span class="sig-name descname"><span class="pre">get_mapping</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.dataprocessing.EncoderOrdinal.get_mapping" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a dictionary with all the information regarding the mapping
 performed by the ordinal encoder. The dictionary contains the following
 structure:</p>
@@ -199,11 +201,11 @@ performed by the ordinal encoder.</p>
 </dd></dl>
 
 <p class="rubric">Class Diagram</p>
-<div class="graphviz"><img src="../../_images/inheritance-4f550e3c00fd3a60a94ade75329548c45f5406ba.png" alt="Inheritance diagram of dataprocessing.EncoderOrdinal" usemap="#inheritanced0bc793cdb" class="inheritance graphviz" /></div>
-<map id="inheritanced0bc793cdb" name="inheritanced0bc793cdb">
-<area shape="rect" id="node3" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
-<area shape="rect" id="node2" href="encoder.html#dataprocessing.DataEncoding" target="_top" title="Base class for all encoding subclasses. Implements basic functionalities" alt="" coords="296,5,408,31"/>
-<area shape="rect" id="node4" href="#dataprocessing.EncoderOrdinal" target="_top" title="Concrete class that applies ordinal encoding over a dataset. The categorical features" alt="" coords="456,5,577,31"/>
+<div class="graphviz"><img src="../../_images/inheritance-b76316ca67c295d5ecb2304e105dddbb3f1c4e21.png" alt="Inheritance diagram of raimitigations.dataprocessing.EncoderOrdinal" usemap="#inheritance3673cd9d24" class="inheritance graphviz" /></div>
+<map id="inheritance3673cd9d24" name="inheritance3673cd9d24">
+<area shape="rect" id="node3" href="../dataprocessing.html#raimitigations.dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node2" href="encoder.html#raimitigations.dataprocessing.DataEncoding" target="_top" title="Base class for all encoding subclasses. Implements basic functionalities" alt="" coords="296,5,408,31"/>
+<area shape="rect" id="node4" href="#raimitigations.dataprocessing.EncoderOrdinal" target="_top" title="Concrete class that applies ordinal encoding over a dataset. The categorical features" alt="" coords="456,5,577,31"/>
 </map><section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">

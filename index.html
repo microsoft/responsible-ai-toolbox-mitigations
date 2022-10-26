@@ -18,6 +18,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -52,6 +53,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -140,7 +143,7 @@ mitigation. The library enables you to <strong>explore potential mitigations for
 through customized loss functions, architectures, and new training algorithms.</p>
 </section>
 <section id="benefits-of-targeted-error-mitigations">
-<h2>Benefits of targeted error mitigations<a class="headerlink" href="#benefits-of-targeted-error-mitigations" title="Permalink to this heading"></a></h2>
+<span id="target-mitigation"></span><h2>Benefits of targeted error mitigations<a class="headerlink" href="#benefits-of-targeted-error-mitigations" title="Permalink to this heading"></a></h2>
 <p>Traditional methods of improving model performance often take a blanket approach, aiming at maximizing a single-score performance number, such as overall accuracy.
 Blanket approaches may involve increasing the size of training data or model architecture—approaches that are not only costly but also <strong>ineffective</strong> for improving the
 model in areas of poorest performance.</p>
@@ -155,10 +158,16 @@ becomes clear that overall there are more examples in the data for which a loan 
 different with more examples of loans being declined. The discrepancy also leads to a higher error for this cohort as the model learns to over-decline. Merely adding
 more data to adjust overall class imbalance (Scenario 1 in the figure) will not address class imbalance for cohort X. In fact, it might make it worse by accentuating
 class imbalance for this cohort and declining more loans. A more targeted approach (Scenario 2 in the figure) would focus the class balance mitigation only on cohort X
-by sampling or synthesizing more data within that cohort where loans have been assigned. At this time, the Responsible AI Mitigations library can implement the second
-scenario by synthesizing data only for a given cohort (see the <a class="reference internal" href="dataprocessing/sampler/synthesizer.html#syhtesizer"><span class="std std-ref">DataProcessing.Synthesizer</span></a> class for more information). In the future, we expect to
-enable similar capabilities for the <a class="reference internal" href="dataprocessing/sampler/rebalance.html#rebalance"><span class="std std-ref">DataProcessing.Rebalance</span></a> class.</p>
-<p>In contrast, the Responsible AI Mitigations Library offers a <strong>targeted approach that lets you save time and resources by</strong>:</p>
+by sampling or synthesizing more data within that cohort where loans have been assigned. The Responsible AI Mitigations library can implement the second
+scenario using two approaches:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Synthesizing data only for a given cohort (see the <a class="reference internal" href="dataprocessing/sampler/synthesizer.html#syhtesizer"><span class="std std-ref">dataprocessing.Synthesizer</span></a> class for more information);</p></li>
+<li><p>Use the <a class="reference internal" href="dataprocessing/sampler/rebalance.html#rebalance"><span class="std std-ref">dataprocessing.Rebalance</span></a> together with the <a class="reference internal" href="cohort/cohort_manager.html#cohort-manager"><span class="std std-ref">cohort.CohortManager</span></a> in order to apply a over-sampling over only
+a set of cohorts (check the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code>’s <a class="reference internal" href="cohort/cohort_manager.html#cohort-manager-ex"><span class="std std-ref">Examples</span></a> section to see how this can be achieved).</p></li>
+</ol>
+</div></blockquote>
+<p>This way, the Responsible AI Mitigations Library offers a <strong>targeted approach that lets you save time and resources by</strong>:</p>
 <blockquote>
 <div><ul>
 <li><p><strong>Testing your hypotheses for why a model is underperforming</strong> in specific data cohorts through exploring data imbalance, features, label noise, or missing values.</p></li>
@@ -201,10 +210,12 @@ learning libraries, such as scikit-learn, mlxtend, sdv, and others.</p>
 <p>A set of metrics for diagnosing and measuring data imbalance. This module is intended to be used as part of the error diagnosis process for failure modes that are due to class
 or feature imbalance. After measuring with DataBalanceAnalysis, AI practitioners can then work to mitigate the failure through techniques available in the library’s DataProcessing
 module.</p>
-<p><strong>Example:</strong></p>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
 <p>A model trained for house-price prediction is discovered to be underperforming for houses that do not have an attached garage. The AI practitioner determines that this failure is
 due to the underrepresentation of houses with no garage in the training data. The practitioner can use metrics in the DataBalanceAnalysis module to measure the feature imbalance
 (“garage” vs. “no garage”), then work to mitigate the issue by using one of the sampling techniques available in the library’s DataProcessing module for augmenting data.</p>
+</div>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
 <ul>
@@ -228,6 +239,17 @@ due to the underrepresentation of houses with no garage in the training data. Th
 <li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#api">API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#examples">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cohort/intro.html">Cohort</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cohort/intro.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cohort/intro.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utils/utils.html">Utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utils/toy_data.html">Toy Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/data_utils.html">Data Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/model_utils.html">Model Utils</a></li>
 </ul>
 </li>
 </ul>

@@ -132,7 +132,7 @@ Mitchell).
 
    <br />
 
-.. automodule:: databalanceanalysis.feature_measures
+.. automodule:: raimitigations.databalanceanalysis.feature_measures
    :members:
    :undoc-members:
    :show-inheritance:

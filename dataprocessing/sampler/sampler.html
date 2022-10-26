@@ -18,6 +18,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -56,13 +57,12 @@
 <li class="toctree-l2"><a class="reference internal" href="../intro.html#structure">Structure</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../intro.html#api">API</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../dataprocessing.html">DataProcessing</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../dataprocessing.html#raimitigations.dataprocessing.DataProcessing"><code class="docutils literal notranslate"><span class="pre">DataProcessing</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../encoder/encoder.html">Encoders</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../feat_sel/feat_sel.html">Feature Selection</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../imputer/imputer.html">Imputers</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Sampling</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../scaler/scaler.html">Scalers</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../model_utils.html">Model Utils</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -71,6 +71,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../intro.html#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -140,11 +142,11 @@ abstract class. Below is a list of the sampling methods present in the <strong>d
 </ul>
 </div>
 <p class="rubric">Class Diagram</p>
-<div class="graphviz"><img src="../../_images/inheritance-9cc363319a93a14c51eee1d5b58f0eb2e9f1d8d7.png" alt="Inheritance diagram of dataprocessing.Rebalance, dataprocessing.Synthesizer" usemap="#inheritance640d60957b" class="inheritance graphviz" /></div>
-<map id="inheritance640d60957b" name="inheritance640d60957b">
-<area shape="rect" id="node2" href="../dataprocessing.html#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,31,248,56"/>
-<area shape="rect" id="node3" href="rebalance.html#dataprocessing.Rebalance" target="_top" title="Concrete class that uses under and oversampling approaches (implemented" alt="" coords="300,5,391,31"/>
-<area shape="rect" id="node4" href="synthesizer.html#dataprocessing.Synthesizer" target="_top" title="Concrete class that uses generative models (implemented in the :mod:`sdv` library)" alt="" coords="296,55,395,80"/>
+<div class="graphviz"><img src="../../_images/inheritance-cc83632ab9c680933367d42672c7ae700c790087.png" alt="Inheritance diagram of raimitigations.dataprocessing.Rebalance, raimitigations.dataprocessing.Synthesizer" usemap="#inheritance0e28191508" class="inheritance graphviz" /></div>
+<map id="inheritance0e28191508" name="inheritance0e28191508">
+<area shape="rect" id="node2" href="../dataprocessing.html#raimitigations.dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,31,248,56"/>
+<area shape="rect" id="node3" href="rebalance.html#raimitigations.dataprocessing.Rebalance" target="_top" title="Concrete class that uses under and oversampling approaches (implemented" alt="" coords="300,5,391,31"/>
+<area shape="rect" id="node4" href="synthesizer.html#raimitigations.dataprocessing.Synthesizer" target="_top" title="Concrete class that uses generative models (implemented in the :mod:`sdv` library)" alt="" coords="296,55,395,80"/>
 </map><section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">

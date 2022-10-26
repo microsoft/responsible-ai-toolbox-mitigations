@@ -18,6 +18,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -52,6 +53,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../../gallery.html">Gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#dataprocessing">DataProcessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort">Cohort</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../module_tests/model_test.html">Simple Example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="case1.html">Case Study 1</a></li>
@@ -71,6 +73,7 @@
 <li class="toctree-l3"><a class="reference internal" href="case3_stat.html">Case Study 3 - Multiple Runs</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort-case-studies">Cohort Case Studies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
@@ -79,6 +82,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -393,6 +398,7 @@ div.rendered_html tbody tr:hover {
 <span class="kn">import</span> <span class="nn">uci_dataset</span> <span class="k">as</span> <span class="nn">database</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">train_model_plot_results</span><span class="p">,</span> <span class="n">split_data</span>
 <span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
 </pre></div>
 </div>
@@ -402,7 +408,7 @@ div.rendered_html tbody tr:hover {
 <section id="Fixing-a-seed">
 <h2>Fixing a seed<a class="headerlink" href="#Fixing-a-seed" title="Permalink to this heading"></a></h2>
 <p>To avoid randomness in the following experiments, we’ll fix the seeds to guarantee that the results obtained are the same each time we run this notebook. Feel free to comment the next cell or test different seeds to see how this affects the results.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
@@ -413,15 +419,6 @@ div.rendered_html tbody tr:hover {
 <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-&lt;torch._C.Generator at 0x7f7914446070&gt;
-</pre></div></div>
 </div>
 </section>
 <section id="1---Understanding-the-Data">
@@ -874,7 +871,7 @@ array([3108,   55])
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;raimitigations.dataprocessing.feat_selection.correlated_features.CorrelatedFeatures at 0x7f78c674a160&gt;
+&lt;raimitigations.dataprocessing.feat_selection.correlated_features.CorrelatedFeatures at 0x7fcaa4b54880&gt;
 </pre></div></div>
 </div>
 <p>Remember to look through the JSON files generated in the previous cell. Correlations have been found, which can be seen in <code class="docutils literal notranslate"><span class="pre">c3_corr.json</span></code>.</p>
@@ -1297,7 +1294,7 @@ No columns specified for imputation. These columns have been automatically ident
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1311,7 +1308,7 @@ No columns specified for imputation. These columns have been automatically ident
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1320,9 +1317,9 @@ No columns specified for imputation. These columns have been automatically ident
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
+
+TEST SET:
+
 [[704  14]
  [  9  64]]
 </pre></div></div>
@@ -1339,22 +1336,21 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 97.09%
-
-Precision:  0.9039450498076024
-
-Recall:  0.9286068607623916
-
-F1 =  0.9158047213776316
-
-ROC AUC =  0.9617182432174611
+ROC AUC: 0.9617182432174611
+Precision: 0.9039450498076024
+Recall: 0.9286068607623916
+F1: 0.9158047213776316
+Accuracy: 0.9709228824273072
+Optimal Threshold (ROC curve): 0.29627740383148193
+Optimal Threshold (Precision x Recall curve): 0.37958627939224243
+Threshold used: 0.29627740383148193
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1363,9 +1359,9 @@ ROC AUC =  0.9617182432174611
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
+
+TEST SET:
+
 [[536 182]
  [ 27  46]]
 </pre></div></div>
@@ -1382,15 +1378,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 73.58%
-
-Precision:  0.5768985073696675
-
-Recall:  0.6883275460754761
-
-F1 =  0.5712470272134779
-
-ROC AUC =  0.7110218643873774
+ROC AUC: 0.7110218643873774
+Precision: 0.5768985073696675
+Recall: 0.6883275460754761
+F1: 0.5712470272134779
+Accuracy: 0.7357774968394437
+Optimal Threshold (ROC curve): 0.2
+Optimal Threshold (Precision x Recall curve): 0.4
+Threshold used: 0.2
 </pre></div></div>
 </div>
 </section>
@@ -1408,7 +1403,7 @@ ROC AUC =  0.7110218643873774
 <span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">train_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">test_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1417,9 +1412,9 @@ ROC AUC =  0.7110218643873774
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
+
+TEST SET:
+
 [[611 107]
  [ 13  60]]
 </pre></div></div>
@@ -1436,15 +1431,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 84.83%
-
-Precision:  0.6692240518962076
-
-Recall:  0.8364463692906475
-
-F1 =  0.7052906110283159
-
-ROC AUC =  0.8665528293967262
+ROC AUC: 0.8665528293967262
+Precision: 0.6692240518962076
+Recall: 0.8364463692906475
+F1: 0.7052906110283159
+Accuracy: 0.8482932996207333
+Optimal Threshold (ROC curve): 0.2
+Optimal Threshold (Precision x Recall curve): 0.4
+Threshold used: 0.2
 </pre></div></div>
 </div>
 </section>
@@ -1459,7 +1453,7 @@ ROC AUC =  0.8665528293967262
 <span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">train_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">test_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1470,9 +1464,9 @@ ROC AUC =  0.8665528293967262
 <div class="highlight"><pre>
 No columns specified for imputation. These columns have been automatically identified:
 []
-------------
-TEST
-------------
+
+TEST SET:
+
 [[541 177]
  [ 26  47]]
 </pre></div></div>
@@ -1482,7 +1476,7 @@ TEST
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:97: RuntimeWarning: invalid value encountered in true_divide
+/home/matheus/Dropbox/Matheus/Microsoft_Research/Code/ResponsibleAI/ResponsibleAI/git/responsible-ai-toolbox-mitigations/raimitigations/utils/metric_utils.py:185: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
 </pre></div></div>
 </div>
@@ -1498,15 +1492,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 74.34%
-
-Precision:  0.581983024691358
-
-Recall:  0.698658755294387
-
-F1 =  0.5792608314009092
-
-ROC AUC =  0.7177090090433853
+ROC AUC: 0.7177090090433853
+Precision: 0.581983024691358
+Recall: 0.698658755294387
+F1: 0.5792608314009092
+Accuracy: 0.7433628318584071
+Optimal Threshold (ROC curve): 0.2
+Optimal Threshold (Precision x Recall curve): 1.0
+Threshold used: 0.2
 </pre></div></div>
 </div>
 </section>
@@ -1521,7 +1514,7 @@ ROC AUC =  0.7177090090433853
 <span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">train_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">test_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1530,9 +1523,9 @@ ROC AUC =  0.7177090090433853
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
+
+TEST SET:
+
 [[598 120]
  [  9  64]]
 </pre></div></div>
@@ -1549,15 +1542,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 83.69%
-
-Precision:  0.6664995344173054
-
-Recall:  0.8547907047735337
-
-F1 =  0.7003479920710668
-
-ROC AUC =  0.8824836875643911
+ROC AUC: 0.8824836875643911
+Precision: 0.6664995344173054
+Recall: 0.8547907047735337
+F1: 0.7003479920710668
+Accuracy: 0.8369152970922883
+Optimal Threshold (ROC curve): 0.2
+Optimal Threshold (Precision x Recall curve): 0.4
+Threshold used: 0.2
 </pre></div></div>
 </div>
 </section>
@@ -1572,7 +1564,7 @@ ROC AUC =  0.8824836875643911
 <span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">train_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">test_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1581,9 +1573,9 @@ ROC AUC =  0.8824836875643911
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
+
+TEST SET:
+
 [[611 107]
  [  9  64]]
 </pre></div></div>
@@ -1600,15 +1592,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 85.34%
-
-Precision:  0.6798764384078475
-
-Recall:  0.8638436295646201
-
-F1 =  0.7189468009507707
-
-ROC AUC =  0.8919468081047048
+ROC AUC: 0.8919468081047048
+Precision: 0.6798764384078475
+Recall: 0.8638436295646201
+F1: 0.7189468009507707
+Accuracy: 0.8533501896333755
+Optimal Threshold (ROC curve): 0.2
+Optimal Threshold (Precision x Recall curve): 0.4
+Threshold used: 0.2
 </pre></div></div>
 </div>
 </section>
@@ -1623,7 +1614,7 @@ ROC AUC =  0.8919468081047048
 <span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">train_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">test_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1632,9 +1623,9 @@ ROC AUC =  0.8919468081047048
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
+
+TEST SET:
+
 [[590 128]
  [ 11  62]]
 </pre></div></div>
@@ -1651,15 +1642,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 82.43%
-
-Precision:  0.654006480427358
-
-Recall:  0.8355210439958789
-
-F1 =  0.6830500119632053
-
-ROC AUC =  0.8798221849124279
+ROC AUC: 0.8798221849124279
+Precision: 0.654006480427358
+Recall: 0.8355210439958789
+F1: 0.6830500119632053
+Accuracy: 0.8242730720606827
+Optimal Threshold (ROC curve): 0.2
+Optimal Threshold (Precision x Recall curve): 0.4
+Threshold used: 0.2
 </pre></div></div>
 </div>
 </section>
@@ -1674,7 +1664,7 @@ ROC AUC =  0.8798221849124279
 <span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">train_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">test_x_scl</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_scl</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_scl</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1683,9 +1673,9 @@ ROC AUC =  0.8798221849124279
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
+
+TEST SET:
+
 [[605 113]
  [  8  65]]
 </pre></div></div>
@@ -1702,15 +1692,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 84.70%
-
-Precision:  0.6760589841816815
-
-Recall:  0.866514671652612
-
-F1 =  0.7135095979717494
-
-ROC AUC =  0.9002842751936504
+ROC AUC: 0.9002842751936504
+Precision: 0.6760589841816815
+Recall: 0.866514671652612
+F1: 0.7135095979717494
+Accuracy: 0.8470290771175727
+Optimal Threshold (ROC curve): 0.2
+Optimal Threshold (Precision x Recall curve): 0.4
+Threshold used: 0.2
 </pre></div></div>
 </div>
 <p>From the previous results, we can see that the <strong>DataStandardScaler</strong> managed to get a considerable improvement over the baseline model. We’ll use this scaled dataset in the following experiments.</p>
@@ -1719,7 +1708,7 @@ ROC AUC =  0.9002842751936504
 <section id="4---Feature-Selection">
 <h2>4 - Feature Selection<a class="headerlink" href="#4---Feature-Selection" title="Permalink to this heading"></a></h2>
 <p>Next, we perform a feature selection, which removes features from the dataset.</p>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
@@ -1729,6 +1718,15 @@ ROC AUC =  0.9002842751936504
 <span class="n">test_x_sel</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x_scl</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/catboost/core.py:1222: FutureWarning: iteritems is deprecated and will be removed in a future version. Use .items instead.
+  self._init_pool(data, label, cat_features, text_features, embedding_features, pairs, weight,
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
@@ -1768,7 +1766,7 @@ ROC AUC =  0.9002842751936504
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_sel</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_sel</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1777,9 +1775,9 @@ ROC AUC =  0.9002842751936504
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
+
+TEST SET:
+
 [[626  92]
  [  9  64]]
 </pre></div></div>
@@ -1796,15 +1794,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 87.23%
-
-Precision:  0.6980415909549768
-
-Recall:  0.8742893120158737
-
-F1 =  0.7421515183790186
-
-ROC AUC =  0.907124050826115
+ROC AUC: 0.907124050826115
+Precision: 0.6980415909549768
+Recall: 0.8742893120158737
+F1: 0.7421515183790186
+Accuracy: 0.8723135271807838
+Optimal Threshold (ROC curve): 0.2
+Optimal Threshold (Precision x Recall curve): 0.4
+Threshold used: 0.2
 </pre></div></div>
 </div>
 <p>We can see that the <strong>CatBoostSelection</strong> class managed to improve even further the results obtained with the scaled data, where we have a higher F1 score and a similar ROC AUC. Note that we are now using a lot less data, since we removed several features from the dataset.</p>
@@ -1875,7 +1872,7 @@ Name: sick-euthyroid, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_res</span><span class="p">,</span> <span class="n">train_y_res</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_res</span><span class="p">,</span> <span class="n">train_y_res</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1884,9 +1881,9 @@ Name: sick-euthyroid, dtype: int64
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
+
+TEST SET:
+
 [[623  95]
  [  8  65]]
 </pre></div></div>
@@ -1903,15 +1900,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 86.98%
-
-Precision:  0.696785855784469
-
-Recall:  0.8790494905941161
-
-F1 =  0.7407935300985947
-
-ROC AUC =  0.9110542984698745
+ROC AUC: 0.9110542984698745
+Precision: 0.696785855784469
+Recall: 0.8790494905941161
+F1: 0.7407935300985947
+Accuracy: 0.8697850821744627
+Optimal Threshold (ROC curve): 0.2
+Optimal Threshold (Precision x Recall curve): 0.4
+Threshold used: 0.2
 </pre></div></div>
 </div>
 <p>Notice that the <strong>Rebalance</strong> class managed to slightly improve the ROC AUC compared to the feature selection step, while maintaining a similar F1 score.</p>
@@ -1945,138 +1941,211 @@ ROC AUC =  0.9110542984698745
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:286: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:286: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:286: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:286: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
+Sampling conditions:   0%|          | 0/200 [00:00&lt;?, ?it/s]/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sdv/tabular/base.py:608: FutureWarning: In a future version of pandas, a length 1 tuple will be returned when iterating over a groupby with a grouper equal to a list of length 1. Don&#39;t supply a list with a single grouper to avoid this warning.
+  for group, dataframe in grouped_conditions:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sdv/tabular/base.py:639: FutureWarning: In a future version of pandas, a length 1 tuple will be returned when iterating over a groupby with a grouper equal to a list of length 1. Don&#39;t supply a list with a single grouper to avoid this warning.
+  for transformed_group, transformed_dataframe in transformed_groups:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+Sampling conditions: 100%|██████████| 200/200 [00:00&lt;00:00, 1783.00it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -2094,7 +2163,7 @@ Name: sick-euthyroid, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">syn_train_x</span><span class="p">,</span> <span class="n">syn_train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">syn_train_x</span><span class="p">,</span> <span class="n">syn_train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2103,11 +2172,11 @@ Name: sick-euthyroid, dtype: int64
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
-[[577 141]
- [  8  65]]
+
+TEST SET:
+
+[[580 138]
+ [  7  66]]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2122,15 +2191,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 81.16%
-
-Precision:  0.6509293834536554
-
-Recall:  0.847016064410272
-
-F1 =  0.6757991621210496
-
-ROC AUC =  0.9004846033502498
+ROC AUC: 0.9070572747739154
+Precision: 0.6558021845876341
+Recall: 0.8559545159690158
+F1: 0.6827115924588849
+Accuracy: 0.8166877370417194
+Optimal Threshold (ROC curve): 0.2
+Optimal Threshold (Precision x Recall curve): 0.4
+Threshold used: 0.2
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -2140,27 +2208,115 @@ ROC AUC =  0.9004846033502498
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">{</span><span class="n">label_col</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>  <span class="c1"># create more of the undersampled class</span>
 <span class="n">syn_train_x</span><span class="p">,</span> <span class="n">syn_train_y</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">train_x_sel</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> <span class="n">conditions</span><span class="o">=</span><span class="n">conditions</span><span class="p">)</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">syn_train_x</span><span class="p">,</span> <span class="n">syn_train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">syn_train_x</span><span class="p">,</span> <span class="n">syn_train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
+<div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
-[[624  94]
- [ 15  58]]
+Sampling conditions:   0%|          | 0/600 [00:00&lt;?, ?it/s]/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sdv/tabular/base.py:608: FutureWarning: In a future version of pandas, a length 1 tuple will be returned when iterating over a groupby with a grouper equal to a list of length 1. Don&#39;t supply a list with a single grouper to avoid this warning.
+  for group, dataframe in grouped_conditions:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sdv/tabular/base.py:639: FutureWarning: In a future version of pandas, a length 1 tuple will be returned when iterating over a groupby with a grouper equal to a list of length 1. Don&#39;t supply a list with a single grouper to avoid this warning.
+  for transformed_group, transformed_dataframe in transformed_groups:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+Sampling conditions: 100%|██████████| 600/600 [00:00&lt;00:00, 4369.32it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/notebooks_dataprocessing_case_study_case3_47_1.png" src="../../../_images/notebooks_dataprocessing_case_study_case3_47_1.png" />
+<div class="highlight"><pre>
+
+TEST SET:
+
+[[537 181]
+ [  5  68]]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/notebooks_dataprocessing_case_study_case3_47_3.png" src="../../../_images/notebooks_dataprocessing_case_study_case3_47_3.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -2168,15 +2324,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 86.22%
-
-Precision:  0.6790523844823326
-
-Recall:  0.8318006639447475
-
-F1 =  0.7176156554491115
-
-ROC AUC =  0.8991300034341969
+ROC AUC: 0.9090414774678521
+Precision: 0.6319336386134946
+Recall: 0.8397088564124089
+F1: 0.6373706004140787
+Accuracy: 0.7648546144121365
+Optimal Threshold (ROC curve): 0.2
+Optimal Threshold (Precision x Recall curve): 0.6
+Threshold used: 0.2
 </pre></div></div>
 </div>
 </section>
@@ -2206,145 +2361,320 @@ ROC AUC =  0.8991300034341969
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:286: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:286: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:286: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:286: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (2) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
+Sampling conditions:   0%|          | 0/200 [00:00&lt;?, ?it/s]/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sdv/tabular/base.py:608: FutureWarning: In a future version of pandas, a length 1 tuple will be returned when iterating over a groupby with a grouper equal to a list of length 1. Don&#39;t supply a list with a single grouper to avoid this warning.
+  for group, dataframe in grouped_conditions:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sdv/tabular/base.py:639: FutureWarning: In a future version of pandas, a length 1 tuple will be returned when iterating over a groupby with a grouper equal to a list of length 1. Don&#39;t supply a list with a single grouper to avoid this warning.
+  for transformed_group, transformed_dataframe in transformed_groups:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+Sampling conditions:  46%|████▌     | 91/200 [00:00&lt;00:00, 758.20it/s]/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+Sampling conditions:  99%|█████████▉| 198/200 [00:00&lt;00:00, 810.50it/s]/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+Sampling conditions: 100%|██████████| 200/200 [00:00&lt;00:00, 667.71it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">syn2_train_x</span><span class="p">,</span> <span class="n">syn2_train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">syn2_train_x</span><span class="p">,</span> <span class="n">syn2_train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2353,10 +2683,10 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
-[[598 120]
+
+TEST SET:
+
+[[606 112]
  [  9  64]]
 </pre></div></div>
 </div>
@@ -2372,15 +2702,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 83.69%
-
-Precision:  0.6664995344173054
-
-Recall:  0.8547907047735337
-
-F1 =  0.7003479920710668
-
-ROC AUC =  0.8958102796962643
+ROC AUC: 0.9024497271721296
+Precision: 0.6745011086474502
+Recall: 0.8603617354142024
+F1: 0.7116417658631524
+Accuracy: 0.8470290771175727
+Optimal Threshold (ROC curve): 0.2
+Optimal Threshold (Precision x Recall curve): 0.4
+Threshold used: 0.2
 </pre></div></div>
 </div>
 </section>

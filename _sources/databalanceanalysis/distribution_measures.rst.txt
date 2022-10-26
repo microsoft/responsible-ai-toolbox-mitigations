@@ -94,7 +94,7 @@ column and do not depend on the class label column.
 
    <br />
 
-.. automodule:: databalanceanalysis.distribution_measures
+.. automodule:: raimitigations.databalanceanalysis.distribution_measures
    :members:
    :undoc-members:
    :show-inheritance:

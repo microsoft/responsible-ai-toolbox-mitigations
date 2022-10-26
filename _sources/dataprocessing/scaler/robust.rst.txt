@@ -1,13 +1,13 @@
 DataRobustScaler
 ================
 
-.. autoclass:: dataprocessing.DataRobustScaler
+.. autoclass:: raimitigations.dataprocessing.DataRobustScaler
    :members:
    :show-inheritance:
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.DataRobustScaler
+.. inheritance-diagram:: raimitigations.dataprocessing.DataRobustScaler
      :parts: 1
 
 Example

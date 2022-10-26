@@ -18,6 +18,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -52,7 +53,9 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../../gallery.html">Gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#dataprocessing">DataProcessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort">Cohort</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort-case-studies">Cohort Case Studies</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Using Pipelines</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Comparing-different-pipelines">Comparing different pipelines</a></li>
@@ -68,6 +71,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -391,6 +396,7 @@ div.rendered_html tbody tr:hover {
 <span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
 <span class="kn">import</span> <span class="nn">uci_dataset</span> <span class="k">as</span> <span class="nn">database</span>
 
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">evaluate_set</span><span class="p">,</span> <span class="n">split_data</span>
 <span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
 </pre></div>
 </div>
@@ -774,7 +780,7 @@ memory usage: 642.6+ KB
 <section id="Comparing-different-pipelines">
 <h2>Comparing different pipelines<a class="headerlink" href="#Comparing-different-pipelines" title="Permalink to this heading"></a></h2>
 <p>Using pipelines allow us to compare different pre-processing methods in a easy and efficient way. Here we will build different pipelines, each with different transformations, and then compare the results obtained for each one. But before we can do this, let’s build a function that calls the pipeline’s fit and predict_proba methods, followed by the computation of a few metrics, such as ROC AUC, F1, precision, recall, accuracy, and the confusion matrix. To compute these metrics, we use the
-<strong>evaluate_set</strong> function from the <strong>dataprocessing.model_utils</strong> module.</p>
+<strong>evaluate_set</strong> function from the <strong>utils.model_utils</strong> module.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -788,8 +794,8 @@ memory usage: 642.6+ KB
     <span class="n">best_th_auc</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
     <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-    <span class="n">pred_test</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">x_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="n">dp</span><span class="o">.</span><span class="n">evaluate_set</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_test</span><span class="p">,</span> <span class="n">is_train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">best_th_auc</span><span class="o">=</span><span class="n">best_th_auc</span><span class="p">)</span>
+    <span class="n">pred_test</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">evaluate_set</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred_test</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">best_th_auc</span><span class="o">=</span><span class="n">best_th_auc</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">pipeline</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -832,7 +838,7 @@ memory usage: 642.6+ KB
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -856,27 +862,15 @@ memory usage: 642.6+ KB
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
-[[503  71]
- [  9  50]]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/dataprocessing/model_utils.py:74: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
+[[501  73]
+ [  7  52]]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/notebooks_dataprocessing_module_tests_pipeline_test_14_2.png" src="../../../_images/notebooks_dataprocessing_module_tests_pipeline_test_14_2.png" />
+<img alt="../../../_images/notebooks_dataprocessing_module_tests_pipeline_test_14_1.png" src="../../../_images/notebooks_dataprocessing_module_tests_pipeline_test_14_1.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -884,15 +878,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 87.36%
-
-Precision:  0.6978225077479339
-
-Recall:  0.8618821236638516
-
-F1 =  0.7409453652547575
-
-ROC AUC =  0.9112088820646076
+ROC AUC: 0.9299001948857261
+Precision: 0.7011102362204724
+Recall: 0.877089115927479
+F1: 0.7456401189423771
+Accuracy: 0.8736176935229067
+Optimal Threshold (ROC curve): 0.1250311491470217
+Optimal Threshold (Precision x Recall curve): 0.251147863435757
+Threshold used: 0.1250311491470217
 </pre></div></div>
 </div>
 </section>
@@ -917,11 +910,8 @@ ROC AUC =  0.9112088820646076
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
-[[548  26]
- [  6  53]]
+[[555  19]
+ [  7  52]]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -936,15 +926,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 94.94%
-
-Precision:  0.8300278755198098
-
-Recall:  0.926504458749188
-
-F1 =  0.8698735738513722
-
-ROC AUC =  0.9268587964330006
+ROC AUC: 0.9250280517333019
+Precision: 0.8599694250914741
+Recall: 0.9241274434536113
+F1: 0.888556338028169
+Accuracy: 0.9589257503949447
+Optimal Threshold (ROC curve): 0.29745720239980394
+Optimal Threshold (Precision x Recall curve): 0.43828324901046595
+Threshold used: 0.29745720239980394
 </pre></div></div>
 </div>
 </section>
@@ -968,20 +957,26 @@ ROC AUC =  0.9268587964330006
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
+<div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
-[[551  23]
- [  5  54]]
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/catboost/core.py:1222: FutureWarning: iteritems is deprecated and will be removed in a future version. Use .items instead.
+  self._init_pool(data, label, cat_features, text_features, embedding_features, pairs, weight,
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/notebooks_dataprocessing_module_tests_pipeline_test_18_1.png" src="../../../_images/notebooks_dataprocessing_module_tests_pipeline_test_18_1.png" />
+<div class="highlight"><pre>
+[[548  26]
+ [  7  52]]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/notebooks_dataprocessing_module_tests_pipeline_test_18_2.png" src="../../../_images/notebooks_dataprocessing_module_tests_pipeline_test_18_2.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -989,15 +984,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 95.58%
-
-Precision:  0.8461529477716527
-
-Recall:  0.9375922754384929
-
-F1 =  0.8846694429984383
-
-ROC AUC =  0.9362782731943543
+ROC AUC: 0.9340046063898896
+Precision: 0.827027027027027
+Recall: 0.9180298824780015
+F1: 0.8649473405183838
+Accuracy: 0.9478672985781991
+Optimal Threshold (ROC curve): 0.22808377020466744
+Optimal Threshold (Precision x Recall curve): 0.4029785100782772
+Threshold used: 0.22808377020466744
 </pre></div></div>
 </div>
 </section>
@@ -1007,8 +1001,13 @@ ROC AUC =  0.9362782731943543
 <p>The transformations in SKLearn always return a numpy array, while the transformers in our <strong>dataprocessing</strong> library usually operate over a Pandas DataFrame (although these transformers also accept numpy arrays as input). The latter uses dataframes in order to allow it to filter specific columns, just like we did when we created the DataStandardScaler object and specified that only the columns in the <strong>float_cols</strong> list should be scaled. With a numpy array, we can also do this, but instead of
 using column names, we are forced to use the column indices instead, since numpy arrays doesn’t have column names.</p>
 <p>In this scenario, when we place a transformer from the SKLearn library before a transformer from the <strong>dataprocessing</strong> library in a Pipeline, we must be aware that we’ll lose the column names (considering that the input to the Pipeline is indeed a Pandas dataframe) after the sklearn transformer calls its transform() method. This way, all of the transformers after this point will have to use column indices instead of column names, as depicted in the following example. In this example, we’ll use
-the SKLearn’s <strong>SimpleImputer</strong> instead of using our similar class, the <strong>BasicImputer</strong>, just so we can test the behavior of the Pipeline class with transformers from both SKLearn and <strong>dataprocessing</strong> libraries. We’ll execute the following steps in this pipeline: 1) encode the columns “sex” and “on_thyroxine” using one-hot encoding, 2) impute missing data by replacing it with a -100 value, 3) apply a min-max scaler over the column “age”, 4) apply an ordinal encoding over all of the remaining
-categorical variables.</p>
+the SKLearn’s <strong>SimpleImputer</strong> instead of using our similar class, the <strong>BasicImputer</strong>, just so we can test the behavior of the Pipeline class with transformers from both SKLearn and <strong>dataprocessing</strong> libraries. We’ll execute the following steps in this pipeline:</p>
+<ol class="arabic simple">
+<li><p>encode the columns “sex” and “on_thyroxine” using one-hot encoding,</p></li>
+<li><p>impute missing data by replacing it with a -100 value,</p></li>
+<li><p>apply a min-max scaler over the column “age”,</p></li>
+<li><p>apply an ordinal encoding over all of the remaining categorical variables.</p></li>
+</ol>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
@@ -1074,8 +1073,8 @@ categorical variables.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.757576</td>
-      <td>1</td>
+      <td>0.641414</td>
+      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1085,11 +1084,11 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>122.0</td>
+      <td>10.0</td>
       <td>1</td>
-      <td>0.75</td>
+      <td>0.9</td>
       <td>1</td>
-      <td>162.0</td>
+      <td>12.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
@@ -1098,7 +1097,7 @@ categorical variables.</p>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.883838</td>
+      <td>0.929293</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1109,11 +1108,11 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>122.0</td>
+      <td>162.0</td>
       <td>1</td>
       <td>1.03</td>
       <td>1</td>
-      <td>119.0</td>
+      <td>158.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
@@ -1122,7 +1121,7 @@ categorical variables.</p>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.797980</td>
+      <td>0.000000</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1133,23 +1132,23 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>67.0</td>
+      <td>175.0</td>
       <td>1</td>
-      <td>0.82</td>
+      <td>0.86</td>
       <td>1</td>
-      <td>82.0</td>
+      <td>204.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
-      <td>0</td>
       <td>1</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0.904040</td>
+      <td>0.858586</td>
       <td>0</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
       <td>1</td>
       <td>0</td>
       <td>0</td>
@@ -1157,11 +1156,11 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>111.0</td>
+      <td>69.0</td>
       <td>1</td>
-      <td>0.87</td>
+      <td>0.83</td>
       <td>1</td>
-      <td>127.0</td>
+      <td>83.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
@@ -1170,7 +1169,7 @@ categorical variables.</p>
     </tr>
     <tr>
       <th>4</th>
-      <td>0.606061</td>
+      <td>0.808081</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1181,16 +1180,16 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>149.0</td>
+      <td>130.0</td>
       <td>1</td>
-      <td>0.99</td>
+      <td>0.94</td>
       <td>1</td>
-      <td>150.0</td>
+      <td>138.0</td>
       <td>0</td>
       <td>-100</td>
       <td>1</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>...</th>
@@ -1218,7 +1217,7 @@ categorical variables.</p>
     </tr>
     <tr>
       <th>628</th>
-      <td>0.691919</td>
+      <td>0.863636</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1229,44 +1228,44 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>95.0</td>
+      <td>137.0</td>
       <td>1</td>
-      <td>0.97</td>
+      <td>1.11</td>
       <td>1</td>
-      <td>99.0</td>
+      <td>123.0</td>
       <td>0</td>
       <td>-100</td>
-      <td>0</td>
+      <td>1</td>
       <td>0</td>
       <td>0</td>
     </tr>
     <tr>
       <th>629</th>
-      <td>0.782828</td>
+      <td>0.606061</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
+      <td>1</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>127.0</td>
+      <td>110.0</td>
       <td>1</td>
-      <td>1.1</td>
+      <td>0.92</td>
       <td>1</td>
-      <td>116.0</td>
+      <td>120.0</td>
       <td>0</td>
       <td>-100</td>
-      <td>1</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>630</th>
-      <td>0.782828</td>
+      <td>0.000000</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1277,11 +1276,11 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>144.0</td>
+      <td>79.0</td>
       <td>1</td>
-      <td>1.24</td>
+      <td>1.0</td>
       <td>1</td>
-      <td>116.0</td>
+      <td>80.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
@@ -1290,31 +1289,31 @@ categorical variables.</p>
     </tr>
     <tr>
       <th>631</th>
-      <td>0.772727</td>
+      <td>0.858586</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
+      <td>1</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>104.0</td>
+      <td>68.0</td>
       <td>1</td>
-      <td>0.93</td>
+      <td>0.0</td>
       <td>1</td>
-      <td>112.0</td>
+      <td>78.0</td>
       <td>0</td>
       <td>-100</td>
-      <td>1</td>
+      <td>0</td>
       <td>0</td>
       <td>0</td>
     </tr>
     <tr>
       <th>632</th>
-      <td>0.904040</td>
+      <td>0.616162</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1325,13 +1324,13 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>107.0</td>
-      <td>1</td>
-      <td>0.85</td>
-      <td>1</td>
-      <td>126.0</td>
+      <td>-100</td>
       <td>0</td>
       <td>-100</td>
+      <td>0</td>
+      <td>-100</td>
+      <td>1</td>
+      <td>110.0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1407,8 +1406,8 @@ categorical variables.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.757576</td>
-      <td>1</td>
+      <td>0.641414</td>
+      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1418,11 +1417,11 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>122.0</td>
+      <td>10.0</td>
       <td>1</td>
-      <td>0.75</td>
+      <td>0.9</td>
       <td>1</td>
-      <td>162.0</td>
+      <td>12.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
@@ -1431,7 +1430,7 @@ categorical variables.</p>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.883838</td>
+      <td>0.929293</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1442,11 +1441,11 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>122.0</td>
+      <td>162.0</td>
       <td>1</td>
       <td>1.03</td>
       <td>1</td>
-      <td>119.0</td>
+      <td>158.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
@@ -1455,7 +1454,7 @@ categorical variables.</p>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.797980</td>
+      <td>0.000000</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1466,23 +1465,23 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>67.0</td>
+      <td>175.0</td>
       <td>1</td>
-      <td>0.82</td>
+      <td>0.86</td>
       <td>1</td>
-      <td>82.0</td>
+      <td>204.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
-      <td>0</td>
       <td>1</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0.904040</td>
+      <td>0.858586</td>
       <td>0</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
       <td>1</td>
       <td>0</td>
       <td>0</td>
@@ -1490,11 +1489,11 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>111.0</td>
+      <td>69.0</td>
       <td>1</td>
-      <td>0.87</td>
+      <td>0.83</td>
       <td>1</td>
-      <td>127.0</td>
+      <td>83.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
@@ -1503,7 +1502,7 @@ categorical variables.</p>
     </tr>
     <tr>
       <th>4</th>
-      <td>0.606061</td>
+      <td>0.808081</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1514,16 +1513,16 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>149.0</td>
+      <td>130.0</td>
       <td>1</td>
-      <td>0.99</td>
+      <td>0.94</td>
       <td>1</td>
-      <td>150.0</td>
+      <td>138.0</td>
       <td>0</td>
       <td>-100</td>
       <td>1</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>...</th>
@@ -1551,7 +1550,7 @@ categorical variables.</p>
     </tr>
     <tr>
       <th>628</th>
-      <td>0.691919</td>
+      <td>0.863636</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1562,44 +1561,44 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>95.0</td>
+      <td>137.0</td>
       <td>1</td>
-      <td>0.97</td>
+      <td>1.11</td>
       <td>1</td>
-      <td>99.0</td>
+      <td>123.0</td>
       <td>0</td>
       <td>-100</td>
-      <td>0</td>
+      <td>1</td>
       <td>0</td>
       <td>0</td>
     </tr>
     <tr>
       <th>629</th>
-      <td>0.782828</td>
+      <td>0.606061</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
+      <td>1</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>127.0</td>
+      <td>110.0</td>
       <td>1</td>
-      <td>1.1</td>
+      <td>0.92</td>
       <td>1</td>
-      <td>116.0</td>
+      <td>120.0</td>
       <td>0</td>
       <td>-100</td>
-      <td>1</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>630</th>
-      <td>0.782828</td>
+      <td>0.000000</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1610,11 +1609,11 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>144.0</td>
+      <td>79.0</td>
       <td>1</td>
-      <td>1.24</td>
+      <td>1.0</td>
       <td>1</td>
-      <td>116.0</td>
+      <td>80.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
@@ -1623,31 +1622,31 @@ categorical variables.</p>
     </tr>
     <tr>
       <th>631</th>
-      <td>0.772727</td>
+      <td>0.858586</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
+      <td>1</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>104.0</td>
+      <td>68.0</td>
       <td>1</td>
-      <td>0.93</td>
+      <td>0.0</td>
       <td>1</td>
-      <td>112.0</td>
+      <td>78.0</td>
       <td>0</td>
       <td>-100</td>
-      <td>1</td>
+      <td>0</td>
       <td>0</td>
       <td>0</td>
     </tr>
     <tr>
       <th>632</th>
-      <td>0.904040</td>
+      <td>0.616162</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1658,13 +1657,13 @@ categorical variables.</p>
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>107.0</td>
-      <td>1</td>
-      <td>0.85</td>
-      <td>1</td>
-      <td>126.0</td>
+      <td>-100</td>
       <td>0</td>
       <td>-100</td>
+      <td>0</td>
+      <td>-100</td>
+      <td>1</td>
+      <td>110.0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1747,9 +1746,9 @@ all transformers will receive a dataframe as input, without losing the column na
   </thead>
   <tbody>
     <tr>
-      <th>956</th>
-      <td>0.757576</td>
-      <td>1</td>
+      <th>3073</th>
+      <td>0.641414</td>
+      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1759,11 +1758,11 @@ all transformers will receive a dataframe as input, without losing the column na
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>122.0</td>
+      <td>10.0</td>
       <td>1</td>
-      <td>0.75</td>
+      <td>0.90</td>
       <td>1</td>
-      <td>162.0</td>
+      <td>12.0</td>
       <td>0</td>
       <td>-100.0</td>
       <td>0</td>
@@ -1771,8 +1770,8 @@ all transformers will receive a dataframe as input, without losing the column na
       <td>0</td>
     </tr>
     <tr>
-      <th>1009</th>
-      <td>0.883838</td>
+      <th>1839</th>
+      <td>0.929293</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1783,11 +1782,11 @@ all transformers will receive a dataframe as input, without losing the column na
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>122.0</td>
+      <td>162.0</td>
       <td>1</td>
       <td>1.03</td>
       <td>1</td>
-      <td>119.0</td>
+      <td>158.0</td>
       <td>0</td>
       <td>-100.0</td>
       <td>0</td>
@@ -1795,8 +1794,8 @@ all transformers will receive a dataframe as input, without losing the column na
       <td>0</td>
     </tr>
     <tr>
-      <th>2187</th>
-      <td>0.797980</td>
+      <th>3096</th>
+      <td>0.000000</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1807,23 +1806,23 @@ all transformers will receive a dataframe as input, without losing the column na
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>67.0</td>
+      <td>175.0</td>
       <td>1</td>
-      <td>0.82</td>
+      <td>0.86</td>
       <td>1</td>
-      <td>82.0</td>
+      <td>204.0</td>
       <td>0</td>
       <td>-100.0</td>
       <td>0</td>
-      <td>0</td>
       <td>1</td>
+      <td>0</td>
     </tr>
     <tr>
-      <th>961</th>
-      <td>0.904040</td>
+      <th>1147</th>
+      <td>0.858586</td>
       <td>0</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
       <td>1</td>
       <td>0</td>
       <td>0</td>
@@ -1831,11 +1830,11 @@ all transformers will receive a dataframe as input, without losing the column na
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>111.0</td>
+      <td>69.0</td>
       <td>1</td>
-      <td>0.87</td>
+      <td>0.83</td>
       <td>1</td>
-      <td>127.0</td>
+      <td>83.0</td>
       <td>0</td>
       <td>-100.0</td>
       <td>0</td>
@@ -1843,8 +1842,8 @@ all transformers will receive a dataframe as input, without losing the column na
       <td>0</td>
     </tr>
     <tr>
-      <th>2514</th>
-      <td>0.606061</td>
+      <th>2413</th>
+      <td>0.808081</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1855,16 +1854,16 @@ all transformers will receive a dataframe as input, without losing the column na
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>149.0</td>
+      <td>130.0</td>
       <td>1</td>
-      <td>0.99</td>
+      <td>0.94</td>
       <td>1</td>
-      <td>150.0</td>
+      <td>138.0</td>
       <td>0</td>
       <td>-100.0</td>
       <td>1</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>...</th>
@@ -1891,8 +1890,8 @@ all transformers will receive a dataframe as input, without losing the column na
       <td>...</td>
     </tr>
     <tr>
-      <th>2864</th>
-      <td>0.691919</td>
+      <th>148</th>
+      <td>0.863636</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1903,83 +1902,11 @@ all transformers will receive a dataframe as input, without losing the column na
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>95.0</td>
+      <td>137.0</td>
       <td>1</td>
-      <td>0.97</td>
+      <td>1.11</td>
       <td>1</td>
-      <td>99.0</td>
-      <td>0</td>
-      <td>-100.0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>1034</th>
-      <td>0.782828</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>127.0</td>
-      <td>1</td>
-      <td>1.10</td>
-      <td>1</td>
-      <td>116.0</td>
-      <td>0</td>
-      <td>-100.0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1909</th>
-      <td>0.782828</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>144.0</td>
-      <td>1</td>
-      <td>1.24</td>
-      <td>1</td>
-      <td>116.0</td>
-      <td>0</td>
-      <td>-100.0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>2398</th>
-      <td>0.772727</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>104.0</td>
-      <td>1</td>
-      <td>0.93</td>
-      <td>1</td>
-      <td>112.0</td>
+      <td>123.0</td>
       <td>0</td>
       <td>-100.0</td>
       <td>1</td>
@@ -1987,8 +1914,32 @@ all transformers will receive a dataframe as input, without losing the column na
       <td>0</td>
     </tr>
     <tr>
-      <th>275</th>
-      <td>0.904040</td>
+      <th>2526</th>
+      <td>0.606061</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>110.0</td>
+      <td>1</td>
+      <td>0.92</td>
+      <td>1</td>
+      <td>120.0</td>
+      <td>0</td>
+      <td>-100.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>593</th>
+      <td>0.000000</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -1999,13 +1950,61 @@ all transformers will receive a dataframe as input, without losing the column na
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>107.0</td>
+      <td>79.0</td>
       <td>1</td>
-      <td>0.85</td>
+      <td>1.00</td>
       <td>1</td>
-      <td>126.0</td>
+      <td>80.0</td>
       <td>0</td>
       <td>-100.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2203</th>
+      <td>0.858586</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>68.0</td>
+      <td>1</td>
+      <td>0.00</td>
+      <td>1</td>
+      <td>78.0</td>
+      <td>0</td>
+      <td>-100.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1302</th>
+      <td>0.616162</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>-100.0</td>
+      <td>0</td>
+      <td>-100.00</td>
+      <td>0</td>
+      <td>-100.0</td>
+      <td>1</td>
+      <td>110.0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -2089,9 +2088,9 @@ dataframe is never lost. To do this, the user must pass the transformer object t
   </thead>
   <tbody>
     <tr>
-      <th>956</th>
-      <td>0.757576</td>
-      <td>1</td>
+      <th>3073</th>
+      <td>0.641414</td>
+      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -2101,11 +2100,11 @@ dataframe is never lost. To do this, the user must pass the transformer object t
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>122.0</td>
+      <td>10.0</td>
       <td>1</td>
-      <td>0.75</td>
+      <td>0.9</td>
       <td>1</td>
-      <td>162.0</td>
+      <td>12.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
@@ -2113,8 +2112,8 @@ dataframe is never lost. To do this, the user must pass the transformer object t
       <td>0</td>
     </tr>
     <tr>
-      <th>1009</th>
-      <td>0.883838</td>
+      <th>1839</th>
+      <td>0.929293</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -2125,11 +2124,11 @@ dataframe is never lost. To do this, the user must pass the transformer object t
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>122.0</td>
+      <td>162.0</td>
       <td>1</td>
       <td>1.03</td>
       <td>1</td>
-      <td>119.0</td>
+      <td>158.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
@@ -2137,8 +2136,8 @@ dataframe is never lost. To do this, the user must pass the transformer object t
       <td>0</td>
     </tr>
     <tr>
-      <th>2187</th>
-      <td>0.797980</td>
+      <th>3096</th>
+      <td>0.000000</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -2149,23 +2148,23 @@ dataframe is never lost. To do this, the user must pass the transformer object t
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>67.0</td>
+      <td>175.0</td>
       <td>1</td>
-      <td>0.82</td>
+      <td>0.86</td>
       <td>1</td>
-      <td>82.0</td>
+      <td>204.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
-      <td>0</td>
       <td>1</td>
+      <td>0</td>
     </tr>
     <tr>
-      <th>961</th>
-      <td>0.904040</td>
+      <th>1147</th>
+      <td>0.858586</td>
       <td>0</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
       <td>1</td>
       <td>0</td>
       <td>0</td>
@@ -2173,11 +2172,11 @@ dataframe is never lost. To do this, the user must pass the transformer object t
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>111.0</td>
+      <td>69.0</td>
       <td>1</td>
-      <td>0.87</td>
+      <td>0.83</td>
       <td>1</td>
-      <td>127.0</td>
+      <td>83.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
@@ -2185,8 +2184,8 @@ dataframe is never lost. To do this, the user must pass the transformer object t
       <td>0</td>
     </tr>
     <tr>
-      <th>2514</th>
-      <td>0.606061</td>
+      <th>2413</th>
+      <td>0.808081</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -2197,16 +2196,16 @@ dataframe is never lost. To do this, the user must pass the transformer object t
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>149.0</td>
+      <td>130.0</td>
       <td>1</td>
-      <td>0.99</td>
+      <td>0.94</td>
       <td>1</td>
-      <td>150.0</td>
+      <td>138.0</td>
       <td>0</td>
       <td>-100</td>
       <td>1</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>...</th>
@@ -2233,8 +2232,8 @@ dataframe is never lost. To do this, the user must pass the transformer object t
       <td>...</td>
     </tr>
     <tr>
-      <th>2864</th>
-      <td>0.691919</td>
+      <th>148</th>
+      <td>0.863636</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -2245,83 +2244,11 @@ dataframe is never lost. To do this, the user must pass the transformer object t
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>95.0</td>
+      <td>137.0</td>
       <td>1</td>
-      <td>0.97</td>
+      <td>1.11</td>
       <td>1</td>
-      <td>99.0</td>
-      <td>0</td>
-      <td>-100</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>1034</th>
-      <td>0.782828</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>127.0</td>
-      <td>1</td>
-      <td>1.1</td>
-      <td>1</td>
-      <td>116.0</td>
-      <td>0</td>
-      <td>-100</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1909</th>
-      <td>0.782828</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>144.0</td>
-      <td>1</td>
-      <td>1.24</td>
-      <td>1</td>
-      <td>116.0</td>
-      <td>0</td>
-      <td>-100</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>2398</th>
-      <td>0.772727</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>104.0</td>
-      <td>1</td>
-      <td>0.93</td>
-      <td>1</td>
-      <td>112.0</td>
+      <td>123.0</td>
       <td>0</td>
       <td>-100</td>
       <td>1</td>
@@ -2329,8 +2256,32 @@ dataframe is never lost. To do this, the user must pass the transformer object t
       <td>0</td>
     </tr>
     <tr>
-      <th>275</th>
-      <td>0.904040</td>
+      <th>2526</th>
+      <td>0.606061</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>110.0</td>
+      <td>1</td>
+      <td>0.92</td>
+      <td>1</td>
+      <td>120.0</td>
+      <td>0</td>
+      <td>-100</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>593</th>
+      <td>0.000000</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -2341,13 +2292,61 @@ dataframe is never lost. To do this, the user must pass the transformer object t
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>107.0</td>
+      <td>79.0</td>
       <td>1</td>
-      <td>0.85</td>
+      <td>1.0</td>
       <td>1</td>
-      <td>126.0</td>
+      <td>80.0</td>
       <td>0</td>
       <td>-100</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2203</th>
+      <td>0.858586</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>68.0</td>
+      <td>1</td>
+      <td>0.0</td>
+      <td>1</td>
+      <td>78.0</td>
+      <td>0</td>
+      <td>-100</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1302</th>
+      <td>0.616162</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>-100</td>
+      <td>0</td>
+      <td>-100</td>
+      <td>0</td>
+      <td>-100</td>
+      <td>1</td>
+      <td>110.0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -2453,9 +2452,9 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
   </thead>
   <tbody>
     <tr>
-      <th>956</th>
-      <td>0.757576</td>
-      <td>1</td>
+      <th>3073</th>
+      <td>0.641414</td>
+      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -2465,11 +2464,11 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>122.0</td>
+      <td>10.0</td>
       <td>1</td>
-      <td>0.75</td>
+      <td>0.9</td>
       <td>1</td>
-      <td>162.0</td>
+      <td>12.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
@@ -2477,8 +2476,8 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
       <td>0</td>
     </tr>
     <tr>
-      <th>1009</th>
-      <td>0.883838</td>
+      <th>1839</th>
+      <td>0.929293</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -2489,11 +2488,11 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>122.0</td>
+      <td>162.0</td>
       <td>1</td>
       <td>1.03</td>
       <td>1</td>
-      <td>119.0</td>
+      <td>158.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
@@ -2501,8 +2500,8 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
       <td>0</td>
     </tr>
     <tr>
-      <th>2187</th>
-      <td>0.797980</td>
+      <th>3096</th>
+      <td>0.000000</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -2513,23 +2512,23 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>67.0</td>
+      <td>175.0</td>
       <td>1</td>
-      <td>0.82</td>
+      <td>0.86</td>
       <td>1</td>
-      <td>82.0</td>
+      <td>204.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
-      <td>0</td>
       <td>1</td>
+      <td>0</td>
     </tr>
     <tr>
-      <th>961</th>
-      <td>0.904040</td>
+      <th>1147</th>
+      <td>0.858586</td>
       <td>0</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
       <td>1</td>
       <td>0</td>
       <td>0</td>
@@ -2537,11 +2536,11 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>111.0</td>
+      <td>69.0</td>
       <td>1</td>
-      <td>0.87</td>
+      <td>0.83</td>
       <td>1</td>
-      <td>127.0</td>
+      <td>83.0</td>
       <td>0</td>
       <td>-100</td>
       <td>0</td>
@@ -2549,8 +2548,8 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
       <td>0</td>
     </tr>
     <tr>
-      <th>2514</th>
-      <td>0.606061</td>
+      <th>2413</th>
+      <td>0.808081</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -2561,16 +2560,16 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>149.0</td>
+      <td>130.0</td>
       <td>1</td>
-      <td>0.99</td>
+      <td>0.94</td>
       <td>1</td>
-      <td>150.0</td>
+      <td>138.0</td>
       <td>0</td>
       <td>-100</td>
       <td>1</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>...</th>
@@ -2597,8 +2596,8 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
       <td>...</td>
     </tr>
     <tr>
-      <th>2864</th>
-      <td>0.691919</td>
+      <th>148</th>
+      <td>0.863636</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -2609,83 +2608,11 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>95.0</td>
+      <td>137.0</td>
       <td>1</td>
-      <td>0.97</td>
+      <td>1.11</td>
       <td>1</td>
-      <td>99.0</td>
-      <td>0</td>
-      <td>-100</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>1034</th>
-      <td>0.782828</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>127.0</td>
-      <td>1</td>
-      <td>1.1</td>
-      <td>1</td>
-      <td>116.0</td>
-      <td>0</td>
-      <td>-100</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1909</th>
-      <td>0.782828</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>144.0</td>
-      <td>1</td>
-      <td>1.24</td>
-      <td>1</td>
-      <td>116.0</td>
-      <td>0</td>
-      <td>-100</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>2398</th>
-      <td>0.772727</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>104.0</td>
-      <td>1</td>
-      <td>0.93</td>
-      <td>1</td>
-      <td>112.0</td>
+      <td>123.0</td>
       <td>0</td>
       <td>-100</td>
       <td>1</td>
@@ -2693,8 +2620,32 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
       <td>0</td>
     </tr>
     <tr>
-      <th>275</th>
-      <td>0.904040</td>
+      <th>2526</th>
+      <td>0.606061</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>110.0</td>
+      <td>1</td>
+      <td>0.92</td>
+      <td>1</td>
+      <td>120.0</td>
+      <td>0</td>
+      <td>-100</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>593</th>
+      <td>0.000000</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
@@ -2705,13 +2656,61 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
       <td>0</td>
       <td>0</td>
       <td>...</td>
-      <td>107.0</td>
+      <td>79.0</td>
       <td>1</td>
-      <td>0.85</td>
+      <td>1.0</td>
       <td>1</td>
-      <td>126.0</td>
+      <td>80.0</td>
       <td>0</td>
       <td>-100</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2203</th>
+      <td>0.858586</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>68.0</td>
+      <td>1</td>
+      <td>0.0</td>
+      <td>1</td>
+      <td>78.0</td>
+      <td>0</td>
+      <td>-100</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1302</th>
+      <td>0.616162</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>-100</td>
+      <td>0</td>
+      <td>-100</td>
+      <td>0</td>
+      <td>-100</td>
+      <td>1</td>
+      <td>110.0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>

@@ -1,0 +1,6 @@
+<map id="inheritance0e28191508" name="inheritance0e28191508">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,31,77,56"/>
+<area shape="rect" id="node2" href="../dataprocessing.html#raimitigations.dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,31,248,56"/>
+<area shape="rect" id="node3" href="rebalance.html#raimitigations.dataprocessing.Rebalance" target="_top" title="Concrete class that uses under and oversampling approaches (implemented" alt="" coords="300,5,391,31"/>
+<area shape="rect" id="node4" href="synthesizer.html#raimitigations.dataprocessing.Synthesizer" target="_top" title="Concrete class that uses generative models (implemented in the :mod:`sdv` library)" alt="" coords="296,55,395,80"/>
+</map>

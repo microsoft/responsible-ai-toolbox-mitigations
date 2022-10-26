@@ -1,13 +1,13 @@
 DataQuantileTransformer
 =======================
 
-.. autoclass:: dataprocessing.DataQuantileTransformer
+.. autoclass:: raimitigations.dataprocessing.DataQuantileTransformer
    :members:
    :show-inheritance:
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.DataQuantileTransformer
+.. inheritance-diagram:: raimitigations.dataprocessing.DataQuantileTransformer
      :parts: 1
 
 

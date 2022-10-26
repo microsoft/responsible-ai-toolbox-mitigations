@@ -18,6 +18,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -69,6 +70,8 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -127,7 +130,7 @@ multiple machine learning libraries, such as scikit-learn, mlxtend, sdv, among o
 this module is that it allows users to create their data processing pipelines using a single library, without
 worrying about making sure that the output from one mitigation (found in one library) is compatible with the
 output of a second mitigation (found in a separate library). As this library grows, we aim to offer an even larger
-amount of mitigation, and also offer complex solutions in a simple and ​easy-to-use interface.</p>
+amount of mitigation, and also offer complex solutions in a simple and easy-to-use interface.</p>
 <p>Some of the classes available here are meant to be a wrapper for some other class found in one of these libraries,
 with the goal of making simplifications to the usage of these approaches, while also automating certain steps. Other
 classes offer unique solutions to a given aspect found in the area of data preprocessing for tabular data. All classes
@@ -138,7 +141,7 @@ several different customization options, making the module ideal for those with 
 <h2>Structure<a class="headerlink" href="#structure" title="Permalink to this heading"></a></h2>
 <p>The <strong>dataprocessing</strong> module uses a base class (<strong>DataProcessing</strong>) that implements several tasks shared
 across the different transformation classes. Whenever possible, the classes implemented in this module follow
-the .fit() and .transform() behavior from scikit-learn, making these classes compatible with scikit-learn.
+the <code class="docutils literal notranslate"><span class="pre">.fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">.transform()</span></code> behavior from scikit-learn, making these classes compatible with scikit-learn.
 Each class aims to mitigate a certain aspect of tabular datasets. For each of these aspects, there might be one
 or more different solutions for it. This way, we create a hierarchy, where each problem category has its own
 abstract class (that inherits from the main abstract <strong>DataProcessing</strong> class), where each of these classes has
@@ -151,13 +154,12 @@ different encoding approaches (<a class="reference internal" href="encoder/ohe.h
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="dataprocessing.html">DataProcessing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dataprocessing.html#raimitigations.dataprocessing.DataProcessing"><code class="docutils literal notranslate"><span class="pre">DataProcessing</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="encoder/encoder.html">Encoders</a></li>
 <li class="toctree-l2"><a class="reference internal" href="feat_sel/feat_sel.html">Feature Selection</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputer/imputer.html">Imputers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sampler/sampler.html">Sampling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scaler/scaler.html">Scalers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_utils.html">Model Utils</a></li>
-<li class="toctree-l2"><a class="reference internal" href="toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>

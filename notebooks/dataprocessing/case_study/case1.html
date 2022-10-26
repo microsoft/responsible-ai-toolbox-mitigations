@@ -18,6 +18,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -52,6 +53,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../../gallery.html">Gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#dataprocessing">DataProcessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort">Cohort</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../module_tests/model_test.html">Simple Example</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Case Study 1</a><ul>
@@ -70,6 +72,7 @@
 <li class="toctree-l3"><a class="reference internal" href="case3_stat.html">Case Study 3 - Multiple Runs</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort-case-studies">Cohort Case Studies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
@@ -78,6 +81,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -384,7 +389,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -393,6 +398,7 @@ div.rendered_html tbody tr:hover {
 <span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">split_data</span><span class="p">,</span> <span class="n">train_model_plot_results</span>
 </pre></div>
 </div>
 </div>
@@ -403,7 +409,7 @@ div.rendered_html tbody tr:hover {
 <h2>Fixing a seed<a class="headerlink" href="#Fixing-a-seed" title="Permalink to this heading"></a></h2>
 <p>To avoid randomness in the following experiments, we’ll fix the seeds to guarantee that the results obtained are the same each time we run this notebook. Feel free to comment the next cell or test different seeds to see how this affects the results.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
@@ -415,19 +421,19 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;torch._C.Generator at 0x7f5b834d2e70&gt;
+&lt;torch._C.Generator at 0x7f25279f79f0&gt;
 </pre></div></div>
 </div>
 </section>
 <section id="1---Understanding-the-Data">
 <h2>1 - Understanding the Data<a class="headerlink" href="#1---Understanding-the-Data" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">database</span><span class="o">.</span><span class="n">load_breast_cancer</span><span class="p">()</span>
@@ -437,7 +443,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -621,7 +627,7 @@ div.rendered_html tbody tr:hover {
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
@@ -655,7 +661,7 @@ memory usage: 22.5+ KB
 <p>There are several categorical data in this dataset. Actually, only one feature is numeric, while the remaining columns are all categorical. Therefore, we should take a closer look at each column in order to determine which encoding method should be used to each one. From the summary of the dataset, presented two cells up, we notice that many of the categorical classes doesn’t present any order. For these, we should use One-Hot encoding. However, some of these columns present some order among
 their categories. For example, the <strong>age</strong> column presents a hierarchical information. Let’s take a look a these ordered categorical data:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;age unique values = </span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -679,7 +685,7 @@ inv-nodes unique values = [&#39;0-2&#39; &#39;6-8&#39; &#39;9-11&#39; &#39;3-5&#
 <p>Before modifying the dataset, let’s analyze the correlations within its columns. To do that, let’s use the <strong>CorrelatedFeatures</strong> class, which computes the correlation between numerical x numerical, categorical x numerical, and categorical x categorical data. Please refer to the notebook in <strong>notebooks/module_tests/feat_sel_corr_tutorial.ipynb</strong> for an in depth analysis of this class. In a nutshell: this class will compute the correlation between all pairs of variables (or we can look only to a
 specific set of variables if needed) and remove one variable for each pair of correlated variables. This class uses a fit method to compute the correlations and a transform method to effectively remove the correlated variables. For now, we are only interested in analysing the correlations between the columns. We will save the results found by this class in the files specified by <em>json_summary</em>, <em>json_corr</em>, and <em>json_uncorr</em>, respectively.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_feat</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">CorrelatedFeatures</span><span class="p">(</span>
@@ -708,12 +714,12 @@ No correlations detected. Nothing to be done here.
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;raimitigations.dataprocessing.feat_selection.correlated_features.CorrelatedFeatures at 0x7f5b3fc33250&gt;
+&lt;raimitigations.dataprocessing.feat_selection.correlated_features.CorrelatedFeatures at 0x7f259488ba00&gt;
 </pre></div></div>
 </div>
 <p>Remember to look through the JSON files generated in the previous cell.</p>
@@ -726,7 +732,7 @@ No correlations detected. Nothing to be done here.
 encoder how it should order the encoding numbers (lower values will be associated to the initial categories, while higher encoding values will be associated to the final categories). After creating the encoder object from the <strong>EncoderOrdinal</strong> class, we call its fit method while passing the dataset <strong>df</strong> to it. We then call the transform method, which returns a new copy of the dataset with the categorical columns specified encoded using ordinal encoding. We then proceed to perform the one-hot
 encoding by instantiating an object of class <strong>EncoderOHE</strong> and then calling its fit and transform methods.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set the order that the ordinal encoder should use</span>
@@ -764,7 +770,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1021,7 +1027,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <p>We can now check that our dataset has only numerical columns in it.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">proc_df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
@@ -1043,30 +1049,34 @@ Data columns (total 16 columns):
  2   tumor-size             286 non-null    int64
  3   inv-nodes              286 non-null    int64
  4   deg-malig              286 non-null    int64
- 5   menopause_lt40         286 non-null    int64
- 6   menopause_premeno      286 non-null    int64
- 7   node-caps_yes          286 non-null    int64
- 8   node-caps_nan          286 non-null    int64
- 9   breast_right           286 non-null    int64
- 10  breast-quad_left_low   286 non-null    int64
- 11  breast-quad_left_up    286 non-null    int64
- 12  breast-quad_right_low  286 non-null    int64
- 13  breast-quad_right_up   286 non-null    int64
- 14  breast-quad_nan        286 non-null    int64
- 15  irradiat_yes           286 non-null    int64
-dtypes: int64(16)
-memory usage: 35.9 KB
+ 5   menopause_lt40         286 non-null    int32
+ 6   menopause_premeno      286 non-null    int32
+ 7   node-caps_yes          286 non-null    int32
+ 8   node-caps_nan          286 non-null    int32
+ 9   breast_right           286 non-null    int32
+ 10  breast-quad_left_low   286 non-null    int32
+ 11  breast-quad_left_up    286 non-null    int32
+ 12  breast-quad_right_low  286 non-null    int32
+ 13  breast-quad_right_up   286 non-null    int32
+ 14  breast-quad_nan        286 non-null    int32
+ 15  irradiat_yes           286 non-null    int32
+dtypes: int32(11), int64(5)
+memory usage: 23.6 KB
 </pre></div></div>
 </div>
 </section>
 <section id="Impute-Missing-Data-and-Split-Dataset">
 <h3>Impute Missing Data and Split Dataset<a class="headerlink" href="#Impute-Missing-Data-and-Split-Dataset" title="Permalink to this heading"></a></h3>
-<p>The next step consists on doing the following: * split the dataset into train and test sets; * impute any missing data (if any).</p>
+<p>The next step consists on doing the following:</p>
+<ul class="simple">
+<li><p>split the dataset into train and test sets;</p></li>
+<li><p>impute any missing data (if any).</p></li>
+</ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
 
 <span class="n">imputer</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">()</span>
 <span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
@@ -1086,7 +1096,7 @@ No columns specified for imputation. These columns have been automatically ident
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1336,10 +1346,10 @@ No columns specified for imputation. These columns have been automatically ident
 <h2>3 - Baseline Models<a class="headerlink" href="#3---Baseline-Models" title="Permalink to this heading"></a></h2>
 <p>In the following cells, we train different models and plot their results over the test set. These models will be considered our baseline models. We will test 2 models as our baseline: XGBoost and K-Nearest Neighbors (KNN).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1348,9 +1358,9 @@ No columns specified for imputation. These columns have been automatically ident
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
+
+TEST SET:
+
 [[26 25]
  [ 4 17]]
 </pre></div></div>
@@ -1367,22 +1377,21 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 59.72%
-
-Precision:  0.6357142857142857
-
-Recall:  0.6596638655462185
-
-F1 =  0.5908289241622575
-
-ROC AUC =  0.704014939309057
+ROC AUC: 0.704014939309057
+Precision: 0.6357142857142857
+Recall: 0.6596638655462185
+F1: 0.5908289241622575
+Accuracy: 0.5972222222222222
+Optimal Threshold (ROC curve): 0.2437402755022049
+Optimal Threshold (Precision x Recall curve): 0.2437402755022049
+Threshold used: 0.2437402755022049
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1391,9 +1400,9 @@ ROC AUC =  0.704014939309057
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
+
+TEST SET:
+
 [[19 32]
  [ 4 17]]
 </pre></div></div>
@@ -1410,27 +1419,30 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 50.00%
-
-Precision:  0.5865128660159716
-
-Recall:  0.5910364145658263
-
-F1 =  0.49961389961389957
-
-ROC AUC =  0.6087768440709618
+ROC AUC: 0.6087768440709618
+Precision: 0.5865128660159716
+Recall: 0.5910364145658263
+F1: 0.49961389961389957
+Accuracy: 0.5
+Optimal Threshold (ROC curve): 0.2
+Optimal Threshold (Precision x Recall curve): 0.2
+Threshold used: 0.2
 </pre></div></div>
 </div>
 </section>
 <section id="4---Feature-Selection">
 <h2>4 - Feature Selection<a class="headerlink" href="#4---Feature-Selection" title="Permalink to this heading"></a></h2>
-<p>From this point on, we will try to improve (even if slightly) the results of the baseline models. But before jumping into these improvements, an important note: there is some randomness involved in the training process we showed so far due to two factors: * the train and test split; * the model’s training process might involve some randomness.</p>
+<p>From this point on, we will try to improve (even if slightly) the results of the baseline models. But before jumping into these improvements, an important note: there is some randomness involved in the training process we showed so far due to two factors:</p>
+<ul class="simple">
+<li><p>the train and test split;</p></li>
+<li><p>the model’s training process might involve some randomness.</p></li>
+</ul>
 <p>Therefore, if you re-run this notebook with different <code class="docutils literal notranslate"><span class="pre">SEED</span></code> values, you most probably will get different results. Given the small size of the dataset being used here, the split between train and test sets can be crucial for getting good results. This means that some seed values might have results considerably better than others. Keep that in mind when looking through these results and testing different seeds (try commenting the cell where we fix the random seeds to check how the results
 vary). To really test the efficiency of the preprocessing steps shown here, we could run the split and train steps several times and record the mean (and standard deviation) of the results (auc, f1, etc.). This would give us a more powerful result. We encourage the interested user to check the notebook called <strong>notebooks/case_study/case1_stat.ipynb</strong>, which is a notebook where we perform the test previously described.</p>
 <p>Now, let’s get back to our more simple experiments. Since we are using the same train and test split used by the baseline models, then we are good to go. Our first preprocessing (not considering the encoding part and the imputations, since those are mandatory to run the baseline models) is feature selection. Here, we will try the feature selection using the CatBoost model by using the <strong>CatBoostSelection</strong> class. Remember that we must pass the training set to the fit method, and then call the
 transform method over the training and test sets. This way we don’t use any information of the test set for this step, avoiding data contamination.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">CatBoostSelection</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1440,9 +1452,18 @@ transform method over the training and test sets. This way we don’t use any in
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/catboost/core.py:1222: FutureWarning: iteritems is deprecated and will be removed in a future version. Use .items instead.
+  self._init_pool(data, label, cat_features, text_features, embedding_features, pairs, weight,
+</pre></div></div>
+</div>
 <p>Let’s print the selected features:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
@@ -1450,7 +1471,7 @@ transform method over the training and test sets. This way we don’t use any in
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1466,10 +1487,10 @@ transform method over the training and test sets. This way we don’t use any in
 </div>
 <p>Now, let’s re-train the KNN model and see how the feature selection preprocessing step affects the results:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_sel</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_sel</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1478,9 +1499,9 @@ transform method over the training and test sets. This way we don’t use any in
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
+
+TEST SET:
+
 [[45  6]
  [14  7]]
 </pre></div></div>
@@ -1497,15 +1518,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 72.22%
-
-Precision:  0.6505867014341591
-
-Recall:  0.6078431372549019
-
-F1 =  0.6149732620320855
-
-ROC AUC =  0.6321195144724556
+ROC AUC: 0.6321195144724556
+Precision: 0.6505867014341591
+Recall: 0.6078431372549019
+F1: 0.6149732620320855
+Accuracy: 0.7222222222222222
+Optimal Threshold (ROC curve): 0.6
+Optimal Threshold (Precision x Recall curve): 0.2
+Threshold used: 0.6
 </pre></div></div>
 </div>
 <p>Looking at the confusion matrix and comparing it to the baseline KNN model, we can see that the True Positives and True Negatives are now flipped. However, we did get an improvement on the other metrics. Therefore, using feature selection managed to improve the results while using less data (we are now using only 7 columns instead of 9).</p>
@@ -1519,7 +1539,7 @@ ROC AUC =  0.6321195144724556
 dataset and decide the best SMOTE variation to use, apply any under sampling method if requested, and run any preprocessing step if necessary (such as imputation). The user can also explicitly choose which SMOTE version they want by instantiating a SMOTE object (from imblearn) and passing it as a parameter to the <strong>Rebalance</strong> class. The same applies to the under sampling method.</p>
 <p>Here, we use the default options provided by the <strong>Rebalance</strong> class regarding the SMOTE method. We choose to not use any under sampling method and we also specify explicitly the number of instances we want for the different values in the Y column.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
@@ -1527,7 +1547,7 @@ dataset and decide the best SMOTE variation to use, apply any under sampling met
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1539,7 +1559,7 @@ Name: Class, dtype: int64
 </div>
 <p>Since we got an improved performance when using feature selection, we’ll use our new dataset containing only the selected features in the following experiments. Note that these datasets are <code class="docutils literal notranslate"><span class="pre">train_x</span></code> and <code class="docutils literal notranslate"><span class="pre">test_x</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rebalance</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span>
@@ -1566,7 +1586,7 @@ Running oversampling...
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1578,10 +1598,10 @@ Name: Class, dtype: int64
 </div>
 <p>We can now retrain the KNN model using the new dataset with oversampling:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_res</span><span class="p">,</span> <span class="n">train_y_res</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_res</span><span class="p">,</span> <span class="n">train_y_res</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1590,9 +1610,9 @@ Name: Class, dtype: int64
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
+
+TEST SET:
+
 [[44  7]
  [12  9]]
 </pre></div></div>
@@ -1609,15 +1629,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 73.61%
-
-Precision:  0.6741071428571428
-
-Recall:  0.6456582633053222
-
-F1 =  0.6544581965142713
-
-ROC AUC =  0.645658263305322
+ROC AUC: 0.645658263305322
+Precision: 0.6741071428571428
+Recall: 0.6456582633053222
+F1: 0.6544581965142713
+Accuracy: 0.7361111111111112
+Optimal Threshold (ROC curve): 0.6
+Optimal Threshold (Precision x Recall curve): 0.6
+Threshold used: 0.6
 </pre></div></div>
 </div>
 <p>As we can see here, the oversampling managed to improve the results for the test set even further (compared to the feature selection step).</p>
@@ -1629,7 +1648,7 @@ ROC AUC =  0.645658263305322
 <h4>CTGAN<a class="headerlink" href="#CTGAN" title="Permalink to this heading"></a></h4>
 <p>In the next cell, we use the <strong>Synthesizer</strong> class to create artificial data using the CTGAN model. Similarly to what we’ve done in the <strong>Rebalance</strong> experiment, we’ll use the datasets produced by the feature selection step. We can also try training the CTGAN for more epochs and see how this affects the results.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">synth</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Synthesizer</span><span class="p">(</span>
@@ -1651,32 +1670,55 @@ ROC AUC =  0.645658263305322
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/mmendonca/anaconda3/envs/test3.7/lib/python3.7/site-packages/sklearn/mixture/_base.py:146: ConvergenceWarning: Number of distinct clusters (7) found smaller than n_clusters (10). Possibly due to duplicate points in X.
-  .fit(X)
-/home/mmendonca/anaconda3/envs/test3.7/lib/python3.7/site-packages/sklearn/mixture/_base.py:146: ConvergenceWarning: Number of distinct clusters (3) found smaller than n_clusters (10). Possibly due to duplicate points in X.
-  .fit(X)
-/home/mmendonca/anaconda3/envs/test3.7/lib/python3.7/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (7) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+  cluster.KMeans(
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (3) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+  cluster.KMeans(
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/test3.7/lib/python3.7/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/test3.7/lib/python3.7/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
+Sampling conditions:   0%|          | 0/20 [00:00&lt;?, ?it/s]/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sdv/tabular/base.py:608: FutureWarning: In a future version of pandas, a length 1 tuple will be returned when iterating over a groupby with a grouper equal to a list of length 1. Don&#39;t supply a list with a single grouper to avoid this warning.
+  for group, dataframe in grouped_conditions:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sdv/tabular/base.py:639: FutureWarning: In a future version of pandas, a length 1 tuple will be returned when iterating over a groupby with a grouper equal to a list of length 1. Don&#39;t supply a list with a single grouper to avoid this warning.
+  for transformed_group, transformed_dataframe in transformed_groups:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+Sampling conditions: 100%|██████████| 20/20 [00:00&lt;00:00, 215.10it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1687,10 +1729,10 @@ Name: Class, dtype: int64
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">syn_train_x</span><span class="p">,</span> <span class="n">syn_train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">syn_train_x</span><span class="p">,</span> <span class="n">syn_train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1699,11 +1741,11 @@ Name: Class, dtype: int64
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-------------
-TEST
-------------
-[[36 15]
- [ 9 12]]
+
+TEST SET:
+
+[[38 13]
+ [ 8 13]]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1718,15 +1760,14 @@ TEST
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Acuracy: 66.67%
-
-Precision:  0.6222222222222222
-
-Recall:  0.6386554621848739
-
-F1 =  0.625
-
-ROC AUC =  0.6395891690009337
+ROC AUC: 0.6862745098039216
+Precision: 0.6630434782608696
+Recall: 0.6820728291316527
+F1: 0.6683483220004387
+Accuracy: 0.7083333333333334
+Optimal Threshold (ROC curve): 0.4
+Optimal Threshold (Precision x Recall curve): 0.4
+Threshold used: 0.4
 </pre></div></div>
 </div>
 <p>Comparing the results to the feature selection step, we notice that the results obtained here are worse for all metrics. Therefore, in this scenario, the CTGAN didn’t manage to improve the performance as the <strong>Rebalance</strong> class.</p>

@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Defining a Cohort &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="CohortManager" href="../../cohort/cohort_manager.html" />
+    <link rel="prev" title="CohortDefinition" href="../../cohort/cohort_definition.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../gallery.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#dataprocessing">DataProcessing</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../gallery.html#cohort">Cohort</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Defining a Cohort</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Creating-a-CohortDefinition-object">Creating a CohortDefinition object</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Saving-and-Loading-a-Cohort-Definition-JSON">Saving and Loading a Cohort Definition JSON</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cohort_manager.html">Managing cohorts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#case-studies">Case Studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#cohort-case-studies">Cohort Case Studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils/utils.html">Utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../api.html">API reference</a> &raquo;</li>
+          <li><a href="../../cohort/cohort.html">Cohort</a> &raquo;</li>
+          <li><a href="../../cohort/cohort_definition.html">CohortDefinition</a> &raquo;</li>
+      <li>Defining a Cohort</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/cohort/cohort_definition.ipynb" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Defining-a-Cohort">
+<h1>Defining a Cohort<a class="headerlink" href="#Defining-a-Cohort" title="Permalink to this heading"></a></h1>
+<p>This library allows users to apply certain mitigations over a specific cohort, instead of ​applying it to the entire dataset. This is useful when, for example, two cohorts have a very different label distribution and we want to rebalance each cohort individually, instead of rebalancing the entire dataset. In some scenarios, applying a mitigation over each cohort separately is more advantageous than applying it over the whole dataset.</p>
+<p>In this notebook, we’ll start covering this topic by showing how to define a single cohort. The class <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> is the one responsible for handling a single cohort, and this class is used internally by the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class in order to accomplish the tasks described previously.</p>
+<p>For starters, let’s create a very simple dataset that we can use throughout this notebook.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">raimitigations.cohort</span> <span class="kn">import</span> <span class="n">CohortDefinition</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;race&quot;</span><span class="p">:</span>     <span class="p">[</span><span class="s1">&#39;elf&#39;</span><span class="p">,</span> <span class="s1">&#39;orc&#39;</span><span class="p">,</span> <span class="s1">&#39;halfling&#39;</span><span class="p">,</span> <span class="s1">&#39;human&#39;</span><span class="p">,</span> <span class="s1">&#39;halfling&#39;</span><span class="p">,</span> <span class="s1">&#39;orc&#39;</span><span class="p">,</span> <span class="s1">&#39;elf&#39;</span><span class="p">,</span> <span class="s1">&#39;orc&#39;</span><span class="p">,</span> <span class="s1">&#39;human&#39;</span><span class="p">,</span> <span class="s1">&#39;orc&#39;</span><span class="p">],</span>
+    <span class="s2">&quot;height(m)&quot;</span><span class="p">:[</span><span class="mf">1.6</span><span class="p">,</span>   <span class="mf">1.95</span><span class="p">,</span>  <span class="mf">1.40</span><span class="p">,</span>       <span class="mf">1.75</span><span class="p">,</span>     <span class="mf">1.53</span><span class="p">,</span>      <span class="mf">2.10</span><span class="p">,</span>   <span class="mf">1.85</span><span class="p">,</span>  <span class="mf">1.79</span><span class="p">,</span>  <span class="mf">1.65</span><span class="p">,</span>   <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span>
+    <span class="s2">&quot;past_score&quot;</span><span class="p">:[</span><span class="mi">85</span><span class="p">,</span>   <span class="mi">59</span><span class="p">,</span>    <span class="mi">19</span><span class="p">,</span>          <span class="mi">89</span><span class="p">,</span>      <span class="mi">91</span><span class="p">,</span>        <span class="mi">79</span><span class="p">,</span>      <span class="mi">45</span><span class="p">,</span>   <span class="mi">82</span><span class="p">,</span>    <span class="mi">47</span><span class="p">,</span>     <span class="mi">87</span>  <span class="p">],</span>
+    <span class="s2">&quot;score&quot;</span><span class="p">:</span>    <span class="p">[</span><span class="mi">90</span><span class="p">,</span>    <span class="mi">43</span><span class="p">,</span>    <span class="mi">29</span><span class="p">,</span>          <span class="mi">99</span><span class="p">,</span>      <span class="mi">85</span><span class="p">,</span>        <span class="mi">73</span><span class="p">,</span>      <span class="mi">58</span><span class="p">,</span>   <span class="mi">94</span><span class="p">,</span>    <span class="mi">37</span><span class="p">,</span>     <span class="mi">51</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>race</th>
+      <th>height(m)</th>
+      <th>past_score</th>
+      <th>score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>elf</td>
+      <td>1.60</td>
+      <td>85</td>
+      <td>90</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>orc</td>
+      <td>1.95</td>
+      <td>59</td>
+      <td>43</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>halfling</td>
+      <td>1.40</td>
+      <td>19</td>
+      <td>29</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>human</td>
+      <td>1.75</td>
+      <td>89</td>
+      <td>99</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>halfling</td>
+      <td>1.53</td>
+      <td>91</td>
+      <td>85</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>orc</td>
+      <td>2.10</td>
+      <td>79</td>
+      <td>73</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>elf</td>
+      <td>1.85</td>
+      <td>45</td>
+      <td>58</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>orc</td>
+      <td>1.79</td>
+      <td>82</td>
+      <td>94</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>human</td>
+      <td>1.65</td>
+      <td>47</td>
+      <td>37</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>orc</td>
+      <td>NaN</td>
+      <td>87</td>
+      <td>51</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<section id="Creating-a-CohortDefinition-object">
+<h2>Creating a CohortDefinition object<a class="headerlink" href="#Creating-a-CohortDefinition-object" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> class aims to solve the following task: given a set of conditions, provide methods for automatically filtering a dataset using the conditions provided to the constructor method and return a subset of the original dataset containing only the desired cohort. This is a very lightweight class, and it’s main goal is to facilitate solving more complex tasks regarding cohort management (check out the documentation for the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class for more details).</p>
+<p>Given our simple fantasy dataset, let’s try creating a cohort where we have only:</p>
+<ul class="simple">
+<li><p>Elves with a height above or equal 1.8 meters</p></li>
+<li><p>Orcs with a height above or equal 1.8 meters</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> has it’s own language for understanding a set of conditions. The conditions must be formatted into a list of lists, where:</p>
+<ul class="simple">
+<li><p>The most inner lists must always contain 3 variables:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Column</span> <span class="pre">name:</span></code> the column name used for setting a condition. If the dataset has no columns, use the column index instead, but remember to provide the column index as a string;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Inner</span> <span class="pre">Operator:</span></code> the operator used to associate the <code class="docutils literal notranslate"><span class="pre">column_name</span></code> (given by the first variable) with the <code class="docutils literal notranslate"><span class="pre">value</span></code> provided (given by the third and last variable in the list). The allowed inner ops are:</p>
+<ul>
+<li><p><strong>Equal (‘==’):</strong> if the <code class="docutils literal notranslate"><span class="pre">value</span></code> provided is a single value, then this condition is set as <strong>“all instances where ``column_name`` is equal to ``value``”</strong>. However, if <code class="docutils literal notranslate"><span class="pre">value</span></code> is a list, then the condition is set as <strong>“all instances where ``column_name`` is one of the values in the ``value`` list”</strong>;</p></li>
+<li><p><strong>Different (‘!=’):</strong> similar to the <em>equal</em> operator: accepts <code class="docutils literal notranslate"><span class="pre">value</span></code> as a single value or a list of values;</p></li>
+<li><p><strong>Greater (‘&gt;’):</strong> <code class="docutils literal notranslate"><span class="pre">value</span></code> must be a single value;</p></li>
+<li><p><strong>Greater or Equal (‘&gt;=’):</strong> <code class="docutils literal notranslate"><span class="pre">value</span></code> must be a single value;</p></li>
+<li><p><strong>Lesser (‘&lt;’):</strong> <code class="docutils literal notranslate"><span class="pre">value</span></code> must be a single value;</p></li>
+<li><p><strong>Lesser or Equal (‘&lt;=’):</strong> <code class="docutils literal notranslate"><span class="pre">value</span></code> must be a single value;</p></li>
+<li><p><strong>Range (‘range’):</strong> <code class="docutils literal notranslate"><span class="pre">value</span></code> must be a list with only 2 values: the minimum and maximum values defining the boundaries of the range, respectively. This operator also includes the minimum and maximum values of the range (<code class="docutils literal notranslate"><span class="pre">value[0]</span></code> &lt;= <code class="docutils literal notranslate"><span class="pre">column_name</span></code> &lt;= <code class="docutils literal notranslate"><span class="pre">value[1</span></code>]).</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Value:</span></code> the value used in the condition. It can be a numerical or categorical value. If the <code class="docutils literal notranslate"><span class="pre">value</span></code> provided is another column name, then a comparison between two columns is performed (we’ll check an example ahead).</p></li>
+</ol>
+</li>
+<li><p>Between two inner lists, there must be a <code class="docutils literal notranslate"><span class="pre">Outer</span> <span class="pre">Operator</span></code>, which can be: <code class="docutils literal notranslate"><span class="pre">and</span></code> or <code class="docutils literal notranslate"><span class="pre">or</span></code>.</p></li>
+<li><p>With this basic set of rules, we can create complex conditions for a cohort by concatenating multiple simple conditions (inner lists) using the <code class="docutils literal notranslate"><span class="pre">and</span></code> and <code class="docutils literal notranslate"><span class="pre">or</span></code> operators.</p></li>
+</ul>
+<p>Now, let’s create a <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> object using the conditions previously mentioned:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;elf&#39;</span><span class="p">],</span> <span class="s1">&#39;or&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;orc&#39;</span><span class="p">]</span> <span class="p">],</span>
+                <span class="s1">&#39;and&#39;</span><span class="p">,</span>
+                <span class="p">[</span><span class="s1">&#39;height(m)&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">]</span>
+            <span class="p">]</span>
+
+<span class="n">cht_def</span> <span class="o">=</span> <span class="n">CohortDefinition</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
+<span class="n">subset</span> <span class="o">=</span> <span class="n">cht_def</span><span class="o">.</span><span class="n">get_cohort_subset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">subset</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>race</th>
+      <th>height(m)</th>
+      <th>past_score</th>
+      <th>score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>orc</td>
+      <td>1.95</td>
+      <td>59</td>
+      <td>43</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>orc</td>
+      <td>2.10</td>
+      <td>79</td>
+      <td>73</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>elf</td>
+      <td>1.85</td>
+      <td>45</td>
+      <td>58</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_cohort_subset()</span></code> method simply applies the cohort’s filter over any dataset provided. If the dataset provided to this method doesn’t have the required columns, and error will be raised. Note that the <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> class is not associated with any specific dataset. It aims to simply convert a set of conditions into a query, which can then be used over any dataset that has the required columns (the columns used in the filters).</p>
+<p>In the example above, notice that we used two <code class="docutils literal notranslate"><span class="pre">equal</span></code> conditions to specify that the <code class="docutils literal notranslate"><span class="pre">race</span></code> should be either <code class="docutils literal notranslate"><span class="pre">elf</span></code> or <code class="docutils literal notranslate"><span class="pre">orc</span></code>. Let’s recreate this condition, but this time we’ll use a list assigned to the <code class="docutils literal notranslate"><span class="pre">equal</span></code> operator:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;elf&#39;</span><span class="p">,</span> <span class="s1">&#39;orc&#39;</span><span class="p">]</span> <span class="p">]</span> <span class="p">],</span>
+                <span class="s1">&#39;and&#39;</span><span class="p">,</span>
+                <span class="p">[</span><span class="s1">&#39;height(m)&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">]</span>
+            <span class="p">]</span>
+
+<span class="n">cht_def</span> <span class="o">=</span> <span class="n">CohortDefinition</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
+<span class="n">subset</span> <span class="o">=</span> <span class="n">cht_def</span><span class="o">.</span><span class="n">get_cohort_subset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">subset</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>race</th>
+      <th>height(m)</th>
+      <th>past_score</th>
+      <th>score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>orc</td>
+      <td>1.95</td>
+      <td>59</td>
+      <td>43</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>orc</td>
+      <td>2.10</td>
+      <td>79</td>
+      <td>73</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>elf</td>
+      <td>1.85</td>
+      <td>45</td>
+      <td>58</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>In the following cells, we’ll show a few other examples where we use other operators:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;height(m)&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">cht_def</span> <span class="o">=</span> <span class="n">CohortDefinition</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
+<span class="n">subset</span> <span class="o">=</span> <span class="n">cht_def</span><span class="o">.</span><span class="n">get_cohort_subset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">subset</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>race</th>
+      <th>height(m)</th>
+      <th>past_score</th>
+      <th>score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>9</th>
+      <td>orc</td>
+      <td>NaN</td>
+      <td>87</td>
+      <td>51</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;height(m)&#39;</span><span class="p">,</span> <span class="s1">&#39;range&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">]],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;!=&#39;</span><span class="p">,</span> <span class="s1">&#39;halfling&#39;</span><span class="p">]</span> <span class="p">]</span> <span class="p">]</span>
+
+<span class="n">cht_def</span> <span class="o">=</span> <span class="n">CohortDefinition</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
+<span class="n">subset</span> <span class="o">=</span> <span class="n">cht_def</span><span class="o">.</span><span class="n">get_cohort_subset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">subset</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>race</th>
+      <th>height(m)</th>
+      <th>past_score</th>
+      <th>score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>elf</td>
+      <td>1.60</td>
+      <td>85</td>
+      <td>90</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>human</td>
+      <td>1.65</td>
+      <td>47</td>
+      <td>37</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;height(m)&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span>
+              <span class="s1">&#39;and&#39;</span><span class="p">,</span>
+              <span class="p">[</span><span class="s1">&#39;height(m)&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="mf">1.99</span><span class="p">],</span>
+              <span class="s1">&#39;and&#39;</span><span class="p">,</span>
+              <span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span> <span class="mi">70</span><span class="p">]</span>
+            <span class="p">]</span>
+
+<span class="n">cht_def</span> <span class="o">=</span> <span class="n">CohortDefinition</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
+<span class="n">subset</span> <span class="o">=</span> <span class="n">cht_def</span><span class="o">.</span><span class="n">get_cohort_subset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">subset</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>race</th>
+      <th>height(m)</th>
+      <th>past_score</th>
+      <th>score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>orc</td>
+      <td>1.95</td>
+      <td>59</td>
+      <td>43</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>elf</td>
+      <td>1.85</td>
+      <td>45</td>
+      <td>58</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>human</td>
+      <td>1.65</td>
+      <td>47</td>
+      <td>37</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>We can also create a condition that compares the values between two different columns:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span> <span class="s1">&#39;past_score&#39;</span><span class="p">]</span> <span class="p">]</span>
+
+<span class="n">cht_def</span> <span class="o">=</span> <span class="n">CohortDefinition</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
+<span class="n">subset</span> <span class="o">=</span> <span class="n">cht_def</span><span class="o">.</span><span class="n">get_cohort_subset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">subset</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>race</th>
+      <th>height(m)</th>
+      <th>past_score</th>
+      <th>score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>orc</td>
+      <td>1.95</td>
+      <td>59</td>
+      <td>43</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>halfling</td>
+      <td>1.53</td>
+      <td>91</td>
+      <td>85</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>orc</td>
+      <td>2.10</td>
+      <td>79</td>
+      <td>73</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>human</td>
+      <td>1.65</td>
+      <td>47</td>
+      <td>37</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>orc</td>
+      <td>NaN</td>
+      <td>87</td>
+      <td>51</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Saving-and-Loading-a-Cohort-Definition-JSON">
+<h2>Saving and Loading a Cohort Definition JSON<a class="headerlink" href="#Saving-and-Loading-a-Cohort-Definition-JSON" title="Permalink to this heading"></a></h2>
+<p>Sometimes it is useful to save the definitions used for a cohort. This way, we can later create a new <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> object using the same conditions as the ones used for the saved cohort.</p>
+<p>To save a cohort definition JSON file, simply use the <code class="docutils literal notranslate"><span class="pre">save()</span></code> method.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cht_def</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;single_cohort.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>To load a JSON file, simply pass the JSON file’s path to the constructor of the class.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_cht</span> <span class="o">=</span> <span class="n">CohortDefinition</span><span class="p">(</span><span class="s2">&quot;single_cohort.json&quot;</span><span class="p">)</span>
+<span class="n">subset</span> <span class="o">=</span> <span class="n">new_cht</span><span class="o">.</span><span class="n">get_cohort_subset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">subset</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>race</th>
+      <th>height(m)</th>
+      <th>past_score</th>
+      <th>score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>orc</td>
+      <td>1.95</td>
+      <td>59</td>
+      <td>43</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>halfling</td>
+      <td>1.53</td>
+      <td>91</td>
+      <td>85</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>orc</td>
+      <td>2.10</td>
+      <td>79</td>
+      <td>73</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>human</td>
+      <td>1.65</td>
+      <td>47</td>
+      <td>37</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>orc</td>
+      <td>NaN</td>
+      <td>87</td>
+      <td>51</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../cohort/cohort_definition.html" class="btn btn-neutral float-left" title="CohortDefinition" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../cohort/cohort_manager.html" class="btn btn-neutral float-right" title="CohortManager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

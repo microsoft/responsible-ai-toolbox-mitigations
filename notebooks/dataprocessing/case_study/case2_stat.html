@@ -18,6 +18,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -52,6 +53,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../../gallery.html">Gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#dataprocessing">DataProcessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort">Cohort</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../module_tests/model_test.html">Simple Example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="case1.html">Case Study 1</a></li>
@@ -67,6 +69,7 @@
 <li class="toctree-l3"><a class="reference internal" href="case3_stat.html">Case Study 3 - Multiple Runs</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort-case-studies">Cohort Case Studies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
@@ -75,6 +78,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -398,6 +403,7 @@ div.rendered_html tbody tr:hover {
 <span class="kn">import</span> <span class="nn">uci_dataset</span> <span class="k">as</span> <span class="nn">database</span>
 <span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">figure</span>
 
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">train_model_fetch_results</span><span class="p">,</span> <span class="n">split_data</span>
 <span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
 <span class="kn">import</span> <span class="nn">case_study_utils</span> <span class="k">as</span> <span class="nn">cs</span>
 
@@ -414,8 +420,8 @@ div.rendered_html tbody tr:hover {
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
     <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
             <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
     <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
@@ -428,8 +434,8 @@ div.rendered_html tbody tr:hover {
     <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
             <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
     <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
@@ -442,9 +448,9 @@ div.rendered_html tbody tr:hover {
     <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
             <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">transform_num_data</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
             <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
     <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
@@ -458,14 +464,14 @@ div.rendered_html tbody tr:hover {
     <span class="k">if</span> <span class="n">rcorr</span><span class="p">:</span>
             <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">art_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">artificial_smote</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">art_str</span><span class="p">,</span> <span class="n">under</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">feat_sel_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">feature_selection</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">scaler_ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">transform_num_data</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
             <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
     <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
@@ -481,7 +487,7 @@ div.rendered_html tbody tr:hover {
     <span class="k">if</span> <span class="n">rcorr</span><span class="p">:</span>
             <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">art_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">artificial_ctgan</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">art_str</span><span class="p">,</span> <span class="n">savefile</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">feat_sel_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -743,7 +749,13 @@ div.rendered_html tbody tr:hover {
 </section>
 <section id="Feature-Selection">
 <h4>Feature Selection<a class="headerlink" href="#Feature-Selection" title="Permalink to this heading"></a></h4>
-<p>Now we will perform feature selection, where all features are removed from the dataset to improve the model performance. We will compare two different feature selection pipelines with two baseline models. - Baseline KNN model - KNN model with robust scaler - KNN model, robust scaler, sequential feature selection - KNN model, robust scaler, CatBoost feature selection</p>
+<p>Now we will perform feature selection, where all features are removed from the dataset to improve the model performance. We will compare two different feature selection pipelines with two baseline models.</p>
+<ul class="simple">
+<li><p>Baseline KNN model</p></li>
+<li><p>KNN model with robust scaler</p></li>
+<li><p>KNN model, robust scaler, sequential feature selection</p></li>
+<li><p>KNN model, robust scaler, CatBoost feature selection</p></li>
+</ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -782,8 +794,15 @@ div.rendered_html tbody tr:hover {
 </section>
 <section id="Artificial-Instances---SMOTE">
 <h4>Artificial Instances - SMOTE<a class="headerlink" href="#Artificial-Instances---SMOTE" title="Permalink to this heading"></a></h4>
-<p>Since we have imbalanced classes (most trees are not diseased), we will experiment with creating artificial data. - baseline KNN model - baseline KNN model with robust scaler and removal of correlated features - KNN model, remove correlated features, SMOTE artificial data - KNN model, remove correlated features, robust scaler, SMOTE artificial data - KNN model, remove correlated features, SMOTE artificial data, TomekLink under sampling - KNN model, remove correlated features, robust scaler,
-SMOTE artificial data, TomekLink under sampling</p>
+<p>Since we have imbalanced classes (most trees are not diseased), we will experiment with creating artificial data.</p>
+<ul class="simple">
+<li><p>baseline KNN model</p></li>
+<li><p>baseline KNN model with robust scaler and removal of correlated features</p></li>
+<li><p>KNN model, remove correlated features, SMOTE artificial data</p></li>
+<li><p>KNN model, remove correlated features, robust scaler, SMOTE artificial data</p></li>
+<li><p>KNN model, remove correlated features, SMOTE artificial data, TomekLink under sampling</p></li>
+<li><p>KNN model, remove correlated features, robust scaler, SMOTE artificial data, TomekLink under sampling</p></li>
+</ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
@@ -868,7 +887,13 @@ SMOTE artificial data, TomekLink under sampling</p>
 </section>
 <section id="Artificial-Instances---CTGAN">
 <h4>Artificial Instances - CTGAN<a class="headerlink" href="#Artificial-Instances---CTGAN" title="Permalink to this heading"></a></h4>
-<p>Instead of doing over sampling using SMOTE and its variations, we can create artificial instances of the minority class using the CTGAN. Here we perform the following experiments: - KNN baseline model - baseline KNN model with robust scaler and removal of correlated features - KNN model, robust scaler, removal of correlated features, over sampling with CTGAN ratio of 0.15 - KNN model, robust scaler, removal of correlated features, over sampling with CTGAN ratio of 0.3</p>
+<p>Instead of doing over sampling using SMOTE and its variations, we can create artificial instances of the minority class using the CTGAN. Here we perform the following experiments:</p>
+<ul class="simple">
+<li><p>KNN baseline model</p></li>
+<li><p>baseline KNN model with robust scaler and removal of correlated features</p></li>
+<li><p>KNN model, robust scaler, removal of correlated features, over sampling with CTGAN ratio of 0.15</p></li>
+<li><p>KNN model, robust scaler, removal of correlated features, over sampling with CTGAN ratio of 0.3</p></li>
+</ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>

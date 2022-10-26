@@ -1,0 +1,6 @@
+<map id="inheritanceb7763ff56e" name="inheritanceb7763ff56e">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node4" href="../dataprocessing.html#raimitigations.dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node2" href="#raimitigations.dataprocessing.CorrelatedFeatures" target="_top" title="Concrete class that measures the correlation between variables" alt="" coords="475,5,621,31"/>
+<area shape="rect" id="node3" href="feat_sel.html#raimitigations.dataprocessing.FeatureSelection" target="_top" title="Base class for all feature selection subclasses. Implements basic" alt="" coords="296,5,427,31"/>
+</map>

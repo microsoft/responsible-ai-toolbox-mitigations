@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cohort Utils &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cohort Case Study 1" href="../notebooks/cohort/case_study/case_1.html" />
+    <link rel="prev" title="Managing cohorts" href="../notebooks/cohort/cohort_manager.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="intro.html">Cohort</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="cohort.html">Cohort</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cohort_definition.html">CohortDefinition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cohort_manager.html">CohortManager</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Cohort Utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/utils.html">Utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API reference</a> &raquo;</li>
+          <li><a href="cohort.html">Cohort</a> &raquo;</li>
+      <li>Cohort Utils</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/cohort/utils.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="module-raimitigations.cohort.utils">
+<span id="id1"></span><span id="cohort-utils"></span><h1>Cohort Utils<a class="headerlink" href="#module-raimitigations.cohort.utils" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="raimitigations.cohort.utils.fetch_cohort_results">
+<span class="sig-prename descclassname"><span class="pre">raimitigations.cohort.utils.</span></span><span class="sig-name descname"><span class="pre">fetch_cohort_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohort_def</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohort_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.utils.fetch_cohort_results" title="Permalink to this definition"></a></dt>
+<dd><p>Computes several classification or regression metrics for a given array of predictions
+for the entire dataset and for a set of cohorts. The cohorts used to compute
+these metrics are defined by the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> or <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameters
+(but not both). These parameters are the ones used in the constructor method
+of the <a class="reference internal" href="cohort_manager.html#raimitigations.cohort.CohortManager" title="raimitigations.cohort.CohortManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">CohortManager</span></code></a> class. Each metric is computed
+separately for each set of predictions belonging to each of the existing cohorts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> – the dataset containing the feature columns. This dataset is used to
+filter the instances that belong to each cohort;</p></li>
+<li><p><strong>y_true</strong> – the true labels of the instances in the <code class="docutils literal notranslate"><span class="pre">X</span></code> dataset;</p></li>
+<li><p><strong>y_pred</strong> – the predicted labels;</p></li>
+<li><p><strong>cohort_def</strong> – a list of cohort definitions, a dictionary of cohort definitions,
+or the path to a JSON file containing the definition of all cohorts. For more
+details on this parameter, please check the <a class="reference internal" href="cohort_manager.html#raimitigations.cohort.CohortManager" title="raimitigations.cohort.CohortManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">CohortManager</span></code></a>
+class;</p></li>
+<li><p><strong>cohort_col</strong> – a list of column names or indices, from which one cohort is created for each
+unique combination of values for these columns. This parameter is ignored if <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code>
+is provided;</p></li>
+<li><p><strong>regression</strong> – if True, regression metrics are computed. If False, only classification
+metrics are computed;</p></li>
+<li><p><strong>shared_th</strong> – if True, the binarization of the predictions is made using the same threshold
+for all cohorts. The threshold used is the one computed for the entire dataset. If False,
+a different threshold is computed for each cohort;</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dataframe containing the metrics for the entire dataset and for all the defined
+cohorts.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/cohort/case_study/case_1.html">
+          <span class="std std-ref">Cohort Case Study 1</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/cohort/case_study/case_2.html">
+          <span class="std std-ref">Cohort Case Study 2</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/cohort/case_study/case_3.html">
+          <span class="std std-ref">Cohort Case Study 3</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-clear"></div></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../notebooks/cohort/cohort_manager.html" class="btn btn-neutral float-left" title="Managing cohorts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../notebooks/cohort/case_study/case_1.html" class="btn btn-neutral float-right" title="Cohort Case Study 1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

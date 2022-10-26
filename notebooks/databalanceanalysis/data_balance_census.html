@@ -18,6 +18,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -67,7 +68,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../gallery.html#dataprocessing">DataProcessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#cohort">Cohort</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../gallery.html#case-studies">Case Studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#cohort-case-studies">Cohort Case Studies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
@@ -76,6 +79,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -387,7 +392,7 @@ div.rendered_html tbody tr:hover {
 <p>This dataset can be used to predict whether annual income exceeds $50,000/year or not based on demographic data from the 1994 U.S. Census. The dataset we’re reading contains 32,561 rows and 14 columns/features.</p>
 <p><a class="reference external" href="https://archive.ics.uci.edu/ml/datasets/Adult">More info on the dataset here</a></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>

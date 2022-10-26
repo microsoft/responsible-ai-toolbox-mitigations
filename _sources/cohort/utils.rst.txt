@@ -1,0 +1,15 @@
+.. _cohort_utils:
+
+Cohort Utils
+============
+
+.. automodule:: raimitigations.cohort.utils
+   :members:
+
+Examples
+--------
+
+.. nbgallery::
+   ../notebooks/cohort/case_study/case_1
+   ../notebooks/cohort/case_study/case_2
+   ../notebooks/cohort/case_study/case_3

@@ -18,6 +18,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -52,6 +53,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../../gallery.html">Gallery</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#dataprocessing">DataProcessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort">Cohort</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Simple Example</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#1---Base-Model">1 - Base Model</a></li>
@@ -68,6 +70,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../case_study/case3_stat.html">Case Study 3 - Multiple Runs</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort-case-studies">Cohort Case Studies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
@@ -76,6 +79,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -394,7 +399,9 @@ div.rendered_html tbody tr:hover {
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">split_data</span><span class="p">,</span> <span class="n">train_model_plot_results</span>
 <span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Rebalance</span><span class="p">,</span>
     <span class="n">EncoderOrdinal</span><span class="p">,</span>
@@ -409,37 +416,21 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="k">def</span> <span class="nf">plot_confusion_matrix</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
-    <span class="n">cm</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">estimator</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">cm</span><span class="p">)</span>
-    <span class="n">cm</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">estimator</span><span class="o">.</span><span class="n">classes_</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="s1">&#39;true&#39;</span><span class="p">)</span>
-    <span class="n">disp</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">ConfusionMatrixDisplay</span><span class="p">(</span><span class="n">confusion_matrix</span><span class="o">=</span><span class="n">cm</span><span class="p">,</span> <span class="n">display_labels</span><span class="o">=</span><span class="n">estimator</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span>
-    <span class="n">disp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">)</span>
-    <span class="n">disp</span><span class="o">.</span><span class="n">ax_</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Confusion Matrix&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/&#39;</span>
 <span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
 <span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
 <span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;employee_id&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">label_col</span> <span class="o">=</span> <span class="s1">&#39;is_promoted&#39;</span>
 <span class="n">dataset</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -660,41 +651,22 @@ div.rendered_html tbody tr:hover {
 </div>
 <section id="1---Base-Model">
 <h2>1 - Base Model<a class="headerlink" href="#1---Base-Model" title="Permalink to this heading"></a></h2>
-<p>Define a function that splits the data into train and test sets. We then use the function to split the data.</p>
+<p>Split the data into training and test sets.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">label_col</span> <span class="o">=</span> <span class="s1">&#39;is_promoted&#39;</span>
-
-<span class="k">def</span> <span class="nf">split_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">full_df</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">label</span><span class="p">])</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">label</span><span class="p">]</span>
-    <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
-                                                                                    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
-                                                                                    <span class="n">test_size</span><span class="o">=</span><span class="n">test_size</span><span class="p">,</span>
-                                                                                    <span class="n">stratify</span><span class="o">=</span><span class="n">y</span>
-                                                                            <span class="p">)</span>
-    <span class="k">if</span> <span class="n">full_df</span><span class="p">:</span>
-            <span class="n">train_df</span> <span class="o">=</span> <span class="n">train_x</span>
-            <span class="n">train_df</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_y</span>
-            <span class="n">test_df</span> <span class="o">=</span> <span class="n">test_x</span>
-            <span class="n">test_df</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_y</span>
-            <span class="k">return</span> <span class="n">train_df</span><span class="p">,</span> <span class="n">test_df</span>
-
-    <span class="k">return</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span>
-
-<span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
-<span class="n">org_train_x</span> <span class="o">=</span> <span class="n">train_x</span>
-<span class="n">org_train_y</span> <span class="o">=</span> <span class="n">train_y</span>
-<span class="n">org_test_x</span> <span class="o">=</span> <span class="n">test_x</span>
-<span class="n">org_test_y</span> <span class="o">=</span> <span class="n">test_y</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">org_train_x</span> <span class="o">=</span> <span class="n">train_x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">org_train_y</span> <span class="o">=</span> <span class="n">train_y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">org_test_x</span> <span class="o">=</span> <span class="n">test_x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">org_test_y</span> <span class="o">=</span> <span class="n">test_y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">train_x</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -725,80 +697,86 @@ div.rendered_html tbody tr:hover {
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>31648</th>
-      <td>HR</td>
+      <th>33758</th>
+      <td>Procurement</td>
       <td>region_2</td>
       <td>Bachelor's</td>
       <td>f</td>
       <td>sourcing</td>
       <td>1</td>
-      <td>50</td>
-      <td>5.0</td>
-      <td>7</td>
-      <td>0</td>
-      <td>46</td>
-    </tr>
-    <tr>
-      <th>13743</th>
-      <td>Operations</td>
-      <td>region_29</td>
-      <td>Master's &amp; above</td>
-      <td>m</td>
-      <td>other</td>
-      <td>2</td>
-      <td>35</td>
-      <td>4.0</td>
-      <td>2</td>
-      <td>0</td>
-      <td>57</td>
-    </tr>
-    <tr>
-      <th>34156</th>
-      <td>Procurement</td>
-      <td>region_3</td>
-      <td>Bachelor's</td>
-      <td>m</td>
-      <td>sourcing</td>
+      <td>39</td>
+      <td>3.0</td>
+      <td>10</td>
       <td>1</td>
-      <td>29</td>
-      <td>4.0</td>
-      <td>4</td>
       <td>0</td>
       <td>68</td>
     </tr>
     <tr>
-      <th>37856</th>
-      <td>Operations</td>
-      <td>region_7</td>
-      <td>Bachelor's</td>
+      <th>9792</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_15</td>
+      <td>NaN</td>
       <td>m</td>
       <td>other</td>
       <td>1</td>
-      <td>34</td>
-      <td>3.0</td>
-      <td>8</td>
+      <td>32</td>
+      <td>2.0</td>
+      <td>3</td>
+      <td>1</td>
       <td>0</td>
-      <td>59</td>
+      <td>48</td>
     </tr>
     <tr>
-      <th>41155</th>
+      <th>30081</th>
       <td>Technology</td>
-      <td>region_13</td>
+      <td>region_22</td>
+      <td>Master's &amp; above</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>4</td>
+      <td>33</td>
+      <td>5.0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>77</td>
+    </tr>
+    <tr>
+      <th>50328</th>
+      <td>Legal</td>
+      <td>region_2</td>
+      <td>Master's &amp; above</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>2</td>
+      <td>35</td>
+      <td>3.0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+    </tr>
+    <tr>
+      <th>13100</th>
+      <td>Operations</td>
+      <td>region_7</td>
       <td>Bachelor's</td>
       <td>f</td>
-      <td>sourcing</td>
+      <td>other</td>
       <td>1</td>
-      <td>28</td>
-      <td>NaN</td>
+      <td>32</td>
+      <td>4.0</td>
+      <td>2</td>
       <td>1</td>
       <td>0</td>
-      <td>78</td>
+      <td>60</td>
     </tr>
     <tr>
       <th>...</th>
@@ -813,85 +791,91 @@ div.rendered_html tbody tr:hover {
       <td>...</td>
       <td>...</td>
       <td>...</td>
+      <td>...</td>
     </tr>
     <tr>
-      <th>48452</th>
-      <td>Technology</td>
-      <td>region_2</td>
-      <td>Below Secondary</td>
-      <td>m</td>
-      <td>sourcing</td>
-      <td>1</td>
-      <td>20</td>
-      <td>3.0</td>
-      <td>2</td>
-      <td>0</td>
-      <td>81</td>
-    </tr>
-    <tr>
-      <th>3967</th>
-      <td>Analytics</td>
-      <td>region_4</td>
+      <th>17487</th>
+      <td>Procurement</td>
+      <td>region_26</td>
       <td>Bachelor's</td>
-      <td>m</td>
+      <td>f</td>
       <td>other</td>
-      <td>1</td>
-      <td>31</td>
+      <td>2</td>
+      <td>25</td>
       <td>3.0</td>
       <td>3</td>
       <td>0</td>
-      <td>86</td>
+      <td>0</td>
+      <td>74</td>
     </tr>
     <tr>
-      <th>44096</th>
-      <td>Sales &amp; Marketing</td>
-      <td>region_18</td>
+      <th>39779</th>
+      <td>Finance</td>
+      <td>region_8</td>
       <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>2</td>
+      <td>27</td>
+      <td>4.0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+      <td>53</td>
+    </tr>
+    <tr>
+      <th>13547</th>
+      <td>Analytics</td>
+      <td>region_7</td>
+      <td>Master's &amp; above</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>45</td>
+      <td>3.0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>90</td>
+    </tr>
+    <tr>
+      <th>28716</th>
+      <td>R&amp;D</td>
+      <td>region_11</td>
+      <td>Master's &amp; above</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>37</td>
+      <td>4.0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>88</td>
+    </tr>
+    <tr>
+      <th>28553</th>
+      <td>Procurement</td>
+      <td>region_14</td>
+      <td>Master's &amp; above</td>
       <td>m</td>
       <td>other</td>
       <td>1</td>
-      <td>30</td>
+      <td>37</td>
       <td>2.0</td>
-      <td>6</td>
+      <td>10</td>
       <td>0</td>
-      <td>49</td>
-    </tr>
-    <tr>
-      <th>8672</th>
-      <td>HR</td>
-      <td>region_2</td>
-      <td>Master's &amp; above</td>
-      <td>m</td>
-      <td>sourcing</td>
-      <td>1</td>
-      <td>43</td>
-      <td>4.0</td>
-      <td>5</td>
       <td>0</td>
-      <td>51</td>
-    </tr>
-    <tr>
-      <th>26442</th>
-      <td>Finance</td>
-      <td>region_2</td>
-      <td>Master's &amp; above</td>
-      <td>m</td>
-      <td>sourcing</td>
-      <td>1</td>
-      <td>34</td>
-      <td>3.0</td>
-      <td>8</td>
-      <td>0</td>
-      <td>57</td>
+      <td>68</td>
     </tr>
   </tbody>
 </table>
-<p>43846 rows × 11 columns</p>
+<p>43846 rows × 12 columns</p>
 </div></div>
 </div>
 <p>Many models can’t handle categorical data and missing values, so we cannot train the model just yet. First we need to encode all categorical data and remove missing values.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">imputer</span> <span class="o">=</span> <span class="n">BasicImputer</span><span class="p">(</span><span class="n">specific_col</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;previous_year_rating&#39;</span><span class="p">:</span> <span class="p">{</span>      <span class="s1">&#39;missing_values&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
@@ -917,6 +901,234 @@ No columns specified for imputation. These columns have been automatically ident
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>department</th>
+      <th>region</th>
+      <th>education</th>
+      <th>gender</th>
+      <th>recruitment_channel</th>
+      <th>no_of_trainings</th>
+      <th>age</th>
+      <th>previous_year_rating</th>
+      <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
+      <th>awards_won?</th>
+      <th>avg_training_score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>33758</th>
+      <td>Procurement</td>
+      <td>region_2</td>
+      <td>Bachelor's</td>
+      <td>f</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>39</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+      <td>68</td>
+    </tr>
+    <tr>
+      <th>9792</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_15</td>
+      <td>NULL</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>32</td>
+      <td>2.0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>48</td>
+    </tr>
+    <tr>
+      <th>30081</th>
+      <td>Technology</td>
+      <td>region_22</td>
+      <td>Master's &amp; above</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>4</td>
+      <td>33</td>
+      <td>5.0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>77</td>
+    </tr>
+    <tr>
+      <th>50328</th>
+      <td>Legal</td>
+      <td>region_2</td>
+      <td>Master's &amp; above</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>2</td>
+      <td>35</td>
+      <td>3.0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+    </tr>
+    <tr>
+      <th>13100</th>
+      <td>Operations</td>
+      <td>region_7</td>
+      <td>Bachelor's</td>
+      <td>f</td>
+      <td>other</td>
+      <td>1</td>
+      <td>32</td>
+      <td>4.0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+      <td>60</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>17487</th>
+      <td>Procurement</td>
+      <td>region_26</td>
+      <td>Bachelor's</td>
+      <td>f</td>
+      <td>other</td>
+      <td>2</td>
+      <td>25</td>
+      <td>3.0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>74</td>
+    </tr>
+    <tr>
+      <th>39779</th>
+      <td>Finance</td>
+      <td>region_8</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>2</td>
+      <td>27</td>
+      <td>4.0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+      <td>53</td>
+    </tr>
+    <tr>
+      <th>13547</th>
+      <td>Analytics</td>
+      <td>region_7</td>
+      <td>Master's &amp; above</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>45</td>
+      <td>3.0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>90</td>
+    </tr>
+    <tr>
+      <th>28716</th>
+      <td>R&amp;D</td>
+      <td>region_11</td>
+      <td>Master's &amp; above</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>37</td>
+      <td>4.0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>88</td>
+    </tr>
+    <tr>
+      <th>28553</th>
+      <td>Procurement</td>
+      <td>region_14</td>
+      <td>Master's &amp; above</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>37</td>
+      <td>2.0</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0</td>
+      <td>68</td>
+    </tr>
+  </tbody>
+</table>
+<p>43846 rows × 12 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
+<span class="n">train_x</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
+<span class="n">test_x</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
+<span class="n">train_x</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+No columns specified for encoding. These columns have been automatically identfied as the following:
+[&#39;department&#39;, &#39;region&#39;, &#39;education&#39;, &#39;gender&#39;, &#39;recruitment_channel&#39;]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
@@ -948,296 +1160,86 @@ No columns specified for imputation. These columns have been automatically ident
       <th>age</th>
       <th>previous_year_rating</th>
       <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
       <th>awards_won?</th>
       <th>avg_training_score</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>31648</th>
-      <td>HR</td>
-      <td>region_2</td>
-      <td>Bachelor's</td>
-      <td>f</td>
-      <td>sourcing</td>
-      <td>1.0</td>
-      <td>50.0</td>
-      <td>5.0</td>
-      <td>7.0</td>
-      <td>0.0</td>
-      <td>46.0</td>
-    </tr>
-    <tr>
-      <th>13743</th>
-      <td>Operations</td>
-      <td>region_29</td>
-      <td>Master's &amp; above</td>
-      <td>m</td>
-      <td>other</td>
-      <td>2.0</td>
-      <td>35.0</td>
-      <td>4.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>57.0</td>
-    </tr>
-    <tr>
-      <th>34156</th>
-      <td>Procurement</td>
-      <td>region_3</td>
-      <td>Bachelor's</td>
-      <td>m</td>
-      <td>sourcing</td>
-      <td>1.0</td>
-      <td>29.0</td>
-      <td>4.0</td>
-      <td>4.0</td>
-      <td>0.0</td>
-      <td>68.0</td>
-    </tr>
-    <tr>
-      <th>37856</th>
-      <td>Operations</td>
-      <td>region_7</td>
-      <td>Bachelor's</td>
-      <td>m</td>
-      <td>other</td>
-      <td>1.0</td>
-      <td>34.0</td>
-      <td>3.0</td>
-      <td>8.0</td>
-      <td>0.0</td>
-      <td>59.0</td>
-    </tr>
-    <tr>
-      <th>41155</th>
-      <td>Technology</td>
-      <td>region_13</td>
-      <td>Bachelor's</td>
-      <td>f</td>
-      <td>sourcing</td>
-      <td>1.0</td>
-      <td>28.0</td>
-      <td>-100.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>78.0</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>48452</th>
-      <td>Technology</td>
-      <td>region_2</td>
-      <td>Below Secondary</td>
-      <td>m</td>
-      <td>sourcing</td>
-      <td>1.0</td>
-      <td>20.0</td>
-      <td>3.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>81.0</td>
-    </tr>
-    <tr>
-      <th>3967</th>
-      <td>Analytics</td>
-      <td>region_4</td>
-      <td>Bachelor's</td>
-      <td>m</td>
-      <td>other</td>
-      <td>1.0</td>
-      <td>31.0</td>
-      <td>3.0</td>
-      <td>3.0</td>
-      <td>0.0</td>
-      <td>86.0</td>
-    </tr>
-    <tr>
-      <th>44096</th>
-      <td>Sales &amp; Marketing</td>
-      <td>region_18</td>
-      <td>Bachelor's</td>
-      <td>m</td>
-      <td>other</td>
-      <td>1.0</td>
-      <td>30.0</td>
-      <td>2.0</td>
-      <td>6.0</td>
-      <td>0.0</td>
-      <td>49.0</td>
-    </tr>
-    <tr>
-      <th>8672</th>
-      <td>HR</td>
-      <td>region_2</td>
-      <td>Master's &amp; above</td>
-      <td>m</td>
-      <td>sourcing</td>
-      <td>1.0</td>
-      <td>43.0</td>
-      <td>4.0</td>
-      <td>5.0</td>
-      <td>0.0</td>
-      <td>51.0</td>
-    </tr>
-    <tr>
-      <th>26442</th>
-      <td>Finance</td>
-      <td>region_2</td>
-      <td>Master's &amp; above</td>
-      <td>m</td>
-      <td>sourcing</td>
-      <td>1.0</td>
-      <td>34.0</td>
-      <td>3.0</td>
-      <td>8.0</td>
-      <td>0.0</td>
-      <td>57.0</td>
-    </tr>
-  </tbody>
-</table>
-<p>43846 rows × 11 columns</p>
-</div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-<span class="n">train_x</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-<span class="n">test_x</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">train_x</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-No columns specified for encoding. These columns have been automatically identfied as the following:
-[&#39;department&#39;, &#39;region&#39;, &#39;education&#39;, &#39;gender&#39;, &#39;recruitment_channel&#39;]
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>department</th>
-      <th>region</th>
-      <th>education</th>
-      <th>gender</th>
-      <th>recruitment_channel</th>
-      <th>no_of_trainings</th>
-      <th>age</th>
-      <th>previous_year_rating</th>
-      <th>length_of_service</th>
-      <th>awards_won?</th>
-      <th>avg_training_score</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>31648</th>
-      <td>2</td>
+      <th>33758</th>
+      <td>5</td>
       <td>11</td>
       <td>1</td>
       <td>0</td>
       <td>2</td>
-      <td>1.0</td>
-      <td>50.0</td>
-      <td>5.0</td>
-      <td>7.0</td>
-      <td>0.0</td>
-      <td>46.0</td>
-    </tr>
-    <tr>
-      <th>13743</th>
-      <td>4</td>
-      <td>21</td>
-      <td>2</td>
+      <td>1</td>
+      <td>39</td>
+      <td>3.0</td>
+      <td>10</td>
       <td>1</td>
       <td>0</td>
-      <td>2.0</td>
-      <td>35.0</td>
-      <td>4.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>57.0</td>
+      <td>68</td>
     </tr>
     <tr>
-      <th>34156</th>
-      <td>5</td>
-      <td>22</td>
+      <th>9792</th>
+      <td>7</td>
+      <td>6</td>
+      <td>-1</td>
       <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>32</td>
+      <td>2.0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>48</td>
+    </tr>
+    <tr>
+      <th>30081</th>
+      <td>8</td>
+      <td>14</td>
+      <td>2</td>
       <td>1</td>
       <td>2</td>
-      <td>1.0</td>
-      <td>29.0</td>
-      <td>4.0</td>
-      <td>4.0</td>
-      <td>0.0</td>
-      <td>68.0</td>
+      <td>4</td>
+      <td>33</td>
+      <td>5.0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>77</td>
     </tr>
     <tr>
-      <th>37856</th>
+      <th>50328</th>
+      <td>3</td>
+      <td>11</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>35</td>
+      <td>3.0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>60</td>
+    </tr>
+    <tr>
+      <th>13100</th>
       <td>4</td>
       <td>31</td>
       <td>1</td>
-      <td>1</td>
       <td>0</td>
-      <td>1.0</td>
-      <td>34.0</td>
-      <td>3.0</td>
-      <td>8.0</td>
-      <td>0.0</td>
-      <td>59.0</td>
-    </tr>
-    <tr>
-      <th>41155</th>
-      <td>8</td>
-      <td>4</td>
-      <td>1</td>
       <td>0</td>
+      <td>1</td>
+      <td>32</td>
+      <td>4.0</td>
       <td>2</td>
-      <td>1.0</td>
-      <td>28.0</td>
-      <td>-100.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>78.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>60</td>
     </tr>
     <tr>
       <th>...</th>
@@ -1252,100 +1254,94 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>...</td>
       <td>...</td>
       <td>...</td>
+      <td>...</td>
     </tr>
     <tr>
-      <th>48452</th>
-      <td>8</td>
-      <td>11</td>
-      <td>0</td>
+      <th>17487</th>
+      <td>5</td>
+      <td>18</td>
       <td>1</td>
+      <td>0</td>
+      <td>0</td>
       <td>2</td>
-      <td>1.0</td>
-      <td>20.0</td>
+      <td>25</td>
       <td>3.0</td>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>81.0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>74</td>
     </tr>
     <tr>
-      <th>3967</th>
-      <td>0</td>
-      <td>28</td>
+      <th>39779</th>
       <td>1</td>
+      <td>32</td>
       <td>1</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>31.0</td>
-      <td>3.0</td>
-      <td>3.0</td>
-      <td>0.0</td>
-      <td>86.0</td>
-    </tr>
-    <tr>
-      <th>44096</th>
-      <td>7</td>
-      <td>9</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1.0</td>
-      <td>30.0</td>
-      <td>2.0</td>
-      <td>6.0</td>
-      <td>0.0</td>
-      <td>49.0</td>
-    </tr>
-    <tr>
-      <th>8672</th>
-      <td>2</td>
-      <td>11</td>
-      <td>2</td>
       <td>1</td>
       <td>2</td>
-      <td>1.0</td>
-      <td>43.0</td>
+      <td>2</td>
+      <td>27</td>
       <td>4.0</td>
-      <td>5.0</td>
-      <td>0.0</td>
-      <td>51.0</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+      <td>53</td>
     </tr>
     <tr>
-      <th>26442</th>
-      <td>1</td>
-      <td>11</td>
+      <th>13547</th>
+      <td>0</td>
+      <td>31</td>
       <td>2</td>
       <td>1</td>
       <td>2</td>
-      <td>1.0</td>
-      <td>34.0</td>
+      <td>1</td>
+      <td>45</td>
       <td>3.0</td>
-      <td>8.0</td>
-      <td>0.0</td>
-      <td>57.0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>90</td>
+    </tr>
+    <tr>
+      <th>28716</th>
+      <td>6</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>37</td>
+      <td>4.0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>88</td>
+    </tr>
+    <tr>
+      <th>28553</th>
+      <td>5</td>
+      <td>5</td>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>37</td>
+      <td>2.0</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0</td>
+      <td>68</td>
     </tr>
   </tbody>
 </table>
-<p>43846 rows × 11 columns</p>
+<p>43846 rows × 12 columns</p>
 </div></div>
 </div>
 <p>Now we create the model and train it using the training set. In the sequence, test its performance over the test set.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">LinearSVC</span>
-<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
-
-<span class="k">def</span> <span class="nf">train_model_plot_results</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">):</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_features</span><span class="o">=</span><span class="s2">&quot;sqrt&quot;</span><span class="p">)</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-    <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">metrics</span><span class="o">.</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">))</span>
-    <span class="n">plot_confusion_matrix</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">model</span>
-
-<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1354,37 +1350,58 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-              precision    recall  f1-score   support
 
-           0       0.93      0.93      0.93     10028
-           1       0.29      0.30      0.29       934
+TEST SET:
 
-    accuracy                           0.88     10962
-   macro avg       0.61      0.62      0.61     10962
-weighted avg       0.88      0.88      0.88     10962
-
-[[9321  707]
- [ 651  283]]
 </pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_9_1.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_9_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[7042 2986]
+ [  76  858]]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_9_3.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_9_3.png" />
+</div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_10_1.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_10_1.png" />
-</div>
+<div class="highlight"><pre>
+ROC AUC: 0.8931139490369151
+Precision: 0.6062639191462251
+Recall: 0.810431647916882
+F1: 0.5902810799741827
+Accuracy: 0.7206714103265828
+Optimal Threshold (ROC curve): 0.11485043913125992
+Optimal Threshold (Precision x Recall curve): 0.20340098440647125
+Threshold used: 0.11485043913125992
+</pre></div></div>
 </div>
 </section>
 <section id="2---Feature-Selection">
 <h2>2 - Feature Selection<a class="headerlink" href="#2---Feature-Selection" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
 
-<span class="c1">#estimator = KNeighborsClassifier(n_neighbors=4)</span>
-<span class="c1">#feat_sel = SeqFeatSelection(estimator=estimator, scoring=&#39;f1&#39;, n_jobs=4)</span>
 <span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">train_x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">)</span>
 <span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
@@ -1408,48 +1425,52 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 [Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
-[Parallel(n_jobs=4)]: Done  11 out of  11 | elapsed:    1.3s finished
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:    1.0s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:    1.0s finished
 
-[2022-06-28 16:06:27] Features: 1/11 -- score: 0.19682103130149586[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[2022-10-25 10:12:26] Features: 1/12 -- score: 0.1931912046382492[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  11 out of  11 | elapsed:    0.2s finished
+
+[2022-10-25 10:12:26] Features: 2/12 -- score: 0.4967097422285698[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
 [Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    0.2s finished
 
-[2022-06-28 16:06:27] Features: 2/11 -- score: 0.5093172576119507[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
-[Parallel(n_jobs=4)]: Done   7 out of   9 | elapsed:    0.2s remaining:    0.0s
-[Parallel(n_jobs=4)]: Done   9 out of   9 | elapsed:    0.2s finished
+[2022-10-25 10:12:26] Features: 3/12 -- score: 0.5026668595847746[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   7 out of   9 | elapsed:    0.2s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   9 out of   9 | elapsed:    0.3s finished
 
-[2022-06-28 16:06:27] Features: 3/11 -- score: 0.5095222759433246[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
-[Parallel(n_jobs=4)]: Done   6 out of   8 | elapsed:    0.3s remaining:    0.1s
+[2022-10-25 10:12:27] Features: 4/12 -- score: 0.4991439989474202[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   6 out of   8 | elapsed:    0.2s remaining:    0.1s
 [Parallel(n_jobs=4)]: Done   8 out of   8 | elapsed:    0.3s finished
 
-[2022-06-28 16:06:28] Features: 4/11 -- score: 0.5055788155344575[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[2022-10-25 10:12:27] Features: 5/12 -- score: 0.4911043697835786[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
 [Parallel(n_jobs=4)]: Done   4 out of   7 | elapsed:    0.1s remaining:    0.1s
 [Parallel(n_jobs=4)]: Done   7 out of   7 | elapsed:    0.2s finished
 
-[2022-06-28 16:06:28] Features: 5/11 -- score: 0.5007301162337021[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[2022-10-25 10:12:28] Features: 6/12 -- score: 0.4775301876819394[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
 [Parallel(n_jobs=4)]: Done   3 out of   6 | elapsed:    0.1s remaining:    0.1s
 [Parallel(n_jobs=4)]: Done   6 out of   6 | elapsed:    0.2s finished
 
-[2022-06-28 16:06:28] Features: 6/11 -- score: 0.4921963472008988[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[2022-10-25 10:12:28] Features: 7/12 -- score: 0.46144907890848175[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
 [Parallel(n_jobs=4)]: Done   5 out of   5 | elapsed:    0.2s finished
 
-[2022-06-28 16:06:29] Features: 7/11 -- score: 0.47122740188626727[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
-[Parallel(n_jobs=4)]: Done   4 out of   4 | elapsed:    0.1s finished
+[2022-10-25 10:12:28] Features: 8/12 -- score: 0.44481880301469073[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   4 out of   4 | elapsed:    0.2s finished
 
-[2022-06-28 16:06:29] Features: 8/11 -- score: 0.43326554024756647[Parallel(n_jobs=3)]: Using backend LokyBackend with 3 concurrent workers.
-[Parallel(n_jobs=3)]: Done   3 out of   3 | elapsed:    0.2s finished
+[2022-10-25 10:12:28] Features: 9/12 -- score: 0.41702774110516766[Parallel(n_jobs=3)]: Using backend LokyBackend with 3 concurrent workers.
+[Parallel(n_jobs=3)]: Done   3 out of   3 | elapsed:    0.3s finished
 
-[2022-06-28 16:06:29] Features: 9/11 -- score: 0.3871847978127798[Parallel(n_jobs=2)]: Using backend LokyBackend with 2 concurrent workers.
-[Parallel(n_jobs=2)]: Done   2 out of   2 | elapsed:    0.8s finished
+[2022-10-25 10:12:29] Features: 10/12 -- score: 0.4201593117361067[Parallel(n_jobs=2)]: Using backend LokyBackend with 2 concurrent workers.
+[Parallel(n_jobs=2)]: Done   2 out of   2 | elapsed:    1.0s finished
 
-[2022-06-28 16:06:30] Features: 10/11 -- score: 0.33529801063313497[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[2022-10-25 10:12:30] Features: 11/12 -- score: 0.38319539428601485[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
 [Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
 [Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s finished
 
-[2022-06-28 16:06:30] Features: 11/11 -- score: 0.3020100006211117
+[2022-10-25 10:12:30] Features: 12/12 -- score: 0.3567176045389587
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1458,7 +1479,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_x</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
@@ -1468,7 +1489,7 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1497,34 +1518,34 @@ No columns specified for encoding. These columns have been automatically identfi
   </thead>
   <tbody>
     <tr>
-      <th>31648</th>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>46.0</td>
+      <th>33758</th>
+      <td>5</td>
+      <td>0</td>
+      <td>68</td>
     </tr>
     <tr>
-      <th>13743</th>
-      <td>4.0</td>
-      <td>0.0</td>
-      <td>57.0</td>
+      <th>9792</th>
+      <td>7</td>
+      <td>0</td>
+      <td>48</td>
     </tr>
     <tr>
-      <th>34156</th>
-      <td>5.0</td>
-      <td>0.0</td>
-      <td>68.0</td>
+      <th>30081</th>
+      <td>8</td>
+      <td>0</td>
+      <td>77</td>
     </tr>
     <tr>
-      <th>37856</th>
-      <td>4.0</td>
-      <td>0.0</td>
-      <td>59.0</td>
+      <th>50328</th>
+      <td>3</td>
+      <td>0</td>
+      <td>60</td>
     </tr>
     <tr>
-      <th>41155</th>
-      <td>8.0</td>
-      <td>0.0</td>
-      <td>78.0</td>
+      <th>13100</th>
+      <td>4</td>
+      <td>0</td>
+      <td>60</td>
     </tr>
     <tr>
       <th>...</th>
@@ -1533,34 +1554,34 @@ No columns specified for encoding. These columns have been automatically identfi
       <td>...</td>
     </tr>
     <tr>
-      <th>48452</th>
-      <td>8.0</td>
-      <td>0.0</td>
-      <td>81.0</td>
+      <th>17487</th>
+      <td>5</td>
+      <td>0</td>
+      <td>74</td>
     </tr>
     <tr>
-      <th>3967</th>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>86.0</td>
+      <th>39779</th>
+      <td>1</td>
+      <td>0</td>
+      <td>53</td>
     </tr>
     <tr>
-      <th>44096</th>
-      <td>7.0</td>
-      <td>0.0</td>
-      <td>49.0</td>
+      <th>13547</th>
+      <td>0</td>
+      <td>0</td>
+      <td>90</td>
     </tr>
     <tr>
-      <th>8672</th>
-      <td>2.0</td>
-      <td>0.0</td>
-      <td>51.0</td>
+      <th>28716</th>
+      <td>6</td>
+      <td>0</td>
+      <td>88</td>
     </tr>
     <tr>
-      <th>26442</th>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>57.0</td>
+      <th>28553</th>
+      <td>5</td>
+      <td>0</td>
+      <td>68</td>
     </tr>
   </tbody>
 </table>
@@ -1568,10 +1589,10 @@ No columns specified for encoding. These columns have been automatically identfi
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1580,31 +1601,54 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-              precision    recall  f1-score   support
 
-           0       0.94      1.00      0.97     10028
-           1       0.93      0.31      0.47       934
+TEST SET:
 
-    accuracy                           0.94     10962
-   macro avg       0.93      0.65      0.72     10962
-weighted avg       0.94      0.94      0.92     10962
-
-[[10006    22]
- [  644   290]]
 </pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_13_1.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_13_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[8756 1272]
+ [ 442  492]]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_13_3.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_13_3.png" />
+</div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_14_1.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_14_1.png" />
-</div>
+<div class="highlight"><pre>
+ROC AUC: 0.7554767422096075
+Precision: 0.6154288199297984
+Recall: 0.6999608804127886
+F1: 0.6377822470914225
+Accuracy: 0.8436416712278781
+Optimal Threshold (ROC curve): 0.10499062389135361
+Optimal Threshold (Precision x Recall curve): 0.2508904039859772
+Threshold used: 0.10499062389135361
+</pre></div></div>
 </div>
 </section>
 <section id="3---Generating-Synthetic-Data-+-Feature-Selection">
 <h2>3 - Generating Synthetic Data + Feature Selection<a class="headerlink" href="#3---Generating-Synthetic-Data-+-Feature-Selection" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1612,7 +1656,7 @@ weighted avg       0.94      0.94      0.92     10962
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1623,7 +1667,7 @@ Name: is_promoted, dtype: float64
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_df</span> <span class="o">=</span> <span class="n">org_train_x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -1636,7 +1680,7 @@ Name: is_promoted, dtype: float64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1647,7 +1691,7 @@ Name: is_promoted, dtype: float64
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">synth</span> <span class="o">=</span> <span class="n">Synthesizer</span><span class="p">(</span>
@@ -1668,48 +1712,93 @@ Name: is_promoted, dtype: float64
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:286: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:143: ConvergenceWarning: Number of distinct clusters (6) found smaller than n_clusters (10). Possibly due to duplicate points in X.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:131: ConvergenceWarning: Number of distinct clusters (6) found smaller than n_clusters (10). Possibly due to duplicate points in X.
   cluster.KMeans(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:286: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:286: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
+Sampling conditions:   0%|          | 0/8299 [00:00&lt;?, ?it/s]/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sdv/tabular/base.py:608: FutureWarning: In a future version of pandas, a length 1 tuple will be returned when iterating over a groupby with a grouper equal to a list of length 1. Don&#39;t supply a list with a single grouper to avoid this warning.
+  for group, dataframe in grouped_conditions:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sdv/tabular/base.py:639: FutureWarning: In a future version of pandas, a length 1 tuple will be returned when iterating over a groupby with a grouper equal to a list of length 1. Don&#39;t supply a list with a single grouper to avoid this warning.
+  for transformed_group, transformed_dataframe in transformed_groups:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+Sampling conditions:  18%|█▊        | 1465/8299 [00:00&lt;00:01, 4109.27it/s]/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+Sampling conditions:  98%|█████████▊| 8153/8299 [00:01&lt;00:00, 7530.84it/s]/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+Sampling conditions: 100%|██████████| 8299/8299 [00:01&lt;00:00, 6773.62it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1720,7 +1809,7 @@ Name: is_promoted, dtype: float64
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_x</span> <span class="o">=</span> <span class="n">balance_train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">label_col</span><span class="p">])</span>
@@ -1739,7 +1828,7 @@ Name: is_promoted, dtype: float64
 <span class="n">train_x</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">test_x</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1752,28 +1841,51 @@ No columns specified for imputation. These columns have been automatically ident
 [&#39;education&#39;, &#39;previous_year_rating&#39;]
 No columns specified for encoding. These columns have been automatically identfied as the following:
 [&#39;department&#39;, &#39;region&#39;, &#39;education&#39;, &#39;gender&#39;, &#39;recruitment_channel&#39;]
-              precision    recall  f1-score   support
 
-           0       0.94      0.86      0.90     10028
-           1       0.22      0.43      0.29       934
+TEST SET:
 
-    accuracy                           0.83     10962
-   macro avg       0.58      0.64      0.60     10962
-weighted avg       0.88      0.83      0.85     10962
-
-[[8646 1382]
- [ 536  398]]
 </pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_18_1.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_18_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[6623 3405]
+ [  84  850]]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_18_3.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_18_3.png" />
+</div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_19_1.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_19_1.png" />
-</div>
+<div class="highlight"><pre>
+ROC AUC: 0.8670331743495088
+Precision: 0.5936203769778037
+Recall: 0.7852574888812396
+F1: 0.5595654501838281
+Accuracy: 0.6817186644772851
+Optimal Threshold (ROC curve): 0.21035872399806976
+Optimal Threshold (Precision x Recall curve): 0.39564475417137146
+Threshold used: 0.21035872399806976
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
@@ -1781,7 +1893,7 @@ weighted avg       0.88      0.83      0.85     10962
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SELECTED FEATURES: </span><span class="si">{</span><span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">train_x_feat</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">test_x_feat</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_feat</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_feat</span><span class="p">,</span> <span class="n">test_y</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1802,44 +1914,48 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
 [Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
-[Parallel(n_jobs=4)]: Done  11 out of  11 | elapsed:    1.5s finished
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:    0.9s remaining:    0.0s
+[Parallel(n_jobs=4)]: Done  12 out of  12 | elapsed:    0.9s finished
 
-[2022-06-28 16:19:33] Features: 1/11 -- score: 0.38504722246930007[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[2022-10-25 10:17:47] Features: 1/12 -- score: 0.20592887926502257[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done  11 out of  11 | elapsed:    0.1s finished
+
+[2022-10-25 10:17:48] Features: 2/12 -- score: 0.2639678881869736[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
 [Parallel(n_jobs=4)]: Done  10 out of  10 | elapsed:    0.2s finished
 
-[2022-06-28 16:19:33] Features: 2/11 -- score: 0.4378868097661957[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[2022-10-25 10:17:48] Features: 3/12 -- score: 0.4590688345129712[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
 [Parallel(n_jobs=4)]: Done   7 out of   9 | elapsed:    0.2s remaining:    0.1s
 [Parallel(n_jobs=4)]: Done   9 out of   9 | elapsed:    0.2s finished
 
-[2022-06-28 16:19:34] Features: 3/11 -- score: 0.5817114928759861[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[2022-10-25 10:17:48] Features: 4/12 -- score: 0.4575717715962757[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
 [Parallel(n_jobs=4)]: Done   6 out of   8 | elapsed:    0.2s remaining:    0.1s
 [Parallel(n_jobs=4)]: Done   8 out of   8 | elapsed:    0.2s finished
 
-[2022-06-28 16:19:34] Features: 4/11 -- score: 0.5870126778413628[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[2022-10-25 10:17:49] Features: 5/12 -- score: 0.45292422018477535[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
 [Parallel(n_jobs=4)]: Done   4 out of   7 | elapsed:    0.1s remaining:    0.1s
-[Parallel(n_jobs=4)]: Done   7 out of   7 | elapsed:    0.3s finished
+[Parallel(n_jobs=4)]: Done   7 out of   7 | elapsed:    0.2s finished
 
-[2022-06-28 16:19:34] Features: 5/11 -- score: 0.5853665008109555[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
-[Parallel(n_jobs=4)]: Done   3 out of   6 | elapsed:    0.2s remaining:    0.2s
-[Parallel(n_jobs=4)]: Done   6 out of   6 | elapsed:    0.3s finished
+[2022-10-25 10:17:49] Features: 6/12 -- score: 0.45380308967736155[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   3 out of   6 | elapsed:    0.1s remaining:    0.1s
+[Parallel(n_jobs=4)]: Done   6 out of   6 | elapsed:    0.2s finished
 
-[2022-06-28 16:19:35] Features: 6/11 -- score: 0.5706687642064435[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
-[Parallel(n_jobs=4)]: Done   5 out of   5 | elapsed:    0.3s finished
+[2022-10-25 10:17:49] Features: 7/12 -- score: 0.44967752578151643[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=4)]: Done   5 out of   5 | elapsed:    0.2s finished
 
-[2022-06-28 16:19:35] Features: 7/11 -- score: 0.5614586813114038[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
+[2022-10-25 10:17:49] Features: 8/12 -- score: 0.45748074234460034[Parallel(n_jobs=4)]: Using backend LokyBackend with 4 concurrent workers.
 [Parallel(n_jobs=4)]: Done   4 out of   4 | elapsed:    0.2s finished
 
-[2022-06-28 16:19:35] Features: 8/11 -- score: 0.5528132004813858[Parallel(n_jobs=3)]: Using backend LokyBackend with 3 concurrent workers.
+[2022-10-25 10:17:50] Features: 9/12 -- score: 0.451101876367842[Parallel(n_jobs=3)]: Using backend LokyBackend with 3 concurrent workers.
 [Parallel(n_jobs=3)]: Done   3 out of   3 | elapsed:    0.3s finished
 
-[2022-06-28 16:19:36] Features: 9/11 -- score: 0.5320814760711076[Parallel(n_jobs=2)]: Using backend LokyBackend with 2 concurrent workers.
-[Parallel(n_jobs=2)]: Done   2 out of   2 | elapsed:    0.8s finished
+[2022-10-25 10:17:50] Features: 10/12 -- score: 0.45446096664474994[Parallel(n_jobs=2)]: Using backend LokyBackend with 2 concurrent workers.
+[Parallel(n_jobs=2)]: Done   2 out of   2 | elapsed:    0.9s finished
 
-[2022-06-28 16:19:37] Features: 10/11 -- score: 0.5257395592761441[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
-[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s remaining:    0.0s
-[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.1s finished
+[2022-10-25 10:17:51] Features: 11/12 -- score: 0.45609394311861323[Parallel(n_jobs=1)]: Using backend SequentialBackend with 1 concurrent workers.
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.2s remaining:    0.0s
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.2s finished
 
-[2022-06-28 16:19:37] Features: 11/11 -- score: 0.5274214125570936
+[2022-10-25 10:17:52] Features: 12/12 -- score: 0.43561266744306537
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1847,32 +1963,55 @@ No columns specified for encoding. These columns have been automatically identfi
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-SELECTED FEATURES: [&#39;department&#39;, &#39;previous_year_rating&#39;, &#39;awards_won?&#39;, &#39;avg_training_score&#39;]
-              precision    recall  f1-score   support
+SELECTED FEATURES: [&#39;department&#39;, &#39;awards_won?&#39;, &#39;avg_training_score&#39;]
 
-           0       0.94      0.98      0.96     10028
-           1       0.62      0.38      0.47       934
+TEST SET:
 
-    accuracy                           0.93     10962
-   macro avg       0.78      0.68      0.72     10962
-weighted avg       0.92      0.93      0.92     10962
-
-[[9804  224]
- [ 575  359]]
 </pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_19_3.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_19_3.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[6623 3405]
+ [  84  850]]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_19_5.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_19_5.png" />
+</div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_20_3.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_20_3.png" />
-</div>
+<div class="highlight"><pre>
+ROC AUC: 0.8670331743495088
+Precision: 0.5936203769778037
+Recall: 0.7852574888812396
+F1: 0.5595654501838281
+Accuracy: 0.6817186644772851
+Optimal Threshold (ROC curve): 0.21035872399806976
+Optimal Threshold (Precision x Recall curve): 0.39564475417137146
+Threshold used: 0.21035872399806976
+</pre></div></div>
 </div>
 </section>
 <section id="4---Feature-Selection-+-Synthetic-Data">
 <h2>4 - Feature Selection + Synthetic Data<a class="headerlink" href="#4---Feature-Selection-+-Synthetic-Data" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_x</span> <span class="o">=</span> <span class="n">org_train_x</span>
@@ -1892,7 +2031,7 @@ weighted avg       0.92      0.93      0.92     10962
 <span class="n">train_x</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
 <span class="n">test_x</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1905,29 +2044,52 @@ No columns specified for imputation. These columns have been automatically ident
 [&#39;education&#39;, &#39;previous_year_rating&#39;]
 No columns specified for encoding. These columns have been automatically identfied as the following:
 [&#39;department&#39;, &#39;region&#39;, &#39;education&#39;, &#39;gender&#39;, &#39;recruitment_channel&#39;]
-SELECTED FEATURES: [&#39;awards_won?&#39;, &#39;avg_training_score&#39;, &#39;department_Finance&#39;, &#39;department_HR&#39;, &#39;department_Legal&#39;, &#39;department_Operations&#39;, &#39;department_Procurement&#39;, &#39;department_R&amp;D&#39;, &#39;department_Sales &amp; Marketing&#39;, &#39;department_Technology&#39;, &#39;region_region_10&#39;, &#39;region_region_15&#39;, &#39;region_region_18&#39;, &#39;region_region_19&#39;, &#39;region_region_21&#39;, &#39;region_region_29&#39;, &#39;region_region_9&#39;]
-              precision    recall  f1-score   support
+SELECTED FEATURES: [&#39;awards_won?&#39;, &#39;avg_training_score&#39;, &#39;department_Finance&#39;, &#39;department_HR&#39;, &#39;department_Legal&#39;, &#39;department_Operations&#39;, &#39;department_Procurement&#39;, &#39;department_Sales &amp; Marketing&#39;, &#39;department_Technology&#39;, &#34;education_Master&#39;s &amp; above&#34;]
 
-           0       0.94      1.00      0.97     10028
-           1       0.91      0.30      0.45       934
+TEST SET:
 
-    accuracy                           0.94     10962
-   macro avg       0.92      0.65      0.71     10962
-weighted avg       0.94      0.94      0.92     10962
-
-[[9999   29]
- [ 652  282]]
 </pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_21_1.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_21_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[8639 1389]
+ [ 426  508]]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_21_3.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_21_3.png" />
+</div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_22_1.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_22_1.png" />
-</div>
+<div class="highlight"><pre>
+ROC AUC: 0.7596129659223981
+Precision: 0.6103986583164233
+Recall: 0.7026925251693545
+F1: 0.631911384760566
+Accuracy: 0.8344280240831965
+Optimal Threshold (ROC curve): 0.10077095776796341
+Optimal Threshold (Precision x Recall curve): 0.2247779816389084
+Threshold used: 0.10077095776796341
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_df</span> <span class="o">=</span> <span class="n">train_x</span>
@@ -1953,18 +2115,27 @@ weighted avg       0.94      0.94      0.92     10962
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:277: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sklearn/mixture/_base.py:286: ConvergenceWarning: Initialization 1 did not converge. Try different init parameters, or increase max_iter, tol or check for degenerate data.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:111: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   data[column_name] = data[column_name].to_numpy().flatten()
+Sampling conditions:   0%|          | 0/8299 [00:00&lt;?, ?it/s]/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sdv/tabular/base.py:608: FutureWarning: In a future version of pandas, a length 1 tuple will be returned when iterating over a groupby with a grouper equal to a list of length 1. Don&#39;t supply a list with a single grouper to avoid this warning.
+  for group, dataframe in grouped_conditions:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/sdv/tabular/base.py:639: FutureWarning: In a future version of pandas, a length 1 tuple will be returned when iterating over a groupby with a grouper equal to a list of length 1. Don&#39;t supply a list with a single grouper to avoid this warning.
+  for transformed_group, transformed_dataframe in transformed_groups:
+/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+Sampling conditions:  13%|█▎        | 1117/8299 [00:00&lt;00:03, 2301.04it/s]/home/matheus/miniconda3/envs/rai/lib/python3.9/site-packages/ctgan/data_transformer.py:149: FutureWarning: In a future version, `df.iloc[:, i] = newvals` will attempt to set the values inplace instead of always setting a new array. To retain the old behavior, use either `df[df.columns[i]] = newvals` or, if columns are non-unique, `df.isetitem(i, newvals)`
+  data.iloc[:, 1] = np.argmax(column_data[:, 1:], axis=1)
+Sampling conditions: 100%|██████████| 8299/8299 [00:02&lt;00:00, 2831.28it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1975,7 +2146,7 @@ Name: is_promoted, dtype: float64
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_x</span> <span class="o">=</span> <span class="n">balance_train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">label_col</span><span class="p">])</span>
@@ -1983,7 +2154,7 @@ Name: is_promoted, dtype: float64
 <span class="n">test_x</span> <span class="o">=</span> <span class="n">test_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">label_col</span><span class="p">])</span>
 <span class="n">test_y</span> <span class="o">=</span> <span class="n">test_df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1992,25 +2163,48 @@ Name: is_promoted, dtype: float64
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-              precision    recall  f1-score   support
 
-           0       0.94      0.99      0.97     10028
-           1       0.81      0.33      0.47       934
+TEST SET:
 
-    accuracy                           0.94     10962
-   macro avg       0.87      0.66      0.72     10962
-weighted avg       0.93      0.94      0.92     10962
-
-[[9955   73]
- [ 628  306]]
 </pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_23_1.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_23_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[9712  316]
+ [ 534  400]]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_23_3.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_23_3.png" />
+</div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/notebooks_dataprocessing_module_tests_model_test_24_1.png" src="../../../_images/notebooks_dataprocessing_module_tests_model_test_24_1.png" />
-</div>
+<div class="highlight"><pre>
+ROC AUC: 0.7403760370320707
+Precision: 0.7532706591044659
+Recall: 0.698376878786507
+F1: 0.7214614329145256
+Accuracy: 0.9224594052180259
+Optimal Threshold (ROC curve): 0.35927507281303406
+Optimal Threshold (Precision x Recall curve): 0.4259410798549652
+Threshold used: 0.35927507281303406
+</pre></div></div>
 </div>
 </section>
 </section>

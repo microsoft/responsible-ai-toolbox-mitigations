@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Utils &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Model Utils" href="model_utils.html" />
+    <link rel="prev" title="Toy Dataset" href="toy_data.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="utils.html">Utils</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="toy_data.html">Toy Dataset</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Data Utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#raimitigations.utils.data_utils.err_float_01"><code class="docutils literal notranslate"><span class="pre">err_float_01()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#raimitigations.utils.data_utils.get_cat_cols"><code class="docutils literal notranslate"><span class="pre">get_cat_cols()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#raimitigations.utils.data_utils.ordinal_to_onehot"><code class="docutils literal notranslate"><span class="pre">ordinal_to_onehot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="model_utils.html">Model Utils</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">API reference</a> &raquo;</li>
+          <li><a href="utils.html">Utils</a> &raquo;</li>
+      <li>Data Utils</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/utils/data_utils.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="module-raimitigations.utils.data_utils">
+<span id="id1"></span><span id="data-utils"></span><h1>Data Utils<a class="headerlink" href="#module-raimitigations.utils.data_utils" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="raimitigations.utils.data_utils.err_float_01">
+<span class="sig-prename descclassname"><span class="pre">raimitigations.utils.data_utils.</span></span><span class="sig-name descname"><span class="pre">err_float_01</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.utils.data_utils.err_float_01" title="Permalink to this definition"></a></dt>
+<dd><p>Raises an error if param is not in the range [0, 1].
+param_name represents the name of the parameter ‘param’.
+This makes it easier for the user to identify where the
+error occured.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param</strong> – the numerical parameter being analyzed;</p></li>
+<li><p><strong>param_name</strong> – the internal name used for the parameter
+provided in param.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="raimitigations.utils.data_utils.get_cat_cols">
+<span class="sig-prename descclassname"><span class="pre">raimitigations.utils.data_utils.</span></span><span class="sig-name descname"><span class="pre">get_cat_cols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.utils.data_utils.get_cat_cols" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a list of all categorical columns in the dataset
+df. If subset != None, check for categorical columns
+only in the columns within the subset list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – the dataset being analyzed;</p></li>
+<li><p><strong>subset</strong> – the list of columns that should be analyzed.
+If subset is None, then check all columns.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list with the name of all categorical columns.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="raimitigations.utils.data_utils.ordinal_to_onehot">
+<span class="sig-prename descclassname"><span class="pre">raimitigations.utils.data_utils.</span></span><span class="sig-name descname"><span class="pre">ordinal_to_onehot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_class</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.utils.data_utils.ordinal_to_onehot" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a list of ordinal values that ranges
+from [0, n_class] to a one-hot matrix with
+shape (len(arr), n_class).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arr</strong> – a list of labels</p></li>
+<li><p><strong>n_class</strong> – the number of classes in arr</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of lists (a matrix) of one-hot
+encodings, where each label in arr is one-hot
+encoded according to the maximum number of
+classes n_class.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of lists</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="toy_data.html" class="btn btn-neutral float-left" title="Toy Dataset" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_utils.html" class="btn btn-neutral float-right" title="Model Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

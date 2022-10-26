@@ -18,6 +18,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -76,6 +77,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#feature-measures"><span class="xref std std-ref">Feature measures</span></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#cohort-management"><span class="xref std std-ref">Cohort Management</span></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#get-involved">Get involved</a></li>
 </ul>
 </li>
@@ -87,6 +89,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -563,6 +567,28 @@ t-distribution.</p></td>
 </tbody>
 </table>
 </section>
+</section>
+<section id="cohort-management">
+<h2><a class="reference internal" href="cohort/intro.html#cohort"><span class="std std-ref">Cohort Management</span></a><a class="headerlink" href="#cohort-management" title="Permalink to this heading"></a></h2>
+<p>The <a class="reference internal" href="cohort/intro.html#cohort"><span class="std std-ref">Cohort Management</span></a> feature allows managing multiple cohorts using a simple interface.
+This is an important tool for guaranteeing fairness across different cohorts, as shown in the scenarios
+described here. The <a class="reference internal" href="cohort/cohort_manager.html#cohort-manager"><span class="std std-ref">cohort.CohortManager</span></a> allows the application of different data
+processing pipelines over each cohort, and therefore represents a powerful tool when dealing with sensitive
+cohorts.</p>
+<div class="admonition-example-imputing-missing-values-for-each-cohort-separately admonition">
+<p class="admonition-title">Example: Imputing missing values for each cohort separately</p>
+<p>Consider the following situation: a dataset that shows several details of similar cars from a specific brand.
+The column <code class="docutils literal notranslate"><span class="pre">price</span></code> stores the price of a car model in US Dollars, while the column <code class="docutils literal notranslate"><span class="pre">country</span></code> indicates
+the country where that price was observed. Due to the differences in economy and local currency, it is expected
+that the price of these models will vary greatly based on the <code class="docutils literal notranslate"><span class="pre">country</span></code> column. Suppose now that we want to
+impute the missing values in the <code class="docutils literal notranslate"><span class="pre">price</span></code> columns using the mean value of that column. Given that the prices
+differ greatly based on the different country cohorts, then it is expected that this imputation approach
+will end up inserting a lot of noise into the <code class="docutils literal notranslate"><span class="pre">price</span></code> column. Instead, we could use the mean value of the
+<code class="docutils literal notranslate"><span class="pre">price</span></code> column based on each cohort, that is: compute the mean <code class="docutils literal notranslate"><span class="pre">price</span></code> value for each cohort and impute
+the missing values based on the mean value of the cohort to which the instance belongs. This will
+greatly reduce the noise inserted by the imputation method. This can be easily achieved by using the
+<a class="reference internal" href="cohort/cohort_manager.html#cohort-manager"><span class="std std-ref">cohort.CohortManager</span></a> class.</p>
+</div>
 </section>
 <section id="get-involved">
 <h2>Get involved<a class="headerlink" href="#get-involved" title="Permalink to this heading"></a></h2>

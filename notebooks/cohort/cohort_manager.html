@@ -1,0 +1,2601 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Managing cohorts &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Cohort Utils" href="../../cohort/utils.html" />
+    <link rel="prev" title="CohortManager" href="../../cohort/cohort_manager.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../gallery.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#dataprocessing">DataProcessing</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../gallery.html#cohort">Cohort</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="cohort_definition.html">Defining a Cohort</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Managing cohorts</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Toy-dataset">Toy dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Basic-scenario">Basic scenario</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Pipelines-that-result-in-incompatible-cohorts">Pipelines that result in incompatible cohorts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Adding-estimators-to-the-pipeline">Adding estimators to the pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Getting-a-list-of-subsets">Getting a list of subsets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Naming-the-cohorts">Naming the cohorts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Handling-datasets-without-column-names">Handling datasets without column names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Using-CohortManager-with-Sci-Kit-Learn’s-Pipeline">Using CohortManager with Sci-Kit Learn’s Pipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Fetching-the-queries-used-for-each-cohort">Fetching the queries used for each cohort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Creating-cohorts-based-on-a-set-of-columns">Creating cohorts based on a set of columns</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Saving-and-loading-the-conditions-used-for-the-cohorts">Saving and loading the conditions used for the cohorts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Using-different-pipelines-for-each-cohort">Using different pipelines for each cohort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Use-Rebalance-over-each-cohort-separately">Use Rebalance over each cohort separately</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Balancing-only-a-set-of-cohorts">Balancing only a set of cohorts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#case-studies">Case Studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#cohort-case-studies">Cohort Case Studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils/utils.html">Utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../api.html">API reference</a> &raquo;</li>
+          <li><a href="../../cohort/cohort.html">Cohort</a> &raquo;</li>
+          <li><a href="../../cohort/cohort_manager.html">CohortManager</a> &raquo;</li>
+      <li>Managing cohorts</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/cohort/cohort_manager.ipynb" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Managing-cohorts">
+<h1>Managing cohorts<a class="headerlink" href="#Managing-cohorts" title="Permalink to this heading"></a></h1>
+<p>This library allows users to apply certain mitigations over a specific cohort, instead of ​applying it to the entire dataset. This is useful when, for example, two cohorts have a very different label distribution and we want to rebalance each cohort individually, instead of rebalancing the entire dataset. In some scenarios, applying a mitigation over each cohort separately is more advantageous than applying it over the whole dataset.</p>
+<p>In this notebook, we’ll show how to apply different pipelines for each cohort separately. To accomplish this, we’ll use the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class. This class allows us to create multiple pipelines (using transformers from <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> or from the current library) and apply them to each cohort separately. All this is done following the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">transform()</span></code> paradigms, ​similar to the other mitigations from the <code class="docutils literal notranslate"><span class="pre">dataprocessing</span></code> module.</p>
+<p>First of all, let’s import the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class, which is found in the <code class="docutils literal notranslate"><span class="pre">cohort</span></code> module.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">create_dummy_dataset</span>
+<span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
+<span class="kn">from</span> <span class="nn">raimitigations.cohort</span> <span class="kn">import</span> <span class="n">CohortDefinition</span><span class="p">,</span> <span class="n">CohortManager</span>
+
+<span class="n">SEED</span> <span class="o">=</span> <span class="mi">42</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Toy-dataset">
+<h2>Toy dataset<a class="headerlink" href="#Toy-dataset" title="Permalink to this heading"></a></h2>
+<p>Next, we’ll create a toy dataset so we can showcase how the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> operates.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_df</span><span class="p">(</span><span class="n">with_null</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">add_nan</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">pct</span><span class="p">):</span>
+        <span class="n">vec</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+        <span class="n">nan_index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vec</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">pct</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">vec</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">nan_index</span><span class="p">:</span>
+            <span class="n">vec</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">return</span> <span class="n">vec</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">create_dummy_dataset</span><span class="p">(</span>
+        <span class="n">samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">n_features</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">n_num_num</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">n_cat_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">n_cat_cat</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">num_num_noise</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">],</span>
+        <span class="n">pct_change</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">with_null</span><span class="p">:</span>
+        <span class="n">col_with_nan</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;num_0&quot;</span><span class="p">,</span> <span class="s2">&quot;num_1&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">col_with_nan</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="o">!=</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">add_nan</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="mf">0.1</span><span class="p">)</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;label&quot;</span><span class="p">]]</span>
+
+    <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span>
+
+<span class="c1"># -----------------------------------</span>
+<span class="k">def</span> <span class="nf">get_model</span><span class="p">():</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">XGBClassifier</span><span class="p">(</span>
+            <span class="n">objective</span><span class="o">=</span><span class="s2">&quot;binary:logistic&quot;</span><span class="p">,</span>
+            <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">n_estimators</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+            <span class="n">max_depth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">colsample_bytree</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">reg_lambda</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+            <span class="n">nthreads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+            <span class="n">verbosity</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">use_label_encoder</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">create_df</span><span class="p">()</span>
+<span class="n">X</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.601034</td>
+      <td>2.535353</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.755945</td>
+      <td>-2.172352</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2.354479</td>
+      <td>NaN</td>
+      <td>val0_0</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.103090</td>
+      <td>-0.766515</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.753178</td>
+      <td>1.787514</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>995</th>
+      <td>2.713939</td>
+      <td>1.451639</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>996</th>
+      <td>1.420812</td>
+      <td>2.535627</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>997</th>
+      <td>3.844315</td>
+      <td>1.211294</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>998</th>
+      <td>0.974124</td>
+      <td>2.619258</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>999</th>
+      <td>4.641478</td>
+      <td>-0.243075</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>1000 rows × 4 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Basic-scenario">
+<h2>Basic scenario<a class="headerlink" href="#Basic-scenario" title="Permalink to this heading"></a></h2>
+<p>Next, we’ll explore a basic scenario where the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> can prove its usefulness. In this scenario, we want to apply an imputation, followed by a min max scaler over each cohort separately. Once again: this is useful when each cohort has different behaviors or distributions for a particular column, so applying an imputation based on the mean value of the column over each cohort separately will make more sense than using the mean of the column of the entire dataset, for example.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> requires two main parameters: a transformation pipeline and a list of cohort definitions. The latter is already explored and explained in the notebook showcasing the <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> class (which is used internally by the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code>). The former is simply a list of objects that implement the <code class="docutils literal notranslate"><span class="pre">fit()</span></code>, <code class="docutils literal notranslate"><span class="pre">transform()</span></code>, <code class="docutils literal notranslate"><span class="pre">predict()</span></code> paradigm, or the <code class="docutils literal notranslate"><span class="pre">fit_resample()</span></code> method (for rebalancing classes, such as the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class from the <code class="docutils literal notranslate"><span class="pre">dataprocessing</span></code>
+module, or the rebalance classes from the <code class="docutils literal notranslate"><span class="pre">imblearn</span></code> library).</p>
+<p>There are two constraints when defining the cohorts:</p>
+<ol class="arabic simple">
+<li><p>The definitions must not allow any instance to belong to more than 1 cohort. If that happens, an error is raised;</p></li>
+<li><p>The definitions must include all instances (without repetition due to the previous constraint). Since in some cases it is difficult to define a set of conditions for the last cohort such that it includes all instances not belonging to any of the previous cohorts, we created an easier way to accomplish this: the condition list for the last cohort is allowed to be <code class="docutils literal notranslate"><span class="pre">None</span></code>. When this happens, this cohort is understood as being the one with all the remaining instances that don’t belong to any of
+the other cohorts.</p></li>
+</ol>
+<p>Once we instantiate the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> object, we can treat it similarly to other classes from the <code class="docutils literal notranslate"><span class="pre">dataprocessing</span></code> module: call the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">transform()</span></code> methods. Internally, what will happen is the following:</p>
+<ol class="arabic simple">
+<li><p>the cohort pipeline will be duplicated, such that we’ll have one pipeline for each cohort, with different objects instantiation;</p></li>
+<li><p>during the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method, we’ll cycle through all cohorts, and for each cohort:</p>
+<ul class="simple">
+<li><p>we’ll first filter the dataset provided (in this case, <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>) so that it includes only instances that belong to the current cohort;</p></li>
+<li><p>with the subset of the current cohort, we’ll call the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method for all the transformations in the cohort’s pipeline (in the order in which they appear) using the subset dataset as input;</p></li>
+</ul>
+</li>
+<li><p>during the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method, we’ll use a similar approach, but instead of calling the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method for the transformers in each cohort’s pipeline, this time we’ll call the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method;</p>
+<ul class="simple">
+<li><p>if all cohorts are compatible with each other, that is, have the same columns after applying all transforms, then all subsets are concatenated together. The full dataset is then returned. If there are any inconsistencies between the cohorts, then we’ll just add each subset into a list of subsets, and the final variable returned in this case is a list of subsets (we’ll explore some examples ahead).</p></li>
+</ul>
+</li>
+</ol>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">c1</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;CN_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val0_1&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;CN_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val0_0&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c3</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">cohort_pipeline</span><span class="p">,</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">new_X</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">new_X</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.616278</td>
+      <td>0.790075</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.340936</td>
+      <td>0.040024</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.910331</td>
+      <td>0.660560</td>
+      <td>val0_0</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.816398</td>
+      <td>0.284064</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.675657</td>
+      <td>0.688320</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>995</th>
+      <td>0.534997</td>
+      <td>0.669115</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>996</th>
+      <td>0.545942</td>
+      <td>0.790112</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>997</th>
+      <td>0.763978</td>
+      <td>0.627393</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>998</th>
+      <td>0.371610</td>
+      <td>0.801491</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>999</th>
+      <td>0.925459</td>
+      <td>0.374928</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>1000 rows × 4 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Pipelines-that-result-in-incompatible-cohorts">
+<h2>Pipelines that result in incompatible cohorts<a class="headerlink" href="#Pipelines-that-result-in-incompatible-cohorts" title="Permalink to this heading"></a></h2>
+<p>As previously mentioned, in some cases, the pipeline associated with one or more cohorts may result in a cohort incompatible with at least one of the other cohorts. For example, consider the case where we add a one-hot encoding transformation in the pipeline. This will probably result in each cohort having different columns, which are the columns created by the one-hot encoder (for example, in case one of the cohorts doesn’t have all existing values in a categorical column that is being
+encoded).</p>
+<p>This is also valid for any other encoder method since categorical encoders require a list of all valid categorical values in the column before creating the encoding. However, for the ordinal encoder, for example, it is not easy to automatically identify an incompatibility between the cohorts, since the ordinal encoder doesn’t change the number of columns. To remedy this (at least for the mitigations from the <code class="docutils literal notranslate"><span class="pre">dataprocessing</span></code> module), we implemented a way for the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> to query if a
+given class results in incompatible cohorts or not. Therefore, if we use the <code class="docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code> from the <code class="docutils literal notranslate"><span class="pre">dataprocessing</span></code> module in the pipeline, we’ll be able to automatically identify that each cohort will be incompatible between each other, and thus, the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method will return a dictionary of subsets instead of a single dataset. This dictionary will have a key assigned to each of the cohorts’ names.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">cohort_pipeline</span><span class="p">,</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">subset_dict</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">subset_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+WARNING: the transformations used over the cohorts resulted in each cohort having different columns. The transform() method will return a list of transformed subsets (one for each cohort).
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+dict_keys([&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_2&#39;])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subset_dict</span><span class="p">[</span><span class="s1">&#39;cohort_0&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>0.340936</td>
+      <td>0.040024</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.816398</td>
+      <td>0.284064</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.402537</td>
+      <td>0.692783</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.299020</td>
+      <td>0.843083</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>0.626370</td>
+      <td>0.180212</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>990</th>
+      <td>0.371002</td>
+      <td>0.696937</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>991</th>
+      <td>0.358171</td>
+      <td>0.089578</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>995</th>
+      <td>0.534997</td>
+      <td>0.669115</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>997</th>
+      <td>0.763978</td>
+      <td>0.627393</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>999</th>
+      <td>0.925459</td>
+      <td>0.374928</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>542 rows × 4 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Adding-estimators-to-the-pipeline">
+<h2>Adding estimators to the pipeline<a class="headerlink" href="#Adding-estimators-to-the-pipeline" title="Permalink to this heading"></a></h2>
+<p>The pipelines are not limited to having only transformers, as we can also add estimators to them. Some considerations when adding an estimator into the pipeline:</p>
+<ol class="arabic simple">
+<li><p>The estimator must be the last object in the pipeline (this implies that we can only have 1 estimator in each pipeline);</p></li>
+<li><p>The estimator must implement at least the <code class="docutils literal notranslate"><span class="pre">predict()</span></code> method. It can also implement the <code class="docutils literal notranslate"><span class="pre">predict_proba()</span></code> method, but the latter is not mandatory;</p></li>
+<li><p>If the pipeline is comprised of a set of transformers (that implement the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method) and the estimator (that is, the pipeline doesn’t contain <em>only</em> the estimator), then the cohort manager object will be allowed to call the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> and <code class="docutils literal notranslate"><span class="pre">predict()</span></code> methods (and the <code class="docutils literal notranslate"><span class="pre">predict_proba()</span></code> as well, but only if the estimator implements this method)</p>
+<ul class="simple">
+<li><p>in this case, the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method will call only the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> methods of the transformers up until the estimator, since this latter doesn’t have a <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method</p></li>
+</ul>
+</li>
+</ol>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">get_model</span><span class="p">()</span>
+<span class="p">]</span>
+
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">cohort_pipeline</span><span class="p">,</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;raimitigations.cohort.cohort_manager.CohortManager at 0x7f78348558b0&gt;
+</pre></div></div>
+</div>
+<p>When calling the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method, it will return a list of subsets, since the <code class="docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code> results in incompatible cohorts (as previously mentioned). The <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method will run the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> of all transformers up until we get to the model.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subset_dict</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">subset_dict</span><span class="p">[</span><span class="s1">&#39;cohort_0&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+WARNING: the transformations used over the cohorts resulted in each cohort having different columns. The transform() method will return a list of transformed subsets (one for each cohort).
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>0.340936</td>
+      <td>0.040024</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.816398</td>
+      <td>0.284064</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.402537</td>
+      <td>0.692783</td>
+      <td>0</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.299020</td>
+      <td>0.843083</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>0.626370</td>
+      <td>0.180212</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>990</th>
+      <td>0.371002</td>
+      <td>0.696937</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>991</th>
+      <td>0.358171</td>
+      <td>0.089578</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>995</th>
+      <td>0.534997</td>
+      <td>0.669115</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>997</th>
+      <td>0.763978</td>
+      <td>0.627393</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>999</th>
+      <td>0.925459</td>
+      <td>0.374928</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>542 rows × 4 columns</p>
+</div></div>
+</div>
+<p>We can then call the <code class="docutils literal notranslate"><span class="pre">predict()</span></code> method. Since the predictions will have the same format regardless if the cohorts are compatible or not, then the <code class="docutils literal notranslate"><span class="pre">predict()</span></code> and <code class="docutils literal notranslate"><span class="pre">predict_proba()</span></code> will always return a single prediction array by default. However, this behavior can be changed through the <code class="docutils literal notranslate"><span class="pre">split_pred</span></code> parameter for both of these methods: if <code class="docutils literal notranslate"><span class="pre">split_pred</span> <span class="pre">=</span> <span class="pre">False</span></code>, then a single prediction array is returned (this is the default behavior), but if <code class="docutils literal notranslate"><span class="pre">split_pred</span> <span class="pre">=</span> <span class="pre">True</span></code>, then a dictionary of
+predictions is returned instead.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_arr</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">pred_arr</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(1000,)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_dict</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">split_pred</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">cohort_name</span> <span class="ow">in</span> <span class="n">pred_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cohort_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">pred_dict</span><span class="p">[</span><span class="n">cohort_name</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+cohort_0: (542,)
+cohort_1: (341,)
+cohort_2: (117,)
+</pre></div></div>
+</div>
+<p>Similarly, we can also call the <code class="docutils literal notranslate"><span class="pre">predict_proba()</span></code> method.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_arr</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">pred_arr</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(1000, 2)
+</pre></div></div>
+</div>
+<p>Note that if none of the transformers in the pipeline result in incompatible cohorts, then the <code class="docutils literal notranslate"><span class="pre">predict()</span></code> method will return a single array of predictions, just like a regular estimator. To demonstrate this, let’s remove the categorical columns of the dataset (so that the estimator works without an encoder). Let’s also redefine our cohorts so that we don’t reference any of the categorical columns removed.</p>
+<p>When calling the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method in this scenario, it will return a single dataset, as previously shown.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_num</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CN_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;CN_1_num_1&#39;</span><span class="p">])</span>
+
+<span class="n">cohort_pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">get_model</span><span class="p">()</span>
+<span class="p">]</span>
+
+<span class="n">c1</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">cohort_pipeline</span><span class="p">,</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X_num</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">new_X</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_num</span><span class="p">)</span>
+<span class="n">new_X</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.028385</td>
+      <td>0.891836</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.072545</td>
+      <td>0.048710</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.243165</td>
+      <td>0.623450</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.741629</td>
+      <td>0.300489</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.071756</td>
+      <td>0.757902</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>995</th>
+      <td>0.345633</td>
+      <td>0.697749</td>
+    </tr>
+    <tr>
+      <th>996</th>
+      <td>0.971967</td>
+      <td>0.781923</td>
+    </tr>
+    <tr>
+      <th>997</th>
+      <td>0.667862</td>
+      <td>0.654704</td>
+    </tr>
+    <tr>
+      <th>998</th>
+      <td>0.806418</td>
+      <td>0.792162</td>
+    </tr>
+    <tr>
+      <th>999</th>
+      <td>0.895103</td>
+      <td>0.394234</td>
+    </tr>
+  </tbody>
+</table>
+<p>1000 rows × 2 columns</p>
+</div></div>
+</div>
+<p>The same applies to the <code class="docutils literal notranslate"><span class="pre">predict()</span></code> method, where it will return a single array of predictions this time.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_num</span><span class="p">)</span>
+<span class="n">pred</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(1000,)
+</pre></div></div>
+</div>
+</section>
+<section id="Getting-a-list-of-subsets">
+<h2>Getting a list of subsets<a class="headerlink" href="#Getting-a-list-of-subsets" title="Permalink to this heading"></a></h2>
+<p>Sometimes we just want to break a new dataset into subsets, where we have one subset for each of the cohorts being used. We can do this using the <code class="docutils literal notranslate"><span class="pre">get_subsets()</span></code> method from the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class. This method accepts three parameters:</p>
+<ol class="arabic simple">
+<li><p>A dataset that has at least the columns used by the cohorts’ filters (this means that the dataset may also have other columns not used by the filters);</p></li>
+<li><p>A dataset containing only the label column (<code class="docutils literal notranslate"><span class="pre">y</span></code> dataset). This parameter is optional, and it is useful when we want to filter a feature dataset (<code class="docutils literal notranslate"><span class="pre">X</span></code>) and a label dataset (<code class="docutils literal notranslate"><span class="pre">y</span></code>), and get a list of subsets from <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>;</p></li>
+<li><p>A boolean value indicating if we want to apply the transformations pipeline used for each cohort or not. If set to True, this method will behave similarly to the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method, with the main difference being that this method will always return a list of subsets, even if the cohorts are compatible with each other.</p></li>
+</ol>
+<p>The returned variable is a dictionary where the primary keys are the name of the cohorts, and the secondary keys are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">X</span></code>: the subset of the features dataset;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">y</span></code>: the subset of the label dataset. This key will only be returned if the <code class="docutils literal notranslate"><span class="pre">y</span></code> dataset is passed in the method’s call.</p></li>
+</ul>
+<p>The following cell shows an example of how to call this method without applying the transformations.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_num</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">subsets</span><span class="p">[</span><span class="s1">&#39;cohort_0&#39;</span><span class="p">][</span><span class="s1">&#39;X&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.601034</td>
+      <td>2.535353</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.755945</td>
+      <td>-2.172352</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2.354479</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.103090</td>
+      <td>-0.766515</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.753178</td>
+      <td>1.787514</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>990</th>
+      <td>1.904364</td>
+      <td>1.611914</td>
+    </tr>
+    <tr>
+      <th>991</th>
+      <td>1.841023</td>
+      <td>-1.886888</td>
+    </tr>
+    <tr>
+      <th>995</th>
+      <td>2.713939</td>
+      <td>1.451639</td>
+    </tr>
+    <tr>
+      <th>997</th>
+      <td>3.844315</td>
+      <td>1.211294</td>
+    </tr>
+    <tr>
+      <th>999</th>
+      <td>4.641478</td>
+      <td>-0.243075</td>
+    </tr>
+  </tbody>
+</table>
+<p>637 rows × 2 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+dict_keys([&#39;cohort_0&#39;, &#39;cohort_1&#39;])
+</pre></div></div>
+</div>
+<p>Let’s now compare the resulting subsets when setting the <code class="docutils literal notranslate"><span class="pre">apply_transform</span></code> to True:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_num</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">subsets</span><span class="p">[</span><span class="s1">&#39;cohort_0&#39;</span><span class="p">][</span><span class="s1">&#39;X&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.028385</td>
+      <td>0.891836</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.072545</td>
+      <td>0.048710</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.243165</td>
+      <td>0.623450</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.741629</td>
+      <td>0.300489</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.071756</td>
+      <td>0.757902</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>990</th>
+      <td>0.114854</td>
+      <td>0.726453</td>
+    </tr>
+    <tr>
+      <th>991</th>
+      <td>0.096797</td>
+      <td>0.099836</td>
+    </tr>
+    <tr>
+      <th>995</th>
+      <td>0.345633</td>
+      <td>0.697749</td>
+    </tr>
+    <tr>
+      <th>997</th>
+      <td>0.667862</td>
+      <td>0.654704</td>
+    </tr>
+    <tr>
+      <th>999</th>
+      <td>0.895103</td>
+      <td>0.394234</td>
+    </tr>
+  </tbody>
+</table>
+<p>637 rows × 2 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subsets</span><span class="p">[</span><span class="s1">&#39;cohort_0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+dict_keys([&#39;X&#39;])
+</pre></div></div>
+</div>
+<p>In the previous cell, we can see that we only have the <code class="docutils literal notranslate"><span class="pre">X</span></code> key for each cohort, since we didn’t pass the <code class="docutils literal notranslate"><span class="pre">y</span></code> dataset as a parameter to the method. Let’s now look at an example where we want the subsets of both the features and labels (X and y):</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_num</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">subsets</span><span class="p">[</span><span class="s1">&#39;cohort_0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+dict_keys([&#39;X&#39;, &#39;y&#39;])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+cohort_0
+(637, 2)
+(637, 1)
+
+cohort_1
+(363, 2)
+(363, 1)
+</pre></div></div>
+</div>
+</section>
+<section id="Naming-the-cohorts">
+<h2>Naming the cohorts<a class="headerlink" href="#Naming-the-cohorts" title="Permalink to this heading"></a></h2>
+<p>So far, we created a list of conditions for each cohort and passed that to the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> without specifying the cohort’s name. In that case, the cohorts will be named automatically. This name is later used in ​the subsets dictionary returned by the <code class="docutils literal notranslate"><span class="pre">get_subsets()</span></code> method, as we’ve shown in the previous subsection. We can provide a specific name to each cohort by passing a dictionary of condition lists to the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> instead of passing a list of conditions. The following cell
+demonstrates this:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">cohort_pipeline</span><span class="p">,</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Large num_0&quot;</span><span class="p">:</span><span class="n">c1</span><span class="p">,</span> <span class="s2">&quot;Remaining&quot;</span><span class="p">:</span><span class="n">c2</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_num</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_num</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
+</pre></div></div>
+</div>
+</section>
+<section id="Handling-datasets-without-column-names">
+<h2>Handling datasets without column names<a class="headerlink" href="#Handling-datasets-without-column-names" title="Permalink to this heading"></a></h2>
+<p>When handling a dataset without column names, we can use the column indices as the column identifier in the conditions list. However, the indices must be passed as a string, not a number. In the following cell, we demonstrate an example where we create a set of conditions using the column indices. Note that this approach will only work if the dataset doesn’t have any column names. If the dataset has valid column names, then these names should be used instead of the indices.</p>
+<p>Note that in the following example, we are not passing a list of transformations to the <code class="docutils literal notranslate"><span class="pre">transform_pipe</span></code> parameter. Instead, we are passing a single transformer. This is also allowed, and what will happen in the background is that an empty list will be created for each cohort, and this transformer will be copied and added to each of these lists.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">new_y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">new_X</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">new_X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+<span class="n">new_y</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">new_y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+
+<span class="n">c1</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val0_1&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val0_0&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c3</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">new_X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">new_y</span><span class="p">)</span>
+<span class="n">new_X</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">new_X</span><span class="p">)</span>
+<span class="n">new_X</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.616278</td>
+      <td>0.790075</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.340936</td>
+      <td>0.040024</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.910331</td>
+      <td>NaN</td>
+      <td>val0_0</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.816398</td>
+      <td>0.284064</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.675657</td>
+      <td>0.688320</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>995</th>
+      <td>0.534997</td>
+      <td>0.669115</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>996</th>
+      <td>0.545942</td>
+      <td>0.790112</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>997</th>
+      <td>0.763978</td>
+      <td>0.627393</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>998</th>
+      <td>0.371610</td>
+      <td>0.801491</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>999</th>
+      <td>0.925459</td>
+      <td>0.374928</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>1000 rows × 4 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Using-CohortManager-with-Sci-Kit-Learn’s-Pipeline">
+<h2>Using CohortManager with Sci-Kit Learn’s Pipeline<a class="headerlink" href="#Using-CohortManager-with-Sci-Kit-Learn’s-Pipeline" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>’s <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> class is a well-established approach for creating pipelines. Therefore, the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class was designed to work with <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>, allowing users to create even more complex data processing pipelines.</p>
+<p>The following cell shows an example of how to create a <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> using an instance of the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class. The pipeline created in this example will do the following:</p>
+<ol class="arabic simple">
+<li><p>Run the <code class="docutils literal notranslate"><span class="pre">BasicImputer</span></code> and <code class="docutils literal notranslate"><span class="pre">DataMinMaxScaler</span></code> (in that order) over each cohort separately. Notice that each cohort will have a separate object from these classes. Since these transformations result in compatible cohorts, the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method will return a single dataset;</p></li>
+<li><p>Run the <code class="docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code> over the dataset returned by the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> (that is, the encoding is done over the entire dataset, not over each cohort individually);</p></li>
+<li><p>Fit the model (an XGBoost in this case) over the dataset processed by the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> and <code class="docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code>.</p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="n">c1</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;CN_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val0_1&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;CN_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val0_0&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c3</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">cohort_pipeline</span><span class="p">,</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">skpipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s2">&quot;cohort_preprocess&quot;</span><span class="p">,</span> <span class="n">cohort_set</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">())</span>
+<span class="p">])</span>
+<span class="n">skpipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">skpipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">skpipe</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Fetching-the-queries-used-for-each-cohort">
+<h2>Fetching the queries used for each cohort<a class="headerlink" href="#Fetching-the-queries-used-for-each-cohort" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_queries()</span></code> method returns a dictionary with the queries used for each cohort.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;cohort_0&#39;: &#39;(`CN_0_num_0` == &#34;val0_1&#34;) and (`num_0` &gt; 0.0)&#39;,
+ &#39;cohort_1&#39;: &#39;(`CN_0_num_0` == &#34;val0_0&#34;) and (`num_0` &gt; 0.0)&#39;,
+ &#39;cohort_2&#39;: None}
+</pre></div></div>
+</div>
+</section>
+<section id="Creating-cohorts-based-on-a-set-of-columns">
+<h2>Creating cohorts based on a set of columns<a class="headerlink" href="#Creating-cohorts-based-on-a-set-of-columns" title="Permalink to this heading"></a></h2>
+<p>In some cases, users might be interested in creating one cohort for each possible value in a given column (for example, if a dataset has a <strong>gender</strong> column, we might be interested in creating one cohort for each gender). To avoid the cumbersome task of creating one condition list for each value in a given column, we <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> use the <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameter instead of the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> during the instantiation of the object. Here are more details about these two parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cohort_def</span></code>: already explored in the previous subsections. Accepts a list of condition lists (one for each cohort), or a dictionary of condition lists;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cohort_col</span></code>: accepts a list of column names or indices, from which one cohort is created for each unique combination of values for these columns.</p></li>
+</ul>
+<p>In the following example, we show how to create a set of cohorts based on the <code class="docutils literal notranslate"><span class="pre">CN_0_num_0</span></code> column. We then use the <code class="docutils literal notranslate"><span class="pre">get_queries()</span></code> method to look at the cohorts created.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CN_0_num_0&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;cohort_0&#39;: &#39;(`CN_0_num_0` == &#34;val0_0&#34;)&#39;,
+ &#39;cohort_1&#39;: &#39;(`CN_0_num_0` == &#34;val0_1&#34;)&#39;}
+</pre></div></div>
+</div>
+<p>We can also use the column indices instead of their names:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;cohort_0&#39;: &#39;(`CN_0_num_0` == &#34;val0_0&#34;)&#39;,
+ &#39;cohort_1&#39;: &#39;(`CN_0_num_0` == &#34;val0_1&#34;)&#39;}
+</pre></div></div>
+</div>
+<p>Note that in both examples we had to call the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method before calling the <code class="docutils literal notranslate"><span class="pre">get_queries()</span></code> method. This is necessary because, when using the <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameter instead of the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code>, the cohorts can only be created when a valid dataset is provided. Since we didn’t provide a dataset in the constructor method, then the cohorts are only built when the fit method is called. In the following cell we provide the dataset in the constructor method just to show this:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span>
+<span class="p">)</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;cohort_0&#39;: &#39;(`CN_0_num_0` == &#34;val0_0&#34;)&#39;,
+ &#39;cohort_1&#39;: &#39;(`CN_0_num_0` == &#34;val0_1&#34;)&#39;}
+</pre></div></div>
+</div>
+<p>Just to better demonstrate this, let’s now use the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> parameter, while not providing the datasets in the constructor method. In this case, we can also call the <code class="docutils literal notranslate"><span class="pre">get_queries()</span></code> method before calling the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;cohort_0&#39;: &#39;(`CN_0_num_0` == &#34;val0_1&#34;) and (`num_0` &gt; 0.0)&#39;,
+ &#39;cohort_1&#39;: &#39;(`CN_0_num_0` == &#34;val0_0&#34;) and (`num_0` &gt; 0.0)&#39;,
+ &#39;cohort_2&#39;: None}
+</pre></div></div>
+</div>
+<p>As previously mentioned, the <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameter accepts a list of column names, not a single column. When more than one column is provided, we create one cohort for each combination of unique values in these columns:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CN_0_num_0&quot;</span><span class="p">,</span> <span class="s2">&quot;CN_1_num_1&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;cohort_0&#39;: &#39;(`CN_0_num_0` == &#34;val0_0&#34;) and (`CN_1_num_1` == &#34;val1_0&#34;)&#39;,
+ &#39;cohort_1&#39;: &#39;(`CN_0_num_0` == &#34;val0_0&#34;) and (`CN_1_num_1` == &#34;val1_1&#34;)&#39;,
+ &#39;cohort_2&#39;: &#39;(`CN_0_num_0` == &#34;val0_0&#34;) and (`CN_1_num_1` == &#34;val1_2&#34;)&#39;,
+ &#39;cohort_3&#39;: &#39;(`CN_0_num_0` == &#34;val0_0&#34;) and (`CN_1_num_1` == &#34;val1_3&#34;)&#39;,
+ &#39;cohort_4&#39;: &#39;(`CN_0_num_0` == &#34;val0_1&#34;) and (`CN_1_num_1` == &#34;val1_0&#34;)&#39;,
+ &#39;cohort_5&#39;: &#39;(`CN_0_num_0` == &#34;val0_1&#34;) and (`CN_1_num_1` == &#34;val1_1&#34;)&#39;,
+ &#39;cohort_6&#39;: &#39;(`CN_0_num_0` == &#34;val0_1&#34;) and (`CN_1_num_1` == &#34;val1_2&#34;)&#39;,
+ &#39;cohort_7&#39;: &#39;(`CN_0_num_0` == &#34;val0_1&#34;) and (`CN_1_num_1` == &#34;val1_3&#34;)&#39;}
+</pre></div></div>
+</div>
+</section>
+<section id="Saving-and-loading-the-conditions-used-for-the-cohorts">
+<h2>Saving and loading the conditions used for the cohorts<a class="headerlink" href="#Saving-and-loading-the-conditions-used-for-the-cohorts" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">save_conditions()</span></code> method saves the list of conditions used by all cohorts into a JSON file. This way, users are able to then reuse these condition lists in another <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> object. The <code class="docutils literal notranslate"><span class="pre">save_conditions()</span></code> has the same conditions as the <code class="docutils literal notranslate"><span class="pre">get_queries()</span></code> method: if using <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code>, then we must either pass the datasets in the constructor method, or call the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method prior to calling the <code class="docutils literal notranslate"><span class="pre">save_conditions()</span></code> method.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">save_conditions</span><span class="p">(</span><span class="s2">&quot;cohort.json&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The JSON file saved has the following structure:</p>
+<p><img alt="cohort" src="../../_images/cohort.png" /></p>
+<p>We can then create a new <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> object and pass the path to the JSON file containing the cohort definitions to the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> parameter. After loading the cohort file, we can verify that the same conditions are being used.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="s2">&quot;cohort.json&quot;</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;cohort_0&#39;: &#39;(`CN_0_num_0` == &#34;val0_1&#34;) and (`num_0` &gt; 0.0)&#39;,
+ &#39;cohort_1&#39;: &#39;(`CN_0_num_0` == &#34;val0_0&#34;) and (`num_0` &gt; 0.0)&#39;,
+ &#39;cohort_2&#39;: None}
+</pre></div></div>
+</div>
+</section>
+<section id="Using-different-pipelines-for-each-cohort">
+<h2>Using different pipelines for each cohort<a class="headerlink" href="#Using-different-pipelines-for-each-cohort" title="Permalink to this heading"></a></h2>
+<p>So far, every time we created an instance of the <code class="docutils literal notranslate"><span class="pre">CohortMManager</span></code> class, the same pipeline was used over all cohorts (different instances of the same pipeline, given that the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> must be called using only the subset associated to a given cohort). However, there might be some scenarios where we might be interested in using different transformations for each cohort. We won’t cover here these scenarios. Instead, here we’ll show how to create different pipelines for each cohort.</p>
+<p>There are four scenarios associated with the <code class="docutils literal notranslate"><span class="pre">transform_pipe</span></code> parameter:</p>
+<ol class="arabic simple">
+<li><p><strong>An empty list or ``None`` is provided:</strong> in this case, the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> won’t apply any transformations over the dataset. The <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method will simply return the dataset provided;</p></li>
+<li><p><strong>A single transformer is provided:</strong> in this case, this single transformer is placed in a list (a list with a single transformer), which is then replicated such that each cohort has its own list of transformations (pipeline);</p></li>
+<li><p><strong>A list of transformers is provided:</strong> in this case, this pipeline is replicated for each cohort;</p></li>
+<li><p><strong>A list of pipelines is provided:</strong> a list of pipelines is basically a list of lists of transformations. In this case, the list of pipelines should have one pipeline for each cohort created, that is, the length of the <code class="docutils literal notranslate"><span class="pre">transform_pipe</span></code> parameter should be the same as the number of cohorts created. The pipelines will be assigned to each cohort following the same order as the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> parameter (depicted in the following example).</p></li>
+</ol>
+<p>In the following example, we’ll create 3 cohorts and 3 pipelines: the first pipeline will contain only a <code class="docutils literal notranslate"><span class="pre">DataMinMaxScaler</span></code> transformer, the second pipeline contains only a <code class="docutils literal notranslate"><span class="pre">DataPowerTransformer</span></code> transformer, and the third pipeline is empty, that is, it doesn’t apply any transformations over the data. These pipelines will be associated with cohorts <code class="docutils literal notranslate"><span class="pre">c1</span></code>, <code class="docutils literal notranslate"><span class="pre">c2</span></code>, and <code class="docutils literal notranslate"><span class="pre">c3</span></code> respectively.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.601034</td>
+      <td>2.535353</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.755945</td>
+      <td>-2.172352</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2.354479</td>
+      <td>NaN</td>
+      <td>val0_0</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.103090</td>
+      <td>-0.766515</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.753178</td>
+      <td>1.787514</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>995</th>
+      <td>2.713939</td>
+      <td>1.451639</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>996</th>
+      <td>1.420812</td>
+      <td>2.535627</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>997</th>
+      <td>3.844315</td>
+      <td>1.211294</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>998</th>
+      <td>0.974124</td>
+      <td>2.619258</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>999</th>
+      <td>4.641478</td>
+      <td>-0.243075</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>1000 rows × 4 columns</p>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">create_df</span><span class="p">()</span>
+
+<span class="n">c1</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;CN_1_num_1&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val1_3&#39;</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;CN_1_num_1&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val1_0&#39;</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c3</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">c1_pipe</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="n">c2_pipe</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">DataPowerTransformer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="n">c3_pipe</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span><span class="n">c1_pipe</span><span class="p">,</span> <span class="n">c2_pipe</span><span class="p">,</span> <span class="n">c3_pipe</span><span class="p">],</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">new_X</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">new_X</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>num_0</th>
+      <th>num_1</th>
+      <th>CN_0_num_0</th>
+      <th>CN_1_num_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.560649</td>
+      <td>0.730360</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.369841</td>
+      <td>0.231139</td>
+      <td>val0_1</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1.089526</td>
+      <td>NaN</td>
+      <td>val0_0</td>
+      <td>val1_0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.103090</td>
+      <td>-0.766515</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.753178</td>
+      <td>1.787514</td>
+      <td>val0_0</td>
+      <td>val1_1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>995</th>
+      <td>2.713939</td>
+      <td>1.451639</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>996</th>
+      <td>0.524491</td>
+      <td>0.730402</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>997</th>
+      <td>3.844315</td>
+      <td>1.211294</td>
+      <td>val0_1</td>
+      <td>val1_2</td>
+    </tr>
+    <tr>
+      <th>998</th>
+      <td>0.434872</td>
+      <td>0.743060</td>
+      <td>val0_0</td>
+      <td>val1_3</td>
+    </tr>
+    <tr>
+      <th>999</th>
+      <td>4.641478</td>
+      <td>-0.243075</td>
+      <td>val0_1</td>
+      <td>val1_1</td>
+    </tr>
+  </tbody>
+</table>
+<p>1000 rows × 4 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Use-Rebalance-over-each-cohort-separately">
+<h2>Use Rebalance over each cohort separately<a class="headerlink" href="#Use-Rebalance-over-each-cohort-separately" title="Permalink to this heading"></a></h2>
+<p>Rebalancing a dataset is not always a trivial task. In some cases, we might have a class imbalance in the whole dataset, but different cohorts of this dataset depict different imbalance distributions. In such a scenario, rebalancing the full dataset might result in an even greater imbalance for a set of cohorts, even though the full dataset is now balanced. Therefore, we might want to rebalance each cohort separately, in order to obtain a balanced dataset and balanced cohorts.</p>
+<p>In this subsection, we’ll explore how the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> can easily help us achieve this goal.</p>
+<p>First of all, let’s start defining a function that plots a graph with the label distribution for the full dataset, as well as for each cohort.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="k">def</span> <span class="nf">plot_value_counts_cohort</span><span class="p">(</span><span class="n">y_full</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#plt.legend(bbox_to_anchor=(1.02, 1), loc=&#39;upper left&#39;, borderaxespad=0, fontsize=23)</span>
+
+    <span class="n">value_count</span> <span class="o">=</span> <span class="n">y_full</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
+
+    <span class="n">subsets_col</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;full df&#39;</span><span class="p">,</span> <span class="s1">&#39;full df&#39;</span><span class="p">]</span>
+    <span class="n">counts_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">value_count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">label_col</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">value_count</span> <span class="o">=</span> <span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
+        <span class="n">subsets_col</span> <span class="o">+=</span> <span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">]</span>
+        <span class="n">counts_col</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value_count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">label_col</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">count_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;subsets&quot;</span><span class="p">:</span><span class="n">subsets_col</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span><span class="n">label_col</span><span class="p">,</span> <span class="s2">&quot;counts&quot;</span><span class="p">:</span><span class="n">counts_col</span><span class="p">})</span>
+
+    <span class="n">y_label</span> <span class="o">=</span> <span class="s2">&quot;Occurrences&quot;</span>
+    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+        <span class="n">y_label</span> <span class="o">=</span> <span class="s2">&quot;Fraction&quot;</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;subsets&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">count_df</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Subsets&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="c1">#ax.tick_params(labelsize=15)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Next, we’ll create a <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> just to obtain the cohorts of interest and plot their distributions.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">create_df</span><span class="p">(</span><span class="n">with_null</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CN_1_num_1&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+
+<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+label
+1        795
+0        205
+dtype: int64
+label
+0        119
+1         11
+dtype: int64
+label
+0        74
+1        31
+dtype: int64
+label
+1        495
+0          6
+dtype: int64
+label
+1        258
+0          6
+dtype: int64
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/notebooks_cohort_cohort_manager_60_1.png" src="../../_images/notebooks_cohort_cohort_manager_60_1.png" />
+</div>
+</div>
+<p>We can see that the full dataset has a great imbalance, where we have a considerably larger number of occurrences of the <code class="docutils literal notranslate"><span class="pre">1</span></code> class in relation to the <code class="docutils literal notranslate"><span class="pre">0</span></code> class. This imbalance is even greater for cohorts <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>, while for cohorts <code class="docutils literal notranslate"><span class="pre">cohort_0</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_1</span></code> this imbalance is inverted: there are a lot more instances from the <code class="docutils literal notranslate"><span class="pre">0</span></code> class when compared to the <code class="docutils literal notranslate"><span class="pre">1</span></code> class.</p>
+<section id="Balancing-the-full-dataset">
+<h3>Balancing the full dataset<a class="headerlink" href="#Balancing-the-full-dataset" title="Permalink to this heading"></a></h3>
+<p>Let’s now rebalance the full dataset. Here, We use the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class from the <code class="docutils literal notranslate"><span class="pre">dataprocessing</span></code> module. Afterward, we plot the label distributions once more to see if our problem is solved.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rebalance</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">new_X</span><span class="p">,</span> <span class="n">new_y</span> <span class="o">=</span> <span class="n">rebalance</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">new_X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">new_y</span><span class="p">)</span>
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">new_X</span><span class="p">,</span> <span class="n">new_y</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">new_y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+
+<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">new_y</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+label
+0        795
+1        795
+dtype: int64
+label
+0        463
+1         11
+dtype: int64
+label
+0        313
+1         31
+dtype: int64
+label
+1        495
+0          8
+dtype: int64
+label
+1        258
+0         11
+dtype: int64
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/notebooks_cohort_cohort_manager_62_1.png" src="../../_images/notebooks_cohort_cohort_manager_62_1.png" />
+</div>
+</div>
+<p>As we can see, the full dataset is now balanced. However, looking at each cohort separately, we noticed that we only made matters worse: we now have an even greater label imbalance inside each cohort. If we think of these cohorts as sensitive groups, that is, groups separated by sensitive features, <em>e.g.</em> gender, race, and nationality, and that we don’t want our models to perform differently in one group compared to another, then this imbalance between cohorts is a scenario that needs to be
+fixed.</p>
+</section>
+<section id="Balancing-each-cohort-separately">
+<h3>Balancing each cohort separately<a class="headerlink" href="#Balancing-each-cohort-separately" title="Permalink to this heading"></a></h3>
+<p>We’ll now use the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class over each cohort separately, in order to obtain a set of balanced cohorts. This might aid us in obtaining fair models, that is, models that perform equally through cohorts. To do this, we’ll use the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code>, and we’ll pass the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> object to the <code class="docutils literal notranslate"><span class="pre">transform_pipe</span></code> parameter. We’ll then call the <code class="docutils literal notranslate"><span class="pre">fit_resample()</span></code> method, implemented by the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class. Note that when using a pipeline with an object that implements the
+<code class="docutils literal notranslate"><span class="pre">fit_resample()</span></code> class, there can’t be any transformers that implement the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> and <code class="docutils literal notranslate"><span class="pre">predict()</span></code> methods, since these transformations serve different purposes: the former is used for rebalancing, that is, creating new instances in the <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> datasets, while the latter require that the number of instances of the dataset is kept fixed between each transformation.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rebalance_cohort</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CN_1_num_1&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">new_X</span><span class="p">,</span> <span class="n">new_y</span> <span class="o">=</span> <span class="n">rebalance_cohort</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">rebalance_cohort</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">new_X</span><span class="p">,</span> <span class="n">new_y</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">new_y</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+cohort_0 --- (`CN_1_num_1` == &#34;val1_0&#34;)
+label
+0        119
+1         11
+dtype: int64
+
+cohort_1 --- (`CN_1_num_1` == &#34;val1_1&#34;)
+label
+0        74
+1        31
+dtype: int64
+
+cohort_2 --- (`CN_1_num_1` == &#34;val1_2&#34;)
+label
+1        495
+0          6
+dtype: int64
+
+cohort_3 --- (`CN_1_num_1` == &#34;val1_3&#34;)
+label
+1        258
+0          6
+dtype: int64
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/notebooks_cohort_cohort_manager_64_1.png" src="../../_images/notebooks_cohort_cohort_manager_64_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0    946
+1    946
+Name: label, dtype: int64
+</pre></div></div>
+</div>
+<p>As we can see, we now have a balanced full dataset, while also having balanced cohorts.</p>
+</section>
+</section>
+<section id="Balancing-only-a-set-of-cohorts">
+<h2>Balancing only a set of cohorts<a class="headerlink" href="#Balancing-only-a-set-of-cohorts" title="Permalink to this heading"></a></h2>
+<p>Suppose that we trained a model that is under-performing only for cohorts <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>. In this case, we can keep the remaining cohorts unchanged, and balance only cohorts <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>. To do this, we can use a separate pipeline for each cohort, where cohorts <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code> use a pipeline comprised with only a <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> object, while the other two cohorts use an empty pipeline.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rebalance_cohort</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">[],</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)],</span>
+        <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)],</span>
+    <span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CN_1_num_1&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">new_X</span><span class="p">,</span> <span class="n">new_y</span> <span class="o">=</span> <span class="n">rebalance_cohort</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">rebalance_cohort</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">new_X</span><span class="p">,</span> <span class="n">new_y</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">new_y</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+cohort_0 --- (`CN_1_num_1` == &#34;val1_0&#34;)
+label
+0        119
+1         11
+dtype: int64
+
+cohort_1 --- (`CN_1_num_1` == &#34;val1_1&#34;)
+label
+0        74
+1        31
+dtype: int64
+
+cohort_2 --- (`CN_1_num_1` == &#34;val1_2&#34;)
+label
+1        495
+0          6
+dtype: int64
+
+cohort_3 --- (`CN_1_num_1` == &#34;val1_3&#34;)
+label
+1        258
+0          6
+dtype: int64
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/notebooks_cohort_cohort_manager_67_1.png" src="../../_images/notebooks_cohort_cohort_manager_67_1.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../cohort/cohort_manager.html" class="btn btn-neutral float-left" title="CohortManager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../cohort/utils.html" class="btn btn-neutral float-right" title="Cohort Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

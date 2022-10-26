@@ -18,6 +18,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -62,7 +63,9 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Synthesizer Class (SDV)</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort">Cohort</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort-case-studies">Cohort Case Studies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
@@ -71,6 +74,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -964,9 +969,9 @@ Name: is_promoted, dtype: int64
 </pre></div></div>
 </div>
 <p>The <strong>strategy</strong> parameter is similar to imblearn’s strategy parameter: it specifies predefined behaviors for balancing the dataset. Here is the description for this parameter:</p>
-<ul class="simple">
-<li><p><strong>strategy:</strong> represents the strategy used to generate the artificial instances. This parameter is ignored when n_samples is provided. Strategy can assume the following values:</p>
 <ul>
+<li><p><strong>strategy:</strong> represents the strategy used to generate the artificial instances. This parameter is ignored when n_samples is provided. Strategy can assume the following values:</p>
+<ul class="simple">
 <li><p>String: one of the following predefined strategies:</p>
 <ul>
 <li><p>‘minority’: generates synthetic samples for only the minority class;</p></li>
@@ -977,8 +982,9 @@ Name: is_promoted, dtype: int64
 <li><p>Dictionary: the dictionary must have one key for each of the possible classes found in the label column, and the value associated with each key represents the number of instances desired for that class after the undersampling process is done. Note: this parameter only works with undersampling approaches that allow controlling the number of instances to be undersampled, such as RandomUnderSampler, ClusterCentroids (from imblearn). If any other undersampler is provided in the under_sampler
 parameter along with a float value for the strategy_under parameter, an error will be raised;</p></li>
 <li><p>Float: a value between [0, 1] that represents the desired ratio between the number of instances of the minority class over the majority class after undersampling. The ratio ‘r’ is given by: <span class="math notranslate nohighlight">\(r = N_m/N_M\)</span> where <span class="math notranslate nohighlight">\(N_m\)</span> is the number of instances of the minority class and <span class="math notranslate nohighlight">\(N_M\)</span> is the number of instances of the majority class after undersampling. Note: this parameter only works with undersampling approaches that allow controlling the number of instances to be undersampled,
-such as RandomUnderSampler, ClusterCentroids (from imblearn). If any other undersampler is provided in the under_sampler parameter along with a float value for the strategy_under parameter, an error will be raised; If None, the default value is set to “auto”, which is the same as “minority”.</p></li>
+such as RandomUnderSampler, ClusterCentroids (from imblearn). If any other undersampler is provided in the under_sampler parameter along with a float value for the strategy_under parameter, an error will be raised;</p></li>
 </ul>
+<p>If None, the default value is set to “auto”, which is the same as “minority”.</p>
 </li>
 </ul>
 <div class="nbinput docutils container">
@@ -1000,7 +1006,10 @@ such as RandomUnderSampler, ClusterCentroids (from imblearn). If any other under
 Name: is_promoted, dtype: int64
 </pre></div></div>
 </div>
-<p>Let’s show an example of how to use the <strong>conditions</strong> parameter. Here is a description of this parameter: * <strong>conditions:</strong> a set of conditions, specified by a dictionary, that defines the characteristics of the synthetic instances that should be created. This parameter indicates the values for certain features that the synthetic instances should have. If None, then no restrictions will be imposed on how to generate the synthetic data;</p>
+<p>Let’s show an example of how to use the <strong>conditions</strong> parameter. Here is a description of this parameter:</p>
+<ul class="simple">
+<li><p><strong>conditions:</strong> a set of conditions, specified by a dictionary, that defines the characteristics of the synthetic instances that should be created. This parameter indicates the values for certain features that the synthetic instances should have. If None, then no restrictions will be imposed on how to generate the synthetic data;</p></li>
+</ul>
 <p>Let’s use the following conditions: the <strong>education</strong> feature must be “Below Secondary” and the <strong>is_promoted</strong> feature must be set to 1.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:

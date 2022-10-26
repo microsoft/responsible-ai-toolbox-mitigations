@@ -18,6 +18,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -56,13 +57,12 @@
 <li class="toctree-l2"><a class="reference internal" href="intro.html#structure">Structure</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">DataProcessing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#raimitigations.dataprocessing.DataProcessing"><code class="docutils literal notranslate"><span class="pre">DataProcessing</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="encoder/encoder.html">Encoders</a></li>
 <li class="toctree-l4"><a class="reference internal" href="feat_sel/feat_sel.html">Feature Selection</a></li>
 <li class="toctree-l4"><a class="reference internal" href="imputer/imputer.html">Imputers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sampler/sampler.html">Sampling</a></li>
 <li class="toctree-l4"><a class="reference internal" href="scaler/scaler.html">Scalers</a></li>
-<li class="toctree-l4"><a class="reference internal" href="model_utils.html">Model Utils</a></li>
-<li class="toctree-l4"><a class="reference internal" href="toy_data.html">Toy Dataset</a></li>
 </ul>
 </li>
 </ul>
@@ -71,6 +71,8 @@
 <li class="toctree-l2"><a class="reference internal" href="intro.html#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -125,8 +127,8 @@
 <section id="dataprocessing">
 <h1>DataProcessing<a class="headerlink" href="#dataprocessing" title="Permalink to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="dataprocessing.DataProcessing">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dataprocessing.</span></span><span class="sig-name descname"><span class="pre">DataProcessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.DataProcessing" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="raimitigations.dataprocessing.DataProcessing">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raimitigations.dataprocessing.</span></span><span class="sig-name descname"><span class="pre">DataProcessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.dataprocessing.DataProcessing" title="Permalink to this definition"></a></dt>
 <dd><p>Base class for all classes present in the dataprocessing module
 of the RAIMitigation library. Implements basic functionalities
 that can be used throughout different mitigations.</p>
@@ -136,8 +138,8 @@ that can be used throughout different mitigations.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="dataprocessing.DataProcessing.inverse_transform">
-<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dataprocessing.DataProcessing.inverse_transform" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="raimitigations.dataprocessing.DataProcessing.inverse_transform">
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.dataprocessing.DataProcessing.inverse_transform" title="Permalink to this definition"></a></dt>
 <dd><p>Implements the behavior for the inverse transformation. This method
 first checks if the current class can be reversed. All transformation
 classes that can be reversed have a private _inverse_transform() method.
@@ -171,17 +173,19 @@ order).</p>
 
 </dd></dl>
 
-<p>The following is a list of all child classes that inherit from the <strong>DataProcessing</strong>:</p>
+<p>The following is a list of all child classes that inherit from the <strong>DataProcessing</strong> class:</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Child Classes</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="encoder/encoder.html">Encoders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="encoder/encoder.html#raimitigations.dataprocessing.DataEncoding"><code class="docutils literal notranslate"><span class="pre">DataEncoding</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="encoder/ordinal.html">EncoderOrdinal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="encoder/ohe.html">EncoderOHE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="encoder/encoder.html#examples">Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="feat_sel/feat_sel.html">Feature Selection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="feat_sel/feat_sel.html#raimitigations.dataprocessing.FeatureSelection"><code class="docutils literal notranslate"><span class="pre">FeatureSelection</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="feat_sel/seq.html">SeqFeatSelection</a></li>
 <li class="toctree-l2"><a class="reference internal" href="feat_sel/catboost.html">CatBoostSelection</a></li>
 <li class="toctree-l2"><a class="reference internal" href="feat_sel/correlation.html">CorrelatedFeatures</a></li>
@@ -189,6 +193,7 @@ order).</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="imputer/imputer.html">Imputers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="imputer/imputer.html#raimitigations.dataprocessing.DataImputer"><code class="docutils literal notranslate"><span class="pre">DataImputer</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputer/basic.html">BasicImputer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="imputer/imputer.html#examples">Examples</a></li>
 </ul>
@@ -200,6 +205,7 @@ order).</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="scaler/scaler.html">Scalers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scaler/scaler.html#raimitigations.dataprocessing.DataScaler"><code class="docutils literal notranslate"><span class="pre">DataScaler</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="scaler/standard.html">DataStandardScaler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scaler/minmax.html">DataMinMaxScaler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scaler/quantile.html">DataQuantileTransformer</a></li>
@@ -212,23 +218,16 @@ order).</p>
 </ul>
 </div>
 <p class="rubric">Class Diagram</p>
-<div class="graphviz"><img src="../_images/inheritance-fd733c8c6ec68ea564c73ff4bc4be3001278fdf8.png" alt="Inheritance diagram of dataprocessing.DataEncoding, dataprocessing.FeatureSelection, dataprocessing.DataImputer, dataprocessing.DataScaler, dataprocessing.Rebalance, dataprocessing.Synthesizer" usemap="#inheritance162add4c09" class="inheritance graphviz" /></div>
-<map id="inheritance162add4c09" name="inheritance162add4c09">
-<area shape="rect" id="node3" href="#dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,129,248,155"/>
-<area shape="rect" id="node2" href="encoder/encoder.html#dataprocessing.DataEncoding" target="_top" title="Base class for all encoding subclasses. Implements basic functionalities" alt="" coords="305,5,417,31"/>
-<area shape="rect" id="node4" href="imputer/imputer.html#dataprocessing.DataImputer" target="_top" title="Base class for all imputer subclasses. Implements basic functionalities" alt="" coords="309,55,413,80"/>
-<area shape="rect" id="node5" href="scaler/scaler.html#dataprocessing.DataScaler" target="_top" title="Base class used by all data scaling or data transformation classes." alt="" coords="315,104,408,129"/>
-<area shape="rect" id="node6" href="feat_sel/feat_sel.html#dataprocessing.FeatureSelection" target="_top" title="Base class for all feature selection subclasses. Implements basic" alt="" coords="296,153,427,179"/>
-<area shape="rect" id="node7" href="sampler/rebalance.html#dataprocessing.Rebalance" target="_top" title="Concrete class that uses under and oversampling approaches (implemented" alt="" coords="316,203,407,228"/>
-<area shape="rect" id="node8" href="sampler/synthesizer.html#dataprocessing.Synthesizer" target="_top" title="Concrete class that uses generative models (implemented in the :mod:`sdv` library)" alt="" coords="312,252,411,277"/>
-</map><div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Utilities</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="model_utils.html">Model Utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="toy_data.html">Toy Dataset</a></li>
-</ul>
-</div>
-</section>
+<div class="graphviz"><img src="../_images/inheritance-8cf910d59ac64d3bdd3194843e4f77dddc40ee52.png" alt="Inheritance diagram of raimitigations.dataprocessing.DataEncoding, raimitigations.dataprocessing.FeatureSelection, raimitigations.dataprocessing.DataImputer, raimitigations.dataprocessing.DataScaler, raimitigations.dataprocessing.Rebalance, raimitigations.dataprocessing.Synthesizer" usemap="#inheritancee5e7f22f2c" class="inheritance graphviz" /></div>
+<map id="inheritancee5e7f22f2c" name="inheritancee5e7f22f2c">
+<area shape="rect" id="node3" href="#raimitigations.dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,129,248,155"/>
+<area shape="rect" id="node2" href="encoder/encoder.html#raimitigations.dataprocessing.DataEncoding" target="_top" title="Base class for all encoding subclasses. Implements basic functionalities" alt="" coords="305,5,417,31"/>
+<area shape="rect" id="node4" href="imputer/imputer.html#raimitigations.dataprocessing.DataImputer" target="_top" title="Base class for all imputer subclasses. Implements basic functionalities" alt="" coords="309,55,413,80"/>
+<area shape="rect" id="node5" href="scaler/scaler.html#raimitigations.dataprocessing.DataScaler" target="_top" title="Base class used by all data scaling or data transformation classes." alt="" coords="315,104,408,129"/>
+<area shape="rect" id="node6" href="feat_sel/feat_sel.html#raimitigations.dataprocessing.FeatureSelection" target="_top" title="Base class for all feature selection subclasses. Implements basic" alt="" coords="296,153,427,179"/>
+<area shape="rect" id="node7" href="sampler/rebalance.html#raimitigations.dataprocessing.Rebalance" target="_top" title="Concrete class that uses under and oversampling approaches (implemented" alt="" coords="316,203,407,228"/>
+<area shape="rect" id="node8" href="sampler/synthesizer.html#raimitigations.dataprocessing.Synthesizer" target="_top" title="Concrete class that uses generative models (implemented in the :mod:`sdv` library)" alt="" coords="312,252,411,277"/>
+</map></section>
 
 
            </div>

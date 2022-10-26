@@ -3,13 +3,13 @@
 Rebalance
 =========
 
-.. autoclass:: dataprocessing.Rebalance
+.. autoclass:: raimitigations.dataprocessing.Rebalance
    :members:
    :show-inheritance:
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.Rebalance
+.. inheritance-diagram:: raimitigations.dataprocessing.Rebalance
      :parts: 1
 
 Example

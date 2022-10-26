@@ -18,6 +18,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -69,7 +70,9 @@
 <li class="toctree-l3"><a class="reference internal" href="rebalance_sdv.html">Synthesizer Class (SDV)</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort">Cohort</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort-case-studies">Cohort Case Studies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
@@ -78,6 +81,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -392,25 +397,31 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">CorrelatedFeatures</span><span class="p">,</span>
-    <span class="n">create_dummy_dataset</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">create_dummy_dataset</span>
+<span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">CorrelatedFeatures</span>
 </pre></div>
 </div>
 </div>
 <section id="Checking-Correlations-Between-Variables---A-Comprehensive-Guide">
 <h1>Checking Correlations Between Variables - A Comprehensive Guide<a class="headerlink" href="#Checking-Correlations-Between-Variables---A-Comprehensive-Guide" title="Permalink to this heading"></a></h1>
-<p>This notebook was created to show how several use cases for the <strong>CorrelatedFeatures</strong> class. This class computes several correlation metrics for different types of correlations: * Numerical x Numerical; * Numerical x Categorical; * Categorical x Categorical.</p>
+<p>This notebook was created to show how several use cases for the <strong>CorrelatedFeatures</strong> class. This class computes several correlation metrics for different types of correlations:</p>
+<ul class="simple">
+<li><p>Numerical x Numerical;</p></li>
+<li><p>Numerical x Categorical;</p></li>
+<li><p>Categorical x Categorical.</p></li>
+</ul>
 <p>To compute these correlations, it is necessary to call the .fit() method first. This method will be responsible for computing the different correlations metrics, which depend on the data type of each variable. After all computations (which may take a while depending on the correlation metrics chosen and the dataset size), three JSON files containing different summaries will be saved. The user can then open these JSON files and look into all correlation metrics by themselves, allowing them to use
 their domain knowledge to determine the best variables to be removed.</p>
 <section id="1---Toy-Dataset">
 <h2>1 - Toy Dataset<a class="headerlink" href="#1---Toy-Dataset" title="Permalink to this heading"></a></h2>
-<p>First of all, we need a dataset with several correlated variables. Ideally, we need a dataset with pairs of numerical, numerical and categorical, and categorical correlated variables to test all this class has to offer. Since we don’t have such dataset at our disposal, we will create an artificial dataset with the desired characteristics. We will create a dataset with <strong>samples</strong> data points and <strong>n_features</strong> base features, where: * <strong>n_num_num</strong> new numerical features are created, where each
-new feature copies one of the <strong>n_features</strong> existing numerical features and then adds a noise over these original values. The standard deviation used for generating the noise is a random value between <strong>num_num_noise[0]</strong> and <strong>num_num_noise[1]</strong>. If the degree of the correlation between the two features depends on the standard deviation used for generating the noise; * <strong>n_cat_num</strong> new categorical features are created, where these new features are correlated to the existing numerical
-features in the dataset. The ith new categorical feature created will be correlated to the ith existing numerical feature of the dataset df. To force this correlation, the numerical feature will be categorized by creating bins, where the number of bins varies between 2 to 10. Each bin is associated with a categorical value. After that, we change a fraction of <strong>p</strong> bins by swapping the categorical value of some bins. Here, <strong>p</strong> is a value in the range [0,1] that is chosen to be between
-<strong>pct_change[0]</strong> and <strong>pct_change[1]</strong>. If the numerical feature selected is already correlated to another numerical feature, the new categorical feature could also be correlated to this second numerical feature.; * <strong>n_cat_cat</strong> new categorical features are created in a way similarly to the previous <strong>n_cat_num</strong> features. The ith new categorical feature here is created following the same logic explained above, and it is also correlated to the ith numerical feature of the dataset. This way,
-the ith categorical feature created between the <strong>n_cat_cat</strong> features will be correlated to the ith categorical feature created between the <strong>n_cat_num</strong> features, since both are correlated to the same numerical feature.</p>
+<p>First of all, we need a dataset with several correlated variables. Ideally, we need a dataset with pairs of numerical, numerical and categorical, and categorical correlated variables to test all this class has to offer. Since we don’t have such dataset at our disposal, we will create an artificial dataset with the desired characteristics. We will create a dataset with <strong>samples</strong> data points and <strong>n_features</strong> base features, where:</p>
+<ul class="simple">
+<li><p><strong>n_num_num</strong> new numerical features are created, where each new feature copies one of the <strong>n_features</strong> existing numerical features and then adds a noise over these original values. The standard deviation used for generating the noise is a random value between <strong>num_num_noise[0]</strong> and <strong>num_num_noise[1]</strong>. If the degree of the correlation between the two features depends on the standard deviation used for generating the noise;</p></li>
+<li><p><strong>n_cat_num</strong> new categorical features are created, where these new features are correlated to the existing numerical features in the dataset. The ith new categorical feature created will be correlated to the ith existing numerical feature of the dataset df. To force this correlation, the numerical feature will be categorized by creating bins, where the number of bins varies between 2 to 10. Each bin is associated with a categorical value. After that, we change a fraction of <strong>p</strong> bins by
+swapping the categorical value of some bins. Here, <strong>p</strong> is a value in the range [0,1] that is chosen to be between <strong>pct_change[0]</strong> and <strong>pct_change[1]</strong>. If the numerical feature selected is already correlated to another numerical feature, the new categorical feature could also be correlated to this second numerical feature.;</p></li>
+<li><p><strong>n_cat_cat</strong> new categorical features are created in a way similarly to the previous <strong>n_cat_num</strong> features. The ith new categorical feature here is created following the same logic explained above, and it is also correlated to the ith numerical feature of the dataset. This way, the ith categorical feature created between the <strong>n_cat_cat</strong> features will be correlated to the ith categorical feature created between the <strong>n_cat_num</strong> features, since both are correlated to the same numerical
+feature.</p></li>
+</ul>
 <p>There is an inherent randomness associated with the creation process of this dataset. We can control the strength of these correlations by tuning the <strong>num_num_noise</strong> and <strong>pct_change</strong> parameters: lower values for both of these parameters results in variables with a higher correlation.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -846,9 +857,13 @@ previously. To do that, we just call the transform method over the new dataset.<
 <section id="3---An-Intermediate-User’s-View-of-the-CorrelatedFeatures-class">
 <h2>3 - An Intermediate User’s View of the CorrelatedFeatures class<a class="headerlink" href="#3---An-Intermediate-User’s-View-of-the-CorrelatedFeatures-class" title="Permalink to this heading"></a></h2>
 <p>Let us now consider the scenario where an intermediate data scientist wants to use the <strong>CorrelatedFeatures</strong> class. This user knows something about correlation metrics, so they will be interested in adjusting some parameters. They also have the domain knowledge of the dataset, allowing them to imbue some of this knowledge when using the CorrelatedFeatures class.</p>
-<p>First of all, we need to instantiate the class. Since the user is more experienced, they decided that they want to use: * Pearson, Spearman, and Kendall-tau to measure the correlation between numerical features, with a threshold of 0.8 for both metrics and a p-value threshold of 0.01, that is, only correlations with a p-value smaller than 0.01 and a correlation coefficient greater than 0.8 (for all metrics: Pearson, Spearman, and Kendall) are considered a high correlation; * To measure the
-correlation between both categorical variables, the user wants to use Cramer’s V test with a correlation metric threshold of 0.9 and a p-value threshold of 0.05, that is, only correlations greater than 0.9 with a p-value lesser than 0.01 are considered a high correlation; * Through the users domain knowledge of the dataset, they know that it makes no sense to test the correlation between a numerical feature and a categorical feature. Therefore, the user disables the correlation checks for
-numerical x categorical features by setting <strong>method_num_cat = None</strong>; * Also using their domain knowledge, the user wants to test the correlation only between a set of variables of the dataset, that being: [num_0, num_4, CN_0_num_0, CC_1_num_1]’. The other variables shouldn’t be checked for correlations.</p>
+<p>First of all, we need to instantiate the class. Since the user is more experienced, they decided that they want to use:</p>
+<ul class="simple">
+<li><p>Pearson, Spearman, and Kendall-tau to measure the correlation between numerical features, with a threshold of 0.8 for both metrics and a p-value threshold of 0.01, that is, only correlations with a p-value smaller than 0.01 and a correlation coefficient greater than 0.8 (for all metrics: Pearson, Spearman, and Kendall) are considered a high correlation;</p></li>
+<li><p>To measure the correlation between both categorical variables, the user wants to use Cramer’s V test with a correlation metric threshold of 0.9 and a p-value threshold of 0.05, that is, only correlations greater than 0.9 with a p-value lesser than 0.01 are considered a high correlation;</p></li>
+<li><p>Through the users domain knowledge of the dataset, they know that it makes no sense to test the correlation between a numerical feature and a categorical feature. Therefore, the user disables the correlation checks for numerical x categorical features by setting <strong>method_num_cat = None</strong>;</p></li>
+<li><p>Also using their domain knowledge, the user wants to test the correlation only between a set of variables of the dataset, that being: [num_0, num_4, CN_0_num_0, CC_1_num_1]’. The other variables shouldn’t be checked for correlations.</p></li>
+</ul>
 <p>The following cell shows how this user could perform the tasks mentioned above using the <strong>CorrelatedFeatures</strong> class:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
@@ -1380,8 +1395,12 @@ advantage is that it only shows the information for correlated features.</p>
 different bins). The next step is to compute the Jensen-Shannon Distance metric between the distribution functions of each pair of clusters. This distance metric varies from 0 to 1, where values closer to 0 means that both distributions tested are similar and values closer to 1 means that the distributions are different. If all pairs of distributions tested are considered different (a Jensen-Shannon metric above <strong>jensen_th</strong> for all pairs tested), then both variables are considered to be
 correlated.</p>
 <p>Here we also present another parameter: the <strong>tie_method</strong>. Whenever a pair of variables is considered correlated, we must choose one of them to remove from the dataset. The first priority is to remove the variables with the most number of correlations. After computing all correlations, we build a graph G = (V, E) with a set of vertices V and a set of edges E. We create one vertex for each variable and one edge for each pair of correlated variables. We then compute the degree of all variables.
-The next step is to analyze each edge: for each edge, we remove the vertex with the highest degree. If both vertices have the same degree, then we use a tie method, which can be the following: * “missing”: chooses the variable with the least number of missing values; * “var”: chooses the variable with the largest data dispersion (std / (V - v), where std is the standard deviation of the variable, V and v are the maximum and minimum values observed in the variable, respectively). Works only for
-numerical x numerical analysis. Otherwise, it uses the cardinality approach internally; * “cardinality”:chooses the variable with the most number of different values present;</p>
+The next step is to analyze each edge: for each edge, we remove the vertex with the highest degree. If both vertices have the same degree, then we use a tie method, which can be the following:</p>
+<ul class="simple">
+<li><p>“missing”: chooses the variable with the least number of missing values;</p></li>
+<li><p>“var”: chooses the variable with the largest data dispersion (std / (V - v), where std is the standard deviation of the variable, V and v are the maximum and minimum values observed in the variable, respectively). Works only for numerical x numerical analysis. Otherwise, it uses the cardinality approach internally;</p></li>
+<li><p>“cardinality”:chooses the variable with the most number of different values present;</p></li>
+</ul>
 <p>In all three cases, if both variables are tied (same dispersion, same number of missing values, or same cardinality), the variable to be removed will be selected randomly. When we remove a variable, we remove its associated vertex and all of its edges. We then recompute the degree of all variables again, and repeat this process until no edges are left.</p>
 <p>Finally, we also call the <strong>get_summary</strong> method, which returns the full, correlated, and uncorrelated JSONs as a dictionary. This method will also print out all of the information contained in the full summary dictionary. If the user doesn’t want this method to print anything, they can just set the <strong>print_summary</strong> parameter to False (it is set to True by default).</p>
 <div class="nbinput docutils container">
@@ -2249,8 +2268,12 @@ CC_0_num_0 x CC_1_num_1:
 </section>
 <section id="Update-the-thresholds-used-without-computing-all-of-the-correlations-again">
 <h3>Update the thresholds used without computing all of the correlations again<a class="headerlink" href="#Update-the-thresholds-used-without-computing-all-of-the-correlations-again" title="Permalink to this heading"></a></h3>
-<p>The fit() method executes three different steps: 1. <strong>Correlation metrics:</strong> compute the correlation metrics for all pairs of variables; 2. <strong>Correlation thresholds:</strong> identify which pairs of variables are correlated by comparing the pair’s metrics against the thresholds used (each type of correlation and each method of correlation uses different thresholds); 3. <strong>Remove variables:</strong> based on all pairs of correlated variables, choose the variables to be removed using the graph approach in
-conjunction with the <strong>tie_method</strong> parameter (explained previously).</p>
+<p>The fit() method executes three different steps:</p>
+<ol class="arabic simple">
+<li><p><strong>Correlation metrics:</strong> compute the correlation metrics for all pairs of variables;</p></li>
+<li><p><strong>Correlation thresholds:</strong> identify which pairs of variables are correlated by comparing the pair’s metrics against the thresholds used (each type of correlation and each method of correlation uses different thresholds);</p></li>
+<li><p><strong>Remove variables:</strong> based on all pairs of correlated variables, choose the variables to be removed using the graph approach in conjunction with the <strong>tie_method</strong> parameter (explained previously).</p></li>
+</ol>
 <p>The most computationally expensive operation between these three steps is the <strong>correlation metrics</strong> computation. After these metrics are computed and saved internally (and in the JSON file), we can still test execute steps (2) and (3) without having to recompute all the correlation metrics. To do this, we can use the <strong>update_selected_features()</strong> method, which is a method that allows the user to pass different threshold values and re-select the best features. This is faster than running the
 fit() method, so we advise using this method instead of fitting the same object several times with different thresholds. Note that the <strong>update_selected_features</strong> only accepts threshold related variables. If the user wishes, for example, to change the correlation method used for numerical x categorical features, so it is necessary to run the fit() method again. But to change the threshold used for the Cramer’s V correlation metric, for example, the user can use the <strong>update_selected_features</strong>
 instead.</p>
