@@ -102,9 +102,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../gallery.html">Gallery</a> &raquo;</li>
-      <li>Python Data Balance Analysis</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../gallery.html">Gallery</a></li>
+      <li class="breadcrumb-item active">Python Data Balance Analysis</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/databalanceanalysis/data_balance_overall.ipynb" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -398,13 +398,31 @@ div.rendered_html tbody tr:hover {
 <section id="Context">
 <h1>Context<a class="headerlink" href="#Context" title="Permalink to this heading"></a></h1>
 <p>Data Balance Analysis is relevant for the overall understanding of datasets, but is essential to building Machine Learning models in a responsible way, especially in term of fairness. It is all too easy to build an ML Model that produces biased results for subsets of the population by training or testing the model on biased ground truth data. There are multiple case studies of biased models assisting in granting loans healthcare, recruitment opportunities and many other decision-making tasks. In
-most of these examples, the data on which these models are trained was the common issue. These findings emphasize how important it is for model creators and auditors to analyze data balance: - to measure training data across various sub-populations - to ensure the data has good coverage, and a balanced representation of labels across sensitive categories and category combinations - and to check that the test data is representative of the target population</p>
-<p>In summary, Data Balance Analysis has the following benefits when used for building ML models. - Reduces the risk of unbalanced models by: - ensuring service fairness and reducing the costs of ML building by identifying data representation gaps early on - prompting data scientists to seek mitigation steps before proceeding on the training portion of Machine Learning model development - Enables easy end-to-end debugging of ML systems in combination with Fairlearn by providing a clear view if an
-issue in a model is tied to the data or the model itself.</p>
+most of these examples, the data on which these models are trained was the common issue. These findings emphasize how important it is for model creators and auditors to analyze data balance:</p>
+<ul class="simple">
+<li><p>to measure training data across various sub-populations</p></li>
+<li><p>to ensure the data has good coverage, and a balanced representation of labels across sensitive categories and category combinations</p></li>
+<li><p>and to check that the test data is representative of the target population</p></li>
+</ul>
+<p>In summary, Data Balance Analysis has the following benefits when used for building ML models.</p>
+<ul class="simple">
+<li><p>Reduces the risk of unbalanced models by:</p>
+<ul>
+<li><p>ensuring service fairness and reducing the costs of ML building by identifying data representation gaps early on</p></li>
+<li><p>prompting data scientists to seek mitigation steps before proceeding on the training portion of Machine Learning model development</p></li>
+</ul>
+</li>
+<li><p>Enables easy end-to-end debugging of ML systems in combination with Fairlearn by providing a clear view if an issue in a model is tied to the data or the model itself.</p></li>
+</ul>
 </section>
 <section id="Usage">
 <h1>Usage<a class="headerlink" href="#Usage" title="Permalink to this heading"></a></h1>
-<p>Data Balance Analysis supports three different types of metrics. - FeatureMeasures - supervised (requires a label column) - DistributionMeasures - unsupervised (does not require a label column) - AggregateMeasures - unsupervised (does not require a label column)</p>
+<p>Data Balance Analysis supports three different types of metrics.</p>
+<ul class="simple">
+<li><p>FeatureMeasures - supervised (requires a label column)</p></li>
+<li><p>DistributionMeasures - unsupervised (does not require a label column)</p></li>
+<li><p>AggregateMeasures - unsupervised (does not require a label column)</p></li>
+</ul>
 </section>
 <section id="Example-Notebook">
 <h1>Example Notebook<a class="headerlink" href="#Example-Notebook" title="Permalink to this heading"></a></h1>
@@ -413,7 +431,7 @@ issue in a model is tied to the data or the model itself.</p>
 <li><p>First we import all of the classes we are interested in.</p></li>
 </ol>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -435,7 +453,7 @@ issue in a model is tied to the data or the model itself.</p>
 </ol>
 <p>For example:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s2">&quot;../../datasets/&quot;</span>
@@ -455,23 +473,218 @@ issue in a model is tied to the data or the model itself.</p>
 <li><p>Create an instance of the FeatureMeasure class and set the sensitives to the column you are interested in seeing and the label column to the name of the column of interest.</p></li>
 </ol>
 <p>For example:</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cols_of_interest</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">,</span> <span class="s2">&quot;sex&quot;</span><span class="p">]</span>
 <span class="n">label_col</span> <span class="o">=</span> <span class="s2">&quot;income&quot;</span>
 <span class="n">feature_measures</span> <span class="o">=</span> <span class="n">FeatureBalanceMeasure</span><span class="p">(</span><span class="n">cols_of_interest</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
-<span class="n">feat_measures</span> <span class="o">=</span> <span class="n">feature_measures</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">feature_measures</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ClassA</th>
+      <th>ClassB</th>
+      <th>FeatureName</th>
+      <th>dp</th>
+      <th>pmi</th>
+      <th>sdc</th>
+      <th>ji</th>
+      <th>krc</th>
+      <th>llr</th>
+      <th>t_test</th>
+      <th>ttest_pvalue</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>White</td>
+      <td>Black</td>
+      <td>race</td>
+      <td>0.131980</td>
+      <td>0.725320</td>
+      <td>0.164302</td>
+      <td>0.212784</td>
+      <td>-5.412507</td>
+      <td>2.911817</td>
+      <td>-1.354903</td>
+      <td>0.123458</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>White</td>
+      <td>Asian-Pac-Islander</td>
+      <td>race</td>
+      <td>-0.009780</td>
+      <td>-0.037512</td>
+      <td>0.168515</td>
+      <td>0.217291</td>
+      <td>-8.742759</td>
+      <td>3.249841</td>
+      <td>-2.582092</td>
+      <td>0.030596</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>White</td>
+      <td>Amer-Indian-Eskimo</td>
+      <td>race</td>
+      <td>0.140104</td>
+      <td>0.793149</td>
+      <td>0.195180</td>
+      <td>0.244934</td>
+      <td>-14.433135</td>
+      <td>5.286723</td>
+      <td>-4.895847</td>
+      <td>0.004034</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>White</td>
+      <td>Other</td>
+      <td>race</td>
+      <td>0.163609</td>
+      <td>1.020118</td>
+      <td>0.196514</td>
+      <td>0.246278</td>
+      <td>-15.322864</td>
+      <td>5.651366</td>
+      <td>-5.256855</td>
+      <td>0.003134</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Black</td>
+      <td>Asian-Pac-Islander</td>
+      <td>race</td>
+      <td>-0.141760</td>
+      <td>-0.762832</td>
+      <td>0.004213</td>
+      <td>0.004507</td>
+      <td>-3.330252</td>
+      <td>0.338024</td>
+      <td>-1.227189</td>
+      <td>0.143519</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Black</td>
+      <td>Amer-Indian-Eskimo</td>
+      <td>race</td>
+      <td>0.008124</td>
+      <td>0.067829</td>
+      <td>0.030878</td>
+      <td>0.032150</td>
+      <td>-9.020628</td>
+      <td>2.374906</td>
+      <td>-3.540944</td>
+      <td>0.011997</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Black</td>
+      <td>Other</td>
+      <td>race</td>
+      <td>0.031629</td>
+      <td>0.294798</td>
+      <td>0.032212</td>
+      <td>0.033494</td>
+      <td>-9.910357</td>
+      <td>2.739549</td>
+      <td>-3.901952</td>
+      <td>0.008756</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Asian-Pac-Islander</td>
+      <td>Amer-Indian-Eskimo</td>
+      <td>race</td>
+      <td>0.149884</td>
+      <td>0.830661</td>
+      <td>0.026665</td>
+      <td>0.027642</td>
+      <td>-5.690376</td>
+      <td>2.036882</td>
+      <td>-2.313755</td>
+      <td>0.040847</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Asian-Pac-Islander</td>
+      <td>Other</td>
+      <td>race</td>
+      <td>0.173389</td>
+      <td>1.057630</td>
+      <td>0.027999</td>
+      <td>0.028987</td>
+      <td>-6.580105</td>
+      <td>2.401525</td>
+      <td>-2.674763</td>
+      <td>0.027765</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Amer-Indian-Eskimo</td>
+      <td>Other</td>
+      <td>race</td>
+      <td>0.023505</td>
+      <td>0.226969</td>
+      <td>0.001334</td>
+      <td>0.001344</td>
+      <td>-0.889729</td>
+      <td>0.364643</td>
+      <td>-0.361008</td>
+      <td>0.368176</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>Male</td>
+      <td>Female</td>
+      <td>sex</td>
+      <td>0.196276</td>
+      <td>1.027159</td>
+      <td>0.161486</td>
+      <td>0.222413</td>
+      <td>-0.880102</td>
+      <td>1.731753</td>
+      <td>-0.372541</td>
+      <td>0.386486</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 <ol class="arabic simple" start="4">
 <li><p>Create an instance of the DistributionMeasures class and set the sensitive columns to the columns you are interested in seeing.</p></li>
 </ol>
 <p>For example:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">distribution_measures</span> <span class="o">=</span> <span class="n">DistributionBalanceMeasure</span><span class="p">([</span><span class="s2">&quot;race&quot;</span><span class="p">,</span> <span class="s2">&quot;sex&quot;</span><span class="p">])</span>
@@ -480,7 +693,7 @@ issue in a model is tied to the data or the model itself.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -543,17 +756,16 @@ issue in a model is tied to the data or the model itself.</p>
 <li><p>Create an instance of the AggregateMeasures class and set the sensitive columns parameter to the columns of interest.</p></li>
 </ol>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;income&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;income&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;&lt;=50K&quot;</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">aggregate_measures</span> <span class="o">=</span> <span class="n">AggregateBalanceMeasure</span><span class="p">([</span><span class="s2">&quot;race&quot;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aggregate_measures</span> <span class="o">=</span> <span class="n">AggregateBalanceMeasure</span><span class="p">([</span><span class="s2">&quot;race&quot;</span><span class="p">])</span>
 <span class="n">aggregate_measures</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">

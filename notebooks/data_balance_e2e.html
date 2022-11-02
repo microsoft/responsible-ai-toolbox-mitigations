@@ -100,9 +100,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../gallery.html">Gallery</a> &raquo;</li>
-      <li>End to End Data Balance and Error Mitigation</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../gallery.html">Gallery</a></li>
+      <li class="breadcrumb-item active">End to End Data Balance and Error Mitigation</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/data_balance_e2e.ipynb" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -392,8 +392,14 @@ div.rendered_html tbody tr:hover {
 </style>
 <section id="End-to-End-Data-Balance-and-Error-Mitigation">
 <h1>End to End Data Balance and Error Mitigation<a class="headerlink" href="#End-to-End-Data-Balance-and-Error-Mitigation" title="Permalink to this heading"></a></h1>
-<p>This Notebook will demonstrate how to use both the Data Balance Analysis capabilities and error mitigation functions together using an example HR dataset which is a tabular dataset with a label column that indicates whether or not a person is promoted based on attributes such as education, gender, number of trainings, and other factors. The steps that we will take in this notebook are 1. We will first conduct an analysis on how balanced the data is. 2. We will train an example model to see how
-it performs on the data using metrics and the Responsible AI Error Analysis Dashboard. 3. We will try to balance the data to mitigate biases that may have resulted from unbalanced data 5. We will train a new model using our data after applying 4. We will then compare model performance before and after mitigating data imbalances by again using various performance metrics and the Error Analysis Dashboard.</p>
+<p>This Notebook will demonstrate how to use both the Data Balance Analysis capabilities and error mitigation functions together using an example HR dataset which is a tabular dataset with a label column that indicates whether or not a person is promoted based on attributes such as education, gender, number of trainings, and other factors. The steps that we will take in this notebook are</p>
+<ol class="arabic simple">
+<li><p>We will first conduct an analysis on how balanced the data is.</p></li>
+<li><p>We will train an example model to see how it performs on the data using metrics and the Responsible AI Error Analysis Dashboard.</p></li>
+<li><p>We will try to balance the data to mitigate biases that may have resulted from unbalanced data</p></li>
+<li><p>We will train a new model using our data after applying the rebalance</p></li>
+<li><p>We will then compare model performance before and after mitigating data imbalances by again using various performance metrics and the Error Analysis Dashboard.</p></li>
+</ol>
 <p>First we import all the dependencies needed in our analysis. This includes the classes to produce the data balance metrics, the sklearn functions to see the model performance and the error mitigation steps like DataRebalance and DataSplit that we apply to the dataset itself.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -432,6 +438,7 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s2">&quot;../datasets/&quot;</span>
 <span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;employee_id&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -466,7 +473,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>employee_id</th>
       <th>department</th>
       <th>region</th>
       <th>education</th>
@@ -485,7 +491,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
   <tbody>
     <tr>
       <th>0</th>
-      <td>65438</td>
       <td>Sales &amp; Marketing</td>
       <td>region_7</td>
       <td>Master's &amp; above</td>
@@ -502,7 +507,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
     </tr>
     <tr>
       <th>1</th>
-      <td>65141</td>
       <td>Operations</td>
       <td>region_22</td>
       <td>Bachelor's</td>
@@ -519,7 +523,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
     </tr>
     <tr>
       <th>2</th>
-      <td>7513</td>
       <td>Sales &amp; Marketing</td>
       <td>region_19</td>
       <td>Bachelor's</td>
@@ -536,7 +539,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
     </tr>
     <tr>
       <th>3</th>
-      <td>2542</td>
       <td>Sales &amp; Marketing</td>
       <td>region_23</td>
       <td>Bachelor's</td>
@@ -553,7 +555,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
     </tr>
     <tr>
       <th>4</th>
-      <td>48945</td>
       <td>Technology</td>
       <td>region_26</td>
       <td>Bachelor's</td>
@@ -583,11 +584,9 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
       <td>...</td>
       <td>...</td>
       <td>...</td>
-      <td>...</td>
     </tr>
     <tr>
       <th>54803</th>
-      <td>3030</td>
       <td>Technology</td>
       <td>region_14</td>
       <td>Bachelor's</td>
@@ -604,7 +603,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
     </tr>
     <tr>
       <th>54804</th>
-      <td>74592</td>
       <td>Operations</td>
       <td>region_27</td>
       <td>Master's &amp; above</td>
@@ -621,7 +619,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
     </tr>
     <tr>
       <th>54805</th>
-      <td>13918</td>
       <td>Analytics</td>
       <td>region_1</td>
       <td>Bachelor's</td>
@@ -638,7 +635,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
     </tr>
     <tr>
       <th>54806</th>
-      <td>13614</td>
       <td>Sales &amp; Marketing</td>
       <td>region_9</td>
       <td>NaN</td>
@@ -655,7 +651,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
     </tr>
     <tr>
       <th>54807</th>
-      <td>51526</td>
       <td>HR</td>
       <td>region_22</td>
       <td>Bachelor's</td>
@@ -672,7 +667,7 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
     </tr>
   </tbody>
 </table>
-<p>54808 rows × 14 columns</p>
+<p>54808 rows × 13 columns</p>
 </div></div>
 </div>
 <p>We do some data transformation on the categorical columns in order to make the training data input in the format that the lightGBM model expects. Although lightGBM can internally deal with categorical columns that the user specifies, we need to encode those categories into integers before we are able to train the lightGBM model on it, so we create a scikit pipeline contains the encoder and the LGBM classifier.</p>
@@ -719,7 +714,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>employee_id</th>
       <th>department</th>
       <th>region</th>
       <th>education</th>
@@ -738,7 +732,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
   <tbody>
     <tr>
       <th>0</th>
-      <td>65438</td>
       <td>Sales &amp; Marketing</td>
       <td>region_7</td>
       <td>Master's &amp; above</td>
@@ -755,7 +748,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
     </tr>
     <tr>
       <th>1</th>
-      <td>65141</td>
       <td>Operations</td>
       <td>region_22</td>
       <td>Bachelor's</td>
@@ -772,7 +764,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
     </tr>
     <tr>
       <th>2</th>
-      <td>7513</td>
       <td>Sales &amp; Marketing</td>
       <td>region_19</td>
       <td>Bachelor's</td>
@@ -789,7 +780,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
     </tr>
     <tr>
       <th>3</th>
-      <td>2542</td>
       <td>Sales &amp; Marketing</td>
       <td>region_23</td>
       <td>Bachelor's</td>
@@ -806,7 +796,6 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
     </tr>
     <tr>
       <th>4</th>
-      <td>48945</td>
       <td>Technology</td>
       <td>region_26</td>
       <td>Bachelor's</td>
@@ -881,61 +870,114 @@ it performs on the data using metrics and the Responsible AI Error Analysis Dash
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-number of errors on test dataset: 281
+number of errors on test dataset: 293
                   Pred 1              Pred 0
-True   TP = 146 (34.52%)   FN = 277 (65.48%)
-False     FP = 4 (0.09%)  TN = 4439 (99.91%)
+True   TP = 142 (33.57%)   FN = 281 (66.43%)
+False    FP = 12 (0.27%)  TN = 4426 (99.73%)
               precision    recall  f1-score   support
 
-           0       0.94      1.00      0.97      4443
-           1       0.97      0.35      0.51       423
+           0       0.94      1.00      0.97      4438
+           1       0.92      0.34      0.49       423
 
-    accuracy                           0.94      4866
-   macro avg       0.96      0.67      0.74      4866
-weighted avg       0.94      0.94      0.93      4866
+    accuracy                           0.94      4861
+   macro avg       0.93      0.67      0.73      4861
+weighted avg       0.94      0.94      0.93      4861
 
 </pre></div></div>
 </div>
 </section>
 <section id="Error-Analysis-on-Baseline-Model">
 <h2>Error Analysis on Baseline Model<a class="headerlink" href="#Error-Analysis-on-Baseline-Model" title="Permalink to this heading"></a></h2>
-<p>Now that we have a baseline model to work with, we can see how this model is doing overall on the data and see if there are any cohorts within the data that the model performs worse on. Even if the model has a high accuracy, we want to make sure that accuracy is applicable over different sensitive groups. We use the <a class="reference external" href="https://erroranalysis.ai/">Error Analysis Dashboard</a> to determine which cohorts of data this model performs worse on. Since the error analysis dashboard is interactive and too
-large to render on Github, we will include screenshots from our analysis. From these screenshots we can see that if we zoom in on certain cohorts that the model is getting more errors on, that region, department and education are all attributes that are involved in those cohorts. For the purpose of this example, we chose remove some of the other columns like KPIs_met from the error analysis since we want to focus on attributes that may lead to biases rather than more measurable attributes. We
-will focus on analyzing and mitigating errors within the department and education columns for the rest of the analysis.</p>
+<p>Now that we have a baseline model to work with, we can see how this model is doing overall on the data and see if there are any cohorts within the data that the model performs worse on. Even if the model has a high accuracy, we want to make sure that accuracy is applicable over different sensitive groups. We use the <a class="reference external" href="https://erroranalysis.ai/">Error Analysis Dashboard</a> to determine which cohorts of data this model performs worse on. To install this library, use the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&gt; pip install raiwidgets</span>
+</pre></div>
+</div>
+<p>In the following cell, we set up the parameters required by the <a class="reference external" href="https://github.com/microsoft/responsible-ai-toolbox">Responsible AI Toolbox</a>.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">from raiwidgets import ErrorAnalysisDashboard</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">raiwidgets</span> <span class="kn">import</span> <span class="n">ResponsibleAIDashboard</span>
+<span class="kn">from</span> <span class="nn">responsibleai</span> <span class="kn">import</span> <span class="n">RAIInsights</span>
+<span class="kn">from</span> <span class="nn">raiwidgets.cohort</span> <span class="kn">import</span> <span class="n">Cohort</span><span class="p">,</span> <span class="n">CohortFilter</span><span class="p">,</span> <span class="n">CohortFilterMethods</span>
 
-<span class="sd">ErrorAnalysisDashboard(</span>
-<span class="sd">    dataset=x_test,</span>
-<span class="sd">    true_y=y_test,</span>
-<span class="sd">    features=x_test.columns,</span>
-<span class="sd">    pred_y=pred,</span>
-<span class="sd">    categorical_features=categorical_cols,</span>
-<span class="sd">)</span>
-<span class="sd">&#39;&#39;&#39;</span>
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">x_train</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">df_train</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_train</span>
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">df_test</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_test</span>
+
+<span class="n">rai_insights</span> <span class="o">=</span> <span class="n">RAIInsights</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">df_train</span><span class="p">,</span> <span class="n">df_test</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="s1">&#39;classification&#39;</span><span class="p">,</span>
+                           <span class="n">categorical_features</span><span class="o">=</span><span class="n">pipeline</span><span class="p">[</span><span class="s1">&#39;ohe&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_encoded_columns</span><span class="p">())</span>
+
+<span class="c1"># Error Analysis</span>
+<span class="n">rai_insights</span><span class="o">.</span><span class="n">error_analysis</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
+
+<span class="n">rai_insights</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+Using categorical_feature in Dataset.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+Passing a set as an indexer is deprecated and will raise in a future version. Use a list instead.
+</pre></div></div>
+</div>
+<p>We can now create the dashboard, which will be available in the local host. Open your browser on the indicated local host address and you’ll be able to interact with the dashboard.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ResponsibleAIDashboard</span><span class="p">(</span><span class="n">rai_insights</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ResponsibleAI started at http://localhost:5000
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&#39;\nfrom raiwidgets import ErrorAnalysisDashboard\n\nErrorAnalysisDashboard(\n    dataset=x_test,\n    true_y=y_test,\n    features=x_test.columns,\n    pred_y=pred,\n    categorical_features=categorical_cols,\n)\n&#39;
+&lt;raiwidgets.responsibleai_dashboard.ResponsibleAIDashboard at 0x7f77dbaf08b0&gt;
 </pre></div></div>
 </div>
+<p>Since the error analysis dashboard is interactive and too large to render on Github, we will include screenshots from our analysis.</p>
+<p><img alt="screen1" src="../_images/error_analysis_adult_census3.png" /></p>
+<p><img alt="screen2" src="../_images/error_analysis1.png" /></p>
+<p><img alt="screen3" src="../_images/error_analysis2.png" /></p>
+<p>From these screenshots we can see that if we zoom in on certain cohorts that the model is getting more errors on, that region, department and education are all attributes that are involved in those cohorts. For the purpose of this example, we chose remove some of the other columns like KPIs_met from the error analysis since we want to focus on attributes that may lead to biases rather than more measurable attributes. We will focus on analyzing and mitigating errors within the department and
+education columns for the rest of the analysis.</p>
 </section>
 <section id="Data-Balance-Analysis">
 <h2>Data Balance Analysis<a class="headerlink" href="#Data-Balance-Analysis" title="Permalink to this heading"></a></h2>
 <p>First we can take a look at the feature balance measures. These measures indicate the difference in the label column amongst different feature values. For example the first row here indicates if people with the “Masters &amp; above” education has a different proportion of people receiving the promoted outcome than those that have a Bachelor’s. Lower values of these measures indicates that the amounts of people with class A vs versus those with class B with a label of 1 is similar. The t-test value
 can also tell us if the difference we see is statistically significant.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feature_measures</span> <span class="o">=</span> <span class="n">FeatureBalanceMeasure</span><span class="p">(</span><span class="n">cols_of_interest</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
@@ -949,7 +991,7 @@ can also tell us if the difference we see is statistically significant.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -987,80 +1029,80 @@ can also tell us if the difference we see is statistically significant.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>Bachelor's</td>
       <td>Master's &amp; above</td>
+      <td>Bachelor's</td>
       <td>education</td>
-      <td>-0.016964</td>
-      <td>-0.188396</td>
-      <td>-0.004202</td>
-      <td>-0.004908</td>
-      <td>-4.957166</td>
-      <td>0.625158</td>
-      <td>-0.260358</td>
-      <td>0.409471</td>
+      <td>0.017814</td>
+      <td>0.197252</td>
+      <td>0.004788</td>
+      <td>0.005594</td>
+      <td>4.996442</td>
+      <td>-0.622067</td>
+      <td>0.262386</td>
+      <td>0.408789</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>Bachelor's</td>
-      <td>Below Secondary</td>
-      <td>education</td>
-      <td>0.001259</td>
-      <td>0.015504</td>
-      <td>0.064587</td>
-      <td>0.070209</td>
-      <td>-31.829677</td>
-      <td>4.281150</td>
-      <td>-2.863668</td>
-      <td>0.051688</td>
-    </tr>
-    <tr>
-      <th>2</th>
       <td>Master's &amp; above</td>
       <td>Below Secondary</td>
       <td>education</td>
-      <td>0.018223</td>
-      <td>0.203900</td>
-      <td>0.068788</td>
-      <td>0.075116</td>
-      <td>-26.872510</td>
-      <td>3.655992</td>
-      <td>-2.603310</td>
-      <td>0.060643</td>
+      <td>0.022587</td>
+      <td>0.257448</td>
+      <td>0.069726</td>
+      <td>0.076144</td>
+      <td>-27.035372</td>
+      <td>3.718893</td>
+      <td>-2.623174</td>
+      <td>0.059886</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Bachelor's</td>
+      <td>Below Secondary</td>
+      <td>education</td>
+      <td>0.004773</td>
+      <td>0.060196</td>
+      <td>0.064938</td>
+      <td>0.070550</td>
+      <td>-32.031814</td>
+      <td>4.340960</td>
+      <td>-2.885561</td>
+      <td>0.051023</td>
     </tr>
     <tr>
       <th>0</th>
       <td>sourcing</td>
       <td>other</td>
       <td>recruitment_channel</td>
-      <td>0.003066</td>
-      <td>0.035499</td>
-      <td>-0.000410</td>
-      <td>-0.000477</td>
-      <td>1.576541</td>
-      <td>-0.234355</td>
-      <td>0.084912</td>
-      <td>0.470033</td>
+      <td>0.002630</td>
+      <td>0.030454</td>
+      <td>-0.000794</td>
+      <td>-0.000925</td>
+      <td>1.579734</td>
+      <td>-0.240590</td>
+      <td>0.085323</td>
+      <td>0.469888</td>
     </tr>
     <tr>
       <th>1</th>
       <td>sourcing</td>
       <td>referred</td>
       <td>recruitment_channel</td>
-      <td>-0.035991</td>
-      <td>-0.343135</td>
-      <td>0.048845</td>
-      <td>0.053990</td>
-      <td>-18.710400</td>
-      <td>2.661363</td>
-      <td>-1.731014</td>
-      <td>0.112794</td>
+      <td>-0.038804</td>
+      <td>-0.366366</td>
+      <td>0.048196</td>
+      <td>0.053285</td>
+      <td>-18.723860</td>
+      <td>2.639673</td>
+      <td>-1.733789</td>
+      <td>0.112546</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
@@ -1111,12 +1153,12 @@ can also tell us if the difference we see is statistically significant.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_data_balance_e2e_16_0.png" src="../_images/notebooks_data_balance_e2e_16_0.png" />
+<img alt="../_images/notebooks_data_balance_e2e_19_0.png" src="../_images/notebooks_data_balance_e2e_19_0.png" />
 </div>
 </div>
-<p>Next we can take a look at the distribution balance measures. These measures each of the columns of interest that we selected to the uniform distribution of those values. Values that are closer to zero indicate that the difference between the actual distribution of the data and the uniform distribution of values. We find that these values pretty far from zero, so they don’t align to a uniform distribution well before we make any modifications to the original data.</p>
+<p>Next we can take a look at the distribution balance measures. These measures each of the columns of interest that we selected to the uniform distribution of those values. Values that are closer to zero indicate that the difference between the actual distribution of the data and the uniform distribution of values. We find that these values are pretty far from zero, so they don’t align to a uniform distribution well before we make any modifications to the original data.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_measures</span> <span class="o">=</span> <span class="n">DistributionBalanceMeasure</span><span class="p">(</span><span class="n">cols_of_interest</span><span class="p">)</span>
@@ -1126,7 +1168,7 @@ can also tell us if the difference we see is statistically significant.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1162,31 +1204,31 @@ can also tell us if the difference we see is statistically significant.</p>
     <tr>
       <th>0</th>
       <td>education</td>
-      <td>0.433445</td>
-      <td>0.358342</td>
-      <td>0.235238</td>
-      <td>0.352857</td>
-      <td>0.352857</td>
+      <td>0.434946</td>
+      <td>0.358906</td>
+      <td>0.236105</td>
+      <td>0.354158</td>
+      <td>0.354158</td>
       <td>0.0</td>
-      <td>30235.985340</td>
+      <td>30343.542312</td>
     </tr>
     <tr>
       <th>1</th>
       <td>recruitment_channel</td>
-      <td>0.326923</td>
-      <td>0.315666</td>
-      <td>0.208217</td>
-      <td>0.312326</td>
-      <td>0.312326</td>
+      <td>0.327144</td>
+      <td>0.315774</td>
+      <td>0.208248</td>
+      <td>0.312371</td>
+      <td>0.312371</td>
       <td>0.0</td>
-      <td>20356.403343</td>
+      <td>20349.678919</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
@@ -1255,12 +1297,12 @@ can also tell us if the difference we see is statistically significant.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_data_balance_e2e_19_0.png" src="../_images/notebooks_data_balance_e2e_19_0.png" />
+<img alt="../_images/notebooks_data_balance_e2e_22_0.png" src="../_images/notebooks_data_balance_e2e_22_0.png" />
 </div>
 </div>
 <p>We can also look at aggregate balance measures which indicate a notion of overall inequality in the data. We can see that the Atkinson Index is 0.79. This means that in order to create a perfectly balanced dataset over these measures we would need to forgo 79.9% of the data.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">agg_measures</span> <span class="o">=</span> <span class="n">AggregateBalanceMeasure</span><span class="p">(</span><span class="n">cols_of_interest</span><span class="p">)</span>
@@ -1270,7 +1312,7 @@ can also tell us if the difference we see is statistically significant.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1300,9 +1342,9 @@ can also tell us if the difference we see is statistically significant.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>1.60865</td>
-      <td>0.760961</td>
-      <td>0.799842</td>
+      <td>1.600814</td>
+      <td>0.762696</td>
+      <td>0.798268</td>
     </tr>
   </tbody>
 </table>
@@ -1311,16 +1353,16 @@ can also tell us if the difference we see is statistically significant.</p>
 </section>
 <section id="Error-Mitigation:-Rebalancing-dataset">
 <h2>Error Mitigation: Rebalancing dataset<a class="headerlink" href="#Error-Mitigation:-Rebalancing-dataset" title="Permalink to this heading"></a></h2>
-<p>In order to rebalance the data we can choose from three different methods of under or oversampling. These are SMOTE, Tomek and SMOTE-Tomek. SMOTE is a oversampling technique for the less represented class. Tomek is an undersampling technique that would be applied to the more represented class. Smote-Tomek is when both of these methods are applied in conjunction on the dataset. In this example, we will choose to use the SMOTE sampling technique on the columns of interest. The rebalance operation
-is originally aimed for a single column, that is, the entire dataset is rebalanced based on one column. However, the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class allows us to specify a set of cohorts, where the rebalance operation will then be applied to each cohort individually.</p>
-<p>In the next cell, we will rebalance our dataset using the <code class="docutils literal notranslate"><span class="pre">recruitment_channel</span></code> column as the target column, and the <code class="docutils literal notranslate"><span class="pre">education</span></code> column as the cohort division, that is, the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class will first separate the dataset into multiple cohorts, one for each of the existing values in the <code class="docutils literal notranslate"><span class="pre">education</span></code> column. Next, it will run the rebalance operation (over the <code class="docutils literal notranslate"><span class="pre">recruitment_channel</span></code> column) for each cohort separately.</p>
+<p>In order to rebalance the data we can choose from three different methods of under or oversampling. These are SMOTE, Tomek and SMOTE-Tomek. SMOTE is an oversampling technique for the less represented class. Tomek is an undersampling technique that would be applied to the more represented class. Smote-Tomek is when both of these methods are applied in conjunction on the dataset. In this example, we will choose to use the SMOTE sampling technique on the columns of interest. The rebalance operation
+is originally aimed for a single column, that is, the entire dataset is rebalanced based on one column. However, the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class allows us to specify a set of cohorts, where the rebalance operation will then be applied to each cohort individually.</p>
+<p>In the next cell, we will rebalance our dataset using the <code class="docutils literal notranslate"><span class="pre">recruitment_channel</span></code> column as the target column, and the <code class="docutils literal notranslate"><span class="pre">education</span></code> column as the cohort division, that is, the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class will first separate the dataset into multiple cohorts, one for each of the existing values in the <code class="docutils literal notranslate"><span class="pre">education</span></code> column. Next, it will run the rebalance operation (over the <code class="docutils literal notranslate"><span class="pre">recruitment_channel</span></code> column) for each cohort separately.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_df2</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-<span class="n">rebalance</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">k_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">rebalance</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">k_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span><span class="n">transform_pipe</span><span class="o">=</span><span class="n">rebalance</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">])</span>
 <span class="n">smote_df</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">train_df2</span><span class="p">,</span> <span class="n">rebalance_col</span><span class="o">=</span><span class="s1">&#39;recruitment_channel&#39;</span><span class="p">)</span>
 
@@ -1328,33 +1370,8 @@ is originally aimed for a single column, that is, the entire dataset is rebalanc
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-No categorical columns specified. These columns have been automatically identfied as the following:
-[&#39;department&#39;, &#39;region&#39;, &#39;education&#39;, &#39;gender&#39;]
-No columns specified for imputation. These columns have been automatically identified:
-[]
-Running oversampling...
-...finished
-No categorical columns specified. These columns have been automatically identfied as the following:
-[&#39;department&#39;, &#39;region&#39;, &#39;education&#39;, &#39;gender&#39;]
-No columns specified for imputation. These columns have been automatically identified:
-[]
-Running oversampling...
-...finished
-No categorical columns specified. These columns have been automatically identfied as the following:
-[&#39;department&#39;, &#39;region&#39;, &#39;education&#39;, &#39;gender&#39;]
-No columns specified for imputation. These columns have been automatically identified:
-[]
-Running oversampling...
-...finished
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1376,7 +1393,6 @@ Running oversampling...
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>employee_id</th>
       <th>department</th>
       <th>region</th>
       <th>education</th>
@@ -1395,88 +1411,83 @@ Running oversampling...
   <tbody>
     <tr>
       <th>0</th>
-      <td>37468</td>
-      <td>Sales &amp; Marketing</td>
-      <td>region_2</td>
-      <td>Bachelor's</td>
-      <td>m</td>
-      <td>1</td>
-      <td>57</td>
-      <td>2.000000</td>
-      <td>26</td>
-      <td>0</td>
-      <td>0</td>
-      <td>54</td>
-      <td>0</td>
-      <td>sourcing</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>75216</td>
-      <td>Sales &amp; Marketing</td>
-      <td>region_10</td>
-      <td>Bachelor's</td>
-      <td>m</td>
-      <td>1</td>
-      <td>39</td>
-      <td>3.000000</td>
-      <td>12</td>
-      <td>0</td>
-      <td>0</td>
-      <td>51</td>
-      <td>0</td>
-      <td>sourcing</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>12975</td>
       <td>Procurement</td>
-      <td>region_22</td>
+      <td>region_7</td>
       <td>Bachelor's</td>
-      <td>m</td>
+      <td>f</td>
       <td>1</td>
-      <td>57</td>
+      <td>29</td>
       <td>3.000000</td>
-      <td>7</td>
+      <td>3</td>
       <td>0</td>
       <td>0</td>
-      <td>69</td>
+      <td>74</td>
       <td>0</td>
       <td>other</td>
     </tr>
     <tr>
-      <th>3</th>
-      <td>6524</td>
-      <td>Sales &amp; Marketing</td>
-      <td>region_32</td>
+      <th>1</th>
+      <td>HR</td>
+      <td>region_2</td>
       <td>Bachelor's</td>
-      <td>m</td>
+      <td>f</td>
       <td>1</td>
-      <td>35</td>
+      <td>56</td>
+      <td>3.000000</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>46</td>
+      <td>0</td>
+      <td>other</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>HR</td>
+      <td>region_7</td>
+      <td>Bachelor's</td>
+      <td>f</td>
+      <td>2</td>
+      <td>30</td>
       <td>4.000000</td>
-      <td>7</td>
+      <td>6</td>
       <td>0</td>
       <td>0</td>
-      <td>49</td>
+      <td>46</td>
       <td>0</td>
       <td>sourcing</td>
     </tr>
     <tr>
-      <th>4</th>
-      <td>73291</td>
+      <th>3</th>
       <td>Sales &amp; Marketing</td>
       <td>region_7</td>
       <td>Bachelor's</td>
       <td>m</td>
-      <td>1</td>
-      <td>42</td>
-      <td>3.000000</td>
-      <td>12</td>
-      <td>1</td>
+      <td>2</td>
+      <td>31</td>
+      <td>4.000000</td>
+      <td>6</td>
+      <td>0</td>
       <td>0</td>
       <td>48</td>
       <td>0</td>
       <td>other</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Finance</td>
+      <td>region_2</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>2</td>
+      <td>47</td>
+      <td>3.000000</td>
+      <td>7</td>
+      <td>1</td>
+      <td>0</td>
+      <td>56</td>
+      <td>0</td>
+      <td>sourcing</td>
     </tr>
     <tr>
       <th>...</th>
@@ -1493,96 +1504,90 @@ Running oversampling...
       <td>...</td>
       <td>...</td>
       <td>...</td>
-      <td>...</td>
     </tr>
     <tr>
-      <th>72931</th>
-      <td>23534</td>
+      <th>72892</th>
       <td>Technology</td>
-      <td>region_7</td>
-      <td>Master's &amp; above</td>
-      <td>f</td>
-      <td>1</td>
-      <td>37</td>
-      <td>4.489266</td>
-      <td>4</td>
-      <td>1</td>
-      <td>0</td>
-      <td>71</td>
-      <td>0</td>
-      <td>sourcing</td>
-    </tr>
-    <tr>
-      <th>72932</th>
-      <td>32255</td>
-      <td>Analytics</td>
-      <td>region_10</td>
-      <td>Master's &amp; above</td>
-      <td>m</td>
-      <td>1</td>
-      <td>32</td>
-      <td>3.718099</td>
-      <td>6</td>
-      <td>0</td>
-      <td>0</td>
-      <td>57</td>
-      <td>0</td>
-      <td>sourcing</td>
-    </tr>
-    <tr>
-      <th>72933</th>
-      <td>3414</td>
-      <td>Procurement</td>
       <td>region_2</td>
       <td>Master's &amp; above</td>
       <td>m</td>
       <td>1</td>
-      <td>35</td>
-      <td>1.000000</td>
-      <td>5</td>
+      <td>40</td>
+      <td>4.000000</td>
+      <td>13</td>
+      <td>1</td>
       <td>0</td>
-      <td>0</td>
-      <td>74</td>
+      <td>81</td>
       <td>0</td>
       <td>sourcing</td>
     </tr>
     <tr>
-      <th>72934</th>
-      <td>37761</td>
-      <td>Technology</td>
-      <td>region_23</td>
+      <th>72893</th>
+      <td>Operations</td>
+      <td>region_22</td>
+      <td>Master's &amp; above</td>
+      <td>m</td>
+      <td>1</td>
+      <td>37</td>
+      <td>3.000000</td>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>61</td>
+      <td>0</td>
+      <td>sourcing</td>
+    </tr>
+    <tr>
+      <th>72894</th>
+      <td>Operations</td>
+      <td>region_1</td>
+      <td>Master's &amp; above</td>
+      <td>m</td>
+      <td>1</td>
+      <td>30</td>
+      <td>3.254223</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>56</td>
+      <td>0</td>
+      <td>sourcing</td>
+    </tr>
+    <tr>
+      <th>72895</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_22</td>
       <td>Master's &amp; above</td>
       <td>m</td>
       <td>1</td>
       <td>45</td>
-      <td>2.529436</td>
-      <td>6</td>
+      <td>4.595457</td>
+      <td>16</td>
       <td>0</td>
       <td>0</td>
-      <td>69</td>
+      <td>55</td>
       <td>0</td>
       <td>sourcing</td>
     </tr>
     <tr>
-      <th>72935</th>
-      <td>36506</td>
-      <td>Technology</td>
-      <td>region_2</td>
+      <th>72896</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_7</td>
       <td>Master's &amp; above</td>
       <td>m</td>
       <td>1</td>
-      <td>41</td>
-      <td>4.267463</td>
-      <td>8</td>
+      <td>28</td>
+      <td>3.000000</td>
+      <td>3</td>
       <td>0</td>
       <td>0</td>
-      <td>71</td>
+      <td>48</td>
       <td>0</td>
       <td>sourcing</td>
     </tr>
   </tbody>
 </table>
-<p>72936 rows × 14 columns</p>
+<p>72897 rows × 13 columns</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1599,8 +1604,8 @@ Running oversampling...
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-43794
-72936
+43746
+72897
 </pre></div></div>
 </div>
 <p>After applying the SMOTE Rebalancing mitigation, we get a dataset that is much larger than the original data frame. The SMOTE Method applies oversampling in order to balance the dataset.</p>
@@ -1695,11 +1700,11 @@ the model actually fit and be able to predict the data outcomes more accurately.
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 
-<span class="ansi-magenta-intense-fg ansi-bold">BEFORE: </span>number of test dataset instances: <span class="ansi-green-intense-fg ansi-bold">4866</span>
-      : number of errors on test dataset: <span class="ansi-red-intense-fg ansi-bold">281</span>
+<span class="ansi-magenta-intense-fg ansi-bold">BEFORE: </span>number of test dataset instances: <span class="ansi-green-intense-fg ansi-bold">4861</span>
+      : number of errors on test dataset: <span class="ansi-red-intense-fg ansi-bold">293</span>
 
-<span class="ansi-magenta-intense-fg ansi-bold">AFTER:  </span>number of test dataset instances: <span class="ansi-green-intense-fg ansi-bold">4866</span>
-     :  number of errors on test dataset: <span class="ansi-red-intense-fg ansi-bold">305</span>
+<span class="ansi-magenta-intense-fg ansi-bold">AFTER:  </span>number of test dataset instances: <span class="ansi-green-intense-fg ansi-bold">4861</span>
+     :  number of errors on test dataset: <span class="ansi-red-intense-fg ansi-bold">299</span>
 
 </pre></div></div>
 </div>
@@ -1733,14 +1738,14 @@ the model actually fit and be able to predict the data outcomes more accurately.
 <span class="ansi-blue-intense-fg ansi-bold">BEFORE: conf_matrix:</span>
 --------------------
                   Pred 1              Pred 0
-True   TP = 146 (34.52%)   FN = 277 (65.48%)
-False     FP = 4 (0.09%)  TN = 4439 (99.91%)
+True   TP = 142 (33.57%)   FN = 281 (66.43%)
+False    FP = 12 (0.27%)  TN = 4426 (99.73%)
 
 <span class="ansi-blue-intense-fg ansi-bold">AFTER: conf_matrix:</span>
 -------------------
                   Pred 1              Pred 0
-True   TP = 120 (28.37%)   FN = 303 (71.63%)
-False     FP = 2 (0.05%)  TN = 4441 (99.95%)
+True   TP = 136 (32.15%)   FN = 287 (67.85%)
+False    FP = 12 (0.27%)  TN = 4426 (99.73%)
 -----------------------------------------------------------------------
 -----------------------------------------------------------------------
 
@@ -1769,39 +1774,38 @@ False     FP = 2 (0.05%)  TN = 4441 (99.95%)
 --------------------------------
               precision    recall  f1-score   support
 
-           0       0.94      1.00      0.97      4443
-           1       0.97      0.35      0.51       423
+           0       0.94      1.00      0.97      4438
+           1       0.92      0.34      0.49       423
 
-    accuracy                           0.94      4866
-   macro avg       0.96      0.67      0.74      4866
-weighted avg       0.94      0.94      0.93      4866
+    accuracy                           0.94      4861
+   macro avg       0.93      0.67      0.73      4861
+weighted avg       0.94      0.94      0.93      4861
 
 <span class="ansi-yellow-intense-fg ansi-bold">AFTER: classification_report:</span>
 --------------------------------
               precision    recall  f1-score   support
 
-           0       0.94      1.00      0.97      4443
-           1       0.98      0.28      0.44       423
+           0       0.94      1.00      0.97      4438
+           1       0.92      0.32      0.48       423
 
-    accuracy                           0.94      4866
-   macro avg       0.96      0.64      0.70      4866
-weighted avg       0.94      0.94      0.92      4866
+    accuracy                           0.94      4861
+   macro avg       0.93      0.66      0.72      4861
+weighted avg       0.94      0.94      0.92      4861
 
 </pre></div></div>
 </div>
-<p>Even though the model started with fairly high accuracy, we were able to increase other measures of the model’s performance</p>
-<p>We return the dataframe columns to their original form after rebalancing the data. We no longer encode We want to be able to run the data balance analysis again on the newly rebalanced data and see what the difference is from before applying SMOTE and after.</p>
+<p>As we can see, we didn’t manage to improve the performance over the test dataset after rebalancing it, but we can still check to see if we were able to improve the data balance metrics. Now we analyze the data balance analysis on the newly rebalanced data and see what the difference is from before applying SMOTE and after.</p>
 <p>The feature value measures before rebalancing don’t indicate a lot of discrepancy in the outcome within specific features within a class since the values such as demographic parity which is on a 0 to 1 scale are very close to zero. After rebalancing, we still have similarly low values of these measures but there is not a significant improvement since they already started low.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_measures1</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_measures1</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1839,88 +1843,102 @@ weighted avg       0.94      0.94      0.92      4866
   <tbody>
     <tr>
       <th>0</th>
-      <td>Bachelor's</td>
       <td>Master's &amp; above</td>
+      <td>Bachelor's</td>
       <td>education</td>
-      <td>-0.016964</td>
-      <td>-0.188396</td>
-      <td>-0.004202</td>
-      <td>-0.004908</td>
-      <td>-4.957166</td>
-      <td>0.625158</td>
-      <td>-0.260358</td>
-      <td>0.409471</td>
+      <td>0.017814</td>
+      <td>0.197252</td>
+      <td>0.004788</td>
+      <td>0.005594</td>
+      <td>4.996442</td>
+      <td>-0.622067</td>
+      <td>0.262386</td>
+      <td>0.408789</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>Bachelor's</td>
-      <td>Below Secondary</td>
-      <td>education</td>
-      <td>0.001259</td>
-      <td>0.015504</td>
-      <td>0.064587</td>
-      <td>0.070209</td>
-      <td>-31.829677</td>
-      <td>4.281150</td>
-      <td>-2.863668</td>
-      <td>0.051688</td>
-    </tr>
-    <tr>
-      <th>2</th>
       <td>Master's &amp; above</td>
       <td>Below Secondary</td>
       <td>education</td>
-      <td>0.018223</td>
-      <td>0.203900</td>
-      <td>0.068788</td>
-      <td>0.075116</td>
-      <td>-26.872510</td>
-      <td>3.655992</td>
-      <td>-2.603310</td>
-      <td>0.060643</td>
+      <td>0.022587</td>
+      <td>0.257448</td>
+      <td>0.069726</td>
+      <td>0.076144</td>
+      <td>-27.035372</td>
+      <td>3.718893</td>
+      <td>-2.623174</td>
+      <td>0.059886</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Bachelor's</td>
+      <td>Below Secondary</td>
+      <td>education</td>
+      <td>0.004773</td>
+      <td>0.060196</td>
+      <td>0.064938</td>
+      <td>0.070550</td>
+      <td>-32.031814</td>
+      <td>4.340960</td>
+      <td>-2.885561</td>
+      <td>0.051023</td>
     </tr>
     <tr>
       <th>0</th>
       <td>sourcing</td>
       <td>other</td>
       <td>recruitment_channel</td>
-      <td>0.003066</td>
-      <td>0.035499</td>
-      <td>-0.000410</td>
-      <td>-0.000477</td>
-      <td>1.576541</td>
-      <td>-0.234355</td>
-      <td>0.084912</td>
-      <td>0.470033</td>
+      <td>0.002630</td>
+      <td>0.030454</td>
+      <td>-0.000794</td>
+      <td>-0.000925</td>
+      <td>1.579734</td>
+      <td>-0.240590</td>
+      <td>0.085323</td>
+      <td>0.469888</td>
     </tr>
     <tr>
       <th>1</th>
       <td>sourcing</td>
       <td>referred</td>
       <td>recruitment_channel</td>
-      <td>-0.035991</td>
-      <td>-0.343135</td>
-      <td>0.048845</td>
-      <td>0.053990</td>
-      <td>-18.710400</td>
-      <td>2.661363</td>
-      <td>-1.731014</td>
-      <td>0.112794</td>
+      <td>-0.038804</td>
+      <td>-0.366366</td>
+      <td>0.048196</td>
+      <td>0.053285</td>
+      <td>-18.723860</td>
+      <td>2.639673</td>
+      <td>-1.733789</td>
+      <td>0.112546</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>other</td>
+      <td>referred</td>
+      <td>recruitment_channel</td>
+      <td>-0.041434</td>
+      <td>-0.396820</td>
+      <td>0.048990</td>
+      <td>0.054210</td>
+      <td>-20.303594</td>
+      <td>2.880263</td>
+      <td>-1.819112</td>
+      <td>0.105255</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feature_measures</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">smote_df</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feature_measures</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">smote_df</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1961,68 +1979,82 @@ weighted avg       0.94      0.94      0.92      4866
       <td>Bachelor's</td>
       <td>Below Secondary</td>
       <td>education</td>
-      <td>0.001385</td>
-      <td>0.026007</td>
-      <td>0.042505</td>
-      <td>0.045061</td>
-      <td>-42.627344</td>
-      <td>4.339343</td>
-      <td>-2.375855</td>
-      <td>0.070355</td>
+      <td>0.007317</td>
+      <td>0.127051</td>
+      <td>0.049504</td>
+      <td>0.052789</td>
+      <td>-39.954385</td>
+      <td>4.470495</td>
+      <td>-2.572282</td>
+      <td>0.061853</td>
     </tr>
     <tr>
       <th>1</th>
       <td>Bachelor's</td>
       <td>Master's &amp; above</td>
       <td>education</td>
-      <td>-0.008743</td>
-      <td>-0.150227</td>
-      <td>-0.003167</td>
-      <td>-0.003519</td>
-      <td>-6.242478</td>
-      <td>0.641928</td>
-      <td>-0.204303</td>
-      <td>0.428510</td>
+      <td>-0.010460</td>
+      <td>-0.157473</td>
+      <td>-0.003277</td>
+      <td>-0.003691</td>
+      <td>-5.858737</td>
+      <td>0.644341</td>
+      <td>-0.220763</td>
+      <td>0.422882</td>
     </tr>
     <tr>
       <th>2</th>
       <td>Below Secondary</td>
       <td>Master's &amp; above</td>
       <td>education</td>
-      <td>-0.010128</td>
-      <td>-0.176234</td>
-      <td>-0.045671</td>
-      <td>-0.048580</td>
-      <td>36.384867</td>
-      <td>-3.697414</td>
-      <td>2.171552</td>
-      <td>0.081017</td>
+      <td>-0.017777</td>
+      <td>-0.284524</td>
+      <td>-0.052781</td>
+      <td>-0.056479</td>
+      <td>34.095648</td>
+      <td>-3.826154</td>
+      <td>2.351520</td>
+      <td>0.071519</td>
     </tr>
     <tr>
       <th>0</th>
-      <td>sourcing</td>
       <td>other</td>
+      <td>sourcing</td>
       <td>recruitment_channel</td>
-      <td>-0.015301</td>
-      <td>-0.198841</td>
-      <td>-0.013079</td>
-      <td>-0.014994</td>
-      <td>-0.093622</td>
-      <td>-0.198841</td>
+      <td>0.011770</td>
+      <td>0.148923</td>
+      <td>0.009862</td>
+      <td>0.011314</td>
+      <td>0.067773</td>
+      <td>0.148923</td>
       <td>0.000000</td>
       <td>0.500000</td>
     </tr>
     <tr>
       <th>1</th>
+      <td>other</td>
+      <td>referred</td>
+      <td>recruitment_channel</td>
+      <td>0.050002</td>
+      <td>0.886267</td>
+      <td>0.041898</td>
+      <td>0.046479</td>
+      <td>0.287918</td>
+      <td>0.886267</td>
+      <td>0.000000</td>
+      <td>0.500000</td>
+    </tr>
+    <tr>
+      <th>2</th>
       <td>sourcing</td>
       <td>referred</td>
       <td>recruitment_channel</td>
-      <td>0.054089</td>
-      <td>1.503486</td>
-      <td>0.046234</td>
-      <td>0.049816</td>
-      <td>0.330950</td>
-      <td>1.503486</td>
+      <td>0.038232</td>
+      <td>0.737344</td>
+      <td>0.032036</td>
+      <td>0.035165</td>
+      <td>0.220145</td>
+      <td>0.737344</td>
       <td>0.000000</td>
       <td>0.500000</td>
     </tr>
@@ -2077,24 +2109,24 @@ weighted avg       0.94      0.94      0.92      4866
     <tr>
       <th>0</th>
       <td>education</td>
-      <td>0.433445</td>
-      <td>0.358342</td>
-      <td>0.235238</td>
-      <td>0.352857</td>
-      <td>0.352857</td>
+      <td>0.434946</td>
+      <td>0.358906</td>
+      <td>0.236105</td>
+      <td>0.354158</td>
+      <td>0.354158</td>
       <td>0.0</td>
-      <td>30235.985340</td>
+      <td>30343.542312</td>
     </tr>
     <tr>
       <th>1</th>
       <td>recruitment_channel</td>
-      <td>0.326923</td>
-      <td>0.315666</td>
-      <td>0.208217</td>
-      <td>0.312326</td>
-      <td>0.312326</td>
+      <td>0.327144</td>
+      <td>0.315774</td>
+      <td>0.208248</td>
+      <td>0.312371</td>
+      <td>0.312371</td>
       <td>0.0</td>
-      <td>20356.403343</td>
+      <td>20349.678919</td>
     </tr>
   </tbody>
 </table>
@@ -2146,20 +2178,20 @@ weighted avg       0.94      0.94      0.92      4866
     <tr>
       <th>0</th>
       <td>education</td>
-      <td>0.431848</td>
-      <td>0.358361</td>
-      <td>0.23245</td>
-      <td>0.348676</td>
-      <td>0.348676</td>
+      <td>0.43447</td>
+      <td>0.35937</td>
+      <td>0.233928</td>
+      <td>0.350892</td>
+      <td>0.350892</td>
       <td>0.0</td>
-      <td>49730.803801</td>
+      <td>50099.684185</td>
     </tr>
     <tr>
       <th>1</th>
       <td>recruitment_channel</td>
-      <td>0.000000</td>
-      <td>0.000000</td>
       <td>0.00000</td>
+      <td>0.00000</td>
+      <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>1.0</td>
@@ -2210,9 +2242,9 @@ weighted avg       0.94      0.94      0.92      4866
   <tbody>
     <tr>
       <th>0</th>
-      <td>1.60865</td>
-      <td>0.760961</td>
-      <td>0.799842</td>
+      <td>1.600814</td>
+      <td>0.762696</td>
+      <td>0.798268</td>
     </tr>
   </tbody>
 </table>
@@ -2258,15 +2290,14 @@ weighted avg       0.94      0.94      0.92      4866
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.98593</td>
-      <td>0.431848</td>
-      <td>0.626908</td>
+      <td>0.995942</td>
+      <td>0.43447</td>
+      <td>0.630625</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
-<p>label the top as before and the bottom as after highlight underneath the cohort lower fill (meaning )</p>
 </section>
 </section>
 

@@ -96,9 +96,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../gallery.html">Gallery</a> &raquo;</li>
-      <li>Data Balance Analysis using the Adult Census Income dataset</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../gallery.html">Gallery</a></li>
+      <li class="breadcrumb-item active">Data Balance Analysis using the Adult Census Income dataset</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/databalanceanalysis/data_balance_census.ipynb" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -392,7 +392,7 @@ div.rendered_html tbody tr:hover {
 <p>This dataset can be used to predict whether annual income exceeds $50,000/year or not based on demographic data from the 1994 U.S. Census. The dataset we’re reading contains 32,561 rows and 14 columns/features.</p>
 <p><a class="reference external" href="https://archive.ics.uci.edu/ml/datasets/Adult">More info on the dataset here</a></p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -406,7 +406,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s2">&quot;../../datasets/&quot;</span>
@@ -423,7 +423,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>First we can do some preliminary EDA on the data. We will look specifically at a couple columns of interest and see the distribution of how often those feature values show up in the data.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>
@@ -434,7 +434,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -450,7 +450,7 @@ Text(0.5, 1.02, &#39;Distribution of Race in the Data&#39;)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>
@@ -461,7 +461,7 @@ Text(0.5, 1.02, &#39;Distribution of Race in the Data&#39;)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -477,7 +477,7 @@ Text(0.5, 1.02, &#39;Distribution of Sex in the Data&#39;)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;marital-status&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>
@@ -488,7 +488,7 @@ Text(0.5, 1.02, &#39;Distribution of Sex in the Data&#39;)
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -505,7 +505,7 @@ Text(0.5, 1.02, &#39;Distribution of Marital Status in the Data&#39;)
 </div>
 <p>We will now select a few columns to focus on for this analysis. In this case we will focus specifically on race and sex.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cols_of_interest</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">,</span> <span class="s2">&quot;sex&quot;</span><span class="p">]</span>
@@ -513,7 +513,7 @@ Text(0.5, 1.02, &#39;Distribution of Marital Status in the Data&#39;)
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">raimitigations.databalanceanalysis</span> <span class="kn">import</span> <span class="p">(</span>
@@ -529,15 +529,15 @@ Text(0.5, 1.02, &#39;Distribution of Marital Status in the Data&#39;)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_measures</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_measures</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -643,13 +643,97 @@ Text(0.5, 1.02, &#39;Distribution of Marital Status in the Data&#39;)
       <td>-1.227189</td>
       <td>0.143519</td>
     </tr>
+    <tr>
+      <th>5</th>
+      <td>Black</td>
+      <td>Amer-Indian-Eskimo</td>
+      <td>race</td>
+      <td>0.008124</td>
+      <td>0.067829</td>
+      <td>0.030878</td>
+      <td>0.032150</td>
+      <td>-9.020628</td>
+      <td>2.374906</td>
+      <td>-3.540944</td>
+      <td>0.011997</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Black</td>
+      <td>Other</td>
+      <td>race</td>
+      <td>0.031629</td>
+      <td>0.294798</td>
+      <td>0.032212</td>
+      <td>0.033494</td>
+      <td>-9.910357</td>
+      <td>2.739549</td>
+      <td>-3.901952</td>
+      <td>0.008756</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Asian-Pac-Islander</td>
+      <td>Amer-Indian-Eskimo</td>
+      <td>race</td>
+      <td>0.149884</td>
+      <td>0.830661</td>
+      <td>0.026665</td>
+      <td>0.027642</td>
+      <td>-5.690376</td>
+      <td>2.036882</td>
+      <td>-2.313755</td>
+      <td>0.040847</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Asian-Pac-Islander</td>
+      <td>Other</td>
+      <td>race</td>
+      <td>0.173389</td>
+      <td>1.057630</td>
+      <td>0.027999</td>
+      <td>0.028987</td>
+      <td>-6.580105</td>
+      <td>2.401525</td>
+      <td>-2.674763</td>
+      <td>0.027765</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Amer-Indian-Eskimo</td>
+      <td>Other</td>
+      <td>race</td>
+      <td>0.023505</td>
+      <td>0.226969</td>
+      <td>0.001334</td>
+      <td>0.001344</td>
+      <td>-0.889729</td>
+      <td>0.364643</td>
+      <td>-0.361008</td>
+      <td>0.368176</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>Male</td>
+      <td>Female</td>
+      <td>sex</td>
+      <td>0.196276</td>
+      <td>1.027159</td>
+      <td>0.161486</td>
+      <td>0.222413</td>
+      <td>-0.880102</td>
+      <td>1.731753</td>
+      <td>-0.372541</td>
+      <td>0.386486</td>
+    </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <p>We will visualize the demographic parities using a heat map to see which pairs of values have the biggest differences in their label values</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">races</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
@@ -702,7 +786,7 @@ Text(0.5, 1.02, &#39;Distribution of Marital Status in the Data&#39;)
 </div>
 <p>Next we will look at the Distribution Measures, these measures allow us to compare our data to a reference distribution like the uniform distribution and are calculated based on each specified sensitive column. You don’t need the label column to calculate these measures</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_measures</span> <span class="o">=</span> <span class="n">DistributionBalanceMeasure</span><span class="p">(</span><span class="n">cols_of_interest</span><span class="p">)</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
@@ -713,7 +797,7 @@ Text(0.5, 1.02, &#39;Distribution of Marital Status in the Data&#39;)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">race_measures</span>
@@ -721,7 +805,7 @@ Text(0.5, 1.02, &#39;Distribution of Marital Status in the Data&#39;)
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -738,7 +822,7 @@ Name: 0, dtype: object
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># measures_of_interest = [&quot;kl_divergence&quot;, &quot;js_dist&quot;, &quot;inf_norm_dist&quot;, &quot;total_variation_dist&quot;, &quot;wasserstein_dist&quot;]</span>
@@ -804,7 +888,7 @@ Name: 0, dtype: object
 <p>Calculate Aggregate Balance Measures​ Aggregate Balance Measures allow us to obtain a higher notion of inequality. They are calculated on the global set of sensitive columns and don’t use the label column.</p>
 <p>These measures look at distribution of records across all combinations of sensitive columns. For example, if Sex and Race are sensitive columns, it shall try to quantify imbalance across all combinations - (Male, Black), (Female, White), (Male, Asian-Pac-Islander), etc.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">agg_measures</span> <span class="o">=</span> <span class="n">AggregateBalanceMeasure</span><span class="p">(</span><span class="n">cols_of_interest</span><span class="p">)</span>
@@ -813,7 +897,7 @@ Name: 0, dtype: object
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -872,9 +956,12 @@ Name: 0, dtype: object
 </li>
 <li><p class="rubric" id="distribution-balance-measures">Distribution Balance Measures</p>
 <ul class="simple">
-<li><p>Calculated Distribution Balance Measures to see that “Sex” is much closer to a perfectly balanced distribution than “Race”. Visualized various distribution balance measures to compare their values for “Race” and “Sex”.</p></li>
+<li><p>Calculated Distribution Balance Measures to see that “Sex” is much closer to a perfectly balanced distribution than “Race”.</p></li>
 </ul>
 </li>
+</ul>
+<p>Visualized various distribution balance measures to compare their values for “Race” and “Sex”.</p>
+<ul>
 <li><p class="rubric" id="aggregate-balance-measures">Aggregate Balance Measures</p>
 <ul class="simple">
 <li><p>Calculated Aggregate Balance Measures to see that we need to forego 77.79% of data points to have a perfectly balanced dataset. We identified that our dataset is leaning towards maximum inequality, and we should take actionable steps to:</p></li>
