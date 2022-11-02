@@ -130,7 +130,7 @@ class EncoderOHE(DataEncoding):
         return new_df
 
     # -----------------------------------
-    def get_encoded_columns(self):
+    def get_one_hot_columns(self):
         """
         Returns a list with the column names or column indices of the one-hot
         encoded columns. These are the columns created by the one-hot encoder
