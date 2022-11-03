@@ -67,10 +67,11 @@ class DataProcessing(ABC):
     def _works_with_cohort_manager(self):
         """
         Returns True if the current class can be used as one of the transformations in
-        the CohortManager class. For this, this class must have a fit() and transform()
-        methods, and the latter must receive a X dataset containing only the features
-        (not the label column) and return a transformed dataset with only the features.
-        If this is not the case, then this method should return False.
+        the CohortManager class. To be used as one of the transformations, this class
+        must have a fit() and transform() methods, and the latter must receive an X
+        dataset containing only the features (not the label column) and return a
+        transformed dataset with only the features. If this is not the case, then this
+        method should return False.
         """
         return True
 

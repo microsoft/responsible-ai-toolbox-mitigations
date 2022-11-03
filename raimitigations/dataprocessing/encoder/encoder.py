@@ -40,9 +40,9 @@ class DataEncoding(DataProcessing):
         """
         Overwrites this method from the base class. Returns False, since running
         an encoding method over each cohort individually may result in each cohort
-        having different features encoding mappings, or different features (in the
-        case of one-hot encoding). This way, the cohorts become incompatible between
-        each other.
+        having different feature-encoding mappings, or different features (in the
+        case of one-hot encoding). In those cases, the cohorts become incompatible
+        between each other.
         """
         return False
 
