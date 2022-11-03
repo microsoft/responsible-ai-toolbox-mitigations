@@ -556,7 +556,7 @@ class Rebalance(DataProcessing):
         elif self.default_under_type == self.UNDER_CONTROLLED:
             self.under_sampler = ClusterCentroids(sampling_strategy=self.strategy_under)
         else:
-            self.under_sampler = TomekLinks(sampling_strategy=self.strategy_under, n_jobs=self.njobs)
+            self.under_sampler = TomekLinks(sampling_strategy="all", n_jobs=self.njobs)
 
     # -----------------------------------
     def fit_resample(
