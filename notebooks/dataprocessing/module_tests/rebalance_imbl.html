@@ -1343,7 +1343,7 @@ Name: is_promoted, dtype: int64
 <p>We can perform both over and under sampling in the same function call. Over sampling is performed first, then under sampling. For undersampling, two different default methods can be used, by setting <code class="docutils literal notranslate"><span class="pre">strategy_under</span></code> to different values.</p>
 <ul class="simple">
 <li><p>If <strong>Float</strong> or <strong>Dictionary</strong>, ClusterCentroids will be used (since we need a specific number of each class)</p></li>
-<li><p>If <strong>String</strong>, then TomekLinks will be used. Options for a which classes to resample are ‘majority, ’not minority’, ‘not majority’, ‘all’, or ‘auto’ (‘auto’ is equivalent to ‘not minority’).</p></li>
+<li><p>If <strong>String</strong>, then TomekLinks will be used. Options for which classes to resample are ‘majority, ’not minority’, ‘not majority’, ‘all’, or ‘auto’ (‘auto’ is equivalent to ‘not minority’).</p></li>
 <li><p>If <strong>None</strong>, the default is also TomekLinks</p></li>
 </ul>
 <p>Here we specify ‘auto’ (i.e. ‘not minority’), so a <code class="docutils literal notranslate"><span class="pre">TomekLinks</span></code> method will be used, and all but the minority class will be resampled.</p>

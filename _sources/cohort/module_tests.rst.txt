@@ -1,7 +1,7 @@
 Tutorials
 =========
 
-Here is a set of tutorial notebooks that aim to explain how to create and use cohorts using
+Here is a set of tutorial notebooks that explain how to create and use cohorts using
 the **cohort** module.
 
 
