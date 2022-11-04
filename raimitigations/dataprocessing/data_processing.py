@@ -477,6 +477,7 @@ class DataProcessing(ABC):
                     self.label_col_name = self.y.name
                 else:
                     self.label_col_name = self.y.columns[0]
+                    self.y = self.y[self.label_col_name]
             else:
                 label_col_name = self.DEFAULT_LABEL_NAME
                 while label_col_name in self.df.columns:
