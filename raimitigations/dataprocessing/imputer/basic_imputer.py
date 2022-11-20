@@ -18,7 +18,7 @@ class BasicImputer(DataImputer):
     several different columns at once, each with its own set of parameters. For more details see:
     https://scikit-learn.org/stable/modules/generated/sklearn.impute.SimpleImputer.html
 
-    :param df: pandas data frame that contains the columns to be encoded;
+    :param df: pandas data frame that contains the columns to be imputed;
 
     :param col_impute: a list of the column names or indexes that will be imputed.
         If None, this parameter will be set automatically as being a list of all

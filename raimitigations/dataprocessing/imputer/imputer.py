@@ -58,7 +58,7 @@ class DataImputer(DataProcessing):
             f"No columns specified for imputation. These columns "
             + f"have been automatically identified:\n{col_with_nan}"
         )
-
+        #self.col_impute = col_with_nan
     # -----------------------------------
     def _check_valid_input(self):
         self.col_impute = self._check_error_col_list(self.df, self.col_impute, "col_impute")

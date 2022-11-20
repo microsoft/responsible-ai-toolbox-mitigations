@@ -1,6 +1,6 @@
 from .data_processing import DataProcessing
 from .encoder import DataEncoding, EncoderOrdinal, EncoderOHE
-from .imputer import DataImputer, BasicImputer
+from .imputer import DataImputer, BasicImputer, IterativeDataImputer
 from .feat_selection import FeatureSelection, CatBoostSelection, SeqFeatSelection, CorrelatedFeatures
 from .sampler import Rebalance, Synthesizer
 from .scaler import (
@@ -21,6 +21,7 @@ __all__ = [
     "EncoderOrdinal",
     "DataImputer",
     "BasicImputer",
+    "IterativeDataImputer",
     "FeatureSelection",
     "CatBoostSelection",
     "SeqFeatSelection",
