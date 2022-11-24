@@ -194,8 +194,12 @@ def _get_precision_recall_th(y, y_pred):
 
 # ----------------------------------------
 def _check_if_probability_pred(y_pred: np.ndarray):
+    # Check if any of the predicted values are between 0 and 1
     y_bool = (0.0 < y_pred) & (y_pred < 1.0)
-    is_prob = y_bool.all()
+    # Check if y_pred has a shape similar to (N, 2) or (N, C),
+    # where C is the number of classes
+    shape_prob = len(y_pred.shape) > 1 and y_pred.shape[1] > 1
+    is_prob = y_bool.all() or shape_prob
     return is_prob
 
 
