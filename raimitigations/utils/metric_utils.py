@@ -94,6 +94,10 @@ def _roc_evaluation(y: np.ndarray, y_pred: np.ndarray):
         target = tpr - fpr
         index = np.argmax(target)
         best_th = th[index]
+        # scikit-learn uses 1 th > 1.0 for technical reasons.
+        # If this th is selected, move to the next th value
+        if best_th > 1.0:
+            best_th = th[index + 1]
     # Multi-class
     else:
         y_temp = np.squeeze(y)
@@ -190,7 +194,7 @@ def _get_precision_recall_th(y, y_pred):
 
 # ----------------------------------------
 def _check_if_probability_pred(y_pred: np.ndarray):
-    y_bool = (0.0 <= y_pred) & (y_pred <= 1.0)
+    y_bool = (0.0 < y_pred) & (y_pred < 1.0)
     is_prob = y_bool.all()
     return is_prob
 

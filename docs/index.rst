@@ -4,10 +4,12 @@ Responsible AI Mitigations Library
 The goal of responsible AI is to create trustworthy AI systems that benefit people while mitigating harms, which can occur when AI systems fail to
 perform with fair, reliable, or safe outputs for various stakeholders. Teams tasked with developing AI systems must work to identify, diagnose, and
 mitigate potential harms as much as possible. In this initial release, **the Responsible AI Mitigations Library helps AI practitioners explore different
-mitigation steps that may be most appropriate when the model underperforms for a given cohort.** The library currently has two modules:
+mitigation steps that may be most appropriate when the model underperforms for a given cohort.** The library currently has three modules:
 
     * :ref:`DataProcessing<dataproc>`: offers mitigation techniques for improving model performance for specific cohorts.
     * :ref:`DataBalanceAnalysis<databalance>`: provides metrics for diagnosing errors that originate from data imbalance either on class labels or feature values.
+    * :ref:`Cohort<cohort>`: provide classes for handling and managing cohorts, which allows the creation of custom pipelines for each cohort in an easy and
+      intuitive interface (also allows using different estimators for each cohort).
 
 Exploring potential mitigations
 -------------------------------
@@ -29,7 +31,7 @@ After you've identified a model as underperforming for a specific cohort, the Re
 mitigation. The library enables you to **explore potential mitigations for targeted cohorts and sub-cohorts** through:
 
     * Balancing and synthesizing data.
-    * Selecting or creating features with different encodings with different encodings.
+    * Selecting or creating features with different encodings.
     * Scaling numerical features.
     * Imputing missing values.
 
@@ -75,13 +77,13 @@ This way, the Responsible AI Mitigations Library offers a **targeted approach th
     * **Simplifying the implementation and customization of mitigations** for specific data problems by providing mitigations that are compatible with each other and can be
       combined into a single pipeline.
 
-Two modules for targeting data
-------------------------------
+Three modules for targeting data
+--------------------------------
 
-The Responsible AI Mitigations Library consists of **two modules that work in complement** for targeting and mitigating data problems: DataProcessing and DataBalanceAnalysis.
+The Responsible AI Mitigations Library consists of **three modules that work in complement** for targeting and mitigating data problems: DataProcessing and DataBalanceAnalysis.
 
-DataProcessing
-##############
+:ref:`DataProcessing<dataproc>`
+###############################
 
 A set of data-oriented mitigation steps for data balancing, scaling, missing value imputation, sampling, and encoding, using proven machine learning mitigation techniques
 in a single interface and compatible environment. The goal of this module is to provide a unified interface for different mitigation methods scattered around multiple machine
@@ -97,18 +99,50 @@ learning libraries, such as scikit-learn, mlxtend, sdv, and others.
     * Automation of various mitigation steps, with some transformer classes acting as a wrapper to others in the library.
     * Customization options, helpful for the more experienced AI practitioner.
 
-DataBalanceAnalysis
-###################
+:ref:`DataBalanceAnalysis<databalance>`
+#######################################
 
 A set of metrics for diagnosing and measuring data imbalance. This module is intended to be used as part of the error diagnosis process for failure modes that are due to class
 or feature imbalance. After measuring with DataBalanceAnalysis, AI practitioners can then work to mitigate the failure through techniques available in the library's DataProcessing
 module.
+
 
 .. admonition:: Example
 
     A model trained for house-price prediction is discovered to be underperforming for houses that do not have an attached garage. The AI practitioner determines that this failure is
     due to the underrepresentation of houses with no garage in the training data. The practitioner can use metrics in the DataBalanceAnalysis module to measure the feature imbalance
     (“garage” vs. “no garage”), then work to mitigate the issue by using one of the sampling techniques available in the library's DataProcessing module for augmenting data.
+
+:ref:`Cohort<cohort>`
+#####################
+
+A sub-module that implements classes capable of handling and managing cohorts. This makes it easier for applying targeted mitigations over a specific cohort, or creating
+custom data processing pipelines for each cohort. The :ref:`Cohort<cohort>` sub-module even allows creating different estimators for each cohort, without the user having to
+explicitly manage multiple models. All is done internally in the class, with a unified and simple interface.
+
+**Highlights include:**
+
+    * Interface for breaking a dataset into multiple cohorts.
+    * Two approaches for defining cohorts: based on the different values of a column, or based on custom filters.
+    * Creation of custom pipelines for each cohort, allowing the creation of different estimators for each cohort.
+    * Simple interface, which also implements the ``.fit()``, ``.transform()``, ``.predict()``, ``.predict_proba()``, and ``.fit_resample()`` methods
+      (some of these methods will only be available depending on the transformations/estimators in the custom pipelines defined for each cohort).
+
+.. admonition:: Example
+
+    Consider a dataset of a classification problem that has a sensitive feature (``country`` for example), and that each cohort created based on this dataset (that is, each
+    cohort is assigned to a different country) behaves differently, in the sense that the classification logic is different between cohorts, or that some other feature values have
+    considerably different ranges depending on the cohort. Depending on the estimator being used, these behavioral differences might not be captured, and in the end, the estimator
+    will simply try to understand to majority cohort, achieving good results for that cohort at the cost of achieving inferior results for the remaining cohorts. One way
+    to approach this problem is to apply targeted mitigations over each cohort separately. For example, use a :ref:`dataprocessing.DataStandardScaler<standard_scaler>` over each
+    cohort separately, or even training a separate estimator for each cohort. This can all be achieved through the :ref:`cohort.CohortManager<cohort_manager>` class.
+    :ref:`Check-out these examples<cohort_examples>` for more details on how to use the :ref:`cohort.CohortManager<cohort_manager>` to create customized pipelines (including
+    an estimator for each cohort).
+
+
+
+
+
 
 
 .. toctree::
