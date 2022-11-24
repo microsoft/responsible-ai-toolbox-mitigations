@@ -6,7 +6,7 @@ Cohort
 This module provides the necessary tools for users to create and manage different cohorts throughout
 their data processing and model training pipeline. In scenarios where a dataset has cohorts with very
 different distributions for certain features, applying a mitigation over the entire dataset might only
-make these differences even worse. In these cases, applying a mitigation over each cohort separately is
+make these differences worse. In these cases, applying a mitigation over each cohort separately is
 more advantageous than applying it over the whole dataset. Check out :ref:`this example<target_mitigation>`
 for a more in-depth analysis of this problem. The classes available in this module are:
 
@@ -17,6 +17,14 @@ for a more in-depth analysis of this problem. The classes available in this modu
       interface. Finally, allows the creation of different estimators for each cohort using the ``.predict()``
       and ``predict_proba()`` interfaces. This class uses the :ref:`cohort.CohortDefinition<cohort_def>`
       internally in order to create, filter, and manipulate multiple cohorts.
+
+**Highlights include:**
+
+    * Interface for breaking a dataset into multiple cohorts.
+    * Two approaches for defining cohorts: based on the different values of a column, or based on custom filters.
+    * Creation of custom pipelines for each cohort, allowing the creation of different estimators for each cohort.
+    * Simple interface, which also implements the ``.fit()``, ``.transform()``, ``.predict()``, ``.predict_proba()``, and ``.fit_resample()`` methods
+      (some of these methods will only be available depending on the transformations/estimators in the custom pipelines defined for each cohort).
 
 
 API

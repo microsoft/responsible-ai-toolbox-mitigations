@@ -6,13 +6,8 @@ Gallery
 The best way to get started is to go through the notebook tutorials, which showcase the benefits and usage of each mitigation and metrics available
 in the Responsible AI Mitigations Library. Here you can find all notebooks grouped according to their goals.
 
-DataBalanceAnalysis
-###################
-
-.. nbgallery::
-   notebooks/databalanceanalysis/data_balance_census
-   notebooks/databalanceanalysis/data_balance_overall
-   notebooks/data_balance_e2e
+Tutorials
+---------
 
 DataProcessing
 ##############
@@ -29,15 +24,41 @@ DataProcessing
    notebooks/dataprocessing/module_tests/rebalance_imbl
    notebooks/dataprocessing/module_tests/rebalance_sdv
 
+DataBalanceAnalysis
+###################
+
+.. nbgallery::
+   notebooks/databalanceanalysis/data_balance_census
+   notebooks/databalanceanalysis/data_balance_overall
+
+
 Cohort
 ######
+
+.. _gallery_cohort:
 
 .. nbgallery::
    notebooks/cohort/cohort_definition
    notebooks/cohort/cohort_manager
 
+
+Using scikit-learn's Pipeline
+#############################
+
+.. nbgallery::
+   notebooks/dataprocessing/module_tests/pipeline_test
+
+
+
+
+
+
+
 Case Studies
-############
+------------
+
+Using the DataProcessing Module
+###############################
 
 .. nbgallery::
    notebooks/dataprocessing/module_tests/model_test
@@ -48,17 +69,24 @@ Case Studies
    notebooks/dataprocessing/case_study/case2_stat
    notebooks/dataprocessing/case_study/case3_stat
 
-Cohort Case Studies
-###################
+
+Using the DataBalanceAnalysis Module
+####################################
+
+.. nbgallery::
+   notebooks/data_balance_e2e
+
+
+Using the Cohort Module
+#######################
+
+.. _gallery_cohort_case:
 
 .. nbgallery::
    notebooks/cohort/case_study/case_1
+   notebooks/cohort/case_study/case_1_rebalance
    notebooks/cohort/case_study/case_1_dashboard
    notebooks/cohort/case_study/case_2
    notebooks/cohort/case_study/case_3
 
-Using scikit-learn's Pipeline
-#############################
 
-.. nbgallery::
-   notebooks/dataprocessing/module_tests/pipeline_test

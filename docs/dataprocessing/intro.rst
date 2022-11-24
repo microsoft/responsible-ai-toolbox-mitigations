@@ -32,6 +32,16 @@ a set of concrete child classes that implements a different solution to the prob
 an abstract encoding class (:ref:`DataEncoding<DataEncoding>`), which has concrete child classes that implement
 different encoding approaches (:ref:`EncoderOHE<EncoderOHE>` and :ref:`EncoderOrdinal<EncoderOrdinal>`).
 
+**Highlights include:**
+
+    * A simple interface for mitigation steps that follows the ``.fit()`` and ``.transform()`` convention.
+    * transformer classes that can be combined together in end-to-end mitigation pipelines.
+    * Function calls adapted for responsible AI by extending existing calls either with target features or cohorts.
+    * Predetermined parameter values, eliminating the need to know or to configure all available parameters.
+    * Unique solutions for tabular data.
+    * Automation of various mitigation steps, with some transformer classes acting as a wrapper to others in the library.
+    * Customization options, helpful for the more experienced AI practitioner.
+
 
 API
 ---
