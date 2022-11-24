@@ -51,26 +51,24 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../gallery.html">Gallery</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#dataprocessing">DataProcessing</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="encoding.html">Encoding Examples</a></li>
-<li class="toctree-l3"><a class="reference internal" href="scaler.html">Data Scaling</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">BasicImputer Example</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Handling-a-DataFrame-with-column-names">Handling a DataFrame with column names</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Handling-a-DataFrame-without-column-names">Handling a DataFrame without column names</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#tutorials">Tutorials</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../../gallery.html#dataprocessing">DataProcessing</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="encoding.html">Encoding Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scaler.html">Data Scaling</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">BasicImputer Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="feat_sel_sequential.html">SeqFeatSelection Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="feat_sel_catboost.html">CatBoostSelection Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="feat_sel_corr_tutorial.html">Checking Correlations Between Variables - A Comprehensive Guide</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rebalance_imbl.html">Rebalance Class (imblearn)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rebalance_sdv.html">Synthesizer Class (SDV)</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="feat_sel_sequential.html">SeqFeatSelection Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="feat_sel_catboost.html">CatBoostSelection Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="feat_sel_corr_tutorial.html">Checking Correlations Between Variables - A Comprehensive Guide</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rebalance_imbl.html">Rebalance Class (imblearn)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rebalance_sdv.html">Synthesizer Class (SDV)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../gallery.html#cohort">Cohort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort">Cohort</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort-case-studies">Cohort Case Studies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
 </ul>
@@ -220,10 +218,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */

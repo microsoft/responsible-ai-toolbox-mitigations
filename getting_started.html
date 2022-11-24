@@ -77,7 +77,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#feature-measures"><span class="xref std std-ref">Feature measures</span></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#cohort-management"><span class="xref std std-ref">Cohort Management</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cohort-management"><span class="xref std std-ref">Cohort Management</span></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cohort-based-estimators">Cohort-based estimators</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#get-involved">Get involved</a></li>
 </ul>
 </li>
@@ -589,6 +592,29 @@ the missing values based on the mean value of the cohort to which the instance b
 greatly reduce the noise inserted by the imputation method. This can be easily achieved by using the
 <a class="reference internal" href="cohort/cohort_manager.html#cohort-manager"><span class="std std-ref">cohort.CohortManager</span></a> class.</p>
 </div>
+<section id="cohort-based-estimators">
+<h3>Cohort-based estimators<a class="headerlink" href="#cohort-based-estimators" title="Permalink to this heading"></a></h3>
+<p>The <a class="reference internal" href="cohort/intro.html#cohort"><span class="std std-ref">Cohort</span></a> module allows applying different mitigations to each cohort separately, as previously highlighted.
+But it allows us to go beyond that: it also allows creating full pipelines, including an estimator, for each cohort, while
+using a familiar and easy-to-use interface. If we are faced with a dataset that has a set of cohorts that behave very
+differently from each other, we are able of creating a custom pipeline for each cohort individually, which means that the
+pipeline is fitted separately for each cohort. This might help achieving more fair results, that is, the performance for each
+cohort is similar when compared to the other cohorts.</p>
+<div class="admonition-tutorials-and-examples admonition">
+<p class="admonition-title">Tutorials and Examples</p>
+<p>Check the <a class="reference internal" href="gallery.html#gallery"><span class="std std-ref">Gallery</span></a> page for some tutorials and examples of how to use the <a class="reference internal" href="cohort/intro.html#cohort"><span class="std std-ref">Cohort</span></a> module.</p>
+<ul class="simple">
+<li><p>The <a class="reference internal" href="gallery.html#gallery-cohort"><span class="std std-ref">Tutorial - Cohort</span></a> section has a set of tutorial notebooks that shows all of the features implemented
+in the different classes inside the <a class="reference internal" href="cohort/intro.html#cohort"><span class="std std-ref">Cohort</span></a> module, as well as when and how to use each one of them.</p></li>
+<li><p>The <a class="reference internal" href="gallery.html#gallery-cohort-case"><span class="std std-ref">Tutorial - Using the Cohort Module</span></a> sections presents a set of notebooks where we analyze a datasets
+that present some behavioral differences between different cohorts, and we use the <a class="reference internal" href="cohort/intro.html#cohort"><span class="std std-ref">Cohort</span></a> module to create different
+pre-processing pipelines for each cohort, and in some cases, we even create different estimators for each cohort.</p></li>
+</ul>
+<p><strong>Note that this module is more useful in scenarios where there are considerable behavioral differences between cohorts.</strong>
+If that is not the case, then applying mitigations and training a single estimator over the entire dataset might prove the
+best approach, instead of creating different pipelines for each cohort.</p>
+</div>
+</section>
 </section>
 <section id="get-involved">
 <h2>Get involved<a class="headerlink" href="#get-involved" title="Permalink to this heading"></a></h2>

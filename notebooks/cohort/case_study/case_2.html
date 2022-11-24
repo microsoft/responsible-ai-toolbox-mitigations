@@ -26,7 +26,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Cohort Case Study 3" href="case_3.html" />
-    <link rel="prev" title="Cohort Case Study 1" href="case_1.html" /> 
+    <link rel="prev" title="Cohort Case Study 1 - Using RAI ErrorAnalysis" href="case_1_dashboard.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,22 +51,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../gallery.html">Gallery</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#dataprocessing">DataProcessing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort">Cohort</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#cohort-case-studies">Cohort Case Studies</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="case_1.html">Cohort Case Study 1</a></li>
-<li class="toctree-l3"><a class="reference internal" href="case_1_dashboard.html">Cohort Case Study 1 - Using RAI ErrorAnalysis</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Cohort Case Study 2</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Initial-analysis-of-multiple-cohort-definitions">Initial analysis of multiple cohort definitions</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#A-Closer-Look-at-the-“relationship”-cohorts">A Closer Look at the “relationship” cohorts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#tutorials">Tutorials</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../../gallery.html#using-the-dataprocessing-module">Using the DataProcessing Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../gallery.html#using-the-databalanceanalysis-module">Using the DataBalanceAnalysis Module</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../../gallery.html#using-the-cohort-module">Using the Cohort Module</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="case_1.html">Cohort Case Study 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="case_1_rebalance.html">Cohort Case Study 1 - Rebalancing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="case_1_dashboard.html">Cohort Case Study 1 - Using RAI ErrorAnalysis</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Cohort Case Study 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="case_3.html">Cohort Case Study 3</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="case_3.html">Cohort Case Study 3</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
 </ul>
@@ -94,7 +92,7 @@
       <li><a href="../../../index.html" class="icon icon-home"></a></li>
           <li class="breadcrumb-item"><a href="../../../api.html">API reference</a></li>
           <li class="breadcrumb-item"><a href="../../../cohort/cohort.html">Cohort</a></li>
-          <li class="breadcrumb-item"><a href="../../../cohort/utils.html">Cohort Utils</a></li>
+          <li class="breadcrumb-item"><a href="../../../cohort/cohort_manager.html">CohortManager</a></li>
       <li class="breadcrumb-item active">Cohort Case Study 2</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/cohort/case_study/case_2.ipynb" class="fa fa-github"> Edit on GitHub</a>
@@ -215,10 +213,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -385,10 +384,10 @@ div.rendered_html tbody tr:hover {
 </style>
 <section id="Cohort-Case-Study-2">
 <h1>Cohort Case Study 2<a class="headerlink" href="#Cohort-Case-Study-2" title="Permalink to this heading"></a></h1>
-<p>This notebook will follow a similar approach to what was done in the notebook <code class="docutils literal notranslate"><span class="pre">Cohort</span> <span class="pre">Case</span> <span class="pre">Study</span> <span class="pre">1</span></code>, but this time we’ll use a real dataset. Since this time we’re handling a real dataset, it might not be obvious which cohorts follow different behaviors, as we’ve seen in the aforementioned notebook.</p>
+<p>This notebook will follow a similar approach to what was done in the notebook <a class="reference internal" href="case_1.html"><span class="doc">Cohort Case Study 1</span></a>, but this time we’ll use a real dataset. Since this time we’re handling a real dataset, it might not be obvious which cohorts follow different behaviors, as we’ve seen in the aforementioned notebook.</p>
 <p>We’ll start by downloading the dataset and reading the train and test sets.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -436,7 +435,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">df_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
@@ -454,7 +453,7 @@ div.rendered_html tbody tr:hover {
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_train</span>
@@ -462,7 +461,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -707,7 +706,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>Here we define which model will be used throughout the experiments performed here. Remember that our goal is not to compare different models, but instead to compare different approaches to cohort processing. Therefore, we’ll use the same model for all experiments, but we’ll alternate between training a pipeline using the entire dataset and training multiple pipelines, where each pipeline is associated with a specific cohort. We’ll also see how the cohort definition changes the results obtained.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_model</span><span class="p">():</span>
@@ -719,15 +718,18 @@ div.rendered_html tbody tr:hover {
 </div>
 <section id="Initial-analysis-of-multiple-cohort-definitions">
 <h2>Initial analysis of multiple cohort definitions<a class="headerlink" href="#Initial-analysis-of-multiple-cohort-definitions" title="Permalink to this heading"></a></h2>
-<p>Now that we have our dataset, we can create a simple pipeline and fit it using the training data. We’ll then use the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results</span></code> function to show the results obtained for the entire dataset, as well as for different cohorts. Notice that this function computes all metrics for each cohort separately, and therefore, different thresholds might be encountered for each cohort (the optimal threshold of a given set of predictions is found using the ROC curve).</p>
+<p>Now that we have our dataset, we can create a simple pipeline and fit it using the training data. We’ll then use the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results</span></code> function to show the results obtained for the entire dataset, as well as for different cohorts. Notice that this function computes all metrics for each cohort separately, and therefore, different thresholds might be encountered for each cohort (the optimal threshold of a given set of predictions is found using the ROC curve). We call this function twice:
+first using the training dataset, which gives us the best thresholds for each cohort, and for the second time we call this function, we pass the test dataset, along with these thresholds. Check <a class="reference internal" href="case_1.html"><span class="doc">Cohort Case Study 1</span></a> for more details.</p>
 <section id="Superficial-analysis-of-the-“race”-cohorts">
 <h3>Superficial analysis of the “race” cohorts<a class="headerlink" href="#Superficial-analysis-of-the-“race”-cohorts" title="Permalink to this heading"></a></h3>
 <p>Our first analysis will focus on the cohorts defined by the <code class="docutils literal notranslate"><span class="pre">race</span></code> feature.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 1</span>
+
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
             <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
             <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
             <span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">()),</span>
@@ -735,12 +737,14 @@ div.rendered_html tbody tr:hover {
 <span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="n">pred_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">])</span>
+<span class="n">pred_train_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -779,11 +783,11 @@ div.rendered_html tbody tr:hover {
       <td>all</td>
       <td>all</td>
       <td>0.928045</td>
-      <td>0.774041</td>
-      <td>0.846508</td>
-      <td>0.793006</td>
-      <td>0.828082</td>
-      <td>0.214291</td>
+      <td>0.777171</td>
+      <td>0.845464</td>
+      <td>0.796679</td>
+      <td>0.832934</td>
+      <td>0.231817</td>
       <td>16281</td>
     </tr>
     <tr>
@@ -791,11 +795,11 @@ div.rendered_html tbody tr:hover {
       <td>cohort_0</td>
       <td>(`race` == " Amer-Indian-Eskimo")</td>
       <td>0.964286</td>
-      <td>0.760706</td>
-      <td>0.916541</td>
-      <td>0.807547</td>
-      <td>0.893082</td>
-      <td>0.236285</td>
+      <td>0.732710</td>
+      <td>0.902256</td>
+      <td>0.775560</td>
+      <td>0.867925</td>
+      <td>0.197201</td>
       <td>159</td>
     </tr>
     <tr>
@@ -803,11 +807,11 @@ div.rendered_html tbody tr:hover {
       <td>cohort_1</td>
       <td>(`race` == " Asian-Pac-Islander")</td>
       <td>0.904596</td>
-      <td>0.777669</td>
-      <td>0.830903</td>
-      <td>0.789716</td>
-      <td>0.812500</td>
-      <td>0.209811</td>
+      <td>0.767611</td>
+      <td>0.822257</td>
+      <td>0.777709</td>
+      <td>0.800000</td>
+      <td>0.203299</td>
       <td>480</td>
     </tr>
     <tr>
@@ -815,11 +819,11 @@ div.rendered_html tbody tr:hover {
       <td>cohort_2</td>
       <td>(`race` == " Black")</td>
       <td>0.950497</td>
-      <td>0.706862</td>
-      <td>0.886423</td>
-      <td>0.744534</td>
-      <td>0.846252</td>
-      <td>0.098247</td>
+      <td>0.760379</td>
+      <td>0.882773</td>
+      <td>0.802551</td>
+      <td>0.900064</td>
+      <td>0.191870</td>
       <td>1561</td>
     </tr>
     <tr>
@@ -827,11 +831,11 @@ div.rendered_html tbody tr:hover {
       <td>cohort_3</td>
       <td>(`race` == " Other")</td>
       <td>0.980000</td>
-      <td>0.895238</td>
-      <td>0.952727</td>
-      <td>0.920085</td>
+      <td>0.901368</td>
+      <td>0.937273</td>
+      <td>0.917833</td>
       <td>0.948148</td>
-      <td>0.176354</td>
+      <td>0.189001</td>
       <td>135</td>
     </tr>
     <tr>
@@ -839,11 +843,11 @@ div.rendered_html tbody tr:hover {
       <td>cohort_4</td>
       <td>(`race` == " White")</td>
       <td>0.924495</td>
-      <td>0.776855</td>
-      <td>0.840369</td>
-      <td>0.793715</td>
-      <td>0.824896</td>
-      <td>0.235332</td>
+      <td>0.778072</td>
+      <td>0.838988</td>
+      <td>0.795214</td>
+      <td>0.827262</td>
+      <td>0.245844</td>
       <td>13946</td>
     </tr>
   </tbody>
@@ -852,10 +856,12 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>Let’s now create a separate pipeline for the different cohorts, instead of training a single pipeline for the entire dataset. We’ll accomplish this by using the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class. We’ll then compare the results obtained for the same cohorts tested in the previous cell. In this notebook, just like in <code class="docutils literal notranslate"><span class="pre">Cohort</span> <span class="pre">Case</span> <span class="pre">Study</span> <span class="pre">1</span></code>, we’ll call this approach the cohort-based pipeline, and we’ll try different cohort-based pipelines, each time using different cohort definitions.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 1</span>
+
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
     <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
@@ -866,12 +872,14 @@ div.rendered_html tbody tr:hover {
 <span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -981,23 +989,27 @@ div.rendered_html tbody tr:hover {
 </table>
 </div></div>
 </div>
-<p>Notice that using a separate pipeline for each cohort defined by the <code class="docutils literal notranslate"><span class="pre">race</span></code> column is not a good idea: we got considerably worse results for some cohorts compared to the baseline pipeline. This might mean that, for some cohorts (like cohort <code class="docutils literal notranslate"><span class="pre">cohort_0</span></code>), we have insufficient data for training a separate model for that cohort, and that the data from other cohorts indeed helps the end result. This could also mean that these cohorts share similarities to other cohorts, and that is why using data
-from different cohorts to train a single model is better than training a separate model for each cohort.</p>
+<p>Notice that using a separate pipeline for each cohort defined by the <code class="docutils literal notranslate"><span class="pre">race</span></code> column is not a good idea: we got considerably worse results for some cohorts compared to the baseline pipeline. This might mean that, for some cohorts (like cohort <code class="docutils literal notranslate"><span class="pre">cohort_0</span></code>), <strong>we have insufficient data for training a separate model for that cohort, and that the data from other cohorts indeed helps the end result</strong>. This could also mean that these cohorts share similarities to other cohorts, and that is why using
+data from different cohorts to train a single model is better than training a separate model for each cohort.</p>
 </section>
 <section id="Superficial-analysis-of-the-“gender”-cohorts">
 <h3>Superficial analysis of the “gender” cohorts<a class="headerlink" href="#Superficial-analysis-of-the-“gender”-cohorts" title="Permalink to this heading"></a></h3>
 <p>Let’s now try other cohort definitions and see if we can find some scenario where the model underperforms for a given cohort. Our next test is to check the cohorts defined by the <code class="docutils literal notranslate"><span class="pre">gender</span></code> column. We’ll follow the same procedure: first, we train a single pipeline over the entire dataset, followed by an evaluation of the predictions over the test data separated by each cohort. Once again, the metrics are computed separately for the predictions of each cohort, and therefore, we might see
 different optimal threshold values encountered for different cohorts.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 2</span>
+
+<span class="n">pred_train_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1036,11 +1048,11 @@ different optimal threshold values encountered for different cohorts.</p>
       <td>all</td>
       <td>all</td>
       <td>0.928045</td>
-      <td>0.774041</td>
-      <td>0.846508</td>
-      <td>0.793006</td>
-      <td>0.828082</td>
-      <td>0.214291</td>
+      <td>0.777171</td>
+      <td>0.845464</td>
+      <td>0.796679</td>
+      <td>0.832934</td>
+      <td>0.231817</td>
       <td>16281</td>
     </tr>
     <tr>
@@ -1048,11 +1060,11 @@ different optimal threshold values encountered for different cohorts.</p>
       <td>cohort_0</td>
       <td>(`gender` == " Female")</td>
       <td>0.945489</td>
-      <td>0.697068</td>
-      <td>0.866671</td>
-      <td>0.734840</td>
-      <td>0.848552</td>
-      <td>0.077829</td>
+      <td>0.740570</td>
+      <td>0.861752</td>
+      <td>0.781435</td>
+      <td>0.892824</td>
+      <td>0.138193</td>
       <td>5421</td>
     </tr>
     <tr>
@@ -1060,11 +1072,11 @@ different optimal threshold values encountered for different cohorts.</p>
       <td>cohort_1</td>
       <td>(`gender` == " Male")</td>
       <td>0.910614</td>
-      <td>0.780929</td>
-      <td>0.821125</td>
-      <td>0.790895</td>
-      <td>0.809761</td>
-      <td>0.284180</td>
+      <td>0.782839</td>
+      <td>0.820572</td>
+      <td>0.793299</td>
+      <td>0.813168</td>
+      <td>0.295236</td>
       <td>10860</td>
     </tr>
   </tbody>
@@ -1073,10 +1085,12 @@ different optimal threshold values encountered for different cohorts.</p>
 </div>
 <p>Next, we create different pipelines for each cohort and evaluate the predictions made by the ensemble of models over each cohort separately.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 2</span>
+
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
     <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
@@ -1087,12 +1101,14 @@ different optimal threshold values encountered for different cohorts.</p>
 <span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1172,15 +1188,19 @@ different optimal threshold values encountered for different cohorts.</p>
 <h3>Superficial analysis of the “relationship” cohorts<a class="headerlink" href="#Superficial-analysis-of-the-“relationship”-cohorts" title="Permalink to this heading"></a></h3>
 <p>We now analyze the cohorts defined by the <code class="docutils literal notranslate"><span class="pre">relationship</span></code> column. Let’s see the results of the baseline pipeline over each of these cohorts:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 3</span>
+
+<span class="n">pred_train_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1219,11 +1239,11 @@ different optimal threshold values encountered for different cohorts.</p>
       <td>all</td>
       <td>all</td>
       <td>0.928045</td>
-      <td>0.774041</td>
-      <td>0.846508</td>
-      <td>0.793006</td>
-      <td>0.828082</td>
-      <td>0.214291</td>
+      <td>0.777171</td>
+      <td>0.845464</td>
+      <td>0.796679</td>
+      <td>0.832934</td>
+      <td>0.231817</td>
       <td>16281</td>
     </tr>
     <tr>
@@ -1231,11 +1251,11 @@ different optimal threshold values encountered for different cohorts.</p>
       <td>cohort_0</td>
       <td>(`relationship` == " Husband")</td>
       <td>0.851455</td>
-      <td>0.767644</td>
-      <td>0.760808</td>
-      <td>0.762712</td>
-      <td>0.767745</td>
-      <td>0.496800</td>
+      <td>0.755007</td>
+      <td>0.756020</td>
+      <td>0.755425</td>
+      <td>0.757474</td>
+      <td>0.430200</td>
       <td>6523</td>
     </tr>
     <tr>
@@ -1243,11 +1263,11 @@ different optimal threshold values encountered for different cohorts.</p>
       <td>cohort_1</td>
       <td>(`relationship` == " Not-in-family")</td>
       <td>0.903658</td>
-      <td>0.648626</td>
-      <td>0.823863</td>
-      <td>0.672058</td>
-      <td>0.806685</td>
-      <td>0.078964</td>
+      <td>0.686648</td>
+      <td>0.815537</td>
+      <td>0.723557</td>
+      <td>0.866293</td>
+      <td>0.122252</td>
       <td>4278</td>
     </tr>
     <tr>
@@ -1255,11 +1275,11 @@ different optimal threshold values encountered for different cohorts.</p>
       <td>cohort_2</td>
       <td>(`relationship` == " Other-relative")</td>
       <td>0.936405</td>
-      <td>0.574932</td>
-      <td>0.890196</td>
-      <td>0.588954</td>
-      <td>0.849524</td>
-      <td>0.034834</td>
+      <td>0.593950</td>
+      <td>0.822549</td>
+      <td>0.629904</td>
+      <td>0.906667</td>
+      <td>0.055801</td>
       <td>525</td>
     </tr>
     <tr>
@@ -1267,11 +1287,11 @@ different optimal threshold values encountered for different cohorts.</p>
       <td>cohort_3</td>
       <td>(`relationship` == " Own-child")</td>
       <td>0.933263</td>
-      <td>0.545761</td>
-      <td>0.884905</td>
-      <td>0.540163</td>
-      <td>0.839634</td>
-      <td>0.011240</td>
+      <td>0.552981</td>
+      <td>0.840417</td>
+      <td>0.565381</td>
+      <td>0.883804</td>
+      <td>0.016585</td>
       <td>2513</td>
     </tr>
     <tr>
@@ -1279,11 +1299,11 @@ different optimal threshold values encountered for different cohorts.</p>
       <td>cohort_4</td>
       <td>(`relationship` == " Unmarried")</td>
       <td>0.908060</td>
-      <td>0.597355</td>
-      <td>0.833168</td>
-      <td>0.610507</td>
-      <td>0.811793</td>
-      <td>0.054493</td>
+      <td>0.617622</td>
+      <td>0.801239</td>
+      <td>0.650907</td>
+      <td>0.868970</td>
+      <td>0.082190</td>
       <td>1679</td>
     </tr>
     <tr>
@@ -1291,24 +1311,26 @@ different optimal threshold values encountered for different cohorts.</p>
       <td>cohort_5</td>
       <td>(`relationship` == " Wife")</td>
       <td>0.873899</td>
-      <td>0.792793</td>
-      <td>0.794374</td>
-      <td>0.793273</td>
-      <td>0.794233</td>
-      <td>0.492120</td>
+      <td>0.778485</td>
+      <td>0.780058</td>
+      <td>0.775786</td>
+      <td>0.775885</td>
+      <td>0.443051</td>
       <td>763</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
-<p>As we can see, in this case, we do have some cohorts that have considerably worse results than others. For example, cohorts <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code>, <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>, and <code class="docutils literal notranslate"><span class="pre">cohort_4</span></code> have considerably lower F1 scores than the other cohorts. This could be a problem if the <code class="docutils literal notranslate"><span class="pre">relationship</span></code> column is considered a sensitive feature, where a similar performance is expected for all cohorts. In that case, we’ll see if we can improve the metrics for these cohorts using different pipelines for each cohort, similar to
-what we’ve done in the previous experiments:</p>
+<p>As we can see, in this case, <strong>we do have some cohorts that have considerably worse results than others</strong>. For example, cohorts <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code>, <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>, and <code class="docutils literal notranslate"><span class="pre">cohort_4</span></code> have considerably lower F1 scores than the other cohorts. This could be a problem if the <code class="docutils literal notranslate"><span class="pre">relationship</span></code> column is considered a sensitive feature, where a similar performance is expected for all cohorts. In that case, we’ll see if we can improve the metrics for these cohorts using different pipelines for each cohort, similar
+to what we’ve done in the previous experiments:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 3</span>
+
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
     <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
@@ -1319,12 +1341,14 @@ what we’ve done in the previous experiments:</p>
 <span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">])</span>
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1363,11 +1387,11 @@ what we’ve done in the previous experiments:</p>
       <td>all</td>
       <td>all</td>
       <td>0.921740</td>
-      <td>0.774480</td>
-      <td>0.838504</td>
-      <td>0.793696</td>
-      <td>0.831767</td>
-      <td>0.235577</td>
+      <td>0.776789</td>
+      <td>0.836764</td>
+      <td>0.795931</td>
+      <td>0.835145</td>
+      <td>0.247375</td>
       <td>16281</td>
     </tr>
     <tr>
@@ -1375,11 +1399,11 @@ what we’ve done in the previous experiments:</p>
       <td>cohort_0</td>
       <td>(`relationship` == " Husband")</td>
       <td>0.847310</td>
-      <td>0.768719</td>
-      <td>0.761313</td>
-      <td>0.763310</td>
-      <td>0.768511</td>
-      <td>0.496186</td>
+      <td>0.763712</td>
+      <td>0.760496</td>
+      <td>0.761651</td>
+      <td>0.765445</td>
+      <td>0.467993</td>
       <td>6523</td>
     </tr>
     <tr>
@@ -1387,11 +1411,11 @@ what we’ve done in the previous experiments:</p>
       <td>cohort_1</td>
       <td>(`relationship` == " Not-in-family")</td>
       <td>0.894365</td>
-      <td>0.652406</td>
-      <td>0.815078</td>
-      <td>0.679824</td>
-      <td>0.819542</td>
-      <td>0.076893</td>
+      <td>0.705684</td>
+      <td>0.785957</td>
+      <td>0.735656</td>
+      <td>0.887564</td>
+      <td>0.162837</td>
       <td>4278</td>
     </tr>
     <tr>
@@ -1399,11 +1423,11 @@ what we’ve done in the previous experiments:</p>
       <td>cohort_2</td>
       <td>(`relationship` == " Other-relative")</td>
       <td>0.904314</td>
-      <td>0.574198</td>
-      <td>0.862745</td>
-      <td>0.591053</td>
-      <td>0.859048</td>
-      <td>0.000759</td>
+      <td>0.986641</td>
+      <td>0.533333</td>
+      <td>0.555730</td>
+      <td>0.973333</td>
+      <td>0.977238</td>
       <td>525</td>
     </tr>
     <tr>
@@ -1411,11 +1435,11 @@ what we’ve done in the previous experiments:</p>
       <td>cohort_3</td>
       <td>(`relationship` == " Own-child")</td>
       <td>0.908999</td>
-      <td>0.600146</td>
-      <td>0.849079</td>
-      <td>0.646560</td>
-      <td>0.944688</td>
-      <td>0.000762</td>
+      <td>0.993800</td>
+      <td>0.647727</td>
+      <td>0.724951</td>
+      <td>0.987664</td>
+      <td>0.928134</td>
       <td>2513</td>
     </tr>
     <tr>
@@ -1423,11 +1447,11 @@ what we’ve done in the previous experiments:</p>
       <td>cohort_4</td>
       <td>(`relationship` == " Unmarried")</td>
       <td>0.872706</td>
-      <td>0.603854</td>
-      <td>0.799634</td>
-      <td>0.629067</td>
-      <td>0.846337</td>
-      <td>0.030138</td>
+      <td>0.707712</td>
+      <td>0.739665</td>
+      <td>0.722286</td>
+      <td>0.938654</td>
+      <td>0.209798</td>
       <td>1679</td>
     </tr>
     <tr>
@@ -1435,11 +1459,11 @@ what we’ve done in the previous experiments:</p>
       <td>cohort_5</td>
       <td>(`relationship` == " Wife")</td>
       <td>0.830681</td>
-      <td>0.749464</td>
-      <td>0.751278</td>
-      <td>0.748091</td>
-      <td>0.748362</td>
-      <td>0.438196</td>
+      <td>0.734595</td>
+      <td>0.735099</td>
+      <td>0.734815</td>
+      <td>0.736566</td>
+      <td>0.510850</td>
       <td>763</td>
     </tr>
   </tbody>
@@ -1455,7 +1479,7 @@ for <code class="docutils literal notranslate"><span class="pre">cohort_3</span>
 <p>In this section, we’ll take a closer look at how we can try to improve the results for the cohorts defined by the <code class="docutils literal notranslate"><span class="pre">relationship</span></code> column. As we’ve shown, this set of cohorts does present some considerably different metrics between different cohorts. Here we’ll try using different cohort definitions, and data rebalancing to improve the performance over a set of cohorts.</p>
 <p>Before starting the analysis, we’ll create a function for plotting the label distribution over different cohorts. This will be useful when we start looking at data imbalance.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -1501,7 +1525,7 @@ for <code class="docutils literal notranslate"><span class="pre">cohort_3</span>
 </div>
 <p>We can now look at the label distribution over each of the <code class="docutils literal notranslate"><span class="pre">relationship</span></code> cohorts using the function previously defined (with the help of the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class):</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
@@ -1575,7 +1599,7 @@ Name: income, dtype: int64
 <h3>Rebalancing the entire dataset<a class="headerlink" href="#Rebalancing-the-entire-dataset" title="Permalink to this heading"></a></h3>
 <p>Let’s start by using a simple rebalance strategy using the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class over the entire dataset. We then plot the new label distributions:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rebalance</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1645,12 +1669,14 @@ Name: income, dtype: int64
 <img alt="../../../_images/notebooks_cohort_case_study_case_2_23_1.png" src="../../../_images/notebooks_cohort_case_study_case_2_23_1.png" />
 </div>
 </div>
-<p>Notice that the label distribution became imbalanced towards the opposite class in <code class="docutils literal notranslate"><span class="pre">cohort_0</span></code> after rebalancing. Let’s now use the baseline pipeline with the rebalanced dataset and check the results for the <code class="docutils literal notranslate"><span class="pre">relationship</span></code> cohorts:</p>
+<p>Notice that the label distribution became imbalanced towards the opposite class in <code class="docutils literal notranslate"><span class="pre">cohort_0</span></code> after rebalancing. Let’s now use the baseline pipeline with the rebalanced dataset, check the results for the <code class="docutils literal notranslate"><span class="pre">relationship</span></code> cohorts, and compare it to <a class="reference external" href="#baseline3">Baseline 3</a>:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 4</span>
+
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
             <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
             <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
             <span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">()),</span>
@@ -1658,12 +1684,14 @@ Name: income, dtype: int64
 <span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">)</span>
 <span class="n">pred_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">])</span>
+<span class="n">pred_train_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1702,11 +1730,11 @@ Name: income, dtype: int64
       <td>all</td>
       <td>all</td>
       <td>0.921874</td>
-      <td>0.765679</td>
-      <td>0.836890</td>
-      <td>0.783717</td>
-      <td>0.819974</td>
-      <td>0.285999</td>
+      <td>0.804539</td>
+      <td>0.819558</td>
+      <td>0.811534</td>
+      <td>0.860574</td>
+      <td>0.516163</td>
       <td>16281</td>
     </tr>
     <tr>
@@ -1714,11 +1742,11 @@ Name: income, dtype: int64
       <td>cohort_0</td>
       <td>(`relationship` == " Husband")</td>
       <td>0.835034</td>
-      <td>0.750890</td>
-      <td>0.750629</td>
-      <td>0.750755</td>
-      <td>0.753488</td>
-      <td>0.605171</td>
+      <td>0.758721</td>
+      <td>0.727895</td>
+      <td>0.729487</td>
+      <td>0.743830</td>
+      <td>0.744579</td>
       <td>6523</td>
     </tr>
     <tr>
@@ -1726,11 +1754,11 @@ Name: income, dtype: int64
       <td>cohort_1</td>
       <td>(`relationship` == " Not-in-family")</td>
       <td>0.899895</td>
-      <td>0.684344</td>
-      <td>0.829142</td>
-      <td>0.722082</td>
-      <td>0.860215</td>
-      <td>0.138539</td>
+      <td>0.696652</td>
+      <td>0.812623</td>
+      <td>0.733305</td>
+      <td>0.876344</td>
+      <td>0.162488</td>
       <td>4278</td>
     </tr>
     <tr>
@@ -1738,11 +1766,11 @@ Name: income, dtype: int64
       <td>cohort_2</td>
       <td>(`relationship` == " Other-relative")</td>
       <td>0.953791</td>
-      <td>0.586376</td>
-      <td>0.901961</td>
-      <td>0.612290</td>
-      <td>0.872381</td>
-      <td>0.045129</td>
+      <td>0.636910</td>
+      <td>0.839216</td>
+      <td>0.687639</td>
+      <td>0.939048</td>
+      <td>0.099639</td>
       <td>525</td>
     </tr>
     <tr>
@@ -1750,11 +1778,11 @@ Name: income, dtype: int64
       <td>cohort_3</td>
       <td>(`relationship` == " Own-child")</td>
       <td>0.932081</td>
-      <td>0.557454</td>
-      <td>0.874103</td>
-      <td>0.572312</td>
-      <td>0.884202</td>
-      <td>0.017004</td>
+      <td>0.551532</td>
+      <td>0.866812</td>
+      <td>0.558926</td>
+      <td>0.869877</td>
+      <td>0.015063</td>
       <td>2513</td>
     </tr>
     <tr>
@@ -1762,11 +1790,11 @@ Name: income, dtype: int64
       <td>cohort_4</td>
       <td>(`relationship` == " Unmarried")</td>
       <td>0.903355</td>
-      <td>0.583324</td>
-      <td>0.828068</td>
-      <td>0.574734</td>
-      <td>0.762954</td>
-      <td>0.042936</td>
+      <td>0.617015</td>
+      <td>0.792140</td>
+      <td>0.650214</td>
+      <td>0.871352</td>
+      <td>0.089455</td>
       <td>1679</td>
     </tr>
     <tr>
@@ -1774,25 +1802,26 @@ Name: income, dtype: int64
       <td>cohort_5</td>
       <td>(`relationship` == " Wife")</td>
       <td>0.861501</td>
-      <td>0.782269</td>
-      <td>0.784459</td>
-      <td>0.781979</td>
-      <td>0.782438</td>
-      <td>0.548571</td>
+      <td>0.782736</td>
+      <td>0.780328</td>
+      <td>0.781221</td>
+      <td>0.783748</td>
+      <td>0.603711</td>
       <td>763</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
-<p>As expected, we didn’t have a considerable improvement for some cohorts. For example, let’s focus here on <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>, which presented considerably worse results when compared to the other cohorts when using the baseline pipeline over the original dataset. For this cohort, after rebalancing, the baseline pipeline resulted in inferior precision and recall metrics when compared to the results obtained by the baseline pipeline trained over the original dataset. This makes sense because only a very
-small number of instances were created for <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code> after the rebalancing operation, which is a result of how SMOTE works. Therefore, we now have a greater imbalance in the number of instances in each cohort, which may result in inferior results for these minority cohorts.</p>
+<p>As expected, we didn’t have a considerable improvement. The only meaningful improvement is for <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code>. For the other cohorts, we either got a slight increase or decrease in some metrics (compared to <a class="reference external" href="#baseline3">Baseline 3</a>).</p>
 <p>We’ll now try using the cohort-based pipeline over the rebalanced dataset:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 4</span>
+
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
     <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
@@ -1803,12 +1832,14 @@ small number of instances were created for <code class="docutils literal notrans
 <span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">)</span>
 <span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">])</span>
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1847,11 +1878,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>all</td>
       <td>all</td>
       <td>0.917939</td>
-      <td>0.777103</td>
-      <td>0.834813</td>
-      <td>0.796039</td>
-      <td>0.836005</td>
-      <td>0.339383</td>
+      <td>0.807377</td>
+      <td>0.802695</td>
+      <td>0.804988</td>
+      <td>0.860328</td>
+      <td>0.558872</td>
       <td>16281</td>
     </tr>
     <tr>
@@ -1859,11 +1890,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_0</td>
       <td>(`relationship` == " Husband")</td>
       <td>0.831617</td>
-      <td>0.742007</td>
-      <td>0.744544</td>
-      <td>0.741650</td>
-      <td>0.742450</td>
-      <td>0.537313</td>
+      <td>0.756983</td>
+      <td>0.728497</td>
+      <td>0.730241</td>
+      <td>0.743830</td>
+      <td>0.735383</td>
       <td>6523</td>
     </tr>
     <tr>
@@ -1871,11 +1902,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_1</td>
       <td>(`relationship` == " Not-in-family")</td>
       <td>0.900655</td>
-      <td>0.662199</td>
-      <td>0.810464</td>
-      <td>0.694328</td>
-      <td>0.838008</td>
-      <td>0.106587</td>
+      <td>0.712755</td>
+      <td>0.789351</td>
+      <td>0.742101</td>
+      <td>0.891772</td>
+      <td>0.189098</td>
       <td>4278</td>
     </tr>
     <tr>
@@ -1883,11 +1914,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_2</td>
       <td>(`relationship` == " Other-relative")</td>
       <td>0.905359</td>
-      <td>0.593400</td>
-      <td>0.879412</td>
-      <td>0.627154</td>
-      <td>0.891429</td>
-      <td>0.001583</td>
+      <td>0.986641</td>
+      <td>0.533333</td>
+      <td>0.555730</td>
+      <td>0.973333</td>
+      <td>0.972915</td>
       <td>525</td>
     </tr>
     <tr>
@@ -1895,11 +1926,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_3</td>
       <td>(`relationship` == " Own-child")</td>
       <td>0.918816</td>
-      <td>0.606111</td>
-      <td>0.872008</td>
-      <td>0.655795</td>
-      <td>0.945881</td>
-      <td>0.000918</td>
+      <td>0.993800</td>
+      <td>0.647727</td>
+      <td>0.724951</td>
+      <td>0.987664</td>
+      <td>0.889831</td>
       <td>2513</td>
     </tr>
     <tr>
@@ -1907,11 +1938,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_4</td>
       <td>(`relationship` == " Unmarried")</td>
       <td>0.881868</td>
-      <td>0.597508</td>
-      <td>0.817802</td>
-      <td>0.614191</td>
-      <td>0.821918</td>
-      <td>0.021182</td>
+      <td>0.690658</td>
+      <td>0.721922</td>
+      <td>0.704817</td>
+      <td>0.934485</td>
+      <td>0.234289</td>
       <td>1679</td>
     </tr>
     <tr>
@@ -1919,11 +1950,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_5</td>
       <td>(`relationship` == " Wife")</td>
       <td>0.835875</td>
-      <td>0.760932</td>
-      <td>0.761051</td>
-      <td>0.760990</td>
-      <td>0.762779</td>
-      <td>0.594278</td>
+      <td>0.758354</td>
+      <td>0.759105</td>
+      <td>0.758665</td>
+      <td>0.760157</td>
+      <td>0.577520</td>
       <td>763</td>
     </tr>
   </tbody>
@@ -1936,7 +1967,7 @@ small number of instances were created for <code class="docutils literal notrans
 <h3>Rebalancing only a few cohorts<a class="headerlink" href="#Rebalancing-only-a-few-cohorts" title="Permalink to this heading"></a></h3>
 <p>Let’s try to mitigate these issues by rebalancing only a few cohorts because as we’ve seen in the label distribution of the original dataset, only a few cohorts have a serious label imbalance. This way, we’ll try to improve the results of only a few cohorts. In the following cell, we use the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class together with the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> in order to rebalance only cohorts <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c0_pipe</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1967,10 +1998,12 @@ small number of instances were created for <code class="docutils literal notrans
 </div>
 <p>We’ll now repeat the same experiments as before. We’ll first train the baseline pipeline over the new rebalanced dataset:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 5</span>
+
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
             <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
             <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
             <span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">()),</span>
@@ -1978,12 +2011,14 @@ small number of instances were created for <code class="docutils literal notrans
 <span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">)</span>
 <span class="n">pred_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">])</span>
+<span class="n">pred_train_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -2022,11 +2057,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>all</td>
       <td>all</td>
       <td>0.922955</td>
-      <td>0.766493</td>
-      <td>0.839125</td>
-      <td>0.784462</td>
-      <td>0.820097</td>
-      <td>0.243259</td>
+      <td>0.766924</td>
+      <td>0.838044</td>
+      <td>0.785133</td>
+      <td>0.821325</td>
+      <td>0.248997</td>
       <td>16281</td>
     </tr>
     <tr>
@@ -2034,11 +2069,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_0</td>
       <td>(`relationship` == " Husband")</td>
       <td>0.849175</td>
-      <td>0.770341</td>
-      <td>0.759717</td>
-      <td>0.762100</td>
-      <td>0.768358</td>
-      <td>0.513855</td>
+      <td>0.753510</td>
+      <td>0.755060</td>
+      <td>0.754039</td>
+      <td>0.755787</td>
+      <td>0.426605</td>
       <td>6523</td>
     </tr>
     <tr>
@@ -2046,11 +2081,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_1</td>
       <td>(`relationship` == " Not-in-family")</td>
       <td>0.900467</td>
-      <td>0.657451</td>
-      <td>0.818966</td>
-      <td>0.687095</td>
-      <td>0.826554</td>
-      <td>0.131611</td>
+      <td>0.673765</td>
+      <td>0.810531</td>
+      <td>0.708795</td>
+      <td>0.853436</td>
+      <td>0.160477</td>
       <td>4278</td>
     </tr>
     <tr>
@@ -2058,11 +2093,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_2</td>
       <td>(`relationship` == " Other-relative")</td>
       <td>0.949020</td>
-      <td>0.585294</td>
-      <td>0.900980</td>
-      <td>0.610194</td>
-      <td>0.870476</td>
-      <td>0.111778</td>
+      <td>0.603624</td>
+      <td>0.827451</td>
+      <td>0.644309</td>
+      <td>0.916190</td>
+      <td>0.183510</td>
       <td>525</td>
     </tr>
     <tr>
@@ -2070,11 +2105,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_3</td>
       <td>(`relationship` == " Own-child")</td>
       <td>0.920128</td>
-      <td>0.552481</td>
-      <td>0.858689</td>
-      <td>0.562234</td>
-      <td>0.875846</td>
-      <td>0.076464</td>
+      <td>0.584059</td>
+      <td>0.781099</td>
+      <td>0.621451</td>
+      <td>0.942698</td>
+      <td>0.211052</td>
       <td>2513</td>
     </tr>
     <tr>
@@ -2082,11 +2117,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_4</td>
       <td>(`relationship` == " Unmarried")</td>
       <td>0.905372</td>
-      <td>0.576866</td>
-      <td>0.816418</td>
-      <td>0.558062</td>
-      <td>0.740917</td>
-      <td>0.040851</td>
+      <td>0.628509</td>
+      <td>0.794202</td>
+      <td>0.665738</td>
+      <td>0.885051</td>
+      <td>0.096555</td>
       <td>1679</td>
     </tr>
     <tr>
@@ -2094,11 +2129,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_5</td>
       <td>(`relationship` == " Wife")</td>
       <td>0.870593</td>
-      <td>0.786184</td>
-      <td>0.787654</td>
-      <td>0.786651</td>
-      <td>0.787680</td>
-      <td>0.489399</td>
+      <td>0.775162</td>
+      <td>0.776953</td>
+      <td>0.773108</td>
+      <td>0.773263</td>
+      <td>0.447575</td>
       <td>763</td>
     </tr>
   </tbody>
@@ -2107,10 +2142,12 @@ small number of instances were created for <code class="docutils literal notrans
 </div>
 <p>Once again, we did get improvements for some cohorts, and performance reduction for others. Let’s try using the cohort-based pipeline over this new rebalanced dataset:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 5</span>
+
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
     <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
@@ -2121,12 +2158,14 @@ small number of instances were created for <code class="docutils literal notrans
 <span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">)</span>
 <span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">])</span>
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -2165,11 +2204,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>all</td>
       <td>all</td>
       <td>0.921497</td>
-      <td>0.772831</td>
-      <td>0.837936</td>
-      <td>0.791930</td>
-      <td>0.829802</td>
-      <td>0.235577</td>
+      <td>0.781029</td>
+      <td>0.836569</td>
+      <td>0.799910</td>
+      <td>0.840059</td>
+      <td>0.268842</td>
       <td>16281</td>
     </tr>
     <tr>
@@ -2177,11 +2216,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_0</td>
       <td>(`relationship` == " Husband")</td>
       <td>0.847310</td>
-      <td>0.768719</td>
-      <td>0.761313</td>
-      <td>0.763310</td>
-      <td>0.768511</td>
-      <td>0.496186</td>
+      <td>0.763712</td>
+      <td>0.760496</td>
+      <td>0.761651</td>
+      <td>0.765445</td>
+      <td>0.467993</td>
       <td>6523</td>
     </tr>
     <tr>
@@ -2189,11 +2228,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_1</td>
       <td>(`relationship` == " Not-in-family")</td>
       <td>0.894365</td>
-      <td>0.652406</td>
-      <td>0.815078</td>
-      <td>0.679824</td>
-      <td>0.819542</td>
-      <td>0.076893</td>
+      <td>0.705684</td>
+      <td>0.785957</td>
+      <td>0.735656</td>
+      <td>0.887564</td>
+      <td>0.162837</td>
       <td>4278</td>
     </tr>
     <tr>
@@ -2201,11 +2240,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_2</td>
       <td>(`relationship` == " Other-relative")</td>
       <td>0.888235</td>
-      <td>0.595128</td>
-      <td>0.851961</td>
-      <td>0.631201</td>
-      <td>0.900952</td>
-      <td>0.006322</td>
+      <td>0.863484</td>
+      <td>0.599020</td>
+      <td>0.651590</td>
+      <td>0.975238</td>
+      <td>0.937766</td>
       <td>525</td>
     </tr>
     <tr>
@@ -2213,11 +2252,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_3</td>
       <td>(`relationship` == " Own-child")</td>
       <td>0.902776</td>
-      <td>0.536897</td>
-      <td>0.839271</td>
-      <td>0.518907</td>
-      <td>0.815758</td>
-      <td>0.001906</td>
+      <td>0.780872</td>
+      <td>0.724235</td>
+      <td>0.749223</td>
+      <td>0.984481</td>
+      <td>0.470157</td>
       <td>2513</td>
     </tr>
     <tr>
@@ -2225,11 +2264,11 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_4</td>
       <td>(`relationship` == " Unmarried")</td>
       <td>0.872706</td>
-      <td>0.603854</td>
-      <td>0.799634</td>
-      <td>0.629067</td>
-      <td>0.846337</td>
-      <td>0.030138</td>
+      <td>0.707712</td>
+      <td>0.739665</td>
+      <td>0.722286</td>
+      <td>0.938654</td>
+      <td>0.209798</td>
       <td>1679</td>
     </tr>
     <tr>
@@ -2237,317 +2276,18 @@ small number of instances were created for <code class="docutils literal notrans
       <td>cohort_5</td>
       <td>(`relationship` == " Wife")</td>
       <td>0.830681</td>
-      <td>0.749464</td>
-      <td>0.751278</td>
-      <td>0.748091</td>
-      <td>0.748362</td>
-      <td>0.438196</td>
+      <td>0.734595</td>
+      <td>0.735099</td>
+      <td>0.734815</td>
+      <td>0.736566</td>
+      <td>0.510850</td>
       <td>763</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
-<p>Let’s compare this last results with the results obtained by using the cohort-base pipeline over the original dataset: by using the rebalanced dataset, we managed to improve the performance for <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code>, but we suffered a performance reduction for <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>. This shows us that we must always carefully analyze how the rebalancing process affects each cohort separately. In the following sections, we’ll take a closer look at how we can improve the results for <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>, since rebalancing
-didn’t work very well for this cohort (although rebalancing worked fine for <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code>).</p>
-</section>
-<section id="Looking-at-“cohort_3”,-where-“relationship”-==-“Own-child”">
-<h3>Looking at “cohort_3”, where “relationship” == “Own-child”<a class="headerlink" href="#Looking-at-“cohort_3”,-where-“relationship”-==-“Own-child”" title="Permalink to this heading"></a></h3>
-<p>Let’s try training a cohort-based pipeline for the following cohorts: cohort where <code class="docutils literal notranslate"><span class="pre">relationship</span></code> == “Own-child”, and another cohort for the remaining instances. We’ll try this approach because we noticed that training a separate pipeline for <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code> did improve its metrics, but the same doesn’t apply to the other cohorts, that is, the other cohorts benefit by using data from different cohorts.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c0</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;relationship&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39; Own-child&#39;</span><span class="p">]]</span> <span class="p">]</span>
-<span class="n">c1</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">get_model</span><span class="p">()</span>
-    <span class="p">],</span>
-    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c0</span><span class="p">,</span> <span class="n">c1</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>cohort</th>
-      <th>cht_query</th>
-      <th>roc</th>
-      <th>precision</th>
-      <th>recall</th>
-      <th>f1</th>
-      <th>accuracy</th>
-      <th>threshold</th>
-      <th>cht_size</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>all</td>
-      <td>all</td>
-      <td>0.926455</td>
-      <td>0.774861</td>
-      <td>0.844373</td>
-      <td>0.794105</td>
-      <td>0.830170</td>
-      <td>0.226182</td>
-      <td>16281</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>cohort_0</td>
-      <td>(`relationship` == " Husband")</td>
-      <td>0.851043</td>
-      <td>0.771036</td>
-      <td>0.760570</td>
-      <td>0.762947</td>
-      <td>0.769125</td>
-      <td>0.513947</td>
-      <td>6523</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>cohort_1</td>
-      <td>(`relationship` == " Not-in-family")</td>
-      <td>0.904380</td>
-      <td>0.663575</td>
-      <td>0.820838</td>
-      <td>0.695773</td>
-      <td>0.835671</td>
-      <td>0.097639</td>
-      <td>4278</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>cohort_2</td>
-      <td>(`relationship` == " Other-relative")</td>
-      <td>0.956732</td>
-      <td>0.573529</td>
-      <td>0.914706</td>
-      <td>0.581581</td>
-      <td>0.834286</td>
-      <td>0.027224</td>
-      <td>525</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>cohort_3</td>
-      <td>(`relationship` == " Own-child")</td>
-      <td>0.908999</td>
-      <td>0.600146</td>
-      <td>0.849079</td>
-      <td>0.646560</td>
-      <td>0.944688</td>
-      <td>0.000762</td>
-      <td>2513</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>cohort_4</td>
-      <td>(`relationship` == " Unmarried")</td>
-      <td>0.907919</td>
-      <td>0.606513</td>
-      <td>0.826619</td>
-      <td>0.630507</td>
-      <td>0.838594</td>
-      <td>0.065474</td>
-      <td>1679</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>cohort_5</td>
-      <td>(`relationship` == " Wife")</td>
-      <td>0.871434</td>
-      <td>0.800143</td>
-      <td>0.797383</td>
-      <td>0.798401</td>
-      <td>0.800786</td>
-      <td>0.530978</td>
-      <td>763</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
-<p>If we compare the results above with the results obtained with the cohort-base pipeline (using the <code class="docutils literal notranslate"><span class="pre">relationship</span></code> cohorts) over the original dataset, we can see that the former has the best metrics for almost all cohorts. This is because some cohorts work well together, while others (in this case, <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>) perform better if trained separately. And thanks to the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code>, we managed to do this.</p>
-<p>We still haven’t managed to improve the results for <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code>. Similar to what happened to <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>, we can test which cohorts work well with <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> and which don’t, that is, which cohorts can be trained together, and which cohorts that when trained together result in sub-optimal metrics. After experimenting with a few combinations, we found out that <code class="docutils literal notranslate"><span class="pre">cohort_1</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> worked well together: if we train a separate pipeline for a cohort comprised of all instances where
-<code class="docutils literal notranslate"><span class="pre">relationship</span></code> is either “Not-in-family” or “Unmarried”, then we manage to improve the metrics for these two cohorts.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c0</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;relationship&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39; Own-child&#39;</span><span class="p">]]</span> <span class="p">]</span>
-<span class="n">c1</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;relationship&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39; Not-in-family&#39;</span><span class="p">,</span> <span class="s1">&#39; Unmarried&#39;</span><span class="p">]]</span> <span class="p">]</span>
-<span class="n">c2</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">get_model</span><span class="p">()</span>
-    <span class="p">],</span>
-    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c0</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>cohort</th>
-      <th>cht_query</th>
-      <th>roc</th>
-      <th>precision</th>
-      <th>recall</th>
-      <th>f1</th>
-      <th>accuracy</th>
-      <th>threshold</th>
-      <th>cht_size</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>all</td>
-      <td>all</td>
-      <td>0.925274</td>
-      <td>0.778632</td>
-      <td>0.842644</td>
-      <td>0.798186</td>
-      <td>0.835759</td>
-      <td>0.249491</td>
-      <td>16281</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>cohort_0</td>
-      <td>(`relationship` == " Husband")</td>
-      <td>0.848288</td>
-      <td>0.760762</td>
-      <td>0.759740</td>
-      <td>0.760192</td>
-      <td>0.763146</td>
-      <td>0.453393</td>
-      <td>6523</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>cohort_1</td>
-      <td>(`relationship` == " Not-in-family")</td>
-      <td>0.903614</td>
-      <td>0.662846</td>
-      <td>0.824587</td>
-      <td>0.694509</td>
-      <td>0.832866</td>
-      <td>0.086289</td>
-      <td>4278</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>cohort_2</td>
-      <td>(`relationship` == " Other-relative")</td>
-      <td>0.907974</td>
-      <td>0.614483</td>
-      <td>0.861765</td>
-      <td>0.660477</td>
-      <td>0.920000</td>
-      <td>0.078535</td>
-      <td>525</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>cohort_3</td>
-      <td>(`relationship` == " Own-child")</td>
-      <td>0.908999</td>
-      <td>0.600146</td>
-      <td>0.849079</td>
-      <td>0.646560</td>
-      <td>0.944688</td>
-      <td>0.000762</td>
-      <td>2513</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>cohort_4</td>
-      <td>(`relationship` == " Unmarried")</td>
-      <td>0.903362</td>
-      <td>0.598105</td>
-      <td>0.818432</td>
-      <td>0.615314</td>
-      <td>0.823109</td>
-      <td>0.050977</td>
-      <td>1679</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>cohort_5</td>
-      <td>(`relationship` == " Wife")</td>
-      <td>0.876226</td>
-      <td>0.794176</td>
-      <td>0.796462</td>
-      <td>0.793824</td>
-      <td>0.794233</td>
-      <td>0.472902</td>
-      <td>763</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
+<p>Let’s compare this last results with the results obtained by using the cohort-base pipeline over the original dataset (<a class="reference external" href="#cohort3">Cohort 3</a>): by using the rebalanced dataset, we managed to improve the performance for <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>, where the performance increase for <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> was considerably higher.</p>
 </section>
 </section>
 </section>
@@ -2556,7 +2296,7 @@ didn’t work very well for this cohort (although rebalancing worked fine for <c
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="case_1.html" class="btn btn-neutral float-left" title="Cohort Case Study 1" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="case_1_dashboard.html" class="btn btn-neutral float-left" title="Cohort Case Study 1 - Using RAI ErrorAnalysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="case_3.html" class="btn btn-neutral float-right" title="Cohort Case Study 3" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

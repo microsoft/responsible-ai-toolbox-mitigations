@@ -110,11 +110,13 @@
 <p>The goal of responsible AI is to create trustworthy AI systems that benefit people while mitigating harms, which can occur when AI systems fail to
 perform with fair, reliable, or safe outputs for various stakeholders. Teams tasked with developing AI systems must work to identify, diagnose, and
 mitigate potential harms as much as possible. In this initial release, <strong>the Responsible AI Mitigations Library helps AI practitioners explore different
-mitigation steps that may be most appropriate when the model underperforms for a given cohort.</strong> The library currently has two modules:</p>
+mitigation steps that may be most appropriate when the model underperforms for a given cohort.</strong> The library currently has three modules:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><a class="reference internal" href="dataprocessing/intro.html#dataproc"><span class="std std-ref">DataProcessing</span></a>: offers mitigation techniques for improving model performance for specific cohorts.</p></li>
 <li><p><a class="reference internal" href="databalanceanalysis/intro.html#databalance"><span class="std std-ref">DataBalanceAnalysis</span></a>: provides metrics for diagnosing errors that originate from data imbalance either on class labels or feature values.</p></li>
+<li><p><a class="reference internal" href="cohort/intro.html#cohort"><span class="std std-ref">Cohort</span></a>: provide classes for handling and managing cohorts, which allows the creation of custom pipelines for each cohort in an easy and
+intuitive interface (also allows using different estimators for each cohort).</p></li>
 </ul>
 </div></blockquote>
 <section id="exploring-potential-mitigations">
@@ -134,7 +136,7 @@ mitigation. The library enables you to <strong>explore potential mitigations for
 <blockquote>
 <div><ul class="simple">
 <li><p>Balancing and synthesizing data.</p></li>
-<li><p>Selecting or creating features with different encodings with different encodings.</p></li>
+<li><p>Selecting or creating features with different encodings.</p></li>
 <li><p>Scaling numerical features.</p></li>
 <li><p>Imputing missing values.</p></li>
 </ul>
@@ -184,11 +186,11 @@ combined into a single pipeline.</p></li>
 </ul>
 </div></blockquote>
 </section>
-<section id="two-modules-for-targeting-data">
-<h2>Two modules for targeting data<a class="headerlink" href="#two-modules-for-targeting-data" title="Permalink to this heading"></a></h2>
-<p>The Responsible AI Mitigations Library consists of <strong>two modules that work in complement</strong> for targeting and mitigating data problems: DataProcessing and DataBalanceAnalysis.</p>
+<section id="three-modules-for-targeting-data">
+<h2>Three modules for targeting data<a class="headerlink" href="#three-modules-for-targeting-data" title="Permalink to this heading"></a></h2>
+<p>The Responsible AI Mitigations Library consists of <strong>three modules that work in complement</strong> for targeting and mitigating data problems: DataProcessing and DataBalanceAnalysis.</p>
 <section id="dataprocessing">
-<h3>DataProcessing<a class="headerlink" href="#dataprocessing" title="Permalink to this heading"></a></h3>
+<h3><a class="reference internal" href="dataprocessing/intro.html#dataproc"><span class="std std-ref">DataProcessing</span></a><a class="headerlink" href="#dataprocessing" title="Permalink to this heading"></a></h3>
 <p>A set of data-oriented mitigation steps for data balancing, scaling, missing value imputation, sampling, and encoding, using proven machine learning mitigation techniques
 in a single interface and compatible environment. The goal of this module is to provide a unified interface for different mitigation methods scattered around multiple machine
 learning libraries, such as scikit-learn, mlxtend, sdv, and others.</p>
@@ -206,7 +208,7 @@ learning libraries, such as scikit-learn, mlxtend, sdv, and others.</p>
 </div></blockquote>
 </section>
 <section id="databalanceanalysis">
-<h3>DataBalanceAnalysis<a class="headerlink" href="#databalanceanalysis" title="Permalink to this heading"></a></h3>
+<h3><a class="reference internal" href="databalanceanalysis/intro.html#databalance"><span class="std std-ref">DataBalanceAnalysis</span></a><a class="headerlink" href="#databalanceanalysis" title="Permalink to this heading"></a></h3>
 <p>A set of metrics for diagnosing and measuring data imbalance. This module is intended to be used as part of the error diagnosis process for failure modes that are due to class
 or feature imbalance. After measuring with DataBalanceAnalysis, AI practitioners can then work to mitigate the failure through techniques available in the library’s DataProcessing
 module.</p>
@@ -215,6 +217,33 @@ module.</p>
 <p>A model trained for house-price prediction is discovered to be underperforming for houses that do not have an attached garage. The AI practitioner determines that this failure is
 due to the underrepresentation of houses with no garage in the training data. The practitioner can use metrics in the DataBalanceAnalysis module to measure the feature imbalance
 (“garage” vs. “no garage”), then work to mitigate the issue by using one of the sampling techniques available in the library’s DataProcessing module for augmenting data.</p>
+</div>
+</section>
+<section id="cohort">
+<h3><a class="reference internal" href="cohort/intro.html#cohort"><span class="std std-ref">Cohort</span></a><a class="headerlink" href="#cohort" title="Permalink to this heading"></a></h3>
+<p>A sub-module that implements classes capable of handling and managing cohorts. This makes it easier for applying targeted mitigations over a specific cohort, or creating
+custom data processing pipelines for each cohort. The <a class="reference internal" href="cohort/intro.html#cohort"><span class="std std-ref">Cohort</span></a> sub-module even allows creating different estimators for each cohort, without the user having to
+explicitly manage multiple models. All is done internally in the class, with a unified and simple interface.</p>
+<p><strong>Highlights include:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Interface for breaking a dataset into multiple cohorts.</p></li>
+<li><p>Two approaches for defining cohorts: based on the different values of a column, or based on custom filters.</p></li>
+<li><p>Creation of custom pipelines for each cohort, allowing the creation of different estimators for each cohort.</p></li>
+<li><p>Simple interface, which also implements the <code class="docutils literal notranslate"><span class="pre">.fit()</span></code>, <code class="docutils literal notranslate"><span class="pre">.transform()</span></code>, <code class="docutils literal notranslate"><span class="pre">.predict()</span></code>, <code class="docutils literal notranslate"><span class="pre">.predict_proba()</span></code>, and <code class="docutils literal notranslate"><span class="pre">.fit_resample()</span></code> methods
+(some of these methods will only be available depending on the transformations/estimators in the custom pipelines defined for each cohort).</p></li>
+</ul>
+</div></blockquote>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<p>Consider a dataset of a classification problem that has a sensitive feature (<code class="docutils literal notranslate"><span class="pre">country</span></code> for example), and that each cohort created based on this dataset (that is, each
+cohort is assigned to a different country) behaves differently, in the sense that the classification logic is different between cohorts, or that some other feature values have
+considerably different ranges depending on the cohort. Depending on the estimator being used, these behavioral differences might not be captured, and in the end, the estimator
+will simply try to understand to majority cohort, achieving good results for that cohort at the cost of achieving inferior results for the remaining cohorts. One way
+to approach this problem is to apply targeted mitigations over each cohort separately. For example, use a <a class="reference internal" href="dataprocessing/scaler/standard.html#standard-scaler"><span class="std std-ref">dataprocessing.DataStandardScaler</span></a> over each
+cohort separately, or even training a separate estimator for each cohort. This can all be achieved through the <a class="reference internal" href="cohort/cohort_manager.html#cohort-manager"><span class="std std-ref">cohort.CohortManager</span></a> class.
+<a class="reference internal" href="cohort/case_studies.html#cohort-examples"><span class="std std-ref">Check-out these examples</span></a> for more details on how to use the <a class="reference internal" href="cohort/cohort_manager.html#cohort-manager"><span class="std std-ref">cohort.CohortManager</span></a> to create customized pipelines (including
+an estimator for each cohort).</p>
 </div>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Overview</span></p>

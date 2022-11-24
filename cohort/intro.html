@@ -122,7 +122,7 @@
 <p>This module provides the necessary tools for users to create and manage different cohorts throughout
 their data processing and model training pipeline. In scenarios where a dataset has cohorts with very
 different distributions for certain features, applying a mitigation over the entire dataset might only
-make these differences even worse. In these cases, applying a mitigation over each cohort separately is
+make these differences worse. In these cases, applying a mitigation over each cohort separately is
 more advantageous than applying it over the whole dataset. Check out <a class="reference internal" href="../index.html#target-mitigation"><span class="std std-ref">this example</span></a>
 for a more in-depth analysis of this problem. The classes available in this module are:</p>
 <blockquote>
@@ -134,6 +134,16 @@ pipelines over each cohort. Also allows the creation and filtering of multiple c
 interface. Finally, allows the creation of different estimators for each cohort using the <code class="docutils literal notranslate"><span class="pre">.predict()</span></code>
 and <code class="docutils literal notranslate"><span class="pre">predict_proba()</span></code> interfaces. This class uses the <a class="reference internal" href="cohort_definition.html#cohort-def"><span class="std std-ref">cohort.CohortDefinition</span></a>
 internally in order to create, filter, and manipulate multiple cohorts.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Highlights include:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Interface for breaking a dataset into multiple cohorts.</p></li>
+<li><p>Two approaches for defining cohorts: based on the different values of a column, or based on custom filters.</p></li>
+<li><p>Creation of custom pipelines for each cohort, allowing the creation of different estimators for each cohort.</p></li>
+<li><p>Simple interface, which also implements the <code class="docutils literal notranslate"><span class="pre">.fit()</span></code>, <code class="docutils literal notranslate"><span class="pre">.transform()</span></code>, <code class="docutils literal notranslate"><span class="pre">.predict()</span></code>, <code class="docutils literal notranslate"><span class="pre">.predict_proba()</span></code>, and <code class="docutils literal notranslate"><span class="pre">.fit_resample()</span></code> methods
+(some of these methods will only be available depending on the transformations/estimators in the custom pipelines defined for each cohort).</p></li>
 </ul>
 </div></blockquote>
 <section id="api">

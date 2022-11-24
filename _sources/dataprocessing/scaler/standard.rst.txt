@@ -1,3 +1,5 @@
+.. _standard_scaler:
+
 DataStandardScaler
 ==================
 

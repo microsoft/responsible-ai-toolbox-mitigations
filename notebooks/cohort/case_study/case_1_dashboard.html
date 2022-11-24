@@ -25,8 +25,8 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Using Pipelines" href="../../dataprocessing/module_tests/pipeline_test.html" />
-    <link rel="prev" title="Case Study 3 - Multiple Runs" href="../../dataprocessing/case_study/case3_stat.html" /> 
+    <link rel="next" title="Cohort Case Study 2" href="case_2.html" />
+    <link rel="prev" title="Cohort Case Study 1 - Rebalancing" href="case_1_rebalance.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,22 +51,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../gallery.html">Gallery</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#dataprocessing">DataProcessing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort">Cohort</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#cohort-case-studies">Cohort Case Studies</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="case_1.html">Cohort Case Study 1</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Cohort Case Study 1 - Using RAI ErrorAnalysis</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Single-Pipeline-for-the-entire-dataset">Single Pipeline for the entire dataset</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Different-Pipelines-for-each-cohort">Different Pipelines for each cohort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#tutorials">Tutorials</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../../gallery.html#using-the-dataprocessing-module">Using the DataProcessing Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../gallery.html#using-the-databalanceanalysis-module">Using the DataBalanceAnalysis Module</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../../gallery.html#using-the-cohort-module">Using the Cohort Module</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="case_1.html">Cohort Case Study 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="case_1_rebalance.html">Cohort Case Study 1 - Rebalancing</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Cohort Case Study 1 - Using RAI ErrorAnalysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="case_2.html">Cohort Case Study 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="case_3.html">Cohort Case Study 3</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="case_2.html">Cohort Case Study 2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="case_3.html">Cohort Case Study 3</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
 </ul>
@@ -92,7 +90,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home"></a></li>
-          <li class="breadcrumb-item"><a href="../../../gallery.html">Gallery</a></li>
+          <li class="breadcrumb-item"><a href="../../../api.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="../../../cohort/cohort.html">Cohort</a></li>
+          <li class="breadcrumb-item"><a href="../../../cohort/cohort_manager.html">CohortManager</a></li>
       <li class="breadcrumb-item active">Cohort Case Study 1 - Using RAI ErrorAnalysis</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/cohort/case_study/case_1_dashboard.ipynb" class="fa fa-github"> Edit on GitHub</a>
@@ -213,10 +213,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -383,7 +384,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <section id="Cohort-Case-Study-1---Using-RAI-ErrorAnalysis">
 <h1>Cohort Case Study 1 - Using RAI ErrorAnalysis<a class="headerlink" href="#Cohort-Case-Study-1---Using-RAI-ErrorAnalysis" title="Permalink to this heading"></a></h1>
-<p>We’ll repeat the experiment demonstrated in <code class="docutils literal notranslate"><span class="pre">case_1.ipynb</span></code>, but this time we’ll be using the <a class="reference external" href="https://erroranalysis.ai/">Error Analysis Dashboard</a>, available in the <a class="reference external" href="https://github.com/microsoft/responsible-ai-toolbox">Responsible AI Toolbox</a> project) to determine which cohorts of data this model performs worse on. To install this library, use the following command:</p>
+<p>We’ll repeat the experiment demonstrated in <a class="reference internal" href="case_1.html"><span class="doc">Case 1</span></a>, but this time we’ll be using the <a class="reference external" href="https://erroranalysis.ai/">Error Analysis Dashboard</a>, available in the <a class="reference external" href="https://github.com/microsoft/responsible-ai-toolbox">Responsible AI Toolbox</a> project) to determine which cohorts of data this model performs worse on. To install this library, use the following command:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&gt; pip install raiwidgets</span>
 </pre></div>
 </div>
@@ -806,8 +807,8 @@ ResponsibleAI started at http://localhost:5003
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../../dataprocessing/case_study/case3_stat.html" class="btn btn-neutral float-left" title="Case Study 3 - Multiple Runs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../../dataprocessing/module_tests/pipeline_test.html" class="btn btn-neutral float-right" title="Using Pipelines" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="case_1_rebalance.html" class="btn btn-neutral float-left" title="Cohort Case Study 1 - Rebalancing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="case_2.html" class="btn btn-neutral float-right" title="Cohort Case Study 2" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -51,27 +51,25 @@
 <li class="toctree-l1"><a class="reference internal" href="../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../gallery.html">Gallery</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Data Balance Analysis using the Adult Census Income dataset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Summary​">Summary​</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Analysis:">Analysis:</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#In-conclusion:">In conclusion:</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../gallery.html#tutorials">Tutorials</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../gallery.html#dataprocessing">DataProcessing</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Data Balance Analysis using the Adult Census Income dataset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Summary​">Summary​</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Analysis:">Analysis:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_balance_overall.html">Python Data Balance Analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_balance_overall.html#Context">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_balance_overall.html#Usage">Usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_balance_overall.html#Example-Notebook">Example Notebook</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_balance_overall.html#Explanations-of-Data-Balance-Measures">Explanations of Data Balance Measures</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_balance_overall.html#Mitigation">Mitigation</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="data_balance_overall.html">Python Data Balance Analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_balance_overall.html#Context">Context</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_balance_overall.html#Usage">Usage</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_balance_overall.html#Example-Notebook">Example Notebook</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_balance_overall.html#Explanations-of-Data-Balance-Measures">Explanations of Data Balance Measures</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_balance_overall.html#Mitigation">Mitigation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../data_balance_e2e.html">End to End Data Balance and Error Mitigation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gallery.html#cohort">Cohort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#dataprocessing">DataProcessing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#cohort">Cohort</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../gallery.html#case-studies">Case Studies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#cohort-case-studies">Cohort Case Studies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
 </ul>
@@ -218,10 +216,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */

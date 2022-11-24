@@ -479,6 +479,30 @@ cohorts.
     greatly reduce the noise inserted by the imputation method. This can be easily achieved by using the
     :ref:`cohort.CohortManager<cohort_manager>` class.
 
+Cohort-based estimators
+#######################
+
+The :ref:`Cohort<cohort>` module allows applying different mitigations to each cohort separately, as previously highlighted.
+But it allows us to go beyond that: it also allows creating full pipelines, including an estimator, for each cohort, while
+using a familiar and easy-to-use interface. If we are faced with a dataset that has a set of cohorts that behave very
+differently from each other, we are able of creating a custom pipeline for each cohort individually, which means that the
+pipeline is fitted separately for each cohort. This might help achieving more fair results, that is, the performance for each
+cohort is similar when compared to the other cohorts.
+
+.. admonition:: Tutorials and Examples
+
+    Check the :ref:`Gallery<gallery>` page for some tutorials and examples of how to use the :ref:`Cohort<cohort>` module.
+
+    * The :ref:`Tutorial - Cohort<gallery_cohort>` section has a set of tutorial notebooks that shows all of the features implemented
+      in the different classes inside the :ref:`Cohort<cohort>` module, as well as when and how to use each one of them.
+    * The :ref:`Tutorial - Using the Cohort Module<gallery_cohort_case>` sections presents a set of notebooks where we analyze a datasets
+      that present some behavioral differences between different cohorts, and we use the :ref:`Cohort<cohort>` module to create different
+      pre-processing pipelines for each cohort, and in some cases, we even create different estimators for each cohort.
+
+    **Note that this module is more useful in scenarios where there are considerable behavioral differences between cohorts.**
+    If that is not the case, then applying mitigations and training a single estimator over the entire dataset might prove the
+    best approach, instead of creating different pipelines for each cohort.
+
 
 Get involved
 ------------

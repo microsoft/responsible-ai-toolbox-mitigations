@@ -25,8 +25,8 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="DataBalanceAnalysis" href="../../../databalanceanalysis/intro.html" />
-    <link rel="prev" title="Cohort Case Study 1 - Using RAI ErrorAnalysis" href="../../cohort/case_study/case_1_dashboard.html" /> 
+    <link rel="next" title="Simple Example" href="model_test.html" />
+    <link rel="prev" title="Python Data Balance Analysis" href="../../databalanceanalysis/data_balance_overall.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,19 +51,17 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../gallery.html">Gallery</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#dataprocessing">DataProcessing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort">Cohort</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#tutorials">Tutorials</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../../gallery.html#dataprocessing">DataProcessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../gallery.html#cohort">Cohort</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Using Pipelines</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort-case-studies">Cohort Case Studies</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Using Pipelines</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Comparing-different-pipelines">Comparing different pipelines</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Using-SKLearn-and-Dataprocessing-transformers-in-the-same-Pipeline">Using SKLearn and Dataprocessing transformers in the same Pipeline</a></li>
-</ul>
-</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -210,10 +208,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -2728,8 +2727,8 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../../cohort/case_study/case_1_dashboard.html" class="btn btn-neutral float-left" title="Cohort Case Study 1 - Using RAI ErrorAnalysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../../../databalanceanalysis/intro.html" class="btn btn-neutral float-right" title="DataBalanceAnalysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../../databalanceanalysis/data_balance_overall.html" class="btn btn-neutral float-left" title="Python Data Balance Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="model_test.html" class="btn btn-neutral float-right" title="Simple Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

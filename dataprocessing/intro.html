@@ -148,6 +148,18 @@ abstract class (that inherits from the main abstract <strong>DataProcessing</str
 a set of concrete child classes that implements a different solution to the problem at hand. For example, we have
 an abstract encoding class (<a class="reference internal" href="encoder/encoder.html#dataencoding"><span class="std std-ref">DataEncoding</span></a>), which has concrete child classes that implement
 different encoding approaches (<a class="reference internal" href="encoder/ohe.html#encoderohe"><span class="std std-ref">EncoderOHE</span></a> and <a class="reference internal" href="encoder/ordinal.html#encoderordinal"><span class="std std-ref">EncoderOrdinal</span></a>).</p>
+<p><strong>Highlights include:</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A simple interface for mitigation steps that follows the <code class="docutils literal notranslate"><span class="pre">.fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">.transform()</span></code> convention.</p></li>
+<li><p>transformer classes that can be combined together in end-to-end mitigation pipelines.</p></li>
+<li><p>Function calls adapted for responsible AI by extending existing calls either with target features or cohorts.</p></li>
+<li><p>Predetermined parameter values, eliminating the need to know or to configure all available parameters.</p></li>
+<li><p>Unique solutions for tabular data.</p></li>
+<li><p>Automation of various mitigation steps, with some transformer classes acting as a wrapper to others in the library.</p></li>
+<li><p>Customization options, helpful for the more experienced AI practitioner.</p></li>
+</ul>
+</div></blockquote>
 </section>
 <section id="api">
 <h2>API<a class="headerlink" href="#api" title="Permalink to this heading"></a></h2>

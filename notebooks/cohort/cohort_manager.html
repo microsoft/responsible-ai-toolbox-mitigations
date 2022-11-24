@@ -25,7 +25,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Cohort Utils" href="../../cohort/utils.html" />
+    <link rel="next" title="Cohort Case Study 1" href="case_study/case_1.html" />
     <link rel="prev" title="CohortManager" href="../../cohort/cohort_manager.html" /> 
 </head>
 
@@ -51,32 +51,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../gallery.html">Gallery</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#dataprocessing">DataProcessing</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../../gallery.html#cohort">Cohort</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="cohort_definition.html">Defining a Cohort</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Managing cohorts</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Toy-dataset">Toy dataset</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Basic-scenario">Basic scenario</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Pipelines-that-result-in-incompatible-cohorts">Pipelines that result in incompatible cohorts</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Adding-estimators-to-the-pipeline">Adding estimators to the pipeline</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Getting-a-list-of-subsets">Getting a list of subsets</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Naming-the-cohorts">Naming the cohorts</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Handling-datasets-without-column-names">Handling datasets without column names</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Using-CohortManager-with-Sci-Kit-Learn’s-Pipeline">Using CohortManager with Sci-Kit Learn’s Pipeline</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Fetching-the-queries-used-for-each-cohort">Fetching the queries used for each cohort</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Creating-cohorts-based-on-a-set-of-columns">Creating cohorts based on a set of columns</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Saving-and-loading-the-conditions-used-for-the-cohorts">Saving and loading the conditions used for the cohorts</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Using-different-pipelines-for-each-cohort">Using different pipelines for each cohort</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Use-Rebalance-over-each-cohort-separately">Use Rebalance over each cohort separately</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Balancing-only-a-set-of-cohorts">Balancing only a set of cohorts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../gallery.html#tutorials">Tutorials</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../gallery.html#dataprocessing">DataProcessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../gallery.html#cohort">Cohort</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cohort_definition.html">Defining a Cohort</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Managing cohorts</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../gallery.html#case-studies">Case Studies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#cohort-case-studies">Cohort Case Studies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
 </ul>
@@ -225,10 +211,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -2572,7 +2559,7 @@ dtype: int64
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../../cohort/cohort_manager.html" class="btn btn-neutral float-left" title="CohortManager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../../cohort/utils.html" class="btn btn-neutral float-right" title="Cohort Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="case_study/case_1.html" class="btn btn-neutral float-right" title="Cohort Case Study 1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

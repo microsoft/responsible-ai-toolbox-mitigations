@@ -25,8 +25,8 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Cohort Case Study 2" href="case_2.html" />
-    <link rel="prev" title="Cohort Utils" href="../../../cohort/utils.html" /> 
+    <link rel="next" title="Cohort Case Study 1 - Rebalancing" href="case_1_rebalance.html" />
+    <link rel="prev" title="Managing cohorts" href="../cohort_manager.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,24 +51,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../gallery.html">Gallery</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#dataprocessing">DataProcessing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#cohort">Cohort</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#cohort-case-studies">Cohort Case Studies</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Cohort Case Study 1</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Creating-the-artificial-dataset">Creating the artificial dataset</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Analyzing-the-“country”-cohorts">Analyzing the “country” cohorts</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Checking-the-“sector”-+-“country”-cohorts">Checking the “sector” + “country” cohorts</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Rebalancing">Rebalancing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#tutorials">Tutorials</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../gallery.html#case-studies">Case Studies</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../../gallery.html#using-the-dataprocessing-module">Using the DataProcessing Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../gallery.html#using-the-databalanceanalysis-module">Using the DataBalanceAnalysis Module</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../../gallery.html#using-the-cohort-module">Using the Cohort Module</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Cohort Case Study 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="case_1_rebalance.html">Cohort Case Study 1 - Rebalancing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="case_1_dashboard.html">Cohort Case Study 1 - Using RAI ErrorAnalysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="case_2.html">Cohort Case Study 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="case_3.html">Cohort Case Study 3</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="case_1_dashboard.html">Cohort Case Study 1 - Using RAI ErrorAnalysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="case_2.html">Cohort Case Study 2</a></li>
-<li class="toctree-l3"><a class="reference internal" href="case_3.html">Cohort Case Study 3</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
 </ul>
 </li>
 </ul>
@@ -96,7 +92,7 @@
       <li><a href="../../../index.html" class="icon icon-home"></a></li>
           <li class="breadcrumb-item"><a href="../../../api.html">API reference</a></li>
           <li class="breadcrumb-item"><a href="../../../cohort/cohort.html">Cohort</a></li>
-          <li class="breadcrumb-item"><a href="../../../cohort/utils.html">Cohort Utils</a></li>
+          <li class="breadcrumb-item"><a href="../../../cohort/cohort_manager.html">CohortManager</a></li>
       <li class="breadcrumb-item active">Cohort Case Study 1</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/cohort/case_study/case_1.ipynb" class="fa fa-github"> Edit on GitHub</a>
@@ -217,10 +213,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -652,13 +649,14 @@ larger than a given threshold then the company succeeded (class 0). For some com
 </section>
 <section id="Analyzing-the-“country”-cohorts">
 <h2>Analyzing the “country” cohorts<a class="headerlink" href="#Analyzing-the-“country”-cohorts" title="Permalink to this heading"></a></h2>
-<p>Let’s create our baseline model. We’ll use a simple model since our goal is to test the efficiency of data processing pipelines, not test how different models behave. We’ll create a pipeline with an imputer, a data normalization transformer, a one-hot encoding transformer, and finally our simple estimator. We’ll then test our pipeline over the test set and analyze how this pipeline performs over different cohorts. This analysis is done using the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results</span></code> function, which shows the
-results obtained for the entire dataset, as well as for different cohorts. Notice that this function computes all metrics for each cohort separately, and therefore, different thresholds might be encountered for each cohort (the optimal threshold of a given set of predictions is found using the ROC curve). For now, we’ll focus on the cohorts defined by the different countries in the dataset.</p>
+<p>Let’s create our baseline model. We’ll use a simple model since our goal is to test the efficiency of data processing pipelines, not test how different models behave. We’ll create a pipeline with an imputer, a data normalization transformer, a one-hot encoding transformer, and finally our simple estimator.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 1</span>
+
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
             <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
             <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
             <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
@@ -666,8 +664,6 @@ results obtained for the entire dataset, as well as for different cohorts. Notic
         <span class="p">])</span>
 <span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="n">pred_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -711,10 +707,10 @@ results obtained for the entire dataset, as well as for different cohorts. Notic
       <td>all</td>
       <td>all</td>
       <td>0.803805</td>
-      <td>0.788877</td>
-      <td>0.790533</td>
-      <td>0.769316</td>
-      <td>0.769333</td>
+      <td>0.788653</td>
+      <td>0.790248</td>
+      <td>0.768984</td>
+      <td>0.769000</td>
       <td>0.714791</td>
       <td>3000</td>
     </tr>
@@ -723,10 +719,10 @@ results obtained for the entire dataset, as well as for different cohorts. Notic
       <td>cohort_0</td>
       <td>(`country` == "A")</td>
       <td>0.836172</td>
-      <td>0.822146</td>
-      <td>0.833283</td>
-      <td>0.813916</td>
-      <td>0.814698</td>
+      <td>0.821859</td>
+      <td>0.832952</td>
+      <td>0.813529</td>
+      <td>0.814303</td>
       <td>0.714791</td>
       <td>2531</td>
     </tr>
@@ -735,10 +731,10 @@ results obtained for the entire dataset, as well as for different cohorts. Notic
       <td>cohort_1</td>
       <td>(`country` == "B")</td>
       <td>0.788575</td>
-      <td>0.811737</td>
-      <td>0.794929</td>
-      <td>0.797184</td>
-      <td>0.802260</td>
+      <td>0.797303</td>
+      <td>0.784403</td>
+      <td>0.786350</td>
+      <td>0.790960</td>
       <td>0.176188</td>
       <td>177</td>
     </tr>
@@ -758,13 +754,30 @@ results obtained for the entire dataset, as well as for different cohorts. Notic
 </table>
 </div></div>
 </div>
-<p>We can see that our pipeline managed to get a decent performance for all countries, despite the different behaviors that we injected for each cohort. However, since we have only a single estimator, we should consider only a single threshold for the entire dataset (the threshold referenced here is the threshold used to determine if a probability should be considered from class <code class="docutils literal notranslate"><span class="pre">1</span></code> or class <code class="docutils literal notranslate"><span class="pre">0</span></code>). The function <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results()</span></code> analyzes the results separately for each cohort, that is,
-all metrics are computed using the isolated predictions of each cohort. That is why we can see that each cohort used different thresholds (<code class="docutils literal notranslate"><span class="pre">threshold</span></code> column). But if we use the same optimal threshold computed for the entire dataset for all cohorts (which makes sense in this case, since we have a single estimator), then we’ll notice that the results are very different.</p>
+<p>We’ll then test our pipeline over the test set and analyze how this pipeline performs over different cohorts. This analysis is done using the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results</span></code> function, which shows the results obtained for the entire dataset, as well as for different cohorts. Notice that this function computes all metrics for each cohort separately, and therefore, different thresholds might be encountered for each cohort (the optimal threshold of a given set of predictions is found using the ROC curve,
+and this threshold is used to determine if a probability should be converted to class <code class="docutils literal notranslate"><span class="pre">1</span></code> or class <code class="docutils literal notranslate"><span class="pre">0</span></code>). Since we use the thresholds for computing the precision, recall, accuracy and F1 score, we must compute these thresholds using the training set, otherwise, we’ll have some data leakage. Therefore, we first call the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results</span></code> using the training set. Notice that we set the <code class="docutils literal notranslate"><span class="pre">return_th_dict</span></code> to True (its default value is False), which makes the function return a dataframe
+with all of the metrics computed and a dictionary with the best thresholds found for each cohort. We then use this dict of thresholds when we call the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results</span></code> for a second time, but this time for the test dataset. Since we want to use the thresholds computed for the training set, we set the <code class="docutils literal notranslate"><span class="pre">fixed_th</span></code> parameter to be the dict of thresholds.</p>
+<p>Notice that the thresholds are only used for binary problems. For multi-class problems, the class chosen based on the probabilities is the class with the largest probability.</p>
+<p>For now, we’ll focus on the cohorts defined by the different countries in the dataset.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_train_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>We can see that our pipeline managed to get a decent performance for all countries, despite the different behaviors that we injected for each cohort. However, since we have only a single estimator, we should consider only a single threshold for the entire dataset. The function <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results()</span></code> analyzes the results separately for each cohort, that is, all metrics are computed using the isolated predictions of each cohort. That is why we can see that each cohort used different thresholds
+(<code class="docutils literal notranslate"><span class="pre">threshold</span></code> column). But if we use the same optimal threshold computed for the entire dataset for all cohorts (which makes sense in this case, since we have a single estimator), then we’ll notice that the results are very different.</p>
+<p>In the following cell, we call the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results()</span></code> again using the test dataset, but this time we set the <code class="docutils literal notranslate"><span class="pre">shared_th</span></code> to True, and we also specify that the thresholds to be used are the ones from <code class="docutils literal notranslate"><span class="pre">th_dict</span></code> (which were computed using the training set). This way, what will happen is that the precision, recall, accuracy, and F1 score metrics will be computed for all cohorts using the threshold value for the “all” cohort (because <code class="docutils literal notranslate"><span class="pre">shared_th</span></code> is True).</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">shared_th</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 2</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">shared_th</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -808,10 +821,10 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>all</td>
       <td>all</td>
       <td>0.803805</td>
-      <td>0.788877</td>
-      <td>0.790533</td>
-      <td>0.769316</td>
-      <td>0.769333</td>
+      <td>0.788653</td>
+      <td>0.790248</td>
+      <td>0.768984</td>
+      <td>0.769000</td>
       <td>0.714791</td>
       <td>3000</td>
     </tr>
@@ -820,10 +833,10 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_0</td>
       <td>(`country` == "A")</td>
       <td>0.836172</td>
-      <td>0.822146</td>
-      <td>0.833283</td>
-      <td>0.813916</td>
-      <td>0.814698</td>
+      <td>0.821859</td>
+      <td>0.832952</td>
+      <td>0.813529</td>
+      <td>0.814303</td>
       <td>0.714791</td>
       <td>2531</td>
     </tr>
@@ -855,13 +868,15 @@ all metrics are computed using the isolated predictions of each cohort. That is 
 </table>
 </div></div>
 </div>
-<p>For the sake of comparability, we’ll use different thresholds for each cohort for all of our experiments from this point on. This will make our analysis more straightforward and easier to understand.</p>
-<p>Let’s see if we can improve these metrics by applying some pre-processing steps over each cohort separately. To that end, let’s apply the imputation and normalization over each cohort separately and see how this impacts the resulting pipeline. We’ll use the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class to achieve this.</p>
+<p>For the sake of comparability, we’ll use different thresholds for each cohort for all of our experiments from this point on (that is, <code class="docutils literal notranslate"><span class="pre">shared_th</span></code> will be set to False). This will make our analysis more straightforward and easier to understand.</p>
+<p>Let’s see if we can improve these metrics (compared to <a class="reference external" href="#baseline1">Baseline 1</a>) by applying some pre-processing steps over each cohort separately. To that end, let’s apply the imputation and normalization over each cohort separately and see how this impacts the resulting pipeline. We’ll use the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class to achieve this.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 1</span>
+
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
     <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
@@ -877,7 +892,9 @@ all metrics are computed using the isolated predictions of each cohort. That is 
 <span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="n">pred_cht</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">])</span>
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -921,10 +938,10 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>all</td>
       <td>all</td>
       <td>0.814191</td>
-      <td>0.795450</td>
-      <td>0.797449</td>
-      <td>0.776309</td>
-      <td>0.776333</td>
+      <td>0.795227</td>
+      <td>0.797164</td>
+      <td>0.775978</td>
+      <td>0.776000</td>
       <td>0.717450</td>
       <td>3000</td>
     </tr>
@@ -933,10 +950,10 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_0</td>
       <td>(`country` == "A")</td>
       <td>0.840887</td>
-      <td>0.826792</td>
-      <td>0.838582</td>
-      <td>0.820110</td>
-      <td>0.821019</td>
+      <td>0.826499</td>
+      <td>0.838250</td>
+      <td>0.819723</td>
+      <td>0.820624</td>
       <td>0.717450</td>
       <td>2531</td>
     </tr>
@@ -945,11 +962,11 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_1</td>
       <td>(`country` == "B")</td>
       <td>0.803594</td>
-      <td>0.807712</td>
-      <td>0.809371</td>
-      <td>0.807609</td>
-      <td>0.807910</td>
-      <td>0.372717</td>
+      <td>0.801724</td>
+      <td>0.803273</td>
+      <td>0.801855</td>
+      <td>0.802260</td>
+      <td>0.367261</td>
       <td>177</td>
     </tr>
     <tr>
@@ -961,7 +978,7 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>0.830079</td>
       <td>0.829746</td>
       <td>0.832192</td>
-      <td>0.265202</td>
+      <td>0.265146</td>
       <td>292</td>
     </tr>
   </tbody>
@@ -973,7 +990,9 @@ all metrics are computed using the isolated predictions of each cohort. That is 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 2</span>
+
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
     <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
@@ -985,7 +1004,9 @@ all metrics are computed using the isolated predictions of each cohort. That is 
 <span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">])</span>
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1029,10 +1050,10 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>all</td>
       <td>all</td>
       <td>0.829600</td>
-      <td>0.813439</td>
-      <td>0.818788</td>
-      <td>0.800157</td>
-      <td>0.800333</td>
+      <td>0.813206</td>
+      <td>0.818502</td>
+      <td>0.799828</td>
+      <td>0.800000</td>
       <td>0.725327</td>
       <td>3000</td>
     </tr>
@@ -1041,10 +1062,10 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_0</td>
       <td>(`country` == "A")</td>
       <td>0.837492</td>
-      <td>0.827379</td>
-      <td>0.839244</td>
-      <td>0.820883</td>
-      <td>0.821810</td>
+      <td>0.827085</td>
+      <td>0.838913</td>
+      <td>0.820496</td>
+      <td>0.821414</td>
       <td>0.725327</td>
       <td>2531</td>
     </tr>
@@ -1053,11 +1074,11 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_1</td>
       <td>(`country` == "B")</td>
       <td>0.830680</td>
-      <td>0.811737</td>
-      <td>0.794929</td>
-      <td>0.797184</td>
-      <td>0.802260</td>
-      <td>0.110534</td>
+      <td>0.797303</td>
+      <td>0.784403</td>
+      <td>0.786350</td>
+      <td>0.790960</td>
+      <td>0.110570</td>
       <td>177</td>
     </tr>
     <tr>
@@ -1069,7 +1090,7 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>0.830079</td>
       <td>0.829746</td>
       <td>0.832192</td>
-      <td>0.174122</td>
+      <td>0.174096</td>
       <td>292</td>
     </tr>
   </tbody>
@@ -1081,7 +1102,9 @@ all metrics are computed using the isolated predictions of each cohort. That is 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 3</span>
+
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
     <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
@@ -1093,7 +1116,9 @@ all metrics are computed using the isolated predictions of each cohort. That is 
 <span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">])</span>
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1102,7 +1127,9 @@ all metrics are computed using the isolated predictions of each cohort. That is 
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:172: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
 </pre></div></div>
 </div>
@@ -1146,11 +1173,11 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>all</td>
       <td>all</td>
       <td>0.902798</td>
-      <td>0.903730</td>
-      <td>0.895894</td>
-      <td>0.899220</td>
-      <td>0.903000</td>
-      <td>0.464362</td>
+      <td>0.902903</td>
+      <td>0.895324</td>
+      <td>0.898555</td>
+      <td>0.902333</td>
+      <td>0.464561</td>
       <td>3000</td>
     </tr>
     <tr>
@@ -1158,11 +1185,11 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_0</td>
       <td>(`country` == "A")</td>
       <td>0.924799</td>
-      <td>0.928999</td>
-      <td>0.918111</td>
-      <td>0.922743</td>
-      <td>0.926511</td>
-      <td>0.464362</td>
+      <td>0.927963</td>
+      <td>0.917449</td>
+      <td>0.921941</td>
+      <td>0.925721</td>
+      <td>0.464561</td>
       <td>2531</td>
     </tr>
     <tr>
@@ -1174,7 +1201,7 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>0.796085</td>
       <td>0.790934</td>
       <td>0.790960</td>
-      <td>0.747660</td>
+      <td>0.747629</td>
       <td>177</td>
     </tr>
     <tr>
@@ -1199,7 +1226,9 @@ all metrics are computed using the isolated predictions of each cohort. That is 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 4</span>
+
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
     <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
         <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
@@ -1211,7 +1240,9 @@ all metrics are computed using the isolated predictions of each cohort. That is 
 <span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">])</span>
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1255,11 +1286,11 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>all</td>
       <td>all</td>
       <td>0.921679</td>
-      <td>0.908911</td>
-      <td>0.903118</td>
-      <td>0.905678</td>
-      <td>0.909000</td>
-      <td>0.473915</td>
+      <td>0.908100</td>
+      <td>0.902547</td>
+      <td>0.905012</td>
+      <td>0.908333</td>
+      <td>0.475074</td>
       <td>3000</td>
     </tr>
     <tr>
@@ -1267,11 +1298,11 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_0</td>
       <td>(`country` == "A")</td>
       <td>0.925494</td>
-      <td>0.923816</td>
-      <td>0.912538</td>
-      <td>0.917297</td>
-      <td>0.921375</td>
-      <td>0.466741</td>
+      <td>0.920170</td>
+      <td>0.911027</td>
+      <td>0.914990</td>
+      <td>0.919004</td>
+      <td>0.476344</td>
       <td>2531</td>
     </tr>
     <tr>
@@ -1283,7 +1314,7 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>0.845956</td>
       <td>0.841803</td>
       <td>0.841808</td>
-      <td>0.552434</td>
+      <td>0.546313</td>
       <td>177</td>
     </tr>
     <tr>
@@ -1291,11 +1322,11 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_2</td>
       <td>(`country` == "C")</td>
       <td>0.923664</td>
-      <td>0.877763</td>
-      <td>0.872178</td>
-      <td>0.872629</td>
-      <td>0.873288</td>
-      <td>0.391472</td>
+      <td>0.874875</td>
+      <td>0.868682</td>
+      <td>0.869120</td>
+      <td>0.869863</td>
+      <td>0.388728</td>
       <td>292</td>
     </tr>
   </tbody>
@@ -1306,12 +1337,15 @@ all metrics are computed using the isolated predictions of each cohort. That is 
 </section>
 <section id="Checking-the-“sector”-+-“country”-cohorts">
 <h2>Checking the “sector” + “country” cohorts<a class="headerlink" href="#Checking-the-“sector”-+-“country”-cohorts" title="Permalink to this heading"></a></h2>
-<p>Let’s now look into the metrics for each combination of country and sector. We’ll first check how the baseline pipeline (trained over the entire dataset) performs for each of these cohorts:</p>
+<p>Let’s now look into the metrics for each combination of country and sector. We’ll first check how the baseline pipeline, trained over the entire dataset (<a class="reference external" href="#baseline1">Baseline 1</a>), performs for each of these cohorts:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 3</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1320,16 +1354,22 @@ all metrics are computed using the isolated predictions of each cohort. That is 
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:172: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:172: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:172: RuntimeWarning: invalid value encountered in true_divide
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
+  fscore = (2 * precision * recall) / (precision + recall)
+/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
   fscore = (2 * precision * recall) / (precision + recall)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1368,10 +1408,10 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>all</td>
       <td>all</td>
       <td>0.803805</td>
-      <td>0.788877</td>
-      <td>0.790533</td>
-      <td>0.769316</td>
-      <td>0.769333</td>
+      <td>0.788653</td>
+      <td>0.790248</td>
+      <td>0.768984</td>
+      <td>0.769000</td>
       <td>0.714791</td>
       <td>3000</td>
     </tr>
@@ -1380,10 +1420,10 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_0</td>
       <td>(`sector` == "s1") and (`country` == "A")</td>
       <td>0.852323</td>
-      <td>0.861257</td>
-      <td>0.896790</td>
-      <td>0.874579</td>
-      <td>0.889251</td>
+      <td>0.860370</td>
+      <td>0.896209</td>
+      <td>0.873737</td>
+      <td>0.888436</td>
       <td>0.714791</td>
       <td>1228</td>
     </tr>
@@ -1392,10 +1432,10 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_1</td>
       <td>(`sector` == "s1") and (`country` == "B")</td>
       <td>0.238095</td>
-      <td>0.791667</td>
-      <td>0.583333</td>
-      <td>0.511278</td>
-      <td>0.615385</td>
+      <td>0.208333</td>
+      <td>0.416667</td>
+      <td>0.277778</td>
+      <td>0.384615</td>
       <td>0.732667</td>
       <td>13</td>
     </tr>
@@ -1404,10 +1444,10 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_2</td>
       <td>(`sector` == "s1") and (`country` == "C")</td>
       <td>0.161905</td>
-      <td>0.602564</td>
-      <td>0.538095</td>
-      <td>0.459110</td>
-      <td>0.551724</td>
+      <td>0.232143</td>
+      <td>0.464286</td>
+      <td>0.309524</td>
+      <td>0.448276</td>
       <td>0.796960</td>
       <td>29</td>
     </tr>
@@ -1416,11 +1456,11 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_3</td>
       <td>(`sector` == "s2") and (`country` == "A")</td>
       <td>0.803265</td>
-      <td>0.930028</td>
-      <td>0.852337</td>
-      <td>0.882836</td>
-      <td>0.920962</td>
-      <td>0.400691</td>
+      <td>0.867622</td>
+      <td>0.834155</td>
+      <td>0.848937</td>
+      <td>0.893471</td>
+      <td>0.400690</td>
       <td>291</td>
     </tr>
     <tr>
@@ -1464,10 +1504,10 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_7</td>
       <td>(`sector` == "s3") and (`country` == "B")</td>
       <td>0.710065</td>
-      <td>0.885315</td>
-      <td>0.754386</td>
-      <td>0.792350</td>
-      <td>0.868421</td>
+      <td>0.913043</td>
+      <td>0.684211</td>
+      <td>0.721612</td>
+      <td>0.842105</td>
       <td>0.176188</td>
       <td>76</td>
     </tr>
@@ -1476,10 +1516,10 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_8</td>
       <td>(`sector` == "s3") and (`country` == "C")</td>
       <td>0.766817</td>
-      <td>0.848348</td>
-      <td>0.785480</td>
-      <td>0.811509</td>
-      <td>0.899225</td>
+      <td>0.889474</td>
+      <td>0.773175</td>
+      <td>0.814833</td>
+      <td>0.906977</td>
       <td>0.234479</td>
       <td>129</td>
     </tr>
@@ -1488,11 +1528,11 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_9</td>
       <td>(`sector` == "s4") and (`country` == "A")</td>
       <td>0.870353</td>
-      <td>0.937758</td>
-      <td>0.895504</td>
-      <td>0.912574</td>
-      <td>0.926893</td>
-      <td>0.502600</td>
+      <td>0.935381</td>
+      <td>0.894539</td>
+      <td>0.911125</td>
+      <td>0.925587</td>
+      <td>0.503846</td>
       <td>766</td>
     </tr>
     <tr>
@@ -1500,10 +1540,10 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_10</td>
       <td>(`sector` == "s4") and (`country` == "B")</td>
       <td>0.944444</td>
-      <td>0.928571</td>
-      <td>0.966667</td>
-      <td>0.944297</td>
-      <td>0.952381</td>
+      <td>0.875000</td>
+      <td>0.933333</td>
+      <td>0.892857</td>
+      <td>0.904762</td>
       <td>0.944555</td>
       <td>21</td>
     </tr>
@@ -1512,10 +1552,10 @@ all metrics are computed using the isolated predictions of each cohort. That is 
       <td>cohort_11</td>
       <td>(`sector` == "s4") and (`country` == "C")</td>
       <td>0.794444</td>
-      <td>0.844444</td>
-      <td>0.844444</td>
-      <td>0.844444</td>
-      <td>0.857143</td>
+      <td>0.804813</td>
+      <td>0.816667</td>
+      <td>0.809524</td>
+      <td>0.821429</td>
       <td>0.960627</td>
       <td>28</td>
     </tr>
@@ -1525,17 +1565,20 @@ all metrics are computed using the isolated predictions of each cohort. That is 
 </div>
 <p>Notice that some cohorts have very poor performance. For example, for companies from sector <code class="docutils literal notranslate"><span class="pre">s1</span></code>, we can notice that the model learned how to predict the correct class only for companies from country <code class="docutils literal notranslate"><span class="pre">A</span></code> (<code class="docutils literal notranslate"><span class="pre">cohort_0</span></code>). Since companies from sector <code class="docutils literal notranslate"><span class="pre">s1</span></code> from country <code class="docutils literal notranslate"><span class="pre">B</span></code> used an inverted behavior (<code class="docutils literal notranslate"><span class="pre">inverted_behavior</span></code> flag in the function that creates the dataset), and companies from country <code class="docutils literal notranslate"><span class="pre">C</span></code> had a very different range of investment values compared to the country <code class="docutils literal notranslate"><span class="pre">A</span></code>, and since
 instances from country <code class="docutils literal notranslate"><span class="pre">A</span></code> are the majority of instances, then the model prioritized to learn how to classify only the instances of sector == <code class="docutils literal notranslate"><span class="pre">s1</span></code> from country <code class="docutils literal notranslate"><span class="pre">A</span></code>.</p>
-<p>Let’s now check the results for these cohorts using our best pipeline, which is the one where each cohort of sector and country had its own pipeline:</p>
+<p>Let’s now check the results for these cohorts using our best pipeline, which is the one where each cohort of sector and country had its own pipeline (<a class="reference external" href="#cohort4">Cohort 4</a>):</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 5</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1574,11 +1617,11 @@ instances from country <code class="docutils literal notranslate"><span class="p
       <td>all</td>
       <td>all</td>
       <td>0.921679</td>
-      <td>0.908911</td>
-      <td>0.903118</td>
-      <td>0.905678</td>
-      <td>0.909000</td>
-      <td>0.473915</td>
+      <td>0.908100</td>
+      <td>0.902547</td>
+      <td>0.905012</td>
+      <td>0.908333</td>
+      <td>0.475074</td>
       <td>3000</td>
     </tr>
     <tr>
@@ -1586,11 +1629,11 @@ instances from country <code class="docutils literal notranslate"><span class="p
       <td>cohort_0</td>
       <td>(`sector` == "s1") and (`country` == "A")</td>
       <td>0.911655</td>
-      <td>0.942981</td>
-      <td>0.895519</td>
-      <td>0.915060</td>
-      <td>0.932410</td>
-      <td>0.445408</td>
+      <td>0.941368</td>
+      <td>0.894939</td>
+      <td>0.914116</td>
+      <td>0.931596</td>
+      <td>0.445645</td>
       <td>1228</td>
     </tr>
     <tr>
@@ -1598,11 +1641,11 @@ instances from country <code class="docutils literal notranslate"><span class="p
       <td>cohort_1</td>
       <td>(`sector` == "s1") and (`country` == "B")</td>
       <td>0.904762</td>
-      <td>0.845238</td>
-      <td>0.845238</td>
-      <td>0.845238</td>
+      <td>0.888889</td>
+      <td>0.833333</td>
+      <td>0.837500</td>
       <td>0.846154</td>
-      <td>0.704639</td>
+      <td>0.616965</td>
       <td>13</td>
     </tr>
     <tr>
@@ -1614,7 +1657,7 @@ instances from country <code class="docutils literal notranslate"><span class="p
       <td>0.895238</td>
       <td>0.896057</td>
       <td>0.896552</td>
-      <td>0.485884</td>
+      <td>0.471948</td>
       <td>29</td>
     </tr>
     <tr>
@@ -1622,11 +1665,11 @@ instances from country <code class="docutils literal notranslate"><span class="p
       <td>cohort_3</td>
       <td>(`sector` == "s2") and (`country` == "A")</td>
       <td>0.861716</td>
-      <td>0.930028</td>
-      <td>0.852337</td>
-      <td>0.882836</td>
-      <td>0.920962</td>
-      <td>0.528316</td>
+      <td>0.867622</td>
+      <td>0.834155</td>
+      <td>0.848937</td>
+      <td>0.893471</td>
+      <td>0.488684</td>
       <td>291</td>
     </tr>
     <tr>
@@ -1638,7 +1681,7 @@ instances from country <code class="docutils literal notranslate"><span class="p
       <td>0.836895</td>
       <td>0.868782</td>
       <td>0.925373</td>
-      <td>0.552434</td>
+      <td>0.521201</td>
       <td>67</td>
     </tr>
     <tr>
@@ -1650,7 +1693,7 @@ instances from country <code class="docutils literal notranslate"><span class="p
       <td>0.840778</td>
       <td>0.878077</td>
       <td>0.952830</td>
-      <td>0.689291</td>
+      <td>0.662477</td>
       <td>106</td>
     </tr>
     <tr>
@@ -1662,7 +1705,7 @@ instances from country <code class="docutils literal notranslate"><span class="p
       <td>0.877957</td>
       <td>0.905093</td>
       <td>0.934959</td>
-      <td>0.481561</td>
+      <td>0.477076</td>
       <td>246</td>
     </tr>
     <tr>
@@ -1670,11 +1713,11 @@ instances from country <code class="docutils literal notranslate"><span class="p
       <td>cohort_7</td>
       <td>(`sector` == "s3") and (`country` == "B")</td>
       <td>0.762696</td>
-      <td>0.885315</td>
-      <td>0.754386</td>
-      <td>0.792350</td>
-      <td>0.868421</td>
-      <td>0.213025</td>
+      <td>0.913043</td>
+      <td>0.684211</td>
+      <td>0.721612</td>
+      <td>0.842105</td>
+      <td>0.226486</td>
       <td>76</td>
     </tr>
     <tr>
@@ -1682,11 +1725,11 @@ instances from country <code class="docutils literal notranslate"><span class="p
       <td>cohort_8</td>
       <td>(`sector` == "s3") and (`country` == "C")</td>
       <td>0.780353</td>
-      <td>0.848348</td>
-      <td>0.785480</td>
-      <td>0.811509</td>
-      <td>0.899225</td>
-      <td>0.358148</td>
+      <td>0.889474</td>
+      <td>0.773175</td>
+      <td>0.814833</td>
+      <td>0.906977</td>
+      <td>0.388728</td>
       <td>129</td>
     </tr>
     <tr>
@@ -1694,11 +1737,11 @@ instances from country <code class="docutils literal notranslate"><span class="p
       <td>cohort_9</td>
       <td>(`sector` == "s4") and (`country` == "A")</td>
       <td>0.907772</td>
-      <td>0.937758</td>
-      <td>0.895504</td>
-      <td>0.912574</td>
-      <td>0.926893</td>
-      <td>0.477978</td>
+      <td>0.935381</td>
+      <td>0.894539</td>
+      <td>0.911125</td>
+      <td>0.925587</td>
+      <td>0.480231</td>
       <td>766</td>
     </tr>
     <tr>
@@ -1706,11 +1749,11 @@ instances from country <code class="docutils literal notranslate"><span class="p
       <td>cohort_10</td>
       <td>(`sector` == "s4") and (`country` == "B")</td>
       <td>0.900000</td>
-      <td>0.941176</td>
-      <td>0.833333</td>
-      <td>0.868750</td>
-      <td>0.904762</td>
-      <td>0.558583</td>
+      <td>0.837500</td>
+      <td>0.800000</td>
+      <td>0.815249</td>
+      <td>0.857143</td>
+      <td>0.559088</td>
       <td>21</td>
     </tr>
     <tr>
@@ -1718,11 +1761,11 @@ instances from country <code class="docutils literal notranslate"><span class="p
       <td>cohort_11</td>
       <td>(`sector` == "s4") and (`country` == "C")</td>
       <td>0.833333</td>
-      <td>0.928571</td>
-      <td>0.850000</td>
-      <td>0.873303</td>
-      <td>0.892857</td>
-      <td>0.533420</td>
+      <td>0.862500</td>
+      <td>0.822222</td>
+      <td>0.836257</td>
+      <td>0.857143</td>
+      <td>0.560495</td>
       <td>28</td>
     </tr>
   </tbody>
@@ -1731,1160 +1774,14 @@ instances from country <code class="docutils literal notranslate"><span class="p
 </div>
 <p>As we can see, the results here are a lot more consistent, and there aren’t any cohorts with a drastic performance difference when compared to other cohorts. This is because each cohort had its own estimators, so it had only one behavior to learn.</p>
 </section>
-<section id="Rebalancing">
-<h2>Rebalancing<a class="headerlink" href="#Rebalancing" title="Permalink to this heading"></a></h2>
-<p>In the following experiments, we’ll test different ways the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class can be used in this dataset. First, let’s create a function capable of plotting the label distribution of different cohorts. This will facilitate our analysis.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-
-<span class="k">def</span> <span class="nf">plot_value_counts_cohort</span><span class="p">(</span><span class="n">y_full</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="c1">#plt.legend(bbox_to_anchor=(1.02, 1), loc=&#39;upper left&#39;, borderaxespad=0, fontsize=23)</span>
-
-    <span class="n">value_count</span> <span class="o">=</span> <span class="n">y_full</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
-
-    <span class="n">subsets_col</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;full df&#39;</span><span class="p">,</span> <span class="s1">&#39;full df&#39;</span><span class="p">]</span>
-    <span class="n">counts_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">value_count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-    <span class="n">label_col</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">value_count</span> <span class="o">=</span> <span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
-        <span class="n">subsets_col</span> <span class="o">+=</span> <span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">]</span>
-        <span class="n">counts_col</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value_count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-        <span class="n">label_col</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-
-    <span class="n">count_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;subsets&quot;</span><span class="p">:</span><span class="n">subsets_col</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span><span class="n">label_col</span><span class="p">,</span> <span class="s2">&quot;counts&quot;</span><span class="p">:</span><span class="n">counts_col</span><span class="p">})</span>
-
-    <span class="n">y_label</span> <span class="o">=</span> <span class="s2">&quot;Occurrences&quot;</span>
-    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
-        <span class="n">y_label</span> <span class="o">=</span> <span class="s2">&quot;Fraction&quot;</span>
-
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;subsets&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">count_df</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Subsets&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-    <span class="c1">#ax.tick_params(labelsize=15)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<p>Let’s now use this function with the subsets returned by the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class. Let’s take a look at the label distributions of the cohorts based on the <code class="docutils literal notranslate"><span class="pre">sector</span></code> and <code class="docutils literal notranslate"><span class="pre">country</span></code> columns:</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
-<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/notebooks_cohort_case_study_case_1_26_0.png" src="../../../_images/notebooks_cohort_case_study_case_1_26_0.png" />
-</div>
-</div>
-<p>As we can see, there is a slight class imbalance in the entire dataset, but if we look at each cohort individually, this imbalance varies greatly. We can see that the imbalance is inverted for some cohorts.</p>
-<section id="Rebalance-the-entire-dataset">
-<h3>Rebalance the entire dataset<a class="headerlink" href="#Rebalance-the-entire-dataset" title="Permalink to this heading"></a></h3>
-<p>For our first experiment, let’s try rebalancing the entire dataset to see how this will affect the results. Note that we don’t expect great changes to the results, since the imbalance in the entire dataset is not very accentuated.</p>
-<p>We’ll use the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class to rebalance the full dataset. We then plot the label distributions for all cohorts once again to see how the rebalance process affected the distributions inside each cohort.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rebalance</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span> <span class="o">=</span> <span class="n">rebalance</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-
-<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
-<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span><span class="n">new_y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">new_y_train</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/notebooks_cohort_case_study_case_1_28_0.png" src="../../../_images/notebooks_cohort_case_study_case_1_28_0.png" />
-</div>
-</div>
-<p>As we can see, after rebalancing the full dataset, there is no class imbalance when we look at the full dataset. However, the imbalance inside the cohorts with an inverted class imbalanced (compared to the full dataset) has only been more accentuated.</p>
-<p>Let’s now check how this new rebalanced dataset impacts the training process when using the baseline pipeline, where we train a single pipeline for the entire dataset.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">()),</span>
-        <span class="p">])</span>
-<span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">)</span>
-<span class="n">pred_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:172: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:172: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:172: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>cohort</th>
-      <th>cht_query</th>
-      <th>roc</th>
-      <th>precision</th>
-      <th>recall</th>
-      <th>f1</th>
-      <th>accuracy</th>
-      <th>threshold</th>
-      <th>cht_size</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>all</td>
-      <td>all</td>
-      <td>0.803268</td>
-      <td>0.789100</td>
-      <td>0.790818</td>
-      <td>0.769648</td>
-      <td>0.769667</td>
-      <td>0.639927</td>
-      <td>3000</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>cohort_0</td>
-      <td>(`sector` == "s1") and (`country` == "A")</td>
-      <td>0.852323</td>
-      <td>0.861257</td>
-      <td>0.896790</td>
-      <td>0.874579</td>
-      <td>0.889251</td>
-      <td>0.639927</td>
-      <td>1228</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>cohort_1</td>
-      <td>(`sector` == "s1") and (`country` == "B")</td>
-      <td>0.238095</td>
-      <td>0.791667</td>
-      <td>0.583333</td>
-      <td>0.511278</td>
-      <td>0.615385</td>
-      <td>0.649560</td>
-      <td>13</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>cohort_2</td>
-      <td>(`sector` == "s1") and (`country` == "C")</td>
-      <td>0.161905</td>
-      <td>0.602564</td>
-      <td>0.538095</td>
-      <td>0.459110</td>
-      <td>0.551724</td>
-      <td>0.715199</td>
-      <td>29</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>cohort_3</td>
-      <td>(`sector` == "s2") and (`country` == "A")</td>
-      <td>0.803265</td>
-      <td>0.930028</td>
-      <td>0.852337</td>
-      <td>0.882836</td>
-      <td>0.920962</td>
-      <td>0.332855</td>
-      <td>291</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>cohort_4</td>
-      <td>(`sector` == "s2") and (`country` == "B")</td>
-      <td>0.813390</td>
-      <td>0.803529</td>
-      <td>0.867521</td>
-      <td>0.828205</td>
-      <td>0.880597</td>
-      <td>0.342261</td>
-      <td>67</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>cohort_5</td>
-      <td>(`sector` == "s2") and (`country` == "C")</td>
-      <td>0.775021</td>
-      <td>0.701744</td>
-      <td>0.787014</td>
-      <td>0.730828</td>
-      <td>0.858491</td>
-      <td>0.413488</td>
-      <td>106</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>cohort_6</td>
-      <td>(`sector` == "s3") and (`country` == "A")</td>
-      <td>0.188799</td>
-      <td>0.575122</td>
-      <td>0.529032</td>
-      <td>0.285017</td>
-      <td>0.304878</td>
-      <td>0.125266</td>
-      <td>246</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>cohort_7</td>
-      <td>(`sector` == "s3") and (`country` == "B")</td>
-      <td>0.710065</td>
-      <td>0.885315</td>
-      <td>0.754386</td>
-      <td>0.792350</td>
-      <td>0.868421</td>
-      <td>0.129994</td>
-      <td>76</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>cohort_8</td>
-      <td>(`sector` == "s3") and (`country` == "C")</td>
-      <td>0.766817</td>
-      <td>0.848348</td>
-      <td>0.785480</td>
-      <td>0.811509</td>
-      <td>0.899225</td>
-      <td>0.168353</td>
-      <td>129</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>cohort_9</td>
-      <td>(`sector` == "s4") and (`country` == "A")</td>
-      <td>0.870353</td>
-      <td>0.937758</td>
-      <td>0.895504</td>
-      <td>0.912574</td>
-      <td>0.926893</td>
-      <td>0.431050</td>
-      <td>766</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>cohort_10</td>
-      <td>(`sector` == "s4") and (`country` == "B")</td>
-      <td>0.944444</td>
-      <td>0.928571</td>
-      <td>0.966667</td>
-      <td>0.944297</td>
-      <td>0.952381</td>
-      <td>0.914203</td>
-      <td>21</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>cohort_11</td>
-      <td>(`sector` == "s4") and (`country` == "C")</td>
-      <td>0.794444</td>
-      <td>0.844444</td>
-      <td>0.844444</td>
-      <td>0.844444</td>
-      <td>0.857143</td>
-      <td>0.935217</td>
-      <td>28</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
-<p>From the previous results, we can see that the results haven’t changed much. This is true for the full dataset, as well as when we analyze each cohort individually. Therefore, this rebalancing process didn’t impact the results for the baseline pipeline.</p>
-<p>In the following cell, we use the rebalanced dataset in the cohort-based pipeline.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">get_model</span><span class="p">()</span>
-    <span class="p">],</span>
-    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">)</span>
-<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:172: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1334: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:172: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>cohort</th>
-      <th>cht_query</th>
-      <th>roc</th>
-      <th>precision</th>
-      <th>recall</th>
-      <th>f1</th>
-      <th>accuracy</th>
-      <th>threshold</th>
-      <th>cht_size</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>all</td>
-      <td>all</td>
-      <td>0.827125</td>
-      <td>0.815023</td>
-      <td>0.820445</td>
-      <td>0.801822</td>
-      <td>0.802000</td>
-      <td>0.637556</td>
-      <td>3000</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>cohort_0</td>
-      <td>(`sector` == "s1") and (`country` == "A")</td>
-      <td>0.852323</td>
-      <td>0.861257</td>
-      <td>0.896790</td>
-      <td>0.874579</td>
-      <td>0.889251</td>
-      <td>0.637556</td>
-      <td>1228</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>cohort_1</td>
-      <td>(`sector` == "s1") and (`country` == "B")</td>
-      <td>0.761905</td>
-      <td>0.888889</td>
-      <td>0.833333</td>
-      <td>0.837500</td>
-      <td>0.846154</td>
-      <td>0.635485</td>
-      <td>13</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>cohort_2</td>
-      <td>(`sector` == "s1") and (`country` == "C")</td>
-      <td>0.838095</td>
-      <td>0.899038</td>
-      <td>0.895238</td>
-      <td>0.896057</td>
-      <td>0.896552</td>
-      <td>0.466120</td>
-      <td>29</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>cohort_3</td>
-      <td>(`sector` == "s2") and (`country` == "A")</td>
-      <td>0.196735</td>
-      <td>0.549242</td>
-      <td>0.522471</td>
-      <td>0.509192</td>
-      <td>0.725086</td>
-      <td>0.175744</td>
-      <td>291</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>cohort_4</td>
-      <td>(`sector` == "s2") and (`country` == "B")</td>
-      <td>0.186610</td>
-      <td>0.097015</td>
-      <td>0.500000</td>
-      <td>0.162500</td>
-      <td>0.194030</td>
-      <td>1.643070</td>
-      <td>67</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>cohort_5</td>
-      <td>(`sector` == "s2") and (`country` == "C")</td>
-      <td>0.224979</td>
-      <td>0.567708</td>
-      <td>0.553763</td>
-      <td>0.216353</td>
-      <td>0.216981</td>
-      <td>0.755883</td>
-      <td>106</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>cohort_6</td>
-      <td>(`sector` == "s3") and (`country` == "A")</td>
-      <td>0.188799</td>
-      <td>0.575122</td>
-      <td>0.529032</td>
-      <td>0.285017</td>
-      <td>0.304878</td>
-      <td>0.170009</td>
-      <td>246</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>cohort_7</td>
-      <td>(`sector` == "s3") and (`country` == "B")</td>
-      <td>0.710065</td>
-      <td>0.885315</td>
-      <td>0.754386</td>
-      <td>0.792350</td>
-      <td>0.868421</td>
-      <td>0.061715</td>
-      <td>76</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>cohort_8</td>
-      <td>(`sector` == "s3") and (`country` == "C")</td>
-      <td>0.766817</td>
-      <td>0.848348</td>
-      <td>0.785480</td>
-      <td>0.811509</td>
-      <td>0.899225</td>
-      <td>0.122870</td>
-      <td>129</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>cohort_9</td>
-      <td>(`sector` == "s4") and (`country` == "A")</td>
-      <td>0.907025</td>
-      <td>0.937758</td>
-      <td>0.895504</td>
-      <td>0.912574</td>
-      <td>0.926893</td>
-      <td>0.420439</td>
-      <td>766</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>cohort_10</td>
-      <td>(`sector` == "s4") and (`country` == "B")</td>
-      <td>0.944444</td>
-      <td>0.928571</td>
-      <td>0.966667</td>
-      <td>0.944297</td>
-      <td>0.952381</td>
-      <td>0.570675</td>
-      <td>21</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>cohort_11</td>
-      <td>(`sector` == "s4") and (`country` == "C")</td>
-      <td>0.794444</td>
-      <td>0.844444</td>
-      <td>0.844444</td>
-      <td>0.844444</td>
-      <td>0.857143</td>
-      <td>0.531133</td>
-      <td>28</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
-<p>We can see that by comparing the previous results with the one obtained by using the cohort-based pipeline (the one for the cohorts based on the <code class="docutils literal notranslate"><span class="pre">sector</span></code> and <code class="docutils literal notranslate"><span class="pre">country</span></code> columns) over the original dataset, we can notice that the new rebalanced dataset performed considerably worse. Using the original dataset, we managed to get good metrics for the entire dataset and for each individual cohort. But when we use the rebalanced dataset, the metrics for some cohorts have become severely worse (for
-example, the metrics for cohort <code class="docutils literal notranslate"><span class="pre">cohort_4</span></code>). One possible explanation for this is that, given that each cohort behaves very differently from the other, the new instances created by the SMOTE method (used internally by the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class) for some cohorts are not very befitting to the behavior analyzed in each cohort. This is especially true in smaller cohorts, that have fewer data points that can be used in the data creation process used in SMOTE. However, this has little impact when we
-train a pipeline over the full dataset since these small cohorts are already marginalized in these pipelines. But when we train a separate pipeline for each cohort, and we insert noisy data points into small cohorts, this noise has a great impact on the resulting estimator, as we can see from the previous results.</p>
-<p>We can check this by printing the statistics for the investment column for all cohorts in the original dataset and for the rebalanced dataset. Notice how the value range changes drastically from the original to the rebalanced datasets for several cohorts. The mean and standard deviation also suffers great changes.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
-<span class="n">subsets_original</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">subsets_rebalance</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">cht_name</span> <span class="ow">in</span> <span class="n">subsets_original</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">min_value</span> <span class="o">=</span> <span class="n">subsets_original</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-    <span class="n">max_value</span> <span class="o">=</span> <span class="n">subsets_original</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-    <span class="n">mean</span> <span class="o">=</span> <span class="n">subsets_original</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-    <span class="n">std</span> <span class="o">=</span> <span class="n">subsets_original</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cht_name</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">ORIGINAL: (min, max, mean, std) = (</span><span class="si">{</span><span class="n">min_value</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">max_value</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">mean</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">std</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-    <span class="n">min_value</span> <span class="o">=</span> <span class="n">subsets_rebalance</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-    <span class="n">max_value</span> <span class="o">=</span> <span class="n">subsets_rebalance</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-    <span class="n">mean</span> <span class="o">=</span> <span class="n">subsets_rebalance</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-    <span class="n">std</span> <span class="o">=</span> <span class="n">subsets_rebalance</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">REBALANCE: (min, max, mean, std) = (</span><span class="si">{</span><span class="n">min_value</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">max_value</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">mean</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">std</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-cohort_0:
-        ORIGINAL: (min, max, mean, std) = (2.005068e+06, 9.998027e+06, 5.976259e+06, 2.339736e+06)
-        REBALANCE: (min, max, mean, std) = (2.005068e+06, 1.098854e+13, 1.040341e+12, 3.217533e+12)
-cohort_1:
-        ORIGINAL: (min, max, mean, std) = (1.182911e+03, 4.987448e+03, 3.215314e+03, 1.206982e+03)
-        REBALANCE: (min, max, mean, std) = (1.182911e+03, 1.098854e+13, 1.127030e+12, 3.377380e+12)
-cohort_2:
-        ORIGINAL: (min, max, mean, std) = (1.149726e+03, 4.982145e+03, 2.959479e+03, 1.251280e+03)
-        REBALANCE: (min, max, mean, std) = (1.149726e+03, 1.098854e+13, 1.046528e+12, 3.244988e+12)
-cohort_3:
-        ORIGINAL: (min, max, mean, std) = (1.516971e+07, 1.499138e+09, 7.909766e+08, 4.417939e+08)
-        REBALANCE: (min, max, mean, std) = (1.516971e+07, 1.098854e+13, 1.252196e+12, 3.492966e+12)
-cohort_4:
-        ORIGINAL: (min, max, mean, std) = (1.068535e+05, 1.493043e+06, 8.164178e+05, 4.428167e+05)
-        REBALANCE: (min, max, mean, std) = (1.068535e+05, 1.098854e+13, 9.555261e+11, 3.113221e+12)
-cohort_5:
-        ORIGINAL: (min, max, mean, std) = (1.037734e+05, 1.498685e+06, 8.011541e+05, 3.926894e+05)
-        REBALANCE: (min, max, mean, std) = (1.037734e+05, 1.098854e+13, 1.088488e+12, 3.290464e+12)
-cohort_6:
-        ORIGINAL: (min, max, mean, std) = (1.007322e+09, 9.996360e+09, 5.407672e+09, 2.557161e+09)
-        REBALANCE: (min, max, mean, std) = (1.007322e+09, 1.098854e+13, 1.239427e+12, 3.471019e+12)
-cohort_7:
-        ORIGINAL: (min, max, mean, std) = (5.059673e+04, 2.994070e+05, 1.814661e+05, 7.001416e+04)
-        REBALANCE: (min, max, mean, std) = (5.059673e+04, 1.098854e+13, 9.609752e+11, 3.110148e+12)
-cohort_8:
-        ORIGINAL: (min, max, mean, std) = (5.057161e+04, 2.981749e+05, 1.635852e+05, 7.342614e+04)
-        REBALANCE: (min, max, mean, std) = (5.057161e+04, 1.098854e+13, 1.163756e+12, 3.384817e+12)
-cohort_9:
-        ORIGINAL: (min, max, mean, std) = (5.621367e+10, 8.999349e+13, 4.307630e+13, 2.579574e+13)
-        REBALANCE: (min, max, mean, std) = (5.621367e+10, 8.999349e+13, 4.251200e+13, 2.731107e+13)
-cohort_10:
-        ORIGINAL: (min, max, mean, std) = (1.073877e+06, 9.817396e+06, 5.365237e+06, 2.469238e+06)
-        REBALANCE: (min, max, mean, std) = (1.073877e+06, 1.098854e+13, 9.747005e+11, 3.089928e+12)
-cohort_11:
-        ORIGINAL: (min, max, mean, std) = (1.209695e+06, 9.919140e+06, 5.624768e+06, 2.545331e+06)
-        REBALANCE: (min, max, mean, std) = (1.209695e+06, 1.098854e+13, 1.024707e+12, 3.191871e+12)
-</pre></div></div>
-</div>
-</section>
-<section id="Rebalance-only-a-specific-cohort">
-<h3>Rebalance only a specific cohort<a class="headerlink" href="#Rebalance-only-a-specific-cohort" title="Permalink to this heading"></a></h3>
-<p>Suppose now that we are interested in improving the performance over a single cohort, not the entire dataset. For example, let’s consider that we are satisfied with the results obtained for all cohorts except for cohort <code class="docutils literal notranslate"><span class="pre">cohort_7</span></code>. This way, we want to improve the metrics only for this cohort and try to leave the other cohorts as is. To this end, we’ll use the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class once again, but this time we’ll use it inside the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class. This way, we’ll be able to rebalance
-only a specific set of cohorts. We’ll use an empty list of transformations for all cohorts except for <code class="docutils literal notranslate"><span class="pre">cohort_7</span></code>, which is the 8th cohort in the list.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="n">rebalance_cohort</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]],</span>
-    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span> <span class="o">=</span> <span class="n">rebalance_cohort</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-
-<span class="n">subsets</span> <span class="o">=</span> <span class="n">rebalance_cohort</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span><span class="n">new_y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">new_y_train</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../../_images/notebooks_cohort_case_study_case_1_36_0.png" src="../../../_images/notebooks_cohort_case_study_case_1_36_0.png" />
-</div>
-</div>
-<p>Let’s check if the new instances created are very different from the original instances from cohort <code class="docutils literal notranslate"><span class="pre">cohort_7</span></code>:</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
-<span class="n">subsets_original</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">subsets_rebalance</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="n">cht_name</span> <span class="o">=</span> <span class="s2">&quot;cohort_7&quot;</span>
-<span class="n">min_value</span> <span class="o">=</span> <span class="n">subsets_original</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-<span class="n">max_value</span> <span class="o">=</span> <span class="n">subsets_original</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-<span class="n">mean</span> <span class="o">=</span> <span class="n">subsets_original</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="n">std</span> <span class="o">=</span> <span class="n">subsets_original</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cht_name</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">ORIGINAL: (min, max, mean, std) = (</span><span class="si">{</span><span class="n">min_value</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">max_value</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">mean</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">std</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-<span class="n">min_value</span> <span class="o">=</span> <span class="n">subsets_rebalance</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-<span class="n">max_value</span> <span class="o">=</span> <span class="n">subsets_rebalance</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-<span class="n">mean</span> <span class="o">=</span> <span class="n">subsets_rebalance</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="n">std</span> <span class="o">=</span> <span class="n">subsets_rebalance</span><span class="p">[</span><span class="n">cht_name</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">][</span><span class="s2">&quot;investment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">REBALANCE: (min, max, mean, std) = (</span><span class="si">{</span><span class="n">min_value</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">max_value</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">mean</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">std</span><span class="si">:</span><span class="s2">e</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-cohort_7:
-        ORIGINAL: (min, max, mean, std) = (5.059673e+04, 2.994070e+05, 1.814661e+05, 7.001416e+04)
-        REBALANCE: (min, max, mean, std) = (5.059673e+04, 2.994070e+05, 1.383858e+05, 7.739440e+04)
-</pre></div></div>
-</div>
-<p>As we can see, the values for the <code class="docutils literal notranslate"><span class="pre">investment</span></code> column suffered only slight changes to the mean and standard deviation. This shows that in some cases, rebalancing certain cohorts separately is less harmful than rebalancing the entire dataset.</p>
-<p>With our new rebalanced dataset, let’s repeat the previous experiments:</p>
-<ol class="arabic simple">
-<li><p>train the baseline pipeline over the rebalanced dataset;</p></li>
-<li><p>train the cohort-based pipeline over the rebalanced dataset;</p></li>
-</ol>
-<p>In the following cell, we perform the first of these two experiments:</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">()),</span>
-        <span class="p">])</span>
-<span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">)</span>
-<span class="n">pred_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:172: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:172: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:172: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>cohort</th>
-      <th>cht_query</th>
-      <th>roc</th>
-      <th>precision</th>
-      <th>recall</th>
-      <th>f1</th>
-      <th>accuracy</th>
-      <th>threshold</th>
-      <th>cht_size</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>all</td>
-      <td>all</td>
-      <td>0.804837</td>
-      <td>0.788642</td>
-      <td>0.790417</td>
-      <td>0.769313</td>
-      <td>0.769333</td>
-      <td>0.712906</td>
-      <td>3000</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>cohort_0</td>
-      <td>(`sector` == "s1") and (`country` == "A")</td>
-      <td>0.852323</td>
-      <td>0.861257</td>
-      <td>0.896790</td>
-      <td>0.874579</td>
-      <td>0.889251</td>
-      <td>0.712906</td>
-      <td>1228</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>cohort_1</td>
-      <td>(`sector` == "s1") and (`country` == "B")</td>
-      <td>0.238095</td>
-      <td>0.791667</td>
-      <td>0.583333</td>
-      <td>0.511278</td>
-      <td>0.615385</td>
-      <td>0.893269</td>
-      <td>13</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>cohort_2</td>
-      <td>(`sector` == "s1") and (`country` == "C")</td>
-      <td>0.161905</td>
-      <td>0.602564</td>
-      <td>0.538095</td>
-      <td>0.459110</td>
-      <td>0.551724</td>
-      <td>0.782414</td>
-      <td>29</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>cohort_3</td>
-      <td>(`sector` == "s2") and (`country` == "A")</td>
-      <td>0.803265</td>
-      <td>0.930028</td>
-      <td>0.852337</td>
-      <td>0.882836</td>
-      <td>0.920962</td>
-      <td>0.377947</td>
-      <td>291</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>cohort_4</td>
-      <td>(`sector` == "s2") and (`country` == "B")</td>
-      <td>0.813390</td>
-      <td>0.803529</td>
-      <td>0.867521</td>
-      <td>0.828205</td>
-      <td>0.880597</td>
-      <td>0.671898</td>
-      <td>67</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>cohort_5</td>
-      <td>(`sector` == "s2") and (`country` == "C")</td>
-      <td>0.775021</td>
-      <td>0.701744</td>
-      <td>0.787014</td>
-      <td>0.730828</td>
-      <td>0.858491</td>
-      <td>0.468042</td>
-      <td>106</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>cohort_6</td>
-      <td>(`sector` == "s3") and (`country` == "A")</td>
-      <td>0.188799</td>
-      <td>0.575122</td>
-      <td>0.529032</td>
-      <td>0.285017</td>
-      <td>0.304878</td>
-      <td>0.196127</td>
-      <td>246</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>cohort_7</td>
-      <td>(`sector` == "s3") and (`country` == "B")</td>
-      <td>0.710065</td>
-      <td>0.885315</td>
-      <td>0.754386</td>
-      <td>0.792350</td>
-      <td>0.868421</td>
-      <td>0.451353</td>
-      <td>76</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>cohort_8</td>
-      <td>(`sector` == "s3") and (`country` == "C")</td>
-      <td>0.766817</td>
-      <td>0.848348</td>
-      <td>0.785480</td>
-      <td>0.811509</td>
-      <td>0.899225</td>
-      <td>0.261151</td>
-      <td>129</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>cohort_9</td>
-      <td>(`sector` == "s4") and (`country` == "A")</td>
-      <td>0.869792</td>
-      <td>0.937758</td>
-      <td>0.895504</td>
-      <td>0.912574</td>
-      <td>0.926893</td>
-      <td>0.502208</td>
-      <td>766</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>cohort_10</td>
-      <td>(`sector` == "s4") and (`country` == "B")</td>
-      <td>0.944444</td>
-      <td>0.928571</td>
-      <td>0.966667</td>
-      <td>0.944297</td>
-      <td>0.952381</td>
-      <td>0.981152</td>
-      <td>21</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>cohort_11</td>
-      <td>(`sector` == "s4") and (`country` == "C")</td>
-      <td>0.794444</td>
-      <td>0.844444</td>
-      <td>0.844444</td>
-      <td>0.844444</td>
-      <td>0.857143</td>
-      <td>0.957202</td>
-      <td>28</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
-<p>As we can see, the results obtained are very similar to the baseline pipeline over the original dataset. This was already expected, since <code class="docutils literal notranslate"><span class="pre">cohort_7</span></code> is a small cohort, and since we are training a single pipeline over the entire dataset, the new instances added had little impact on the results of the other cohorts.</p>
-<p>Let’s now check how this rebalancing process impacts the cohort-based pipeline:</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">get_model</span><span class="p">()</span>
-    <span class="p">],</span>
-    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">)</span>
-<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>cohort</th>
-      <th>cht_query</th>
-      <th>roc</th>
-      <th>precision</th>
-      <th>recall</th>
-      <th>f1</th>
-      <th>accuracy</th>
-      <th>threshold</th>
-      <th>cht_size</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>all</td>
-      <td>all</td>
-      <td>0.923553</td>
-      <td>0.907360</td>
-      <td>0.899210</td>
-      <td>0.902657</td>
-      <td>0.906333</td>
-      <td>0.481561</td>
-      <td>3000</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>cohort_0</td>
-      <td>(`sector` == "s1") and (`country` == "A")</td>
-      <td>0.911655</td>
-      <td>0.942981</td>
-      <td>0.895519</td>
-      <td>0.915060</td>
-      <td>0.932410</td>
-      <td>0.445408</td>
-      <td>1228</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>cohort_1</td>
-      <td>(`sector` == "s1") and (`country` == "B")</td>
-      <td>0.904762</td>
-      <td>0.845238</td>
-      <td>0.845238</td>
-      <td>0.845238</td>
-      <td>0.846154</td>
-      <td>0.704639</td>
-      <td>13</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>cohort_2</td>
-      <td>(`sector` == "s1") and (`country` == "C")</td>
-      <td>0.914286</td>
-      <td>0.899038</td>
-      <td>0.895238</td>
-      <td>0.896057</td>
-      <td>0.896552</td>
-      <td>0.485884</td>
-      <td>29</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>cohort_3</td>
-      <td>(`sector` == "s2") and (`country` == "A")</td>
-      <td>0.861716</td>
-      <td>0.930028</td>
-      <td>0.852337</td>
-      <td>0.882836</td>
-      <td>0.920962</td>
-      <td>0.528316</td>
-      <td>291</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>cohort_4</td>
-      <td>(`sector` == "s2") and (`country` == "B")</td>
-      <td>0.814815</td>
-      <td>0.914912</td>
-      <td>0.836895</td>
-      <td>0.868782</td>
-      <td>0.925373</td>
-      <td>0.552434</td>
-      <td>67</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>cohort_5</td>
-      <td>(`sector` == "s2") and (`country` == "C")</td>
-      <td>0.874276</td>
-      <td>0.929167</td>
-      <td>0.840778</td>
-      <td>0.878077</td>
-      <td>0.952830</td>
-      <td>0.689291</td>
-      <td>106</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>cohort_6</td>
-      <td>(`sector` == "s3") and (`country` == "A")</td>
-      <td>0.875000</td>
-      <td>0.943813</td>
-      <td>0.877957</td>
-      <td>0.905093</td>
-      <td>0.934959</td>
-      <td>0.481561</td>
-      <td>246</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>cohort_7</td>
-      <td>(`sector` == "s3") and (`country` == "B")</td>
-      <td>0.787627</td>
-      <td>0.885315</td>
-      <td>0.754386</td>
-      <td>0.792350</td>
-      <td>0.868421</td>
-      <td>0.747631</td>
-      <td>76</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>cohort_8</td>
-      <td>(`sector` == "s3") and (`country` == "C")</td>
-      <td>0.780353</td>
-      <td>0.848348</td>
-      <td>0.785480</td>
-      <td>0.811509</td>
-      <td>0.899225</td>
-      <td>0.358148</td>
-      <td>129</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>cohort_9</td>
-      <td>(`sector` == "s4") and (`country` == "A")</td>
-      <td>0.907772</td>
-      <td>0.937758</td>
-      <td>0.895504</td>
-      <td>0.912574</td>
-      <td>0.926893</td>
-      <td>0.477978</td>
-      <td>766</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>cohort_10</td>
-      <td>(`sector` == "s4") and (`country` == "B")</td>
-      <td>0.900000</td>
-      <td>0.941176</td>
-      <td>0.833333</td>
-      <td>0.868750</td>
-      <td>0.904762</td>
-      <td>0.558583</td>
-      <td>21</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>cohort_11</td>
-      <td>(`sector` == "s4") and (`country` == "C")</td>
-      <td>0.833333</td>
-      <td>0.928571</td>
-      <td>0.850000</td>
-      <td>0.873303</td>
-      <td>0.892857</td>
-      <td>0.533420</td>
-      <td>28</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
-<p>Notice that we managed to get a slight improvement over the ROC AUC metric for <code class="docutils literal notranslate"><span class="pre">cohort_7</span></code>, although the other metrics were left unchanged. It is interesting to note that the threshold used for <code class="docutils literal notranslate"><span class="pre">cohort_7</span></code> changed considerably when compared to the cohort-based pipeline trained over the original dataset.</p>
-</section>
-</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../../../cohort/utils.html" class="btn btn-neutral float-left" title="Cohort Utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="case_2.html" class="btn btn-neutral float-right" title="Cohort Case Study 2" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../cohort_manager.html" class="btn btn-neutral float-left" title="Managing cohorts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="case_1_rebalance.html" class="btn btn-neutral float-right" title="Cohort Case Study 1 - Rebalancing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
