@@ -633,7 +633,7 @@ class CohortDefinition:
 
     # -----------------------------------
     def get_cohort_subset(
-        self, df: pd.DataFrame, y: pd.DataFrame = None, index_used: list = None, return_index_list: bool = False
+        self, X: pd.DataFrame, y: pd.DataFrame = None, index_used: list = None, return_index_list: bool = False
     ):
         """
         Filters a dataset to fetch only the instances that follow the
@@ -645,7 +645,7 @@ class CohortDefinition:
         The list of indices used in other cohorts is given by the
         index_used parameter. Finally, return the filtered dataset.
 
-        :param df: a data frame containing the features of a dataset
+        :param X: a data frame containing the features of a dataset
             that should be filtered;
         :param y: the label dataset (``y``) that should also be filtered.
             This ``y`` dataset should have the same number of rows as the
@@ -677,7 +677,7 @@ class CohortDefinition:
             cohort;
         :rtype: tuple or pd.DataFrame
         """
-        self.check_valid_df(df)
+        self.check_valid_df(X)
         if self.require_remaining_index():
             if index_used is None:
                 raise ValueError(
@@ -685,10 +685,10 @@ class CohortDefinition:
                     "it is necessary to provide the 'index_used' parameter so that the remaining indexes "
                     "are used."
                 )
-            missing_index = [index for index in df.index if index not in index_used]
-            subset = df.filter(items=missing_index, axis=0)
+            missing_index = [index for index in X.index if index not in index_used]
+            subset = X.filter(items=missing_index, axis=0)
         else:
-            subset = df.query(self.query)
+            subset = X.query(self.query)
 
         index_list = list(subset.index)
         if y is not None:

@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from scipy import stats
 import re
 from typing import Union, Tuple
 
@@ -152,3 +153,22 @@ def _inverse_transform_ordinal_encoder_with_new_values(
             )
 
     return df_cpy
+
+
+# -------------------------------------
+def freedman_diaconis(data: pd.Series):
+    """
+    Computes the optimal number of bins for a set of data using the
+    Freedman Diaconis rule.
+
+    :param data: the data column used to compute the number of bins.
+    """
+    data = np.asarray(data, dtype=np.float_)
+    iqr = stats.iqr(data, rng=(25, 75), scale=1.0, nan_policy="omit")
+    N = data.size
+    bw = (2 * iqr) / np.power(N, 1 / 3)
+
+    min_val, max_val = data.min(), data.max()
+    datrng = max_val - min_val
+    result = int((datrng / bw) + 1)
+    return result

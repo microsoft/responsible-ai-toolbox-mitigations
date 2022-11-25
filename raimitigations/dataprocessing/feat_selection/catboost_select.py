@@ -266,15 +266,6 @@ class CatBoostSelection(FeatureSelection):
                 )
 
     # -----------------------------------
-    def _check_regression(self):
-        if self.regression is not None:
-            return
-
-        self.regression = False
-        if "float" in self.y.dtype.name:
-            self.regression = True
-
-    # -----------------------------------
     def _check_test_size(self):
         """
         Checks if the value provided to the test_size parameter is valid.

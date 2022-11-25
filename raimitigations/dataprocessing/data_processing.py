@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Union, Any
+from sklearn.base import BaseEstimator, is_classifier
 
 import random
 import pandas as pd
@@ -698,3 +699,59 @@ class DataProcessing(ABC):
                 df = transform._inverse_transform(df)
 
         return df
+
+    # -----------------------------------
+    def _get_base_estimator(self):
+        """
+        Returns the default estimator that should be used. This base
+        estimator is only used if the user doesn't provide any estimator
+        through the estimator parameter.
+        """
+        pass
+
+    # -----------------------------------
+    def _check_regression(self):
+        if self.regression is not None:
+            return
+
+        self.regression = False
+        if "float" in self.y.dtype.name:
+            self.regression = True
+
+    # -----------------------------------
+    def _set_regression_based_on_estimator(self):
+        self.regression = True
+        if is_classifier(self.estimator):
+            self.regression = False
+
+    # -----------------------------------
+    def _set_estimator(self):
+        """
+        Sets the self.estimator attribute based on the estimator passed by
+        the user through the estimator parameter. If estimator is None, then
+        a default estimator is used (implemented in the abstract _get_base_estimator
+        method). Otherwise, the estimator is checked to see if it is an estimator
+        from the sklearn library. If not, an error is raised, since only sklearn
+        estimators are allowed.
+        """
+        if self.estimator is None:
+            if self.regression is not None:
+                self.estimator = self._get_base_estimator()
+        else:
+            if not isinstance(self.estimator, BaseEstimator):
+                raise ValueError("ERROR: Expected 'estimator' to be a SKLearn classifier or regressor.")
+
+            is_class = is_classifier(self.estimator)
+            if self.regression is not None:
+                if self.regression and is_class:
+                    raise ValueError(
+                        "ERROR: Expected a regression model (regression = True), but instead got a "
+                        + f"classifier model ({self.estimator.__class__.__name__})"
+                    )
+                if not self.regression and not is_class:
+                    raise ValueError(
+                        "ERROR: Expected a classification model (regression = False), but instead got a "
+                        + f"regression model ({self.estimator.__class__.__name__})"
+                    )
+            else:
+                self._set_regression_based_on_estimator()

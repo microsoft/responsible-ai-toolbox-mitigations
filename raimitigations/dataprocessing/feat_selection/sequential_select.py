@@ -1,7 +1,7 @@
 from typing import Union
 import pandas as pd
 import numpy as np
-from sklearn.base import BaseEstimator, is_classifier
+from sklearn.base import BaseEstimator
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 import json
 from mlxtend.feature_selection import SequentialFeatureSelector as SFS
@@ -293,35 +293,6 @@ class SeqFeatSelection(FeatureSelection):
         if self.regression:
             return self.BASE_REGRESSOR
         return self.BASE_CLASSIFIER
-
-    # -----------------------------------
-    def _set_estimator(self):
-        """
-        Sets the self.estimator attribute based on the estimator passed by
-        the user through the estimator parameter. If estimator is None, then
-        a default estimator is used (defined by BASE_CLASSIFIER and BASE_REGRESSOR).
-        Otherwise, the estimator is checked to see if it is an estimator from the
-        sklearn library. If not, an error is raised, since only sklearn estimators
-        are allowed.
-        """
-        if self.estimator is None:
-            if self.regression is not None:
-                self.estimator = self._get_base_estimator()
-        else:
-            if not isinstance(self.estimator, BaseEstimator):
-                raise ValueError("ERROR: Expected 'estimator' to be a SKLearn classifier or regressor.")
-            self.regression = True
-            if is_classifier(self.estimator):
-                self.regression = False
-
-    # -----------------------------------
-    def _check_regression(self):
-        if self.regression is not None:
-            return
-
-        self.regression = False
-        if "float" in self.y.dtype.name:
-            self.regression = True
 
     # -----------------------------------
     def _run_feat_selection(self):

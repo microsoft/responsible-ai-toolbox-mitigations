@@ -13,7 +13,7 @@ import researchpy as rp
 
 from .selector import FeatureSelection
 from ..encoder import EncoderOrdinal
-from ...utils.data_utils import get_cat_cols, ordinal_to_onehot, err_float_01
+from ...utils.data_utils import get_cat_cols, ordinal_to_onehot, err_float_01, freedman_diaconis
 
 
 """
@@ -49,25 +49,6 @@ def _get_exact_matches(col1: list, col2: list):
     pct_match = f"{pct_match*100}%"
 
     return pct_match
-
-
-# -----------------------------------
-def freedman_diaconis(data: pd.Series):
-    """
-    Computes the optimal number of bins for a set of data using the
-    Freedman Diaconis rule.
-
-    :param data: the data column used to compute the number of bins.
-    """
-    data = np.asarray(data, dtype=np.float_)
-    iqr = stats.iqr(data, rng=(25, 75), scale=1.0, nan_policy="omit")
-    N = data.size
-    bw = (2 * iqr) / np.power(N, 1 / 3)
-
-    min_val, max_val = data.min(), data.max()
-    datrng = max_val - min_val
-    result = int((datrng / bw) + 1)
-    return result
 
 
 # -----------------------------------
