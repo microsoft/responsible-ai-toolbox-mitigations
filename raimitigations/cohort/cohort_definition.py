@@ -250,7 +250,7 @@ class CohortDefinition:
                     state = self.STATE_AND_OR
                 elif state == self.STATE_COND2:
                     query = f"{query}({part_query})"
-                    state = self.STATE_COND1
+                    state = self.STATE_AND_OR
                 else:
                     raise ValueError(
                         f"ERROR: expected one of the following connectors: {CohortFilters.CONDITION_CONNECTORS}. "

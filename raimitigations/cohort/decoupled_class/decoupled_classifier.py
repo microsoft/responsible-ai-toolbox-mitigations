@@ -17,6 +17,7 @@ from ...utils.data_utils import err_float_01
 # Change self.cohort_list to self.cohorts
 # Change self.cohort_transf_list to self._cohort_pipe
 # Update the documentation of the cohort_def parameter
+# Change cohort_cols to cohort_col
 
 
 class DecoupledClass(CohortHandler):
@@ -246,13 +247,59 @@ class DecoupledClass(CohortHandler):
         inplace: bool = False,
         verbose: bool = True,
     ):
-        super().__init__(cohort_def, cohort_col, cohort_json_files, df, label_col, X, y, verbose)
         self.regression = regression
         self.estimator = estimator
+        super().__init__(cohort_def, cohort_col, cohort_json_files, df, label_col, X, y, verbose)
         self._set_transforms(transform_pipe)
         self._set_theta_param(theta, min_fold_size_theta, valid_k_folds_theta, default_theta, cohort_dist_th)
         self._set_cohorts_min_size(min_cohort_size, min_cohort_pct, minority_min_rate)
+        self._check_regression()
+        self._build_cohorts()
         self._check_and_update_cohorts()
+
+    # -----------------------------------
+    def _instantiate_cohort(self, cohort_definition: Union[list, str], name: str):
+        """
+        Create a cohort object from the ``_DecoupledCohort`` based on the specifications
+        provided in the parameters.
+
+        :param cohort_definition: a list of conditions or a string containing the path
+            to a JSON file that has the list condition. Check the description of this parameter
+            in the constructor method of the ``CohortDefinition`` class for more info.
+        :param name: a string indicating the name of the cohort. This parameter may be accessed
+            later using the ``name`` attribute.
+        :return: an object from the ``_DecoupledCohort`` class.
+        :rtype: _DecoupledCohort
+        """
+        return _DecoupledCohort(self.y, cohort_definition, name, self.regression)
+
+    # -----------------------------------
+    def _build_cohorts(self):
+        """
+        TODO
+        """
+        if self.df is None or self.cohorts is not None:
+            return
+
+        if self.cohort_def is None:
+            self._use_baseline_cohorts = True
+            self.cohort_col = self._check_error_col_list(self.df, self.cohort_col, "cohort_col")
+            self._cohort_col_to_def()
+            if self.cohort_def is None:
+                return
+
+        self.cohorts = []
+        index_used = []
+        for i, cohort_def in enumerate(self.cohort_def):
+            if cohort_def is None and i < len(self.cohort_def) - 1:
+                raise ValueError("ERROR: only the last cohort is allowed to have a condition list assigned to 'None'.")
+            cohort = self._instantiate_cohort(cohort_def, self._cohort_names[i])
+            subset_x, subset_y, subset_index = cohort.get_cohort_subset(
+                self.df, self.y, index_used=index_used, return_index_list=True
+            )
+            index_used += subset_index
+            cohort.set_info_df(subset_x, subset_y)
+            self.cohorts.append(cohort)
 
     # -----------------------------------
     def _get_base_estimator(self):
@@ -419,9 +466,9 @@ class DecoupledClass(CohortHandler):
         status_dict = {self.VALID_NAME: [], self.INVALID_SIZE_NAME: [], self.INVALID_DIST_NAME: []}
         for i, cohort in enumerate(cohort_list):
             valid_status = cohort.is_valid(min_cohort_size, self.minority_min_rate)
-            if valid_status == CohortHandler.INVALID_SIZE:
+            if valid_status == _DecoupledCohort.INVALID_SIZE:
                 status_dict[self.INVALID_SIZE_NAME].append(i)
-            elif valid_status == CohortHandler.INVALID_DISTRIBUTION:
+            elif valid_status == _DecoupledCohort.INVALID_DISTRIBUTION:
                 status_dict[self.INVALID_DIST_NAME].append(i)
             else:
                 status_dict[self.VALID_NAME].append(i)
@@ -500,7 +547,7 @@ class DecoupledClass(CohortHandler):
         """
         min_cohort_size = max(self.min_cohort_size, self.df.shape[0] * self.min_cohort_pct)
         for cohort in self.cohorts:
-            if cohort.is_valid(min_cohort_size, self.minority_min_rate) != CohortHandler.VALID:
+            if cohort.is_valid(min_cohort_size, self.minority_min_rate) != _DecoupledCohort.VALID:
                 cohort.print()
                 raise ValueError(
                     f"ERROR: Found an invalid cohort when trying to build the cohorts specified.\n"
@@ -677,7 +724,7 @@ class DecoupledClass(CohortHandler):
         index_used = []
         pred_dict = {}
         for i, cohort in enumerate(self.cohorts):
-            cohort_index, cohort_pred = self.cohort_list[i].find_instances_cohort_and_predict(
+            cohort_index, cohort_pred = self.cohorts[i].find_instances_cohort_and_predict(
                 df, self._cohort_pipe[i], index_used, probability
             )
             index_used += cohort_index
@@ -726,13 +773,13 @@ class DecoupledClass(CohortHandler):
         """
         Print the information of all cohorts created.
         """
-        if self.cohort_list is None:
+        if self.cohorts is None:
             print(
                 "No cohorts built yet. To build the cohorts, pass the dataset to the constructor "
                 + "or call the fit method."
             )
             return
         print("FINAL COHORTS")
-        for cohort in self.cohort_list:
+        for cohort in self.cohorts:
             cohort.print()
             print("\n")

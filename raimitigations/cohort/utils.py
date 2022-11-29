@@ -313,11 +313,11 @@ def _get_cross_validation_results(
         estimator.fit(train_x, train_y, sample_weight=weights)
         if regression:
             y_pred = estimator.predict(test_x)
-            result_dict = get_metrics(test_y, y_pred)
+            result_dict = get_metrics(test_y, y_pred, regression=regression)
             results.append(result_dict[MetricNames.MSE_KEY])
         else:
             y_pred = estimator.predict_proba(test_x)
-            result_dict = get_metrics(test_y, y_pred)
+            result_dict = get_metrics(test_y, y_pred, regression=regression)
             results.append(result_dict[MetricNames.AUC_KEY])
 
     return np.mean(results)

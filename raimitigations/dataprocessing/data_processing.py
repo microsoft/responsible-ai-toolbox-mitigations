@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from typing import Union, Any
 from sklearn.base import BaseEstimator, is_classifier
 
-import random
 import pandas as pd
 import numpy as np
 
@@ -473,17 +472,12 @@ class DataProcessing(ABC):
             self.df = X
             self.y = y
 
-            if type(self.y) == pd.core.series.Series or type(self.y) == pd.DataFrame:
-                if type(self.y) == pd.core.series.Series:
-                    self.label_col_name = self.y.name
-                else:
-                    self.label_col_name = self.y.columns[0]
-                    self.y = self.y[self.label_col_name]
+            # At this point, self.y is either a dataframe or a pd.Series object
+            if type(self.y) == pd.core.series.Series:
+                self.label_col_name = self.y.name
             else:
-                label_col_name = self.DEFAULT_LABEL_NAME
-                while label_col_name in self.df.columns:
-                    label_col_name += str(random.randint([0, 9]))
-                self.label_col_name = label_col_name
+                self.label_col_name = self.y.columns[0]
+                self.y = self.y[self.label_col_name]
 
             self.input_scheme = input_scheme
         self.df_org = self.df
@@ -711,7 +705,7 @@ class DataProcessing(ABC):
 
     # -----------------------------------
     def _check_regression(self):
-        if self.regression is not None:
+        if self.regression is not None or self.y is None:
             return
 
         self.regression = False

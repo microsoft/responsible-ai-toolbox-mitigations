@@ -19,6 +19,10 @@ class _DecoupledCohort(CohortDefinition):
     BASE_CLASSIFIER = DecisionTreeClassifier(max_features="sqrt")
     BASE_REGRESSOR = DecisionTreeRegressor()
 
+    VALID = 0
+    INVALID_SIZE = 1
+    INVALID_DISTRIBUTION = 2
+
     def __init__(
         self,
         label_col: pd.Series,
@@ -216,6 +220,7 @@ class _DecoupledCohort(CohortDefinition):
                 deepcopy(self.estimator),
                 self.regression,
             )
+            print(score)
             if score is None:
                 if default_theta is None:
                     raise ValueError(
@@ -316,7 +321,8 @@ class _DecoupledCohort(CohortDefinition):
             the cohort to be merged into the current cohort (self).
         """
         self.index_list += cohort.index_list
-        self.conditions = [self.conditions, "and", cohort.conditions]
+        self.conditions = [self.conditions, "or", cohort.conditions]
+        self._build_query()
 
         if self.regression:
             self._merge_cohorts_label_dist(cohort)
@@ -443,12 +449,16 @@ class _DecoupledCohort(CohortDefinition):
         """
         if self.regression:
             return
-        pred = self.estimator.predict_proba(X)
-        result = get_metrics(y, pred, self.regression, best_th_auc)
-        if train_set:
-            self.train_result = result
-        else:
-            self.test_result = result
+
+        has_att = hasattr(self.estimator.__class__, "predict_proba")
+        has_proba = has_att and callable(getattr(self.estimator.__class__, "predict_proba"))
+        if has_proba:
+            pred = self.estimator.predict_proba(X)
+            result = get_metrics(y, pred, self.regression, best_th_auc)
+            if train_set:
+                self.train_result = result
+            else:
+                self.test_result = result
 
     # -----------------------------------
     def get_cohort_and_fit_estimator(
@@ -509,7 +519,7 @@ class _DecoupledCohort(CohortDefinition):
                 )
         self._get_best_prob_th(subset_x, subset_y, best_th_auc)
 
-        return list(subset_x.index)
+        return self.get_index_list()
 
     # -----------------------------------
     def find_instances_cohort_and_predict(

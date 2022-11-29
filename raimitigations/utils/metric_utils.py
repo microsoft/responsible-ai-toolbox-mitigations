@@ -169,7 +169,7 @@ def probability_to_class(prediction: np.ndarray, th: float):
 
 # -----------------------------------
 def _get_precision_recall_fscore(y: Union[np.ndarray, list], y_pred: Union[np.ndarray, list]):
-    precision, recall, f1, sup = precision_recall_fscore_support(y, y_pred)
+    precision, recall, f1, _ = precision_recall_fscore_support(y, y_pred, warn_for=tuple())
     precision = np.mean(precision)
     recall = np.mean(recall)
     f1 = np.mean(f1)
@@ -185,6 +185,9 @@ def _get_precision_recall_th(y, y_pred):
     else:
         y_pred_temp = y_pred[:, 1]
     precision, recall, thresholds = precision_recall_curve(y, y_pred_temp)
+
+    np.seterr(invalid="ignore")
+
     fscore = (2 * precision * recall) / (precision + recall)
     index = np.argmax(fscore)
     best_th = thresholds[index]

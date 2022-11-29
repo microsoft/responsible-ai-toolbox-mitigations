@@ -80,7 +80,6 @@ class CohortHandler(DataProcessing):
         self._use_baseline_cohorts = False
         self._set_df_mult(df, label_col, X, y)
         self._set_cohort_def(cohort_def, cohort_col, cohort_json_files)
-        self._build_cohorts()
 
     # -----------------------------------
     def _get_fit_input_type(self):
