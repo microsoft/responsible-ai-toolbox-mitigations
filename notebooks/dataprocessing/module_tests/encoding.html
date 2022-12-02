@@ -394,14 +394,14 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../../notebooks&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import sys
+sys.path.append(&#39;../../../notebooks&#39;)
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">EncoderOHE</span><span class="p">,</span> <span class="n">EncoderOrdinal</span>
+import pandas as pd
+import numpy as np
+from raimitigations.dataprocessing import EncoderOHE, EncoderOrdinal
 
-<span class="kn">from</span> <span class="nn">download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
+from download import download_datasets
 </pre></div>
 </div>
 </div>
@@ -414,10 +414,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/&#39;</span>
-<span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
-<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
-<span class="n">dataset</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data_dir = &#39;../../../datasets/&#39;
+download_datasets(data_dir)
+dataset =  pd.read_csv(data_dir + &#39;hr_promotion/train.csv&#39;)
+dataset
 </pre></div>
 </div>
 </div>
@@ -658,13 +658,13 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOrdinal</span><span class="p">(</span>
-                            <span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
-                            <span class="n">col_encode</span><span class="o">=</span><span class="kc">None</span>
-                    <span class="p">)</span>
-<span class="n">encode</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-<span class="n">new_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>encode = EncoderOrdinal(
+                            df=dataset,
+                            col_encode=None
+                    )
+encode.fit()
+new_df = encode.transform(dataset)
+new_df
 </pre></div>
 </div>
 </div>
@@ -914,7 +914,7 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span><span class="o">.</span><span class="n">get_mapping</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>encode.get_mapping()
 </pre></div>
 </div>
 </div>
@@ -1029,10 +1029,10 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="n">encode</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>encode = EncoderOrdinal(col_encode=None)
+encode.fit(df=dataset)
+new_df = encode.transform(dataset)
+new_df
 </pre></div>
 </div>
 </div>
@@ -1282,13 +1282,13 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOrdinal</span><span class="p">(</span>
-                            <span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
-                            <span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;department&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">,</span> <span class="s2">&quot;education&quot;</span><span class="p">]</span>
-                    <span class="p">)</span>
-<span class="n">encode</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-<span class="n">new_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>encode = EncoderOrdinal(
+                            df=dataset,
+                            col_encode=[&quot;department&quot;, &quot;region&quot;, &quot;education&quot;]
+                    )
+encode.fit()
+new_df = encode.transform(dataset)
+new_df
 </pre></div>
 </div>
 </div>
@@ -1529,13 +1529,13 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOrdinal</span><span class="p">(</span>
-                            <span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
-                            <span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
-                    <span class="p">)</span>
-<span class="n">encode</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-<span class="n">new_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>encode = EncoderOrdinal(
+                            df=dataset,
+                            col_encode=[1,2,3]
+                    )
+encode.fit()
+new_df = encode.transform(dataset)
+new_df
 </pre></div>
 </div>
 </div>
@@ -1776,7 +1776,7 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset[&#39;education&#39;].unique()
 </pre></div>
 </div>
 </div>
@@ -1794,14 +1794,14 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOrdinal</span><span class="p">(</span>
-                            <span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
-                            <span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;education&quot;</span><span class="p">,</span> <span class="s2">&quot;gender&quot;</span><span class="p">],</span>
-                            <span class="n">categories</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;education&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Below Secondary&quot;</span><span class="p">,</span> <span class="s2">&quot;Bachelor&#39;s&quot;</span><span class="p">,</span> <span class="s2">&quot;Master&#39;s &amp; above&quot;</span><span class="p">]}</span>
-                    <span class="p">)</span>
-<span class="n">encode</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-<span class="n">new_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>encode = EncoderOrdinal(
+                            df=dataset,
+                            col_encode=[&quot;education&quot;, &quot;gender&quot;],
+                            categories={&#39;education&#39;: [&quot;Below Secondary&quot;, &quot;Bachelor&#39;s&quot;, &quot;Master&#39;s &amp; above&quot;]}
+                    )
+encode.fit()
+new_df = encode.transform(dataset)
+new_df
 </pre></div>
 </div>
 </div>
@@ -2042,7 +2042,7 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span><span class="o">.</span><span class="n">get_encoded_columns</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>encode.get_encoded_columns()
 </pre></div>
 </div>
 </div>
@@ -2060,8 +2060,8 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">org_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">new_df</span><span class="p">)</span>
-<span class="n">org_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>org_df = encode.inverse_transform(new_df)
+org_df
 </pre></div>
 </div>
 </div>
@@ -2305,9 +2305,9 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">dataset</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset =  pd.read_csv(data_dir + &#39;hr_promotion/train.csv&#39;, header=None, skiprows=1)
+dataset.drop(columns=[0], inplace=True)
+dataset
 </pre></div>
 </div>
 </div>
@@ -2535,14 +2535,14 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOrdinal</span><span class="p">(</span>
-                            <span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
-                            <span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                            <span class="n">categories</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Below Secondary&quot;</span><span class="p">,</span> <span class="s2">&quot;Bachelor&#39;s&quot;</span><span class="p">,</span> <span class="s2">&quot;Master&#39;s &amp; above&quot;</span><span class="p">]}</span>
-                    <span class="p">)</span>
-<span class="n">encode</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-<span class="n">new_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>encode = EncoderOrdinal(
+                            df=dataset,
+                            col_encode=[3, 2],
+                            categories={2: [&quot;Below Secondary&quot;, &quot;Bachelor&#39;s&quot;, &quot;Master&#39;s &amp; above&quot;]}
+                    )
+encode.fit()
+new_df = encode.transform(dataset)
+new_df
 </pre></div>
 </div>
 </div>
@@ -2770,8 +2770,8 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">org_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">new_df</span><span class="p">)</span>
-<span class="n">org_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>org_df = encode.inverse_transform(new_df)
+org_df
 </pre></div>
 </div>
 </div>
@@ -3004,13 +3004,13 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
-<span class="n">dataset</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset =  pd.read_csv(data_dir + &#39;hr_promotion/train.csv&#39;)
+dataset.head()
 
-<span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="n">encode</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span>
+encode = EncoderOHE(col_encode=None)
+encode.fit(df=dataset)
+new_df = encode.transform(dataset)
+new_df
 </pre></div>
 </div>
 </div>
@@ -3344,7 +3344,7 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span><span class="o">.</span><span class="n">get_encoded_columns</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>encode.get_encoded_columns()
 </pre></div>
 </div>
 </div>
@@ -3362,7 +3362,7 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span><span class="o">.</span><span class="n">get_one_hot_columns</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>encode.get_one_hot_columns()
 </pre></div>
 </div>
 </div>
@@ -3426,10 +3426,10 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">])</span>
-<span class="n">encode</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>encode = EncoderOHE(col_encode=[&#39;education&#39;])
+encode.fit(df=dataset)
+new_df = encode.transform(dataset)
+new_df
 </pre></div>
 </div>
 </div>
@@ -3694,10 +3694,10 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-<span class="n">encode</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>encode = EncoderOHE(col_encode=[3])
+encode.fit(df=dataset)
+new_df = encode.transform(dataset)
+new_df
 </pre></div>
 </div>
 </div>
@@ -3962,8 +3962,8 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">org_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">new_df</span><span class="p">)</span>
-<span class="n">org_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>org_df = encode.inverse_transform(new_df)
+org_df
 </pre></div>
 </div>
 </div>
@@ -4204,10 +4204,10 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">],</span> <span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">encode</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>encode = EncoderOHE(col_encode=[&#39;education&#39;], drop=False)
+encode.fit(df=dataset)
+new_df = encode.transform(dataset)
+new_df
 </pre></div>
 </div>
 </div>
@@ -4483,8 +4483,8 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">org_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">new_df</span><span class="p">)</span>
-<span class="n">org_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>org_df = encode.inverse_transform(new_df)
+org_df
 </pre></div>
 </div>
 </div>
@@ -4726,9 +4726,9 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">dataset</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset =  pd.read_csv(data_dir + &#39;hr_promotion/train.csv&#39;, header=None, skiprows=1)
+dataset.drop(columns=[0], inplace=True)
+dataset
 </pre></div>
 </div>
 </div>
@@ -4956,10 +4956,10 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">encode</span> <span class="o">=</span> <span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">encode</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>encode = EncoderOHE(col_encode=[2, 1])
+encode.fit(df=dataset)
+new_df = encode.transform(dataset)
+new_df
 </pre></div>
 </div>
 </div>
@@ -5283,8 +5283,8 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">org_df</span> <span class="o">=</span> <span class="n">encode</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">new_df</span><span class="p">)</span>
-<span class="n">org_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>org_df = encode.inverse_transform(new_df)
+org_df
 </pre></div>
 </div>
 </div>

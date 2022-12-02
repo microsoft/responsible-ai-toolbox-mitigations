@@ -397,18 +397,18 @@ train/test split. To avoid these pitfalls, we will try each experiment several t
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">uci_dataset</span> <span class="k">as</span> <span class="nn">database</span>
-<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">figure</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import pandas as pd
+import numpy as np
+import uci_dataset as database
+from matplotlib.pyplot import figure
 
-<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">train_model_fetch_results</span><span class="p">,</span> <span class="n">split_data</span>
-<span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
-<span class="kn">import</span> <span class="nn">case_study_utils</span> <span class="k">as</span> <span class="nn">cs</span>
+from raimitigations.utils import train_model_fetch_results, split_data
+import raimitigations.dataprocessing as dp
+import case_study_utils as cs
 
-<span class="n">N_EXEC</span> <span class="o">=</span> <span class="mi">100</span>
+N_EXEC = 100
 
-<span class="n">USE_AUC_TH</span> <span class="o">=</span> <span class="kc">True</span>
+USE_AUC_TH = True
 </pre></div>
 </div>
 </div>
@@ -416,85 +416,85 @@ train/test split. To avoid these pitfalls, we will try each experiment several t
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_encoders</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates the encoder objects used to encode the dataset.</span>
-<span class="sd">    The categorical features that have a given ordering are</span>
-<span class="sd">    encoded using ordinal encoding. The other categorical</span>
-<span class="sd">    features encoded using one-hot encoding.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">age_order</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-    <span class="n">age_order</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-    <span class="n">tumor_size_order</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tumor-size&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-    <span class="n">tumor_size_order</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-    <span class="n">inv_nodes_order</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;inv-nodes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-    <span class="n">inv_nodes_order</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def get_encoders(df):
+    &quot;&quot;&quot;
+    Creates the encoder objects used to encode the dataset.
+    The categorical features that have a given ordering are
+    encoded using ordinal encoding. The other categorical
+    features encoded using one-hot encoding.
+    &quot;&quot;&quot;
+    age_order = df[&#39;age&#39;].unique()
+    age_order.sort()
+    tumor_size_order = df[&#39;tumor-size&#39;].unique()
+    tumor_size_order.sort()
+    inv_nodes_order = df[&#39;inv-nodes&#39;].unique()
+    inv_nodes_order.sort()
 
-    <span class="c1"># Encode &#39;tumor-size&#39;, and &#39;inv-nodes&#39; using ordinal encoding</span>
-    <span class="n">enc_ord</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;tumor-size&quot;</span><span class="p">,</span> <span class="s2">&quot;inv-nodes&quot;</span><span class="p">],</span>
-                                <span class="n">categories</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;age&quot;</span><span class="p">:</span><span class="n">age_order</span><span class="p">,</span>
-                                            <span class="s2">&quot;tumor-size&quot;</span><span class="p">:</span><span class="n">tumor_size_order</span><span class="p">,</span>
-                                            <span class="s2">&quot;inv-nodes&quot;</span><span class="p">:</span><span class="n">inv_nodes_order</span><span class="p">},</span>
-                                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
-                            <span class="p">)</span>
-    <span class="n">enc_ohe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">enc_ord</span><span class="p">,</span> <span class="n">enc_ohe</span>
-
-
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">encode_case1</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Encodes the full dataset using one-hot and ordinal encodings.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">enc_ord</span><span class="p">,</span> <span class="n">enc_ohe</span> <span class="o">=</span> <span class="n">get_encoders</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-    <span class="n">enc_ord</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">enc_ord</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-
-    <span class="c1"># Encode the remaining categorical columns using One-Hot Encoding</span>
-    <span class="n">enc_ohe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
-    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">enc_ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">proc_df</span>
+    # Encode &#39;tumor-size&#39;, and &#39;inv-nodes&#39; using ordinal encoding
+    enc_ord = dp.EncoderOrdinal(col_encode=[&quot;age&quot;, &quot;tumor-size&quot;, &quot;inv-nodes&quot;],
+                                categories={&quot;age&quot;:age_order,
+                                            &quot;tumor-size&quot;:tumor_size_order,
+                                            &quot;inv-nodes&quot;:inv_nodes_order},
+                                verbose=False
+                            )
+    enc_ohe = dp.EncoderOHE(drop=False, unknown_err=False, verbose=False)
+    return enc_ord, enc_ohe
 
 
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">encode_case1_train_test</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Encodes the train and test datasets (without the label column)</span>
-<span class="sd">    using one-hot and ordinal encodings.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">enc_ord</span><span class="p">,</span> <span class="n">enc_ohe</span> <span class="o">=</span> <span class="n">get_encoders</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-    <span class="n">enc_ord</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-    <span class="n">train_x_enc</span> <span class="o">=</span> <span class="n">enc_ord</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-    <span class="n">test_x_enc</span> <span class="o">=</span> <span class="n">enc_ord</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
+# -----------------------------------
+def encode_case1(df):
+    &quot;&quot;&quot;
+    Encodes the full dataset using one-hot and ordinal encodings.
+    &quot;&quot;&quot;
+    enc_ord, enc_ohe = get_encoders(df)
+    enc_ord.fit(df)
+    proc_df = enc_ord.transform(df)
 
-    <span class="n">enc_ohe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x_enc</span><span class="p">)</span>
-    <span class="n">train_x_enc</span> <span class="o">=</span> <span class="n">enc_ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x_enc</span><span class="p">)</span>
-    <span class="n">test_x_enc</span> <span class="o">=</span> <span class="n">enc_ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x_enc</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">train_x_enc</span><span class="p">,</span> <span class="n">test_x_enc</span>
+    # Encode the remaining categorical columns using One-Hot Encoding
+    enc_ohe.fit(proc_df)
+    proc_df = enc_ohe.transform(proc_df)
+    return proc_df
 
 
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">impute_case1</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Imputes missing data from the full dataset.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">imputer</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">proc_df</span>
+# -----------------------------------
+def encode_case1_train_test(train_x, test_x):
+    &quot;&quot;&quot;
+    Encodes the train and test datasets (without the label column)
+    using one-hot and ordinal encodings.
+    &quot;&quot;&quot;
+    enc_ord, enc_ohe = get_encoders(train_x)
+    enc_ord.fit(train_x)
+    train_x_enc = enc_ord.transform(train_x)
+    test_x_enc = enc_ord.transform(test_x)
+
+    enc_ohe.fit(train_x_enc)
+    train_x_enc = enc_ohe.transform(train_x_enc)
+    test_x_enc = enc_ohe.transform(test_x_enc)
+    return train_x_enc, test_x_enc
 
 
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">impute_case1_train_test</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Imputes missing data from the train and test</span>
-<span class="sd">    datasets (without the label column).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">imputer</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-    <span class="n">train_x_enc</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-    <span class="n">test_x_enc</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">train_x_enc</span><span class="p">,</span> <span class="n">test_x_enc</span>
+# -----------------------------------
+def impute_case1(df):
+    &quot;&quot;&quot;
+    Imputes missing data from the full dataset.
+    &quot;&quot;&quot;
+    imputer = dp.BasicImputer(verbose=False)
+    imputer.fit(df)
+    proc_df = imputer.transform(df)
+    return proc_df
+
+
+# -----------------------------------
+def impute_case1_train_test(train_x, test_x):
+    &quot;&quot;&quot;
+    Imputes missing data from the train and test
+    datasets (without the label column).
+    &quot;&quot;&quot;
+    imputer = dp.BasicImputer(verbose=False)
+    imputer.fit(train_x)
+    train_x_enc = imputer.transform(train_x)
+    test_x_enc = imputer.transform(test_x)
+    return train_x_enc, test_x_enc
 </pre></div>
 </div>
 </div>
@@ -502,90 +502,90 @@ train/test split. To avoid these pitfalls, we will try each experiment several t
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Runs the baseline experiment several times and returns a dictionary</span>
-<span class="sd">    with the results obtained.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">encode_case1</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">impute_case1</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
-        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
-        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def test_base(df, label_col, n_exec, model_name):
+    &quot;&quot;&quot;
+    Runs the baseline experiment several times and returns a dictionary
+    with the results obtained.
+    &quot;&quot;&quot;
+    result_list = []
+    proc_df = encode_case1(df)
+    proc_df = impute_case1(proc_df)
+    for n in range(n_exec):
+        train_x, test_x, train_y, test_y = split_data(proc_df, label_col, test_size=0.25)
+        result = train_model_fetch_results(train_x, train_y, test_x, test_y, model_name, USE_AUC_TH)
+        result_list.append(result)
 
-    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
+    result_stat = cs.result_statistics(result_list)
 
-    <span class="k">return</span> <span class="n">result_stat</span>
-
-
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">test_corr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Similar to the test_base function, but before starting the experiments,</span>
-<span class="sd">    remove all correlated features using the remove_corr_feat function from</span>
-<span class="sd">    the case_study_utils module. Returns a dictionary with the results</span>
-<span class="sd">    obtained.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
-    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">model_name</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">result_stat</span>
+    return result_stat
 
 
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">test_smote</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Runs several experiments where artificial instances are created using SMOTE, with</span>
-<span class="sd">    each run having different artificial instances. Returns a dictionary with the</span>
-<span class="sd">    results obtained.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">df</span>
-    <span class="k">if</span> <span class="n">rcorr</span><span class="p">:</span>
-        <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
-    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">encode_case1</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
-    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">impute_case1</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
-        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">art_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">artificial_smote</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">art_str</span><span class="p">,</span> <span class="n">under</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">feat_sel_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">feature_selection</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
-        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-
-    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">result_stat</span>
+# -----------------------------------
+def test_corr(df, label_col, n_exec, model_name):
+    &quot;&quot;&quot;
+    Similar to the test_base function, but before starting the experiments,
+    remove all correlated features using the remove_corr_feat function from
+    the case_study_utils module. Returns a dictionary with the results
+    obtained.
+    &quot;&quot;&quot;
+    result_list = []
+    proc_df = cs.remove_corr_feat(df, label_col)
+    result_stat = test_base(proc_df, label_col, n_exec, model_name)
+    return result_stat
 
 
-<span class="c1"># -----------------------------------</span>
-<span class="k">def</span> <span class="nf">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Runs several experiments where artificial instances are created using the CTGAN,</span>
-<span class="sd">    with each run having different artificial instances. Returns a dictionary with the</span>
-<span class="sd">    results obtained.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">df</span>
-    <span class="k">if</span> <span class="n">rcorr</span><span class="p">:</span>
-        <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
-        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">art_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">artificial_ctgan</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">art_str</span><span class="p">,</span> <span class="n">savefile</span><span class="p">)</span>
-        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">encode_case1_train_test</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">)</span>
-        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">impute_case1_train_test</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">feat_sel_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">feature_selection</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
-        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+# -----------------------------------
+def test_smote(df, label_col, n_exec, model_name, rcorr=True, feat_sel_type=None, art_str=None, under=False):
+    &quot;&quot;&quot;
+    Runs several experiments where artificial instances are created using SMOTE, with
+    each run having different artificial instances. Returns a dictionary with the
+    results obtained.
+    &quot;&quot;&quot;
+    result_list = []
+    proc_df = df
+    if rcorr:
+        proc_df = cs.remove_corr_feat(proc_df, label_col)
+    proc_df = encode_case1(proc_df)
+    proc_df = impute_case1(proc_df)
+    for n in range(n_exec):
+        train_x, test_x, train_y, test_y = split_data(proc_df, label_col, test_size=0.25)
+        if art_str is not None:
+            train_x, train_y = cs.artificial_smote(train_x, train_y, art_str, under)
+        if feat_sel_type is not None:
+            train_x, test_x = cs.feature_selection(train_x, train_y, test_x, feat_sel_type)
+        result = train_model_fetch_results(train_x, train_y, test_x, test_y, model_name, USE_AUC_TH)
+        result_list.append(result)
 
-    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
+    result_stat = cs.result_statistics(result_list)
 
-    <span class="k">return</span> <span class="n">result_stat</span>
+    return result_stat
+
+
+# -----------------------------------
+def test_ctgan_first(df, label_col, n_exec, model_name, rcorr=True, feat_sel_type=None, art_str=None, savefile=None):
+    &quot;&quot;&quot;
+    Runs several experiments where artificial instances are created using the CTGAN,
+    with each run having different artificial instances. Returns a dictionary with the
+    results obtained.
+    &quot;&quot;&quot;
+    result_list = []
+    proc_df = df
+    if rcorr:
+        proc_df = cs.remove_corr_feat(proc_df, label_col)
+    for n in range(n_exec):
+        train_x, test_x, train_y, test_y = split_data(proc_df, label_col, test_size=0.25)
+        if art_str is not None:
+            train_x, train_y = cs.artificial_ctgan(train_x, train_y, art_str, savefile)
+        train_x, test_x = encode_case1_train_test(train_x, test_x)
+        train_x, test_x = impute_case1_train_test(train_x, test_x)
+        if feat_sel_type is not None:
+            train_x, test_x = cs.feature_selection(train_x, train_y, test_x, feat_sel_type)
+        result = train_model_fetch_results(train_x, train_y, test_x, test_y, model_name, USE_AUC_TH)
+        result_list.append(result)
+
+    result_stat = cs.result_statistics(result_list)
+
+    return result_stat
 </pre></div>
 </div>
 </div>
@@ -596,10 +596,10 @@ train/test split. To avoid these pitfalls, we will try each experiment several t
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">database</span><span class="o">.</span><span class="n">load_breast_cancer</span><span class="p">()</span>
-<span class="n">label_col</span> <span class="o">=</span> <span class="s2">&quot;Class&quot;</span>
-<span class="n">df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">&quot;recurrence-events&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;no-recurrence-events&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
-<span class="n">df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = database.load_breast_cancer()
+label_col = &quot;Class&quot;
+df[label_col] = df[label_col].replace({&quot;recurrence-events&quot;: 1, &quot;no-recurrence-events&quot;: 0})
+df
 </pre></div>
 </div>
 </div>
@@ -791,7 +791,7 @@ train/test split. To avoid these pitfalls, we will try each experiment several t
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df.info()
 </pre></div>
 </div>
 </div>
@@ -840,19 +840,19 @@ metrics (ROC AUC, Precision, Recall, and F1 score).</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;knn&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>MODEL_NAME = &quot;knn&quot;
 
-<span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
+result_base = test_base(df, label_col, N_EXEC, MODEL_NAME)
+result_df = cs.add_results_df(None, result_base, &quot;Baseline&quot;)
 
-<span class="n">result_cor</span> <span class="o">=</span> <span class="n">test_corr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_cor</span><span class="p">,</span> <span class="s2">&quot;Corr.&quot;</span><span class="p">)</span>
+result_cor = test_corr(df, label_col, N_EXEC, MODEL_NAME)
+result_df = cs.add_results_df(result_df, result_cor, &quot;Corr.&quot;)
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;backward&#39;</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq.Bwd.&quot;</span><span class="p">)</span>
+restult_fs = test_smote(df, label_col, N_EXEC, MODEL_NAME, rcorr=False, feat_sel_type=&#39;backward&#39;)
+result_df = cs.add_results_df(result_df, restult_fs, &quot;Seq.Bwd.&quot;)
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;catboost&#39;</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CatBoost&quot;</span><span class="p">)</span>
+restult_fs = test_smote(df, label_col, N_EXEC, MODEL_NAME, rcorr=False, feat_sel_type=&#39;catboost&#39;)
+result_df = cs.add_results_df(result_df, restult_fs, &quot;CatBoost&quot;)
 </pre></div>
 </div>
 </div>
@@ -1013,7 +1013,7 @@ metrics (ROC AUC, Precision, Recall, and F1 score).</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cs.plot_results(result_df)
 </pre></div>
 </div>
 </div>
@@ -1043,15 +1043,15 @@ mere coincidence. This is also expected, since the standard deviation error is r
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;knn&quot;</span>
-<span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>MODEL_NAME = &quot;knn&quot;
+result_base = test_base(df, label_col, N_EXEC, MODEL_NAME)
+result_df = cs.add_results_df(None, result_base, &quot;Baseline&quot;)
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM&quot;</span><span class="p">)</span>
+restult_fs = test_smote(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, art_str=0.7, under=False)
+result_df = cs.add_results_df(result_df, restult_fs, &quot;SM&quot;)
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM+TK&quot;</span><span class="p">)</span>
+restult_fs = test_smote(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, art_str=0.7, under=True)
+result_df = cs.add_results_df(result_df, restult_fs, &quot;SM+TK&quot;)
 </pre></div>
 </div>
 </div>
@@ -1156,7 +1156,7 @@ mere coincidence. This is also expected, since the standard deviation error is r
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cs.plot_results(result_df)
 </pre></div>
 </div>
 </div>
@@ -1180,15 +1180,15 @@ mere coincidence. This is also expected, since the standard deviation error is r
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;knn&quot;</span>
-<span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>MODEL_NAME = &quot;knn&quot;
+result_base = test_base(df, label_col, N_EXEC, MODEL_NAME)
+result_df = cs.add_results_df(None, result_base, &quot;Baseline&quot;)
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="s2">&quot;1_1.pkl&quot;</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.6&quot;</span><span class="p">)</span>
+restult_fs = test_ctgan_first(df, label_col, N_EXEC, MODEL_NAME, rcorr=False, feat_sel_type=None, art_str=0.6, savefile=&quot;1_1.pkl&quot;)
+result_df = cs.add_results_df(result_df, restult_fs, &quot;CTGAN 0.6&quot;)
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="s2">&quot;1_2.pkl&quot;</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.9&quot;</span><span class="p">)</span>
+restult_fs = test_ctgan_first(df, label_col, N_EXEC, MODEL_NAME, rcorr=False, feat_sel_type=None, art_str=0.9, savefile=&quot;1_2.pkl&quot;)
+result_df = cs.add_results_df(result_df, restult_fs, &quot;CTGAN 0.9&quot;)
 <br/></pre></div>
 </div>
 </div>
@@ -1341,7 +1341,7 @@ mere coincidence. This is also expected, since the standard deviation error is r
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cs.plot_results(result_df)
 </pre></div>
 </div>
 </div>
@@ -1362,19 +1362,19 @@ mere coincidence. This is also expected, since the standard deviation error is r
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;xgb&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>MODEL_NAME = &quot;xgb&quot;
 
-<span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
+result_base = test_base(df, label_col, N_EXEC, MODEL_NAME)
+result_df = cs.add_results_df(None, result_base, &quot;Baseline&quot;)
 
-<span class="n">result_cor</span> <span class="o">=</span> <span class="n">test_corr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_cor</span><span class="p">,</span> <span class="s2">&quot;Corr.&quot;</span><span class="p">)</span>
+result_cor = test_corr(df, label_col, N_EXEC, MODEL_NAME)
+result_df = cs.add_results_df(result_df, result_cor, &quot;Corr.&quot;)
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;backward&#39;</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq.Bwd.&quot;</span><span class="p">)</span>
+restult_fs = test_smote(df, label_col, N_EXEC, MODEL_NAME, rcorr=False, feat_sel_type=&#39;backward&#39;)
+result_df = cs.add_results_df(result_df, restult_fs, &quot;Seq.Bwd.&quot;)
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;catboost&#39;</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CatBoost&quot;</span><span class="p">)</span>
+restult_fs = test_smote(df, label_col, N_EXEC, MODEL_NAME, rcorr=False, feat_sel_type=&#39;catboost&#39;)
+result_df = cs.add_results_df(result_df, restult_fs, &quot;CatBoost&quot;)
 </pre></div>
 </div>
 </div>
@@ -1513,7 +1513,7 @@ mere coincidence. This is also expected, since the standard deviation error is r
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cs.plot_results(result_df)
 </pre></div>
 </div>
 </div>
@@ -1531,14 +1531,14 @@ mere coincidence. This is also expected, since the standard deviation error is r
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>result_base = test_base(df, label_col, N_EXEC, MODEL_NAME)
+result_df = cs.add_results_df(None, result_base, &quot;Baseline&quot;)
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM&quot;</span><span class="p">)</span>
+restult_fs = test_smote(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, art_str=0.7, under=False)
+result_df = cs.add_results_df(result_df, restult_fs, &quot;SM&quot;)
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM+TK&quot;</span><span class="p">)</span>
+restult_fs = test_smote(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, art_str=0.7, under=True)
+result_df = cs.add_results_df(result_df, restult_fs, &quot;SM+TK&quot;)
 </pre></div>
 </div>
 </div>
@@ -1665,7 +1665,7 @@ mere coincidence. This is also expected, since the standard deviation error is r
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cs.plot_results(result_df)
 </pre></div>
 </div>
 </div>
@@ -1683,14 +1683,14 @@ mere coincidence. This is also expected, since the standard deviation error is r
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>result_base = test_base(df, label_col, N_EXEC, MODEL_NAME)
+result_df = cs.add_results_df(None, result_base, &quot;Baseline&quot;)
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="s2">&quot;1_3.pkl&quot;</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.6&quot;</span><span class="p">)</span>
+restult_fs = test_ctgan_first(df, label_col, N_EXEC, MODEL_NAME, rcorr=False, feat_sel_type=None, art_str=0.6, savefile=&quot;1_3.pkl&quot;)
+result_df = cs.add_results_df(result_df, restult_fs, &quot;CTGAN 0.6&quot;)
 
-<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="s2">&quot;1_4.pkl&quot;</span><span class="p">)</span>
-<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.9&quot;</span><span class="p">)</span>
+restult_fs = test_ctgan_first(df, label_col, N_EXEC, MODEL_NAME, rcorr=False, feat_sel_type=None, art_str=0.9, savefile=&quot;1_4.pkl&quot;)
+result_df = cs.add_results_df(result_df, restult_fs, &quot;CTGAN 0.9&quot;)
 <br/></pre></div>
 </div>
 </div>
@@ -1841,7 +1841,7 @@ mere coincidence. This is also expected, since the standard deviation error is r
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cs.plot_results(result_df)
 </pre></div>
 </div>
 </div>

@@ -391,26 +391,26 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import sys
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">lightgbm</span> <span class="kn">import</span> <span class="n">LGBMClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">classification_report</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OrdinalEncoder</span>
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from lightgbm import LGBMClassifier
+from sklearn import metrics
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.preprocessing import OrdinalEncoder
 
-<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">split_data</span>
-<span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
-<span class="kn">from</span> <span class="nn">raimitigations.databalanceanalysis</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">FeatureBalanceMeasure</span><span class="p">,</span>
-    <span class="n">AggregateBalanceMeasure</span><span class="p">,</span>
-    <span class="n">DistributionBalanceMeasure</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">raimitigations.cohort</span> <span class="kn">import</span> <span class="n">CohortManager</span>
-<span class="kn">from</span> <span class="nn">download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
+from raimitigations.utils import split_data
+import raimitigations.dataprocessing as dp
+from raimitigations.databalanceanalysis import (
+    FeatureBalanceMeasure,
+    AggregateBalanceMeasure,
+    DistributionBalanceMeasure,
+)
+from raimitigations.cohort import CohortManager
+from download import download_datasets
 </pre></div>
 </div>
 </div>
@@ -421,10 +421,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s2">&quot;../datasets/&quot;</span>
-<span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;employee_id&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data_dir = &quot;../datasets/&quot;
+download_datasets(data_dir)
+df = pd.read_csv(data_dir + &#39;hr_promotion/train.csv&#39;)
+df.drop(columns=[&#39;employee_id&#39;], inplace=True)
 </pre></div>
 </div>
 </div>
@@ -432,7 +432,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df
 </pre></div>
 </div>
 </div>
@@ -661,19 +661,19 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cols_of_interest</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;education&quot;</span><span class="p">,</span> <span class="s2">&quot;recruitment_channel&quot;</span><span class="p">]</span>
-<span class="n">categorical_cols</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;department&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;gender&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;education&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;region&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;recruitment_channel&quot;</span><span class="p">,</span>
-<span class="p">]</span>
-<span class="n">label_col</span> <span class="o">=</span> <span class="s2">&quot;is_promoted&quot;</span>
-<span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span>
-<span class="c1"># handle duplicates</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cols_of_interest = [&quot;education&quot;, &quot;recruitment_channel&quot;]
+categorical_cols = [
+    &quot;department&quot;,
+    &quot;gender&quot;,
+    &quot;education&quot;,
+    &quot;region&quot;,
+    &quot;recruitment_channel&quot;,
+]
+label_col = &quot;is_promoted&quot;
+seed = 42
+# handle duplicates
+df = df.drop_duplicates().dropna()
+df.head()
 </pre></div>
 </div>
 </div>
@@ -804,12 +804,12 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from sklearn.pipeline import Pipeline
 
-<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-                <span class="p">(</span><span class="s2">&quot;ohe&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="n">categorical_cols</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-                <span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">LGBMClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
-            <span class="p">])</span>
+pipeline = Pipeline([
+                (&quot;ohe&quot;, dp.EncoderOHE(col_encode=categorical_cols, drop=False)),
+                (&quot;model&quot;, LGBMClassifier(n_estimators=50, random_state=42)),
+            ])
 </pre></div>
 </div>
 </div>
@@ -818,17 +818,17 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">conf_matrix</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pred</span><span class="p">):</span>
-    <span class="p">((</span><span class="n">tn</span><span class="p">,</span> <span class="n">fp</span><span class="p">),</span> <span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">tp</span><span class="p">))</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
-    <span class="p">((</span><span class="n">tnr</span><span class="p">,</span> <span class="n">fpr</span><span class="p">),</span> <span class="p">(</span><span class="n">fnr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">))</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-        <span class="p">[</span>
-            <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;TP = </span><span class="si">{</span><span class="n">tp</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">tpr</span><span class="si">:</span><span class="s2">1.2%</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;FN = </span><span class="si">{</span><span class="n">fn</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">fnr</span><span class="si">:</span><span class="s2">1.2%</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">],</span>
-            <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;FP = </span><span class="si">{</span><span class="n">fp</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">fpr</span><span class="si">:</span><span class="s2">1.2%</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;TN = </span><span class="si">{</span><span class="n">tn</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">tnr</span><span class="si">:</span><span class="s2">1.2%</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">],</span>
-        <span class="p">],</span>
-        <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;False&quot;</span><span class="p">],</span>
-        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Pred 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Pred 0&quot;</span><span class="p">],</span>
-    <span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def conf_matrix(y, pred):
+    ((tn, fp), (fn, tp)) = metrics.confusion_matrix(y, pred)
+    ((tnr, fpr), (fnr, tpr)) = metrics.confusion_matrix(y, pred, normalize=&quot;true&quot;)
+    return pd.DataFrame(
+        [
+            [f&quot;TP = {tp} ({tpr:1.2%})&quot;, f&quot;FN = {fn} ({fnr:1.2%})&quot;],
+            [f&quot;FP = {fp} ({fpr:1.2%})&quot;, f&quot;TN = {tn} ({tnr:1.2%})&quot;],
+        ],
+        index=[&quot;True&quot;, &quot;False&quot;],
+        columns=[&quot;Pred 1&quot;, &quot;Pred 0&quot;],
+    )
 </pre></div>
 </div>
 </div>
@@ -836,18 +836,18 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Train a model and get accuracy numbers</span>
-<span class="c1"># splitting the dataset</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="c1"># fitting the pipeline and predicting</span>
-<span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="n">pred</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>## Train a model and get accuracy numbers
+# splitting the dataset
+np.random.seed(42)
+x_train, x_test, y_train, y_test = split_data(df, label_col, test_size=0.1)
+# fitting the pipeline and predicting
+pipeline.fit(x_train, y_train)
+pred = pipeline.predict(x_test)
 
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;number of errors on test dataset: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">pred</span> <span class="o">!=</span> <span class="n">y_test</span><span class="p">)))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">))</span>
+print(&quot;number of errors on test dataset: &quot; + str(sum(pred != y_test)))
+print(conf_matrix(y_test, pred))
+print(classification_report(y_test, pred))
 </pre></div>
 </div>
 </div>
@@ -883,22 +883,22 @@ weighted avg       0.94      0.94      0.93      4861
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">raiwidgets</span> <span class="kn">import</span> <span class="n">ResponsibleAIDashboard</span>
-<span class="kn">from</span> <span class="nn">responsibleai</span> <span class="kn">import</span> <span class="n">RAIInsights</span>
-<span class="kn">from</span> <span class="nn">raiwidgets.cohort</span> <span class="kn">import</span> <span class="n">Cohort</span><span class="p">,</span> <span class="n">CohortFilter</span><span class="p">,</span> <span class="n">CohortFilterMethods</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from raiwidgets import ResponsibleAIDashboard
+from responsibleai import RAIInsights
+from raiwidgets.cohort import Cohort, CohortFilter, CohortFilterMethods
 
-<span class="n">df_train</span> <span class="o">=</span> <span class="n">x_train</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">df_train</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_train</span>
-<span class="n">df_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">df_test</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_test</span>
+df_train = x_train.copy()
+df_train[label_col] = y_train
+df_test = x_test.copy()
+df_test[label_col] = y_test
 
-<span class="n">rai_insights</span> <span class="o">=</span> <span class="n">RAIInsights</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">df_train</span><span class="p">,</span> <span class="n">df_test</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="s1">&#39;classification&#39;</span><span class="p">,</span>
-                           <span class="n">categorical_features</span><span class="o">=</span><span class="n">pipeline</span><span class="p">[</span><span class="s1">&#39;ohe&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_encoded_columns</span><span class="p">())</span>
+rai_insights = RAIInsights(pipeline, df_train, df_test, label_col, &#39;classification&#39;,
+                           categorical_features=pipeline[&#39;ohe&#39;].get_encoded_columns())
 
-<span class="c1"># Error Analysis</span>
-<span class="n">rai_insights</span><span class="o">.</span><span class="n">error_analysis</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
+# Error Analysis
+rai_insights.error_analysis.add()
 
-<span class="n">rai_insights</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+rai_insights.compute()
 </pre></div>
 </div>
 </div>
@@ -930,7 +930,7 @@ Passing a set as an indexer is deprecated and will raise in a future version. Us
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ResponsibleAIDashboard</span><span class="p">(</span><span class="n">rai_insights</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ResponsibleAIDashboard(rai_insights)
 </pre></div>
 </div>
 </div>
@@ -966,13 +966,13 @@ can also tell us if the difference we see is statistically significant.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feature_measures</span> <span class="o">=</span> <span class="n">FeatureBalanceMeasure</span><span class="p">(</span><span class="n">cols_of_interest</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feature_measures = FeatureBalanceMeasure(cols_of_interest, label_col)
 
-<span class="n">train_df</span> <span class="o">=</span> <span class="n">x_train</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">train_df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_train</span>
+train_df = x_train.copy()
+train_df[label_col] = y_train
 
-<span class="n">feat_measures1</span> <span class="o">=</span> <span class="n">feature_measures</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
-<span class="n">feat_measures1</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+feat_measures1 = feature_measures.measures(train_df)
+feat_measures1.head()
 </pre></div>
 </div>
 </div>
@@ -1091,47 +1091,47 @@ can also tell us if the difference we see is statistically significant.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
-<span class="n">educations</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="s2">&quot;education&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-<span class="n">education_dp_values</span> <span class="o">=</span> <span class="n">feat_measures1</span><span class="p">[</span><span class="n">feat_measures1</span><span class="p">[</span><span class="s2">&quot;FeatureName&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;education&quot;</span><span class="p">][</span>
-    <span class="p">[</span><span class="s2">&quot;ClassA&quot;</span><span class="p">,</span> <span class="s2">&quot;ClassB&quot;</span><span class="p">,</span> <span class="s2">&quot;pmi&quot;</span><span class="p">]</span>
-<span class="p">]</span>
-<span class="n">education_dp_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">educations</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">educations</span><span class="p">)))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%matplotlib inline
+educations = train_df[&quot;education&quot;].unique()
+education_dp_values = feat_measures1[feat_measures1[&quot;FeatureName&quot;] == &quot;education&quot;][
+    [&quot;ClassA&quot;, &quot;ClassB&quot;, &quot;pmi&quot;]
+]
+education_dp_array = np.zeros((len(educations), len(educations)))
 
-<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">education_dp_values</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-    <span class="n">class_a</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">class_b</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">dp_value</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-    <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">educations</span> <span class="o">==</span> <span class="n">class_a</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">educations</span> <span class="o">==</span> <span class="n">class_b</span><span class="p">)</span>
-    <span class="n">dp_value</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">dp_value</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">education_dp_array</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp_value</span>
-    <span class="n">education_dp_array</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">dp_value</span>
+for idx, row in education_dp_values.iterrows():
+    class_a = row[0]
+    class_b = row[1]
+    dp_value = row[2]
+    i, j = np.where(educations == class_a)[0][0], np.where(educations == class_b)
+    dp_value = round(dp_value, 2)
+    education_dp_array[i, j] = dp_value
+    education_dp_array[j, i] = -1 * dp_value
 
-<span class="n">colormap</span> <span class="o">=</span> <span class="s2">&quot;RdBu&quot;</span>
-<span class="n">dp_min</span><span class="p">,</span> <span class="n">dp_max</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span>
+colormap = &quot;RdBu&quot;
+dp_min, dp_max = -1.0, 1.0
 
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-<span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">education_dp_array</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">dp_min</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">dp_max</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">colormap</span><span class="p">)</span>
+fig, ax = plt.subplots()
+im = ax.imshow(education_dp_array, vmin=dp_min, vmax=dp_max, cmap=colormap)
 
-<span class="n">cbar</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-<span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Point Mutual Info&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">)</span>
+cbar = ax.figure.colorbar(im, ax=ax)
+cbar.ax.set_ylabel(&quot;Point Mutual Info&quot;, rotation=-90, va=&quot;bottom&quot;)
 
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">educations</span><span class="p">)))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">educations</span><span class="p">)))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">educations</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">educations</span><span class="p">)</span>
+ax.set_xticks(np.arange(len(educations)))
+ax.set_yticks(np.arange(len(educations)))
+ax.set_xticklabels(educations)
+ax.set_yticklabels(educations)
 
-<span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s2">&quot;anchor&quot;</span><span class="p">)</span>
+plt.setp(ax.get_xticklabels(), rotation=45, ha=&quot;right&quot;, rotation_mode=&quot;anchor&quot;)
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">educations</span><span class="p">)):</span>
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">educations</span><span class="p">)):</span>
-        <span class="n">text</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
-            <span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">education_dp_array</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span>
-        <span class="p">)</span>
+for i in range(len(educations)):
+    for j in range(len(educations)):
+        text = ax.text(
+            j, i, education_dp_array[i, j], ha=&quot;center&quot;, va=&quot;center&quot;, color=&quot;k&quot;
+        )
 
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;PMI of education in HR Dataset&quot;</span><span class="p">)</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+ax.set_title(&quot;PMI of education in HR Dataset&quot;)
+fig.tight_layout()
+plt.show()
 </pre></div>
 </div>
 </div>
@@ -1147,9 +1147,9 @@ can also tell us if the difference we see is statistically significant.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_measures</span> <span class="o">=</span> <span class="n">DistributionBalanceMeasure</span><span class="p">(</span><span class="n">cols_of_interest</span><span class="p">)</span>
-<span class="n">dist_measures1</span> <span class="o">=</span> <span class="n">dist_measures</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
-<span class="n">dist_measures1</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dist_measures = DistributionBalanceMeasure(cols_of_interest)
+dist_measures1 = dist_measures.measures(train_df)
+dist_measures1
 </pre></div>
 </div>
 </div>
@@ -1217,65 +1217,65 @@ can also tell us if the difference we see is statistically significant.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
-<span class="n">measures_of_interest</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;kl_divergence&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;js_dist&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;inf_norm_dist&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;total_variation_dist&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;wasserstein_dist&quot;</span><span class="p">,</span>
-<span class="p">]</span>
-<span class="n">education_measures</span> <span class="o">=</span> <span class="n">dist_measures1</span><span class="p">[</span><span class="n">dist_measures1</span><span class="p">[</span><span class="s2">&quot;FeatureName&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;education&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span>
-    <span class="mi">0</span>
-<span class="p">]</span>
-<span class="n">recruitment_measures</span> <span class="o">=</span> <span class="n">dist_measures1</span><span class="p">[</span>
-    <span class="n">dist_measures1</span><span class="p">[</span><span class="s2">&quot;FeatureName&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;recruitment_channel&quot;</span>
-<span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">education_array</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="nb">round</span><span class="p">(</span><span class="n">education_measures</span><span class="p">[</span><span class="n">measure</span><span class="p">],</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">measure</span> <span class="ow">in</span> <span class="n">measures_of_interest</span>
-<span class="p">]</span>
-<span class="n">recruitment_array</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="nb">round</span><span class="p">(</span><span class="n">recruitment_measures</span><span class="p">[</span><span class="n">measure</span><span class="p">],</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">measure</span> <span class="ow">in</span> <span class="n">measures_of_interest</span>
-<span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>%matplotlib inline
+measures_of_interest = [
+    &quot;kl_divergence&quot;,
+    &quot;js_dist&quot;,
+    &quot;inf_norm_dist&quot;,
+    &quot;total_variation_dist&quot;,
+    &quot;wasserstein_dist&quot;,
+]
+education_measures = dist_measures1[dist_measures1[&quot;FeatureName&quot;] == &quot;education&quot;].iloc[
+    0
+]
+recruitment_measures = dist_measures1[
+    dist_measures1[&quot;FeatureName&quot;] == &quot;recruitment_channel&quot;
+].iloc[0]
+education_array = [
+    round(education_measures[measure], 4) for measure in measures_of_interest
+]
+recruitment_array = [
+    round(recruitment_measures[measure], 4) for measure in measures_of_interest
+]
 
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">measures_of_interest</span><span class="p">))</span>
-<span class="n">width</span> <span class="o">=</span> <span class="mf">0.35</span>
+x = np.arange(len(measures_of_interest))
+width = 0.35
 
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
-<span class="n">rects1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">education_array</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;education&quot;</span><span class="p">)</span>
-<span class="n">rects2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">recruitment_array</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;recruitment_channel&quot;</span><span class="p">)</span>
+fig, ax = plt.subplots()
+rects1 = ax.bar(x - width / 2, education_array, width, label=&quot;education&quot;)
+rects2 = ax.bar(x + width / 2, recruitment_array, width, label=&quot;recruitment_channel&quot;)
 
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Measure&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Value&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
-    <span class="s2">&quot;Distribution Balance Measures of Education and Recruitment Channel in Adult Dataset&quot;</span>
-<span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">measures_of_interest</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+ax.set_xlabel(&quot;Measure&quot;)
+ax.set_ylabel(&quot;Value&quot;)
+ax.set_title(
+    &quot;Distribution Balance Measures of Education and Recruitment Channel in Adult Dataset&quot;
+)
+ax.set_xticks(x)
+ax.set_xticklabels(measures_of_interest)
+ax.legend()
 
-<span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">autolabel</span><span class="p">(</span><span class="n">rects</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">rect</span> <span class="ow">in</span> <span class="n">rects</span><span class="p">:</span>
-        <span class="n">height</span> <span class="o">=</span> <span class="n">rect</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">height</span><span class="p">),</span>
-            <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span> <span class="o">+</span> <span class="n">rect</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span>
-            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>  <span class="c1"># 1 point vertical offset</span>
-            <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span><span class="p">,</span>
-            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
-            <span class="n">va</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
+plt.setp(ax.get_xticklabels(), rotation=20, ha=&quot;right&quot;, rotation_mode=&quot;default&quot;)
 
 
-<span class="n">autolabel</span><span class="p">(</span><span class="n">rects1</span><span class="p">)</span>
-<span class="n">autolabel</span><span class="p">(</span><span class="n">rects2</span><span class="p">)</span>
+def autolabel(rects):
+    for rect in rects:
+        height = rect.get_height()
+        ax.annotate(
+            &quot;{}&quot;.format(height),
+            xy=(rect.get_x() + rect.get_width() / 2, height),
+            xytext=(0, 1),  # 1 point vertical offset
+            textcoords=&quot;offset points&quot;,
+            ha=&quot;center&quot;,
+            va=&quot;bottom&quot;,
+        )
 
-<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+autolabel(rects1)
+autolabel(rects2)
+
+fig.tight_layout()
+
+plt.show()
 </pre></div>
 </div>
 </div>
@@ -1291,9 +1291,9 @@ can also tell us if the difference we see is statistically significant.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">agg_measures</span> <span class="o">=</span> <span class="n">AggregateBalanceMeasure</span><span class="p">(</span><span class="n">cols_of_interest</span><span class="p">)</span>
-<span class="n">agg_measures1</span> <span class="o">=</span> <span class="n">agg_measures</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
-<span class="n">agg_measures1</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>agg_measures = AggregateBalanceMeasure(cols_of_interest)
+agg_measures1 = agg_measures.measures(train_df)
+agg_measures1
 </pre></div>
 </div>
 </div>
@@ -1346,13 +1346,13 @@ is originally aimed for a single column, that is, the entire dataset is rebalanc
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_df2</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>train_df2 = train_df.copy()
 
-<span class="n">rebalance</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">k_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span><span class="n">transform_pipe</span><span class="o">=</span><span class="n">rebalance</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">])</span>
-<span class="n">smote_df</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">train_df2</span><span class="p">,</span> <span class="n">rebalance_col</span><span class="o">=</span><span class="s1">&#39;recruitment_channel&#39;</span><span class="p">)</span>
+rebalance = dp.Rebalance(k_neighbors=4, verbose=False)
+cht_manager = CohortManager(transform_pipe=rebalance, cohort_col=[&#39;education&#39;])
+smote_df = cht_manager.fit_resample(df=train_df2, rebalance_col=&#39;recruitment_channel&#39;)
 
-<span class="n">smote_df</span>
+smote_df
 </pre></div>
 </div>
 </div>
@@ -1580,8 +1580,8 @@ is originally aimed for a single column, that is, the entire dataset is rebalanc
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">smote_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(x_train.shape[0])
+print(smote_df.shape[0])
 </pre></div>
 </div>
 </div>
@@ -1604,18 +1604,18 @@ the model actually fit and be able to predict the data outcomes more accurately.
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_train2</span> <span class="o">=</span> <span class="n">smote_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">label_col</span><span class="p">])</span>
-<span class="n">y_train2</span> <span class="o">=</span> <span class="n">smote_df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x_train2 = smote_df.drop(columns=[label_col])
+y_train2 = smote_df[label_col]
 
-<span class="n">pipeline2</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-                <span class="p">(</span><span class="s2">&quot;ohe&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="n">categorical_cols</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-                <span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">LGBMClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
-            <span class="p">])</span>
+pipeline2 = Pipeline([
+                (&quot;ohe&quot;, dp.EncoderOHE(col_encode=categorical_cols, drop=False)),
+                (&quot;model&quot;, LGBMClassifier(n_estimators=50, random_state=42)),
+            ])
 
-<span class="n">pipeline2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train2</span><span class="p">,</span> <span class="n">y_train2</span><span class="p">)</span>
+pipeline2.fit(x_train2, y_train2)
 
-<span class="n">pred2</span> <span class="o">=</span> <span class="n">pipeline2</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
-<span class="n">pred_model1</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+pred2 = pipeline2.predict(x_test)
+pred_model1 = pipeline.predict(x_test)
 </pre></div>
 </div>
 </div>
@@ -1624,59 +1624,59 @@ the model actually fit and be able to predict the data outcomes more accurately.
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compare Results</span>
-<span class="k">class</span> <span class="nc">color</span><span class="p">:</span>
-    <span class="n">PURPLE</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[95m&quot;</span>
-    <span class="n">CYAN</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[96m&quot;</span>
-    <span class="n">DARKCYAN</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[36m&quot;</span>
-    <span class="n">BLUE</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[94m&quot;</span>
-    <span class="n">GREEN</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[92m&quot;</span>
-    <span class="n">YELLOW</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[93m&quot;</span>
-    <span class="n">RED</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[91m&quot;</span>
-    <span class="n">BOLD</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[1m&quot;</span>
-    <span class="n">UNDERLINE</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[4m&quot;</span>
-    <span class="n">END</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0m&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Compare Results
+class color:
+    PURPLE = &quot;\033[95m&quot;
+    CYAN = &quot;\033[96m&quot;
+    DARKCYAN = &quot;\033[36m&quot;
+    BLUE = &quot;\033[94m&quot;
+    GREEN = &quot;\033[92m&quot;
+    YELLOW = &quot;\033[93m&quot;
+    RED = &quot;\033[91m&quot;
+    BOLD = &quot;\033[1m&quot;
+    UNDERLINE = &quot;\033[4m&quot;
+    END = &quot;\033[0m&quot;
 
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span>
-    <span class="n">color</span><span class="o">.</span><span class="n">PURPLE</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">BOLD</span>
-    <span class="o">+</span> <span class="s2">&quot;BEFORE: &quot;</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">END</span>
-    <span class="o">+</span> <span class="s2">&quot;number of test dataset instances: &quot;</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">BOLD</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">GREEN</span>
-    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">END</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span>
-    <span class="s2">&quot;      : number of errors on test dataset: &quot;</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">BOLD</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">RED</span>
-    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">pred_model1</span> <span class="o">!=</span> <span class="n">y_test</span><span class="p">))</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">END</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span>
-    <span class="n">color</span><span class="o">.</span><span class="n">PURPLE</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">BOLD</span>
-    <span class="o">+</span> <span class="s2">&quot;AFTER:  &quot;</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">END</span>
-    <span class="o">+</span> <span class="s2">&quot;number of test dataset instances: &quot;</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">BOLD</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">GREEN</span>
-    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">END</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span>
-    <span class="s2">&quot;     :  number of errors on test dataset: &quot;</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">BOLD</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">RED</span>
-    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">pred2</span> <span class="o">!=</span> <span class="n">y_test</span><span class="p">))</span>
-    <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">END</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+print(&quot;&quot;)
+print(
+    color.PURPLE
+    + color.BOLD
+    + &quot;BEFORE: &quot;
+    + color.END
+    + &quot;number of test dataset instances: &quot;
+    + color.BOLD
+    + color.GREEN
+    + str(len(y_test))
+    + color.END
+)
+print(
+    &quot;      : number of errors on test dataset: &quot;
+    + color.BOLD
+    + color.RED
+    + str(sum(pred_model1 != y_test))
+    + color.END
+)
+print(&quot;&quot;)
+print(
+    color.PURPLE
+    + color.BOLD
+    + &quot;AFTER:  &quot;
+    + color.END
+    + &quot;number of test dataset instances: &quot;
+    + color.BOLD
+    + color.GREEN
+    + str(len(y_test))
+    + color.END
+)
+print(
+    &quot;     :  number of errors on test dataset: &quot;
+    + color.BOLD
+    + color.RED
+    + str(sum(pred2 != y_test))
+    + color.END
+)
+print(&quot;&quot;)
 </pre></div>
 </div>
 </div>
@@ -1698,19 +1698,19 @@ the model actually fit and be able to predict the data outcomes more accurately.
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># compare conf matrices</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-----------------------------------------------------------------------&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">BLUE</span> <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">BOLD</span> <span class="o">+</span> <span class="s2">&quot;BEFORE: conf_matrix:&quot;</span> <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------------&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred_model1</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">BLUE</span> <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">BOLD</span> <span class="o">+</span> <span class="s2">&quot;AFTER: conf_matrix:&quot;</span> <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-------------------&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred2</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-----------------------------------------------------------------------&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-----------------------------------------------------------------------&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># compare conf matrices
+print(&quot;-----------------------------------------------------------------------&quot;)
+print(&quot;&quot;)
+print(color.BLUE + color.BOLD + &quot;BEFORE: conf_matrix:&quot; + color.END)
+print(&quot;--------------------&quot;)
+print(conf_matrix(y_test, pred_model1))
+print(&quot;&quot;)
+print(color.BLUE + color.BOLD + &quot;AFTER: conf_matrix:&quot; + color.END)
+print(&quot;-------------------&quot;)
+print(conf_matrix(y_test, pred2))
+print(&quot;-----------------------------------------------------------------------&quot;)
+print(&quot;-----------------------------------------------------------------------&quot;)
+print(&quot;&quot;)
 </pre></div>
 </div>
 </div>
@@ -1741,13 +1741,13 @@ False    FP = 12 (0.27%)  TN = 4426 (99.73%)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># compare classification report</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">YELLOW</span> <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">BOLD</span> <span class="o">+</span> <span class="s2">&quot;BEFORE: classification_report:&quot;</span> <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------------------------&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred_model1</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">YELLOW</span> <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">BOLD</span> <span class="o">+</span> <span class="s2">&quot;AFTER: classification_report:&quot;</span> <span class="o">+</span> <span class="n">color</span><span class="o">.</span><span class="n">END</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------------------------&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred2</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># compare classification report
+print(color.YELLOW + color.BOLD + &quot;BEFORE: classification_report:&quot; + color.END)
+print(&quot;--------------------------------&quot;)
+print(classification_report(y_test, pred_model1))
+print(color.YELLOW + color.BOLD + &quot;AFTER: classification_report:&quot; + color.END)
+print(&quot;--------------------------------&quot;)
+print(classification_report(y_test, pred2))
 </pre></div>
 </div>
 </div>
@@ -1786,7 +1786,7 @@ weighted avg       0.94      0.94      0.92      4861
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_measures1</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_measures1
 </pre></div>
 </div>
 </div>
@@ -1919,7 +1919,7 @@ weighted avg       0.94      0.94      0.92      4861
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feature_measures</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">smote_df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feature_measures.measures(smote_df)
 </pre></div>
 </div>
 </div>
@@ -2053,8 +2053,8 @@ weighted avg       0.94      0.94      0.92      4861
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># before</span>
-<span class="n">dist_measures1</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># before
+dist_measures1
 </pre></div>
 </div>
 </div>
@@ -2122,8 +2122,8 @@ weighted avg       0.94      0.94      0.92      4861
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># after</span>
-<span class="n">dist_measures</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">smote_df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># after
+dist_measures.measures(smote_df)
 </pre></div>
 </div>
 </div>
@@ -2192,8 +2192,8 @@ weighted avg       0.94      0.94      0.92      4861
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># before</span>
-<span class="n">agg_measures1</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># before
+agg_measures1
 </pre></div>
 </div>
 </div>
@@ -2240,8 +2240,8 @@ weighted avg       0.94      0.94      0.92      4861
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># after</span>
-<span class="n">agg_measures</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">smote_df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># after
+agg_measures.measures(smote_df)
 </pre></div>
 </div>
 </div>

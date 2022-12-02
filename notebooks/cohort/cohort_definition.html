@@ -389,17 +389,17 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">raimitigations.cohort</span> <span class="kn">import</span> <span class="n">CohortDefinition</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import pandas as pd
+from raimitigations.cohort import CohortDefinition
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-    <span class="s2">&quot;race&quot;</span><span class="p">:</span>     <span class="p">[</span><span class="s1">&#39;elf&#39;</span><span class="p">,</span> <span class="s1">&#39;orc&#39;</span><span class="p">,</span> <span class="s1">&#39;halfling&#39;</span><span class="p">,</span> <span class="s1">&#39;human&#39;</span><span class="p">,</span> <span class="s1">&#39;halfling&#39;</span><span class="p">,</span> <span class="s1">&#39;orc&#39;</span><span class="p">,</span> <span class="s1">&#39;elf&#39;</span><span class="p">,</span> <span class="s1">&#39;orc&#39;</span><span class="p">,</span> <span class="s1">&#39;human&#39;</span><span class="p">,</span> <span class="s1">&#39;orc&#39;</span><span class="p">],</span>
-    <span class="s2">&quot;height(m)&quot;</span><span class="p">:[</span><span class="mf">1.6</span><span class="p">,</span>   <span class="mf">1.95</span><span class="p">,</span>  <span class="mf">1.40</span><span class="p">,</span>       <span class="mf">1.75</span><span class="p">,</span>     <span class="mf">1.53</span><span class="p">,</span>      <span class="mf">2.10</span><span class="p">,</span>   <span class="mf">1.85</span><span class="p">,</span>  <span class="mf">1.79</span><span class="p">,</span>  <span class="mf">1.65</span><span class="p">,</span>   <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span>
-    <span class="s2">&quot;past_score&quot;</span><span class="p">:[</span><span class="mi">85</span><span class="p">,</span>   <span class="mi">59</span><span class="p">,</span>    <span class="mi">19</span><span class="p">,</span>          <span class="mi">89</span><span class="p">,</span>      <span class="mi">91</span><span class="p">,</span>        <span class="mi">79</span><span class="p">,</span>      <span class="mi">45</span><span class="p">,</span>   <span class="mi">82</span><span class="p">,</span>    <span class="mi">47</span><span class="p">,</span>     <span class="mi">87</span>  <span class="p">],</span>
-    <span class="s2">&quot;score&quot;</span><span class="p">:</span>    <span class="p">[</span><span class="mi">90</span><span class="p">,</span>    <span class="mi">43</span><span class="p">,</span>    <span class="mi">29</span><span class="p">,</span>          <span class="mi">99</span><span class="p">,</span>      <span class="mi">85</span><span class="p">,</span>        <span class="mi">73</span><span class="p">,</span>      <span class="mi">58</span><span class="p">,</span>   <span class="mi">94</span><span class="p">,</span>    <span class="mi">37</span><span class="p">,</span>     <span class="mi">51</span><span class="p">]</span>
-<span class="p">})</span>
-<span class="n">df</span>
+df = pd.DataFrame({
+    &quot;race&quot;:     [&#39;elf&#39;, &#39;orc&#39;, &#39;halfling&#39;, &#39;human&#39;, &#39;halfling&#39;, &#39;orc&#39;, &#39;elf&#39;, &#39;orc&#39;, &#39;human&#39;, &#39;orc&#39;],
+    &quot;height(m)&quot;:[1.6,   1.95,  1.40,       1.75,     1.53,      2.10,   1.85,  1.79,  1.65,   np.nan],
+    &quot;past_score&quot;:[85,   59,    19,          89,      91,        79,      45,   82,    47,     87  ],
+    &quot;score&quot;:    [90,    43,    29,          99,      85,        73,      58,   94,    37,     51]
+})
+df
 </pre></div>
 </div>
 </div>
@@ -542,15 +542,15 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;elf&#39;</span><span class="p">],</span> <span class="s1">&#39;or&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;orc&#39;</span><span class="p">]</span> <span class="p">],</span>
-                <span class="s1">&#39;and&#39;</span><span class="p">,</span>
-                <span class="p">[</span><span class="s1">&#39;height(m)&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">]</span>
-            <span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>conditions = [
+                [ [&#39;race&#39;, &#39;==&#39;, &#39;elf&#39;], &#39;or&#39;, [&#39;race&#39;, &#39;==&#39;, &#39;orc&#39;] ],
+                &#39;and&#39;,
+                [&#39;height(m)&#39;, &#39;&gt;=&#39;, 1.8]
+            ]
 
-<span class="n">cht_def</span> <span class="o">=</span> <span class="n">CohortDefinition</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
-<span class="n">subset</span> <span class="o">=</span> <span class="n">cht_def</span><span class="o">.</span><span class="n">get_cohort_subset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="n">subset</span>
+cht_def = CohortDefinition(conditions)
+subset = cht_def.get_cohort_subset(df)
+subset
 </pre></div>
 </div>
 </div>
@@ -615,15 +615,15 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;elf&#39;</span><span class="p">,</span> <span class="s1">&#39;orc&#39;</span><span class="p">]</span> <span class="p">]</span> <span class="p">],</span>
-                <span class="s1">&#39;and&#39;</span><span class="p">,</span>
-                <span class="p">[</span><span class="s1">&#39;height(m)&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">]</span>
-            <span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>conditions = [
+                [ [&#39;race&#39;, &#39;==&#39;, [&#39;elf&#39;, &#39;orc&#39;] ] ],
+                &#39;and&#39;,
+                [&#39;height(m)&#39;, &#39;&gt;=&#39;, 1.8]
+            ]
 
-<span class="n">cht_def</span> <span class="o">=</span> <span class="n">CohortDefinition</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
-<span class="n">subset</span> <span class="o">=</span> <span class="n">cht_def</span><span class="o">.</span><span class="n">get_cohort_subset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="n">subset</span>
+cht_def = CohortDefinition(conditions)
+subset = cht_def.get_cohort_subset(df)
+subset
 </pre></div>
 </div>
 </div>
@@ -687,10 +687,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;height(m)&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span> <span class="p">]</span>
-<span class="n">cht_def</span> <span class="o">=</span> <span class="n">CohortDefinition</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
-<span class="n">subset</span> <span class="o">=</span> <span class="n">cht_def</span><span class="o">.</span><span class="n">get_cohort_subset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="n">subset</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>conditions = [ [&#39;height(m)&#39;, &#39;==&#39;, np.nan] ]
+cht_def = CohortDefinition(conditions)
+subset = cht_def.get_cohort_subset(df)
+subset
 </pre></div>
 </div>
 </div>
@@ -739,11 +739,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;height(m)&#39;</span><span class="p">,</span> <span class="s1">&#39;range&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">]],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;race&#39;</span><span class="p">,</span> <span class="s1">&#39;!=&#39;</span><span class="p">,</span> <span class="s1">&#39;halfling&#39;</span><span class="p">]</span> <span class="p">]</span> <span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>conditions = [ [ [&#39;height(m)&#39;, &#39;range&#39;, [1.1, 1.7]], &#39;and&#39;, [&#39;race&#39;, &#39;!=&#39;, &#39;halfling&#39;] ] ]
 
-<span class="n">cht_def</span> <span class="o">=</span> <span class="n">CohortDefinition</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
-<span class="n">subset</span> <span class="o">=</span> <span class="n">cht_def</span><span class="o">.</span><span class="n">get_cohort_subset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="n">subset</span>
+cht_def = CohortDefinition(conditions)
+subset = cht_def.get_cohort_subset(df)
+subset
 </pre></div>
 </div>
 </div>
@@ -799,16 +799,16 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;height(m)&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span>
-              <span class="s1">&#39;and&#39;</span><span class="p">,</span>
-              <span class="p">[</span><span class="s1">&#39;height(m)&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="mf">1.99</span><span class="p">],</span>
-              <span class="s1">&#39;and&#39;</span><span class="p">,</span>
-              <span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span> <span class="mi">70</span><span class="p">]</span>
-            <span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>conditions = [ [&#39;height(m)&#39;, &#39;&gt;&#39;, 1.5],
+              &#39;and&#39;,
+              [&#39;height(m)&#39;, &#39;&lt;&#39;, 1.99],
+              &#39;and&#39;,
+              [&#39;score&#39;, &#39;&lt;=&#39;, 70]
+            ]
 
-<span class="n">cht_def</span> <span class="o">=</span> <span class="n">CohortDefinition</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
-<span class="n">subset</span> <span class="o">=</span> <span class="n">cht_def</span><span class="o">.</span><span class="n">get_cohort_subset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="n">subset</span>
+cht_def = CohortDefinition(conditions)
+subset = cht_def.get_cohort_subset(df)
+subset
 </pre></div>
 </div>
 </div>
@@ -872,11 +872,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">,</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span> <span class="s1">&#39;past_score&#39;</span><span class="p">]</span> <span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>conditions = [ [&#39;score&#39;, &#39;&lt;=&#39;, &#39;past_score&#39;] ]
 
-<span class="n">cht_def</span> <span class="o">=</span> <span class="n">CohortDefinition</span><span class="p">(</span><span class="n">conditions</span><span class="p">)</span>
-<span class="n">subset</span> <span class="o">=</span> <span class="n">cht_def</span><span class="o">.</span><span class="n">get_cohort_subset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="n">subset</span>
+cht_def = CohortDefinition(conditions)
+subset = cht_def.get_cohort_subset(df)
+subset
 </pre></div>
 </div>
 </div>
@@ -958,7 +958,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cht_def</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;single_cohort.json&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cht_def.save(&quot;single_cohort.json&quot;)
 </pre></div>
 </div>
 </div>
@@ -967,9 +967,9 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_cht</span> <span class="o">=</span> <span class="n">CohortDefinition</span><span class="p">(</span><span class="s2">&quot;single_cohort.json&quot;</span><span class="p">)</span>
-<span class="n">subset</span> <span class="o">=</span> <span class="n">new_cht</span><span class="o">.</span><span class="n">get_cohort_subset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="n">subset</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>new_cht = CohortDefinition(&quot;single_cohort.json&quot;)
+subset = new_cht.get_cohort_subset(df)
+subset
 </pre></div>
 </div>
 </div>

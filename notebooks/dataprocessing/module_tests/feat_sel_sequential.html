@@ -393,14 +393,14 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../../notebooks&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import sys
+sys.path.append(&#39;../../../notebooks&#39;)
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">SeqFeatSelection</span>
+import pandas as pd
+import numpy as np
+from raimitigations.dataprocessing import SeqFeatSelection
 
-<span class="kn">from</span> <span class="nn">download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
+from download import download_datasets
 </pre></div>
 </div>
 </div>
@@ -410,11 +410,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/&#39;</span>
-<span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
-<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
-<span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;employee_id&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">dataset</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data_dir = &#39;../../../datasets/&#39;
+download_datasets(data_dir)
+dataset =  pd.read_csv(data_dir + &#39;hr_promotion/train.csv&#39;)
+dataset.drop(columns=[&#39;employee_id&#39;], inplace=True)
+dataset
 </pre></div>
 </div>
 </div>
@@ -644,9 +644,9 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel = SeqFeatSelection(n_jobs=4)
+feat_sel.fit(df=dataset, label_col=&#39;is_promoted&#39;)
+feat_sel.get_selected_features()
 </pre></div>
 </div>
 </div>
@@ -726,7 +726,7 @@ run, the results obtained for each fold (using cross-validation), where the resu
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">get_summary</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel.get_summary()
 </pre></div>
 </div>
 </div>
@@ -854,8 +854,8 @@ run, the results obtained for each fold (using cross-validation), where the resu
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">save_json</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">json_summary</span><span class="o">=</span><span class="s2">&quot;json_files/seq_feat.json&quot;</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel = SeqFeatSelection(n_jobs=4, save_json=True, json_summary=&quot;json_files/seq_feat.json&quot;)
+feat_sel.fit(df=dataset, label_col=&#39;is_promoted&#39;)
 </pre></div>
 </div>
 </div>
@@ -938,8 +938,8 @@ or if they want to change it.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">set_selected_features</span><span class="p">([</span><span class="s2">&quot;department&quot;</span><span class="p">,</span> <span class="s2">&quot;previous_year_rating&quot;</span><span class="p">])</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel.set_selected_features([&quot;department&quot;, &quot;previous_year_rating&quot;])
+feat_sel.get_selected_features()
 </pre></div>
 </div>
 </div>
@@ -957,8 +957,8 @@ or if they want to change it.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">set_selected_features</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel.set_selected_features([1, 2])
+feat_sel.get_selected_features()
 </pre></div>
 </div>
 </div>
@@ -976,8 +976,8 @@ or if they want to change it.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">set_selected_features</span><span class="p">()</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel.set_selected_features()
+feat_sel.get_selected_features()
 </pre></div>
 </div>
 </div>
@@ -995,12 +995,12 @@ or if they want to change it.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">])</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>X = dataset.drop(columns=[&#39;is_promoted&#39;])
+Y = dataset[&#39;is_promoted&#39;]
 
-<span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Y</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+feat_sel = SeqFeatSelection(scoring=&#39;f1&#39;, n_jobs=4)
+feat_sel.fit(X=X, y=Y)
+feat_sel.get_selected_features()
 </pre></div>
 </div>
 </div>
@@ -1080,12 +1080,12 @@ classifier or <em>None</em> if the user wants to use the default one. Let’s se
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from sklearn.neighbors import KNeighborsClassifier
 
-<span class="n">estimator</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+estimator = KNeighborsClassifier(n_neighbors=4)
+feat_sel = SeqFeatSelection(df=dataset, label_col=11, estimator=estimator, scoring=&#39;accuracy&#39;, n_jobs=4)
+feat_sel.fit()
+feat_sel.get_selected_features()
 </pre></div>
 </div>
 </div>
@@ -1320,8 +1320,8 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_df</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>new_df = feat_sel.transform(dataset)
+new_df.head()
 </pre></div>
 </div>
 </div>
@@ -1401,8 +1401,8 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
-<span class="n">dataset</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(dataset.info())
+dataset
 </pre></div>
 </div>
 </div>
@@ -1658,7 +1658,7 @@ None
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset[&#39;education&#39;].unique()
 </pre></div>
 </div>
 </div>
@@ -1676,26 +1676,26 @@ array([&#34;Master&#39;s &amp; above&#34;, &#34;Bachelor&#39;s&#34;, nan, &#39;B
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">EncoderOHE</span><span class="p">,</span> <span class="n">EncoderOrdinal</span>
-<span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">BasicImputer</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from raimitigations.dataprocessing import EncoderOHE, EncoderOrdinal
+from raimitigations.dataprocessing import BasicImputer
 
-<span class="n">imputer</span> <span class="o">=</span> <span class="n">BasicImputer</span><span class="p">(</span>
-                            <span class="n">col_impute</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                            <span class="n">specific_col</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;previous_year_rating&#39;</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;missing_values&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                                                                                                            <span class="s1">&#39;strategy&#39;</span><span class="p">:</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span>
-                                                                                                            <span class="s1">&#39;fill_value&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span> <span class="p">}</span> <span class="p">}</span>
-                    <span class="p">)</span>
-<span class="n">ordinal</span> <span class="o">=</span> <span class="n">EncoderOrdinal</span><span class="p">(</span>
-                            <span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">],</span>
-                            <span class="n">categories</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;education&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Below Secondary&quot;</span><span class="p">,</span> <span class="s2">&quot;Bachelor&#39;s&quot;</span><span class="p">,</span> <span class="s2">&quot;Master&#39;s &amp; above&quot;</span><span class="p">]}</span>
-                    <span class="p">)</span>
-<span class="n">ohe</span> <span class="o">=</span> <span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;department&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">,</span> <span class="s2">&quot;gender&quot;</span><span class="p">,</span> <span class="s2">&quot;recruitment_channel&quot;</span><span class="p">])</span>
+imputer = BasicImputer(
+                            col_impute=None,
+                            specific_col={&#39;previous_year_rating&#39;: { &#39;missing_values&#39;:np.nan,
+                                                                                                            &#39;strategy&#39;:&#39;constant&#39;,
+                                                                                                            &#39;fill_value&#39;:-100 } }
+                    )
+ordinal = EncoderOrdinal(
+                            col_encode=[&#39;education&#39;],
+                            categories={&#39;education&#39;: [&quot;Below Secondary&quot;, &quot;Bachelor&#39;s&quot;, &quot;Master&#39;s &amp; above&quot;]}
+                    )
+ohe = EncoderOHE(col_encode=[&quot;department&quot;, &quot;region&quot;, &quot;gender&quot;, &quot;recruitment_channel&quot;])
 
-<span class="n">transform_pipe</span> <span class="o">=</span> <span class="p">[</span><span class="n">imputer</span><span class="p">,</span> <span class="n">ordinal</span><span class="p">,</span> <span class="n">ohe</span><span class="p">]</span>
+transform_pipe = [imputer, ordinal, ohe]
 
-<span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">transform_pipe</span><span class="o">=</span><span class="n">transform_pipe</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+feat_sel = SeqFeatSelection(transform_pipe=transform_pipe, n_jobs=4)
+feat_sel.fit(df=dataset, label_col=&#39;is_promoted&#39;)
+feat_sel.get_selected_features()
 </pre></div>
 </div>
 </div>
@@ -1915,8 +1915,8 @@ No columns specified for imputation. These columns have been automatically ident
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_df</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>new_df = feat_sel.transform(dataset)
+new_df.head()
 </pre></div>
 </div>
 </div>
@@ -2040,9 +2040,9 @@ No columns specified for imputation. These columns have been automatically ident
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">dataset</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset =  pd.read_csv(data_dir + &#39;hr_promotion/train.csv&#39;, header=None, skiprows=1)
+dataset.drop(columns=[0], inplace=True)
+dataset
 </pre></div>
 </div>
 </div>
@@ -2270,9 +2270,9 @@ No columns specified for imputation. These columns have been automatically ident
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel = SeqFeatSelection(n_jobs=1)
+feat_sel.fit(df=dataset, label_col=12)
+feat_sel.get_selected_features()
 </pre></div>
 </div>
 </div>
@@ -2356,8 +2356,8 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">set_selected_features</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">])</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel.set_selected_features([1,8])
+feat_sel.get_selected_features()
 </pre></div>
 </div>
 </div>
@@ -2374,8 +2374,8 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">set_selected_features</span><span class="p">()</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel.set_selected_features()
+feat_sel.get_selected_features()
 </pre></div>
 </div>
 </div>
@@ -2392,8 +2392,8 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_df</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">new_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>new_df = feat_sel.transform(dataset)
+new_df.head()
 </pre></div>
 </div>
 </div>
@@ -2474,19 +2474,19 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">create_dummy_dataset</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from raimitigations.utils import create_dummy_dataset
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">create_dummy_dataset</span><span class="p">(</span>
-        <span class="n">samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
-        <span class="n">n_features</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
-        <span class="n">n_num_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-        <span class="n">n_cat_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-        <span class="n">n_cat_cat</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">num_num_noise</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">],</span>
-        <span class="n">pct_change</span><span class="o">=</span><span class="p">[</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">],</span>
-        <span class="n">regression</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-<span class="n">df</span>
+df = create_dummy_dataset(
+        samples=1000,
+        n_features=6,
+        n_num_num=2,
+        n_cat_num=2,
+        n_cat_cat=0,
+        num_num_noise=[0.01, 0.02],
+        pct_change=[0.03, 0.05],
+        regression=True,
+    )
+df
 </pre></div>
 </div>
 </div>
@@ -2693,9 +2693,9 @@ parameter to True.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel = SeqFeatSelection(verbose=False)
+feat_sel.fit(df=df, label_col=&quot;label&quot;)
+feat_sel.get_selected_features()
 </pre></div>
 </div>
 </div>
@@ -2721,7 +2721,7 @@ parameter to True.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">regression</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel.regression
 </pre></div>
 </div>
 </div>
@@ -2739,11 +2739,11 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from sklearn.linear_model import LinearRegression
 
-<span class="n">feat_sel</span> <span class="o">=</span> <span class="n">SeqFeatSelection</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="n">LinearRegression</span><span class="p">())</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+feat_sel = SeqFeatSelection(verbose=False, estimator=LinearRegression())
+feat_sel.fit(df=df, label_col=&quot;label&quot;)
+feat_sel.get_selected_features()
 </pre></div>
 </div>
 </div>

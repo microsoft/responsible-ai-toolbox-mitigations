@@ -384,19 +384,19 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from typing import Union
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
-<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
-<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">SimpleImputer</span>
-<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
-<span class="kn">import</span> <span class="nn">uci_dataset</span> <span class="k">as</span> <span class="nn">database</span>
+import pandas as pd
+import numpy as np
+from sklearn.svm import SVC
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+import uci_dataset as database
 
-<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">evaluate_set</span><span class="p">,</span> <span class="n">split_data</span>
-<span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
+from raimitigations.utils import evaluate_set, split_data
+import raimitigations.dataprocessing as dp
 </pre></div>
 </div>
 </div>
@@ -405,10 +405,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">database</span><span class="o">.</span><span class="n">load_thyroid_disease</span><span class="p">()</span>
-<span class="n">label_col</span> <span class="o">=</span> <span class="s2">&quot;sick-euthyroid&quot;</span>
-<span class="n">df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">&quot;sick-euthyroid&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;negative&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
-<span class="n">df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = database.load_thyroid_disease()
+label_col = &quot;sick-euthyroid&quot;
+df[label_col] = df[label_col].replace({&quot;sick-euthyroid&quot;: 1, &quot;negative&quot;: 0})
+df
 </pre></div>
 </div>
 </div>
@@ -732,7 +732,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df.info()
 </pre></div>
 </div>
 </div>
@@ -784,17 +784,17 @@ memory usage: 642.6+ KB
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fit_and_get_results_bin</span><span class="p">(</span>
-    <span class="n">pipeline</span><span class="p">:</span> <span class="n">Pipeline</span><span class="p">,</span>
-    <span class="n">x_train</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">y_train</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">x_test</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">y_test</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
-    <span class="n">best_th_auc</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">):</span>
-    <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-    <span class="n">pred_test</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
-    <span class="n">_</span> <span class="o">=</span> <span class="n">evaluate_set</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred_test</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">best_th_auc</span><span class="o">=</span><span class="n">best_th_auc</span><span class="p">,</span> <span class="n">classes</span><span class="o">=</span><span class="n">pipeline</span><span class="o">.</span><span class="n">classes_</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def fit_and_get_results_bin(
+    pipeline: Pipeline,
+    x_train: pd.DataFrame,
+    y_train: pd.DataFrame,
+    x_test: pd.DataFrame,
+    y_test: pd.DataFrame,
+    best_th_auc: bool=True
+):
+    pipeline.fit(x_train, y_train)
+    pred_test = pipeline.predict_proba(x_test)
+    _ = evaluate_set(y_test, pred_test, regression=False, plot_pr=False, best_th_auc=best_th_auc, classes=pipeline.classes_)
 </pre></div>
 </div>
 </div>
@@ -803,8 +803,8 @@ memory usage: 642.6+ KB
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">float_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;float&#39;</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-<span class="n">float_cols</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>float_cols = [col for col in df.columns if &#39;float&#39; in df[col].dtype.name]
+float_cols
 </pre></div>
 </div>
 </div>
@@ -822,13 +822,13 @@ memory usage: 642.6+ KB
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ohe_encoder</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">imputer</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">numerical</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;missing_values&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
-                                                                    <span class="s1">&#39;strategy&#39;</span><span class="p">:</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span>
-                                                                    <span class="s1">&#39;fill_value&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span>
-                          <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">feat_sel</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">CatBoostSelection</span><span class="p">(</span><span class="n">catboost_log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">cor_feat</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">CorrelatedFeatures</span><span class="p">(</span><span class="n">save_json</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ohe_encoder = dp.EncoderOHE(drop=False, unknown_err=False, verbose=False)
+imputer = dp.BasicImputer(numerical={&#39;missing_values&#39;:np.nan,
+                                                                    &#39;strategy&#39;:&#39;constant&#39;,
+                                                                    &#39;fill_value&#39;:-1},
+                          verbose=False)
+feat_sel = dp.CatBoostSelection(catboost_log=False, verbose=False)
+cor_feat = dp.CorrelatedFeatures(save_json=False)
 </pre></div>
 </div>
 </div>
@@ -837,7 +837,7 @@ memory usage: 642.6+ KB
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>train_x, test_x, train_y, test_y = split_data(df, label_col, test_size=0.2)
 </pre></div>
 </div>
 </div>
@@ -847,12 +847,12 @@ memory usage: 642.6+ KB
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipe0</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">ohe_encoder</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">imputer</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">,</span> <span class="n">SVC</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
-        <span class="p">])</span>
-<span class="n">fit_and_get_results_bin</span><span class="p">(</span><span class="n">pipe0</span><span class="p">,</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">best_th_auc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pipe0 = Pipeline([
+            (&quot;encoder&quot;, ohe_encoder),
+            (&quot;imputer&quot;, imputer),
+            (&quot;estimator&quot;, SVC(probability=True)),
+        ])
+fit_and_get_results_bin(pipe0, train_x, train_y, test_x, test_y, best_th_auc=True)
 </pre></div>
 </div>
 </div>
@@ -894,13 +894,13 @@ Threshold used: 0.1250311491470217
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipe1</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">ohe_encoder</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">imputer</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">include_cols</span><span class="o">=</span><span class="n">float_cols</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">,</span> <span class="n">SVC</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
-        <span class="p">])</span>
-<span class="n">fit_and_get_results_bin</span><span class="p">(</span><span class="n">pipe1</span><span class="p">,</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">best_th_auc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pipe1 = Pipeline([
+            (&quot;encoder&quot;, ohe_encoder),
+            (&quot;imputer&quot;, imputer),
+            (&quot;scaler&quot;, dp.DataStandardScaler(include_cols=float_cols, verbose=False)),
+            (&quot;estimator&quot;, SVC(probability=True)),
+        ])
+fit_and_get_results_bin(pipe1, train_x, train_y, test_x, test_y, best_th_auc=True)
 </pre></div>
 </div>
 </div>
@@ -942,14 +942,14 @@ Threshold used: 0.29745720239980394
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipe2</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">ohe_encoder</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">imputer</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">include_cols</span><span class="o">=</span><span class="n">float_cols</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s2">&quot;feat_sel&quot;</span><span class="p">,</span> <span class="n">feat_sel</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">,</span> <span class="n">SVC</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
-        <span class="p">])</span>
-<span class="n">fit_and_get_results_bin</span><span class="p">(</span><span class="n">pipe2</span><span class="p">,</span> <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">best_th_auc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pipe2 = Pipeline([
+            (&quot;encoder&quot;, ohe_encoder),
+            (&quot;imputer&quot;, imputer),
+            (&quot;scaler&quot;, dp.DataStandardScaler(include_cols=float_cols)),
+            (&quot;feat_sel&quot;, feat_sel),
+            (&quot;estimator&quot;, SVC(probability=True)),
+        ])
+fit_and_get_results_bin(pipe2, train_x, train_y, test_x, test_y, best_th_auc=True)
 </pre></div>
 </div>
 </div>
@@ -1011,15 +1011,15 @@ the SKLearn’s <strong>SimpleImputer</strong> instead of using our similar clas
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="p">(</span><span class="s2">&quot;encoder_ohe&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">,</span> <span class="s2">&quot;on_thyroxine&quot;</span><span class="p">])),</span> <span class="c1"># dataprocessing</span>
-            <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=-</span><span class="mi">100</span><span class="p">)),</span>   <span class="c1"># sklearn</span>
-            <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">include_cols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span>                  <span class="c1"># dataprocessing</span>
-            <span class="p">(</span><span class="s2">&quot;ordinal_encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>              <span class="c1"># dataprocessing</span>
-        <span class="p">])</span>
-<span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">)</span>
-<span class="n">new_x_test</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">new_x_test</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pipe = Pipeline([
+            (&quot;encoder_ohe&quot;, dp.EncoderOHE(col_encode=[&quot;sex&quot;, &quot;on_thyroxine&quot;])), # dataprocessing
+            (&quot;imputer&quot;, SimpleImputer(strategy=&quot;constant&quot;, fill_value=-100)),   # sklearn
+            (&quot;scaler&quot;, dp.DataMinMaxScaler(include_cols=[0])),                  # dataprocessing
+            (&quot;ordinal_encoder&quot;, dp.EncoderOrdinal(verbose=False)),              # dataprocessing
+        ])
+pipe.fit(train_x, train_y)
+new_x_test = pipe.transform(test_x)
+new_x_test
 </pre></div>
 </div>
 </div>
@@ -1344,15 +1344,15 @@ the SKLearn’s <strong>SimpleImputer</strong> instead of using our similar clas
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="p">(</span><span class="s2">&quot;encoder_ohe&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])),</span>                  <span class="c1"># dataprocessing</span>
-            <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=-</span><span class="mi">100</span><span class="p">)),</span>   <span class="c1"># sklearn</span>
-            <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">include_cols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span>                  <span class="c1"># dataprocessing</span>
-            <span class="p">(</span><span class="s2">&quot;ordinal_encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>              <span class="c1"># dataprocessing</span>
-        <span class="p">])</span>
-<span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">)</span>
-<span class="n">new_x_test</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">new_x_test</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pipe = Pipeline([
+            (&quot;encoder_ohe&quot;, dp.EncoderOHE(col_encode=[1, 2])),                  # dataprocessing
+            (&quot;imputer&quot;, SimpleImputer(strategy=&quot;constant&quot;, fill_value=-100)),   # sklearn
+            (&quot;scaler&quot;, dp.DataMinMaxScaler(include_cols=[0])),                  # dataprocessing
+            (&quot;ordinal_encoder&quot;, dp.EncoderOrdinal(verbose=False)),              # dataprocessing
+        ])
+pipe.fit(train_x, train_y)
+new_x_test = pipe.transform(test_x)
+new_x_test
 </pre></div>
 </div>
 </div>
@@ -1683,17 +1683,17 @@ all transformers will receive a dataframe as input, without losing the column na
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">miss_dict</span> <span class="o">=</span><span class="p">{</span><span class="s1">&#39;missing_values&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s1">&#39;strategy&#39;</span><span class="p">:</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="s1">&#39;fill_value&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>miss_dict ={&#39;missing_values&#39;:np.nan, &#39;strategy&#39;:&#39;constant&#39;, &#39;fill_value&#39;:-100}
 
-<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="p">(</span><span class="s2">&quot;encoder_ohe&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">,</span> <span class="s2">&quot;on_thyroxine&quot;</span><span class="p">])),</span>                         <span class="c1"># dataprocessing</span>
-            <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">numerical</span><span class="o">=</span><span class="n">miss_dict</span><span class="p">,</span> <span class="n">categorical</span><span class="o">=</span><span class="n">miss_dict</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>    <span class="c1"># dataprocessing</span>
-            <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">include_cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">])),</span>                                      <span class="c1"># dataprocessing</span>
-            <span class="p">(</span><span class="s2">&quot;ordinal_encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>                                      <span class="c1"># dataprocessing</span>
-        <span class="p">])</span>
-<span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">)</span>
-<span class="n">new_x_test</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">new_x_test</span>
+pipe = Pipeline([
+            (&quot;encoder_ohe&quot;, dp.EncoderOHE(col_encode=[&quot;sex&quot;, &quot;on_thyroxine&quot;])),                         # dataprocessing
+            (&quot;imputer&quot;, dp.BasicImputer(numerical=miss_dict, categorical=miss_dict, verbose=False)),    # dataprocessing
+            (&quot;scaler&quot;, dp.DataMinMaxScaler(include_cols=[&quot;age&quot;])),                                      # dataprocessing
+            (&quot;ordinal_encoder&quot;, dp.EncoderOrdinal(verbose=False)),                                      # dataprocessing
+        ])
+pipe.fit(train_x, train_y)
+new_x_test = pipe.transform(test_x)
+new_x_test
 </pre></div>
 </div>
 </div>
@@ -2023,19 +2023,19 @@ dataframe is never lost. To do this, the user must pass the transformer object t
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">feature_engine.wrappers</span> <span class="kn">import</span> <span class="n">SklearnTransformerWrapper</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from feature_engine.wrappers import SklearnTransformerWrapper
 
-<span class="n">imputer</span> <span class="o">=</span> <span class="n">SklearnTransformerWrapper</span><span class="p">(</span><span class="n">transformer</span><span class="o">=</span><span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=-</span><span class="mi">100</span><span class="p">))</span>
+imputer = SklearnTransformerWrapper(transformer=SimpleImputer(strategy=&quot;constant&quot;, fill_value=-100))
 
-<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="p">(</span><span class="s2">&quot;encoder_ohe&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">,</span> <span class="s2">&quot;on_thyroxine&quot;</span><span class="p">])),</span> <span class="c1"># dataprocessing</span>
-            <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">imputer</span><span class="p">),</span>                                               <span class="c1"># sklearn</span>
-            <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">include_cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">])),</span>                  <span class="c1"># dataprocessing</span>
-            <span class="p">(</span><span class="s2">&quot;ordinal_encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>              <span class="c1"># dataprocessing</span>
-        <span class="p">])</span>
-<span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">)</span>
-<span class="n">new_x_test</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">new_x_test</span>
+pipe = Pipeline([
+            (&quot;encoder_ohe&quot;, dp.EncoderOHE(col_encode=[&quot;sex&quot;, &quot;on_thyroxine&quot;])), # dataprocessing
+            (&quot;imputer&quot;, imputer),                                               # sklearn
+            (&quot;scaler&quot;, dp.DataMinMaxScaler(include_cols=[&quot;age&quot;])),                  # dataprocessing
+            (&quot;ordinal_encoder&quot;, dp.EncoderOrdinal(verbose=False)),              # dataprocessing
+        ])
+pipe.fit(train_x, train_y)
+new_x_test = pipe.transform(test_x)
+new_x_test
 </pre></div>
 </div>
 </div>
@@ -2365,24 +2365,24 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">feature_engine.wrappers.wrappers</span> <span class="kn">import</span> <span class="n">_ALL_TRANSFORMERS</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from feature_engine.wrappers.wrappers import _ALL_TRANSFORMERS
 
-<span class="k">class</span> <span class="nc">PipelineWrapper</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+class PipelineWrapper(Pipeline):
 
-    <span class="c1"># -----------------------------------</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">steps</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="n">memory</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_wrap_skl_transf</span><span class="p">()</span>
+    # -----------------------------------
+    def __init__(self, steps, *, memory=None, verbose=False):
+        super().__init__(steps, memory=memory, verbose=verbose)
+        self._wrap_skl_transf()
 
-    <span class="c1"># -----------------------------------</span>
-    <span class="k">def</span> <span class="nf">_wrap_skl_transf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">)):</span>
-            <span class="n">name</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataProcessing</span><span class="p">):</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">SklearnTransformerWrapper</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="n">transform</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">in</span> <span class="n">_ALL_TRANSFORMERS</span><span class="p">:</span>
-                        <span class="n">transform</span> <span class="o">=</span> <span class="n">SklearnTransformerWrapper</span><span class="p">(</span><span class="n">transformer</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
+    # -----------------------------------
+    def _wrap_skl_transf(self):
+        for i in range(len(self.steps)):
+            name, transform = self.steps[i]
+            if not isinstance(transform, dp.DataProcessing):
+                if not isinstance(transform, SklearnTransformerWrapper):
+                    if transform.__class__.__name__ in _ALL_TRANSFORMERS:
+                        transform = SklearnTransformerWrapper(transformer=transform)
+                        self.steps[i] = (name, transform)
 </pre></div>
 </div>
 </div>
@@ -2391,15 +2391,15 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipe</span> <span class="o">=</span> <span class="n">PipelineWrapper</span><span class="p">([</span>
-            <span class="p">(</span><span class="s2">&quot;encoder_ohe&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">,</span> <span class="s2">&quot;on_thyroxine&quot;</span><span class="p">])),</span> <span class="c1"># dataprocessing</span>
-            <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;constant&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=-</span><span class="mi">100</span><span class="p">)),</span>   <span class="c1"># sklearn</span>
-            <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">include_cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">])),</span>              <span class="c1"># dataprocessing</span>
-            <span class="p">(</span><span class="s2">&quot;ordinal_encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>              <span class="c1"># dataprocessing</span>
-        <span class="p">])</span>
-<span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">)</span>
-<span class="n">new_x_test</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">new_x_test</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pipe = PipelineWrapper([
+            (&quot;encoder_ohe&quot;, dp.EncoderOHE(col_encode=[&quot;sex&quot;, &quot;on_thyroxine&quot;])), # dataprocessing
+            (&quot;imputer&quot;, SimpleImputer(strategy=&quot;constant&quot;, fill_value=-100)),   # sklearn
+            (&quot;scaler&quot;, dp.DataMinMaxScaler(include_cols=[&quot;age&quot;])),              # dataprocessing
+            (&quot;ordinal_encoder&quot;, dp.EncoderOrdinal(verbose=False)),              # dataprocessing
+        ])
+pipe.fit(train_x, train_y)
+new_x_test = pipe.transform(test_x)
+new_x_test
 </pre></div>
 </div>
 </div>

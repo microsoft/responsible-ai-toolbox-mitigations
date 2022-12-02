@@ -386,13 +386,13 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">uci_dataset</span> <span class="k">as</span> <span class="nn">database</span>
-<span class="kn">import</span> <span class="nn">torch</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import pandas as pd
+import numpy as np
+import uci_dataset as database
+import torch
 
-<span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
-<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">split_data</span><span class="p">,</span> <span class="n">train_model_plot_results</span>
+import raimitigations.dataprocessing as dp
+from raimitigations.utils import split_data, train_model_plot_results
 </pre></div>
 </div>
 </div>
@@ -406,11 +406,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
-<span class="n">SEED</span> <span class="o">=</span> <span class="mi">45</span>
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
-<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
-<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import random
+SEED = 45
+np.random.seed(SEED)
+random.seed(SEED)
+torch.manual_seed(SEED)
 </pre></div>
 </div>
 </div>
@@ -430,9 +430,9 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">database</span><span class="o">.</span><span class="n">load_breast_cancer</span><span class="p">()</span>
-<span class="n">label_col</span> <span class="o">=</span> <span class="s2">&quot;Class&quot;</span>
-<span class="n">df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = database.load_breast_cancer()
+label_col = &quot;Class&quot;
+df
 </pre></div>
 </div>
 </div>
@@ -624,7 +624,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df.info()
 </pre></div>
 </div>
 </div>
@@ -658,9 +658,9 @@ their categories. For example, the <strong>age</strong> column presents a hierar
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;age unique values = </span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;tumor-size unique values = </span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;tumor-size&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;inv-nodes unique values = </span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;inv-nodes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(f&quot;age unique values = {df[&#39;age&#39;].unique()}&quot;)
+print(f&quot;tumor-size unique values = {df[&#39;tumor-size&#39;].unique()}&quot;)
+print(f&quot;inv-nodes unique values = {df[&#39;inv-nodes&#39;].unique()}&quot;)
 </pre></div>
 </div>
 </div>
@@ -682,20 +682,20 @@ specific set of variables if needed) and remove one variable for each pair of co
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_feat</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">CorrelatedFeatures</span><span class="p">(</span>
-                                    <span class="n">method_num_num</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;kendall&quot;</span><span class="p">],</span>                              <span class="c1"># Used for Numerical x Numerical correlations</span>
-                                    <span class="n">num_corr_th</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>                                                                                                <span class="c1"># Used for Numerical x Numerical correlations</span>
-                                    <span class="n">num_pvalue_th</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>                                                                                             <span class="c1"># Used for Numerical x Numerical correlations</span>
-                                    <span class="n">method_num_cat</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">,</span>                                                                                 <span class="c1"># Used for Numerical x Categorical correlations</span>
-                                    <span class="n">model_metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;auc&quot;</span><span class="p">],</span>                                                                    <span class="c1"># Used for Numerical x Categorical correlations</span>
-                                    <span class="n">metric_th</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>                                                                                                  <span class="c1"># Used for Numerical x Categorical correlations</span>
-                                    <span class="n">cat_corr_th</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>                                                                                                <span class="c1"># Used for Categorical x Categorical correlations</span>
-                                    <span class="n">cat_pvalue_th</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>                                                                                             <span class="c1"># Used for Categorical x Categorical correlations</span>
-                                    <span class="n">json_summary</span><span class="o">=</span><span class="s2">&quot;./corr_json/c1_summary.json&quot;</span><span class="p">,</span>
-                                    <span class="n">json_corr</span><span class="o">=</span><span class="s2">&quot;./corr_json/c1_corr.json&quot;</span><span class="p">,</span>
-                                    <span class="n">json_uncorr</span><span class="o">=</span><span class="s2">&quot;./corr_json/c1_uncorr.json&quot;</span>
-                            <span class="p">)</span>
-<span class="n">cor_feat</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="n">label_col</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cor_feat = dp.CorrelatedFeatures(
+                                    method_num_num=[&quot;spearman&quot;, &quot;pearson&quot;, &quot;kendall&quot;],                              # Used for Numerical x Numerical correlations
+                                    num_corr_th=0.9,                                                                                                # Used for Numerical x Numerical correlations
+                                    num_pvalue_th=0.05,                                                                                             # Used for Numerical x Numerical correlations
+                                    method_num_cat=&quot;model&quot;,                                                                                 # Used for Numerical x Categorical correlations
+                                    model_metrics=[&quot;f1&quot;, &quot;auc&quot;],                                                                    # Used for Numerical x Categorical correlations
+                                    metric_th=0.9,                                                                                                  # Used for Numerical x Categorical correlations
+                                    cat_corr_th=0.9,                                                                                                # Used for Categorical x Categorical correlations
+                                    cat_pvalue_th=0.01,                                                                                             # Used for Categorical x Categorical correlations
+                                    json_summary=&quot;./corr_json/c1_summary.json&quot;,
+                                    json_corr=&quot;./corr_json/c1_corr.json&quot;,
+                                    json_uncorr=&quot;./corr_json/c1_uncorr.json&quot;
+                            )
+cor_feat.fit(df=df, label_col=label_col)
 </pre></div>
 </div>
 </div>
@@ -729,28 +729,28 @@ encoding by instantiating an object of class <strong>EncoderOHE</strong> and the
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set the order that the ordinal encoder should use</span>
-<span class="n">age_order</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-<span class="n">age_order</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-<span class="n">tumor_size_order</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tumor-size&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-<span class="n">tumor_size_order</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-<span class="n">inv_nodes_order</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;inv-nodes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-<span class="n">inv_nodes_order</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Set the order that the ordinal encoder should use
+age_order = df[&#39;age&#39;].unique()
+age_order.sort()
+tumor_size_order = df[&#39;tumor-size&#39;].unique()
+tumor_size_order.sort()
+inv_nodes_order = df[&#39;inv-nodes&#39;].unique()
+inv_nodes_order.sort()
 
-<span class="c1"># Encode &#39;tumor-size&#39;, &#39;Class&#39;, and &#39;inv-nodes&#39; using ordinal encoding</span>
-<span class="n">enc_ord</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">col_encode</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;tumor-size&quot;</span><span class="p">,</span> <span class="s2">&quot;inv-nodes&quot;</span><span class="p">,</span> <span class="s2">&quot;Class&quot;</span><span class="p">],</span>
-                                                    <span class="n">categories</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;age&quot;</span><span class="p">:</span><span class="n">age_order</span><span class="p">,</span>
-                                                                            <span class="s2">&quot;tumor-size&quot;</span><span class="p">:</span><span class="n">tumor_size_order</span><span class="p">,</span>
-                                                                            <span class="s2">&quot;inv-nodes&quot;</span><span class="p">:</span><span class="n">inv_nodes_order</span><span class="p">}</span>
-                                            <span class="p">)</span>
-<span class="n">enc_ord</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="n">proc_df</span> <span class="o">=</span> <span class="n">enc_ord</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+# Encode &#39;tumor-size&#39;, &#39;Class&#39;, and &#39;inv-nodes&#39; using ordinal encoding
+enc_ord = dp.EncoderOrdinal(col_encode=[&quot;age&quot;, &quot;tumor-size&quot;, &quot;inv-nodes&quot;, &quot;Class&quot;],
+                                                    categories={&quot;age&quot;:age_order,
+                                                                            &quot;tumor-size&quot;:tumor_size_order,
+                                                                            &quot;inv-nodes&quot;:inv_nodes_order}
+                                            )
+enc_ord.fit(df)
+proc_df = enc_ord.transform(df)
 
-<span class="c1"># Encode the remaining categorical columns using One-Hot Encoding</span>
-<span class="n">enc_ohe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">()</span>
-<span class="n">enc_ohe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
-<span class="n">proc_df</span> <span class="o">=</span> <span class="n">enc_ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
-<span class="n">proc_df</span>
+# Encode the remaining categorical columns using One-Hot Encoding
+enc_ohe = dp.EncoderOHE()
+enc_ohe.fit(proc_df)
+proc_df = enc_ohe.transform(proc_df)
+proc_df
 </pre></div>
 </div>
 </div>
@@ -1024,7 +1024,7 @@ No columns specified for encoding. These columns have been automatically identfi
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">proc_df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>proc_df.info()
 </pre></div>
 </div>
 </div>
@@ -1070,13 +1070,13 @@ memory usage: 23.6 KB
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>train_x, test_x, train_y, test_y = split_data(proc_df, label_col, test_size=0.25)
 
-<span class="n">imputer</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">()</span>
-<span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-<span class="n">train_x</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-<span class="n">test_x</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
-<span class="n">train_x</span>
+imputer = dp.BasicImputer()
+imputer.fit(train_x)
+train_x = imputer.transform(train_x)
+test_x = imputer.transform(test_x)
+train_x
 </pre></div>
 </div>
 </div>
@@ -1343,7 +1343,7 @@ No columns specified for imputation. These columns have been automatically ident
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;xgb&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model = train_model_plot_results(train_x, train_y, test_x, test_y, model=&quot;xgb&quot;, train_result=False, plot_pr=False)
 </pre></div>
 </div>
 </div>
@@ -1385,7 +1385,7 @@ Threshold used: 0.2437402755022049
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model = train_model_plot_results(train_x, train_y, test_x, test_y, model=&quot;knn&quot;, train_result=False, plot_pr=False)
 </pre></div>
 </div>
 </div>
@@ -1439,10 +1439,10 @@ transform method over the training and test sets. This way we don’t use any in
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">CatBoostSelection</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">train_x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">)</span>
-<span class="n">train_x_sel</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
-<span class="n">test_x_sel</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel = dp.CatBoostSelection(steps=5, verbose=False)
+feat_sel.fit(X=train_x, y=train_y)
+train_x_sel = feat_sel.transform(train_x)
+test_x_sel = feat_sel.transform(test_x)
 </pre></div>
 </div>
 </div>
@@ -1460,7 +1460,7 @@ transform method over the training and test sets. This way we don’t use any in
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel.get_selected_features()
 </pre></div>
 </div>
 </div>
@@ -1484,7 +1484,7 @@ transform method over the training and test sets. This way we don’t use any in
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_sel</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model = train_model_plot_results(train_x_sel, train_y, test_x_sel, test_y, model=&quot;knn&quot;, train_result=False, plot_pr=False)
 </pre></div>
 </div>
 </div>
@@ -1536,7 +1536,7 @@ dataset and decide the best SMOTE variation to use, apply any under sampling met
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>train_y.value_counts()
 </pre></div>
 </div>
 </div>
@@ -1556,15 +1556,15 @@ Name: Class, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rebalance</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span>
-                            <span class="n">X</span><span class="o">=</span><span class="n">train_x_sel</span><span class="p">,</span>
-                            <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span>
-                            <span class="n">strategy_over</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="mi">150</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">90</span><span class="p">},</span>
-                            <span class="n">over_sampler</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">under_sampler</span><span class="o">=</span><span class="kc">False</span>
-                    <span class="p">)</span>
-<span class="n">train_x_res</span><span class="p">,</span> <span class="n">train_y_res</span> <span class="o">=</span> <span class="n">rebalance</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">()</span>
-<span class="n">train_y_res</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rebalance = dp.Rebalance(
+                            X=train_x_sel,
+                            y=train_y,
+                            strategy_over={0:150, 1:90},
+                            over_sampler=True,
+                            under_sampler=False
+                    )
+train_x_res, train_y_res = rebalance.fit_resample()
+train_y_res.value_counts()
 </pre></div>
 </div>
 </div>
@@ -1595,7 +1595,7 @@ Name: Class, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">train_x_res</span><span class="p">,</span> <span class="n">train_y_res</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model = train_model_plot_results(train_x_res, train_y_res, test_x_sel, test_y, model=&quot;knn&quot;, train_result=False, plot_pr=False)
 </pre></div>
 </div>
 </div>
@@ -1645,17 +1645,17 @@ Threshold used: 0.6
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">synth</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Synthesizer</span><span class="p">(</span>
-                            <span class="n">X</span><span class="o">=</span><span class="n">train_x_sel</span><span class="p">,</span>
-                            <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span>
-                            <span class="n">epochs</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
-                            <span class="n">model</span><span class="o">=</span><span class="s2">&quot;ctgan&quot;</span><span class="p">,</span>
-                            <span class="n">load_existing</span><span class="o">=</span><span class="kc">False</span>
-                    <span class="p">)</span>
-<span class="n">synth</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-<span class="n">conditions</span> <span class="o">=</span> <span class="p">{</span><span class="n">label_col</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
-<span class="n">syn_train_x</span><span class="p">,</span> <span class="n">syn_train_y</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">train_x_sel</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">conditions</span><span class="o">=</span><span class="n">conditions</span><span class="p">)</span>
-<span class="n">syn_train_y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>synth = dp.Synthesizer(
+                            X=train_x_sel,
+                            y=train_y,
+                            epochs=400,
+                            model=&quot;ctgan&quot;,
+                            load_existing=False
+                    )
+synth.fit()
+conditions = {label_col:1}
+syn_train_x, syn_train_y = synth.transform(X=train_x_sel, y=train_y, n_samples=20, conditions=conditions)
+syn_train_y.value_counts()
 </pre></div>
 </div>
 </div>
@@ -1726,7 +1726,7 @@ Name: Class, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">train_model_plot_results</span><span class="p">(</span><span class="n">syn_train_x</span><span class="p">,</span> <span class="n">syn_train_y</span><span class="p">,</span> <span class="n">test_x_sel</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;knn&quot;</span><span class="p">,</span> <span class="n">train_result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_pr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>model = train_model_plot_results(syn_train_x, syn_train_y, test_x_sel, test_y, model=&quot;knn&quot;, train_result=False, plot_pr=False)
 </pre></div>
 </div>
 </div>

@@ -427,17 +427,17 @@ most of these examples, the data on which these models are trained was the commo
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../notebooks&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import sys
+sys.path.append(&#39;../../notebooks&#39;)
 
-<span class="kn">from</span> <span class="nn">raimitigations.databalanceanalysis</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">FeatureBalanceMeasure</span><span class="p">,</span>
-    <span class="n">DistributionBalanceMeasure</span><span class="p">,</span>
-    <span class="n">AggregateBalanceMeasure</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+from raimitigations.databalanceanalysis import (
+    FeatureBalanceMeasure,
+    DistributionBalanceMeasure,
+    AggregateBalanceMeasure,
+)
+import pandas as pd
 
-<span class="kn">from</span> <span class="nn">download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
+from download import download_datasets
 </pre></div>
 </div>
 </div>
@@ -449,16 +449,16 @@ most of these examples, the data on which these models are trained was the commo
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s2">&quot;../../datasets/&quot;</span>
-<span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data_dir = &quot;../../datasets/&quot;
+download_datasets(data_dir)
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s2">&quot;AdultCensusIncome.csv&quot;</span><span class="p">,</span> <span class="n">skipinitialspace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+df = pd.read_csv(data_dir + &quot;AdultCensusIncome.csv&quot;, skipinitialspace=True)
 
-<span class="n">sensitive_features</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Gender&quot;</span><span class="p">,</span> <span class="s2">&quot;Race&quot;</span><span class="p">]</span>
-<span class="n">label_col</span> <span class="o">=</span> <span class="s2">&quot;income&quot;</span>
+sensitive_features = [&quot;Gender&quot;, &quot;Race&quot;]
+label_col = &quot;income&quot;
 
-<span class="c1"># convert to 0 and 1 encoding</span>
-<span class="n">df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;&lt;=50K&quot;</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+# convert to 0 and 1 encoding
+df[label_col] = df[label_col].apply(lambda x: 0 if x == &quot;&lt;=50K&quot; else 1)
 </pre></div>
 </div>
 </div>
@@ -470,10 +470,10 @@ most of these examples, the data on which these models are trained was the commo
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cols_of_interest</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">,</span> <span class="s2">&quot;sex&quot;</span><span class="p">]</span>
-<span class="n">label_col</span> <span class="o">=</span> <span class="s2">&quot;income&quot;</span>
-<span class="n">feature_measures</span> <span class="o">=</span> <span class="n">FeatureBalanceMeasure</span><span class="p">(</span><span class="n">cols_of_interest</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
-<span class="n">feature_measures</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cols_of_interest = [&quot;race&quot;, &quot;sex&quot;]
+label_col = &quot;income&quot;
+feature_measures = FeatureBalanceMeasure(cols_of_interest, label_col)
+feature_measures.measures(df)
 </pre></div>
 </div>
 </div>
@@ -680,8 +680,8 @@ most of these examples, the data on which these models are trained was the commo
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">distribution_measures</span> <span class="o">=</span> <span class="n">DistributionBalanceMeasure</span><span class="p">([</span><span class="s2">&quot;race&quot;</span><span class="p">,</span> <span class="s2">&quot;sex&quot;</span><span class="p">])</span>
-<span class="n">distribution_measures</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>distribution_measures = DistributionBalanceMeasure([&quot;race&quot;, &quot;sex&quot;])
+distribution_measures.measures(df)
 </pre></div>
 </div>
 </div>
@@ -752,8 +752,8 @@ most of these examples, the data on which these models are trained was the commo
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aggregate_measures</span> <span class="o">=</span> <span class="n">AggregateBalanceMeasure</span><span class="p">([</span><span class="s2">&quot;race&quot;</span><span class="p">])</span>
-<span class="n">aggregate_measures</span><span class="o">.</span><span class="n">measures</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>aggregate_measures = AggregateBalanceMeasure([&quot;race&quot;])
+aggregate_measures.measures(df)
 </pre></div>
 </div>
 </div>

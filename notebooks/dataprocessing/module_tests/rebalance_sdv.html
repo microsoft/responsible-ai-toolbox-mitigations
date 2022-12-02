@@ -391,13 +391,13 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../../notebooks&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import sys
+sys.path.append(&#39;../../../notebooks&#39;)
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">Synthesizer</span>
-<span class="kn">from</span> <span class="nn">download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
+import pandas as pd
+import numpy as np
+from raimitigations.dataprocessing import Synthesizer
+from download import download_datasets
 </pre></div>
 </div>
 </div>
@@ -409,11 +409,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/&#39;</span>
-<span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
-<span class="n">dataset</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
-<span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;employee_id&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">dataset</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data_dir = &#39;../../../datasets/&#39;
+download_datasets(data_dir)
+dataset =  pd.read_csv(data_dir + &#39;hr_promotion/train.csv&#39;)
+dataset.drop(columns=[&#39;employee_id&#39;], inplace=True)
+dataset
 </pre></div>
 </div>
 </div>
@@ -642,7 +642,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dataset[&#39;is_promoted&#39;].value_counts()
 </pre></div>
 </div>
 </div>
@@ -663,8 +663,8 @@ Name: is_promoted, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">synth</span> <span class="o">=</span> <span class="n">Synthesizer</span><span class="p">(</span><span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">synth</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>synth = Synthesizer(epochs=10)
+synth.fit(df=dataset, label_col=&#39;is_promoted&#39;)
 </pre></div>
 </div>
 </div>
@@ -718,8 +718,8 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_sample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
-<span class="n">df_sample</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df_sample = synth.sample(500)
+df_sample
 </pre></div>
 </div>
 </div>
@@ -936,8 +936,8 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df_resample</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df_resample = synth.transform(df=dataset, n_samples=1000)
+print(df_resample[&#39;is_promoted&#39;].value_counts())
 </pre></div>
 </div>
 </div>
@@ -956,8 +956,8 @@ Name: is_promoted, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df_resample</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df_resample = synth.transform(df=dataset)
+print(df_resample[&#39;is_promoted&#39;].value_counts())
 </pre></div>
 </div>
 </div>
@@ -994,8 +994,8 @@ such as RandomUnderSampler, ClusterCentroids (from imblearn). If any other under
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;not majority&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df_resample</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df_resample = synth.transform(df=dataset, strategy=&#39;not majority&#39;)
+print(df_resample[&#39;is_promoted&#39;].value_counts())
 </pre></div>
 </div>
 </div>
@@ -1018,10 +1018,10 @@ Name: is_promoted, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;education&quot;</span><span class="p">:</span> <span class="s2">&quot;Below Secondary&quot;</span><span class="p">,</span> <span class="s2">&quot;is_promoted&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
-<span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">conditions</span><span class="o">=</span><span class="n">conditions</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df_resample</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
-<span class="n">df_resample</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>conditions = {&quot;education&quot;: &quot;Below Secondary&quot;, &quot;is_promoted&quot;:1}
+df_resample = synth.transform(df=dataset, n_samples=5000, conditions=conditions)
+print(df_resample[&#39;is_promoted&#39;].value_counts())
+df_resample
 </pre></div>
 </div>
 </div>
@@ -1248,10 +1248,10 @@ Name: is_promoted, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;education&quot;</span><span class="p">:</span> <span class="s2">&quot;Below Secondary&quot;</span><span class="p">,</span> <span class="s2">&quot;is_promoted&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
-<span class="n">sample_df</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">conditions</span><span class="o">=</span><span class="n">conditions</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">sample_df</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
-<span class="n">sample_df</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>conditions = {&quot;education&quot;: &quot;Below Secondary&quot;, &quot;is_promoted&quot;:1}
+sample_df = synth.sample(n_samples=5000, conditions=conditions)
+print(sample_df[&#39;is_promoted&#39;].value_counts())
+sample_df
 </pre></div>
 </div>
 </div>

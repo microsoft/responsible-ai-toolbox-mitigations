@@ -390,47 +390,47 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../../notebooks&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import sys
+sys.path.append(&#39;../../../notebooks&#39;)
 
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
-<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
-<span class="kn">from</span> <span class="nn">lightgbm</span> <span class="kn">import</span> <span class="n">LGBMClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+import random
+import numpy as np
+import pandas as pd
+import xgboost as xgb
+from sklearn.pipeline import Pipeline
+from lightgbm import LGBMClassifier
+from sklearn.linear_model import LogisticRegression
+import matplotlib.pyplot as plt
 
-<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">split_data</span>
-<span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
-<span class="kn">from</span> <span class="nn">raimitigations.cohort</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">CohortDefinition</span><span class="p">,</span>
-    <span class="n">CohortManager</span><span class="p">,</span>
-    <span class="n">fetch_cohort_results</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
+from raimitigations.utils import split_data
+import raimitigations.dataprocessing as dp
+from raimitigations.cohort import (
+    CohortDefinition,
+    CohortManager,
+    fetch_cohort_results
+)
+from download import download_datasets
 
-<span class="n">SEED</span> <span class="o">=</span> <span class="mi">46</span>
-<span class="c1">#SEED = None</span>
+SEED = 46
+#SEED = None
 
-<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
-<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+np.random.seed(SEED)
+random.seed(SEED)
 
-<span class="n">data_dir</span> <span class="o">=</span> <span class="s2">&quot;../../../datasets/census/&quot;</span>
-<span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
+data_dir = &quot;../../../datasets/census/&quot;
+download_datasets(data_dir)
 
-<span class="n">label_col</span> <span class="o">=</span> <span class="s2">&quot;income&quot;</span>
-<span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s2">&quot;train.csv&quot;</span><span class="p">)</span>
-<span class="n">df_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s2">&quot;test.csv&quot;</span><span class="p">)</span>
-<span class="c1"># convert to 0 and 1 encoding</span>
-<span class="n">df_train</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;&lt;=50K&quot;</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">df_test</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;&lt;=50K&quot;</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+label_col = &quot;income&quot;
+df_train = pd.read_csv(data_dir + &quot;train.csv&quot;)
+df_test = pd.read_csv(data_dir + &quot;test.csv&quot;)
+# convert to 0 and 1 encoding
+df_train[label_col] = df_train[label_col].apply(lambda x: 0 if x == &quot;&lt;=50K&quot; else 1)
+df_test[label_col] = df_test[label_col].apply(lambda x: 0 if x == &quot;&lt;=50K&quot; else 1)
 
-<span class="n">X_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">label_col</span><span class="p">])</span>
-<span class="n">y_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span>
-<span class="n">X_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">label_col</span><span class="p">])</span>
-<span class="n">y_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span>
+X_train = df_train.drop(columns=[label_col])
+y_train = df_train[label_col]
+X_test = df_test.drop(columns=[label_col])
+y_test = df_test[label_col]
 </pre></div>
 </div>
 </div>
@@ -438,8 +438,8 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">df_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(df_train.shape)
+print(df_test.shape)
 </pre></div>
 </div>
 </div>
@@ -456,7 +456,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_train</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df_train
 </pre></div>
 </div>
 </div>
@@ -709,10 +709,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_model</span><span class="p">():</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">LGBMClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">SEED</span><span class="p">)</span>
-    <span class="c1">#model = LogisticRegression()</span>
-    <span class="k">return</span> <span class="n">model</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def get_model():
+    model = LGBMClassifier(random_state=SEED)
+    #model = LogisticRegression()
+    return model
 </pre></div>
 </div>
 </div>
@@ -727,19 +727,19 @@ first using the training dataset, which gives us the best thresholds for each co
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 1</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Baseline 1
 
-<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">()),</span>
-        <span class="p">])</span>
-<span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="n">pred_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+pipe = Pipeline([
+            (&quot;scaler&quot;, dp.DataStandardScaler(verbose=False)),
+            (&quot;encoder&quot;, dp.EncoderOHE(verbose=False)),
+            (&quot;estimator&quot;, get_model()),
+        ])
+pipe.fit(X_train, y_train)
+pred_org = pipe.predict_proba(X_test)
 
-<span class="n">pred_train_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+pred_train_org = pipe.predict_proba(X_train)
+metrics_train, th_dict = fetch_cohort_results(X_train, y_train, pred_train_org, cohort_col=[&quot;race&quot;], return_th_dict=True)
+fetch_cohort_results(X_test, y_test, pred_org, cohort_col=[&quot;race&quot;], fixed_th=th_dict)
 </pre></div>
 </div>
 </div>
@@ -859,22 +859,22 @@ first using the training dataset, which gives us the best thresholds for each co
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 1</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Cohort 1
 
-<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">get_model</span><span class="p">()</span>
-    <span class="p">],</span>
-    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+cht_manager = CohortManager(
+    transform_pipe=[
+        dp.DataStandardScaler(verbose=False),
+        dp.EncoderOHE(drop=False, unknown_err=False, verbose=False),
+        get_model()
+    ],
+    cohort_col=[&quot;race&quot;]
+)
+cht_manager.fit(X_train, y_train)
+pred_cht = cht_manager.predict_proba(X_test)
 
-<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">])</span>
+pred_train = cht_manager.predict_proba(X_train)
+metrics_train, th_dict = fetch_cohort_results(X_train, y_train, pred_train, cohort_col=[&quot;race&quot;], return_th_dict=True)
+fetch_cohort_results(X_test, y_test, pred_cht, cohort_col=[&quot;race&quot;])
 </pre></div>
 </div>
 </div>
@@ -1000,11 +1000,11 @@ different optimal threshold values encountered for different cohorts.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 2</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Baseline 2
 
-<span class="n">pred_train_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+pred_train_org = pipe.predict_proba(X_train)
+metrics_train, th_dict = fetch_cohort_results(X_train, y_train, pred_train_org, cohort_col=[&quot;gender&quot;], return_th_dict=True)
+fetch_cohort_results(X_test, y_test, pred_org, cohort_col=[&quot;gender&quot;], fixed_th=th_dict)
 </pre></div>
 </div>
 </div>
@@ -1088,22 +1088,22 @@ different optimal threshold values encountered for different cohorts.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 2</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Cohort 2
 
-<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">get_model</span><span class="p">()</span>
-    <span class="p">],</span>
-    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+cht_manager = CohortManager(
+    transform_pipe=[
+        dp.DataStandardScaler(verbose=False),
+        dp.EncoderOHE(drop=False, unknown_err=False, verbose=False),
+        get_model()
+    ],
+    cohort_col=[&quot;gender&quot;]
+)
+cht_manager.fit(X_train, y_train)
+pred_cht = cht_manager.predict_proba(X_test)
 
-<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">])</span>
+pred_train = cht_manager.predict_proba(X_train)
+metrics_train, th_dict = fetch_cohort_results(X_train, y_train, pred_train, cohort_col=[&quot;gender&quot;], return_th_dict=True)
+fetch_cohort_results(X_test, y_test, pred_cht, cohort_col=[&quot;gender&quot;])
 </pre></div>
 </div>
 </div>
@@ -1191,11 +1191,11 @@ different optimal threshold values encountered for different cohorts.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 3</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Baseline 3
 
-<span class="n">pred_train_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+pred_train_org = pipe.predict_proba(X_train)
+metrics_train, th_dict = fetch_cohort_results(X_train, y_train, pred_train_org, cohort_col=[&quot;relationship&quot;], return_th_dict=True)
+fetch_cohort_results(X_test, y_test, pred_org, cohort_col=[&quot;relationship&quot;], fixed_th=th_dict)
 </pre></div>
 </div>
 </div>
@@ -1328,22 +1328,22 @@ to what we’ve done in the previous experiments:</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 3</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Cohort 3
 
-<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">get_model</span><span class="p">()</span>
-    <span class="p">],</span>
-    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+cht_manager = CohortManager(
+    transform_pipe=[
+        dp.DataStandardScaler(verbose=False),
+        dp.EncoderOHE(drop=False, unknown_err=False, verbose=False),
+        get_model()
+    ],
+    cohort_col=[&quot;relationship&quot;]
+)
+cht_manager.fit(X_train, y_train)
+pred_cht = cht_manager.predict_proba(X_test)
 
-<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+pred_train = cht_manager.predict_proba(X_train)
+metrics_train, th_dict = fetch_cohort_results(X_train, y_train, pred_train, cohort_col=[&quot;relationship&quot;], return_th_dict=True)
+fetch_cohort_results(X_test, y_test, pred_cht, cohort_col=[&quot;relationship&quot;], fixed_th=th_dict)
 </pre></div>
 </div>
 </div>
@@ -1482,44 +1482,44 @@ for <code class="docutils literal notranslate"><span class="pre">cohort_3</span>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import matplotlib.pyplot as plt
+import seaborn as sns
 
-<span class="k">def</span> <span class="nf">plot_value_counts_cohort</span><span class="p">(</span><span class="n">y_full</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="c1">#plt.legend(bbox_to_anchor=(1.02, 1), loc=&#39;upper left&#39;, borderaxespad=0, fontsize=23)</span>
+def plot_value_counts_cohort(y_full, subsets, normalize = True):
+    plt.figure().clear()
+    plt.close()
+    plt.cla()
+    plt.clf()
+    fig = plt.gcf()
+    fig.set_size_inches(18, 10)
+    sns.set_theme(style=&quot;whitegrid&quot;)
+    if normalize:
+        plt.ylim(0, 1)
+    #plt.legend(bbox_to_anchor=(1.02, 1), loc=&#39;upper left&#39;, borderaxespad=0, fontsize=23)
 
-    <span class="n">value_count</span> <span class="o">=</span> <span class="n">y_full</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
+    value_count = y_full.value_counts(normalize=normalize)
 
-    <span class="n">subsets_col</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;full df&#39;</span><span class="p">,</span> <span class="s1">&#39;full df&#39;</span><span class="p">]</span>
-    <span class="n">counts_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">value_count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-    <span class="n">label_col</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    subsets_col = [&#39;full df&#39;, &#39;full df&#39;]
+    counts_col = [value_count[0], value_count[1]]
+    label_col = [0, 1]
 
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">value_count</span> <span class="o">=</span> <span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
-        <span class="n">subsets_col</span> <span class="o">+=</span> <span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">]</span>
-        <span class="n">counts_col</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value_count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-        <span class="n">label_col</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    for key in subsets.keys():
+        value_count = subsets[key][&quot;y&quot;].value_counts(normalize=normalize)
+        subsets_col += [key, key]
+        counts_col += [value_count[0], value_count[1]]
+        label_col += [0, 1]
 
-    <span class="n">count_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;subsets&quot;</span><span class="p">:</span><span class="n">subsets_col</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span><span class="n">label_col</span><span class="p">,</span> <span class="s2">&quot;counts&quot;</span><span class="p">:</span><span class="n">counts_col</span><span class="p">})</span>
+    count_df = pd.DataFrame({&quot;subsets&quot;:subsets_col, &quot;label&quot;:label_col, &quot;counts&quot;:counts_col})
 
-    <span class="n">y_label</span> <span class="o">=</span> <span class="s2">&quot;Occurrences&quot;</span>
-    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
-        <span class="n">y_label</span> <span class="o">=</span> <span class="s2">&quot;Fraction&quot;</span>
+    y_label = &quot;Occurrences&quot;
+    if normalize:
+        y_label = &quot;Fraction&quot;
 
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;subsets&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">count_df</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Subsets&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-    <span class="c1">#ax.tick_params(labelsize=15)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    ax = sns.barplot(x=&quot;subsets&quot;, y=&quot;counts&quot;, hue=&quot;label&quot;, data=count_df)
+    ax.set_xlabel(&quot;Subsets&quot;, fontsize=30)
+    ax.set_ylabel(y_label, fontsize=30)
+    #ax.tick_params(labelsize=15)
+    plt.show()
 </pre></div>
 </div>
 </div>
@@ -1528,17 +1528,17 @@ for <code class="docutils literal notranslate"><span class="pre">cohort_3</span>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
-<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cohort_set = CohortManager(
+    cohort_col=[&quot;relationship&quot;]
+)
+cohort_set.fit(X=X_train, y=y_train)
+subsets = cohort_set.get_subsets(X_train, y_train, apply_transform=False)
 
-<span class="nb">print</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
-<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">***********&quot;</span><span class="p">)</span>
+print(y_train.value_counts())
+for key in subsets.keys():
+    print(f&quot;\n{key}:\n{subsets[key][&#39;y&#39;].value_counts()}\n***********&quot;)
 
-<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+plot_value_counts_cohort(y_train, subsets, normalize=False)
 </pre></div>
 </div>
 </div>
@@ -1602,17 +1602,17 @@ Name: income, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rebalance</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span> <span class="o">=</span> <span class="n">rebalance</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rebalance = dp.Rebalance(verbose=False)
+new_X_train, new_y_train = rebalance.fit_resample(X_train, y_train)
 
-<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">new_y_train</span><span class="p">)</span>
-<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+cohort_set.fit(X=new_X_train, y=new_y_train)
+subsets = cohort_set.get_subsets(new_X_train, new_y_train, apply_transform=False)
 
-<span class="nb">print</span><span class="p">(</span><span class="n">new_y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
-<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">***********&quot;</span><span class="p">)</span>
+print(new_y_train.value_counts())
+for key in subsets.keys():
+    print(f&quot;\n{key}:\n{subsets[key][&#39;y&#39;].value_counts()}\n***********&quot;)
 
-<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">new_y_train</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+plot_value_counts_cohort(new_y_train, subsets, normalize=False)
 </pre></div>
 </div>
 </div>
@@ -1674,19 +1674,19 @@ Name: income, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 4</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Baseline 4
 
-<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">()),</span>
-        <span class="p">])</span>
-<span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">)</span>
-<span class="n">pred_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+pipe = Pipeline([
+            (&quot;scaler&quot;, dp.DataStandardScaler(verbose=False)),
+            (&quot;encoder&quot;, dp.EncoderOHE(verbose=False)),
+            (&quot;estimator&quot;, get_model()),
+        ])
+pipe.fit(new_X_train, new_y_train)
+pred_org = pipe.predict_proba(X_test)
 
-<span class="n">pred_train_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">)</span>
-<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+pred_train_org = pipe.predict_proba(new_X_train)
+metrics_train, th_dict = fetch_cohort_results(new_X_train, new_y_train, pred_train_org, cohort_col=[&quot;relationship&quot;], return_th_dict=True)
+fetch_cohort_results(X_test, y_test, pred_org, cohort_col=[&quot;relationship&quot;], fixed_th=th_dict)
 </pre></div>
 </div>
 </div>
@@ -1819,22 +1819,22 @@ Name: income, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 4</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Cohort 4
 
-<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">get_model</span><span class="p">()</span>
-    <span class="p">],</span>
-    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">)</span>
-<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+cht_manager = CohortManager(
+    transform_pipe=[
+        dp.DataStandardScaler(verbose=False),
+        dp.EncoderOHE(drop=False, unknown_err=False, verbose=False),
+        get_model()
+    ],
+    cohort_col=[&quot;relationship&quot;]
+)
+cht_manager.fit(new_X_train, new_y_train)
+pred_cht = cht_manager.predict_proba(X_test)
 
-<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">)</span>
-<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+pred_train = cht_manager.predict_proba(new_X_train)
+metrics_train, th_dict = fetch_cohort_results(new_X_train, new_y_train, pred_train, cohort_col=[&quot;relationship&quot;], return_th_dict=True)
+fetch_cohort_results(X_test, y_test, pred_cht, cohort_col=[&quot;relationship&quot;], fixed_th=th_dict)
 </pre></div>
 </div>
 </div>
@@ -1970,22 +1970,22 @@ Name: income, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c0_pipe</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">c1_pipe</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">c2_pipe</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">strategy_over</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
-<span class="n">c3_pipe</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">strategy_over</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
-<span class="n">c4_pipe</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">c5_pipe</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>c0_pipe = []
+c1_pipe = []
+c2_pipe = [dp.Rebalance(strategy_over=0.2, verbose=False)]
+c3_pipe = [dp.Rebalance(strategy_over=0.2, verbose=False)]
+c4_pipe = []
+c5_pipe = []
 
-<span class="n">rebalance_cohort</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span><span class="n">c0_pipe</span><span class="p">,</span> <span class="n">c1_pipe</span><span class="p">,</span> <span class="n">c2_pipe</span><span class="p">,</span> <span class="n">c3_pipe</span><span class="p">,</span> <span class="n">c4_pipe</span><span class="p">,</span> <span class="n">c5_pipe</span><span class="p">],</span>
-    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span> <span class="o">=</span> <span class="n">rebalance_cohort</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+rebalance_cohort = CohortManager(
+    transform_pipe=[c0_pipe, c1_pipe, c2_pipe, c3_pipe, c4_pipe, c5_pipe],
+    cohort_col=[&quot;relationship&quot;]
+)
+new_X_train, new_y_train = rebalance_cohort.fit_resample(X_train, y_train)
 
-<span class="n">subsets</span> <span class="o">=</span> <span class="n">rebalance_cohort</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+subsets = rebalance_cohort.get_subsets(new_X_train, new_y_train, apply_transform=False)
 
-<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">new_y_train</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+plot_value_counts_cohort(new_y_train, subsets, normalize=False)
 </pre></div>
 </div>
 </div>
@@ -2001,19 +2001,19 @@ Name: income, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 5</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Baseline 5
 
-<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-            <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
-            <span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">()),</span>
-        <span class="p">])</span>
-<span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">)</span>
-<span class="n">pred_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+pipe = Pipeline([
+            (&quot;scaler&quot;, dp.DataStandardScaler(verbose=False)),
+            (&quot;encoder&quot;, dp.EncoderOHE(verbose=False)),
+            (&quot;estimator&quot;, get_model()),
+        ])
+pipe.fit(new_X_train, new_y_train)
+pred_org = pipe.predict_proba(X_test)
 
-<span class="n">pred_train_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">)</span>
-<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+pred_train_org = pipe.predict_proba(new_X_train)
+metrics_train, th_dict = fetch_cohort_results(new_X_train, new_y_train, pred_train_org, cohort_col=[&quot;relationship&quot;], return_th_dict=True)
+fetch_cohort_results(X_test, y_test, pred_org, cohort_col=[&quot;relationship&quot;], fixed_th=th_dict)
 </pre></div>
 </div>
 </div>
@@ -2145,22 +2145,22 @@ Name: income, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 5</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Cohort 5
 
-<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
-    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="n">get_model</span><span class="p">()</span>
-    <span class="p">],</span>
-    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">)</span>
-<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+cht_manager = CohortManager(
+    transform_pipe=[
+        dp.DataStandardScaler(verbose=False),
+        dp.EncoderOHE(drop=False, unknown_err=False, verbose=False),
+        get_model()
+    ],
+    cohort_col=[&quot;relationship&quot;]
+)
+cht_manager.fit(new_X_train, new_y_train)
+pred_cht = cht_manager.predict_proba(X_test)
 
-<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">)</span>
-<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">new_X_train</span><span class="p">,</span> <span class="n">new_y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+pred_train = cht_manager.predict_proba(new_X_train)
+metrics_train, th_dict = fetch_cohort_results(new_X_train, new_y_train, pred_train, cohort_col=[&quot;relationship&quot;], return_th_dict=True)
+fetch_cohort_results(X_test, y_test, pred_cht, cohort_col=[&quot;relationship&quot;], fixed_th=th_dict)
 </pre></div>
 </div>
 </div>
