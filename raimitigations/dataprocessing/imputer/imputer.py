@@ -32,6 +32,7 @@ class DataImputer(DataProcessing):
         self._set_df(df)
         self.col_impute = col_impute
         self.do_nothing = False
+        self.none_status = False
 
     # -----------------------------------
     def _set_column_to_impute(self):
@@ -43,6 +44,7 @@ class DataImputer(DataProcessing):
         if self.col_impute is not None:
             return
 
+        self.none_status = True
         self.col_impute = self.df.columns.to_list()
 
         col_nan_status = self.df.isna().any()
@@ -56,10 +58,13 @@ class DataImputer(DataProcessing):
 
         self.print_message(
             f"No columns specified for imputation. These columns "
-            + f"have been automatically identified:\n{col_with_nan}"
+            + f"have been automatically identified at fit time:\n{col_with_nan}"
         )
-        #self.col_impute = col_with_nan
+
+        self.col_impute = col_with_nan
+
     # -----------------------------------
+
     def _check_valid_input(self):
         self.col_impute = self._check_error_col_list(self.df, self.col_impute, "col_impute")
 

@@ -22,14 +22,18 @@ the **DataImputer** class, and thus, have access to all of the methods previousl
    :caption: Child Classes
 
    basic
+   iterative
+   knn
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: raimitigations.dataprocessing.BasicImputer
+.. inheritance-diagram:: raimitigations.dataprocessing.BasicImputer raimitigations.dataprocessing.IterativeDataImputer raimitigations.dataprocessing.KNNDataImputer
      :parts: 1
 
 Examples
 ********
 
 .. nbgallery::
-   ../../notebooks/dataprocessing/module_tests/imputation
+   ../../notebooks/dataprocessing/module_tests/basic_imputation
+   ../../notebooks/dataprocessing/module_tests/iterative_imputation
+   ../../notebooks/dataprocessing/module_tests/knn_imputation

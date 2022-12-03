@@ -3,9 +3,7 @@ import pandas as pd
 import numpy as np
 import sys
 
-from sklearn.experimental import enable_iterative_imputer  # noqa # pylint: disable=unused-import
-from sklearn.impute import IterativeImputer
-from sklearn.linear_model import BayesianRidge
+from sklearn.impute import KNNImputer
 
 from ..encoder import EncoderOrdinal
 from .imputer import DataImputer
@@ -22,14 +20,14 @@ def custom_formatwarning(msg, *args, **kwargs):
 warnings.formatwarning = custom_formatwarning
 
 
-class IterativeDataImputer(DataImputer):
+class KNNDataImputer(DataImputer):
     """
-    Concrete class that imputes missing data of a feature using the other features. It uses a round-robin method of modeling each feature with missing values to be imputed as a function of the other features.
-    This subclass uses the :class:`~sklearn.impute.IterativeImputer` class from :mod:`sklearn` in the background (note that this sklearn class is still in an experimental stage).
-    sklearn.impute.IterativeImputer can only handle numerical data, however, this subclass allows for categorical input by applying ordinal encoding before calling the sklearn class. In order to use this function, use enable_encoder=True, note that encoded columns are not guaranteed to reverse transform if they have imputed values.
+    Concrete class that imputes missing data of a feature using K-nearest neighbours. A feature's missing values are imputed using the mean value from k-nearest neighbors in the dataset. Two samples are close if the features that neither is missing are close.
+    This subclass uses the :class:`~sklearn.impute.KNNImputer` class from :mod:`sklearn` in the background.
+    sklearn.impute.KNNImputer can only handle numerical data, however, this subclass allows for categorical input by applying ordinal encoding before calling the sklearn class. In order to use this function, use enable_encoder=True, note that encoded columns are not guaranteed to reverse transform if they have imputed values.
     If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and call your own encoder before calling this subclass for imputation.
     For more details see:
-    https://scikit-learn.org/stable/modules/generated/sklearn.impute.IterativeImputer.html#
+    https://scikit-learn.org/stable/modules/generated/sklearn.impute.KNNImputer.html#
 
     :param df: pandas data frame that contains the columns to be imputed;
 
@@ -37,29 +35,23 @@ class IterativeDataImputer(DataImputer):
         If None, this parameter will be set automatically as being a list of all
         columns with any NaN value;
 
-    :param enable_encoder: a boolean flag to allow for applying ordinal encoding of categorical data before applying the IterativeImputer since it only accepts numerical values.
+    :param enable_encoder: a boolean flag to allow for applying ordinal encoding of categorical data before applying the KNNImputer since it only accepts numerical values.
 
-    :param iterative_params: a dict indicating the parameters used by
-        :class:`~sklearn.impute.IterativeImputer`. The dict has the following structure:
+    :param knn_params: a dict indicating the parameters used by
+        :class:`~sklearn.impute.KNNImputer`. The dict has the following structure:
 
             | {
-            |   **'estimator'**:BayesianRidge(),
             |   **'missing_values'**:np.nan,
-            |   **'sample_posterior'**:False,
-            |   **'max_iter'**:10,
-            |   **'tol'**:1e-3,
-            |   **'n_nearest_features'**:None,
-            |   **'initial_strategy'**:'mean',
-            |   **'imputation_order'**:'ascending',
-            |   **'skip_complete'**:False,
-            |   **'min_value'**:-np.inf,
-            |   **'max_value'**:np.inf,
-            |   **'random_state'**:None
+            |   **'n_neighbors'**:5,
+            |   **'weights'**:'uniform',
+            |   **'metric'**:'nan_euclidean',
+            |   **'copy'**:True,
             | }
 
-        where these are the parameters used by sklearn's IterativeImputer. If None,
+        where these are the parameters used by sklearn's KNNImputer. If None,
         this dict will be auto-filled as the one above.
-        ``Note: initial_strategy can take one of these values: ['mean', 'median', 'most_frequent', 'constant']``
+        ``Note: 'weights' can take one of these values: ['uniform', 'distance'] or callable``
+        ``and 'metric' can take one of these values: ['nan_euclidean'] or callable``
 
     :param verbose: indicates whether internal messages should be printed or not.
     """
@@ -70,61 +62,47 @@ class IterativeDataImputer(DataImputer):
         df: Union[pd.DataFrame, np.ndarray] = None,
         col_impute: list = None,
         enable_encoder: bool = False,
-        iterative_params: dict = None,
-        verbose: int = 1,
+        knn_params: dict = None,
+        verbose: bool = True,
     ):
         super().__init__(df, col_impute, verbose)
         self.enable_encoder = enable_encoder
-        self.iterative_params = iterative_params
+        self.knn_params = knn_params
         self._set_dicts()
 
     # -----------------------------------
     def _set_dicts(self):
         """
-        If the 'iterative_params' dictionary that specifies how to impute given data
+        If the 'knn_params' dictionary that specifies how to impute given data
         is set to None, then create a default dictionary.
         """
-        if self.iterative_params is None:
-            self.iterative_params = {
-                "estimator": BayesianRidge(),
+        if self.knn_params is None:
+            self.knn_params = {
                 "missing_values": np.nan,
-                "sample_posterior": False,
-                "max_iter": 10,
-                "tol": 1e-3,
-                "n_nearest_features": None,
-                "initial_strategy": "mean",
-                "imputation_order": "ascending",
-                "skip_complete": False,
-                "min_value": -np.inf,
-                "max_value": np.inf,
-                "random_state": None,
+                "n_neighbors": 5,
+                "weights": "uniform",
+                "metric": "nan_euclidean",
+                "copy": True,
             }
 
     # -----------------------------------
     def _check_valid_dict(self):
         """
-        Checks if 'iterative_params' dictionary that specifis how to impute given data
+        Checks if 'knn_params' dictionary that specifis how to impute given data
         is appropriately set.
         """
-        param_err = type(self.iterative_params) != dict
+        param_err = type(self.knn_params) != dict
 
         if param_err:
-            raise ValueError("ERROR: 'iterative_params' is not a dict. Check the documentation for more information.")
+            raise ValueError("ERROR: 'knn_params' is not a dict. Check the documentation for more information.")
 
-        keys = self.iterative_params.keys()
+        keys = self.knn_params.keys()
         sklearn_params = [
-            "estimator",
             "missing_values",
-            "sample_posterior",
-            "max_iter",
-            "tol",
-            "n_nearest_features",
-            "initial_strategy",
-            "imputation_order",
-            "skip_complete",
-            "min_value",
-            "max_value",
-            "random_state",
+            "n_neighbors",
+            "weights",
+            "metric",
+            "copy",
         ]
         for sklearn_param in sklearn_params:
             if sklearn_param not in keys:
@@ -132,18 +110,18 @@ class IterativeDataImputer(DataImputer):
                     "ERROR: expected the key "
                     + f"{sklearn_param}"
                     + " in the dictionary:\n"
-                    + f"iterative_params: {self.iterative_params}"
+                    + f"knn_params: {self.knn_params}"
                 )
 
     # -----------------------------------
     def _fit(self):
         """
         Fit method complement used specifically for the current class.
-        The following steps are executed: (i) check if 'self.iterative_params'
+        The following steps are executed: (i) check if 'self.knn_params'
         dictionary is properly set, (ii) check for categorical columns
         (iii) exclude categorical columns if 'enable_encoder' is false,
         otherwise, apply ordinal encoder, (iv) create and fit the
-        IterativeImputer object over df.
+        KNNImputer object over df.
         """
         self._check_valid_dict()
 
@@ -156,7 +134,7 @@ class IterativeDataImputer(DataImputer):
         if not isinstance(self.enable_encoder, bool):
             raise ValueError("ERROR: 'enable_encoder' is a boolean parameter, use True/False.")
 
-        elif self.enable_encoder is False:
+        if self.enable_encoder is False:
             warnings.warn(
                 "\nWARNING: Categorical columns will be excluded from the iterative imputation process.\n"
                 + "If you'd like to include these columns, you need to set 'enable_encoder'=True.\n"
@@ -174,20 +152,12 @@ class IterativeDataImputer(DataImputer):
             df_valid = ordinal_encoder.transform(self.df)
 
         self.valid_cols = list(df_valid)
-        self.imputer = IterativeImputer(
-            estimator=self.iterative_params["estimator"],
-            missing_values=self.iterative_params["missing_values"],
-            sample_posterior=self.iterative_params["sample_posterior"],
-            max_iter=self.iterative_params["max_iter"],
-            tol=self.iterative_params["tol"],
-            n_nearest_features=self.iterative_params["n_nearest_features"],
-            initial_strategy=self.iterative_params["initial_strategy"],
-            imputation_order=self.iterative_params["imputation_order"],
-            skip_complete=self.iterative_params["skip_complete"],
-            min_value=self.iterative_params["min_value"],
-            max_value=self.iterative_params["max_value"],
-            random_state=self.iterative_params["random_state"],
-            verbose=self.verbose,
+        self.imputer = KNNImputer(
+            missing_values=self.knn_params["missing_values"],
+            n_neighbors=self.knn_params["n_neighbors"],
+            weights=self.knn_params["weights"],
+            metric=self.knn_params["metric"],
+            copy=self.knn_params["copy"],
         )
         self.imputer.fit(df_valid)
 
@@ -228,7 +198,7 @@ class IterativeDataImputer(DataImputer):
         cat_cols_no_missing_value = [
             value
             for value in list(all_cat_cols)
-            if (self.iterative_params["missing_values"] not in df_valid[value] and not df_valid[value].isna().any())
+            if (self.knn_params["missing_values"] not in df_valid[value] and not df_valid[value].isna().any())
         ]
         cat_cols_missing_value_impute = [
             value for value in list(set(all_cat_cols) - set(cat_cols_no_missing_value)) if (value in self.col_impute)
@@ -258,7 +228,7 @@ class IterativeDataImputer(DataImputer):
         missing_value_cols = [
             value
             for value in list(df_to_transf)
-            if (self.iterative_params["missing_values"] in df_to_transf[value] or df_to_transf[value].isna().any())
+            if (self.knn_params["missing_values"] in df_to_transf[value] or df_to_transf[value].isna().any())
         ]
         missing_value_cols_no_impute = list(set(missing_value_cols) - set(self.col_impute))
 
@@ -272,8 +242,8 @@ class IterativeDataImputer(DataImputer):
                 self.print_message(f"\nImputed categorical columns' encoding was reverse transformed.")
         except IndexError:
             self.print_message(
-                "\nImputed categorical columns' encoding was not reverse transformed."
-                + "Note that encoded columns are not guaranteed to reverse transform if they have imputed values.\n"
+                f"\nImputed categorical columns' encoding was not reverse transformed."
+                + f"Note that encoded columns are not guaranteed to reverse transform if they have imputed values.\n"
             )
             pass
 

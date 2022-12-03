@@ -8,7 +8,9 @@ methods offered in the **dataprocessing** module.
 .. nbgallery::
    ../notebooks/dataprocessing/module_tests/encoding
    ../notebooks/dataprocessing/module_tests/scaler
-   ../notebooks/dataprocessing/module_tests/imputation
+   ../notebooks/dataprocessing/module_tests/basic_imputation
+   ../notebooks/dataprocessing/module_tests/iterative_imputation
+   ../notebooks/dataprocessing/module_tests/knn_imputation
    ../notebooks/dataprocessing/module_tests/feat_sel_sequential
    ../notebooks/dataprocessing/module_tests/feat_sel_catboost
    ../notebooks/dataprocessing/module_tests/feat_sel_corr_tutorial
