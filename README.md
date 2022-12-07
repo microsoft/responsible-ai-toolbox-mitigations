@@ -21,13 +21,26 @@ In this library, we take a **targeted approach to mitigating errors** in Machine
 
 ## Installation
 
-Use the following pip command to install the Responsible AI Toolbox. Make sure you are using Python 3.7, 3.8, or 3.9.
+Use the following pip command to install the Responsible AI Toolbox. Make sure you are using Python 3.7, 3.8, or 3.9. If running in jupyter, please make sure to restart the jupyter kernel after installing. There are three installation options for the ``raimitigations`` package:
 
-If running in jupyter, please make sure to restart the jupyter kernel after installing.
+* To install the minimum dependencies, use:
 
 ```
 pip install raimitigations
 ```
+
+* To install the minimum dependencies + the packages required to run all of the notebooks in the ``notebooks/`` folder:
+
+```
+pip install raimitigations[all]
+```
+
+* To install all the dependencies used for development (such as ``pytest``, for example), use:
+
+```
+pip install raimitigations[dev]
+```
+
 ## Documentation
 
 To learn more about the supported dataset measurements and mitigation techniques covered in the **raimitigations** package, [please check out this documentation.](https://responsible-ai-toolbox-mitigations.readthedocs.io/en/latest/)
@@ -95,6 +108,14 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
+### Installing Using ``dev`` Mode
+
+After cloning this repo and moving to its root folder, install the package in editable mode with the development dependencies using:
+
+```console
+> pip install -e .[dev]
+```
+
 ### Pre-Commit
 
 This repository uses pre-commit hooks to guarantee that the code format is kept consistent. For development, make sure to
@@ -102,7 +123,8 @@ activate pre-commit before creating a pull request. Any code pushed to this repo
 Github Actions, so if pre-commit is not used when doing a commit, there is a chance that it fails in the format check workflow.
 Using pre-commit will avoid this.
 
-To use pre-commit with this repository, first install pre-commit:
+To use pre-commit with this repository, first install pre-commit (**NOTE:** when installing the package with the ``[dev]`` tag, the
+``pre-commit`` package will already be installed):
 
 ```console
 > pip install pre-commit
