@@ -395,18 +395,18 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import pandas as pd
-import numpy as np
-import uci_dataset as database
-from matplotlib.pyplot import figure
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">uci_dataset</span> <span class="k">as</span> <span class="nn">database</span>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">figure</span>
 
-from raimitigations.utils import train_model_fetch_results, split_data
-import raimitigations.dataprocessing as dp
-import case_study_utils as cs
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">train_model_fetch_results</span><span class="p">,</span> <span class="n">split_data</span>
+<span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
+<span class="kn">import</span> <span class="nn">case_study_utils</span> <span class="k">as</span> <span class="nn">cs</span>
 
-N_EXEC = 50
+<span class="n">N_EXEC</span> <span class="o">=</span> <span class="mi">50</span>
 
-USE_AUC_TH = False
+<span class="n">USE_AUC_TH</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
 </div>
 </div>
@@ -414,43 +414,43 @@ USE_AUC_TH = False
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def encode_case3(df):
-    enc_ohe = dp.EncoderOHE(verbose=False)
-    enc_ohe.fit(df)
-    proc_df = enc_ohe.transform(df)
-    return proc_df
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">encode_case3</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">enc_ohe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">enc_ohe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">enc_ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">proc_df</span>
 
 
-# -----------------------------------
-def encode_case3_train_test(train_x, test_x):
-    enc_ohe = dp.EncoderOHE(drop=False, unknown_err=False, verbose=False)
-    enc_ohe.fit(train_x)
-    train_x_enc = enc_ohe.transform(train_x)
-    test_x_enc = enc_ohe.transform(test_x)
-    return train_x_enc, test_x_enc
+<span class="c1"># -----------------------------------</span>
+<span class="k">def</span> <span class="nf">encode_case3_train_test</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">):</span>
+    <span class="n">enc_ohe</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">enc_ohe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
+    <span class="n">train_x_enc</span> <span class="o">=</span> <span class="n">enc_ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
+    <span class="n">test_x_enc</span> <span class="o">=</span> <span class="n">enc_ohe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">train_x_enc</span><span class="p">,</span> <span class="n">test_x_enc</span>
 
 
-# -----------------------------------
-def impute_case3(df):
-    imputer = dp.BasicImputer(      numerical={     &#39;missing_values&#39;:np.nan,
-                                            &#39;strategy&#39;:&#39;constant&#39;,
-                                            &#39;fill_value&#39;:-1},
-                                verbose=False)
-    imputer.fit(df)
-    proc_df = imputer.transform(df)
-    return proc_df
+<span class="c1"># -----------------------------------</span>
+<span class="k">def</span> <span class="nf">impute_case3</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">imputer</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span>      <span class="n">numerical</span><span class="o">=</span><span class="p">{</span>     <span class="s1">&#39;missing_values&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                                            <span class="s1">&#39;strategy&#39;</span><span class="p">:</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span>
+                                            <span class="s1">&#39;fill_value&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span>
+                                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">proc_df</span>
 
 
-# -----------------------------------
-def impute_case3_train_test(train_x, test_x):
-    imputer = dp.BasicImputer(      numerical={     &#39;missing_values&#39;:np.nan,
-                                            &#39;strategy&#39;:&#39;constant&#39;,
-                                            &#39;fill_value&#39;:-1},
-                                verbose=False)
-    imputer.fit(train_x)
-    train_x_enc = imputer.transform(train_x)
-    test_x_enc = imputer.transform(test_x)
-    return train_x_enc, test_x_enc
+<span class="c1"># -----------------------------------</span>
+<span class="k">def</span> <span class="nf">impute_case3_train_test</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">):</span>
+    <span class="n">imputer</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span>      <span class="n">numerical</span><span class="o">=</span><span class="p">{</span>     <span class="s1">&#39;missing_values&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                                            <span class="s1">&#39;strategy&#39;</span><span class="p">:</span><span class="s1">&#39;constant&#39;</span><span class="p">,</span>
+                                            <span class="s1">&#39;fill_value&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">},</span>
+                                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
+    <span class="n">train_x_enc</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_x</span><span class="p">)</span>
+    <span class="n">test_x_enc</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">train_x_enc</span><span class="p">,</span> <span class="n">test_x_enc</span>
 </pre></div>
 </div>
 </div>
@@ -458,99 +458,99 @@ def impute_case3_train_test(train_x, test_x):
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def test_base(df, label_col, n_exec, model_name):
-    result_list = []
-    proc_df = encode_case3(df)
-    proc_df = impute_case3(proc_df)
-    for n in range(n_exec):
-        train_x, test_x, train_y, test_y = split_data(proc_df, label_col, test_size=0.25)
-        result = train_model_fetch_results(train_x, train_y, test_x, test_y, model_name, USE_AUC_TH)
-        result_list.append(result)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
+    <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">encode_case3</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">impute_case3</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    result_stat = cs.result_statistics(result_list)
+    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
 
-    return result_stat
-
-
-# -----------------------------------
-def test_corr(df, label_col, n_exec, model_name):
-    result_list = []
-    proc_df = cs.remove_corr_feat(df, label_col)
-    proc_df = encode_case3(proc_df)
-    proc_df = impute_case3(proc_df)
-    for n in range(n_exec):
-        train_x, test_x, train_y, test_y = split_data(proc_df, label_col, test_size=0.25)
-        result = train_model_fetch_results(train_x, train_y, test_x, test_y, model_name, USE_AUC_TH)
-        result_list.append(result)
-
-    result_stat = cs.result_statistics(result_list)
-
-    return result_stat
+    <span class="k">return</span> <span class="n">result_stat</span>
 
 
-# -----------------------------------
-def test_corr_transf(df, label_col, n_exec, scaler_ref, model_name, num_col=None):
-    result_list = []
-    proc_df = cs.remove_corr_feat(df, label_col)
-    proc_df = encode_case3(proc_df)
-    proc_df = impute_case3(proc_df)
-    for n in range(n_exec):
-        train_x, test_x, train_y, test_y = split_data(proc_df, label_col, test_size=0.25)
-        train_x, test_x = cs.transform_num_data(train_x, test_x, scaler_ref, num_col)
-        result = train_model_fetch_results(train_x, train_y, test_x, test_y, model_name, USE_AUC_TH)
-        result_list.append(result)
+<span class="c1"># -----------------------------------</span>
+<span class="k">def</span> <span class="nf">test_corr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">model_name</span><span class="p">):</span>
+    <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">encode_case3</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">impute_case3</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    result_stat = cs.result_statistics(result_list)
+    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
 
-    return result_stat
-
-# -----------------------------------
-def test_smote_transf(df, label_col, n_exec, model_name, rcorr=True, scaler_ref=None, num_col=None, feat_sel_type=None, art_str=None, under=False):
-    result_list = []
-    proc_df = df
-    if rcorr:
-        proc_df = cs.remove_corr_feat(proc_df, label_col)
-    proc_df = encode_case3(proc_df)
-    proc_df = impute_case3(proc_df)
-    for n in range(n_exec):
-        train_x, test_x, train_y, test_y = split_data(proc_df, label_col, test_size=0.25)
-        if art_str is not None:
-            train_x, train_y = cs.artificial_smote(train_x, train_y, art_str, under)
-        if feat_sel_type is not None:
-            train_x, test_x = cs.feature_selection(train_x, train_y, test_x, feat_sel_type)
-        if scaler_ref is not None:
-            train_x, test_x = cs.transform_num_data(train_x, test_x, scaler_ref, num_col)
-        result = train_model_fetch_results(train_x, train_y, test_x, test_y, model_name, USE_AUC_TH)
-        result_list.append(result)
-
-    result_stat = cs.result_statistics(result_list)
-
-    return result_stat
+    <span class="k">return</span> <span class="n">result_stat</span>
 
 
+<span class="c1"># -----------------------------------</span>
+<span class="k">def</span> <span class="nf">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">encode_case3</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">impute_case3</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">transform_num_data</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-# -----------------------------------
-def test_ctgan_first(df, label_col, n_exec, model_name, rcorr=True, scaler_ref=None, num_col=None, feat_sel_type=None, art_str=None, savefile=None):
-    result_list = []
-    proc_df = df
-    if rcorr:
-        proc_df = cs.remove_corr_feat(proc_df, label_col)
-    for n in range(n_exec):
-        train_x, test_x, train_y, test_y = split_data(proc_df, label_col, test_size=0.25)
-        if art_str is not None:
-            train_x, train_y = cs.artificial_ctgan(train_x, train_y, art_str, savefile, epochs=1000)
-        train_x, test_x = encode_case3_train_test(train_x, test_x)
-        train_x, test_x = impute_case3_train_test(train_x, test_x)
-        if feat_sel_type is not None:
-            train_x, test_x = cs.feature_selection(train_x, train_y, test_x, feat_sel_type)
-        if scaler_ref is not None:
-            train_x, test_x = cs.transform_num_data(train_x, test_x, scaler_ref, num_col)
-        result = train_model_fetch_results(train_x, train_y, test_x, test_y, model_name, USE_AUC_TH)
-        result_list.append(result)
+    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
 
-    result_stat = cs.result_statistics(result_list)
+    <span class="k">return</span> <span class="n">result_stat</span>
 
-    return result_stat
+<span class="c1"># -----------------------------------</span>
+<span class="k">def</span> <span class="nf">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">df</span>
+    <span class="k">if</span> <span class="n">rcorr</span><span class="p">:</span>
+        <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">encode_case3</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">impute_case3</span><span class="p">(</span><span class="n">proc_df</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">art_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">artificial_smote</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">art_str</span><span class="p">,</span> <span class="n">under</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">feat_sel_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">feature_selection</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scaler_ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">transform_num_data</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result_stat</span>
+
+
+
+<span class="c1"># -----------------------------------</span>
+<span class="k">def</span> <span class="nf">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">n_exec</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">proc_df</span> <span class="o">=</span> <span class="n">df</span>
+    <span class="k">if</span> <span class="n">rcorr</span><span class="p">:</span>
+        <span class="n">proc_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">remove_corr_feat</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_exec</span><span class="p">):</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_y</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">art_str</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">artificial_ctgan</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">art_str</span><span class="p">,</span> <span class="n">savefile</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">encode_case3_train_test</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">)</span>
+        <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">impute_case3_train_test</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">feat_sel_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">feature_selection</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scaler_ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">transform_num_data</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">train_model_fetch_results</span><span class="p">(</span><span class="n">train_x</span><span class="p">,</span> <span class="n">train_y</span><span class="p">,</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">USE_AUC_TH</span><span class="p">)</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+    <span class="n">result_stat</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">result_statistics</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result_stat</span>
 </pre></div>
 </div>
 </div>
@@ -561,10 +561,10 @@ def test_ctgan_first(df, label_col, n_exec, model_name, rcorr=True, scaler_ref=N
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = database.load_thyroid_disease()
-label_col = &quot;sick-euthyroid&quot;
-df[label_col] = df[label_col].replace({&quot;sick-euthyroid&quot;: 1, &quot;negative&quot;: 0})
-df
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">database</span><span class="o">.</span><span class="n">load_thyroid_disease</span><span class="p">()</span>
+<span class="n">label_col</span> <span class="o">=</span> <span class="s2">&quot;sick-euthyroid&quot;</span>
+<span class="n">df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s2">&quot;sick-euthyroid&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;negative&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+<span class="n">df</span>
 </pre></div>
 </div>
 </div>
@@ -888,7 +888,7 @@ df
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df.info()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -936,7 +936,7 @@ memory usage: 642.6+ KB
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>num_col = [&#39;age&#39;, &#39;TSH&#39;, &#39;T3&#39;, &#39;TT4&#39;, &#39;T4U&#39;, &#39;FTI&#39;, &#39;TBG&#39;]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_col</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;TSH&#39;</span><span class="p">,</span> <span class="s1">&#39;T3&#39;</span><span class="p">,</span> <span class="s1">&#39;TT4&#39;</span><span class="p">,</span> <span class="s1">&#39;T4U&#39;</span><span class="p">,</span> <span class="s1">&#39;FTI&#39;</span><span class="p">,</span> <span class="s1">&#39;TBG&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -963,31 +963,31 @@ memory usage: 642.6+ KB
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>MODEL_NAME = &quot;knn&quot;
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;knn&quot;</span>
 
-result_base = test_base(df, label_col, N_EXEC, MODEL_NAME)
-result_df = cs.add_results_df(None, result_base, &quot;Baseline&quot;)
+<span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
 
-result_cor = test_corr(df, label_col, N_EXEC, MODEL_NAME)
-result_df = cs.add_results_df(result_df, result_cor, &quot;Corr.&quot;)
+<span class="n">result_cor</span> <span class="o">=</span> <span class="n">test_corr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_cor</span><span class="p">,</span> <span class="s2">&quot;Corr.&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataStandardScaler, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Std.&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataMinMaxScaler, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Min/Max.&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Min/Max.&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataQuantileTransformer, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Quantile&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Quantile&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataNormalizer, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Normalizer&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataNormalizer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Normalizer&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataRobustScaler, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Robust&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataRobustScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Robust&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataPowerTransformer, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Power&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataPowerTransformer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Power&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1040,7 +1040,7 @@ result_df = cs.add_results_df(result_df, result_tr, &quot;Power&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cs.plot_results(result_df, y_lim=[0.5, 1.0])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1067,20 +1067,20 @@ result_df = cs.add_results_df(result_df, result_tr, &quot;Power&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>result_base = test_base(df, label_col, N_EXEC, MODEL_NAME)
-result_df = cs.add_results_df(None, result_base, &quot;Baseline&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataStandardScaler, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Std.&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
 
-restult_fs = test_smote_transf(df, label_col, N_EXEC, MODEL_NAME, rcorr=False, scaler_ref=None, feat_sel_type=&#39;forward&#39;)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;Seq. Fwd.&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq. Fwd.&quot;</span><span class="p">)</span>
 
-restult_fs = test_smote_transf(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, scaler_ref=None, feat_sel_type=&#39;forward&#39;)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;Corr.Seq.Fwd&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Corr.Seq.Fwd&quot;</span><span class="p">)</span>
 
-restult_fs = test_smote_transf(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, scaler_ref=dp.DataStandardScaler, num_col=num_col, feat_sel_type=&#39;forward&#39;)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;Corr.Seq.Fwd.Std.&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Corr.Seq.Fwd.Std.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1119,7 +1119,7 @@ result_df = cs.add_results_df(result_df, restult_fs, &quot;Corr.Seq.Fwd.Std.&quo
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cs.plot_results(result_df, y_lim=[0.5, 1.0])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1145,20 +1145,20 @@ result_df = cs.add_results_df(result_df, restult_fs, &quot;Corr.Seq.Fwd.Std.&quo
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>result_base = test_base(df, label_col, N_EXEC, MODEL_NAME)
-result_df = cs.add_results_df(None, result_base, &quot;Baseline&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
 
-restult_fs = test_smote_transf(df, label_col, N_EXEC, MODEL_NAME, rcorr=False, scaler_ref=None, feat_sel_type=&#39;forward&#39;)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;Seq. Fwd.&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq. Fwd.&quot;</span><span class="p">)</span>
 
-restult_fs = test_smote_transf(df, label_col, N_EXEC, MODEL_NAME, rcorr=False, scaler_ref=None, feat_sel_type=&#39;backward&#39;)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;Seq. Bwd.&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;backward&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq. Bwd.&quot;</span><span class="p">)</span>
 
-restult_fs = test_smote_transf(df, label_col, N_EXEC, MODEL_NAME, rcorr=False, scaler_ref=dp.DataStandardScaler, num_col=num_col, feat_sel_type=&#39;backward&#39;)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;Seq.Bwd.Std.&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;backward&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq.Bwd.Std.&quot;</span><span class="p">)</span>
 
-restult_fs = test_smote_transf(df, label_col, N_EXEC, MODEL_NAME, rcorr=False, scaler_ref=dp.DataStandardScaler, num_col=num_col, feat_sel_type=&#39;catboost&#39;)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;CatBoost Std.&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;catboost&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CatBoost Std.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1193,7 +1193,7 @@ result_df = cs.add_results_df(result_df, restult_fs, &quot;CatBoost Std.&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cs.plot_results(result_df, y_lim=[0.5, 1.0])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1220,23 +1220,23 @@ result_df = cs.add_results_df(result_df, restult_fs, &quot;CatBoost Std.&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>result_base = test_base(df, label_col, N_EXEC, MODEL_NAME)
-result_df = cs.add_results_df(None, result_base, &quot;Baseline&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataStandardScaler, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Std.&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
 
-restult_fs = test_smote_transf(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, scaler_ref=None, feat_sel_type=None, art_str=0.2, under=False)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;SM&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM&quot;</span><span class="p">)</span>
 
-restult_fs = test_smote_transf(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, scaler_ref=dp.DataStandardScaler, feat_sel_type=None, art_str=0.2, under=False)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;SM Std.&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM Std.&quot;</span><span class="p">)</span>
 
-restult_fs = test_smote_transf(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, scaler_ref=None, feat_sel_type=None, art_str=0.2, under=True)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;SM+TK&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM+TK&quot;</span><span class="p">)</span>
 
-restult_fs = test_smote_transf(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, scaler_ref=dp.DataStandardScaler, feat_sel_type=None, art_str=0.2, under=True)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;SM+TK Std.&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;SM+TK Std.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1273,7 +1273,7 @@ result_df = cs.add_results_df(result_df, restult_fs, &quot;SM+TK Std.&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cs.plot_results(result_df, y_lim=[0.5, 1.0])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1299,18 +1299,18 @@ result_df = cs.add_results_df(result_df, restult_fs, &quot;SM+TK Std.&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>MODEL_NAME = &quot;knn&quot;
-result_base = test_base(df, label_col, N_EXEC, MODEL_NAME)
-result_df = cs.add_results_df(None, result_base, &quot;Baseline&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;knn&quot;</span>
+<span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataStandardScaler, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Std.&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
 
-restult_fs = test_ctgan_first(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, scaler_ref=dp.DataStandardScaler, feat_sel_type=None, art_str=0.2, savefile=&quot;3_1.pkl&quot;)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;CTGAN 0.2 Std.&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="s2">&quot;3_1.pkl&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.2 Std.&quot;</span><span class="p">)</span>
 
-restult_fs = test_ctgan_first(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, scaler_ref=dp.DataStandardScaler, feat_sel_type=None, art_str=0.6, savefile=&quot;3_2.pkl&quot;)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;CTGAN 0.6 Std.&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="s2">&quot;3_2.pkl&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.6 Std.&quot;</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -1343,7 +1343,7 @@ result_df = cs.add_results_df(result_df, restult_fs, &quot;CTGAN 0.6 Std.&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cs.plot_results(result_df, y_lim=[0.5, 1.0])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1364,31 +1364,31 @@ result_df = cs.add_results_df(result_df, restult_fs, &quot;CTGAN 0.6 Std.&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>MODEL_NAME = &quot;xgb&quot;
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;xgb&quot;</span>
 
-result_base = test_base(df, label_col, N_EXEC, MODEL_NAME)
-result_df = cs.add_results_df(None, result_base, &quot;Baseline&quot;)
+<span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
 
-result_cor = test_corr(df, label_col, N_EXEC, MODEL_NAME)
-result_df = cs.add_results_df(result_df, result_cor, &quot;Corr.&quot;)
+<span class="n">result_cor</span> <span class="o">=</span> <span class="n">test_corr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_cor</span><span class="p">,</span> <span class="s2">&quot;Corr.&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataStandardScaler, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Std.&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Std.&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataMinMaxScaler, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Min/Max.&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Min/Max.&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataQuantileTransformer, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Quantile&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Quantile&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataNormalizer, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Normalizer&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataNormalizer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Normalizer&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataRobustScaler, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Robust&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataRobustScaler</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Robust&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataPowerTransformer, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Power&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataPowerTransformer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Power&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1396,7 +1396,7 @@ result_df = cs.add_results_df(result_df, result_tr, &quot;Power&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cs.plot_results(result_df, y_lim=[0.75,1.0])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.75</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1411,14 +1411,14 @@ result_df = cs.add_results_df(result_df, result_tr, &quot;Power&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>result_base = test_base(df, label_col, N_EXEC, MODEL_NAME)
-result_df = cs.add_results_df(None, result_base, &quot;Baseline&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
 
-restult_fs = test_smote_transf(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, scaler_ref=dp.DataQuantileTransformer, num_col=num_col, feat_sel_type=&#39;backward&#39;)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;Seq.Bwd.Qtl.&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;backward&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;Seq.Bwd.Qtl.&quot;</span><span class="p">)</span>
 
-restult_fs = test_smote_transf(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, scaler_ref=dp.DataQuantileTransformer, num_col=num_col, feat_sel_type=&#39;catboost&#39;)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;CatBoost Qtl.&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_smote_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="s1">&#39;catboost&#39;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CatBoost Qtl.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1441,7 +1441,7 @@ result_df = cs.add_results_df(result_df, restult_fs, &quot;CatBoost Qtl.&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cs.plot_results(result_df, y_lim=[0.75,1.0])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.75</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1456,18 +1456,18 @@ result_df = cs.add_results_df(result_df, restult_fs, &quot;CatBoost Qtl.&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>MODEL_NAME = &quot;xgb&quot;
-result_base = test_base(df, label_col, N_EXEC, MODEL_NAME)
-result_df = cs.add_results_df(None, result_base, &quot;Baseline&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">&quot;xgb&quot;</span>
+<span class="n">result_base</span> <span class="o">=</span> <span class="n">test_base</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">result_base</span><span class="p">,</span> <span class="s2">&quot;Baseline&quot;</span><span class="p">)</span>
 
-result_tr = test_corr_transf(df, label_col, N_EXEC, dp.DataQuantileTransformer, MODEL_NAME, num_col)
-result_df = cs.add_results_df(result_df, result_tr, &quot;Qtl.&quot;)
+<span class="n">result_tr</span> <span class="o">=</span> <span class="n">test_corr_transf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">num_col</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">result_tr</span><span class="p">,</span> <span class="s2">&quot;Qtl.&quot;</span><span class="p">)</span>
 
-restult_fs = test_ctgan_first(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, scaler_ref=dp.DataQuantileTransformer, num_col=num_col, feat_sel_type=None, art_str=0.2, savefile=&quot;3_3.pkl&quot;)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;CTGAN 0.2 Qtl.&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="s2">&quot;3_3.pkl&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.2 Qtl.&quot;</span><span class="p">)</span>
 
-restult_fs = test_ctgan_first(df, label_col, N_EXEC, MODEL_NAME, rcorr=True, scaler_ref=dp.DataQuantileTransformer, num_col=num_col, feat_sel_type=None, art_str=0.6, savefile=&quot;3_4.pkl&quot;)
-result_df = cs.add_results_df(result_df, restult_fs, &quot;CTGAN 0.6 Qtl.&quot;)
+<span class="n">restult_fs</span> <span class="o">=</span> <span class="n">test_ctgan_first</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">N_EXEC</span><span class="p">,</span> <span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">rcorr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaler_ref</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataQuantileTransformer</span><span class="p">,</span> <span class="n">num_col</span><span class="o">=</span><span class="n">num_col</span><span class="p">,</span> <span class="n">feat_sel_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">art_str</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">savefile</span><span class="o">=</span><span class="s2">&quot;3_4.pkl&quot;</span><span class="p">)</span>
+<span class="n">result_df</span> <span class="o">=</span> <span class="n">cs</span><span class="o">.</span><span class="n">add_results_df</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">restult_fs</span><span class="p">,</span> <span class="s2">&quot;CTGAN 0.6 Qtl.&quot;</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -1488,7 +1488,7 @@ result_df = cs.add_results_df(result_df, restult_fs, &quot;CTGAN 0.6 Qtl.&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cs.plot_results(result_df, y_lim=[0.75, 1.0])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cs</span><span class="o">.</span><span class="n">plot_results</span><span class="p">(</span><span class="n">result_df</span><span class="p">,</span> <span class="n">y_lim</span><span class="o">=</span><span class="p">[</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>

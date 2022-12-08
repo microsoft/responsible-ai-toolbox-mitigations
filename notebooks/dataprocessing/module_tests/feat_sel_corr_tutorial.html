@@ -391,10 +391,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import pandas as pd
-import numpy as np
-from raimitigations.utils import create_dummy_dataset
-from raimitigations.dataprocessing import CorrelatedFeatures
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">create_dummy_dataset</span>
+<span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">CorrelatedFeatures</span>
 </pre></div>
 </div>
 </div>
@@ -423,17 +423,17 @@ feature.</p></li>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = create_dummy_dataset(
-                    samples=3000,
-                    n_features=6,
-                    n_num_num=2,
-                    n_cat_num=2,
-                    n_cat_cat=2,
-                    num_num_noise=[0.01, 0.05],
-                    pct_change=[0.05, 0.1]
-                )
-label_col = &quot;label&quot;
-df
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">create_dummy_dataset</span><span class="p">(</span>
+                    <span class="n">samples</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span>
+                    <span class="n">n_features</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                    <span class="n">n_num_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="n">n_cat_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="n">n_cat_cat</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="n">num_num_noise</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">],</span>
+                    <span class="n">pct_change</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span>
+                <span class="p">)</span>
+<span class="n">label_col</span> <span class="o">=</span> <span class="s2">&quot;label&quot;</span>
+<span class="n">df</span>
 </pre></div>
 </div>
 </div>
@@ -668,10 +668,10 @@ method to remove the unwanted columns of a second dataset (this second dataset c
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cor_feat = CorrelatedFeatures(save_json=False) # We setted this single parameter just to avoid creating json files for now
-cor_feat.fit(df=df, label_col=label_col)
-new_df = cor_feat.transform(df)
-new_df
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_feat</span> <span class="o">=</span> <span class="n">CorrelatedFeatures</span><span class="p">(</span><span class="n">save_json</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># We setted this single parameter just to avoid creating json files for now</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="n">label_col</span><span class="p">)</span>
+<span class="n">new_df</span> <span class="o">=</span> <span class="n">cor_feat</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">new_df</span>
 </pre></div>
 </div>
 </div>
@@ -865,19 +865,19 @@ previously. To do that, we just call the transform method over the new dataset.<
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cor_feat = CorrelatedFeatures(
-                                    cor_features=[&quot;num_0&quot;, &quot;num_4&quot;, &quot;CN_0_num_0&quot;, &quot;CC_1_num_1&quot;],
-                                    method_num_num=[&quot;spearman&quot;, &quot;pearson&quot;, &quot;kendall&quot;],
-                                    num_corr_th=0.8,
-                                    num_pvalue_th=0.01,
-                                    method_num_cat=None,
-                                    cat_corr_th=0.9,
-                                    cat_pvalue_th=0.05,
-                                    save_json=False
-                            )
-cor_feat.fit(df=df, label_col=label_col)
-new_df = cor_feat.transform(df)
-new_df
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_feat</span> <span class="o">=</span> <span class="n">CorrelatedFeatures</span><span class="p">(</span>
+                                    <span class="n">cor_features</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;num_0&quot;</span><span class="p">,</span> <span class="s2">&quot;num_4&quot;</span><span class="p">,</span> <span class="s2">&quot;CN_0_num_0&quot;</span><span class="p">,</span> <span class="s2">&quot;CC_1_num_1&quot;</span><span class="p">],</span>
+                                    <span class="n">method_num_num</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;kendall&quot;</span><span class="p">],</span>
+                                    <span class="n">num_corr_th</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                                    <span class="n">num_pvalue_th</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                                    <span class="n">method_num_cat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                    <span class="n">cat_corr_th</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+                                    <span class="n">cat_pvalue_th</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                                    <span class="n">save_json</span><span class="o">=</span><span class="kc">False</span>
+                            <span class="p">)</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="n">label_col</span><span class="p">)</span>
+<span class="n">new_df</span> <span class="o">=</span> <span class="n">cor_feat</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">new_df</span>
 </pre></div>
 </div>
 </div>
@@ -1114,7 +1114,7 @@ No correlations detected. Nothing to be done here.
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cor_feat.get_selected_features()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_feat</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1155,20 +1155,20 @@ will use F1 and Accuracy as the evaluation metrics, both with a threshold of 0.9
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cor_feat = CorrelatedFeatures(
-                                    method_num_num=[&quot;spearman&quot;, &quot;pearson&quot;, &quot;kendall&quot;],                              # Used for Numerical x Numerical correlations
-                                    num_corr_th=0.8,                                                                                                # Used for Numerical x Numerical correlations
-                                    num_pvalue_th=0.01,                                                                                             # Used for Numerical x Numerical correlations
-                                    method_num_cat=&quot;model&quot;,                                                                                 # Used for Numerical x Categorical correlations
-                                    model_metrics=[&quot;f1&quot;],                                                                                   # Used for Numerical x Categorical correlations
-                                    metric_th=0.9,                                                                                                  # Used for Numerical x Categorical correlations
-                                    cat_corr_th=0.8,                                                                                                # Used for Categorical x Categorical correlations
-                                    cat_pvalue_th=0.01,                                                                                             # Used for Categorical x Categorical correlations
-                                    json_summary=&quot;./corr_json_examples/1_summary_model.json&quot;,
-                                    json_corr=&quot;./corr_json_examples/1_corr_model.json&quot;,
-                                    json_uncorr=&quot;./corr_json_examples/1_uncorr_model.json&quot;
-                            )
-cor_feat.fit(df=df, label_col=label_col)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_feat</span> <span class="o">=</span> <span class="n">CorrelatedFeatures</span><span class="p">(</span>
+                                    <span class="n">method_num_num</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;spearman&quot;</span><span class="p">,</span> <span class="s2">&quot;pearson&quot;</span><span class="p">,</span> <span class="s2">&quot;kendall&quot;</span><span class="p">],</span>                              <span class="c1"># Used for Numerical x Numerical correlations</span>
+                                    <span class="n">num_corr_th</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>                                                                                                <span class="c1"># Used for Numerical x Numerical correlations</span>
+                                    <span class="n">num_pvalue_th</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>                                                                                             <span class="c1"># Used for Numerical x Numerical correlations</span>
+                                    <span class="n">method_num_cat</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">,</span>                                                                                 <span class="c1"># Used for Numerical x Categorical correlations</span>
+                                    <span class="n">model_metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;f1&quot;</span><span class="p">],</span>                                                                                   <span class="c1"># Used for Numerical x Categorical correlations</span>
+                                    <span class="n">metric_th</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>                                                                                                  <span class="c1"># Used for Numerical x Categorical correlations</span>
+                                    <span class="n">cat_corr_th</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>                                                                                                <span class="c1"># Used for Categorical x Categorical correlations</span>
+                                    <span class="n">cat_pvalue_th</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>                                                                                             <span class="c1"># Used for Categorical x Categorical correlations</span>
+                                    <span class="n">json_summary</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/1_summary_model.json&quot;</span><span class="p">,</span>
+                                    <span class="n">json_corr</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/1_corr_model.json&quot;</span><span class="p">,</span>
+                                    <span class="n">json_uncorr</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/1_uncorr_model.json&quot;</span>
+                            <span class="p">)</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="n">label_col</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1217,10 +1217,10 @@ advantage is that it only shows the information for correlated features.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>features_manual = [&quot;num_0&quot;, &quot;num_1&quot;, &quot;num_2&quot;, &quot;num_3&quot;, &quot;num_4&quot;, &quot;CN_0_num_0&quot;, &quot;CC_1_num_1&quot;]
-cor_feat.set_selected_features(features_manual)
-new_df = cor_feat.transform(df)
-new_df
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">features_manual</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;num_0&quot;</span><span class="p">,</span> <span class="s2">&quot;num_1&quot;</span><span class="p">,</span> <span class="s2">&quot;num_2&quot;</span><span class="p">,</span> <span class="s2">&quot;num_3&quot;</span><span class="p">,</span> <span class="s2">&quot;num_4&quot;</span><span class="p">,</span> <span class="s2">&quot;CN_0_num_0&quot;</span><span class="p">,</span> <span class="s2">&quot;CC_1_num_1&quot;</span><span class="p">]</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">set_selected_features</span><span class="p">(</span><span class="n">features_manual</span><span class="p">)</span>
+<span class="n">new_df</span> <span class="o">=</span> <span class="n">cor_feat</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">new_df</span>
 </pre></div>
 </div>
 </div>
@@ -1403,21 +1403,21 @@ The next step is to analyze each edge: for each edge, we remove the vertex with 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cor_feat = CorrelatedFeatures(
-                                    method_num_num=[&quot;kendall&quot;],
-                                    num_corr_th=0.8,
-                                    num_pvalue_th=0.01,
-                                    method_num_cat=&quot;jensen&quot;,
-                                    jensen_n_bins=None, # use the Freedman Diaconis rule to compute this for each numerical variable
-                                    jensen_th=0.8,
-                                    tie_method=&quot;var&quot;,
-                                    json_summary=&quot;./corr_json_examples/2_summary_jensen.json&quot;,
-                                    json_corr=&quot;./corr_json_examples/2_corr_jensen.json&quot;,
-                                    json_uncorr=&quot;./corr_json_examples/2_uncorr_jensen.json&quot;
-                            )
-cor_feat.fit(df=df, label_col=label_col)
-full_sum, cor_sum, uncor_sum = cor_feat.get_summary()
-cor_feat.get_selected_features()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_feat</span> <span class="o">=</span> <span class="n">CorrelatedFeatures</span><span class="p">(</span>
+                                    <span class="n">method_num_num</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;kendall&quot;</span><span class="p">],</span>
+                                    <span class="n">num_corr_th</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                                    <span class="n">num_pvalue_th</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                                    <span class="n">method_num_cat</span><span class="o">=</span><span class="s2">&quot;jensen&quot;</span><span class="p">,</span>
+                                    <span class="n">jensen_n_bins</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="c1"># use the Freedman Diaconis rule to compute this for each numerical variable</span>
+                                    <span class="n">jensen_th</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                                    <span class="n">tie_method</span><span class="o">=</span><span class="s2">&quot;var&quot;</span><span class="p">,</span>
+                                    <span class="n">json_summary</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/2_summary_jensen.json&quot;</span><span class="p">,</span>
+                                    <span class="n">json_corr</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/2_corr_jensen.json&quot;</span><span class="p">,</span>
+                                    <span class="n">json_uncorr</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/2_uncorr_jensen.json&quot;</span>
+                            <span class="p">)</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="n">label_col</span><span class="p">)</span>
+<span class="n">full_sum</span><span class="p">,</span> <span class="n">cor_sum</span><span class="p">,</span> <span class="n">uncor_sum</span> <span class="o">=</span> <span class="n">cor_feat</span><span class="o">.</span><span class="n">get_summary</span><span class="p">()</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1855,22 +1855,22 @@ to the <strong>levene_pvalue</strong> parameter), then we can perform the ANOVA 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cor_feat = CorrelatedFeatures(
-                                    method_num_num=[&quot;kendall&quot;],
-                                    num_corr_th=0.8,
-                                    num_pvalue_th=0.01,
-                                    method_num_cat=&quot;anova&quot;,
-                                    levene_pvalue=0.01,
-                                    anova_pvalue=0.05,
-                                    omega_th=0.75,
-                                    tie_method=&quot;cardinality&quot;,
-                                    json_summary=&quot;./corr_json_examples/3_summary_anova.json&quot;,
-                                    json_corr=&quot;./corr_json_examples/3_corr_anova.json&quot;,
-                                    json_uncorr=&quot;./corr_json_examples/3_uncorr_anova.json&quot;
-                            )
-cor_feat.fit(df=df, label_col=label_col)
-_ = cor_feat.get_summary()
-cor_feat.get_selected_features()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_feat</span> <span class="o">=</span> <span class="n">CorrelatedFeatures</span><span class="p">(</span>
+                                    <span class="n">method_num_num</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;kendall&quot;</span><span class="p">],</span>
+                                    <span class="n">num_corr_th</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                                    <span class="n">num_pvalue_th</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                                    <span class="n">method_num_cat</span><span class="o">=</span><span class="s2">&quot;anova&quot;</span><span class="p">,</span>
+                                    <span class="n">levene_pvalue</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                                    <span class="n">anova_pvalue</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                                    <span class="n">omega_th</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
+                                    <span class="n">tie_method</span><span class="o">=</span><span class="s2">&quot;cardinality&quot;</span><span class="p">,</span>
+                                    <span class="n">json_summary</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/3_summary_anova.json&quot;</span><span class="p">,</span>
+                                    <span class="n">json_corr</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/3_corr_anova.json&quot;</span><span class="p">,</span>
+                                    <span class="n">json_uncorr</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/3_uncorr_anova.json&quot;</span>
+                            <span class="p">)</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="n">label_col</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">cor_feat</span><span class="o">.</span><span class="n">get_summary</span><span class="p">()</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2204,16 +2204,16 @@ CC_0_num_0 x CC_1_num_1:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cor_feat = CorrelatedFeatures(
-                                    method_num_num=None,
-                                    method_num_cat=None,
-                                    json_summary=&quot;./corr_json_examples/4_summary_cat.json&quot;,
-                                    json_corr=&quot;./corr_json_examples/4_corr_cat.json&quot;,
-                                    json_uncorr=&quot;./corr_json_examples/4_uncorr_cat.json&quot;
-                            )
-cor_feat.fit(df=df, label_col=label_col)
-_ = cor_feat.get_summary()
-cor_feat.get_selected_features()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_feat</span> <span class="o">=</span> <span class="n">CorrelatedFeatures</span><span class="p">(</span>
+                                    <span class="n">method_num_num</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                    <span class="n">method_num_cat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                    <span class="n">json_summary</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/4_summary_cat.json&quot;</span><span class="p">,</span>
+                                    <span class="n">json_corr</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/4_corr_cat.json&quot;</span><span class="p">,</span>
+                                    <span class="n">json_uncorr</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/4_uncorr_cat.json&quot;</span>
+                            <span class="p">)</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="n">label_col</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">cor_feat</span><span class="o">.</span><span class="n">get_summary</span><span class="p">()</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2278,21 +2278,21 @@ instead.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cor_feat = CorrelatedFeatures(
-                                    method_num_num=[&quot;kendall&quot;, &quot;pearson&quot;],
-                                    num_corr_th=0.99999,
-                                    num_pvalue_th=0.01,
-                                    method_num_cat=&quot;model&quot;,
-                                    model_metrics=[&quot;auc&quot;, &quot;f1&quot;],
-                                    metric_th=0.97,
-                                    cat_corr_th=0.5,
-                                    tie_method=&quot;cardinality&quot;,
-                                    json_summary=&quot;./corr_json_examples/5_summary_1.json&quot;,
-                                    json_corr=&quot;./corr_json_examples/5_corr_1.json&quot;,
-                                    json_uncorr=&quot;./corr_json_examples/5_uncorr_1.json&quot;
-                            )
-cor_feat.fit(df=df, label_col=label_col)
-cor_feat.get_selected_features()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_feat</span> <span class="o">=</span> <span class="n">CorrelatedFeatures</span><span class="p">(</span>
+                                    <span class="n">method_num_num</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;kendall&quot;</span><span class="p">,</span> <span class="s2">&quot;pearson&quot;</span><span class="p">],</span>
+                                    <span class="n">num_corr_th</span><span class="o">=</span><span class="mf">0.99999</span><span class="p">,</span>
+                                    <span class="n">num_pvalue_th</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                                    <span class="n">method_num_cat</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">,</span>
+                                    <span class="n">model_metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;auc&quot;</span><span class="p">,</span> <span class="s2">&quot;f1&quot;</span><span class="p">],</span>
+                                    <span class="n">metric_th</span><span class="o">=</span><span class="mf">0.97</span><span class="p">,</span>
+                                    <span class="n">cat_corr_th</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                                    <span class="n">tie_method</span><span class="o">=</span><span class="s2">&quot;cardinality&quot;</span><span class="p">,</span>
+                                    <span class="n">json_summary</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/5_summary_1.json&quot;</span><span class="p">,</span>
+                                    <span class="n">json_corr</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/5_corr_1.json&quot;</span><span class="p">,</span>
+                                    <span class="n">json_uncorr</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/5_uncorr_1.json&quot;</span>
+                            <span class="p">)</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="n">label_col</span><span class="p">)</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2318,17 +2318,17 @@ cor_feat.get_selected_features()
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cor_feat.update_selected_features(
-                                    num_corr_th=0.5,
-                                    num_pvalue_th=0.001,
-                                    model_metrics=[&quot;accuracy&quot;, &quot;precision&quot;],
-                                    metric_th=0.7,
-                                    cat_corr_th=0.9,
-                                    json_summary=&quot;./corr_json_examples/5_summary_2.json&quot;,
-                                    json_corr=&quot;./corr_json_examples/5_corr_2.json&quot;,
-                                    json_uncorr=&quot;./corr_json_examples/5_uncorr_2.json&quot;
-                            )
-cor_feat.get_selected_features()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_feat</span><span class="o">.</span><span class="n">update_selected_features</span><span class="p">(</span>
+                                    <span class="n">num_corr_th</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                                    <span class="n">num_pvalue_th</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
+                                    <span class="n">model_metrics</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">,</span> <span class="s2">&quot;precision&quot;</span><span class="p">],</span>
+                                    <span class="n">metric_th</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+                                    <span class="n">cat_corr_th</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+                                    <span class="n">json_summary</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/5_summary_2.json&quot;</span><span class="p">,</span>
+                                    <span class="n">json_corr</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/5_corr_2.json&quot;</span><span class="p">,</span>
+                                    <span class="n">json_uncorr</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/5_uncorr_2.json&quot;</span>
+                            <span class="p">)</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2357,9 +2357,9 @@ cor_feat.get_selected_features()
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df_new = df.copy()
-df_new.columns = [i for i in range(df_new.shape[1])]
-df_new
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_new</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">df_new</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">df_new</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+<span class="n">df_new</span>
 </pre></div>
 </div>
 </div>
@@ -2587,13 +2587,13 @@ df_new
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cor_feat = CorrelatedFeatures(
-                                    json_summary=&quot;./corr_json_examples/6_summary.json&quot;,
-                                    json_corr=&quot;./corr_json_examples/6_corr.json&quot;,
-                                    json_uncorr=&quot;./corr_json_examples/6_uncorr.json&quot;
-                            )
-cor_feat.fit(df=df_new, label_col=6)
-cor_feat.get_selected_features()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cor_feat</span> <span class="o">=</span> <span class="n">CorrelatedFeatures</span><span class="p">(</span>
+                                    <span class="n">json_summary</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/6_summary.json&quot;</span><span class="p">,</span>
+                                    <span class="n">json_corr</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/6_corr.json&quot;</span><span class="p">,</span>
+                                    <span class="n">json_uncorr</span><span class="o">=</span><span class="s2">&quot;./corr_json_examples/6_uncorr.json&quot;</span>
+                            <span class="p">)</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df_new</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">cor_feat</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>

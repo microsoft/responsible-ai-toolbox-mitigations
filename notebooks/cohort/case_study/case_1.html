@@ -404,103 +404,103 @@ larger than a given threshold then the company succeeded (class 0). For some com
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import random
-import numpy as np
-import pandas as pd
-import xgboost as xgb
-from sklearn.pipeline import Pipeline
-from lightgbm import LGBMClassifier
-from sklearn.linear_model import LogisticRegression
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">lightgbm</span> <span class="kn">import</span> <span class="n">LGBMClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
 
-from raimitigations.utils import split_data
-import raimitigations.dataprocessing as dp
-from raimitigations.cohort import (
-    CohortDefinition,
-    CohortManager,
-    fetch_cohort_results
-)
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">split_data</span>
+<span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
+<span class="kn">from</span> <span class="nn">raimitigations.cohort</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CohortDefinition</span><span class="p">,</span>
+    <span class="n">CohortManager</span><span class="p">,</span>
+    <span class="n">fetch_cohort_results</span>
+<span class="p">)</span>
 
-SEED = 51
-#SEED = None
-np.random.seed(SEED)
-random.seed(SEED)
+<span class="n">SEED</span> <span class="o">=</span> <span class="mi">51</span>
+<span class="c1">#SEED = None</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
 
-def _create_country_df(samples: int, sectors: dict, country_name: str):
-    df = None
-    for key in sectors.keys():
-        size = int(samples * sectors[key][&quot;prob_occur&quot;])
-        invest = np.random.uniform(low=sectors[key][&quot;min&quot;], high=sectors[key][&quot;max&quot;], size=size)
-        min_invest = min(invest)
-        max_invest = max(invest)
-        range_invest = max_invest - min_invest
-        bankrupt_th = sectors[key][&quot;prob_success&quot;] * range_invest
-        inverted_behavior = sectors[key][&quot;inverted_behavior&quot;]
-        bankrupt = []
-        for i in range(invest.shape[0]):
-            inst_class = 1
-            if invest[i] &gt; bankrupt_th:
-                inst_class = 0
-            if inverted_behavior:
-                inst_class = int(not inst_class)
-            bankrupt.append(inst_class)
-        noise_ind = np.random.choice(range(size), int(size*0.05), replace=False)
-        for ind in noise_ind:
-            bankrupt[ind] = int(not bankrupt[ind])
-        noise_ind = np.random.choice(range(size), int(size*0.1), replace=False)
-        for ind in noise_ind:
-            invest[ind] = np.nan
+<span class="k">def</span> <span class="nf">_create_country_df</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sectors</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">country_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sectors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">samples</span> <span class="o">*</span> <span class="n">sectors</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">])</span>
+        <span class="n">invest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="n">sectors</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;min&quot;</span><span class="p">],</span> <span class="n">high</span><span class="o">=</span><span class="n">sectors</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;max&quot;</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">min_invest</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">invest</span><span class="p">)</span>
+        <span class="n">max_invest</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">invest</span><span class="p">)</span>
+        <span class="n">range_invest</span> <span class="o">=</span> <span class="n">max_invest</span> <span class="o">-</span> <span class="n">min_invest</span>
+        <span class="n">bankrupt_th</span> <span class="o">=</span> <span class="n">sectors</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;prob_success&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">range_invest</span>
+        <span class="n">inverted_behavior</span> <span class="o">=</span> <span class="n">sectors</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;inverted_behavior&quot;</span><span class="p">]</span>
+        <span class="n">bankrupt</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">invest</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">inst_class</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">invest</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">bankrupt_th</span><span class="p">:</span>
+                <span class="n">inst_class</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">inverted_behavior</span><span class="p">:</span>
+                <span class="n">inst_class</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="ow">not</span> <span class="n">inst_class</span><span class="p">)</span>
+            <span class="n">bankrupt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst_class</span><span class="p">)</span>
+        <span class="n">noise_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="o">*</span><span class="mf">0.05</span><span class="p">),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">noise_ind</span><span class="p">:</span>
+            <span class="n">bankrupt</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="ow">not</span> <span class="n">bankrupt</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span>
+        <span class="n">noise_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="o">*</span><span class="mf">0.1</span><span class="p">),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">noise_ind</span><span class="p">:</span>
+            <span class="n">invest</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
-        country_col = [country_name for _ in range(size)]
-        sector_col = [key for _ in range(size)]
-        df_sector = pd.DataFrame({
-            &quot;investment&quot;:invest,
-            &quot;sector&quot;:sector_col,
-            &quot;country&quot;:country_col,
-            &quot;bankrupt&quot;:bankrupt
-        })
+        <span class="n">country_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">country_name</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span>
+        <span class="n">sector_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span>
+        <span class="n">df_sector</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+            <span class="s2">&quot;investment&quot;</span><span class="p">:</span><span class="n">invest</span><span class="p">,</span>
+            <span class="s2">&quot;sector&quot;</span><span class="p">:</span><span class="n">sector_col</span><span class="p">,</span>
+            <span class="s2">&quot;country&quot;</span><span class="p">:</span><span class="n">country_col</span><span class="p">,</span>
+            <span class="s2">&quot;bankrupt&quot;</span><span class="p">:</span><span class="n">bankrupt</span>
+        <span class="p">})</span>
 
-        if df is None:
-            df = df_sector
-        else:
-            df = pd.concat([df, df_sector], axis=0)
-    return df
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df_sector</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">df_sector</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
 
-def create_df_multiple_distributions(samples: list):
-    sectors_c1 = {
-        &quot;s1&quot;: {&quot;prob_occur&quot;:0.5, &quot;prob_success&quot;:0.99, &quot;inverted_behavior&quot;:False, &quot;min&quot;:2e6, &quot;max&quot;:1e7},
-        &quot;s2&quot;: {&quot;prob_occur&quot;:0.1, &quot;prob_success&quot;:0.2, &quot;inverted_behavior&quot;:False, &quot;min&quot;:1e7, &quot;max&quot;:1.5e9},
-        &quot;s3&quot;: {&quot;prob_occur&quot;:0.1, &quot;prob_success&quot;:0.9, &quot;inverted_behavior&quot;:True, &quot;min&quot;:1e9, &quot;max&quot;:1e10},
-        &quot;s4&quot;: {&quot;prob_occur&quot;:0.3, &quot;prob_success&quot;:0.7, &quot;inverted_behavior&quot;:False, &quot;min&quot;:4e10, &quot;max&quot;:9e13},
-    }
-    sectors_c2 = {
-        &quot;s1&quot;: {&quot;prob_occur&quot;:0.1, &quot;prob_success&quot;:0.6, &quot;inverted_behavior&quot;:True, &quot;min&quot;:1e3, &quot;max&quot;:5e3},
-        &quot;s2&quot;: {&quot;prob_occur&quot;:0.3, &quot;prob_success&quot;:0.9, &quot;inverted_behavior&quot;:False, &quot;min&quot;:1e5, &quot;max&quot;:1.5e6},
-        &quot;s3&quot;: {&quot;prob_occur&quot;:0.5, &quot;prob_success&quot;:0.3, &quot;inverted_behavior&quot;:False, &quot;min&quot;:5e4, &quot;max&quot;:3e5},
-        &quot;s4&quot;: {&quot;prob_occur&quot;:0.1, &quot;prob_success&quot;:0.8, &quot;inverted_behavior&quot;:False, &quot;min&quot;:1e6, &quot;max&quot;:1e7},
-    }
-    sectors_c3 = {
-        &quot;s1&quot;: {&quot;prob_occur&quot;:0.3, &quot;prob_success&quot;:0.9, &quot;inverted_behavior&quot;:False, &quot;min&quot;:3e2, &quot;max&quot;:6e2},
-        &quot;s2&quot;: {&quot;prob_occur&quot;:0.6, &quot;prob_success&quot;:0.7, &quot;inverted_behavior&quot;:False, &quot;min&quot;:5e3, &quot;max&quot;:9e3},
-        &quot;s3&quot;: {&quot;prob_occur&quot;:0.07, &quot;prob_success&quot;:0.6, &quot;inverted_behavior&quot;:False, &quot;min&quot;:4e3, &quot;max&quot;:2e4},
-        &quot;s4&quot;: {&quot;prob_occur&quot;:0.03, &quot;prob_success&quot;:0.1, &quot;inverted_behavior&quot;:True, &quot;min&quot;:6e5, &quot;max&quot;:1.3e6},
-    }
-    countries = {
-        &quot;A&quot;:{&quot;sectors&quot;:sectors_c1, &quot;sample_rate&quot;:0.85},
-        &quot;B&quot;:{&quot;sectors&quot;:sectors_c2, &quot;sample_rate&quot;:0.05},
-        &quot;C&quot;:{&quot;sectors&quot;:sectors_c2, &quot;sample_rate&quot;:0.1}
-    }
-    df = None
-    for key in countries.keys():
-        n_sample = int(samples * countries[key][&quot;sample_rate&quot;])
-        df_c = _create_country_df(n_sample, countries[key][&quot;sectors&quot;], key)
-        if df is None:
-            df = df_c
-        else:
-            df = pd.concat([df, df_c], axis=0)
+<span class="k">def</span> <span class="nf">create_df_multiple_distributions</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+    <span class="n">sectors_c1</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.99</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">2e6</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">1e7</span><span class="p">},</span>
+        <span class="s2">&quot;s2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.2</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">1e7</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">1.5e9</span><span class="p">},</span>
+        <span class="s2">&quot;s3&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.9</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">1e9</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">1e10</span><span class="p">},</span>
+        <span class="s2">&quot;s4&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.3</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.7</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">4e10</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">9e13</span><span class="p">},</span>
+    <span class="p">}</span>
+    <span class="n">sectors_c2</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.6</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">1e3</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">5e3</span><span class="p">},</span>
+        <span class="s2">&quot;s2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.3</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.9</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">1e5</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">1.5e6</span><span class="p">},</span>
+        <span class="s2">&quot;s3&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.3</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">5e4</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">3e5</span><span class="p">},</span>
+        <span class="s2">&quot;s4&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.8</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">1e6</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">1e7</span><span class="p">},</span>
+    <span class="p">}</span>
+    <span class="n">sectors_c3</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.3</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.9</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">3e2</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">6e2</span><span class="p">},</span>
+        <span class="s2">&quot;s2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.6</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.7</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">5e3</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">9e3</span><span class="p">},</span>
+        <span class="s2">&quot;s3&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.07</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.6</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">4e3</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">2e4</span><span class="p">},</span>
+        <span class="s2">&quot;s4&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.03</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">6e5</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">1.3e6</span><span class="p">},</span>
+    <span class="p">}</span>
+    <span class="n">countries</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;A&quot;</span><span class="p">:{</span><span class="s2">&quot;sectors&quot;</span><span class="p">:</span><span class="n">sectors_c1</span><span class="p">,</span> <span class="s2">&quot;sample_rate&quot;</span><span class="p">:</span><span class="mf">0.85</span><span class="p">},</span>
+        <span class="s2">&quot;B&quot;</span><span class="p">:{</span><span class="s2">&quot;sectors&quot;</span><span class="p">:</span><span class="n">sectors_c2</span><span class="p">,</span> <span class="s2">&quot;sample_rate&quot;</span><span class="p">:</span><span class="mf">0.05</span><span class="p">},</span>
+        <span class="s2">&quot;C&quot;</span><span class="p">:{</span><span class="s2">&quot;sectors&quot;</span><span class="p">:</span><span class="n">sectors_c2</span><span class="p">,</span> <span class="s2">&quot;sample_rate&quot;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">countries</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">n_sample</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">samples</span> <span class="o">*</span> <span class="n">countries</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;sample_rate&quot;</span><span class="p">])</span>
+        <span class="n">df_c</span> <span class="o">=</span> <span class="n">_create_country_df</span><span class="p">(</span><span class="n">n_sample</span><span class="p">,</span> <span class="n">countries</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;sectors&quot;</span><span class="p">],</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df_c</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">df_c</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-    idx = pd.Index([i for i in range(df.shape[0])])
-    df = df.set_index(idx)
-    return df
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
 </pre></div>
 </div>
 </div>
@@ -509,8 +509,8 @@ def create_df_multiple_distributions(samples: list):
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = create_df_multiple_distributions(10000)
-df
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">create_df_multiple_distributions</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
+<span class="n">df</span>
 </pre></div>
 </div>
 </div>
@@ -631,7 +631,7 @@ df
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>X_train, X_test, y_train, y_test = split_data(df, label=&quot;bankrupt&quot;, test_size=0.3)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;bankrupt&quot;</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -639,10 +639,10 @@ df
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def get_model():
-    #model = LGBMClassifier(random_state=SEED)
-    model = LogisticRegression(random_state=SEED)
-    return model
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_model</span><span class="p">():</span>
+    <span class="c1">#model = LGBMClassifier(random_state=SEED)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">SEED</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
 </pre></div>
 </div>
 </div>
@@ -654,16 +654,16 @@ df
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Baseline 1
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 1</span>
 
-pipe = Pipeline([
-            (&quot;imputer&quot;, dp.BasicImputer(verbose=False)),
-            (&quot;scaler&quot;, dp.DataMinMaxScaler(verbose=False)),
-            (&quot;encoder&quot;, dp.EncoderOHE(verbose=False)),
-            (&quot;estimator&quot;, get_model()),
-        ])
-pipe.fit(X_train, y_train)
-pred_org = pipe.predict_proba(X_test)
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+            <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">()),</span>
+        <span class="p">])</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">pred_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -763,9 +763,9 @@ with all of the metrics computed and a dictionary with the best thresholds found
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pred_train_org = pipe.predict_proba(X_train)
-metrics_train, th_dict = fetch_cohort_results(X_train, y_train, pred_train_org, cohort_col=[&quot;country&quot;], return_th_dict=True)
-fetch_cohort_results(X_test, y_test, pred_org, cohort_col=[&quot;country&quot;], fixed_th=th_dict)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_train_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -776,8 +776,8 @@ fetch_cohort_results(X_test, y_test, pred_org, cohort_col=[&quot;country&quot;],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Baseline 2
-fetch_cohort_results(X_test, y_test, pred_org, cohort_col=[&quot;country&quot;], shared_th=True, fixed_th=th_dict)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 2</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">shared_th</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -874,27 +874,27 @@ fetch_cohort_results(X_test, y_test, pred_org, cohort_col=[&quot;country&quot;],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Cohort 1
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 1</span>
 
-cht_manager = CohortManager(
-    transform_pipe=[
-        dp.BasicImputer(verbose=False),
-        dp.DataMinMaxScaler(verbose=False),
-    ],
-    cohort_col=[&quot;country&quot;]
-)
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">]</span>
+<span class="p">)</span>
 
-pipe = Pipeline([
-            (&quot;cht_preprocess&quot;, cht_manager),
-            (&quot;encoder&quot;, dp.EncoderOHE(verbose=False)),
-            (&quot;estimator&quot;, get_model()),
-        ])
-pipe.fit(X_train, y_train)
-pred_cht = pipe.predict_proba(X_test)
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+            <span class="p">(</span><span class="s2">&quot;cht_preprocess&quot;</span><span class="p">,</span> <span class="n">cht_manager</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
+            <span class="p">(</span><span class="s2">&quot;estimator&quot;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">()),</span>
+        <span class="p">])</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-pred_train = pipe.predict_proba(X_train)
-metrics_train, th_dict = fetch_cohort_results(X_train, y_train, pred_train, cohort_col=[&quot;country&quot;], return_th_dict=True)
-fetch_cohort_results(X_test, y_test, pred_cht, cohort_col=[&quot;country&quot;], fixed_th=th_dict)
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -990,23 +990,23 @@ fetch_cohort_results(X_test, y_test, pred_cht, cohort_col=[&quot;country&quot;],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Cohort 2
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 2</span>
 
-cht_manager = CohortManager(
-    transform_pipe=[
-        dp.BasicImputer(verbose=False),
-        dp.DataMinMaxScaler(verbose=False),
-        dp.EncoderOHE(verbose=False),
-        get_model()
-    ],
-    cohort_col=[&quot;country&quot;]
-)
-cht_manager.fit(X_train, y_train)
-pred_cht = cht_manager.predict_proba(X_test)
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">get_model</span><span class="p">()</span>
+    <span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-pred_train = cht_manager.predict_proba(X_train)
-metrics_train, th_dict = fetch_cohort_results(X_train, y_train, pred_train, cohort_col=[&quot;country&quot;], return_th_dict=True)
-fetch_cohort_results(X_test, y_test, pred_cht, cohort_col=[&quot;country&quot;], fixed_th=th_dict)
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1102,23 +1102,23 @@ fetch_cohort_results(X_test, y_test, pred_cht, cohort_col=[&quot;country&quot;],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Cohort 3
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 3</span>
 
-cht_manager = CohortManager(
-    transform_pipe=[
-        dp.BasicImputer(verbose=False),
-        dp.DataMinMaxScaler(verbose=False),
-        dp.EncoderOHE(verbose=False),
-        get_model()
-    ],
-    cohort_col=[&quot;sector&quot;]
-)
-cht_manager.fit(X_train, y_train)
-pred_cht = cht_manager.predict_proba(X_test)
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">get_model</span><span class="p">()</span>
+    <span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-pred_train = cht_manager.predict_proba(X_train)
-metrics_train, th_dict = fetch_cohort_results(X_train, y_train, pred_train, cohort_col=[&quot;country&quot;], return_th_dict=True)
-fetch_cohort_results(X_test, y_test, pred_cht, cohort_col=[&quot;country&quot;], fixed_th=th_dict)
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1226,23 +1226,23 @@ fetch_cohort_results(X_test, y_test, pred_cht, cohort_col=[&quot;country&quot;],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Cohort 4
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 4</span>
 
-cht_manager = CohortManager(
-    transform_pipe=[
-        dp.BasicImputer(verbose=False),
-        dp.DataMinMaxScaler(verbose=False),
-        dp.EncoderOHE(verbose=False),
-        get_model()
-    ],
-    cohort_col=[&quot;sector&quot;, &quot;country&quot;]
-)
-cht_manager.fit(X_train, y_train)
-pred_cht = cht_manager.predict_proba(X_test)
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">get_model</span><span class="p">()</span>
+    <span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
-pred_train = cht_manager.predict_proba(X_train)
-metrics_train, th_dict = fetch_cohort_results(X_train, y_train, pred_train, cohort_col=[&quot;country&quot;], return_th_dict=True)
-fetch_cohort_results(X_test, y_test, pred_cht, cohort_col=[&quot;country&quot;], fixed_th=th_dict)
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1342,10 +1342,10 @@ fetch_cohort_results(X_test, y_test, pred_cht, cohort_col=[&quot;country&quot;],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Baseline 3
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 3</span>
 
-_, th_dict = fetch_cohort_results(X_train, y_train, pred_train_org, cohort_col=[&quot;sector&quot;, &quot;country&quot;], return_th_dict=True)
-fetch_cohort_results(X_test, y_test, pred_org, cohort_col=[&quot;sector&quot;, &quot;country&quot;], fixed_th=th_dict)
+<span class="n">_</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1570,10 +1570,10 @@ instances from country <code class="docutils literal notranslate"><span class="p
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#EXPERIMENT: Cohort 5
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 5</span>
 
-_, th_dict = fetch_cohort_results(X_train, y_train, pred_train, cohort_col=[&quot;sector&quot;, &quot;country&quot;], return_th_dict=True)
-fetch_cohort_results(X_test, y_test, pred_cht, cohort_col=[&quot;sector&quot;, &quot;country&quot;], fixed_th=th_dict)
+<span class="n">_</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

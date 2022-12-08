@@ -393,10 +393,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import pandas as pd
-import numpy as np
-from raimitigations.utils import create_dummy_dataset
-from raimitigations.dataprocessing import CatBoostSelection
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">create_dummy_dataset</span>
+<span class="kn">from</span> <span class="nn">raimitigations.dataprocessing</span> <span class="kn">import</span> <span class="n">CatBoostSelection</span>
 </pre></div>
 </div>
 </div>
@@ -406,17 +406,17 @@ from raimitigations.dataprocessing import CatBoostSelection
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = create_dummy_dataset(
-                            samples=10000,
-                            n_features=6,
-                            n_num_num=2,
-                            n_cat_num=2,
-                            n_cat_cat=1,
-                            num_num_noise=[0.01, 0.02],
-                            pct_change=[0.03, 0.05]
-                    )
-label_col = &quot;label&quot;
-df
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">create_dummy_dataset</span><span class="p">(</span>
+                            <span class="n">samples</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+                            <span class="n">n_features</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                            <span class="n">n_num_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                            <span class="n">n_cat_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                            <span class="n">n_cat_cat</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="n">num_num_noise</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">],</span>
+                            <span class="n">pct_change</span><span class="o">=</span><span class="p">[</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">]</span>
+                    <span class="p">)</span>
+<span class="n">label_col</span> <span class="o">=</span> <span class="s2">&quot;label&quot;</span>
+<span class="n">df</span>
 </pre></div>
 </div>
 </div>
@@ -640,9 +640,9 @@ built approximately using the original model with this feature removed from all 
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel = CatBoostSelection()
-feat_sel.fit(df=df, label_col=label_col)
-feat_sel.get_summary()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">CatBoostSelection</span><span class="p">()</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="n">label_col</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_summary</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1704,9 +1704,9 @@ script environment when compared to running it in a Python Notebook environment.
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel = CatBoostSelection(catboost_log=False, catboost_plot=True)
-feat_sel.fit(df=df, label_col=label_col)
-feat_sel.get_summary()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">CatBoostSelection</span><span class="p">(</span><span class="n">catboost_log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">catboost_plot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="n">label_col</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_summary</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1879,16 +1879,16 @@ if (outputEl) {{
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel = CatBoostSelection(
-                            catboost_log=False,
-                            catboost_plot=False,
-                            steps=4,
-                            algorithm=&quot;shap&quot;,
-                            save_json=True,
-                            json_summary=&quot;json_files/cb_feat_summary.json&quot;
-                    )
-feat_sel.fit(df=df, label_col=label_col)
-feat_sel.get_summary()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">CatBoostSelection</span><span class="p">(</span>
+                            <span class="n">catboost_log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">catboost_plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">steps</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                            <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;shap&quot;</span><span class="p">,</span>
+                            <span class="n">save_json</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">json_summary</span><span class="o">=</span><span class="s2">&quot;json_files/cb_feat_summary.json&quot;</span>
+                    <span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="n">label_col</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_summary</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1938,8 +1938,8 @@ No columns specified for imputation. These columns have been automatically ident
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>new_df = feat_sel.transform(df)
-new_df.head()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_df</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">new_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2065,10 +2065,10 @@ new_df.head()
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>features_manual = [&quot;num_0&quot;, &quot;num_1&quot;, &quot;num_2&quot;]
-feat_sel.set_selected_features(features_manual)
-new_df = feat_sel.transform(df)
-new_df
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">features_manual</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;num_0&quot;</span><span class="p">,</span> <span class="s2">&quot;num_1&quot;</span><span class="p">,</span> <span class="s2">&quot;num_2&quot;</span><span class="p">]</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">set_selected_features</span><span class="p">(</span><span class="n">features_manual</span><span class="p">)</span>
+<span class="n">new_df</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">new_df</span>
 </pre></div>
 </div>
 </div>
@@ -2192,18 +2192,18 @@ new_df
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = create_dummy_dataset(
-                            samples=10000,
-                            n_features=6,
-                            n_num_num=2,
-                            n_cat_num=2,
-                            n_cat_cat=1,
-                            num_num_noise=[0.01, 0.02],
-                            pct_change=[0.03, 0.05]
-                    )
-df.columns = [i for i in range(df.shape[1])]
-label_col = 6
-df
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">create_dummy_dataset</span><span class="p">(</span>
+                            <span class="n">samples</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+                            <span class="n">n_features</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                            <span class="n">n_num_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                            <span class="n">n_cat_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                            <span class="n">n_cat_cat</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="n">num_num_noise</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">],</span>
+                            <span class="n">pct_change</span><span class="o">=</span><span class="p">[</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">]</span>
+                    <span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+<span class="n">label_col</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">df</span>
 </pre></div>
 </div>
 </div>
@@ -2419,9 +2419,9 @@ df
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel = CatBoostSelection(catboost_log=False)
-feat_sel.fit(df=df, label_col=6 )
-feat_sel.get_summary()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">CatBoostSelection</span><span class="p">(</span><span class="n">catboost_log</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="mi">6</span> <span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_summary</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2459,8 +2459,8 @@ No columns specified for imputation. These columns have been automatically ident
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>new_df = feat_sel.transform(df)
-new_df.head()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_df</span> <span class="o">=</span> <span class="n">feat_sel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">new_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2565,17 +2565,17 @@ new_df.head()
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = create_dummy_dataset(
-        samples=1000,
-        n_features=6,
-        n_num_num=2,
-        n_cat_num=2,
-        n_cat_cat=0,
-        num_num_noise=[0.01, 0.02],
-        pct_change=[0.03, 0.05],
-        regression=True,
-    )
-df
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">create_dummy_dataset</span><span class="p">(</span>
+        <span class="n">samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">n_features</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">n_num_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">n_cat_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">n_cat_cat</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">num_num_noise</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">],</span>
+        <span class="n">pct_change</span><span class="o">=</span><span class="p">[</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">],</span>
+        <span class="n">regression</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="n">df</span>
 </pre></div>
 </div>
 </div>
@@ -2782,9 +2782,9 @@ parameter to True.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel = CatBoostSelection(verbose=False)
-feat_sel.fit(df=df, label_col=&quot;label&quot;)
-feat_sel.get_selected_features()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span> <span class="o">=</span> <span class="n">CatBoostSelection</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">)</span>
+<span class="n">feat_sel</span><span class="o">.</span><span class="n">get_selected_features</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2811,7 +2811,7 @@ feat_sel.get_selected_features()
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>feat_sel.regression
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feat_sel</span><span class="o">.</span><span class="n">regression</span>
 </pre></div>
 </div>
 </div>

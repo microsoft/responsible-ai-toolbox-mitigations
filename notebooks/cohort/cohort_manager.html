@@ -389,20 +389,20 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import random
-import numpy as np
-import pandas as pd
-import xgboost as xgb
-from sklearn.pipeline import Pipeline
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
 
-from raimitigations.utils import create_dummy_dataset
-import raimitigations.dataprocessing as dp
-from raimitigations.cohort import CohortDefinition, CohortManager
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">create_dummy_dataset</span>
+<span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
+<span class="kn">from</span> <span class="nn">raimitigations.cohort</span> <span class="kn">import</span> <span class="n">CohortDefinition</span><span class="p">,</span> <span class="n">CohortManager</span>
 
-SEED = 42
+<span class="n">SEED</span> <span class="o">=</span> <span class="mi">42</span>
 
-np.random.seed(SEED)
-random.seed(SEED)
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -413,51 +413,51 @@ random.seed(SEED)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def create_df(with_null: bool = True):
-    np.random.seed(SEED)
-    random.seed(SEED)
-    def add_nan(vec, pct):
-        vec = list(vec)
-        nan_index = random.sample(range(len(vec)), int(pct * len(vec)))
-        for index in nan_index:
-            vec[index] = np.nan
-        return vec
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_df</span><span class="p">(</span><span class="n">with_null</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">add_nan</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">pct</span><span class="p">):</span>
+        <span class="n">vec</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+        <span class="n">nan_index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vec</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">pct</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">vec</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">nan_index</span><span class="p">:</span>
+            <span class="n">vec</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">return</span> <span class="n">vec</span>
 
-    df = create_dummy_dataset(
-        samples=1000,
-        n_features=2,
-        n_num_num=0,
-        n_cat_num=2,
-        n_cat_cat=0,
-        num_num_noise=[0.01, 0.05],
-        pct_change=[0.05, 0.1],
-    )
-    if with_null:
-        col_with_nan = [&quot;num_0&quot;, &quot;num_1&quot;]
-        for col in col_with_nan:
-            if col != &quot;label&quot;:
-                df[col] = add_nan(df[col], 0.1)
+    <span class="n">df</span> <span class="o">=</span> <span class="n">create_dummy_dataset</span><span class="p">(</span>
+        <span class="n">samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+        <span class="n">n_features</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">n_num_num</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">n_cat_num</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">n_cat_cat</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">num_num_noise</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">],</span>
+        <span class="n">pct_change</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">with_null</span><span class="p">:</span>
+        <span class="n">col_with_nan</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;num_0&quot;</span><span class="p">,</span> <span class="s2">&quot;num_1&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">col_with_nan</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="o">!=</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">add_nan</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="mf">0.1</span><span class="p">)</span>
 
-    X = df.drop(columns=[&quot;label&quot;])
-    y = df[[&quot;label&quot;]]
+    <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;label&quot;</span><span class="p">]]</span>
 
-    return X, y
+    <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span>
 
-# -----------------------------------
-def get_model():
-    model = xgb.XGBClassifier(
-            objective=&quot;binary:logistic&quot;,
-            learning_rate=0.1,
-            n_estimators=30,
-            max_depth=10,
-            colsample_bytree=0.7,
-            alpha=0.0,
-            reg_lambda=10.0,
-            nthreads=4,
-            verbosity=0,
-            use_label_encoder=False,
-        )
-    return model
+<span class="c1"># -----------------------------------</span>
+<span class="k">def</span> <span class="nf">get_model</span><span class="p">():</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">XGBClassifier</span><span class="p">(</span>
+            <span class="n">objective</span><span class="o">=</span><span class="s2">&quot;binary:logistic&quot;</span><span class="p">,</span>
+            <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">n_estimators</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+            <span class="n">max_depth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">colsample_bytree</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">reg_lambda</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+            <span class="n">nthreads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+            <span class="n">verbosity</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">use_label_encoder</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
 </pre></div>
 </div>
 </div>
@@ -465,8 +465,8 @@ def get_model():
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>X, y = create_df()
-X
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">create_df</span><span class="p">()</span>
+<span class="n">X</span>
 </pre></div>
 </div>
 </div>
@@ -613,22 +613,22 @@ the other cohorts.</p></li>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cohort_pipeline = [
-    dp.BasicImputer(verbose=False),
-    dp.DataMinMaxScaler(verbose=False),
-]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="p">]</span>
 
-c1 = [ [&#39;CN_0_num_0&#39;, &#39;==&#39;, &#39;val0_1&#39;], &#39;and&#39;, [&#39;num_0&#39;, &#39;&gt;&#39;, 0.0] ]
-c2 = [ [&#39;CN_0_num_0&#39;, &#39;==&#39;, &#39;val0_0&#39;], &#39;and&#39;, [&#39;num_0&#39;, &#39;&gt;&#39;, 0.0] ]
-c3 = None
+<span class="n">c1</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;CN_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val0_1&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;CN_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val0_0&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c3</span> <span class="o">=</span> <span class="kc">None</span>
 
-cohort_set = CohortManager(
-    transform_pipe=cohort_pipeline,
-    cohort_def=[c1, c2, c3]
-)
-cohort_set.fit(X=X, y=y)
-new_X = cohort_set.transform(X)
-new_X
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">cohort_pipeline</span><span class="p">,</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">new_X</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">new_X</span>
 </pre></div>
 </div>
 </div>
@@ -755,19 +755,19 @@ given class results in incompatible cohorts or not. Therefore, if we use the <co
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cohort_pipeline = [
-    dp.BasicImputer(verbose=False),
-    dp.DataMinMaxScaler(verbose=False),
-    dp.EncoderOrdinal(verbose=False)
-]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="p">]</span>
 
-cohort_set = CohortManager(
-    transform_pipe=cohort_pipeline,
-    cohort_def=[c1, c2, c3]
-)
-cohort_set.fit(X=X, y=y)
-subset_dict = cohort_set.transform(X)
-subset_dict.keys()
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">cohort_pipeline</span><span class="p">,</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">subset_dict</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">subset_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -792,7 +792,7 @@ dict_keys([&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_2&#39;])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>subset_dict[&#39;cohort_0&#39;]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subset_dict</span><span class="p">[</span><span class="s1">&#39;cohort_0&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -925,18 +925,18 @@ dict_keys([&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_2&#39;])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cohort_pipeline = [
-    dp.BasicImputer(verbose=False),
-    dp.DataMinMaxScaler(verbose=False),
-    dp.EncoderOrdinal(verbose=False),
-    get_model()
-]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">get_model</span><span class="p">()</span>
+<span class="p">]</span>
 
-cohort_set = CohortManager(
-    transform_pipe=cohort_pipeline,
-    cohort_def=[c1, c2, c3]
-)
-cohort_set.fit(X=X, y=y)
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">cohort_pipeline</span><span class="p">,</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -954,8 +954,8 @@ cohort_set.fit(X=X, y=y)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>subset_dict = cohort_set.transform(X)
-subset_dict[&#39;cohort_0&#39;]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subset_dict</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">subset_dict</span><span class="p">[</span><span class="s1">&#39;cohort_0&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1085,8 +1085,8 @@ predictions is returned instead.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pred_arr = cohort_set.predict(X)
-pred_arr.shape
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_arr</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">pred_arr</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
 </div>
@@ -1103,9 +1103,9 @@ pred_arr.shape
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pred_dict = cohort_set.predict(X, split_pred=True)
-for cohort_name in pred_dict.keys():
-    print(f&quot;{cohort_name}: {pred_dict[cohort_name].shape}&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_dict</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">split_pred</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">cohort_name</span> <span class="ow">in</span> <span class="n">pred_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cohort_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">pred_dict</span><span class="p">[</span><span class="n">cohort_name</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1124,8 +1124,8 @@ cohort_2: (117,)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pred_arr = cohort_set.predict_proba(X)
-pred_arr.shape
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_arr</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">pred_arr</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
 </div>
@@ -1144,24 +1144,24 @@ pred_arr.shape
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>X_num = X.drop(columns=[&#39;CN_0_num_0&#39;, &#39;CN_1_num_1&#39;])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_num</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;CN_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;CN_1_num_1&#39;</span><span class="p">])</span>
 
-cohort_pipeline = [
-    dp.BasicImputer(verbose=False),
-    dp.DataMinMaxScaler(verbose=False),
-    get_model()
-]
+<span class="n">cohort_pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">get_model</span><span class="p">()</span>
+<span class="p">]</span>
 
-c1 = [ [&#39;num_0&#39;, &#39;&gt;&#39;, 1.5] ]
-c2 = None
+<span class="n">c1</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="kc">None</span>
 
-cohort_set = CohortManager(
-    transform_pipe=cohort_pipeline,
-    cohort_def=[c1, c2]
-)
-cohort_set.fit(X=X_num, y=y)
-new_X = cohort_set.transform(X_num)
-new_X
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">cohort_pipeline</span><span class="p">,</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X_num</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">new_X</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_num</span><span class="p">)</span>
+<span class="n">new_X</span>
 </pre></div>
 </div>
 </div>
@@ -1258,8 +1258,8 @@ new_X
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pred = cohort_set.predict(X_num)
-pred.shape
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_num</span><span class="p">)</span>
+<span class="n">pred</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
 </div>
@@ -1291,8 +1291,8 @@ pred.shape
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>subsets = cohort_set.get_subsets(X_num, apply_transform=False)
-subsets[&#39;cohort_0&#39;][&#39;X&#39;]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_num</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">subsets</span><span class="p">[</span><span class="s1">&#39;cohort_0&#39;</span><span class="p">][</span><span class="s1">&#39;X&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1388,7 +1388,7 @@ subsets[&#39;cohort_0&#39;][&#39;X&#39;]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>subsets.keys()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1406,8 +1406,8 @@ dict_keys([&#39;cohort_0&#39;, &#39;cohort_1&#39;])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>subsets = cohort_set.get_subsets(X_num, apply_transform=True)
-subsets[&#39;cohort_0&#39;][&#39;X&#39;]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_num</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">subsets</span><span class="p">[</span><span class="s1">&#39;cohort_0&#39;</span><span class="p">][</span><span class="s1">&#39;X&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1503,7 +1503,7 @@ subsets[&#39;cohort_0&#39;][&#39;X&#39;]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>subsets[&#39;cohort_0&#39;].keys()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subsets</span><span class="p">[</span><span class="s1">&#39;cohort_0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1521,8 +1521,8 @@ dict_keys([&#39;X&#39;])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>subsets = cohort_set.get_subsets(X_num, y, apply_transform=True)
-subsets[&#39;cohort_0&#39;].keys()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_num</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">subsets</span><span class="p">[</span><span class="s1">&#39;cohort_0&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1539,10 +1539,10 @@ dict_keys([&#39;X&#39;, &#39;y&#39;])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for key in subsets.keys():
-    print(f&quot;\n{key}&quot;)
-    print(subsets[key][&quot;X&quot;].shape)
-    print(subsets[key][&quot;y&quot;].shape)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;X&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1570,13 +1570,13 @@ demonstrates this:</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cohort_set = CohortManager(
-    transform_pipe=cohort_pipeline,
-    cohort_def={&quot;Large num_0&quot;:c1, &quot;Remaining&quot;:c2}
-)
-cohort_set.fit(X_num, y)
-subsets = cohort_set.get_subsets(X_num, y, apply_transform=True)
-subsets.keys()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">cohort_pipeline</span><span class="p">,</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Large num_0&quot;</span><span class="p">:</span><span class="n">c1</span><span class="p">,</span> <span class="s2">&quot;Remaining&quot;</span><span class="p">:</span><span class="n">c2</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_num</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_num</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1598,22 +1598,22 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>new_X = X.copy()
-new_y = y.copy()
-new_X.columns = [i for i in range(new_X.shape[1])]
-new_y.columns = [i for i in range(new_y.shape[1])]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">new_y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">new_X</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">new_X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+<span class="n">new_y</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">new_y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
 
-c1 = [ [&#39;2&#39;, &#39;==&#39;, &#39;val0_1&#39;], &#39;and&#39;, [&#39;0&#39;, &#39;&gt;&#39;, 0.0] ]
-c2 = [ [&#39;2&#39;, &#39;==&#39;, &#39;val0_0&#39;], &#39;and&#39;, [&#39;0&#39;, &#39;&gt;&#39;, 0.0] ]
-c3 = None
+<span class="n">c1</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val0_1&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val0_0&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c3</span> <span class="o">=</span> <span class="kc">None</span>
 
-cohort_set = CohortManager(
-    transform_pipe=dp.DataMinMaxScaler(verbose=False),
-    cohort_def=[c1, c2, c3]
-)
-cohort_set.fit(X=new_X, y=new_y)
-new_X = cohort_set.transform(new_X)
-new_X
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">new_X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">new_y</span><span class="p">)</span>
+<span class="n">new_X</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">new_X</span><span class="p">)</span>
+<span class="n">new_X</span>
 </pre></div>
 </div>
 </div>
@@ -1743,28 +1743,28 @@ new_X
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cohort_pipeline = [
-    dp.BasicImputer(verbose=False),
-    dp.DataMinMaxScaler(verbose=False),
-]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_pipeline</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="p">]</span>
 
-c1 = [ [&#39;CN_0_num_0&#39;, &#39;==&#39;, &#39;val0_1&#39;], &#39;and&#39;, [&#39;num_0&#39;, &#39;&gt;&#39;, 0.0] ]
-c2 = [ [&#39;CN_0_num_0&#39;, &#39;==&#39;, &#39;val0_0&#39;], &#39;and&#39;, [&#39;num_0&#39;, &#39;&gt;&#39;, 0.0] ]
-c3 = None
+<span class="n">c1</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;CN_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val0_1&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;CN_0_num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val0_0&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;num_0&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c3</span> <span class="o">=</span> <span class="kc">None</span>
 
-cohort_set = CohortManager(
-    transform_pipe=cohort_pipeline,
-    cohort_def=[c1, c2, c3]
-)
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">cohort_pipeline</span><span class="p">,</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
 
-skpipe = Pipeline([
-    (&quot;cohort_preprocess&quot;, cohort_set),
-    (&quot;encoder&quot;, dp.EncoderOrdinal(verbose=False)),
-    (&quot;model&quot;, get_model())
-])
-skpipe.fit(X, y)
-pred = skpipe.predict_proba(X)
-pred = skpipe.predict(X)
+<span class="n">skpipe</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s2">&quot;cohort_preprocess&quot;</span><span class="p">,</span> <span class="n">cohort_set</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;encoder&quot;</span><span class="p">,</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">())</span>
+<span class="p">])</span>
+<span class="n">skpipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">skpipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">skpipe</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1776,8 +1776,8 @@ pred = skpipe.predict(X)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>queries = cohort_set.get_queries()
-queries
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
 </pre></div>
 </div>
 </div>
@@ -1805,13 +1805,13 @@ queries
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cohort_set = CohortManager(
-    transform_pipe=dp.DataMinMaxScaler(verbose=False),
-    cohort_col=[&quot;CN_0_num_0&quot;]
-)
-cohort_set.fit(X, y)
-queries = cohort_set.get_queries()
-queries
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CN_0_num_0&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
 </pre></div>
 </div>
 </div>
@@ -1830,13 +1830,13 @@ queries
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cohort_set = CohortManager(
-    transform_pipe=dp.DataMinMaxScaler(verbose=False),
-    cohort_col=[2]
-)
-cohort_set.fit(X, y)
-queries = cohort_set.get_queries()
-queries
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
 </pre></div>
 </div>
 </div>
@@ -1855,13 +1855,13 @@ queries
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cohort_set = CohortManager(
-    transform_pipe=dp.DataMinMaxScaler(verbose=False),
-    cohort_col=[2],
-    X=X, y=y
-)
-queries = cohort_set.get_queries()
-queries
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span>
+<span class="p">)</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
 </pre></div>
 </div>
 </div>
@@ -1880,12 +1880,12 @@ queries
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cohort_set = CohortManager(
-    transform_pipe=dp.DataMinMaxScaler(verbose=False),
-    cohort_def=[c1, c2, c3]
-)
-queries = cohort_set.get_queries()
-queries
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
 </pre></div>
 </div>
 </div>
@@ -1905,13 +1905,13 @@ queries
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cohort_set = CohortManager(
-    transform_pipe=dp.DataMinMaxScaler(verbose=False),
-    cohort_col=[&quot;CN_0_num_0&quot;, &quot;CN_1_num_1&quot;]
-)
-cohort_set.fit(X=X, y=y)
-queries = cohort_set.get_queries()
-queries
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CN_0_num_0&quot;</span><span class="p">,</span> <span class="s2">&quot;CN_1_num_1&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
 </pre></div>
 </div>
 </div>
@@ -1939,12 +1939,12 @@ queries
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cohort_set = CohortManager(
-    transform_pipe=dp.DataMinMaxScaler(verbose=False),
-    cohort_def=[c1, c2, c3]
-)
-cohort_set.fit(X=X, y=y)
-cohort_set.save_conditions(&quot;cohort.json&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">save_conditions</span><span class="p">(</span><span class="s2">&quot;cohort.json&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1955,13 +1955,13 @@ cohort_set.save_conditions(&quot;cohort.json&quot;)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cohort_set = CohortManager(
-    transform_pipe=dp.BasicImputer(verbose=False),
-    cohort_def=&quot;cohort.json&quot;
-)
-cohort_set.fit(X=X, y=y)
-queries = cohort_set.get_queries()
-queries
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="s2">&quot;cohort.json&quot;</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
 </pre></div>
 </div>
 </div>
@@ -1992,7 +1992,7 @@ queries
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>X
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span>
 </pre></div>
 </div>
 </div>
@@ -2112,23 +2112,23 @@ queries
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>X, y = create_df()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">create_df</span><span class="p">()</span>
 
-c1 = [ [&#39;CN_1_num_1&#39;, &#39;==&#39;, &#39;val1_3&#39;] ]
-c2 = [ [&#39;CN_1_num_1&#39;, &#39;==&#39;, &#39;val1_0&#39;] ]
-c3 = None
+<span class="n">c1</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;CN_1_num_1&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val1_3&#39;</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="s1">&#39;CN_1_num_1&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;val1_0&#39;</span><span class="p">]</span> <span class="p">]</span>
+<span class="n">c3</span> <span class="o">=</span> <span class="kc">None</span>
 
-c1_pipe = [dp.DataMinMaxScaler(verbose=False)]
-c2_pipe = [dp.DataPowerTransformer(verbose=False)]
-c3_pipe = []
+<span class="n">c1_pipe</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="n">c2_pipe</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">DataPowerTransformer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="n">c3_pipe</span> <span class="o">=</span> <span class="p">[]</span>
 
-cohort_set = CohortManager(
-    transform_pipe=[c1_pipe, c2_pipe, c3_pipe],
-    cohort_def=[c1, c2, c3]
-)
-cohort_set.fit(X=X, y=y)
-new_X = cohort_set.transform(X)
-new_X
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span><span class="n">c1_pipe</span><span class="p">,</span> <span class="n">c2_pipe</span><span class="p">,</span> <span class="n">c3_pipe</span><span class="p">],</span>
+    <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">new_X</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">new_X</span>
 </pre></div>
 </div>
 </div>
@@ -2254,44 +2254,44 @@ new_X
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import matplotlib.pyplot as plt
-import seaborn as sns
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 
-def plot_value_counts_cohort(y_full, subsets, normalize = True):
-    plt.figure().clear()
-    plt.close()
-    plt.cla()
-    plt.clf()
-    fig = plt.gcf()
-    fig.set_size_inches(18, 10)
-    sns.set_theme(style=&quot;whitegrid&quot;)
-    if normalize:
-        plt.ylim(0, 1)
-    #plt.legend(bbox_to_anchor=(1.02, 1), loc=&#39;upper left&#39;, borderaxespad=0, fontsize=23)
+<span class="k">def</span> <span class="nf">plot_value_counts_cohort</span><span class="p">(</span><span class="n">y_full</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#plt.legend(bbox_to_anchor=(1.02, 1), loc=&#39;upper left&#39;, borderaxespad=0, fontsize=23)</span>
 
-    value_count = y_full.value_counts(normalize=normalize)
+    <span class="n">value_count</span> <span class="o">=</span> <span class="n">y_full</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
 
-    subsets_col = [&#39;full df&#39;, &#39;full df&#39;]
-    counts_col = [value_count[0], value_count[1]]
-    label_col = [0, 1]
+    <span class="n">subsets_col</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;full df&#39;</span><span class="p">,</span> <span class="s1">&#39;full df&#39;</span><span class="p">]</span>
+    <span class="n">counts_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">value_count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">label_col</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 
-    for key in subsets.keys():
-        value_count = subsets[key][&quot;y&quot;].value_counts(normalize=normalize)
-        subsets_col += [key, key]
-        counts_col += [value_count[0], value_count[1]]
-        label_col += [0, 1]
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">value_count</span> <span class="o">=</span> <span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
+        <span class="n">subsets_col</span> <span class="o">+=</span> <span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">]</span>
+        <span class="n">counts_col</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value_count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">label_col</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 
-    count_df = pd.DataFrame({&quot;subsets&quot;:subsets_col, &quot;label&quot;:label_col, &quot;counts&quot;:counts_col})
+    <span class="n">count_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;subsets&quot;</span><span class="p">:</span><span class="n">subsets_col</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span><span class="n">label_col</span><span class="p">,</span> <span class="s2">&quot;counts&quot;</span><span class="p">:</span><span class="n">counts_col</span><span class="p">})</span>
 
-    y_label = &quot;Occurrences&quot;
-    if normalize:
-        y_label = &quot;Fraction&quot;
+    <span class="n">y_label</span> <span class="o">=</span> <span class="s2">&quot;Occurrences&quot;</span>
+    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+        <span class="n">y_label</span> <span class="o">=</span> <span class="s2">&quot;Fraction&quot;</span>
 
-    ax = sns.barplot(x=&quot;subsets&quot;, y=&quot;counts&quot;, hue=&quot;label&quot;, data=count_df)
-    ax.set_xlabel(&quot;Subsets&quot;, fontsize=30)
-    ax.set_ylabel(y_label, fontsize=30)
-    #ax.tick_params(labelsize=15)
-    plt.show()
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;subsets&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">count_df</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Subsets&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="c1">#ax.tick_params(labelsize=15)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2300,19 +2300,19 @@ def plot_value_counts_cohort(y_full, subsets, normalize = True):
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>X, y = create_df(with_null=False)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">create_df</span><span class="p">(</span><span class="n">with_null</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-cohort_set = CohortManager(
-    cohort_col=[&quot;CN_1_num_1&quot;]
-)
-cohort_set.fit(X=X, y=y)
-subsets = cohort_set.get_subsets(X, y, apply_transform=False)
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CN_1_num_1&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-print(y.value_counts())
-for key in subsets.keys():
-    print(subsets[key][&quot;y&quot;].value_counts())
+<span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
 
-plot_value_counts_cohort(y, subsets, normalize=False)
+<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2358,17 +2358,17 @@ dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rebalance = dp.Rebalance(verbose=False)
-new_X, new_y = rebalance.fit_resample(X, y)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rebalance</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">new_X</span><span class="p">,</span> <span class="n">new_y</span> <span class="o">=</span> <span class="n">rebalance</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
-cohort_set.fit(X=new_X, y=new_y)
-subsets = cohort_set.get_subsets(new_X, new_y, apply_transform=False)
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">new_X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">new_y</span><span class="p">)</span>
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">new_X</span><span class="p">,</span> <span class="n">new_y</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-print(new_y.value_counts())
-for key in subsets.keys():
-    print(subsets[key][&quot;y&quot;].value_counts())
+<span class="nb">print</span><span class="p">(</span><span class="n">new_y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
 
-plot_value_counts_cohort(new_y, subsets, normalize=False)
+<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">new_y</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2417,15 +2417,15 @@ fixed.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rebalance_cohort = CohortManager(
-    transform_pipe=dp.Rebalance(verbose=False),
-    cohort_col=[&quot;CN_1_num_1&quot;]
-)
-new_X, new_y = rebalance_cohort.fit_resample(X, y)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rebalance_cohort</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CN_1_num_1&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">new_X</span><span class="p">,</span> <span class="n">new_y</span> <span class="o">=</span> <span class="n">rebalance_cohort</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
-subsets = rebalance_cohort.get_subsets(new_X, new_y, apply_transform=False)
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">rebalance_cohort</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">new_X</span><span class="p">,</span> <span class="n">new_y</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-plot_value_counts_cohort(new_y, subsets, normalize=False)
+<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">new_y</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2471,7 +2471,7 @@ dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>new_y.value_counts()
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2496,20 +2496,20 @@ Name: label, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>rebalance_cohort = CohortManager(
-    transform_pipe=[
-        [],
-        [],
-        [dp.Rebalance(verbose=False)],
-        [dp.Rebalance(verbose=False)],
-    ],
-    cohort_col=[&quot;CN_1_num_1&quot;]
-)
-new_X, new_y = rebalance_cohort.fit_resample(X, y)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rebalance_cohort</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">[],</span>
+        <span class="p">[],</span>
+        <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)],</span>
+        <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)],</span>
+    <span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;CN_1_num_1&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">new_X</span><span class="p">,</span> <span class="n">new_y</span> <span class="o">=</span> <span class="n">rebalance_cohort</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
-subsets = rebalance_cohort.get_subsets(new_X, new_y, apply_transform=False)
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">rebalance_cohort</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">new_X</span><span class="p">,</span> <span class="n">new_y</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-plot_value_counts_cohort(new_y, subsets, normalize=False)
+<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">new_y</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
