@@ -17,9 +17,9 @@ class DataMinMaxScaler(DataScaler):
     The user can also use a list of transformations using other non-scaler classes
     implemented in this library (:class:`~raimitigations.datapreprocessing.SeqFeatSelection`,
     :class:`~raimitigations.datapreprocessing.EncoderOHE., :class:`~raimitigations.datapreprocessing.DataImputer`, etc.).
-    For more details on how the :class:`~sklearn.preprocessing.MinMaxScaler` scales the data, check the official
-    documentation from :mod:`sklearn`:
-    https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html
+    For more details on how the :class:`~sklearn.preprocessing.MinMaxScaler` scales the data, check the `official
+    documentation from sklearn
+    <https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html>`_.
 
     :param scaler_obj: an object from the :class:`~sklearn.preprocessing.MinMaxScaler` class. This :mod:`sklearn`
         scaler will be used to perform the scaling process. If None, a :class:`~sklearn.preprocessing.MinMaxScaler`

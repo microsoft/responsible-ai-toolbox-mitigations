@@ -15,8 +15,9 @@ class BasicImputer(DataImputer):
     where mean and median are only valid for numerical values. This subclass uses
     the :class:`~sklearn.impute.SimpleImputer` class from :mod:`sklearn` in the background.
     The main advantage is that this subclass allows using the simple imputation approach over
-    several different columns at once, each with its own set of parameters. For more details see:
-    https://scikit-learn.org/stable/modules/generated/sklearn.impute.SimpleImputer.html
+    several different columns at once, each with its own set of parameters. For more details
+    check the `SimpleImputer's documentation
+    <https://scikit-learn.org/stable/modules/generated/sklearn.impute.SimpleImputer.html>`_.
 
     :param df: pandas data frame that contains the columns to be imputed;
 

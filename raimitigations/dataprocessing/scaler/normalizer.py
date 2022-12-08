@@ -17,9 +17,9 @@ class DataNormalizer(DataScaler):
     all of the scalers in the pipeline will be applied before the :class:`~sklearn.preprocessing.Normalizer` scaler.
     The user can also use a list of transformations using other non-scaler classes
     implemented in this library (feature selection, encoding, imputation, etc.).
-    For more details on how the :class:`~sklearn.preprocessing.Normalizer` scales the data, check the official
-    documentation from :mod:`sklearn`:
-    https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.Normalizer.html
+    For more details on how the :class:`~sklearn.preprocessing.Normalizer` scales the data, check the `official
+    documentation from sklearn
+    <https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.Normalizer.html>`_.
 
     :param scaler_obj: an object from the :class:`~sklearn.preprocessing.Normalizer` class. This :mod:`sklearn`
         scaler will be used to perform the scaling process. If None, a :class:`~sklearn.preprocessing.Normalizer`
