@@ -38,7 +38,8 @@ extensions = [
                 "sphinx_gallery.load_style",
                 "sphinx.ext.graphviz",
                 "sphinx.ext.inheritance_diagram",
-                "sphinx.ext.mathjax"
+                "sphinx.ext.mathjax",
+                "IPython.sphinxext.ipython_console_highlighting"
             ]
 
 # Add any paths that contain templates here, relative to this directory.
