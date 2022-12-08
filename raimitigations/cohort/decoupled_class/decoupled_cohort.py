@@ -16,6 +16,28 @@ from ..utils import _get_cross_validation_results
 
 class _DecoupledCohort(CohortDefinition):
 
+    """
+    Extends the ``CohortDefinition`` class by adding functionalities for the
+    ``DecoupledClass`` class. The ``_DecoupledCohort`` is used directly by the
+    ``DecoupledClass`` class, which implements the Decoupled Classfier.
+
+    :param cohort_definition: a list of conditions or a string containing the path
+        to a JSON file that has the list condition. A basic condition is a list
+        with three values:
+
+            1. **Column:** name or index of the column being analyzed
+            2. **Inner Operator:** one of the following operators: ``'=='``, ``'!='``,
+               ``'>'``, ``'>='``, ``'<'``, ``'<='``, or ``'range'``)
+            3. **Value:** the value used in the condition. It can be a numerical or
+               categorical value.
+
+        An ``and`` or ``or`` operator may be placed between two basic conditions. Complex
+        conditions may be created by concatenating multiple conditions;
+
+    :param name: a string indicating the name of the cohort. This parameter may be accessed
+        later using the ``name`` attribute.
+    """
+
     BASE_CLASSIFIER = DecisionTreeClassifier(max_features="sqrt")
     BASE_REGRESSOR = DecisionTreeRegressor()
 
@@ -45,11 +67,11 @@ class _DecoupledCohort(CohortDefinition):
     # -----------------------------------
     def _check_valid_inputs(self, label_col: pd.Series):
         """
-        TODO
+        Run some checks over the parameters provided in the constructor.
 
         :param label_col: the label column of the full dataset. This column is
-        used to save some information about the label column that is later
-        used in other funtions;
+            used to save some information about the label column that is later
+            used in other funtions;
         """
         if type(self.regression) != bool:
             raise ValueError("ERROR: the 'regression' parameter must a boolean value.")
@@ -62,11 +84,13 @@ class _DecoupledCohort(CohortDefinition):
     # -----------------------------------
     def _compute_label_stats(self, label_col: pd.Series):
         """
-        TODO
+        Compute some statistics of the full dataset's label column. These statistics
+        are later used to determine if two cohorts are allowed to be merged or
+        not (based on their label distribution similarity).
 
         :param label_col: the label column of the full dataset. This column is
-        used to save some information about the label column that is later
-        used in other funtions;
+            used to save some information about the label column that is later
+            used in other funtions;
         """
         if self.regression:
             self.label_info = {
@@ -128,19 +152,45 @@ class _DecoupledCohort(CohortDefinition):
 
     # -----------------------------------
     def set_estimator(self, estimator: BaseEstimator, regression: bool):
+        """
+        Sets the estimator to be used by the cohort.
+
+        :param: estimator: the estimator to be used;
+        :param: regression: a boolean value that indicates if the estimator
+            is for regression problems or not.
+        """
         self.estimator = estimator
         self.regression = regression
 
     # -----------------------------------
     def get_size(self):
+        """
+        Return the size of the cohort.
+
+        :return: the size of the cohort.
+        :rtype: int
+        """
         return len(self.index_list)
 
     # -----------------------------------
     def get_index_list(self):
+        """
+        Return a list with the index of all instances that belongs to the cohort.
+
+        :return: list with the index of all instances in the cohort.
+        :rtype: list
+        """
         return self.index_list
 
     # -----------------------------------
     def get_out_group_index_list(self):
+        """
+        Return a list with the index of all instances that belongs to the cohort.
+
+        :return: list with the index of all instances used as the out-group
+            during the cohort's training (used only when transfer learning is used).
+        :rtype: list
+        """
         return self.out_group_index
 
     # -----------------------------------
@@ -271,6 +321,20 @@ class _DecoupledCohort(CohortDefinition):
             cross-validation to determine the best value for $\theta$. In these cases,
             a default value is used. If default_theta is None, an error is raised when
             a cohort is too small to use cross-validation.
+        :return: a tuple with the following values:
+
+            * **subset X:** a dataframe containing only the feature columns that represents
+              the subset used for training for the current cohort. This includes the instances
+              that belong to the cohort, plus the instances from the out-group, that is,
+              instances from other cohorts that are used in training with a smaller weight
+              (used only when transfer learning is used);
+            * **subset y:** similar to subset X, but instead contains only the label column;
+            * **weights:** the weights assigned to each instance in the training set. Instances
+              that belong to the cohort have a weight of 1, while instances from the out-group
+              are assigned a weight < 1. The weight of the out-group instances is defined using
+              cross-validation.
+
+        :rtype: tuple
         """
         if type(self.out_group_weight) == list:
             self._compute_best_tl_weight(X, y, transform_pipe, min_size_fold, valid_k_folds, default_theta)
@@ -288,6 +352,13 @@ class _DecoupledCohort(CohortDefinition):
 
     # -----------------------------------
     def _merge_cohorts_label_value_counts(self, cohort: "_DecoupledCohort"):
+        """
+        Update the value counts of the label column for the current cohort
+        when it is being merged to a new cohort (specified by the ``cohort``
+        parameter).
+
+        :param cohort: the new cohort being merged to the current cohort.
+        """
         # merge value_counts of both cohorts
         for key in self.value_counts.keys():
             if key in cohort.value_counts.keys():
@@ -302,6 +373,12 @@ class _DecoupledCohort(CohortDefinition):
 
     # -----------------------------------
     def _merge_cohorts_label_dist(self, cohort: "_DecoupledCohort"):
+        """
+        Update the labels of the current cohort when it is being merged to
+        a new cohort (specified by the ``cohort`` parameter).
+
+        :param cohort: the new cohort being merged to the current cohort.
+        """
         self.label_dist += cohort.label_dist.copy()
 
     # -----------------------------------
@@ -331,6 +408,21 @@ class _DecoupledCohort(CohortDefinition):
 
     # -----------------------------------
     def _jensen_distance_regression(self, outside_cohort: "_DecoupledCohort"):
+        """
+        Compute the Jensen-Shannon distance between the label distribution of the
+        current cohort and the outside cohort (``outside_cohort``). This method
+        is only used for regression problems. To build the label distribution in
+        this case, we do the following: (i) get the minimum and maximum values found
+        in the label column of the full dataset, (ii) create a histogram of the
+        label values found for the current cohort (self) and the outside cohort (the
+        number of bins used when building the histogram is computed using the
+        Freedman-Diaconis rule), and then (iii) compute the Jensen-Shannon distance
+        between these two histograms.
+
+        :param outside_cohort: the outside cohort being tested for compatibility for
+            being used as the outside data in the transfer learning task by the current
+            cohort;
+        """
         bins = self.label_info["optimal_bins"]
         hist_1, _ = np.histogram(
             self.label_dist, bins=bins, range=(self.label_info["min"], self.label_info["max"]), density=True
@@ -343,6 +435,15 @@ class _DecoupledCohort(CohortDefinition):
 
     # -----------------------------------
     def _jensen_distance_class(self, outside_cohort: "_DecoupledCohort"):
+        """
+        Compute the Jensen-Shannon distance between the label distribution of the
+        current cohort and the outside cohort (``outside_cohort``). This method
+        is only used for classification problems.
+
+        :param outside_cohort: the outside cohort being tested for compatibility for
+            being used as the outside data in the transfer learning task by the current
+            cohort;
+        """
         p = []
         q = []
         for label in self.label_info["unique"]:
@@ -379,6 +480,9 @@ class _DecoupledCohort(CohortDefinition):
             if the label distribution between two cohorts are similar or not. If the distance
             between these two distributions is <= dist_th, then the cohorts are considered
             compatible, and considered incompatible otherwise.
+        :return: True if ``outside_cohort`` is compatible with the current cohort, and
+            False otherwise;
+        :rtype: boolean
         """
         compatible = False
 
@@ -404,6 +508,10 @@ class _DecoupledCohort(CohortDefinition):
         :param min_rate: a value between [0, 1] that determines the
             minimum occurrence rate allowed for any class in the label
             column.
+        :return: True if all label values have an occurrence rate greater
+            than min_rate. False if at least one of the label values has an
+            occurance smaller than min_rate.
+        :rtype: boolean
         """
         if self.regression:
             return True
@@ -427,6 +535,15 @@ class _DecoupledCohort(CohortDefinition):
             class (from the label column) that a cohort is allowed
             to have. If the minority class of the cohort has an occurrence
             rate lower than min_rate, the cohort is considered invalid.
+        :return: a code that determines if the cohort is valid or not:
+
+            * _DecoupledCohort.VALID: if the cohort is valid;
+            * _DecoupledCohort.INVALID_SIZE: if the cohort has an invalid
+              size;
+            * _DecoupledCohort.INVALID_DISTRIBUTION: if the cohort has an
+              invalid distribution.
+
+        :rtype: int
         """
         if not self.check_min_class_rate(min_rate):
             return self.INVALID_DISTRIBUTION
@@ -549,6 +666,13 @@ class _DecoupledCohort(CohortDefinition):
             False, transform the probabilities to class values using the threshold
             computed by the _get_best_prob_th() method. This parameter is ignored if
             the current task is a regression task.
+        :return: a tuple with the following values:
+
+            * **Index list:** list of indices of all instances that belongs to the cohort;
+            * **Predictions:** list of predictions for each instance in the cohort (paired
+              with the index list).
+
+        :rtype: tuple
         """
         subset, index_list = self.get_cohort_subset(X, index_used=index_used, return_index_list=True)
         if subset.empty:

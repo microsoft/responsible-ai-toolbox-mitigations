@@ -13,13 +13,6 @@ from .decoupled_cohort import _DecoupledCohort
 from ...utils.data_utils import err_float_01
 
 
-# Change BaseClass to DataProcessing
-# Change self.cohort_list to self.cohorts
-# Change self.cohort_transf_list to self._cohort_pipe
-# Update the documentation of the cohort_def parameter
-# Change cohort_cols to cohort_col
-
-
 class DecoupledClass(CohortHandler):
     """
     Concrete class that trains different models over different subsets of data (cohorts).
@@ -64,36 +57,33 @@ class DecoupledClass(CohortHandler):
         regression model. If False, a classifier is created instead. This parameter
         is ignored if an estimator is provided using the 'estimator' parameter;
 
-    :param cohort_def: a dictionary that defines each cohort. This dictionary must have
-        one key for each cohort, where the key represents the cohort's name. Each of these
-        keys is assigned to a list of secondary dictionaries, where each of these secondary
-        dictionaries represents a set of conditions. This set of conditions defines which
-        instances will belong to each cohort. The last cohort is allowed to be assigned
-        a None value, which means that all instances not yet assigned to any of the previous
-        cohorts will be assigned to the last cohort. Below is an example of a valid
-        cohort_dict:
-            * cohort_dict = {
-                            "cohort_1": [{'column1': 'c1value1', 'column2': 'c2value5'}],
-                            "cohort_2": [{'column1': 'c1value3', 'column2': 'c2value4'},
-                                         {'column1': ['c1value2', 'c1value4']}],
-                            "cohort_3": None
-                        }
+    :param cohort_def: a list of cohort definitions, a dictionary of cohort definitions, or
+        the path to a JSON file containing the definition of all cohorts. A cohort condition
+        is the same variable received by the ``cohort_definition`` parameter of the
+        ``CohortDefinition`` class. When using a list of cohort definitions, the cohorts will
+        be named automatically. For the dictionary of cohort definitions, the key used represents
+        the cohort's name, and the value assigned to each key is given by that cohort's conditions.
+        This parameter can't be used together with the ``cohort_col`` parameter. Only one these two
+        parameters must be used at a time;
 
     :param cohort_col: a list of column names that indicates which columns should be used
-        to create a cohort. For example, if cohort_cols = ["C1", "C2"], then we first identify
+        to create a cohort. For example, if ``cohort_col`` = ["C1", "C2"], then we first identify
         all possible values for column "C1" and "C2". Suppose that the unique values in "C1"
         are: [0, 1, 2], and the unique values in "C2" are: ['a', 'b']. Then, we create one
         cohort for each combination between these two sets of unique values. This way, the
         first cohort will be conditioned to instances where ("C1" == 0 and "C2" == 'a'),
-        cohort 2 will be conditioned to ("C1" == 0 and "C2" == 'b'), and so on. There are
+        cohort 2 will be conditioned to ("C1" == 0 and "C2" == 'b'), and so on. They are
         called the baseline cohorts. We then check if there are any of the baseline cohorts
         that are invalid, where an invalid cohort is considered as being a cohort with
-        size < max(min_cohort_size, df.shape[0] * min_cohort_pct) or a cohort with a
+        size < ``max(min_cohort_size, df.shape[0] * min_cohort_pct)`` or a cohort with a
         minority class (the label value with least ocurrences) with an occurrence rate <
-        minority_min_rate. Every time an invalid cohort is found, we merge this cohort to
+        ``minority_min_rate``. Every time an invalid cohort is found, we merge this cohort to
         the current smallest cohort. This is simply a heuristic, as identifying the best
         way to merge these cohorts in a way that results in a list of valid cohorts is a
-        complex problem that we do not try to solve here;
+        complex problem that we do not try to solve here. Note that if using transfer
+        learing (check the ``theta`` parameter for more details), then the baseline
+        cohorts are not merged if they are found invalid. Instead, we use transfer learning
+        over the invalid cohorts;
 
     :param cohort_json_files: a list with the name of the JSON files that contains the definition
         of each cohort. Each cohort is saved in a single JSON file, so the length of the
@@ -187,18 +177,18 @@ class DecoupledClass(CohortHandler):
         is used for each cohort;
 
     :param min_cohort_size: the minimum size a cohort is allowed to have to be considered
-        valid. Check the cohort_cols parameter for more information;
+        valid. Check the ``cohort_col`` parameter for more information;
 
     :param min_cohort_pct: a value between [0, 1] that determines the minimum size allowed
         for a cohort. The minimum size is given by the size of the full dataset (df.shape[0])
         multiplied by min_cohort_pct. The maximum value between min_cohort_size and
         (df.shape[0] * min_cohort_pct) is used to determine the minimum size allowed for a
-        cohort. Check the cohort_cols parameter for more information;
+        cohort. Check the ``cohort_col`` parameter for more information;
 
     :param minority_min_rate: the minimum occurrence rate for the minority class (from the label
         column) that a cohort is allowed to have. If the minority class of the cohort has an
         occurrence rate lower than min_rate, the cohort is considered invalid. Check the
-        cohort_cols parameter for more information;
+        ``cohort_col`` parameter for more information;
 
     :param inplace: indicates if the original dataset will be saved internally
         (df_org) or not. If True, then the feature selection transformation is saved
@@ -276,7 +266,11 @@ class DecoupledClass(CohortHandler):
     # -----------------------------------
     def _build_cohorts(self):
         """
-        TODO
+        Overwrites the ``_build_cohorts()`` method from the parent class ``CohortHandler``.
+        The current class (``DecoupledClass``) uses a different class when creating its
+        cohorts: it uses the ``_DecoupledCohort`` instead of the base ``CohortDefinition``
+        class. And the former class requires a few extra steps after it is created,
+        which are implemented here.
         """
         if self.df is None or self.cohorts is not None:
             return
@@ -309,6 +303,10 @@ class DecoupledClass(CohortHandler):
         For classification tasks, BASE_CLASSIFIER. These base estimators are
         only used if the user doesn't provide any estimator through the estimator
         parameter.
+
+        :return: the base estimator to be used. It could be a base classifier
+            or a base regression model;
+        :rtype: BaseEstimator
         """
         if self.regression:
             return self.BASE_REGRESSOR
@@ -317,8 +315,8 @@ class DecoupledClass(CohortHandler):
     # -----------------------------------
     def _set_transforms(self, transform_pipe: list):
         """
-        Overwrites the _set_transforms() method from the BaseClass. This method
-        first calls the _set_transforms() method from the BaseClass to check for
+        Overwrites the _set_transforms() method from the DataProcessing. Thismethod
+        first calls the _set_transforms() method from the DataProcessing to check for
         errors in the list of transformations (transform_pipe) and then set the
         transform_pipe attribute. Following this call, it is created a copy of
         the transform_pipe attribute to each cohort. This way, each cohort will
@@ -461,6 +459,13 @@ class DecoupledClass(CohortHandler):
         constructor method.
 
         :param cohort_list: a list of cohorts.
+        :return: a dictionary with three keys:
+
+            * **Key 1:** a list of all valid cohorts
+            * **Key 2:** a list of cohorts with invalid size
+            * **Key 3:** a list of cohorts with invalid minority class occurrence
+              rate.
+        :rtype: dict
         """
         min_cohort_size = max(self.min_cohort_size, self.df.shape[0] * self.min_cohort_pct)
         status_dict = {self.VALID_NAME: [], self.INVALID_SIZE_NAME: [], self.INVALID_DIST_NAME: []}
@@ -484,6 +489,9 @@ class DecoupledClass(CohortHandler):
         :param cohort_list: a list of cohorts;
         :param invalid_index: an invalid index value. The
             smallest cohort must not have this index.
+        :return: the index of ``cohort_list`` associated with the
+            smallest cohort.
+        :rtype: int
         """
         min_size = -1
         min_index = -1
