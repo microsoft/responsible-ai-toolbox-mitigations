@@ -16,9 +16,9 @@ class DataQuantileTransformer(DataScaler):
     all of the scalers in the pipeline will be applied before the :class:`~sklearn.preprocessing.QuantileTransformer`
     scaler. The user can also use a list of transformations using other non-scaler
     classes implemented in this library (feature selection, encoding, imputation, etc.).
-    For more details on how the :class:`~sklearn.preprocessing.QuantileTransformer` changes the data, check the official
-    documentation from :mod:`sklearn`:
-    https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.QuantileTransformer.html
+    For more details on how the :class:`~sklearn.preprocessing.QuantileTransformer` changes the data, check the `official
+    documentation from sklearn
+    <https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.QuantileTransformer.html>`_.
 
     :param scaler_obj: an object from the :class:`~sklearn.preprocessing.QuantileTransformer` class.
         This :mod:`sklearn` scaler will be used to perform the scaling process. If None, a
