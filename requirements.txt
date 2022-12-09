@@ -27,7 +27,7 @@ bleach==5.0.1
     # via nbconvert
 catboost==1.0.4
     # via -r requirements.in
-certifi==2022.6.15
+certifi==2022.12.7
     # via requests
 cffi==1.15.0
     # via argon2-cffi-bindings
