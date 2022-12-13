@@ -1,3 +1,5 @@
+.. _iterative:
+
 IterativeDataImputer
 ====================
 
