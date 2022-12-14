@@ -3,7 +3,6 @@ from copy import deepcopy
 
 import pandas as pd
 import numpy as np
-import json
 
 from ..dataprocessing import DataProcessing
 from .cohort_definition import CohortDefinition, CohortFilters
@@ -44,11 +43,17 @@ class CohortManager(DataProcessing):
         be named automatically. For the dictionary of cohort definitions, the key used represents
         the cohort's name, and the value assigned to each key is given by that cohort's conditions.
         This parameter can't be used together with the ``cohort_col`` parameter. Only one these two
-        parameters must be used at a time;
+        parameters must be used at a time. This parameter is ignored if ``cohort_json_files`` is
+        provided;
 
     :param cohort_col: a list of column names or indices, from which one cohort is created for each
         unique combination of values for these columns. This parameter can't be used together with
-        the ``cohort_def`` parameter. Only one these two parameters must be used at a time;
+        the ``cohort_def`` parameter. Only one these two parameters must be used at a time. This
+        parameter is ignored if ``cohort_json_files`` is provided;
+
+    :param cohort_json_files: a list with the name of the JSON files that contains the definition
+        of each cohort. Each cohort is saved in a single JSON file, so the length of the
+        ``cohort_json_files`` should be equal to the number of cohorts to be used.
 
     :param df: the data frame to be used during the fit method.
         This data frame must contain all the features, including the label
@@ -81,6 +86,7 @@ class CohortManager(DataProcessing):
         transform_pipe: list = None,
         cohort_def: Union[dict, list, str] = None,
         cohort_col: list = None,
+        cohort_json_files: list = None,
         df: pd.DataFrame = None,
         label_col: str = None,
         X: pd.DataFrame = None,
@@ -103,7 +109,7 @@ class CohortManager(DataProcessing):
         self._cohorts_compatible = None
         self._transf_pipe = transform_pipe
         self._set_df_mult(df, label_col, X, y)
-        self._set_cohort_def(cohort_def, cohort_col)
+        self._set_cohort_def(cohort_def, cohort_col, cohort_json_files)
         self._build_cohorts()
         self._set_transforms()
 
@@ -248,7 +254,7 @@ class CohortManager(DataProcessing):
                 self._cohort_pipe.append(_pipe)
 
     # -----------------------------------
-    def _set_cohort_def(self, cohort_def: Union[dict, list], cohort_col: list):
+    def _set_cohort_def(self, cohort_def: Union[dict, list], cohort_col: list, cohort_json_files: list):
         """
         Validate and set the cohort definitions based on the ``cohort_def`` and ``cohort_col``
         parameters. Checks if only one of these two parameters must be provided (the other one
@@ -263,11 +269,31 @@ class CohortManager(DataProcessing):
             be named automatically. For the dictionary of cohort definitions, the key used represents
             the cohort's name, and the value assigned to each key is given by that cohort's conditions.
             This parameter can't be used together with the ``cohort_col`` parameter. Only one these two
-            parameters must be used at a time;
+            parameters must be used at a time. This parameter is ignored if ``cohort_json_files`` is provided;
         :param cohort_col: a list of column names or indices, from which one cohort is created for each
             unique combination of values for these columns. This parameter can't be used together with
-            the ``cohort_def`` parameter. Only one these two parameters must be used at a time;
+            the ``cohort_def`` parameter. Only one these two parameters must be used at a time. This
+            parameter is ignored if ``cohort_json_files`` is provided;
+        :param cohort_json_files: a list with the name of the JSON files that contains the definition
+            of each cohort. Each cohort is saved in a single JSON file, so the length of the
+            ``cohort_json_files`` should be equal to the number of cohorts to be used.
         """
+        if cohort_json_files is not None:
+            if type(cohort_json_files) != list:
+                raise ValueError(
+                    "ERROR: the 'cohort_json_files' should be a list with the name of the JSON files that "
+                    + "contains the definition of each cohort. Expected a list, but instead got a "
+                    + f"{type(cohort_json_files)}."
+                )
+            cohort_def = []
+            for json_file in cohort_json_files:
+                cohort = CohortDefinition(json_file)
+                self._cohort_names.append(deepcopy(cohort.name))
+                cohort_def.append(deepcopy(cohort.conditions))
+            self.cohort_col = cohort_col
+            self.cohort_def = cohort_def
+            return
+
         if cohort_def is None and cohort_col is None:
             raise ValueError(
                 "ERROR: at least one of the following parameters must be provided: [cohort_def, cohort_col]."
@@ -278,9 +304,6 @@ class CohortManager(DataProcessing):
             )
 
         if cohort_def is not None:
-            if type(cohort_def) == str:
-                cohort_def = self._load(cohort_def)
-
             if type(cohort_def) != dict and type(cohort_def) != list:
                 raise ValueError(
                     "ERROR: 'cohort_def' must be a dict or a list with the definition of all cohorts, or a string "
@@ -381,45 +404,46 @@ class CohortManager(DataProcessing):
                 return
 
         self.cohorts = []
+        prev_cohort_def = []
         for i, cohort_def in enumerate(self.cohort_def):
             if cohort_def is None and i < len(self.cohort_def) - 1:
                 raise ValueError("ERROR: only the last cohort is allowed to have a condition list assigned to 'None'.")
             cohort = CohortDefinition(cohort_def, self._cohort_names[i])
+            if cohort_def is None:
+                cohort.create_query_remaining_instances_cohort(prev_cohort_def)
+            else:
+                prev_cohort_def.append(cohort_def)
             self.cohorts.append(cohort)
 
     # -----------------------------------
-    def save_conditions(self, json_file: str):
+    def save_cohorts(self, json_file_names: list = None):
         """
-        Save the definition of all cohorts into a JSON file.
+        Save the definition of each cohort in their respective JSON
+        file, which means that one JSON file will be created for each
+        cohort. The name of the JSON files created is provided through
+        the 'json_file_names'. If no list of JSON file names is used
+        (json_file_names = None), then a default list of JSON file
+        names is created.
 
-        :param json_file: the path to the JSON file.
+        :param json_file: a list of JSON file names. The first file name
+            is used to save the first cohort, and so on. If not provided,
+            a default list of file names is created.
         """
         if self.cohorts is None:
             raise ValueError(
-                "ERROR: calling the save_conditions() method before building the cohorts. To build the cohorts, "
+                "ERROR: calling the save_cohorts() method before building the cohorts. To build the cohorts, "
                 + "either pass a valid dataframe to the constructor of the CohortManager class, "
                 + " or call the fit() method."
             )
-        cht_dict = {}
-        for cht in self.cohorts:
-            cht_dict[cht.name] = cht.conditions
+        if json_file_names is None:
+            json_file_names = [f"cohort_{i}.json" for i in range(len(self.cohorts))]
+        elif type(json_file_names) != list:
+            raise ValueError(
+                "ERROR: the 'json_file_names' parameter must be a list of JSON file names (list of strings)."
+            )
 
-        with open(json_file, "w") as file:
-            json.dump(cht_dict, file, indent=4)
-
-    # -----------------------------------
-    def _load(self, json_file: str):
-        """
-        Load the condition list of all cohorts from a JSON file.
-
-        :param json_file: the path to the JSON file;
-        :return: a dictionary with the list of conditions for each of
-            the existing cohorts;
-        :rtype: dict
-        """
-        with open(json_file, "r") as file:
-            conditions = json.load(file)
-        return conditions
+        for i, cohort in enumerate(self.cohorts):
+            cohort.save(json_file_names[i])
 
     # -----------------------------------
     def _check_intersection_cohorts(self, index_used: list):

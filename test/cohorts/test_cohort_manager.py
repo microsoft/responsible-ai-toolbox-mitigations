@@ -32,12 +32,37 @@ def _get_object_list(df=None, label_col=None, X=None, y=None, use_index=True):
 
     if use_index:
         c1 = [ ['2', '==', 'val0_1'], 'and', ['0', '>', 0.0] ]
-        c2 = [ ['2', '==', 'val0_0'], 'and', ['0', '>', 0.0] ]
+        c2 = [
+                [
+                    ['2', '==', 'val0_0'],
+                    'and',
+                    ['0', 'range', [-1.0, 0.0]]
+                ],
+                'or',
+                [
+                    ['2', '==', 'val0_0'],
+                    'and',
+                    ['0', 'range', [0.5, 1.0]]
+                ]
+            ]
         c3 = None
         cht_col = ['2', '3']
     else:
         c1 = [ ['CN_0_num_0', '==', 'val0_1'], 'and', ['num_0', '>', 0.0] ]
-        c2 = [ ['CN_0_num_0', '==', 'val0_0'], 'and', ['num_0', '>', 0.0] ]
+        c2 = [ ['CN_0_num_0', '==', 'val0_0'], 'and', ['num_0', 'range', [-1.0, 0.0]] ]
+        c2 = [
+                [
+                    ['CN_0_num_0', '==', 'val0_0'],
+                    'and',
+                    ['num_0', 'range', [-1.0, 0.0]]
+                ],
+                'or',
+                [
+                    ['CN_0_num_0', '==', 'val0_0'],
+                    'and',
+                    ['num_0', 'range', [0.5, 1.0]]
+                ]
+            ]
         c3 = None
         cht_col = ['CN_0_num_0', 'CN_1_num_1']
 
@@ -60,7 +85,7 @@ def _get_object_list(df=None, label_col=None, X=None, y=None, use_index=True):
     cohort_set = CohortManager(
         df=df, label_col=label_col, X=X, y=y,
         transform_pipe=cohort_pipeline,
-        cohort_def=[c1, c2, c3]
+        cohort_def={"cht1":c1, "cht2":c2, "cht3":c3}
     )
     cht_list.append(cohort_set)
 
@@ -108,11 +133,13 @@ def _run_main_commands(X, y, cht_manager, X_in_fit=True):
     _ = cht_manager.get_subsets(X, y, apply_transform=True)
     _ = cht_manager.get_queries()
 
-    cht_manager.save_conditions("cht.json")
+    cht_manager.save_cohorts()
+    cohort_json_files = [f"cohort_{i}.json" for i in range(len(cht_manager.cohorts))]
     _ = CohortManager(
-        cohort_def="cht.json"
+        cohort_json_files=cohort_json_files
     )
-    os.remove("cht.json")
+    for json_file in cohort_json_files:
+        os.remove(json_file)
 
 # -----------------------------------
 def test_df(df_full_cohort, label_col_name):
@@ -230,7 +257,7 @@ def test_errors_cohorts(df_full_cohort, label_col_name):
     with pytest.raises(Exception):
         cohort_set.get_queries()
     with pytest.raises(Exception):
-        cohort_set.save_conditions("cht.json")
+        cohort_set.save_cohorts()
     with pytest.raises(Exception):
         cohort_set.fit_resample(df=df_full_cohort, rebalance_col=label_col_name)
     with pytest.raises(Exception):
@@ -251,6 +278,13 @@ def test_errors_cohorts(df_full_cohort, label_col_name):
         cohort_set = CohortManager(cohort_col=[])
     with pytest.raises(Exception):
         cohort_set = CohortManager(cohort_def=[[['num_0', '>', 0.0]], None, None])
+    with pytest.raises(Exception):
+        cohort_set = CohortManager(cohort_json_files="file.json")
+
+    cohort_set = CohortManager(cohort_col=["CN_0_num_0"])
+    cohort_set.fit(df=df_full_cohort, label_col=label_col_name)
+    with pytest.raises(Exception):
+        cohort_set.save_cohorts("file.json")
 
 # -----------------------------------
 def test_errors_cohorts_special_cases(df_full_cohort, label_col_name):

@@ -1,9 +1,25 @@
 from typing import Union
+from copy import deepcopy
 import pandas as pd
 import numpy as np
 import json
 
+from ._raiutils_cohort import CohortFilterMethods, CohortJsonConst, CohortFilterOps
 
+
+# -----------------------------------
+def _remove_nan_from_list(value_list: list):
+    new_value = []
+    has_nan = False
+    for v in value_list:
+        if type(v) == float and np.isnan(v):
+            has_nan = True
+        else:
+            new_value.append(deepcopy(v))
+    return new_value, has_nan
+
+
+# -----------------------------------
 class CohortFilters:
 
     GREATER = ">"
@@ -16,13 +32,24 @@ class CohortFilters:
     ALL = [GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, EQUAL, RANGE, DIFFERENT]
 
     OP_ALLOW_LIST = [EQUAL, RANGE, DIFFERENT]
-    OP_REQ_NUMER = [GREATER, GREATER_EQUAL, LESS, LESS_EQUAL]
+    OP_REQ_NUMBER = [GREATER, GREATER_EQUAL, LESS, LESS_EQUAL]
 
     SIMPLE_OP = [GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, EQUAL, DIFFERENT]
 
     AND = "and"
     OR = "or"
     CONDITION_CONNECTORS = [AND, OR]
+
+    OP_NEGATION_DICT = {
+        GREATER: LESS_EQUAL,
+        GREATER_EQUAL: LESS,
+        LESS: GREATER_EQUAL,
+        LESS_EQUAL: GREATER,
+        EQUAL: DIFFERENT,
+        DIFFERENT: EQUAL,
+    }
+
+    CONNECTOR_NEGATION_DICT = {AND: OR, OR: AND}
 
 
 class CohortDefinition:
@@ -53,12 +80,19 @@ class CohortDefinition:
     STATE_AND_OR = 1
     STATE_COND2 = 2
 
+    RAIUTILS_STATE_COND1 = 0
+    RAIUTILS_STATE_COND2 = 1
+    RAIUTILS_STATE_COMPOSITE = 2
+
+    JSON_NAME_FIELD = "name"
+    JSON_FILTER_FIELD = "cohort_filter_list"
+
     # -----------------------------------
     def __init__(self, cohort_definition: Union[list, str] = None, name: str = "cohort"):
+        self.name = name
         self._set_conditions(cohort_definition)
         self.query = None
         self.columns_used = []
-        self.name = name
         self._build_query()
 
     # -----------------------------------
@@ -73,10 +107,12 @@ class CohortDefinition:
             to a JSON file that has the list condition.
         """
         self.conditions = None
+        self._require_index = False
         if conditions is None:
+            self._require_index = True
             return
         if type(conditions) == str:
-            conditions = self._load(conditions)
+            self.name, conditions = self._load(conditions)
         elif type(conditions) != list:
             raise ValueError(
                 "ERROR: the cohort_definition parameter must be a string or a list. If cohort_definition is a "
@@ -139,7 +175,7 @@ class CohortDefinition:
                     + f"operators for this value are: {CohortFilters.SIMPLE_OP}"
                 )
             if type(value) == str:
-                if operator in CohortFilters.OP_REQ_NUMER:
+                if operator in CohortFilters.OP_REQ_NUMBER:
                     value = f"`{value}`"
                 else:
                     value = f'"{value}"'
@@ -165,11 +201,21 @@ class CohortDefinition:
         column, operator, value = self._get_condition_parts(condition)
         self.columns_used.append(column)
         if type(value) == list:
+            value, has_nan = _remove_nan_from_list(value)
+
             if operator == CohortFilters.EQUAL:
                 query = f"`{column}` in {value}"
+                if has_nan:
+                    nan_query = f"`{column}`.isnull()"
+                    query = f"({query}) or ({nan_query})"
             elif operator == CohortFilters.DIFFERENT:
                 query = f"`{column}` not in {value}"
+                if has_nan:
+                    nan_query = f"not `{column}`.isnull()"
+                    query = f"({query}) and ({nan_query})"
             else:
+                if has_nan:
+                    raise ValueError("ERROR: it is not allowed to use NaN in a range operation.")
                 query = f"{value[0]} <= `{column}` <= {value[1]}"
         else:
             if type(value) == float and np.isnan(value):
@@ -270,7 +316,117 @@ class CohortDefinition:
             for the ``get_cohort_subset()`` method. False otherwise.
         :rtype: bool
         """
-        return self.conditions is None or self.conditions == []
+        return self._require_index
+
+    # -----------------------------------
+    def _negate_simple_condition(self, condition: list):
+        column = deepcopy(condition[0])
+        operator = deepcopy(condition[1])
+        value = deepcopy(condition[2])
+
+        if operator == CohortFilters.RANGE:
+            less_than = [column, CohortFilters.LESS, value[0]]
+            greater_than = [column, CohortFilters.GREATER, value[1]]
+            not_condition = [less_than, CohortFilters.OR, greater_than]
+        else:
+            operator = CohortFilters.OP_NEGATION_DICT[operator]
+            not_condition = [column, operator, value]
+
+        # check if we should include a nan check as well
+        if operator in CohortFilters.OP_REQ_NUMBER or operator == CohortFilters.RANGE:
+            nan_condition = [column, CohortFilters.EQUAL, np.nan]
+            not_condition = [not_condition, CohortFilters.OR, nan_condition]
+
+        return not_condition
+
+    # -----------------------------------
+    def _negate_condition_list(self, condition_list: list):
+        not_condition_list = []
+        for condition in condition_list:
+            if type(condition) == list:
+                if type(condition[0]) == list:
+                    not_condition = self._negate_condition_list(condition)
+                else:
+                    not_condition = self._negate_simple_condition(condition)
+                not_condition_list.append(not_condition)
+            elif type(condition) == str:
+                not_condition_list.append(CohortFilters.CONNECTOR_NEGATION_DICT[condition])
+
+        return not_condition_list
+
+    # -----------------------------------
+    def create_query_remaining_instances_cohort(self, prev_conditions: list):
+        final_condition = []
+        for i, condition in enumerate(prev_conditions):
+            not_condition = self._negate_condition_list(condition)
+            final_condition.append(not_condition)
+            if i < len(prev_conditions) - 1:
+                final_condition.append(CohortFilters.AND)
+        self.conditions = final_condition
+        self._build_query()
+
+    # -----------------------------------
+    @staticmethod
+    def _filter_op_to_raiutils_filter_op(op: str, value: Union[list, int, str, float]):
+        if op == CohortFilters.GREATER:
+            return CohortFilterMethods.METHOD_GREATER
+        elif op == CohortFilters.GREATER_EQUAL:
+            return CohortFilterMethods.METHOD_GREATER_AND_EQUAL
+        elif op == CohortFilters.LESS:
+            return CohortFilterMethods.METHOD_LESS
+        elif op == CohortFilters.LESS_EQUAL:
+            return CohortFilterMethods.METHOD_LESS_AND_EQUAL
+        elif op == CohortFilters.EQUAL:
+            # if type(value) in [list, str]:
+            if type(value) == list:
+                return CohortFilterMethods.METHOD_INCLUDES
+            return CohortFilterMethods.METHOD_EQUAL
+        elif op == CohortFilters.RANGE:
+            return CohortFilterMethods.METHOD_RANGE
+        elif op == CohortFilters.DIFFERENT:
+            return CohortFilterMethods.METHOD_EXCLUDES
+
+    # -----------------------------------
+    def _build_raiutils_simple_block(self, column: str, op: str, value: Union[list, int, str, float]):
+        method = self._filter_op_to_raiutils_filter_op(op, value)
+        arg = value
+        if type(value) != list:
+            arg = [value]
+        simple_block = {CohortJsonConst.COLUMN: column, CohortJsonConst.METHOD: method, CohortJsonConst.ARG: arg}
+        return simple_block
+
+    # -----------------------------------
+    def _conditions_to_raiutils_filters(self, conditions: list):
+        state = self.STATE_COND1
+        connector = CohortFilterOps.OR
+        for condition in conditions:
+            if type(condition) == list:
+                if type(condition[0]) == list:
+                    block = self._conditions_to_raiutils_filters(condition)
+                else:
+                    block = self._build_raiutils_simple_block(condition[0], condition[1], condition[2])
+                if state == self.STATE_COND1:
+                    part1 = block
+                    state = self.STATE_AND_OR
+                elif state == self.STATE_COND2:
+                    block = {CohortJsonConst.COMPOSITE_FILTERS: [part1, block], CohortJsonConst.OPERATION: connector}
+                    part1 = block
+                    state = self.STATE_COND1
+            elif type(condition) == str:
+                if condition in CohortFilters.CONDITION_CONNECTORS:
+                    connector = CohortFilterOps.OR
+                    if condition == CohortFilters.AND:
+                        connector = CohortFilterOps.AND
+                    state = self.STATE_COND2
+
+        return block
+
+    # -----------------------------------
+    def _convert_conditions_to_raiutils_filters(self):
+        if self.conditions is None or self.conditions == []:
+            raise ValueError("ERROR: can't save conditions from a cohort without conditions.")
+        raiutils_filters = [self._conditions_to_raiutils_filters(self.conditions)]
+        return raiutils_filters
 
     # -----------------------------------
     def save(self, json_file: str):
@@ -279,8 +435,82 @@ class CohortDefinition:
 
         :param json_file: the path of the JSON file to be saved.
         """
+        filters = self._convert_conditions_to_raiutils_filters()
+        cht_json = {self.JSON_NAME_FIELD: self.name, self.JSON_FILTER_FIELD: filters}
         with open(json_file, "w") as file:
-            json.dump(self.conditions, file, indent=4)
+            json.dump(cht_json, file, indent=4)
+
+    # -----------------------------------
+    def _validate_json(self, json_dict: dict, json_file: str):
+        required_fields = [self.JSON_NAME_FIELD, self.JSON_FILTER_FIELD]
+        for field in required_fields:
+            if field not in json_dict.keys():
+                raise ValueError(
+                    f"ERROR: the json file {json_file} does not contain the mandatory '{field}' key in it."
+                )
+
+    # -----------------------------------
+    def _filter_dict_to_single_condition(self, single_filter: dict):
+        column = single_filter[CohortJsonConst.COLUMN]
+        if column in CohortJsonConst.INVALID_TERMS:
+            raise ValueError(
+                f"ERROR: the CohortDefinition class does not support the use of column {column}, "
+                + "which is used for special cases by the raiutils library. Use a different column name."
+            )
+
+        operator = single_filter[CohortJsonConst.METHOD]
+        value = single_filter[CohortJsonConst.ARG][0]
+        if operator == CohortFilterMethods.METHOD_GREATER:
+            operator = CohortFilters.GREATER
+        elif operator == CohortFilterMethods.METHOD_GREATER_AND_EQUAL:
+            operator = CohortFilters.GREATER_EQUAL
+        elif operator == CohortFilterMethods.METHOD_LESS:
+            operator = CohortFilters.LESS
+        elif operator == CohortFilterMethods.METHOD_LESS_AND_EQUAL:
+            operator = CohortFilters.LESS_EQUAL
+        elif operator in [CohortFilterMethods.METHOD_EQUAL, CohortFilterMethods.METHOD_INCLUDES]:
+            if operator == CohortFilterMethods.METHOD_INCLUDES:
+                value = single_filter[CohortJsonConst.ARG]
+            operator = CohortFilters.EQUAL
+        elif operator == CohortFilterMethods.METHOD_EXCLUDES:
+            operator = CohortFilters.DIFFERENT
+            value = single_filter[CohortJsonConst.ARG]
+        elif operator == CohortFilterMethods.METHOD_RANGE:
+            operator = CohortFilters.RANGE
+            value = single_filter[CohortJsonConst.ARG]
+
+        return [column, operator, value]
+
+    # -----------------------------------
+    def _convert_raiutils_filters_to_conditions(self, filters: list, connector: int = None):
+        if connector is None:
+            connector = CohortFilters.AND
+        conditions = []
+
+        state = self.RAIUTILS_STATE_COND1
+        for single_filter in filters:
+            if CohortJsonConst.METHOD in single_filter:
+                single_condition = self._filter_dict_to_single_condition(single_filter)
+                if state == self.RAIUTILS_STATE_COND1:
+                    state = self.RAIUTILS_STATE_COND2
+                elif state == self.RAIUTILS_STATE_COND2:
+                    conditions.append(connector)
+                conditions.append(single_condition)
+            else:
+                composite_filter_list = single_filter[CohortJsonConst.COMPOSITE_FILTERS]
+                conector = CohortFilters.AND
+                if single_filter[CohortJsonConst.OPERATION] == CohortFilterOps.OR:
+                    conector = CohortFilters.OR
+                composite_condition = self._convert_raiutils_filters_to_conditions(
+                    composite_filter_list, connector=conector
+                )
+                if state == self.RAIUTILS_STATE_COND1:
+                    state = self.RAIUTILS_STATE_COND2
+                elif state == self.RAIUTILS_STATE_COND2:
+                    conditions.append(connector)
+                conditions.append(composite_condition)
+
+        return conditions
 
     # -----------------------------------
     def _load(self, json_file: str):
@@ -290,8 +520,14 @@ class CohortDefinition:
         :param json_file: the path to the JSON file that should be loaded.
         """
         with open(json_file, "r") as file:
-            conditions = json.load(file)
-        return conditions
+            cht_json = json.load(file)
+
+        self._validate_json(cht_json, json_file)
+        name = cht_json[self.JSON_NAME_FIELD]
+        filters = cht_json[self.JSON_FILTER_FIELD]
+        conditions = self._convert_raiutils_filters_to_conditions(filters)
+
+        return name, conditions
 
     # -----------------------------------
     def get_cohort_subset(

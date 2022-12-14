@@ -1,0 +1,12 @@
+{
+    "name": "cohort",
+    "cohort_filter_list": [
+        {
+            "column": "height(m)",
+            "method": "equal",
+            "arg": [
+                NaN
+            ]
+        }
+    ]
+}

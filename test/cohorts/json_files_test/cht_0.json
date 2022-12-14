@@ -1,0 +1,44 @@
+{
+    "name": "Cohort Composite",
+    "cohort_filter_list":
+        [
+            {
+                "compositeFilters":
+                    [
+                        {
+                            "compositeFilters":
+                                [
+                                    {
+                                        "arg": [13.45, 22.27],
+                                        "column": "mean radius",
+                                        "method": "in the range of"
+                                    },
+                                    {
+                                        "arg": [10.88, 24.46],
+                                        "column": "mean texture",
+                                        "method": "in the range of"
+                                    }
+                                ],
+                            "operation": "and"
+                        },
+                        {
+                            "compositeFilters":
+                                [
+                                    {
+                                        "arg": ["Never-married"],
+                                        "column": "marital-status",
+                                        "method": "excludes"
+                                    },
+                                    {
+                                        "method": "less",
+                                        "arg": [65],
+                                        "column": "age"
+                                    }
+                                ],
+                            "operation": "and"
+                        }
+                    ],
+                "operation": "or"
+            }
+        ]
+}
