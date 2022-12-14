@@ -433,7 +433,7 @@ div.rendered_html tbody tr:hover {
         <span class="n">pct_change</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">with_null</span><span class="p">:</span>
-        <span class="n">col_with_nan</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;num_0&quot;</span><span class="p">,</span> <span class="s2">&quot;num_1&quot;</span><span class="p">]</span>
+        <span class="n">col_with_nan</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;num_0&quot;</span><span class="p">,</span> <span class="s2">&quot;num_1&quot;</span><span class="p">,</span> <span class="p">]</span>
         <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">col_with_nan</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">col</span> <span class="o">!=</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span>
                 <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">add_nan</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="mf">0.1</span><span class="p">)</span>
@@ -940,13 +940,22 @@ dict_keys([&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_2&#39;])
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/xgboost/sklearn.py:1421: UserWarning: `use_label_encoder` is deprecated in 1.7.0.
+  warnings.warn(&#34;`use_label_encoder` is deprecated in 1.7.0.&#34;)
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;raimitigations.cohort.cohort_manager.CohortManager at 0x7f78348558b0&gt;
+&lt;raimitigations.cohort.cohort_manager.CohortManager at 0x7f87bb42b0a0&gt;
 </pre></div></div>
 </div>
 <p>When calling the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method, it will return a list of subsets, since the <code class="docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code> results in incompatible cohorts (as previously mentioned). The <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method will run the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> of all transformers up until we get to the model.</p>
@@ -1164,6 +1173,15 @@ cohort_2: (117,)
 <span class="n">new_X</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/xgboost/sklearn.py:1421: UserWarning: `use_label_encoder` is deprecated in 1.7.0.
+  warnings.warn(&#34;`use_label_encoder` is deprecated in 1.7.0.&#34;)
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
@@ -1739,7 +1757,7 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 <li><p>Run the <code class="docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code> over the dataset returned by the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> (that is, the encoding is done over the entire dataset, not over each cohort individually);</p></li>
 <li><p>Fit the model (an XGBoost in this case) over the dataset processed by the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> and <code class="docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code>.</p></li>
 </ol>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
@@ -1768,6 +1786,15 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/xgboost/sklearn.py:1421: UserWarning: `use_label_encoder` is deprecated in 1.7.0.
+  warnings.warn(&#34;`use_label_encoder` is deprecated in 1.7.0.&#34;)
+</pre></div></div>
+</div>
 </section>
 <section id="Fetching-the-queries-used-for-each-cohort">
 <h2>Fetching the queries used for each cohort<a class="headerlink" href="#Fetching-the-queries-used-for-each-cohort" title="Permalink to this heading"></a></h2>
@@ -1789,7 +1816,7 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 <div class="highlight"><pre>
 {&#39;cohort_0&#39;: &#39;(`CN_0_num_0` == &#34;val0_1&#34;) and (`num_0` &gt; 0.0)&#39;,
  &#39;cohort_1&#39;: &#39;(`CN_0_num_0` == &#34;val0_0&#34;) and (`num_0` &gt; 0.0)&#39;,
- &#39;cohort_2&#39;: None}
+ &#39;cohort_2&#39;: &#39;((`CN_0_num_0` != &#34;val0_1&#34;) or ((`num_0` &lt;= 0.0) or (`num_0`.isnull()))) and ((`CN_0_num_0` != &#34;val0_0&#34;) or ((`num_0` &lt;= 0.0) or (`num_0`.isnull())))&#39;}
 </pre></div></div>
 </div>
 </section>
@@ -1897,7 +1924,7 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 <div class="highlight"><pre>
 {&#39;cohort_0&#39;: &#39;(`CN_0_num_0` == &#34;val0_1&#34;) and (`num_0` &gt; 0.0)&#39;,
  &#39;cohort_1&#39;: &#39;(`CN_0_num_0` == &#34;val0_0&#34;) and (`num_0` &gt; 0.0)&#39;,
- &#39;cohort_2&#39;: None}
+ &#39;cohort_2&#39;: &#39;((`CN_0_num_0` != &#34;val0_1&#34;) or ((`num_0` &lt;= 0.0) or (`num_0`.isnull()))) and ((`CN_0_num_0` != &#34;val0_0&#34;) or ((`num_0` &lt;= 0.0) or (`num_0`.isnull())))&#39;}
 </pre></div></div>
 </div>
 <p>As previously mentioned, the <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameter accepts a list of column names, not a single column. When more than one column is provided, we create one cohort for each combination of unique values in these columns:</p>
@@ -1934,7 +1961,7 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 </section>
 <section id="Saving-and-loading-the-conditions-used-for-the-cohorts">
 <h2>Saving and loading the conditions used for the cohorts<a class="headerlink" href="#Saving-and-loading-the-conditions-used-for-the-cohorts" title="Permalink to this heading"></a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">save_conditions()</span></code> method saves the list of conditions used by all cohorts into a JSON file. This way, users are able to then reuse these condition lists in another <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> object. The <code class="docutils literal notranslate"><span class="pre">save_conditions()</span></code> has the same conditions as the <code class="docutils literal notranslate"><span class="pre">get_queries()</span></code> method: if using <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code>, then we must either pass the datasets in the constructor method, or call the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method prior to calling the <code class="docutils literal notranslate"><span class="pre">save_conditions()</span></code> method.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">save_cohorts()</span></code> method saves the list of conditions used by all cohorts into a JSON file. This way, users are able to then reuse these condition lists in another <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> object. The <code class="docutils literal notranslate"><span class="pre">save_cohorts()</span></code> has the same conditions as the <code class="docutils literal notranslate"><span class="pre">get_queries()</span></code> method: if using <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code>, then we must either pass the datasets in the constructor method, or call the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method prior to calling the <code class="docutils literal notranslate"><span class="pre">save_cohorts()</span></code> method.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
@@ -1944,20 +1971,26 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
     <span class="n">cohort_def</span><span class="o">=</span><span class="p">[</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">]</span>
 <span class="p">)</span>
 <span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
-<span class="n">cohort_set</span><span class="o">.</span><span class="n">save_conditions</span><span class="p">(</span><span class="s2">&quot;cohort.json&quot;</span><span class="p">)</span>
+
+<span class="n">json_files</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;json_files/CohortManager_tutorial/cht_0.json&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;json_files/CohortManager_tutorial/cht_1.json&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;json_files/CohortManager_tutorial/cht_2.json&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">save_cohorts</span><span class="p">(</span><span class="n">json_files</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>The JSON file saved has the following structure:</p>
+<p>The JSON file saved has the following structure (note that it follows the same JSON structure used by the <a class="reference external" href="https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/responsibleaidashboard-census-classification-model-debugging.ipynb">raiwidgets library</a>):</p>
 <p><img alt="cohort" src="../../_images/cohort.png" /></p>
-<p>We can then create a new <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> object and pass the path to the JSON file containing the cohort definitions to the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> parameter. After loading the cohort file, we can verify that the same conditions are being used.</p>
+<p>We can then create a new <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> object and pass the list of paths to the JSON files containing the cohort definitions to the <code class="docutils literal notranslate"><span class="pre">cohort_json_files</span></code> parameter. After loading the cohort files, we can verify that the same conditions are being used.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
     <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-    <span class="n">cohort_def</span><span class="o">=</span><span class="s2">&quot;cohort.json&quot;</span>
+    <span class="n">cohort_json_files</span><span class="o">=</span><span class="n">json_files</span>
 <span class="p">)</span>
 <span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
 <span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
@@ -1971,9 +2004,9 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;cohort_0&#39;: &#39;(`CN_0_num_0` == &#34;val0_1&#34;) and (`num_0` &gt; 0.0)&#39;,
- &#39;cohort_1&#39;: &#39;(`CN_0_num_0` == &#34;val0_0&#34;) and (`num_0` &gt; 0.0)&#39;,
- &#39;cohort_2&#39;: None}
+{&#39;cohort_0&#39;: &#39;((`CN_0_num_0` == &#34;val0_1&#34;) and (`num_0` &gt; 0.0))&#39;,
+ &#39;cohort_1&#39;: &#39;((`CN_0_num_0` == &#34;val0_0&#34;) and (`num_0` &gt; 0.0))&#39;,
+ &#39;cohort_2&#39;: &#34;(((`CN_0_num_0` not in [&#39;val0_1&#39;]) or ((`num_0` &lt;= 0.0) or (`num_0`.isnull()))) and ((`CN_0_num_0` not in [&#39;val0_0&#39;]) or ((`num_0` &lt;= 0.0) or (`num_0`.isnull()))))&#34;}
 </pre></div></div>
 </div>
 </section>
@@ -2375,35 +2408,41 @@ dtype: int64
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:572: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:336: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+  warnings.warn(
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-label
-0        795
-1        795
-dtype: int64
-label
-0        463
-1         11
-dtype: int64
-label
-0        313
-1         31
-dtype: int64
-label
-1        495
-0          8
-dtype: int64
-label
-1        258
-0         11
-dtype: int64
+1    795
+0    795
+Name: label, dtype: int64
+0    463
+1     11
+Name: label, dtype: int64
+0    313
+1     31
+Name: label, dtype: int64
+1    495
+0      8
+Name: label, dtype: int64
+1    258
+0     11
+Name: label, dtype: int64
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/notebooks_cohort_cohort_manager_62_1.png" src="../../_images/notebooks_cohort_cohort_manager_62_1.png" />
+<img alt="../../_images/notebooks_cohort_cohort_manager_62_2.png" src="../../_images/notebooks_cohort_cohort_manager_62_2.png" />
 </div>
 </div>
 <p>As we can see, the full dataset is now balanced. However, looking at each cohort separately, we noticed that we only made matters worse: we now have an even greater label imbalance inside each cohort. If we think of these cohorts as sensitive groups, that is, groups separated by sensitive features, <em>e.g.</em> gender, race, and nationality, and that we don’t want our models to perform differently in one group compared to another, then this imbalance between cohorts is a scenario that needs to be
@@ -2432,32 +2471,24 @@ fixed.</p>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
+<div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-cohort_0 --- (`CN_1_num_1` == &#34;val1_0&#34;)
-label
-0        119
-1         11
-dtype: int64
-
-cohort_1 --- (`CN_1_num_1` == &#34;val1_1&#34;)
-label
-0        74
-1        31
-dtype: int64
-
-cohort_2 --- (`CN_1_num_1` == &#34;val1_2&#34;)
-label
-1        495
-0          6
-dtype: int64
-
-cohort_3 --- (`CN_1_num_1` == &#34;val1_3&#34;)
-label
-1        258
-0          6
-dtype: int64
-
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:572: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:336: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:572: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:336: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:572: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:336: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:572: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:336: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+  warnings.warn(
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -2516,32 +2547,16 @@ Name: label, dtype: int64
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area docutils container">
+<div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-cohort_0 --- (`CN_1_num_1` == &#34;val1_0&#34;)
-label
-0        119
-1         11
-dtype: int64
-
-cohort_1 --- (`CN_1_num_1` == &#34;val1_1&#34;)
-label
-0        74
-1        31
-dtype: int64
-
-cohort_2 --- (`CN_1_num_1` == &#34;val1_2&#34;)
-label
-1        495
-0          6
-dtype: int64
-
-cohort_3 --- (`CN_1_num_1` == &#34;val1_3&#34;)
-label
-1        258
-0          6
-dtype: int64
-
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:572: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:336: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:572: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:336: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+  warnings.warn(
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
