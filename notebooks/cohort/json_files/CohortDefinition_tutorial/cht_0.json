@@ -1,0 +1,36 @@
+{
+    "name": "cohort",
+    "cohort_filter_list": [
+        {
+            "compositeFilters": [
+                {
+                    "compositeFilters": [
+                        {
+                            "column": "race",
+                            "method": "equal",
+                            "arg": [
+                                "elf"
+                            ]
+                        },
+                        {
+                            "column": "race",
+                            "method": "equal",
+                            "arg": [
+                                "orc"
+                            ]
+                        }
+                    ],
+                    "operation": "or"
+                },
+                {
+                    "column": "height(m)",
+                    "method": "greater and equal",
+                    "arg": [
+                        1.8
+                    ]
+                }
+            ],
+            "operation": "and"
+        }
+    ]
+}

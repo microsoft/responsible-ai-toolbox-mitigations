@@ -1,0 +1,16 @@
+{
+    "name": "Cohort Exclude",
+    "cohort_filter_list":
+        [
+            {
+                "method": "excludes",
+                "arg": ["Never-married"],
+                "column": "marital-status"
+            },
+            {
+                "method": "excludes",
+                "arg": [52],
+                "column": "age"
+            }
+        ]
+}

@@ -1,0 +1,11 @@
+{
+    "name": "Cohort Eq",
+    "cohort":
+        [
+            {
+                "method": "includes",
+                "arg": [52, 22, 58],
+                "column": "age"
+            }
+        ]
+}

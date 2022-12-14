@@ -1,0 +1,12 @@
+{
+    "name": "cohort",
+    "cohort_filter_list": [
+        {
+            "column": "score",
+            "method": "less and equal",
+            "arg": [
+                "past_score"
+            ]
+        }
+    ]
+}

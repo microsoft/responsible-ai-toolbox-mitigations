@@ -1,0 +1,36 @@
+{
+    "name": "cohort",
+    "cohort_filter_list": [
+        {
+            "compositeFilters": [
+                {
+                    "compositeFilters": [
+                        {
+                            "column": "height(m)",
+                            "method": "greater",
+                            "arg": [
+                                1.5
+                            ]
+                        },
+                        {
+                            "column": "height(m)",
+                            "method": "less",
+                            "arg": [
+                                1.99
+                            ]
+                        }
+                    ],
+                    "operation": "and"
+                },
+                {
+                    "column": "score",
+                    "method": "less and equal",
+                    "arg": [
+                        70
+                    ]
+                }
+            ],
+            "operation": "and"
+        }
+    ]
+}
