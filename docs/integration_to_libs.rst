@@ -30,6 +30,20 @@ In addition, we also encourage practitioners to rigorously validate new post-mit
 step indeed improved the model in the way the practitioner expected and that the mitigation step did not lead to new mistakes. To assist with these steps,
 `BackwardCompatibilityML`_ is a package for an extended support on model comparison and backward compatible training.
 
+
+Integration between raimitigations and raiwidgets
+-------------------------------------------------
+
+The ``raimitigations`` and `Responsible AI Toolbox`_ (``raiwidgets``) libraries allow users to apply mitigations or analyze the behavior of certain cohorts. These libraries
+can be used together in order to analyze and mitigate certain aspects of a given cohort. We demonstrate this integration between these two libraries in the following
+notebook, where we show how to create a set of cohorts in one library and continue the work in the other library by importing these cohorts.
+
+.. nbgallery::
+   notebooks/cohort/case_study/integration_raiwidgets
+
+
+
+
 .. _Responsible AI Toolbox: https://responsibleaitoolbox.ai/
 .. _unfairness assessment and mitigation: https://fairlearn.org/
 .. _error analysis: https://erroranalysis.ai/

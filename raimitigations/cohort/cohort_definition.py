@@ -320,6 +320,21 @@ class CohortDefinition:
 
     # -----------------------------------
     def _negate_simple_condition(self, condition: list):
+        """
+        Creates the negation of a simple boolean expression.
+        The boolean expression must be a list with three values:
+        the column being used, the operator, and the value being
+        compared to.
+
+        :param condition: a simple condition, containing three values:
+            the column being used, the operator, and the value being
+            compared to.
+        :return: the negation of the boolean expression using the same
+            representation used for the input parameter 'condition', that
+            is, a list with three values: the column being used, the operator,
+            and the value being compared to.
+        :rtype: list
+        """
         column = deepcopy(condition[0])
         operator = deepcopy(condition[1])
         value = deepcopy(condition[2])
@@ -341,6 +356,15 @@ class CohortDefinition:
 
     # -----------------------------------
     def _negate_condition_list(self, condition_list: list):
+        """
+        Creates the negation of a complex boolean expression. This method
+        is called recursively for each sub-expression.
+
+        :param condition_list: a list with a set of filters. Check the parameter
+            'cohort_definition' from the ``CohortDefinition`` class for more info.
+        :return: the negation of the expression provided as input.
+        :rtype: list
+        """
         not_condition_list = []
         for condition in condition_list:
             if type(condition) == list:
@@ -356,6 +380,16 @@ class CohortDefinition:
 
     # -----------------------------------
     def create_query_remaining_instances_cohort(self, prev_conditions: list):
+        """
+        Creates the query for the cohort that handles all instances that doesn't
+        belong to any other cohort. This query is built by doing the negation of
+        the condition list of all other cohorts, and concatenate them using the
+        "and" operator.
+
+        :param prev_conditions: a list of the list conditions used by other cohorts.
+            Each sub-list here follows the same pattern as the parameter
+            'cohort_definition' from the ``CohortDefinition`` class.
+        """
         final_condition = []
         for i, condition in enumerate(prev_conditions):
             not_condition = self._negate_condition_list(condition)
@@ -368,6 +402,16 @@ class CohortDefinition:
     # -----------------------------------
     @staticmethod
     def _filter_op_to_raiutils_filter_op(op: str, value: Union[list, int, str, float]):
+        """
+        Fetches the corresponding operator between the raimitigations library
+        and the raiutils library.
+
+        :param op: a string representing one of the operators from the raimitigations
+            library, defined in the ``CohortFilters`` class;
+        :param value: the value assinged to the operator ``op``;
+        :return: the equivalent operator from the raiutils library.
+        :rtype: str
+        """
         if op == CohortFilters.GREATER:
             return CohortFilterMethods.METHOD_GREATER
         elif op == CohortFilters.GREATER_EQUAL:
@@ -377,8 +421,7 @@ class CohortDefinition:
         elif op == CohortFilters.LESS_EQUAL:
             return CohortFilterMethods.METHOD_LESS_AND_EQUAL
         elif op == CohortFilters.EQUAL:
-            # if type(value) in [list, str]:
-            if type(value) == list:
+            if type(value) in [list, str]:
                 return CohortFilterMethods.METHOD_INCLUDES
             return CohortFilterMethods.METHOD_EQUAL
         elif op == CohortFilters.RANGE:
@@ -388,6 +431,18 @@ class CohortDefinition:
 
     # -----------------------------------
     def _build_raiutils_simple_block(self, column: str, op: str, value: Union[list, int, str, float]):
+        """
+        Convert a simple condition list (comprised of column, operator, and value) to
+        a simple filter dictionary used in the JSON format of raiutils when saving
+        a cohort.
+
+        :param column: the name or index of the column being used in the filter;
+        :param op: a string that identifies the operator being used in the filter;
+        :param value: a list of values or a single value used in the filter;
+        :return: a dictionary representing a simple filter following the format used
+            in raiutils when saving a cohort to a JSON.
+        :rtype: dict
+        """
         method = self._filter_op_to_raiutils_filter_op(op, value)
         arg = value
         if type(value) != list:
@@ -397,6 +452,18 @@ class CohortDefinition:
 
     # -----------------------------------
     def _conditions_to_raiutils_filters(self, conditions: list):
+        """
+        Convert a condition list (used by the raimitigations) to the JSON format used
+        to represent the filters of a cohort in the raiutils library. This mehtod is
+        called recursively for each condition list inside the original condition list
+        that is not a simple condition list (comprised of column, operator, and value).
+
+        :param conditions: the condition list to be converted;
+        :return: a dictionary representing the composite filter passed through the
+            ``conditions`` parameter. The dictionary thfollows the format used in raiutils
+            when saving a cohort to a JSON.
+        :rtype: dict
+        """
         state = self.STATE_COND1
         connector = CohortFilterOps.OR
         for condition in conditions:
@@ -423,6 +490,15 @@ class CohortDefinition:
 
     # -----------------------------------
     def _convert_conditions_to_raiutils_filters(self):
+        """
+        Convert a condition list (used by the raimitigations) to the JSON format used
+        to represent the filters of a cohort in the raiutils library.
+
+        :return: a dictionary representing the composite filter passed through the
+            ``conditions`` parameter. The dictionary thfollows the format used in raiutils
+            when saving a cohort to a JSON.
+        :rtype: dict
+        """
         if self.conditions is None or self.conditions == []:
             raise ValueError("ERROR: can't save conditions from a cohort without conditions.")
         raiutils_filters = [self._conditions_to_raiutils_filters(self.conditions)]
@@ -442,6 +518,12 @@ class CohortDefinition:
 
     # -----------------------------------
     def _validate_json(self, json_dict: dict, json_file: str):
+        """
+        Simple validation of the JSON file being loaded.
+
+        :param json_dict: the dictionary loaded from the json file;
+        :param json_file: the name of the json file.
+        """
         required_fields = [self.JSON_NAME_FIELD, self.JSON_FILTER_FIELD]
         for field in required_fields:
             if field not in json_dict.keys():
@@ -451,6 +533,15 @@ class CohortDefinition:
 
     # -----------------------------------
     def _filter_dict_to_single_condition(self, single_filter: dict):
+        """
+        Converts a simple dictionary filter used in the JSON file format adopted
+        by the raiutils to a simple condition list used in raimitigations.
+
+        :param single_filter: a dictionary representing a simple filter in the
+            json file;
+        :return: a simple condition list (comprised of column, operator, and value);
+        :rtype: list
+        """
         column = single_filter[CohortJsonConst.COLUMN]
         if column in CohortJsonConst.INVALID_TERMS:
             raise ValueError(
@@ -483,6 +574,17 @@ class CohortDefinition:
 
     # -----------------------------------
     def _convert_raiutils_filters_to_conditions(self, filters: list, connector: int = None):
+        """
+        Converts the filters saved in a JSON file (using raiutils' format) to a conditions
+        list used by raimitigations. This method is called recursively for each sub-filter
+        found in the JSON file.
+
+        :param filters: a list of filters in the JSON file;
+        :param connector: the connector ('and' or 'or') to be used when concatanating two
+            or more conditions. The default connector used is 'and';
+        :return: a list of conditions formatted according to raimitigations' standards;
+        :rtype: list
+        """
         if connector is None:
             connector = CohortFilters.AND
         conditions = []

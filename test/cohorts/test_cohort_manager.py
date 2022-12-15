@@ -1,4 +1,5 @@
 import os
+import pathlib
 import pytest
 import conftest as utils
 import xgboost as xgb
@@ -286,6 +287,19 @@ def test_errors_cohorts(df_full_cohort, label_col_name):
     with pytest.raises(Exception):
         cohort_set.save_cohorts("file.json")
 
+    current_path = pathlib.Path(__file__).parent.absolute()
+    file_name = f"{current_path}/json_files_test/cht_0.json"
+    with pytest.raises(Exception):
+        cohort_set = CohortManager(cohort_json_files=[file_name, None, None])
+
+    with pytest.raises(Exception):
+        _ = CohortManager(cohort_json_files=[
+                                f"{current_path}/json_files_test/cht_name_1.json",
+                                f"{current_path}/json_files_test/cht_name_2.json",
+                                None
+                            ]
+                        )
+
 # -----------------------------------
 def test_errors_cohorts_special_cases(df_full_cohort, label_col_name):
 
@@ -368,3 +382,9 @@ def test_cohort_results(df_full, label_col_name):
 
     with pytest.raises(Exception):
         _ = fetch_cohort_results(X, y, pred)
+
+# -----------------------------------
+def test_special_cases(df_full, label_col_name):
+    current_path = pathlib.Path(__file__).parent.absolute()
+    file_name = f"{current_path}/json_files_test/cht_name_1.json"
+    _ = CohortManager(cohort_json_files=[file_name, None])

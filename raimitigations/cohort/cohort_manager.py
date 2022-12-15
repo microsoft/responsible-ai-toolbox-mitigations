@@ -254,6 +254,56 @@ class CohortManager(DataProcessing):
                 self._cohort_pipe.append(_pipe)
 
     # -----------------------------------
+    def _load_json_files(self, cohort_json_files: list):
+        """
+        Load a list of json files, convert the json structure to the list of
+        conditions used by the CohortDefinition class, and then save these
+        conditions in a list of cohort definitions. Finally, return the list
+        of cohort definitions.
+
+        :param cohort_json_files: a list with the name of the JSON files that
+            contains the definition of each cohort. Each cohort is saved in a
+            single JSON file, so the length of the ``cohort_json_files`` should
+            be equal to the number of cohorts to be used.
+        :return: a list of cohort definitions;
+        :rtype: list
+        """
+        if type(cohort_json_files) != list:
+            raise ValueError(
+                "ERROR: the 'cohort_json_files' should be a list with the name of the JSON files that "
+                + "contains the definition of each cohort. Expected a list, but instead got a "
+                + f"{type(cohort_json_files)}."
+            )
+        cohort_def = []
+        none_cohort = False
+        for json_file in cohort_json_files:
+
+            if json_file is None:
+                if none_cohort:
+                    raise ValueError("ERROR: only one 'None' value is allowed in the 'cohort_json_files' parameter.")
+                name = "Remaining Instances"
+                if name in self._cohort_names:
+                    temp_name = deepcopy(name)
+                    count = 0
+                    while temp_name in self._cohort_names:
+                        temp_name = f"{name} {count}"
+                        count += 1
+                    name = temp_name
+                cohort = CohortDefinition(cohort_definition=None, name=name)
+            else:
+                cohort = CohortDefinition(json_file)
+
+            if cohort.name in self._cohort_names:
+                raise ValueError(
+                    f"ERROR: multiple cohorts are named '{cohort.name}'. Make sure that the each cohort has "
+                    + "a unique name. The following name."
+                )
+            self._cohort_names.append(deepcopy(cohort.name))
+            cohort_def.append(deepcopy(cohort.conditions))
+
+        return cohort_def
+
+    # -----------------------------------
     def _set_cohort_def(self, cohort_def: Union[dict, list], cohort_col: list, cohort_json_files: list):
         """
         Validate and set the cohort definitions based on the ``cohort_def`` and ``cohort_col``
@@ -279,17 +329,7 @@ class CohortManager(DataProcessing):
             ``cohort_json_files`` should be equal to the number of cohorts to be used.
         """
         if cohort_json_files is not None:
-            if type(cohort_json_files) != list:
-                raise ValueError(
-                    "ERROR: the 'cohort_json_files' should be a list with the name of the JSON files that "
-                    + "contains the definition of each cohort. Expected a list, but instead got a "
-                    + f"{type(cohort_json_files)}."
-                )
-            cohort_def = []
-            for json_file in cohort_json_files:
-                cohort = CohortDefinition(json_file)
-                self._cohort_names.append(deepcopy(cohort.name))
-                cohort_def.append(deepcopy(cohort.conditions))
+            cohort_def = self._load_json_files(cohort_json_files)
             self.cohort_col = cohort_col
             self.cohort_def = cohort_def
             return

@@ -1,0 +1,12 @@
+{
+    "name": "Remaining Instances",
+    "cohort_filter_list": [
+        {
+            "column": "race",
+            "method": "includes",
+            "arg": [
+                " Amer-Indian-Eskimo"
+            ]
+        }
+    ]
+}

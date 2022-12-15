@@ -1,0 +1,1 @@
+{"name": "Cohort Age and Hours-Per-Week", "cohort_filter_list": [{"method": "less", "arg": [65], "column": "age"}, {"method": "greater", "arg": [40], "column": "hours-per-week"}]}

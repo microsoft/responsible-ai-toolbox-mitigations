@@ -5,7 +5,7 @@
             "compositeFilters": [
                 {
                     "column": "CN_0_num_0",
-                    "method": "equal",
+                    "method": "includes",
                     "arg": [
                         "val0_1"
                     ]
