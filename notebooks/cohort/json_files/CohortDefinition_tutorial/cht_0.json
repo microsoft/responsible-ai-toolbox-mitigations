@@ -7,14 +7,14 @@
                     "compositeFilters": [
                         {
                             "column": "race",
-                            "method": "equal",
+                            "method": "includes",
                             "arg": [
                                 "elf"
                             ]
                         },
                         {
                             "column": "race",
-                            "method": "equal",
+                            "method": "includes",
                             "arg": [
                                 "orc"
                             ]
