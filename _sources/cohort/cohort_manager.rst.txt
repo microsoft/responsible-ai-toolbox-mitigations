@@ -23,3 +23,4 @@ Examples
    ../notebooks/cohort/case_study/case_1_dashboard
    ../notebooks/cohort/case_study/case_2
    ../notebooks/cohort/case_study/case_3
+   ../notebooks/cohort/case_study/integration_raiwidgets

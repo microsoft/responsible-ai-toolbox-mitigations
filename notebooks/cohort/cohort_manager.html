@@ -955,7 +955,7 @@ dict_keys([&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_2&#39;])
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;raimitigations.cohort.cohort_manager.CohortManager at 0x7f87bb42b0a0&gt;
+&lt;raimitigations.cohort.cohort_manager.CohortManager at 0x7fc074d77d00&gt;
 </pre></div></div>
 </div>
 <p>When calling the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method, it will return a list of subsets, since the <code class="docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code> results in incompatible cohorts (as previously mentioned). The <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method will run the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> of all transformers up until we get to the model.</p>
@@ -1985,28 +1985,58 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 <p><img alt="cohort" src="../../_images/cohort.png" /></p>
 <p>We can then create a new <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> object and pass the list of paths to the JSON files containing the cohort definitions to the <code class="docutils literal notranslate"><span class="pre">cohort_json_files</span></code> parameter. After loading the cohort files, we can verify that the same conditions are being used.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
     <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
     <span class="n">cohort_json_files</span><span class="o">=</span><span class="n">json_files</span>
 <span class="p">)</span>
-<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
 <span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
 <span class="n">queries</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;cohort_0&#39;: &#39;((`CN_0_num_0` == &#34;val0_1&#34;) and (`num_0` &gt; 0.0))&#39;,
- &#39;cohort_1&#39;: &#39;((`CN_0_num_0` == &#34;val0_0&#34;) and (`num_0` &gt; 0.0))&#39;,
+{&#39;cohort_0&#39;: &#34;((`CN_0_num_0` in [&#39;val0_1&#39;]) and (`num_0` &gt; 0.0))&#34;,
+ &#39;cohort_1&#39;: &#34;((`CN_0_num_0` in [&#39;val0_0&#39;]) and (`num_0` &gt; 0.0))&#34;,
  &#39;cohort_2&#39;: &#34;(((`CN_0_num_0` not in [&#39;val0_1&#39;]) or ((`num_0` &lt;= 0.0) or (`num_0`.isnull()))) and ((`CN_0_num_0` not in [&#39;val0_0&#39;]) or ((`num_0` &lt;= 0.0) or (`num_0`.isnull()))))&#34;}
+</pre></div></div>
+</div>
+<p>If you have the file for only a few of the cohorts that needs to be created, but don’t want to create a file for the cohort with the remaining instances, you can proceed similarly to what we do with the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> parameter: the last json file passed through the <code class="docutils literal notranslate"><span class="pre">cohort_json_files</span></code> can be a <code class="docutils literal notranslate"><span class="pre">None</span></code> value, which indicates that that cohort should include all instances that doesn’t belong to any of the other cohorts.</p>
+<p>To demonstrate this, suppose that we only have the json files for <code class="docutils literal notranslate"><span class="pre">cohort_0</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_1</span></code>. To load these files using the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code>, we should do the following:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">json_files</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;json_files/CohortManager_tutorial/cht_0.json&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;json_files/CohortManager_tutorial/cht_1.json&quot;</span><span class="p">,</span>
+    <span class="kc">None</span>
+<span class="p">]</span>
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">cohort_json_files</span><span class="o">=</span><span class="n">json_files</span>
+<span class="p">)</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()</span>
+<span class="n">queries</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;cohort_0&#39;: &#34;((`CN_0_num_0` in [&#39;val0_1&#39;]) and (`num_0` &gt; 0.0))&#34;,
+ &#39;cohort_1&#39;: &#34;((`CN_0_num_0` in [&#39;val0_0&#39;]) and (`num_0` &gt; 0.0))&#34;,
+ &#39;Remaining Instances&#39;: &#34;(((`CN_0_num_0` not in [&#39;val0_1&#39;]) or ((`num_0` &lt;= 0.0) or (`num_0`.isnull())))) and (((`CN_0_num_0` not in [&#39;val0_0&#39;]) or ((`num_0` &lt;= 0.0) or (`num_0`.isnull()))))&#34;}
 </pre></div></div>
 </div>
 </section>
@@ -2380,7 +2410,7 @@ dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/notebooks_cohort_cohort_manager_60_1.png" src="../../_images/notebooks_cohort_cohort_manager_60_1.png" />
+<img alt="../../_images/notebooks_cohort_cohort_manager_62_1.png" src="../../_images/notebooks_cohort_cohort_manager_62_1.png" />
 </div>
 </div>
 <p>We can see that the full dataset has a great imbalance, where we have a considerably larger number of occurrences of the <code class="docutils literal notranslate"><span class="pre">1</span></code> class in relation to the <code class="docutils literal notranslate"><span class="pre">0</span></code> class. This imbalance is even greater for cohorts <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>, while for cohorts <code class="docutils literal notranslate"><span class="pre">cohort_0</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_1</span></code> this imbalance is inverted: there are a lot more instances from the <code class="docutils literal notranslate"><span class="pre">0</span></code> class when compared to the <code class="docutils literal notranslate"><span class="pre">1</span></code> class.</p>
@@ -2410,9 +2440,7 @@ dtype: int64
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:572: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
-  warnings.warn(
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:336: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:808: FutureWarning: `sparse` was renamed to `sparse_output` in version 1.2 and will be removed in 1.4. `sparse_output` is ignored unless you leave `sparse` to its default value.
   warnings.warn(
 </pre></div></div>
 </div>
@@ -2442,7 +2470,7 @@ Name: label, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/notebooks_cohort_cohort_manager_62_2.png" src="../../_images/notebooks_cohort_cohort_manager_62_2.png" />
+<img alt="../../_images/notebooks_cohort_cohort_manager_64_2.png" src="../../_images/notebooks_cohort_cohort_manager_64_2.png" />
 </div>
 </div>
 <p>As we can see, the full dataset is now balanced. However, looking at each cohort separately, we noticed that we only made matters worse: we now have an even greater label imbalance inside each cohort. If we think of these cohorts as sensitive groups, that is, groups separated by sensitive features, <em>e.g.</em> gender, race, and nationality, and that we don’t want our models to perform differently in one group compared to another, then this imbalance between cohorts is a scenario that needs to be
@@ -2473,21 +2501,13 @@ fixed.</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:572: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:808: FutureWarning: `sparse` was renamed to `sparse_output` in version 1.2 and will be removed in 1.4. `sparse_output` is ignored unless you leave `sparse` to its default value.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:336: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:808: FutureWarning: `sparse` was renamed to `sparse_output` in version 1.2 and will be removed in 1.4. `sparse_output` is ignored unless you leave `sparse` to its default value.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:572: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:808: FutureWarning: `sparse` was renamed to `sparse_output` in version 1.2 and will be removed in 1.4. `sparse_output` is ignored unless you leave `sparse` to its default value.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:336: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
-  warnings.warn(
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:572: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
-  warnings.warn(
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:336: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
-  warnings.warn(
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:572: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
-  warnings.warn(
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:336: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:808: FutureWarning: `sparse` was renamed to `sparse_output` in version 1.2 and will be removed in 1.4. `sparse_output` is ignored unless you leave `sparse` to its default value.
   warnings.warn(
 </pre></div></div>
 </div>
@@ -2495,7 +2515,7 @@ fixed.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/notebooks_cohort_cohort_manager_64_1.png" src="../../_images/notebooks_cohort_cohort_manager_64_1.png" />
+<img alt="../../_images/notebooks_cohort_cohort_manager_66_1.png" src="../../_images/notebooks_cohort_cohort_manager_66_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -2549,13 +2569,9 @@ Name: label, dtype: int64
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:572: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:808: FutureWarning: `sparse` was renamed to `sparse_output` in version 1.2 and will be removed in 1.4. `sparse_output` is ignored unless you leave `sparse` to its default value.
   warnings.warn(
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:336: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
-  warnings.warn(
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:572: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
-  warnings.warn(
-/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/imblearn/over_sampling/_smote/base.py:336: FutureWarning: The parameter `n_jobs` has been deprecated in 0.10 and will be removed in 0.12. You can pass an nearest neighbors estimator where `n_jobs` is already set instead.
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:808: FutureWarning: `sparse` was renamed to `sparse_output` in version 1.2 and will be removed in 1.4. `sparse_output` is ignored unless you leave `sparse` to its default value.
   warnings.warn(
 </pre></div></div>
 </div>
@@ -2563,7 +2579,7 @@ Name: label, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/notebooks_cohort_cohort_manager_67_1.png" src="../../_images/notebooks_cohort_cohort_manager_67_1.png" />
+<img alt="../../_images/notebooks_cohort_cohort_manager_69_1.png" src="../../_images/notebooks_cohort_cohort_manager_69_1.png" />
 </div>
 </div>
 </section>

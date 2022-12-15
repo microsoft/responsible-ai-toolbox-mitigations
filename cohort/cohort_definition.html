@@ -165,6 +165,22 @@ of the columns used in the query is not present, an error is raised.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="raimitigations.cohort.CohortDefinition.create_query_remaining_instances_cohort">
+<span class="sig-name descname"><span class="pre">create_query_remaining_instances_cohort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prev_conditions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.CohortDefinition.create_query_remaining_instances_cohort" title="Permalink to this definition"></a></dt>
+<dd><p>Creates the query for the cohort that handles all instances that doesn’t
+belong to any other cohort. This query is built by doing the negation of
+the condition list of all other cohorts, and concatenate them using the
+“and” operator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>prev_conditions</strong> – a list of the list conditions used by other cohorts.
+Each sub-list here follows the same pattern as the parameter
+‘cohort_definition’ from the <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="raimitigations.cohort.CohortDefinition.get_cohort_subset">
 <span class="sig-name descname"><span class="pre">get_cohort_subset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_used</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_index_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.CohortDefinition.get_cohort_subset" title="Permalink to this definition"></a></dt>
 <dd><p>Filters a dataset to fetch only the instances that follow the
