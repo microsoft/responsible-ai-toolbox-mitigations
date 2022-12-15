@@ -53,7 +53,6 @@ def _pred_to_numpy(pred: Union[np.ndarray, list, pd.DataFrame]):
     if type(pred) in [pd.DataFrame, pd.Series]:
         pred = pred.to_numpy()
     elif type(pred) == list:
-        print("opa")
         pred = np.array(pred)
     elif type(pred) != np.ndarray:
         raise ValueError(
