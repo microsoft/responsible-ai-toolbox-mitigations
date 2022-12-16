@@ -4,7 +4,6 @@ from copy import deepcopy
 
 import pandas as pd
 import numpy as np
-import json
 
 from ..dataprocessing import DataProcessing
 from .cohort_definition import CohortFilters

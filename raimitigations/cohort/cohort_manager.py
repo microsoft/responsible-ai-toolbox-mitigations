@@ -1,4 +1,5 @@
 from typing import Union
+from copy import deepcopy
 
 import pandas as pd
 import numpy as np
@@ -98,6 +99,7 @@ class CohortManager(CohortHandler):
         self._pipe_has_predict_proba = False
         self._transf_pipe = transform_pipe
         super().__init__(cohort_def, cohort_col, cohort_json_files, df, label_col, X, y, verbose)
+        self._build_cohorts()
         self._set_transforms()
 
     # -----------------------------------
@@ -237,7 +239,7 @@ class CohortManager(CohortHandler):
                 self._cohort_pipe.append(_pipe)
 
     # -----------------------------------
-    def _instantiate_cohort(self, cohort_definition: Union[list, str], name: str):
+    def _instantiate_cohort(self, cohort_definition: Union[list, str], name: str = "cohort"):
         """
         Create a ``CohortDefinition`` based on the specifications provided in the parameters.
 
@@ -249,8 +251,6 @@ class CohortManager(CohortHandler):
         :return: a ``CohortDefinition`` object.
         :rtype: CohortDefinition
         """
-        if name is None:
-            return CohortDefinition(cohort_definition)
         return CohortDefinition(cohort_definition, name)
 
     # -----------------------------------

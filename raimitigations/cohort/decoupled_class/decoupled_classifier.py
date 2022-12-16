@@ -193,11 +193,6 @@ class DecoupledClass(CohortHandler):
         occurrence rate lower than min_rate, the cohort is considered invalid. Check the
         ``cohort_col`` parameter for more information;
 
-    :param inplace: indicates if the original dataset will be saved internally
-        (df_org) or not. If True, then the feature selection transformation is saved
-        over the original dataset. If False, the original dataset is saved separately
-        (default value);
-
     :param verbose: indicates whether internal messages should be printed or not.
     """
 
@@ -250,7 +245,7 @@ class DecoupledClass(CohortHandler):
         self._check_and_update_cohorts()
 
     # -----------------------------------
-    def _instantiate_cohort(self, cohort_definition: Union[list, str], name: str):
+    def _instantiate_cohort(self, cohort_definition: Union[list, str], name: str = "cohort"):
         """
         Create a cohort object from the ``_DecoupledCohort`` based on the specifications
         provided in the parameters.
