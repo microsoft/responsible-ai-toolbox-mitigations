@@ -16,11 +16,14 @@ from ...utils.data_utils import err_float_01
 class DecoupledClass(CohortHandler):
     """
     Concrete class that trains different models over different subsets of data (cohorts).
+    Based on the work presented in the following paper: `Decoupled classifiers for group-fair
+    and efficient machine learning
+    <https://www.microsoft.com/en-us/research/publication/decoupled-classifiers-for-group-fair-and-efficient-machine-learning/>`_.
     This is useful when a given cohort behaves differently from the rest of the dataset,
     or when a cohort represents a minority group that is underrepresented. For small cohorts,
     it is possible to train a model using the data of other cohorts (outside data) with a
     smaller weight $\theta$ (only works with models that accept instance weights). This process
-    is called here Transfer Learning. Instead of using transfer learning, it is also possible
+    is herein called Transfer Learning. Instead of using transfer learning, it is also possible
     to merge small cohorts together, resulting in a set of sufficiently large cohorts.
 
     :param df: the data frame to be used during the fit method.
@@ -137,7 +140,7 @@ class DecoupledClass(CohortHandler):
         possible, we reduce the value of K (according to the possible values of K specified
         in the valid_k_folds_theta parameter) and test if now we can split the cohort into
         K folds, each fold being larger than min_fold_size_theta. We do this until all K
-        values are tested, and if none of these results in large enough folds, a default
+        values are tested, and if none of these results in folds large enough, a default
         value of $\theta$ is used to avoid raising an error. This default value is given
         by this parameter. If None, then don't use any default value in these cases. Instead,
         raise an error;
@@ -234,7 +237,6 @@ class DecoupledClass(CohortHandler):
         min_cohort_size: int = MIN_COHORT_SIZE,
         min_cohort_pct: float = MIN_COHORT_SIZE_PCT,
         minority_min_rate: float = MINORITY_MIN_RATE,
-        inplace: bool = False,
         verbose: bool = True,
     ):
         self.regression = regression

@@ -270,7 +270,6 @@ class _DecoupledCohort(CohortDefinition):
                 deepcopy(self.estimator),
                 self.regression,
             )
-            print(score)
             if score is None:
                 if default_theta is None:
                     raise ValueError(
@@ -702,7 +701,7 @@ class _DecoupledCohort(CohortDefinition):
     # -----------------------------------
     def print(self):
         """
-        Prints all the relevant ​information of the current cohort.
+        Prints all the relevant information of the current cohort.
         """
         print(f"{self.name}:")
         print(f"\tSize: {self.get_size()}")
