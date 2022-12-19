@@ -85,6 +85,7 @@ Here is a set of tutorial notebooks that aim to explain how to manage cohorts.
 - [Creating Single Cohorts](notebooks/cohort/cohort_definition.ipynb)
 - [Creating Different Pipelines for each Cohort](notebooks/cohort/cohort_manager.ipynb)
 - [Different Pre-processing Scenarios using cohorts](notebooks/cohort/cohort_manager_scenarios.ipynb)
+- [Using Decoupled Classifiers](notebooks/cohort/decoupled.ipynb)
 
 Here is a set of case study notebooks showing how creating customized dataprocessing pipelines for each
 cohort can help in some scenarios.

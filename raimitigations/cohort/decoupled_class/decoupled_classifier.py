@@ -60,11 +60,10 @@ class DecoupledClass(CohortHandler):
         regression model. If False, a classifier is created instead. This parameter
         is ignored if an estimator is provided using the 'estimator' parameter;
 
-    :param cohort_def: a list of cohort definitions, a dictionary of cohort definitions, or
-        the path to a JSON file containing the definition of all cohorts. A cohort condition
-        is the same variable received by the ``cohort_definition`` parameter of the
-        ``CohortDefinition`` class. When using a list of cohort definitions, the cohorts will
-        be named automatically. For the dictionary of cohort definitions, the key used represents
+    :param cohort_def: a list of cohort definitions or a dictionary of cohort definitions. A
+        cohort condition is the same variable received by the ``cohort_definition`` parameter
+        of the ``CohortDefinition`` class. When using a list of cohort definitions, the cohorts
+        will be named automatically. For the dictionary of cohort definitions, the key used represents
         the cohort's name, and the value assigned to each key is given by that cohort's conditions.
         This parameter can't be used together with the ``cohort_col`` parameter. Only one these two
         parameters must be used at a time;
