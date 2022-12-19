@@ -66,6 +66,7 @@ methods offered in the **dataprocessing** module.
 - [Identifying correlated features: tutorial](notebooks/dataprocessing/module_tests/feat_sel_corr_tutorial.ipynb)
 - [Data Rebalance using imblearn](notebooks/dataprocessing/module_tests/rebalance_imbl.ipynb)
 - [Data Rebalance using SDV](notebooks/dataprocessing/module_tests/rebalance_sdv.ipynb)
+- [Using scikit-learn's Pipeline](notebooks/dataprocessing/module_tests/pipeline_test.ipynb)
 
 Here is a set of case study scenarios where we use the transformations available in the **dataprocessing**
 module in order to train a model for a real-world dataset.
@@ -74,6 +75,22 @@ module in order to train a model for a real-world dataset.
 - [Case Study 1](notebooks/dataprocessing/case_study/case1.ipynb)
 - [Case Study 2](notebooks/dataprocessing/case_study/case2.ipynb)
 - [Case Study 3](notebooks/dataprocessing/case_study/case3.ipynb)
+
+## Handling Cohorts
+
+Here is a set of tutorial notebooks that aim to explain how to manage cohorts.
+
+- [Creating Single Cohorts](notebooks/cohort/cohort_definition.ipynb)
+- [Creating Different Pipelines for each Cohort](notebooks/cohort/cohort_manager.ipynb)
+
+Here is a set of case study notebooks showing how creating customized dataprocessing pipelines for each
+cohort can help in some scenarios.
+
+- [Cohort Case Study 1](notebooks/cohort/case_study/case_1.ipynb)
+- [Cohort Case Study 1 - Rebalancing only specific cohorts](notebooks/cohort/case_study/case_1_rebalance.ipynb)
+- [Cohort Case Study 1 - Using RAI Toolbox](notebooks/cohort/case_study/case_1_dashboard.ipynb)
+- [Cohort Case Study 2](notebooks/cohort/case_study/case_2.ipynb)
+- [Cohort Case Study 3](notebooks/cohort/case_study/case_3.ipynb)
 
 
 
