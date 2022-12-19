@@ -382,7 +382,10 @@ working with cohorts. The adoption of a unified JSON interface supports the foll
 <li><p>A user starts by doing some analysis and applying mitigations using the <code class="docutils literal notranslate"><span class="pre">raimitigations</span></code> library over different cohorts (using the <a class="reference internal" href="../cohort_manager.html"><span class="doc">CohortManager</span></a> class). They then save their cohorts using the <code class="docutils literal notranslate"><span class="pre">CohortManager.save_cohorts()</span></code> method, which will create a JSON file for each of the existing cohorts. Finally, the user can use those JSON files to recreate those cohorts in the <code class="docutils literal notranslate"><span class="pre">raiwidgets</span></code> library and continue with their analysis using that library;</p></li>
 <li><p>A user starts by creating a set of cohorts in the <code class="docutils literal notranslate"><span class="pre">raiwidgets</span></code> library, where they perform some analysis. They then save those cohorts into a set of JSON files, which are then loaded using the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class. From here, users can apply a set of mitigations over each cohort.</p></li>
 </ol>
-<p>This notebook aims to demonstrate how to achieve these two scenarios. For this, we’ll be using the Adult Census Dataset.</p>
+<p>This notebook aims to demonstrate how to achieve these two scenarios. For this, we’ll be using the Adult Census Dataset. First of all, make sure that <code class="docutils literal notranslate"><span class="pre">raiwidgets</span></code> is installed:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&gt; pip install raiwidgets</span>
+</pre></div>
+</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>

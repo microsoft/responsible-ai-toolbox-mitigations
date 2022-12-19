@@ -156,11 +156,10 @@ order as the <code class="docutils literal notranslate"><span class="pre">cohort
 </ol>
 </div></blockquote>
 </p></li>
-<li><p><strong>cohort_def</strong> – a list of cohort definitions, a dictionary of cohort definitions, or
-the path to a JSON file containing the definition of all cohorts. A cohort condition
-is the same variable received by the <code class="docutils literal notranslate"><span class="pre">cohort_definition</span></code> parameter of the
-<code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> class. When using a list of cohort definitions, the cohorts will
-be named automatically. For the dictionary of cohort definitions, the key used represents
+<li><p><strong>cohort_def</strong> – a list of cohort definitions or a dictionary of cohort definitions.
+A cohort condition is the same variable received by the <code class="docutils literal notranslate"><span class="pre">cohort_definition</span></code> parameter
+of the <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> class. When using a list of cohort definitions, the cohorts
+will be named automatically. For the dictionary of cohort definitions, the key used represents
 the cohort’s name, and the value assigned to each key is given by that cohort’s conditions.
 This parameter can’t be used together with the <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameter. Only one these two
 parameters must be used at a time. This parameter is ignored if <code class="docutils literal notranslate"><span class="pre">cohort_json_files</span></code> is
