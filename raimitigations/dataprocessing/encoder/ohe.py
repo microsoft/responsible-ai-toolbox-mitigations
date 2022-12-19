@@ -1,4 +1,5 @@
 from typing import Union
+import inspect
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
@@ -60,7 +61,12 @@ class EncoderOHE(DataEncoding):
             unk_err = "error"
         else:
             unk_err = "ignore"
-        self.encoder = OneHotEncoder(drop=drop, dtype=np.int32, sparse=False, handle_unknown=unk_err)
+
+        parameters = str(inspect.signature(OneHotEncoder))
+        if "sparse_output" in parameters:
+            self.encoder = OneHotEncoder(drop=drop, dtype=np.int32, sparse_output=False, handle_unknown=unk_err)
+        else:
+            self.encoder = OneHotEncoder(drop=drop, dtype=np.int32, sparse=False, handle_unknown=unk_err)
 
     # -----------------------------------
     def _get_new_col_name(self):
