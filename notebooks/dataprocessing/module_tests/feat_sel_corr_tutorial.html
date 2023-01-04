@@ -1,41 +1,78 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Checking Correlations Between Variables - A Comprehensive Guide &mdash; Responsible AI Mitigations  documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../../../_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Imputers" href="../../../dataprocessing/imputer/imputer.html" />
     <link rel="prev" title="CorrelatedFeatures" href="../../../dataprocessing/feat_sel/correlation.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../../../index.html" class="icon icon-home"> Responsible AI Mitigations
+          
+
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -43,7 +80,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install_guide.html">Installation guide</a></li>
@@ -80,34 +128,81 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">Responsible AI Mitigations</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a></li>
-          <li class="breadcrumb-item"><a href="../../../api.html">API reference</a></li>
-          <li class="breadcrumb-item"><a href="../../../dataprocessing/dataprocessing.html">DataProcessing</a></li>
-          <li class="breadcrumb-item"><a href="../../../dataprocessing/feat_sel/feat_sel.html">Feature Selection</a></li>
-          <li class="breadcrumb-item"><a href="../../../dataprocessing/feat_sel/correlation.html">CorrelatedFeatures</a></li>
-      <li class="breadcrumb-item active">Checking Correlations Between Variables - A Comprehensive Guide</li>
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../api.html">API reference</a> &raquo;</li>
+        
+          <li><a href="../../../dataprocessing/dataprocessing.html">DataProcessing</a> &raquo;</li>
+        
+          <li><a href="../../../dataprocessing/feat_sel/feat_sel.html">Feature Selection</a> &raquo;</li>
+        
+          <li><a href="../../../dataprocessing/feat_sel/correlation.html">CorrelatedFeatures</a> &raquo;</li>
+        
+      <li>Checking Correlations Between Variables - A Comprehensive Guide</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
+            
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/dataprocessing/module_tests/feat_sel_corr_tutorial.ipynb" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   
 <style>
 /* CSS for nbsphinx extension */
@@ -399,7 +494,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="Checking-Correlations-Between-Variables---A-Comprehensive-Guide">
-<h1>Checking Correlations Between Variables - A Comprehensive Guide<a class="headerlink" href="#Checking-Correlations-Between-Variables---A-Comprehensive-Guide" title="Permalink to this heading"></a></h1>
+<h1>Checking Correlations Between Variables - A Comprehensive Guide<a class="headerlink" href="#Checking-Correlations-Between-Variables---A-Comprehensive-Guide" title="Permalink to this heading">¶</a></h1>
 <p>This notebook was created to show how several use cases for the <strong>CorrelatedFeatures</strong> class. This class computes several correlation metrics for different types of correlations:</p>
 <ul class="simple">
 <li><p>Numerical x Numerical;</p></li>
@@ -409,7 +504,7 @@ div.rendered_html tbody tr:hover {
 <p>To compute these correlations, it is necessary to call the .fit() method first. This method will be responsible for computing the different correlations metrics, which depend on the data type of each variable. After all computations (which may take a while depending on the correlation metrics chosen and the dataset size), three JSON files containing different summaries will be saved. The user can then open these JSON files and look into all correlation metrics by themselves, allowing them to use
 their domain knowledge to determine the best variables to be removed.</p>
 <section id="1---Toy-Dataset">
-<h2>1 - Toy Dataset<a class="headerlink" href="#1---Toy-Dataset" title="Permalink to this heading"></a></h2>
+<h2>1 - Toy Dataset<a class="headerlink" href="#1---Toy-Dataset" title="Permalink to this heading">¶</a></h2>
 <p>First of all, we need a dataset with several correlated variables. Ideally, we need a dataset with pairs of numerical, numerical and categorical, and categorical correlated variables to test all this class has to offer. Since we don’t have such dataset at our disposal, we will create an artificial dataset with the desired characteristics. We will create a dataset with <strong>samples</strong> data points and <strong>n_features</strong> base features, where:</p>
 <ul class="simple">
 <li><p><strong>n_num_num</strong> new numerical features are created, where each new feature copies one of the <strong>n_features</strong> existing numerical features and then adds a noise over these original values. The standard deviation used for generating the noise is a random value between <strong>num_num_noise[0]</strong> and <strong>num_num_noise[1]</strong>. If the degree of the correlation between the two features depends on the standard deviation used for generating the noise;</p></li>
@@ -659,7 +754,7 @@ feature.</p></li>
 </div>
 </section>
 <section id="2---A-Beginner-User’s-View-of-the-CorrelatedFeatures-class">
-<h2>2 - A Beginner User’s View of the CorrelatedFeatures class<a class="headerlink" href="#2---A-Beginner-User’s-View-of-the-CorrelatedFeatures-class" title="Permalink to this heading"></a></h2>
+<h2>2 - A Beginner User’s View of the CorrelatedFeatures class<a class="headerlink" href="#2---A-Beginner-User’s-View-of-the-CorrelatedFeatures-class" title="Permalink to this heading">¶</a></h2>
 <p>Let’s consider the following scenario: a beginner data scientist wants to check for correlations within a dataset. But this data scientist doesn’t really understand how these correlations are measured, nor how to interpret them. Actually, this data scientist doesn’t even care for these details: its goal is to simply remove a set of features that are already explained well enough within other features, that is, the data scientist just wants to remove one feature for each pair of correlated
 features and reduce the overall number of features used in its training pipeline (if possible). This means that the data scientist isn’t interested in analyzing the JSON summary generated by the <strong>CorrelatedFeatures</strong> class: the goal is to simply remove a set of features that are correlated to other features.</p>
 <p>The <strong>CorrelatedFeatures</strong> class was designed to perform all of these desired steps automatically. If the user doesn’t really understand what each parameter means, we set these parameters with default values capable of delivering reasonable results on the average case (depends on the dataset used). The only thing required is that the user instantiates the class (leave all parameters blank, that is, using their default values), call the fit method using their dataset, and then use the transform
@@ -851,7 +946,7 @@ method to remove the unwanted columns of a second dataset (this second dataset c
 previously. To do that, we just call the transform method over the new dataset.</p>
 </section>
 <section id="3---An-Intermediate-User’s-View-of-the-CorrelatedFeatures-class">
-<h2>3 - An Intermediate User’s View of the CorrelatedFeatures class<a class="headerlink" href="#3---An-Intermediate-User’s-View-of-the-CorrelatedFeatures-class" title="Permalink to this heading"></a></h2>
+<h2>3 - An Intermediate User’s View of the CorrelatedFeatures class<a class="headerlink" href="#3---An-Intermediate-User’s-View-of-the-CorrelatedFeatures-class" title="Permalink to this heading">¶</a></h2>
 <p>Let us now consider the scenario where an intermediate data scientist wants to use the <strong>CorrelatedFeatures</strong> class. This user knows something about correlation metrics, so they will be interested in adjusting some parameters. They also have the domain knowledge of the dataset, allowing them to imbue some of this knowledge when using the CorrelatedFeatures class.</p>
 <p>First of all, we need to instantiate the class. Since the user is more experienced, they decided that they want to use:</p>
 <ul class="simple">
@@ -1140,7 +1235,7 @@ No correlations detected. Nothing to be done here.
 </div>
 </section>
 <section id="4---A-Pro-User’s-View-of-the-CorrelatedFeatures-class">
-<h2>4 - A Pro User’s View of the CorrelatedFeatures class<a class="headerlink" href="#4---A-Pro-User’s-View-of-the-CorrelatedFeatures-class" title="Permalink to this heading"></a></h2>
+<h2>4 - A Pro User’s View of the CorrelatedFeatures class<a class="headerlink" href="#4---A-Pro-User’s-View-of-the-CorrelatedFeatures-class" title="Permalink to this heading">¶</a></h2>
 <p>Let us now consider the scenario where a pro data scientist wants to use the <strong>CorrelatedFeatures</strong> class to compute different correlation metrics. In contrast to the previous scenarios, this user doesn’t want to rely on the class to automatically select the best features. Instead, the user wants to access all correlation metrics computed, even those for pairs of variables defined as not correlated. To this end, the user can use the <strong>get_summary</strong> method, which returns 3 JSON files:</p>
 <ul class="simple">
 <li><p><strong>Full Summary</strong>: when calling the fit method, all correlations will be computed according to the many parameters detailed previously. After computing all these data, everything is saved in a JSON file, which can then be accessed and analyzed carefully. We recommend using a JSON viewing tool for this. This JSON is saved in the file specified by the parameter <strong>json_summary</strong>;</p></li>
@@ -1183,7 +1278,7 @@ will use F1 and Accuracy as the evaluation metrics, both with a threshold of 0.9
 </div>
 <p>We can now go on and check the resulting JSON files. We recommend using a JSON file viewing tool to check the results. We used the JSON Viewer tool from Visual Studio.</p>
 <section id="Full-Summary">
-<h3>Full Summary<a class="headerlink" href="#Full-Summary" title="Permalink to this heading"></a></h3>
+<h3>Full Summary<a class="headerlink" href="#Full-Summary" title="Permalink to this heading">¶</a></h3>
 <p>First, let’s take a look at the full summary JSON file. When we open this file with the JSON Viewer, we get the following:</p>
 <p><img alt="sum1" src="../../../_images/summary1.PNG" /></p>
 <p>This shows one primary key for each variable in the dataset. When we click on one of these keys, we will see a list of secondary keys made up by all variables in the dataset not including the variable being analyzed (the primary key), as the follow image shows:</p>
@@ -1198,7 +1293,7 @@ variables, and if they are correlated or not. In the following image, we can see
 <p>Here we can see the results for the Cramer’s V test used for this type of correlation.</p>
 </section>
 <section id="Correlated-Summary">
-<h3>Correlated Summary<a class="headerlink" href="#Correlated-Summary" title="Permalink to this heading"></a></h3>
+<h3>Correlated Summary<a class="headerlink" href="#Correlated-Summary" title="Permalink to this heading">¶</a></h3>
 <p>Now we will take a look at the correlated summary, which shows only the results for the correlated variables (that is, the pairs of variables that passed the correlation thresholds defined by the different parameters). The following image shows this JSON file:</p>
 <p><img alt="cor1" src="../../../_images/cor1.PNG" /></p>
 <p>The main difference here is that the primary keys are variable pairs instead of a single variable. Since we have only 4 primary keys, then there are only 4 correlated pairs of variables in our dataset. If we click over the pair <strong>A x B</strong> of these pairs, we will notice that the contents inside this key are exactly the same in the full summary under the primary key <strong>A</strong> and secondary key <strong>B</strong>. Therefore, this summary doesn’t add any new information in comparison to the previous JSON file. Its
@@ -1206,12 +1301,12 @@ advantage is that it only shows the information for correlated features.</p>
 <p><img alt="cor2" src="../../../_images/cor2.PNG" /> <img alt="cor3" src="../../../_images/cor3.PNG" /></p>
 </section>
 <section id="Uncorrelated-Summary">
-<h3>Uncorrelated Summary<a class="headerlink" href="#Uncorrelated-Summary" title="Permalink to this heading"></a></h3>
+<h3>Uncorrelated Summary<a class="headerlink" href="#Uncorrelated-Summary" title="Permalink to this heading">¶</a></h3>
 <p>The final JSON file is very similar to the correlated summary, but instead of showing only the correlated pairs, it shows only the pairs considered NOT correlated. As we can see in the following image, this file is larger than the previous one (for this dataset), because there are many more pairs of uncorrelated variables than pairs of correlated variables.</p>
 <p><img alt="uncor1" src="../../../_images/uncor1.PNG" /> <img alt="uncor2" src="../../../_images/uncor2.PNG" /> <img alt="uncor3" src="../../../_images/uncor3.PNG" /> <img alt="uncor4" src="../../../_images/uncor4.PNG" /></p>
 </section>
 <section id="Setting-the-selected-features-manually">
-<h3>Setting the selected features manually<a class="headerlink" href="#Setting-the-selected-features-manually" title="Permalink to this heading"></a></h3>
+<h3>Setting the selected features manually<a class="headerlink" href="#Setting-the-selected-features-manually" title="Permalink to this heading">¶</a></h3>
 <p>After looking over all of these different results, the user will decide by themselves which variables are the best ones to keep. They can then call the <strong>set_selected_features</strong> method and provide it a list with the selected columns. This will override the list of selected features defined automatically by the class. After that, the user can simply call the transform method normally to remove the unwanted features.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
@@ -1386,7 +1481,7 @@ advantage is that it only shows the information for correlated features.</p>
 </div>
 </section>
 <section id="Using-the-Jensen-Shannon-approach-for-numerical-x-categorical-correlations">
-<h3>Using the Jensen-Shannon approach for numerical x categorical correlations<a class="headerlink" href="#Using-the-Jensen-Shannon-approach-for-numerical-x-categorical-correlations" title="Permalink to this heading"></a></h3>
+<h3>Using the Jensen-Shannon approach for numerical x categorical correlations<a class="headerlink" href="#Using-the-Jensen-Shannon-approach-for-numerical-x-categorical-correlations" title="Permalink to this heading">¶</a></h3>
 <p>The following cell shows how to use the Jensen-Shannon approach for numerical x categorical correlations. For a given pair A, B, where A is a numerical feature and B is a categorical feature, this approach does the following: first we cluster the numerical values of A according to their respective values of the categorical data B. We then compute the probability density function of the numerical variable for each cluster (we approximate the PDF with the histogram using <strong>jensen_n_bins</strong>
 different bins). The next step is to compute the Jensen-Shannon Distance metric between the distribution functions of each pair of clusters. This distance metric varies from 0 to 1, where values closer to 0 means that both distributions tested are similar and values closer to 1 means that the distributions are different. If all pairs of distributions tested are considered different (a Jensen-Shannon metric above <strong>jensen_th</strong> for all pairs tested), then both variables are considered to be
 correlated.</p>
@@ -1848,7 +1943,7 @@ CC_0_num_0 x CC_1_num_1:
 </div>
 </section>
 <section id="Using-the-ANOVA-test-approach-for-numerical-x-categorical-correlations">
-<h3>Using the ANOVA test approach for numerical x categorical correlations<a class="headerlink" href="#Using-the-ANOVA-test-approach-for-numerical-x-categorical-correlations" title="Permalink to this heading"></a></h3>
+<h3>Using the ANOVA test approach for numerical x categorical correlations<a class="headerlink" href="#Using-the-ANOVA-test-approach-for-numerical-x-categorical-correlations" title="Permalink to this heading">¶</a></h3>
 <p>The other approach implemented for detecting numerical x categorical correlation is the ANOVA test. The following cell shows how to use this method to detect this type of correlation. This method uses the ANOVA test to identify a correlation. First we use the Levene test to see if the numerical variable has a similar variance across the different values of the categorical variable (Homoscedastic data). If the test passes (that is, if the p-value of the Levene test is greater than the value set
 to the <strong>levene_pvalue</strong> parameter), then we can perform the ANOVA test, in which we compute the F-statistic to see if there is a correlation between the numerical and categorical variables and its associated p-value. We also compute the omega-squared metric. If the p-value is less than the parameter <strong>anova_pvalue</strong> and the omega-squared is greater than the parameter <strong>omega_th</strong>, then both variables are considered to be correlated;</p>
 <div class="nbinput docutils container">
@@ -2198,7 +2293,7 @@ CC_0_num_0 x CC_1_num_1:
 </div>
 </section>
 <section id="Checking-only-for-certain-types-of-correlation">
-<h3>Checking only for certain types of correlation<a class="headerlink" href="#Checking-only-for-certain-types-of-correlation" title="Permalink to this heading"></a></h3>
+<h3>Checking only for certain types of correlation<a class="headerlink" href="#Checking-only-for-certain-types-of-correlation" title="Permalink to this heading">¶</a></h3>
 <p>The following cell shows an example of how to test only for correlations between categorical features. To do this, simply set the method for checking correlations between numerical variables to None (<strong>method_num_num=None</strong>) and the method for checking correlations between numerical and categorical variables to None (<strong>method_num_cat=None</strong>).</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
@@ -2263,7 +2358,7 @@ CC_0_num_0 x CC_1_num_1:
 </div>
 </section>
 <section id="Update-the-thresholds-used-without-computing-all-of-the-correlations-again">
-<h3>Update the thresholds used without computing all of the correlations again<a class="headerlink" href="#Update-the-thresholds-used-without-computing-all-of-the-correlations-again" title="Permalink to this heading"></a></h3>
+<h3>Update the thresholds used without computing all of the correlations again<a class="headerlink" href="#Update-the-thresholds-used-without-computing-all-of-the-correlations-again" title="Permalink to this heading">¶</a></h3>
 <p>The fit() method executes three different steps:</p>
 <ol class="arabic simple">
 <li><p><strong>Correlation metrics:</strong> compute the correlation metrics for all pairs of variables;</p></li>
@@ -2352,7 +2447,7 @@ instead.</p>
 </section>
 </section>
 <section id="Using-a-dataset-without-headers">
-<h2>Using a dataset without headers<a class="headerlink" href="#Using-a-dataset-without-headers" title="Permalink to this heading"></a></h2>
+<h2>Using a dataset without headers<a class="headerlink" href="#Using-a-dataset-without-headers" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
@@ -2619,33 +2714,50 @@ instead.</p>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../../../dataprocessing/feat_sel/correlation.html" class="btn btn-neutral float-left" title="CorrelatedFeatures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="../../../dataprocessing/imputer/imputer.html" class="btn btn-neutral float-right" title="Imputers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../../../dataprocessing/feat_sel/correlation.html" class="btn btn-neutral float-left" title="CorrelatedFeatures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Microsoft.</p>
-  </div>
+    <p>
+        &#169; Copyright 2022, Microsoft.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

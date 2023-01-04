@@ -1,41 +1,78 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Cohort Case Study 2 &mdash; Responsible AI Mitigations  documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../../../_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Cohort Case Study 3" href="case_3.html" />
     <link rel="prev" title="Cohort Case Study 1 - Using RAI ErrorAnalysis" href="case_1_dashboard.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../../../index.html" class="icon icon-home"> Responsible AI Mitigations
+          
+
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -43,7 +80,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install_guide.html">Installation guide</a></li>
@@ -77,33 +125,79 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">Responsible AI Mitigations</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a></li>
-          <li class="breadcrumb-item"><a href="../../../api.html">API reference</a></li>
-          <li class="breadcrumb-item"><a href="../../../cohort/cohort.html">Cohort</a></li>
-          <li class="breadcrumb-item"><a href="../../../cohort/cohort_manager.html">CohortManager</a></li>
-      <li class="breadcrumb-item active">Cohort Case Study 2</li>
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../api.html">API reference</a> &raquo;</li>
+        
+          <li><a href="../../../cohort/cohort.html">Cohort</a> &raquo;</li>
+        
+          <li><a href="../../../cohort/cohort_manager.html">CohortManager</a> &raquo;</li>
+        
+      <li>Cohort Case Study 2</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
+            
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/cohort/case_study/case_2.ipynb" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   
 <style>
 /* CSS for nbsphinx extension */
@@ -384,7 +478,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Cohort-Case-Study-2">
-<h1>Cohort Case Study 2<a class="headerlink" href="#Cohort-Case-Study-2" title="Permalink to this heading"></a></h1>
+<h1>Cohort Case Study 2<a class="headerlink" href="#Cohort-Case-Study-2" title="Permalink to this heading">¶</a></h1>
 <p>This notebook will follow a similar approach to what was done in the notebook <a class="reference internal" href="case_1.html"><span class="doc">Cohort Case Study 1</span></a>, but this time we’ll use a real dataset. Since this time we’re handling a real dataset, it might not be obvious which cohorts follow different behaviors, as we’ve seen in the aforementioned notebook.</p>
 <p>We’ll start by downloading the dataset and reading the train and test sets.</p>
 <div class="nbinput nblast docutils container">
@@ -718,11 +812,11 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="Initial-analysis-of-multiple-cohort-definitions">
-<h2>Initial analysis of multiple cohort definitions<a class="headerlink" href="#Initial-analysis-of-multiple-cohort-definitions" title="Permalink to this heading"></a></h2>
+<h2>Initial analysis of multiple cohort definitions<a class="headerlink" href="#Initial-analysis-of-multiple-cohort-definitions" title="Permalink to this heading">¶</a></h2>
 <p>Now that we have our dataset, we can create a simple pipeline and fit it using the training data. We’ll then use the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results</span></code> function to show the results obtained for the entire dataset, as well as for different cohorts. Notice that this function computes all metrics for each cohort separately, and therefore, different thresholds might be encountered for each cohort (the optimal threshold of a given set of predictions is found using the ROC curve). We call this function twice:
 first using the training dataset, which gives us the best thresholds for each cohort, and for the second time we call this function, we pass the test dataset, along with these thresholds. Check <a class="reference internal" href="case_1.html"><span class="doc">Cohort Case Study 1</span></a> for more details.</p>
 <section id="Superficial-analysis-of-the-“race”-cohorts">
-<h3>Superficial analysis of the “race” cohorts<a class="headerlink" href="#Superficial-analysis-of-the-“race”-cohorts" title="Permalink to this heading"></a></h3>
+<h3>Superficial analysis of the “race” cohorts<a class="headerlink" href="#Superficial-analysis-of-the-“race”-cohorts" title="Permalink to this heading">¶</a></h3>
 <p>Our first analysis will focus on the cohorts defined by the <code class="docutils literal notranslate"><span class="pre">race</span></code> feature.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
@@ -994,7 +1088,7 @@ first using the training dataset, which gives us the best thresholds for each co
 data from different cohorts to train a single model is better than training a separate model for each cohort.</p>
 </section>
 <section id="Superficial-analysis-of-the-“gender”-cohorts">
-<h3>Superficial analysis of the “gender” cohorts<a class="headerlink" href="#Superficial-analysis-of-the-“gender”-cohorts" title="Permalink to this heading"></a></h3>
+<h3>Superficial analysis of the “gender” cohorts<a class="headerlink" href="#Superficial-analysis-of-the-“gender”-cohorts" title="Permalink to this heading">¶</a></h3>
 <p>Let’s now try other cohort definitions and see if we can find some scenario where the model underperforms for a given cohort. Our next test is to check the cohorts defined by the <code class="docutils literal notranslate"><span class="pre">gender</span></code> column. We’ll follow the same procedure: first, we train a single pipeline over the entire dataset, followed by an evaluation of the predictions over the test data separated by each cohort. Once again, the metrics are computed separately for the predictions of each cohort, and therefore, we might see
 different optimal threshold values encountered for different cohorts.</p>
 <div class="nbinput docutils container">
@@ -1186,7 +1280,7 @@ different optimal threshold values encountered for different cohorts.</p>
 <p>Analyzing the two previous results, we can notice that there isn’t a considerable difference in the metrics for each of the cohorts. Also, training different pipelines for each cohort didn’t manage to improve the performance, just like our previous results. Therefore, it seems that the cohorts defined by the <code class="docutils literal notranslate"><span class="pre">gender</span></code> column follow similar behaviors, so we won’t be able to gain a lot using different pipelines for each cohort in this case.</p>
 </section>
 <section id="Superficial-analysis-of-the-“relationship”-cohorts">
-<h3>Superficial analysis of the “relationship” cohorts<a class="headerlink" href="#Superficial-analysis-of-the-“relationship”-cohorts" title="Permalink to this heading"></a></h3>
+<h3>Superficial analysis of the “relationship” cohorts<a class="headerlink" href="#Superficial-analysis-of-the-“relationship”-cohorts" title="Permalink to this heading">¶</a></h3>
 <p>We now analyze the cohorts defined by the <code class="docutils literal notranslate"><span class="pre">relationship</span></code> column. Let’s see the results of the baseline pipeline over each of these cohorts:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
@@ -1476,7 +1570,7 @@ for <code class="docutils literal notranslate"><span class="pre">cohort_3</span>
 </section>
 </section>
 <section id="A-Closer-Look-at-the-“relationship”-cohorts">
-<h2>A Closer Look at the “relationship” cohorts<a class="headerlink" href="#A-Closer-Look-at-the-“relationship”-cohorts" title="Permalink to this heading"></a></h2>
+<h2>A Closer Look at the “relationship” cohorts<a class="headerlink" href="#A-Closer-Look-at-the-“relationship”-cohorts" title="Permalink to this heading">¶</a></h2>
 <p>In this section, we’ll take a closer look at how we can try to improve the results for the cohorts defined by the <code class="docutils literal notranslate"><span class="pre">relationship</span></code> column. As we’ve shown, this set of cohorts does present some considerably different metrics between different cohorts. Here we’ll try using different cohort definitions, and data rebalancing to improve the performance over a set of cohorts.</p>
 <p>Before starting the analysis, we’ll create a function for plotting the label distribution over different cohorts. This will be useful when we start looking at data imbalance.</p>
 <div class="nbinput nblast docutils container">
@@ -1597,7 +1691,7 @@ Name: income, dtype: int64
 </div>
 </div>
 <section id="Rebalancing-the-entire-dataset">
-<h3>Rebalancing the entire dataset<a class="headerlink" href="#Rebalancing-the-entire-dataset" title="Permalink to this heading"></a></h3>
+<h3>Rebalancing the entire dataset<a class="headerlink" href="#Rebalancing-the-entire-dataset" title="Permalink to this heading">¶</a></h3>
 <p>Let’s start by using a simple rebalance strategy using the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class over the entire dataset. We then plot the new label distributions:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
@@ -1965,7 +2059,7 @@ Name: income, dtype: int64
 <p>The results shown above depict a similar scenario to the previous results (baseline pipeline over the rebalanced dataset): an improvement over some cohorts and performance reduction for other cohorts. Once again, this is because a different number of data points were added to each cohort, due to the nature of the SMOTE rebalancing technique (used in the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class).</p>
 </section>
 <section id="Rebalancing-only-a-few-cohorts">
-<h3>Rebalancing only a few cohorts<a class="headerlink" href="#Rebalancing-only-a-few-cohorts" title="Permalink to this heading"></a></h3>
+<h3>Rebalancing only a few cohorts<a class="headerlink" href="#Rebalancing-only-a-few-cohorts" title="Permalink to this heading">¶</a></h3>
 <p>Let’s try to mitigate these issues by rebalancing only a few cohorts because as we’ve seen in the label distribution of the original dataset, only a few cohorts have a serious label imbalance. This way, we’ll try to improve the results of only a few cohorts. In the following cell, we use the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class together with the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> in order to rebalance only cohorts <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
@@ -2295,33 +2389,50 @@ Name: income, dtype: int64
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="case_1_dashboard.html" class="btn btn-neutral float-left" title="Cohort Case Study 1 - Using RAI ErrorAnalysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="case_3.html" class="btn btn-neutral float-right" title="Cohort Case Study 3" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="case_1_dashboard.html" class="btn btn-neutral float-left" title="Cohort Case Study 1 - Using RAI ErrorAnalysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Microsoft.</p>
-  </div>
+    <p>
+        &#169; Copyright 2022, Microsoft.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

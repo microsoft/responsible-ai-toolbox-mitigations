@@ -1,41 +1,78 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Using Pipelines &mdash; Responsible AI Mitigations  documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../../../_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Simple Example" href="model_test.html" />
     <link rel="prev" title="Python Data Balance Analysis" href="../../databalanceanalysis/data_balance_overall.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../../../index.html" class="icon icon-home"> Responsible AI Mitigations
+          
+
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -43,7 +80,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install_guide.html">Installation guide</a></li>
@@ -73,31 +121,75 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">Responsible AI Mitigations</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a></li>
-          <li class="breadcrumb-item"><a href="../../../gallery.html">Gallery</a></li>
-      <li class="breadcrumb-item active">Using Pipelines</li>
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../gallery.html">Gallery</a> &raquo;</li>
+        
+      <li>Using Pipelines</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
+            
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/dataprocessing/module_tests/pipeline_test.ipynb" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   
 <style>
 /* CSS for nbsphinx extension */
@@ -378,7 +470,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Using-Pipelines">
-<h1>Using Pipelines<a class="headerlink" href="#Using-Pipelines" title="Permalink to this heading"></a></h1>
+<h1>Using Pipelines<a class="headerlink" href="#Using-Pipelines" title="Permalink to this heading">¶</a></h1>
 <p>The <strong>dataprocessing</strong> library works with the <strong>Pipeline</strong> class from SKLearn. In this notebook, we show a few examples of how to use pipelines with transformers from the <strong>dataprocessing</strong> library.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -777,7 +869,7 @@ memory usage: 642.6+ KB
 </pre></div></div>
 </div>
 <section id="Comparing-different-pipelines">
-<h2>Comparing different pipelines<a class="headerlink" href="#Comparing-different-pipelines" title="Permalink to this heading"></a></h2>
+<h2>Comparing different pipelines<a class="headerlink" href="#Comparing-different-pipelines" title="Permalink to this heading">¶</a></h2>
 <p>Using pipelines allow us to compare different pre-processing methods in a easy and efficient way. Here we will build different pipelines, each with different transformations, and then compare the results obtained for each one. But before we can do this, let’s build a function that calls the pipeline’s fit and predict_proba methods, followed by the computation of a few metrics, such as ROC AUC, F1, precision, recall, accuracy, and the confusion matrix. To compute these metrics, we use the
 <strong>evaluate_set</strong> function from the <strong>utils.model_utils</strong> module.</p>
 <div class="nbinput nblast docutils container">
@@ -842,7 +934,7 @@ memory usage: 642.6+ KB
 </div>
 </div>
 <section id="Pipeline-0">
-<h3>Pipeline 0<a class="headerlink" href="#Pipeline-0" title="Permalink to this heading"></a></h3>
+<h3>Pipeline 0<a class="headerlink" href="#Pipeline-0" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -889,7 +981,7 @@ Threshold used: 0.1250311491470217
 </div>
 </section>
 <section id="Pipeline-1">
-<h3>Pipeline 1<a class="headerlink" href="#Pipeline-1" title="Permalink to this heading"></a></h3>
+<h3>Pipeline 1<a class="headerlink" href="#Pipeline-1" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -937,7 +1029,7 @@ Threshold used: 0.29745720239980394
 </div>
 </section>
 <section id="Pipeline-2">
-<h3>Pipeline 2<a class="headerlink" href="#Pipeline-2" title="Permalink to this heading"></a></h3>
+<h3>Pipeline 2<a class="headerlink" href="#Pipeline-2" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
@@ -996,7 +1088,7 @@ Threshold used: 0.22808377020466744
 </section>
 </section>
 <section id="Using-SKLearn-and-Dataprocessing-transformers-in-the-same-Pipeline">
-<h2>Using SKLearn and Dataprocessing transformers in the same Pipeline<a class="headerlink" href="#Using-SKLearn-and-Dataprocessing-transformers-in-the-same-Pipeline" title="Permalink to this heading"></a></h2>
+<h2>Using SKLearn and Dataprocessing transformers in the same Pipeline<a class="headerlink" href="#Using-SKLearn-and-Dataprocessing-transformers-in-the-same-Pipeline" title="Permalink to this heading">¶</a></h2>
 <p>The transformations in SKLearn always return a numpy array, while the transformers in our <strong>dataprocessing</strong> library usually operate over a Pandas DataFrame (although these transformers also accept numpy arrays as input). The latter uses dataframes in order to allow it to filter specific columns, just like we did when we created the DataStandardScaler object and specified that only the columns in the <strong>float_cols</strong> list should be scaled. With a numpy array, we can also do this, but instead of
 using column names, we are forced to use the column indices instead, since numpy arrays doesn’t have column names.</p>
 <p>In this scenario, when we place a transformer from the SKLearn library before a transformer from the <strong>dataprocessing</strong> library in a Pipeline, we must be aware that we’ll lose the column names (considering that the input to the Pipeline is indeed a Pandas dataframe) after the sklearn transformer calls its transform() method. This way, all of the transformers after this point will have to use column indices instead of column names, as depicted in the following example. In this example, we’ll use
@@ -1675,7 +1767,7 @@ the SKLearn’s <strong>SimpleImputer</strong> instead of using our similar clas
 <p>Using column indices is not as intuitive as using column names. Using indices is also more error prone, especially when dealing with a pipeline with transformations that could change the order of the columns, such as the EncoderOHE and feature selection methods. In these scenarios, the index of a column might change in the middle of the pipeline, making it harder for the user to know exactly the column index that they should use to apply a specific operation over a specific column. Therefore, it
 is of interest to the user to continue to use only column names when possible. In the remainder of this section, we’ll present three solutions to this problem.</p>
 <section id="Solution-1:-use-the-Pipeline-class-with-only-transformers-from-the-dataprocessing-library">
-<h3>Solution 1: use the Pipeline class with only transformers from the dataprocessing library<a class="headerlink" href="#Solution-1:-use-the-Pipeline-class-with-only-transformers-from-the-dataprocessing-library" title="Permalink to this heading"></a></h3>
+<h3>Solution 1: use the Pipeline class with only transformers from the dataprocessing library<a class="headerlink" href="#Solution-1:-use-the-Pipeline-class-with-only-transformers-from-the-dataprocessing-library" title="Permalink to this heading">¶</a></h3>
 <p>The first solution is pretty straightforward: use only transformers from the <strong>dataprocessing</strong> library. Note that an estimator from SKLearn or other libraries could still be used in the end of the pipeline, but the transformers used must be always from the <strong>dataprocessing</strong> library. Since all transformers from this library operate over Pandas Dataframes, and if all transformers in the pipeline return dataframes, then at no point in the pipeline this dataframe will be lost. This guarantees that
 all transformers will receive a dataframe as input, without losing the column names. As a result, all transformers are allowed to use filters based on column names.</p>
 <p>Let’s recreate the previous pipeline using only transformers from our library. For this, we’ll replace the <strong>SimpleImputer</strong> by the <strong>BasicImputer</strong>. This allows us to use column names when specifying which columns the <strong>DataMinMaxScaler</strong> should be applied on:</p>
@@ -2015,7 +2107,7 @@ all transformers will receive a dataframe as input, without losing the column na
 </div>
 </section>
 <section id="Solution-2:-use-the-SklearnTransformerWrapper-class">
-<h3>Solution 2: use the SklearnTransformerWrapper class<a class="headerlink" href="#Solution-2:-use-the-SklearnTransformerWrapper-class" title="Permalink to this heading"></a></h3>
+<h3>Solution 2: use the SklearnTransformerWrapper class<a class="headerlink" href="#Solution-2:-use-the-SklearnTransformerWrapper-class" title="Permalink to this heading">¶</a></h3>
 <p>If there is a specific transformer from the <strong>SKLearn</strong> library not present in the <strong>dataprocessing</strong> library, then the user has no alternative but to use the <strong>SKLearn</strong> transformer. The <strong>SklearnTransformerWrapper</strong> class, from the <strong>Feature Engine library</strong>, is a wrapper for transformers from the <strong>SKLearn</strong> library that forces, among other features, forces the output of the transformers to be a pandas dataframe if the input is also a dataframe. This solves our problem, since this way the
 dataframe is never lost. To do this, the user must pass the transformer object to the <strong>SklearnTransformerWrapper</strong> constructor when instantiating it. The <strong>SklearnTransformerWrapper</strong> object will then allow users to use the fit and transform methods, but now, the transform method returns a pandas dataframe instead of a numpy array.</p>
 <p>The following cell shows how to use the SklearnTransformerWrapper to wrap a transformer from the SKLearn library and then use it in a Pipeline. Before running the following cell, make sure to install the <strong>feature-engine</strong> package <a class="reference external" href="https://pypi.org/project/feature-engine/#:~:text=Feature-engine%20is%20a%20Python%20library%20with%20multiple%20transformers,parameters%20from%20the%20data%20and%20then%20transform%20it.">following this link.</a></p>
@@ -2357,7 +2449,7 @@ dataframe is never lost. To do this, the user must pass the transformer object t
 </div>
 </section>
 <section id="Solution-3:-Wrap-the-Pipeline-class-and-apply-solution-2-automatically">
-<h3>Solution 3: Wrap the Pipeline class and apply solution 2 automatically<a class="headerlink" href="#Solution-3:-Wrap-the-Pipeline-class-and-apply-solution-2-automatically" title="Permalink to this heading"></a></h3>
+<h3>Solution 3: Wrap the Pipeline class and apply solution 2 automatically<a class="headerlink" href="#Solution-3:-Wrap-the-Pipeline-class-and-apply-solution-2-automatically" title="Permalink to this heading">¶</a></h3>
 <p>We can also create a wrapper over the <strong>Pipeline</strong> class that automatically applies Solution 2 to the transformers in the pipeline. This extension, called here the <strong>PipelineWrapper</strong>, provides a simple modification: all transformers that are not from the <strong>dataprocessing</strong> library are wrapped around the <strong>SklearnTransformerWrapper</strong> class. Therefore, the <strong>PipelineWrapper</strong> executes the previous solution internally, removing the burden of wrapping all of <strong>SKLearn’s</strong> transformers from the
 hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any other behavior from the <strong>Pipeline</strong> class, and therefore, the latter can be replaced by the former without any changes in the behavior of the code.</p>
 <p>First, let’s create the <strong>PipelineWrapper</strong> class. This class inherits from the <strong>Pipeline</strong> class. The only modification that we make is that we call a new method, called **_wrap_skl_transf()<strong>, in the init method. This method will check all transformers in the pipeline and wrap all of the SKLearn’s transformers in the</strong>SklearnTransformerWrapper**. This guarantees that, if the input is a pandas dataframe, the transformers from SKLearn will also output a dataframe.</p>
@@ -2725,33 +2817,50 @@ hands of the user. The <strong>PipelineWrapper</strong> doesn’t change any oth
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../../databalanceanalysis/data_balance_overall.html" class="btn btn-neutral float-left" title="Python Data Balance Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="model_test.html" class="btn btn-neutral float-right" title="Simple Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../../databalanceanalysis/data_balance_overall.html" class="btn btn-neutral float-left" title="Python Data Balance Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Microsoft.</p>
-  </div>
+    <p>
+        &#169; Copyright 2022, Microsoft.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -1,41 +1,78 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Moving Cohorts from raimitigations to raiwidgets (and vice versa) &mdash; Responsible AI Mitigations  documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../../../_static/js/theme.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="API reference" href="../../../api.html" />
     <link rel="prev" title="How this library works with the Responsible AI Toolbox" href="../../../integration_to_libs.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../../../index.html" class="icon icon-home"> Responsible AI Mitigations
+          
+
+          
           </a>
+
+          
+            
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -43,7 +80,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install_guide.html">Installation guide</a></li>
@@ -70,31 +118,75 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">Responsible AI Mitigations</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a></li>
-          <li class="breadcrumb-item"><a href="../../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
-      <li class="breadcrumb-item active">Moving Cohorts from raimitigations to raiwidgets (and vice versa)</li>
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a> &raquo;</li>
+        
+      <li>Moving Cohorts from raimitigations to raiwidgets (and vice versa)</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
+            
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/cohort/case_study/integration_raiwidgets.ipynb" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   
 <style>
 /* CSS for nbsphinx extension */
@@ -375,7 +467,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Moving-Cohorts-from-raimitigations-to-raiwidgets-(and-vice-versa)">
-<h1>Moving Cohorts from raimitigations to raiwidgets (and vice versa)<a class="headerlink" href="#Moving-Cohorts-from-raimitigations-to-raiwidgets-(and-vice-versa)" title="Permalink to this heading"></a></h1>
+<h1>Moving Cohorts from raimitigations to raiwidgets (and vice versa)<a class="headerlink" href="#Moving-Cohorts-from-raimitigations-to-raiwidgets-(and-vice-versa)" title="Permalink to this heading">¶</a></h1>
 <p><a class="reference external" href="https://github.com/microsoft/responsible-ai-toolbox">raiwidgets</a> is a library that offers several visualization tools for comparing models, and among these tools, it offer ways to compare the results between different cohorts. The <code class="docutils literal notranslate"><span class="pre">raiwidgets</span></code> library has their own way of defining a cohort, but <code class="docutils literal notranslate"><span class="pre">raiwidgets</span></code> and <code class="docutils literal notranslate"><span class="pre">raimitigations</span></code> both use the same standard for saving the definitions of a cohort into a JSON file. This makes it easier for users to go back and forth these two libraries when
 working with cohorts. The adoption of a unified JSON interface supports the following scenarios:</p>
 <ol class="arabic simple">
@@ -716,7 +808,7 @@ working with cohorts. The adoption of a unified JSON interface supports the foll
 </pre></div></div>
 </div>
 <section id="Scenario-1:-Saving-a-set-of-cohorts-using-raimitigations-and-loading-it-in-raiwidgets">
-<h2>Scenario 1: Saving a set of cohorts using raimitigations and loading it in raiwidgets<a class="headerlink" href="#Scenario-1:-Saving-a-set-of-cohorts-using-raimitigations-and-loading-it-in-raiwidgets" title="Permalink to this heading"></a></h2>
+<h2>Scenario 1: Saving a set of cohorts using raimitigations and loading it in raiwidgets<a class="headerlink" href="#Scenario-1:-Saving-a-set-of-cohorts-using-raimitigations-and-loading-it-in-raiwidgets" title="Permalink to this heading">¶</a></h2>
 <p>We’ll start by creating a <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> object just to create the definitions of our cohorts. But note that users can also create custom pipelines for each cohort here, and whatever other mitigations. But for the sake of the demonstration, we’ll only focus on how to create the cohort definition files and transfer them to <code class="docutils literal notranslate"><span class="pre">raiwidgets</span></code>.</p>
 <p>In the following cell, we simply create a <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> object (without any pipelines), call the fit method in order to create the queries for each cohort (remember that when using the <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameter, the cohort definitions is only created after calling the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method - check the <a class="reference internal" href="../cohort_manager.html"><span class="doc">CohortManager tutorial notebook</span></a> for more information), and then save the cohorts using the <code class="docutils literal notranslate"><span class="pre">save_cohorts()</span></code> method.</p>
 <div class="nbinput nblast docutils container">
@@ -826,7 +918,7 @@ ResponsibleAI started at http://localhost:5000
 <p><img alt="exp1" src="../../../_images/cohorts_exp1.png" /></p>
 </section>
 <section id="Scenario-2:-Saving-a-set-of-cohorts-using-raiwidgets-and-loading-them-in-raimitigations">
-<h2>Scenario 2: Saving a set of cohorts using raiwidgets and loading them in raimitigations<a class="headerlink" href="#Scenario-2:-Saving-a-set-of-cohorts-using-raiwidgets-and-loading-them-in-raimitigations" title="Permalink to this heading"></a></h2>
+<h2>Scenario 2: Saving a set of cohorts using raiwidgets and loading them in raimitigations<a class="headerlink" href="#Scenario-2:-Saving-a-set-of-cohorts-using-raiwidgets-and-loading-them-in-raimitigations" title="Permalink to this heading">¶</a></h2>
 <p>We’ll now show how to do the other way around: create a set of cohorts using <code class="docutils literal notranslate"><span class="pre">raiwidgets</span></code> and then moving those cohorts to <code class="docutils literal notranslate"><span class="pre">raimitigations</span></code>. First, we’ll need to create the cohorts using <code class="docutils literal notranslate"><span class="pre">CohortFilter</span></code> and <code class="docutils literal notranslate"><span class="pre">Cohort</span></code> classes from <code class="docutils literal notranslate"><span class="pre">raiwidgets</span></code> and then save those cohorts to a JSON file.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -878,33 +970,50 @@ one saved in the JSON file, and the other that contains all the remaining instan
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../../../integration_to_libs.html" class="btn btn-neutral float-left" title="How this library works with the Responsible AI Toolbox" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="../../../api.html" class="btn btn-neutral float-right" title="API reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../../../integration_to_libs.html" class="btn btn-neutral float-left" title="How this library works with the Responsible AI Toolbox" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Microsoft.</p>
-  </div>
+    <p>
+        &#169; Copyright 2022, Microsoft.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
