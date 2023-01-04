@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import json
 
-from ._raiutils_cohort import CohortFilterMethods, CohortJsonConst, CohortFilterOps
+from raiutils.cohort import CohortFilterMethods, CohortFilterOps, CohortJsonConst
 
 
 # -----------------------------------
