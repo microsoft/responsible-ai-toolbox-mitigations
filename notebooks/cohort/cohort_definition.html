@@ -1,78 +1,41 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Defining a Cohort &mdash; Responsible AI Mitigations  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="CohortManager" href="../../cohort/cohort_manager.html" />
     <link rel="prev" title="CohortDefinition" href="../../cohort/cohort_definition.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../index.html" class="icon icon-home"> Responsible AI Mitigations
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -80,18 +43,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install_guide.html">Installation guide</a></li>
@@ -105,6 +57,7 @@
 <li class="toctree-l3 current"><a class="reference internal" href="../../gallery.html#cohort">Cohort</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Defining a Cohort</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cohort_manager.html">Managing cohorts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cohort_manager_scenarios.html">Cohort Manager - Scenarios and Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
@@ -122,79 +75,33 @@
 <li class="toctree-l1"><a class="reference internal" href="../../utils/utils.html">Utils</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">Responsible AI Mitigations</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../../api.html">API reference</a> &raquo;</li>
-        
-          <li><a href="../../cohort/cohort.html">Cohort</a> &raquo;</li>
-        
-          <li><a href="../../cohort/cohort_definition.html">CohortDefinition</a> &raquo;</li>
-        
-      <li>Defining a Cohort</li>
-    
-    
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="../../cohort/cohort.html">Cohort</a></li>
+          <li class="breadcrumb-item"><a href="../../cohort/cohort_definition.html">CohortDefinition</a></li>
+      <li class="breadcrumb-item active">Defining a Cohort</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-            
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/cohort/cohort_definition.ipynb" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS for nbsphinx extension */
@@ -475,7 +382,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Defining-a-Cohort">
-<h1>Defining a Cohort<a class="headerlink" href="#Defining-a-Cohort" title="Permalink to this heading">¶</a></h1>
+<h1>Defining a Cohort<a class="headerlink" href="#Defining-a-Cohort" title="Permalink to this heading"></a></h1>
 <p>This library allows users to apply certain mitigations over a specific cohort, instead of ​applying it to the entire dataset. This is useful when, for example, two cohorts have a very different label distribution and we want to rebalance each cohort individually, instead of rebalancing the entire dataset. In some scenarios, applying a mitigation over each cohort separately is more advantageous than applying it over the whole dataset.</p>
 <p>In this notebook, we’ll start covering this topic by showing how to define a single cohort. The class <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> is the one responsible for handling a single cohort, and this class is used internally by the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class in order to accomplish the tasks described previously.</p>
 <p>For starters, let’s create a very simple dataset that we can use throughout this notebook.</p>
@@ -602,7 +509,7 @@ div.rendered_html tbody tr:hover {
 </div></div>
 </div>
 <section id="Creating-a-CohortDefinition-object">
-<h2>Creating a CohortDefinition object<a class="headerlink" href="#Creating-a-CohortDefinition-object" title="Permalink to this heading">¶</a></h2>
+<h2>Creating a CohortDefinition object<a class="headerlink" href="#Creating-a-CohortDefinition-object" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> class aims to solve the following task: given a set of conditions, provide methods for automatically filtering a dataset using the conditions provided to the constructor method and return a subset of the original dataset containing only the desired cohort. This is a very lightweight class, and it’s main goal is to facilitate solving more complex tasks regarding cohort management (check out the documentation for the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class for more details).</p>
 <p>Given our simple fantasy dataset, let’s try creating a cohort where we have only:</p>
 <ul class="simple">
@@ -1104,7 +1011,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Saving-and-Loading-a-Cohort-Definition-JSON">
-<h2>Saving and Loading a Cohort Definition JSON<a class="headerlink" href="#Saving-and-Loading-a-Cohort-Definition-JSON" title="Permalink to this heading">¶</a></h2>
+<h2>Saving and Loading a Cohort Definition JSON<a class="headerlink" href="#Saving-and-Loading-a-Cohort-Definition-JSON" title="Permalink to this heading"></a></h2>
 <p>Sometimes it is useful to save the definitions used for a cohort. This way, we can later create a new <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> object using the same conditions as the ones used for the saved cohort.</p>
 <p>To save a cohort definition JSON file, simply use the <code class="docutils literal notranslate"><span class="pre">save()</span></code> method. This method will save the cohort definition in a JSON file following the same JSON structure used by the <a class="reference external" href="https://github.com/microsoft/responsible-ai-toolbox/blob/main/notebooks/responsibleaidashboard/responsibleaidashboard-census-classification-model-debugging.ipynb">raiwidgets library</a>.</p>
 <div class="nbinput nblast docutils container">
@@ -1244,50 +1151,33 @@ div.rendered_html tbody tr:hover {
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../../cohort/cohort_manager.html" class="btn btn-neutral float-right" title="CohortManager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../../cohort/cohort_definition.html" class="btn btn-neutral float-left" title="CohortDefinition" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../cohort/cohort_manager.html" class="btn btn-neutral float-right" title="CohortManager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2022, Microsoft.
-
-    </p>
+    <p>&#169; Copyright 2022, Microsoft.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

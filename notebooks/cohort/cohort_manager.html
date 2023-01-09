@@ -1,78 +1,41 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Managing cohorts &mdash; Responsible AI Mitigations  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Cohort Case Study 1" href="case_study/case_1.html" />
+    <link rel="next" title="Cohort Manager - Scenarios and Examples" href="cohort_manager_scenarios.html" />
     <link rel="prev" title="CohortManager" href="../../cohort/cohort_manager.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../index.html" class="icon icon-home"> Responsible AI Mitigations
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -80,18 +43,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install_guide.html">Installation guide</a></li>
@@ -105,6 +57,7 @@
 <li class="toctree-l3 current"><a class="reference internal" href="../../gallery.html#cohort">Cohort</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="cohort_definition.html">Defining a Cohort</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Managing cohorts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cohort_manager_scenarios.html">Cohort Manager - Scenarios and Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
@@ -122,79 +75,33 @@
 <li class="toctree-l1"><a class="reference internal" href="../../utils/utils.html">Utils</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">Responsible AI Mitigations</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../../api.html">API reference</a> &raquo;</li>
-        
-          <li><a href="../../cohort/cohort.html">Cohort</a> &raquo;</li>
-        
-          <li><a href="../../cohort/cohort_manager.html">CohortManager</a> &raquo;</li>
-        
-      <li>Managing cohorts</li>
-    
-    
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="../../cohort/cohort.html">Cohort</a></li>
+          <li class="breadcrumb-item"><a href="../../cohort/cohort_manager.html">CohortManager</a></li>
+      <li class="breadcrumb-item active">Managing cohorts</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-            
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/cohort/cohort_manager.ipynb" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS for nbsphinx extension */
@@ -475,7 +382,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Managing-cohorts">
-<h1>Managing cohorts<a class="headerlink" href="#Managing-cohorts" title="Permalink to this heading">¶</a></h1>
+<h1>Managing cohorts<a class="headerlink" href="#Managing-cohorts" title="Permalink to this heading"></a></h1>
 <p>This library allows users to apply certain mitigations over a specific cohort, instead of ​applying it to the entire dataset. This is useful when, for example, two cohorts have a very different label distribution and we want to rebalance each cohort individually, instead of rebalancing the entire dataset. In some scenarios, applying a mitigation over each cohort separately is more advantageous than applying it over the whole dataset.</p>
 <p>In this notebook, we’ll show how to apply different pipelines for each cohort separately. To accomplish this, we’ll use the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class. This class allows us to create multiple pipelines (using transformers from <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> or from the current library) and apply them to each cohort separately. All this is done following the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">transform()</span></code> paradigms, ​similar to the other mitigations from the <code class="docutils literal notranslate"><span class="pre">dataprocessing</span></code> module.</p>
 <p>First of all, let’s import the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class, which is found in the <code class="docutils literal notranslate"><span class="pre">cohort</span></code> module.</p>
@@ -501,7 +408,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="Toy-dataset">
-<h2>Toy dataset<a class="headerlink" href="#Toy-dataset" title="Permalink to this heading">¶</a></h2>
+<h2>Toy dataset<a class="headerlink" href="#Toy-dataset" title="Permalink to this heading"></a></h2>
 <p>Next, we’ll create a toy dataset so we can showcase how the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> operates.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -678,7 +585,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </section>
 <section id="Basic-scenario">
-<h2>Basic scenario<a class="headerlink" href="#Basic-scenario" title="Permalink to this heading">¶</a></h2>
+<h2>Basic scenario<a class="headerlink" href="#Basic-scenario" title="Permalink to this heading"></a></h2>
 <p>Next, we’ll explore a basic scenario where the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> can prove its usefulness. In this scenario, we want to apply an imputation, followed by a min max scaler over each cohort separately. Once again: this is useful when each cohort has different behaviors or distributions for a particular column, so applying an imputation based on the mean value of the column over each cohort separately will make more sense than using the mean of the column of the entire dataset, for example.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> requires two main parameters: a transformation pipeline and a list of cohort definitions. The latter is already explored and explained in the notebook showcasing the <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> class (which is used internally by the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code>). The former is simply a list of objects that implement the <code class="docutils literal notranslate"><span class="pre">fit()</span></code>, <code class="docutils literal notranslate"><span class="pre">transform()</span></code>, <code class="docutils literal notranslate"><span class="pre">predict()</span></code> paradigm, or the <code class="docutils literal notranslate"><span class="pre">fit_resample()</span></code> method (for rebalancing classes, such as the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class from the <code class="docutils literal notranslate"><span class="pre">dataprocessing</span></code>
 module, or the rebalance classes from the <code class="docutils literal notranslate"><span class="pre">imblearn</span></code> library).</p>
@@ -840,7 +747,7 @@ the other cohorts.</p></li>
 </div>
 </section>
 <section id="Pipelines-that-result-in-incompatible-cohorts">
-<h2>Pipelines that result in incompatible cohorts<a class="headerlink" href="#Pipelines-that-result-in-incompatible-cohorts" title="Permalink to this heading">¶</a></h2>
+<h2>Pipelines that result in incompatible cohorts<a class="headerlink" href="#Pipelines-that-result-in-incompatible-cohorts" title="Permalink to this heading"></a></h2>
 <p>As previously mentioned, in some cases, the pipeline associated with one or more cohorts may result in a cohort incompatible with at least one of the other cohorts. For example, consider the case where we add a one-hot encoding transformation in the pipeline. This will probably result in each cohort having different columns, which are the columns created by the one-hot encoder (for example, in case one of the cohorts doesn’t have all existing values in a categorical column that is being
 encoded).</p>
 <p>This is also valid for any other encoder method since categorical encoders require a list of all valid categorical values in the column before creating the encoding. However, for the ordinal encoder, for example, it is not easy to automatically identify an incompatibility between the cohorts, since the ordinal encoder doesn’t change the number of columns. To remedy this (at least for the mitigations from the <code class="docutils literal notranslate"><span class="pre">dataprocessing</span></code> module), we implemented a way for the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> to query if a
@@ -1004,7 +911,7 @@ dict_keys([&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_2&#39;])
 </div>
 </section>
 <section id="Adding-estimators-to-the-pipeline">
-<h2>Adding estimators to the pipeline<a class="headerlink" href="#Adding-estimators-to-the-pipeline" title="Permalink to this heading">¶</a></h2>
+<h2>Adding estimators to the pipeline<a class="headerlink" href="#Adding-estimators-to-the-pipeline" title="Permalink to this heading"></a></h2>
 <p>The pipelines are not limited to having only transformers, as we can also add estimators to them. Some considerations when adding an estimator into the pipeline:</p>
 <ol class="arabic simple">
 <li><p>The estimator must be the last object in the pipeline (this implies that we can only have 1 estimator in each pipeline);</p></li>
@@ -1386,7 +1293,7 @@ cohort_2: (117,)
 </div>
 </section>
 <section id="Getting-a-list-of-subsets">
-<h2>Getting a list of subsets<a class="headerlink" href="#Getting-a-list-of-subsets" title="Permalink to this heading">¶</a></h2>
+<h2>Getting a list of subsets<a class="headerlink" href="#Getting-a-list-of-subsets" title="Permalink to this heading"></a></h2>
 <p>Sometimes we just want to break a new dataset into subsets, where we have one subset for each of the cohorts being used. We can do this using the <code class="docutils literal notranslate"><span class="pre">get_subsets()</span></code> method from the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class. This method accepts three parameters:</p>
 <ol class="arabic simple">
 <li><p>A dataset that has at least the columns used by the cohorts’ filters (this means that the dataset may also have other columns not used by the filters);</p></li>
@@ -1675,7 +1582,7 @@ cohort_1
 </div>
 </section>
 <section id="Naming-the-cohorts">
-<h2>Naming the cohorts<a class="headerlink" href="#Naming-the-cohorts" title="Permalink to this heading">¶</a></h2>
+<h2>Naming the cohorts<a class="headerlink" href="#Naming-the-cohorts" title="Permalink to this heading"></a></h2>
 <p>So far, we created a list of conditions for each cohort and passed that to the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> without specifying the cohort’s name. In that case, the cohorts will be named automatically. This name is later used in ​the subsets dictionary returned by the <code class="docutils literal notranslate"><span class="pre">get_subsets()</span></code> method, as we’ve shown in the previous subsection. We can provide a specific name to each cohort by passing a dictionary of condition lists to the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> instead of passing a list of conditions. The following cell
 demonstrates this:</p>
 <div class="nbinput docutils container">
@@ -1703,7 +1610,7 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 </div>
 </section>
 <section id="Handling-datasets-without-column-names">
-<h2>Handling datasets without column names<a class="headerlink" href="#Handling-datasets-without-column-names" title="Permalink to this heading">¶</a></h2>
+<h2>Handling datasets without column names<a class="headerlink" href="#Handling-datasets-without-column-names" title="Permalink to this heading"></a></h2>
 <p>When handling a dataset without column names, we can use the column indices as the column identifier in the conditions list. However, the indices must be passed as a string, not a number. In the following cell, we demonstrate an example where we create a set of conditions using the column indices. Note that this approach will only work if the dataset doesn’t have any column names. If the dataset has valid column names, then these names should be used instead of the indices.</p>
 <p>Note that in the following example, we are not passing a list of transformations to the <code class="docutils literal notranslate"><span class="pre">transform_pipe</span></code> parameter. Instead, we are passing a single transformer. This is also allowed, and what will happen in the background is that an empty list will be created for each cohort, and this transformer will be copied and added to each of these lists.</p>
 <div class="nbinput docutils container">
@@ -1843,7 +1750,7 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 </div>
 </section>
 <section id="Using-CohortManager-with-Sci-Kit-Learn’s-Pipeline">
-<h2>Using CohortManager with Sci-Kit Learn’s Pipeline<a class="headerlink" href="#Using-CohortManager-with-Sci-Kit-Learn’s-Pipeline" title="Permalink to this heading">¶</a></h2>
+<h2>Using CohortManager with Sci-Kit Learn’s Pipeline<a class="headerlink" href="#Using-CohortManager-with-Sci-Kit-Learn’s-Pipeline" title="Permalink to this heading"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>’s <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> class is a well-established approach for creating pipelines. Therefore, the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class was designed to work with <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>, allowing users to create even more complex data processing pipelines.</p>
 <p>The following cell shows an example of how to create a <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code> using an instance of the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class. The pipeline created in this example will do the following:</p>
 <ol class="arabic simple">
@@ -1891,7 +1798,7 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 </div>
 </section>
 <section id="Fetching-the-queries-used-for-each-cohort">
-<h2>Fetching the queries used for each cohort<a class="headerlink" href="#Fetching-the-queries-used-for-each-cohort" title="Permalink to this heading">¶</a></h2>
+<h2>Fetching the queries used for each cohort<a class="headerlink" href="#Fetching-the-queries-used-for-each-cohort" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">get_queries()</span></code> method returns a dictionary with the queries used for each cohort.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
@@ -1915,7 +1822,7 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 </div>
 </section>
 <section id="Creating-cohorts-based-on-a-set-of-columns">
-<h2>Creating cohorts based on a set of columns<a class="headerlink" href="#Creating-cohorts-based-on-a-set-of-columns" title="Permalink to this heading">¶</a></h2>
+<h2>Creating cohorts based on a set of columns<a class="headerlink" href="#Creating-cohorts-based-on-a-set-of-columns" title="Permalink to this heading"></a></h2>
 <p>In some cases, users might be interested in creating one cohort for each possible value in a given column (for example, if a dataset has a <strong>gender</strong> column, we might be interested in creating one cohort for each gender). To avoid the cumbersome task of creating one condition list for each value in a given column, we <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> use the <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameter instead of the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> during the instantiation of the object. Here are more details about these two parameters:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">cohort_def</span></code>: already explored in the previous subsections. Accepts a list of condition lists (one for each cohort), or a dictionary of condition lists;</p></li>
@@ -2054,7 +1961,7 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 </div>
 </section>
 <section id="Saving-and-loading-the-conditions-used-for-the-cohorts">
-<h2>Saving and loading the conditions used for the cohorts<a class="headerlink" href="#Saving-and-loading-the-conditions-used-for-the-cohorts" title="Permalink to this heading">¶</a></h2>
+<h2>Saving and loading the conditions used for the cohorts<a class="headerlink" href="#Saving-and-loading-the-conditions-used-for-the-cohorts" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">save_cohorts()</span></code> method saves the list of conditions used by all cohorts into a JSON file. This way, users are able to then reuse these condition lists in another <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> object. The <code class="docutils literal notranslate"><span class="pre">save_cohorts()</span></code> has the same conditions as the <code class="docutils literal notranslate"><span class="pre">get_queries()</span></code> method: if using <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code>, then we must either pass the datasets in the constructor method, or call the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method prior to calling the <code class="docutils literal notranslate"><span class="pre">save_cohorts()</span></code> method.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
@@ -2135,7 +2042,7 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 </div>
 </section>
 <section id="Using-different-pipelines-for-each-cohort">
-<h2>Using different pipelines for each cohort<a class="headerlink" href="#Using-different-pipelines-for-each-cohort" title="Permalink to this heading">¶</a></h2>
+<h2>Using different pipelines for each cohort<a class="headerlink" href="#Using-different-pipelines-for-each-cohort" title="Permalink to this heading"></a></h2>
 <p>So far, every time we created an instance of the <code class="docutils literal notranslate"><span class="pre">CohortMManager</span></code> class, the same pipeline was used over all cohorts (different instances of the same pipeline, given that the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> must be called using only the subset associated to a given cohort). However, there might be some scenarios where we might be interested in using different transformations for each cohort. We won’t cover here these scenarios. Instead, here we’ll show how to create different pipelines for each cohort.</p>
 <p>There are four scenarios associated with the <code class="docutils literal notranslate"><span class="pre">transform_pipe</span></code> parameter:</p>
 <ol class="arabic simple">
@@ -2403,7 +2310,7 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 </div>
 </section>
 <section id="Use-Rebalance-over-each-cohort-separately">
-<h2>Use Rebalance over each cohort separately<a class="headerlink" href="#Use-Rebalance-over-each-cohort-separately" title="Permalink to this heading">¶</a></h2>
+<h2>Use Rebalance over each cohort separately<a class="headerlink" href="#Use-Rebalance-over-each-cohort-separately" title="Permalink to this heading"></a></h2>
 <p>Rebalancing a dataset is not always a trivial task. In some cases, we might have a class imbalance in the whole dataset, but different cohorts of this dataset depict different imbalance distributions. In such a scenario, rebalancing the full dataset might result in an even greater imbalance for a set of cohorts, even though the full dataset is now balanced. Therefore, we might want to rebalance each cohort separately, in order to obtain a balanced dataset and balanced cohorts.</p>
 <p>In this subsection, we’ll explore how the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> can easily help us achieve this goal.</p>
 <p>First of all, let’s start defining a function that plots a graph with the label distribution for the full dataset, as well as for each cohort.</p>
@@ -2509,7 +2416,7 @@ dtype: int64
 </div>
 <p>We can see that the full dataset has a great imbalance, where we have a considerably larger number of occurrences of the <code class="docutils literal notranslate"><span class="pre">1</span></code> class in relation to the <code class="docutils literal notranslate"><span class="pre">0</span></code> class. This imbalance is even greater for cohorts <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>, while for cohorts <code class="docutils literal notranslate"><span class="pre">cohort_0</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_1</span></code> this imbalance is inverted: there are a lot more instances from the <code class="docutils literal notranslate"><span class="pre">0</span></code> class when compared to the <code class="docutils literal notranslate"><span class="pre">1</span></code> class.</p>
 <section id="Balancing-the-full-dataset">
-<h3>Balancing the full dataset<a class="headerlink" href="#Balancing-the-full-dataset" title="Permalink to this heading">¶</a></h3>
+<h3>Balancing the full dataset<a class="headerlink" href="#Balancing-the-full-dataset" title="Permalink to this heading"></a></h3>
 <p>Let’s now rebalance the full dataset. Here, We use the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class from the <code class="docutils literal notranslate"><span class="pre">dataprocessing</span></code> module. Afterward, we plot the label distributions once more to see if our problem is solved.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
@@ -2571,7 +2478,7 @@ Name: label, dtype: int64
 fixed.</p>
 </section>
 <section id="Balancing-each-cohort-separately">
-<h3>Balancing each cohort separately<a class="headerlink" href="#Balancing-each-cohort-separately" title="Permalink to this heading">¶</a></h3>
+<h3>Balancing each cohort separately<a class="headerlink" href="#Balancing-each-cohort-separately" title="Permalink to this heading"></a></h3>
 <p>We’ll now use the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class over each cohort separately, in order to obtain a set of balanced cohorts. This might aid us in obtaining fair models, that is, models that perform equally through cohorts. To do this, we’ll use the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code>, and we’ll pass the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> object to the <code class="docutils literal notranslate"><span class="pre">transform_pipe</span></code> parameter. We’ll then call the <code class="docutils literal notranslate"><span class="pre">fit_resample()</span></code> method, implemented by the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class. Note that when using a pipeline with an object that implements the
 <code class="docutils literal notranslate"><span class="pre">fit_resample()</span></code> class, there can’t be any transformers that implement the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> and <code class="docutils literal notranslate"><span class="pre">predict()</span></code> methods, since these transformations serve different purposes: the former is used for rebalancing, that is, creating new instances in the <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> datasets, while the latter require that the number of instances of the dataset is kept fixed between each transformation.</p>
 <div class="nbinput docutils container">
@@ -2635,7 +2542,7 @@ Name: label, dtype: int64
 </section>
 </section>
 <section id="Balancing-only-a-set-of-cohorts">
-<h2>Balancing only a set of cohorts<a class="headerlink" href="#Balancing-only-a-set-of-cohorts" title="Permalink to this heading">¶</a></h2>
+<h2>Balancing only a set of cohorts<a class="headerlink" href="#Balancing-only-a-set-of-cohorts" title="Permalink to this heading"></a></h2>
 <p>Suppose that we trained a model that is under-performing only for cohorts <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>. In this case, we can keep the remaining cohorts unchanged, and balance only cohorts <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>. To do this, we can use a separate pipeline for each cohort, where cohorts <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code> use a pipeline comprised with only a <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> object, while the other two cohorts use an empty pipeline.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
@@ -2681,50 +2588,33 @@ Name: label, dtype: int64
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="case_study/case_1.html" class="btn btn-neutral float-right" title="Cohort Case Study 1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../../cohort/cohort_manager.html" class="btn btn-neutral float-left" title="CohortManager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cohort_manager_scenarios.html" class="btn btn-neutral float-right" title="Cohort Manager - Scenarios and Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2022, Microsoft.
-
-    </p>
+    <p>&#169; Copyright 2022, Microsoft.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

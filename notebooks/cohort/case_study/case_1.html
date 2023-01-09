@@ -1,78 +1,41 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Cohort Case Study 1 &mdash; Responsible AI Mitigations  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Cohort Case Study 1 - Rebalancing" href="case_1_rebalance.html" />
-    <link rel="prev" title="Managing cohorts" href="../cohort_manager.html" /> 
+    <link rel="prev" title="Cohort Manager - Scenarios and Examples" href="../cohort_manager_scenarios.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> Responsible AI Mitigations
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -80,18 +43,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install_guide.html">Installation guide</a></li>
@@ -125,79 +77,33 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">Responsible AI Mitigations</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../../../api.html">API reference</a> &raquo;</li>
-        
-          <li><a href="../../../cohort/cohort.html">Cohort</a> &raquo;</li>
-        
-          <li><a href="../../../cohort/cohort_manager.html">CohortManager</a> &raquo;</li>
-        
-      <li>Cohort Case Study 1</li>
-    
-    
+      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../api.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="../../../cohort/cohort.html">Cohort</a></li>
+          <li class="breadcrumb-item"><a href="../../../cohort/cohort_manager.html">CohortManager</a></li>
+      <li class="breadcrumb-item active">Cohort Case Study 1</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-            
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/cohort/case_study/case_1.ipynb" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS for nbsphinx extension */
@@ -478,14 +384,14 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Cohort-Case-Study-1">
-<h1>Cohort Case Study 1<a class="headerlink" href="#Cohort-Case-Study-1" title="Permalink to this heading">¶</a></h1>
+<h1>Cohort Case Study 1<a class="headerlink" href="#Cohort-Case-Study-1" title="Permalink to this heading"></a></h1>
 <p>In this first case study for the <code class="docutils literal notranslate"><span class="pre">cohort</span></code> submodule, we’ll create a synthetic dataset that has some characteristics that will highlight the advantages of using pre-processing pipelines for each cohort separately instead of using it over the entire dataset.</p>
 <p>Adopting a separate pipeline for each cohort is not an approach that will work in every situation. In fact, it is usually recommended to process the entire dataset instead of analyzing each cohort separately. But in some cases, certain cohorts behave differently from others, and the intensity of this difference will indicate if using a cohort-based pipeline is the best approach or not. When each cohort has a distinct behavior, <em>e.g.</em>, considerably different class distributions, different feature
 importance, opposite class behaviors, different value distribution for certain features, etc., then one cohort might end up degrading the performance of a model trained over the entire dataset when evaluated over the remaining cohorts. This is especially true when we have cohorts with very different behaviors, and one cohort that comprises the majority of the instances: in this case, the model trained over the entire dataset might simply learn how to predict the class of the instances of this
 majority cohort, and simply ignore the other cohorts. By doing this, the model will still achieve good results, but at the cost of neglecting the minority cohorts. This becomes a major concern when we are dealing with sensitive cohorts, that is, cohorts built with sensitive features, such as (but not limited to): gender, nationality, race, age, or a combination of these features. When a model performs well for one of the sensitive cohorts, but under-performs for the remaining cohorts, then the
 model is considered to be biased and may result in several legal problems. To mitigate these discrepancies, we might need to apply different pre-processing operations over each cohort separately, or even train different models for each cohort.</p>
 <section id="Creating-the-artificial-dataset">
-<h2>Creating the artificial dataset<a class="headerlink" href="#Creating-the-artificial-dataset" title="Permalink to this heading">¶</a></h2>
+<h2>Creating the artificial dataset<a class="headerlink" href="#Creating-the-artificial-dataset" title="Permalink to this heading"></a></h2>
 <p>Given that scenarios that benefit from using different data pipelines for each cohort are not common, in this first case study we’ll use a synthetic dataset that is created to artificially create this scenario. Here are the main characteristics that we want to see in our dataset:</p>
 <ol class="arabic simple">
 <li><p><strong>Different cohorts and sub-cohorts that behave differently:</strong> to simulate this, we can use different rules to establish each instance’s class based on which cohort it belongs to. By doing this, a model will have a hard time understanding the general classification rule if trained with the entire dataset, since learning how to classify instances from one cohort may harm the classification capabilities for another cohort;</p></li>
@@ -743,7 +649,7 @@ larger than a given threshold then the company succeeded (class 0). For some com
 </div>
 </section>
 <section id="Analyzing-the-“country”-cohorts">
-<h2>Analyzing the “country” cohorts<a class="headerlink" href="#Analyzing-the-“country”-cohorts" title="Permalink to this heading">¶</a></h2>
+<h2>Analyzing the “country” cohorts<a class="headerlink" href="#Analyzing-the-“country”-cohorts" title="Permalink to this heading"></a></h2>
 <p>Let’s create our baseline model. We’ll use a simple model since our goal is to test the efficiency of data processing pipelines, not test how different models behave. We’ll create a pipeline with an imputer, a data normalization transformer, a one-hot encoding transformer, and finally our simple estimator.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -1431,7 +1337,7 @@ with all of the metrics computed and a dictionary with the best thresholds found
 <p>This resulted in only a slight increase in performance. These results show us what we wanted: for our artificial dataset, training a separate pipeline for each cohort of sector and country, we get the best results. This was already expected due to how we created this artificial dataset, where we defined different classification behaviors for each subset with different sector and country values.</p>
 </section>
 <section id="Checking-the-“sector”-+-“country”-cohorts">
-<h2>Checking the “sector” + “country” cohorts<a class="headerlink" href="#Checking-the-“sector”-+-“country”-cohorts" title="Permalink to this heading">¶</a></h2>
+<h2>Checking the “sector” + “country” cohorts<a class="headerlink" href="#Checking-the-“sector”-+-“country”-cohorts" title="Permalink to this heading"></a></h2>
 <p>Let’s now look into the metrics for each combination of country and sector. We’ll first check how the baseline pipeline, trained over the entire dataset (<a class="reference external" href="#baseline1">Baseline 1</a>), performs for each of these cohorts:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
@@ -1873,50 +1779,33 @@ instances from country <code class="docutils literal notranslate"><span class="p
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../cohort_manager_scenarios.html" class="btn btn-neutral float-left" title="Cohort Manager - Scenarios and Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="case_1_rebalance.html" class="btn btn-neutral float-right" title="Cohort Case Study 1 - Rebalancing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="../cohort_manager.html" class="btn btn-neutral float-left" title="Managing cohorts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2022, Microsoft.
-
-    </p>
+    <p>&#169; Copyright 2022, Microsoft.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

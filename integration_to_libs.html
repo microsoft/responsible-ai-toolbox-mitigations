@@ -1,76 +1,39 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>How this library works with the Responsible AI Toolbox &mdash; Responsible AI Mitigations  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Moving Cohorts from raimitigations to raiwidgets (and vice versa)" href="notebooks/cohort/case_study/integration_raiwidgets.html" />
     <link rel="prev" title="Getting Started" href="getting_started.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> Responsible AI Mitigations
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -78,18 +41,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install_guide.html">Installation guide</a></li>
@@ -112,73 +64,30 @@
 <li class="toctree-l1"><a class="reference internal" href="utils/utils.html">Utils</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Responsible AI Mitigations</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>How this library works with the Responsible AI Toolbox</li>
-    
-    
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">How this library works with the Responsible AI Toolbox</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-            
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/integration_to_libs.rst" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS overrides for sphinx_rtd_theme */
@@ -204,7 +113,7 @@
 }
 </style>
 <section id="how-this-library-works-with-the-responsible-ai-toolbox">
-<span id="integration-other-libs"></span><h1>How this library works with the Responsible AI Toolbox<a class="headerlink" href="#how-this-library-works-with-the-responsible-ai-toolbox" title="Permalink to this heading">¶</a></h1>
+<span id="integration-other-libs"></span><h1>How this library works with the Responsible AI Toolbox<a class="headerlink" href="#how-this-library-works-with-the-responsible-ai-toolbox" title="Permalink to this heading"></a></h1>
 <figure class="align-default">
 <a class="reference internal image-reference" href="_images/responsible-ai-toolbox-mitigations.png"><img alt="Responsible AI Toolbox" src="_images/responsible-ai-toolbox-mitigations.png" style="width: 713.3px; height: 319.2px;" /></a>
 </figure>
@@ -212,8 +121,8 @@
 One of the central contributions of the Toolbox is the <a class="reference external" href="https://responsibleaitoolbox.ai/introducing-responsible-ai-dashboard/">dashboard</a>, which bringing together several mature Responsible AI tools in the areas of <a class="reference external" href="https://interpret.ml/">machine learning
 interpretability</a>, <a class="reference external" href="https://fairlearn.org/">unfairness assessment and mitigation</a>, <a class="reference external" href="https://erroranalysis.ai/">error analysis</a>, <a class="reference external" href="https://github.com/microsoft/EconML">causal inference</a>, and <a class="reference external" href="https://github.com/interpretml/DiCE">counterfactual analysis</a> for a holistic assessment and debugging of
 models and making informed business decisions.</p>
-<p><strong>A practitioner using the Responsible AI Mitigations Library may rely on the</strong> <a class="reference external" href="https://responsibleaitoolbox.ai/introducing-responsible-ai-dashboard/">Responsible AI Dashboard</a> <strong>: a dashboard to identify and diagnose failure
-modes.</strong> Take a look at this <a class="reference external" href="https://techcommunity.microsoft.com/t5/ai-machine-learning-blog/responsible-ai-dashboard-a-one-stop-shop-for-operationalizing/ba-p/3030944">technical blog</a> on how to leverage the dashboard for pre-mitigation steps.</p>
+<p><strong>A practitioner using the Responsible AI Mitigations Library may rely on the</strong> <a class="reference external" href="https://responsibleaitoolbox.ai/introducing-responsible-ai-dashboard/">Responsible AI Dashboard</a> ** to identify and diagnose failure
+modes.** Take a look at this <a class="reference external" href="https://techcommunity.microsoft.com/t5/ai-machine-learning-blog/responsible-ai-dashboard-a-one-stop-shop-for-operationalizing/ba-p/3030944">technical blog</a> on how to leverage the dashboard for pre-mitigation steps.</p>
 <p>At a high level, components in the dashboard such as Error Analysis and Model Overview help with the identification stage by discovering cohorts of data for which
 the model underperforms. Other components like the Data Explorer, Interpretability, and Counterfactual Analysis assist with understanding underlying reasons for
 why the model is underperforming. These components go back to the data (Data Explorer) or to the model (Interpretability) to highlight data statistics and feature
@@ -226,8 +135,17 @@ here and can be used in combination together.</p>
 <p>In addition, we also encourage practitioners to rigorously validate new post-mitigation models and compare them with previous versions to make sure that the mitigation
 step indeed improved the model in the way the practitioner expected and that the mitigation step did not lead to new mistakes. To assist with these steps,
 <a class="reference external" href="https://github.com/microsoft/BackwardCompatibilityML">BackwardCompatibilityML</a> is a package for an extended support on model comparison and backward compatible training.</p>
+<p>We also encourage practitioners to rigorously validate new post-mitigation models and compare them with previous versions to make
+sure that the mitigation step indeed improved the model in the way the practitioner expected and that the mitigation step did not
+lead to new mistakes. <a class="reference external" href="https://github.com/microsoft/responsible-ai-toolbox-tracker">Responsible AI Tracker</a> is a tool in the Responsible AI Toolbox that can be installed as a <a class="reference external" href="https://jupyterlab.readthedocs.io/en/stable/index.html#">JupyterLab</a> extension
+and helps developers track, manage, and compare Responsible AI mitigations and experiments along with the necessary code and model
+artifacts. Disaggregated comparisons are central to the comparative views offered in Responsible AI Tracker and enable practitioners
+to track performance improvements or decline across cohorts. For example, if the error mitigation process was focused in improving
+performance on a cohort of interest, <cite>Responsible AI Tracker</cite> can validate that the process indeed improves performance for that cohort,
+while also keeping track at all other cohorts of interests. In addition, <a class="reference external" href="https://github.com/microsoft/BackwardCompatibilityML">BackwardCompatibilityML</a> a package for an extended support
+on backward compatible training, which aims at improving model accuracy without introducing new errors.</p>
 <section id="integration-between-raimitigations-and-raiwidgets">
-<h2>Integration between raimitigations and raiwidgets<a class="headerlink" href="#integration-between-raimitigations-and-raiwidgets" title="Permalink to this heading">¶</a></h2>
+<h2>Integration between raimitigations and raiwidgets<a class="headerlink" href="#integration-between-raimitigations-and-raiwidgets" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">raimitigations</span></code> and <a class="reference external" href="https://responsibleaitoolbox.ai/">Responsible AI Toolbox</a> (<code class="docutils literal notranslate"><span class="pre">raiwidgets</span></code>) libraries allow users to apply mitigations or analyze the behavior of certain cohorts. These libraries
 can be used together in order to analyze and mitigate certain aspects of a given cohort. We demonstrate this integration between these two libraries in the following
 notebook, where we show how to create a set of cohorts in one library and continue the work in the other library by importing these cohorts.</p>
@@ -250,50 +168,33 @@ notebook, where we show how to create a set of cohorts in one library and contin
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="notebooks/cohort/case_study/integration_raiwidgets.html" class="btn btn-neutral float-right" title="Moving Cohorts from raimitigations to raiwidgets (and vice versa)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="notebooks/cohort/case_study/integration_raiwidgets.html" class="btn btn-neutral float-right" title="Moving Cohorts from raimitigations to raiwidgets (and vice versa)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2022, Microsoft.
-
-    </p>
+    <p>&#169; Copyright 2022, Microsoft.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

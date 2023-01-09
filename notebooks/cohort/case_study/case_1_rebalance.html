@@ -1,78 +1,41 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Cohort Case Study 1 - Rebalancing &mdash; Responsible AI Mitigations  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Cohort Case Study 1 - Using RAI ErrorAnalysis" href="case_1_dashboard.html" />
     <link rel="prev" title="Cohort Case Study 1" href="case_1.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../index.html" class="icon icon-home"> Responsible AI Mitigations
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -80,18 +43,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../install_guide.html">Installation guide</a></li>
@@ -125,79 +77,33 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">Responsible AI Mitigations</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../../../api.html">API reference</a> &raquo;</li>
-        
-          <li><a href="../../../cohort/cohort.html">Cohort</a> &raquo;</li>
-        
-          <li><a href="../../../cohort/cohort_manager.html">CohortManager</a> &raquo;</li>
-        
-      <li>Cohort Case Study 1 - Rebalancing</li>
-    
-    
+      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../api.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="../../../cohort/cohort.html">Cohort</a></li>
+          <li class="breadcrumb-item"><a href="../../../cohort/cohort_manager.html">CohortManager</a></li>
+      <li class="breadcrumb-item active">Cohort Case Study 1 - Rebalancing</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
-            
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/cohort/case_study/case_1_rebalance.ipynb" class="fa fa-github"> Edit on GitHub</a>
-            
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   
 <style>
 /* CSS for nbsphinx extension */
@@ -478,7 +384,7 @@ div.rendered_html tbody tr:hover {
 }
 </style>
 <section id="Cohort-Case-Study-1---Rebalancing">
-<h1>Cohort Case Study 1 - Rebalancing<a class="headerlink" href="#Cohort-Case-Study-1---Rebalancing" title="Permalink to this heading">¶</a></h1>
+<h1>Cohort Case Study 1 - Rebalancing<a class="headerlink" href="#Cohort-Case-Study-1---Rebalancing" title="Permalink to this heading"></a></h1>
 <p>This notebook is a continuation of the notebook <a class="reference internal" href="case_1.html"><span class="doc">Case 1</span></a>. Here, we’ll show a situation where using the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> to rebalance the dataset is a good idea.</p>
 <p>First of all, we’ll need to create the artificial dataset once again. We’ll just copy the code used in the previous notebook.</p>
 <div class="nbinput nblast docutils container">
@@ -728,7 +634,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <section id="Rebalancing">
-<h2>Rebalancing<a class="headerlink" href="#Rebalancing" title="Permalink to this heading">¶</a></h2>
+<h2>Rebalancing<a class="headerlink" href="#Rebalancing" title="Permalink to this heading"></a></h2>
 <p>In the following experiments, we’ll test different ways the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class can be used in this dataset. First, let’s create a function capable of plotting the label distribution of different cohorts. This will facilitate our analysis.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -799,7 +705,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>As we can see, there is a slight class imbalance in the entire dataset, but if we look at each cohort individually, this imbalance varies greatly. We can see that the imbalance is inverted for some cohorts.</p>
 <section id="Rebalance-the-entire-dataset">
-<h3>Rebalance the entire dataset<a class="headerlink" href="#Rebalance-the-entire-dataset" title="Permalink to this heading">¶</a></h3>
+<h3>Rebalance the entire dataset<a class="headerlink" href="#Rebalance-the-entire-dataset" title="Permalink to this heading"></a></h3>
 <p>For our first experiment, let’s try rebalancing the entire dataset to see how this will affect the results. Note that we don’t expect great changes to the results, since the imbalance in the entire dataset is not very accentuated.</p>
 <p>We’ll use the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class to rebalance the full dataset. We then plot the label distributions for all cohorts once again to see how the rebalance process affected the distributions inside each cohort.</p>
 <div class="nbinput docutils container">
@@ -1378,7 +1284,7 @@ cohort_11:
 </div>
 </section>
 <section id="Rebalance-only-a-specific-cohort">
-<h3>Rebalance only a specific cohort<a class="headerlink" href="#Rebalance-only-a-specific-cohort" title="Permalink to this heading">¶</a></h3>
+<h3>Rebalance only a specific cohort<a class="headerlink" href="#Rebalance-only-a-specific-cohort" title="Permalink to this heading"></a></h3>
 <p>Suppose now that we are interested in improving the performance over a single cohort, not the entire dataset. For example, let’s consider that we are satisfied with the results obtained for all cohorts except for cohort <code class="docutils literal notranslate"><span class="pre">cohort_7</span></code> in the experiment <a class="reference internal" href="case_1.html"><span class="doc">Case 1 - Cohort 5</span></a>. This way, we want to improve the metrics only for this cohort and try to leave the other cohorts as is. To this end, we’ll use the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> class once again, but this time we’ll use it inside the
 <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class. This way, we’ll be able to rebalance only a specific set of cohorts. We’ll use an empty list of transformations for all cohorts except for <code class="docutils literal notranslate"><span class="pre">cohort_7</span></code>, which is the 8th cohort in the list.</p>
 <div class="nbinput docutils container">
@@ -1911,50 +1817,33 @@ cohort_7:
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="case_1_dashboard.html" class="btn btn-neutral float-right" title="Cohort Case Study 1 - Using RAI ErrorAnalysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="case_1.html" class="btn btn-neutral float-left" title="Cohort Case Study 1" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="case_1_dashboard.html" class="btn btn-neutral float-right" title="Cohort Case Study 1 - Using RAI ErrorAnalysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2022, Microsoft.
-
-    </p>
+    <p>&#169; Copyright 2022, Microsoft.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

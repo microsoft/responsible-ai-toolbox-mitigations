@@ -18,6 +18,7 @@ Examples
 
 .. nbgallery::
    ../notebooks/cohort/cohort_manager
+   ../notebooks/cohort/cohort_manager_scenarios
    ../notebooks/cohort/case_study/case_1
    ../notebooks/cohort/case_study/case_1_rebalance
    ../notebooks/cohort/case_study/case_1_dashboard
