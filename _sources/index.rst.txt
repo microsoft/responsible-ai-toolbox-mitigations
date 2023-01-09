@@ -93,9 +93,8 @@ There are multiple ways of using the :ref:`cohort.CohortManager<cohort_manager>`
   the same or different type of data mitigation is applied to the cohort data, and whether a single or separate models will be trained for different cohorts. Depending on
   these choices, CohortManager will take care of slicing the data accordingly, applying the specified data mitigation strategy, merging the data back, and retraining the model(s).
 
-The `Cohort Manager - Scenarios and Examples`_ notebook shows how each of these scenarios can be implemented through simple code snippets.
-
-.. _Cohort Manager - Scenarios and Examples: notebooks/cohort/cohort_manager_scenarios
+The **Cohort Manager - Scenarios and Examples** notebook, located in ``notebooks/cohort/cohort_manager_scenarios.ipynb``, shows how each of these
+scenarios can be implemented through simple code snippets.
 
 Three modules for targeting data
 --------------------------------
