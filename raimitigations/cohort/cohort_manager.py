@@ -20,7 +20,7 @@ class CohortManager(DataProcessing):
     :param transform_pipe: the transformation pipeline to be used for each
         cohort. There are different ways to present this parameter:
 
-            1. **An empty list or** ``None``**:** in this case, the ``CohortManager``
+            1. **An empty list or None:** in this case, the ``CohortManager``
                won't apply any transformations over the dataset. The ``transform()``
                method will simply return the dataset provided;
             2. **A single transformer:** in this case, this single transformer is
