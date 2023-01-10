@@ -11,7 +11,7 @@ from .cohort_definition import CohortDefinition, CohortFilters
 class CohortManager(DataProcessing):
     """
     Concrete class that manages multiple cohort pipelines that are
-    applied using the ``fit()``, ``transform()``, fit_resample()``,
+    applied using the ``fit()``, ``transform()``, ``fit_resample()``,
     ``predict()``, and ``predict_proba()`` interfaces. The ``CohortManager``
     uses multiple ``CohortDefinition`` objects to control the filters
     of each cohort, while using transformation pipelines to control
@@ -20,7 +20,7 @@ class CohortManager(DataProcessing):
     :param transform_pipe: the transformation pipeline to be used for each
         cohort. There are different ways to present this parameter:
 
-            1. **An empty list or ``None``:** in this case, the ``CohortManager``
+            1. **An empty list or** ``None``**:** in this case, the ``CohortManager``
                won't apply any transformations over the dataset. The ``transform()``
                method will simply return the dataset provided;
             2. **A single transformer:** in this case, this single transformer is
