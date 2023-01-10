@@ -113,6 +113,17 @@
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&gt; pip install raimitigations</span>
 </pre></div>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">raimitigations</span></code> has three installation options:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">raimitigations</span></code>: the default installation showed above installs only the essential packages. It doesn’t install packages
+used in some tutorial Python notebooks included in the <code class="docutils literal notranslate"><span class="pre">notebooks/</span></code> folder</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">raimitigations[all]</span></code>: this option installs all essential packages installed in the default option plus
+all packages used in the tutorial notebooks in the <code class="docutils literal notranslate"><span class="pre">notebooks/</span></code> folder</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">raimitigations[dev]</span></code>: installs all packages installed in the <code class="docutils literal notranslate"><span class="pre">[all]</span></code> option plus all packages used for
+development, such as: <code class="docutils literal notranslate"><span class="pre">pytest</span></code>, <code class="docutils literal notranslate"><span class="pre">sphinx</span></code>, etc.</p></li>
+</ol>
+</div></blockquote>
 <p>Alternatively, you can also clone the main branch of the <a class="reference external" href="https://github.com/microsoft/responsible-ai-toolbox-mitigations">Responsible AI Mitigations official repository</a>. Then, move to the root folder of the repo, and type:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&gt; pip install -e .</span>
 </pre></div>
