@@ -11,7 +11,7 @@ internally in order to create, filter, and manipulate multiple cohorts. There ar
 figure.
 
 .. figure:: ../imgs/scenarios.jpg
-  :scale: 25
+  :scale: 20
   :alt: Balancing over cohorts
 
   Figure 1 - The CohortManager class can be used in different ways to target mitigations to different cohorts. The main differences
