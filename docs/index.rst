@@ -86,7 +86,7 @@ This way, the Responsible AI Mitigations Library offers a **targeted approach th
 There are multiple ways of using the :ref:`cohort.CohortManager<cohort_manager>` class when building a pipeline, and these different scenarios are summarized in following figure.
 
 .. figure:: imgs/scenarios.jpg
-  :scale: 25
+  :scale: 20
   :alt: Balancing over cohorts
 
   Figure 3 - The CohortManager class can be used in different ways to target mitigations to different cohorts. The main differences between these scenarios consist on whether
