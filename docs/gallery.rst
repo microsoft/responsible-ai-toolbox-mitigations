@@ -40,6 +40,7 @@ Cohort
 .. nbgallery::
    notebooks/cohort/cohort_definition
    notebooks/cohort/cohort_manager
+   notebooks/cohort/cohort_manager_scenarios
 
 
 Using scikit-learn's Pipeline

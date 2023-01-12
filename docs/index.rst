@@ -8,7 +8,7 @@ mitigation steps that may be most appropriate when the model underperforms for a
 
     * :ref:`DataProcessing<dataproc>`: offers mitigation techniques for improving model performance for specific cohorts.
     * :ref:`DataBalanceAnalysis<databalance>`: provides metrics for diagnosing errors that originate from data imbalance either on class labels or feature values.
-    * :ref:`Cohort<cohort>`: provide classes for handling and managing cohorts, which allows the creation of custom pipelines for each cohort in an easy and
+    * :ref:`Cohort<cohort>`: provides classes for handling and managing cohorts, which allows the creation of custom pipelines for each cohort in an easy and
       intuitive interface (also allows using different estimators for each cohort).
 
 Exploring potential mitigations
@@ -38,6 +38,12 @@ mitigation. The library enables you to **explore potential mitigations for targe
 **Note:** Although the Responsible AI Mitigations Library currently focuses on data problems, it will expand over time to include mitigations for model errors,
 through customized loss functions, architectures, and new training algorithms.
 
+.. admonition:: Terminology Note
+
+    The words "transformations" and "mitigations" are used interchangeably here, and both refer to an operation that changes the original dataset, with
+    the goal of mitigating some issue in the data. We also use the words "estimator" and "model" interchangeably, where both words refer to the object
+    that is trained over a dataset and then can be used to make predictions over new data.
+
 
 .. _target_mitigation:
 
@@ -52,7 +58,7 @@ model in areas of poorest performance.
   :scale: 20
   :alt: Balancing over cohorts
 
-  Figure 2 – Example of how blanket approaches may not help in mitigating the underlying issue for a given cohort (in this case flipped class imbalance).
+  Figure 2 - Example of how blanket approaches may not help in mitigating the underlying issue for a given cohort (in this case flipped class imbalance).
 
 Imagine the following example. A model that predicts customer credit reliability is underperforming for a given cohort X. When analyzing class balance for the data, it
 becomes clear that overall there are more examples in the data for which a loan has been assigned. However, for the cohort of interest X, this distribution looks very
@@ -62,9 +68,9 @@ class imbalance for this cohort and declining more loans. A more targeted approa
 by sampling or synthesizing more data within that cohort where loans have been assigned. The Responsible AI Mitigations library can implement the second
 scenario using two approaches:
 
-    1. Synthesizing data only for a given cohort (see the :ref:`dataprocessing.Synthesizer<syhtesizer>` class for more information);
-    2. Use the :ref:`dataprocessing.Rebalance<rebalance>` together with the :ref:`cohort.CohortManager<cohort_manager>` in order to apply a over-sampling over only
+    1. Use the :ref:`dataprocessing.Rebalance<rebalance>` together with the :ref:`cohort.CohortManager<cohort_manager>` in order to apply a over-sampling over only
        a set of cohorts (check the ``CohortManager``'s :ref:`Examples<cohort_manager_ex>` section to see how this can be achieved).
+    2. Synthesizing data only for a given cohort (see the :ref:`dataprocessing.Synthesizer<syhtesizer>` class for more information);
 
 This way, the Responsible AI Mitigations Library offers a **targeted approach that lets you save time and resources by**:
 
@@ -76,6 +82,19 @@ This way, the Responsible AI Mitigations Library offers a **targeted approach th
 
     * **Simplifying the implementation and customization of mitigations** for specific data problems by providing mitigations that are compatible with each other and can be
       combined into a single pipeline.
+
+There are multiple ways of using the :ref:`cohort.CohortManager<cohort_manager>` class when building a pipeline, and these different scenarios are summarized in following figure.
+
+.. figure:: imgs/scenarios.jpg
+  :scale: 20
+  :alt: Balancing over cohorts
+
+  Figure 3 - The CohortManager class can be used in different ways to target mitigations to different cohorts. The main differences between these scenarios consist on whether
+  the same or different type of data mitigation is applied to the cohort data, and whether a single or separate models will be trained for different cohorts. Depending on
+  these choices, CohortManager will take care of slicing the data accordingly, applying the specified data mitigation strategy, merging the data back, and retraining the model(s).
+
+The **Cohort Manager - Scenarios and Examples** notebook, located in ``notebooks/cohort/cohort_manager_scenarios.ipynb``, shows how each of these
+scenarios can be implemented through simple code snippets.
 
 Three modules for targeting data
 --------------------------------
@@ -130,12 +149,13 @@ explicitly manage multiple models. All is done internally in the class, with a u
 
 .. admonition:: Example
 
-    Consider a dataset of a classification problem that has a sensitive feature (``country`` for example), and that each cohort created based on this dataset (that is, each
-    cohort is assigned to a different country) behaves differently, in the sense that the classification logic is different between cohorts, or that some other feature values have
-    considerably different ranges depending on the cohort. Depending on the estimator being used, these behavioral differences might not be captured, and in the end, the estimator
-    will simply try to understand to majority cohort, achieving good results for that cohort at the cost of achieving inferior results for the remaining cohorts. One way
-    to approach this problem is to apply targeted mitigations over each cohort separately. For example, use a :ref:`dataprocessing.DataStandardScaler<standard_scaler>` over each
-    cohort separately, or even training a separate estimator for each cohort. This can all be achieved through the :ref:`cohort.CohortManager<cohort_manager>` class.
+    Consider a dataset of a classification problem that has a sensitive feature (``country`` for example), and that each country-based cohort behaves differently, in the sense
+    that the classification logic may be different between cohorts, or that some other feature values may be considerably different ranges and interpretations across cohorts.
+    Depending on the estimator being used, these behavioral differences might not be captured, and in the end, the estimator
+    will simply try to understand the majority cohort, achieving good results for that cohort at the cost of achieving inferior results for the remaining ones. One way
+    to approach this problem is to apply targeted mitigations over each cohort separately. Some examples include using :ref:`dataprocessing.DataStandardScaler<standard_scaler>`
+    over each cohort separately (e.g. for features like grades that have a different range in different countries), or even training a separate estimator for each cohort
+    (e.g. if some features are more or less relevant for some cohorts). This can all be achieved through the :ref:`cohort.CohortManager<cohort_manager>` class.
     :ref:`Check-out these examples<cohort_examples>` for more details on how to use the :ref:`cohort.CohortManager<cohort_manager>` to create customized pipelines (including
     an estimator for each cohort).
 

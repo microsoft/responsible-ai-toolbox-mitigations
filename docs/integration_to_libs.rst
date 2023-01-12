@@ -12,7 +12,7 @@ One of the central contributions of the Toolbox is the `dashboard`_, which bring
 interpretability`_, `unfairness assessment and mitigation`_, `error analysis`_, `causal inference`_, and `counterfactual analysis`_ for a holistic assessment and debugging of
 models and making informed business decisions.
 
-**A practitioner using the Responsible AI Mitigations Library may rely on the** `Responsible AI Dashboard`_ **: a dashboard to identify and diagnose failure
+**A practitioner using the Responsible AI Mitigations Library may rely on the** `Responsible AI Dashboard`_ ** to identify and diagnose failure
 modes.** Take a look at this `technical blog`_ on how to leverage the dashboard for pre-mitigation steps.
 
 At a high level, components in the dashboard such as Error Analysis and Model Overview help with the identification stage by discovering cohorts of data for which
@@ -29,6 +29,16 @@ here and can be used in combination together.
 In addition, we also encourage practitioners to rigorously validate new post-mitigation models and compare them with previous versions to make sure that the mitigation
 step indeed improved the model in the way the practitioner expected and that the mitigation step did not lead to new mistakes. To assist with these steps,
 `BackwardCompatibilityML`_ is a package for an extended support on model comparison and backward compatible training.
+
+We also encourage practitioners to rigorously validate new post-mitigation models and compare them with previous versions to make
+sure that the mitigation step indeed improved the model in the way the practitioner expected and that the mitigation step did not
+lead to new mistakes. `Responsible AI Tracker`_ is a tool in the Responsible AI Toolbox that can be installed as a `JupyterLab`_ extension
+and helps developers track, manage, and compare Responsible AI mitigations and experiments along with the necessary code and model
+artifacts. Disaggregated comparisons are central to the comparative views offered in Responsible AI Tracker and enable practitioners
+to track performance improvements or decline across cohorts. For example, if the error mitigation process was focused in improving
+performance on a cohort of interest, `Responsible AI Tracker` can validate that the process indeed improves performance for that cohort,
+while also keeping track at all other cohorts of interests. In addition, `BackwardCompatibilityML`_ a package for an extended support
+on backward compatible training, which aims at improving model accuracy without introducing new errors.
 
 
 Integration between raimitigations and raiwidgets
@@ -55,3 +65,5 @@ notebook, where we show how to create a set of cohorts in one library and contin
 .. _technical blog: https://techcommunity.microsoft.com/t5/ai-machine-learning-blog/responsible-ai-dashboard-a-one-stop-shop-for-operationalizing/ba-p/3030944
 .. _Fairlearn: https://fairlearn.org/
 .. _BackwardCompatibilityML: https://github.com/microsoft/BackwardCompatibilityML
+.. _Responsible AI Tracker: https://github.com/microsoft/responsible-ai-toolbox-tracker
+.. _JupyterLab: https://jupyterlab.readthedocs.io/en/stable/index.html#
