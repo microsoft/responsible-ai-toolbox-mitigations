@@ -245,7 +245,7 @@ class BasicImputer(DataImputer):
                 + f"have been automatically identified at transform time:\n{col_with_nan}"
             )
             self.col_impute = col_with_nan
-            
+
         transf_df = df.copy()
         for col in self.col_impute:
             df_valid = self._get_df_subset(df, [col])
