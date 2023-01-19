@@ -7,7 +7,7 @@ import conftest as utils
 from sklearn.svm import LinearSVC
 
 import raimitigations.dataprocessing as dp
-from raimitigations.cohort import DecoupledClass
+from raimitigations.cohort import DecoupledClass, fetch_cohort_results
 from raimitigations.cohort.decoupled_class.decoupled_cohort import _DecoupledCohort
 
 
@@ -76,6 +76,9 @@ def _get_object_list_bin_class(df=None, label_col=None, X=None, y=None, use_inde
         minority_min_rate=0.15,
         estimator=model,
         transform_pipe=preprocessing,
+        fairness_loss="num_parity",
+        lambda_coef=0.9,
+        max_joint_loss_time=5,
     )
     dec_class_list.append(dec_class)
 
@@ -89,6 +92,24 @@ def _get_object_list_bin_class(df=None, label_col=None, X=None, y=None, use_inde
         estimator=model,
         min_cohort_size=10,
         transform_pipe=preprocessing,
+        fairness_loss="balanced",
+        lambda_coef=0.9,
+        max_joint_loss_time=0.00001,
+    )
+    dec_class_list.append(dec_class)
+
+    dec_class = DecoupledClass(
+        df=df,
+        label_col=label_col,
+        X=X,
+        y=y,
+        cohort_col=cohort_cols2,
+        theta=False,
+        min_cohort_size=10,
+        transform_pipe=preprocessing,
+        fairness_loss="dem_parity",
+        lambda_coef=0.9,
+        max_joint_loss_time=5,
     )
     dec_class_list.append(dec_class)
 
@@ -104,6 +125,7 @@ def _run_main_commands(df, label_col, dec_class, df_in_fit=True, predict_prob=Fa
         dec_class.fit()
 
     dec_class.print_cohorts()
+    _ = dec_class.get_threasholds_dict()
 
     if type(label_col) == int:
         test_dummy = df.copy().drop(df.columns[label_col], axis=1)
@@ -268,6 +290,21 @@ def test_instantiation_errors_bin_class():
             estimator=QuadraticDiscriminantAnalysis(),
         )
 
+    # ERROR: invalid fairness loss provided...
+    with pytest.raises(Exception):
+        dec_class = DecoupledClass(
+            cohort_col=["menopause"],
+            fairness_loss="aaa",
+        )
+
+    # ERROR: the 'max_joint_loss_time' parameter must be...
+    with pytest.raises(Exception):
+        dec_class = DecoupledClass(
+            cohort_col=["menopause"],
+            fairness_loss="dem_parity",
+            max_joint_loss_time="aaa",
+        )
+
 
 # -----------------------------------
 def _get_list_obj_error_fit_bin_class():
@@ -397,6 +434,15 @@ def _get_list_obj_error_fit_regression():
     )
     obj_list.append(dec_class)
 
+    # ERROR: the DecoupledClass can only optimize a fairness loss...
+    dec_class = DecoupledClass(
+        cohort_col=["CN_1_num_1"],
+        regression=True,
+        transform_pipe=preprocessing,
+        fairness_loss="balanced",
+    )
+    obj_list.append(dec_class)
+
     return obj_list
 
 
@@ -465,3 +511,14 @@ def test_other_errors(df_breast_cancer, label_name_bc):
     with pytest.raises(Exception):
         dec.fit(df=df, label_col=label_name_bc)
 
+# -----------------------------------
+def test_other_scenarios(df_breast_cancer, label_name_bc):
+    df = df_breast_cancer
+    X = df.drop(columns=[label_name_bc])
+    y = df[label_name_bc]
+    preprocessing = [dp.EncoderOrdinal(verbose=False)]
+    dec = DecoupledClass(cohort_col=["breast-quad"], transform_pipe=preprocessing)
+    dec.get_threasholds_dict()
+    dec.fit(X, y)
+    pred = dec.predict_proba(X)
+    fetch_cohort_results(X, y, pred, cohort_def=dec, fixed_th=True)

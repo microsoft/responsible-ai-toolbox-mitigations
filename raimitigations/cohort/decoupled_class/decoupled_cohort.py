@@ -711,11 +711,7 @@ class _DecoupledCohort(CohortDefinition):
         print(f"{self.name}:")
         print(f"\tSize: {self.get_size()}")
 
-        print(f"\tQuery:")
-        if self.query is None:
-            print(f"\t\tRemaining instances")
-        else:
-            print(f"\t\t{self.query}")
+        print(f"\tQuery:\n\t\t{self.query}")
 
         if not self.regression:
             print(f"\tValue Counts:")

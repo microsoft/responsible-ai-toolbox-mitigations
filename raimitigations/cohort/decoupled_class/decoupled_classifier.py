@@ -240,9 +240,9 @@ class DecoupledClass(CohortHandler):
         the fairness loss;
 
     :param max_joint_loss_time: the maximum time (in seconds) allowed for the decoupled classifier
-        to run its fairness optimiziation step. This parameter is ignored when ``fairness_loss = None``.
+        to run its fairness optimization step. This parameter is ignored when ``fairness_loss = None``.
         When ``fairness != None``, the decoupled classifier will try to find the best set of thresholds
-        to be used for each cohort such that the final predictions result in a mimimum joint loss.
+        to be used for each cohort such that the final predictions result in a minimum joint loss.
         However, this optimization step is computationally expensive, and can take some time to be
         finalized depending on the number of cohorts and the size of the dataset. To avoid long execution
         times, we can specify the maximum time allowed for the decoupled classifier to run this step.
@@ -1037,12 +1037,6 @@ class DecoupledClass(CohortHandler):
         if self.fairness_loss is None:
             return
 
-        if self.cohorts[0].train_result[MetricNames.PROBLEM_TYPE] != MetricNames.BIN_CLASS:
-            raise ValueError(
-                "ERROR: the DecoupledClass can only optimize a fairness loss (using a joint loss) "
-                + "for binary classification problems."
-            )
-
         # Compute initial losses, prediction probabilities, and true labels
         joint_loss, bin_true, pred_proba, bin_pred, current_loss = self._compute_initial_joint_loss()
 
@@ -1250,14 +1244,16 @@ class DecoupledClass(CohortHandler):
         threshold value found for the estimator
         of each cohort.
         """
-        if self.cohorts is None:
+        if not self.fitted:
             warnings.warn(
                 "WARNING: No cohorts built yet. To build the cohorts, pass the dataset to the constructor "
                 + "or call the fit method. Returning NONE"
             )
             return None
 
-        if self.cohorts[0].train_result[MetricNames.TH] is None:
+        has_proba = self.cohorts[0].train_result is not None
+        bin_problem = has_proba and self.cohorts[0].train_result[MetricNames.PROBLEM_TYPE] == MetricNames.BIN_CLASS
+        if not bin_problem:
             warnings.warn(
                 "WARNING: The problem beinf solved is not a binary classification problem. Therefore, not threshold "
                 + "information is saved or used. Returning NONE."
