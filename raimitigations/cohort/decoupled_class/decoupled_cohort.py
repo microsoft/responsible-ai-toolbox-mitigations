@@ -11,7 +11,7 @@ from ...dataprocessing import DataProcessing
 from ..cohort_definition import CohortDefinition
 from ...utils import MetricNames, get_metrics, probability_to_class
 from ...utils.data_utils import freedman_diaconis, err_float_01
-from ..utils import _get_cross_validation_results
+from .decoupled_utils import get_cross_validation_results
 
 
 class _DecoupledCohort(CohortDefinition):
@@ -220,13 +220,13 @@ class _DecoupledCohort(CohortDefinition):
         default_theta: float,
     ):
         """
-        Compute the best value for the $\theta$ parameter, which represents the
+        Compute the best value for the theta parameter, which represents the
         weight assigned to data outside the cohort when doing transfer learning.
-        This method receives a list of possible $\theta$ values that should be
+        This method receives a list of possible theta values that should be
         tested and the full dataset (from which the current cohort was extracted
-        from). For each $\theta$ value, assess the performance of the model trained
-        using this value of $\theta$ using cross-validation. After cycling through
-        all possible values, select the $\theta$ value associated with the best
+        from). For each theta value, assess the performance of the model trained
+        using this value of theta using cross-validation. After cycling through
+        all possible values, select the theta value associated with the best
         performance metric.
 
         :param X: a data frame containing the features of the full dataset;
@@ -241,7 +241,7 @@ class _DecoupledCohort(CohortDefinition):
             folds is returned. We recommend filling this list with increasing values of K.
             This way, the largest valid value of K will be selected;
         :param default_theta: a default value used when a cohort is too small to use
-            cross-validation to determine the best value for $\theta$. In these cases,
+            cross-validation to determine the best value for theta. In these cases,
             a default value is used. If default_theta is None, an error is raised when
             a cohort is too small to use cross-validation.
         """
@@ -258,7 +258,7 @@ class _DecoupledCohort(CohortDefinition):
         best_score = 0
         best_theta = -1
         for theta in self.out_group_weight:
-            score = _get_cross_validation_results(
+            score = get_cross_validation_results(
                 cohort_x,
                 cohort_y,
                 out_data_x,
@@ -300,9 +300,9 @@ class _DecoupledCohort(CohortDefinition):
         Returns a dataset with the features and a dataset with the labels of
         the cohort, and a list with the weights assigned to each instance of
         the train set (used with the sample_weight parameter of the model).
-        If using transfer learning and the $\theta$ parameter provided is a
+        If using transfer learning and the theta parameter provided is a
         list of possible values instead of a single value, then call the
-        _compute_best_tl_weight() method to compute the optimal $\theta$ value
+        _compute_best_tl_weight() method to compute the optimal theta value
         among the possible values.
 
         :param X: a data frame containing the features of the full dataset;
@@ -317,7 +317,7 @@ class _DecoupledCohort(CohortDefinition):
             folds is returned. We recommend filling this list with increasing values of K.
             This way, the largest valid value of K will be selected;
         :param default_theta: a default value used when a cohort is too small to use
-            cross-validation to determine the best value for $\theta$. In these cases,
+            cross-validation to determine the best value for theta. In these cases,
             a default value is used. If default_theta is None, an error is raised when
             a cohort is too small to use cross-validation.
         :return: a tuple with the following values:
@@ -570,11 +570,16 @@ class _DecoupledCohort(CohortDefinition):
         has_proba = has_att and callable(getattr(self.estimator.__class__, "predict_proba"))
         if has_proba:
             pred = self.estimator.predict_proba(X)
-            result = get_metrics(y, pred, self.regression, best_th_auc)
             if train_set:
-                self.train_result = result
+                self.train_result = get_metrics(y, pred, self.regression, best_th_auc, return_th_list=True)
             else:
-                self.test_result = result
+                if self.test_result is None:
+                    raise ValueError(
+                        "ERROR: calling the function '_get_best_prob_th()' to compute the test metrics before "
+                        + "computing the train metrics. Compute the train metrics before computing the test metrics."
+                    )
+                th = self.test_result[MetricNames.TH]
+                self.test_result = get_metrics(y, pred, self.regression, best_th_auc, fixed_th=th, return_th_list=True)
 
     # -----------------------------------
     def get_cohort_and_fit_estimator(
@@ -602,12 +607,12 @@ class _DecoupledCohort(CohortDefinition):
         :param min_size_fold: the minimum size allowed for a fold. If
             cohort_size / K < min_size_fold, the value of K is considered invalid;
         :param valid_k_folds: a list with possible values for K (used only to get the
-            best value for $\theta$ when using transfer learning). The first value of
+            best value for theta when using transfer learning). The first value of
             K found in this list (checked in reversed order) that results in valid folds
             is returned. We recommend filling this list with increasing values of K.
             This way, the largest valid value of K will be selected;
         :param default_theta: a default value used when a cohort is too small to use
-            cross-validation to determine the best value for $\theta$. In these cases,
+            cross-validation to determine the best value for theta. In these cases,
             a default value is used. If default_theta is None, an error is raised when
             a cohort is too small to use cross-validation.
         :param best_th_auc: if True, use the AUC curve to get the best threshold. If False, use

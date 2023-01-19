@@ -1,3 +1,5 @@
+import time
+import warnings
 from typing import List
 from copy import deepcopy
 from typing import Union
@@ -7,14 +9,16 @@ import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.metrics import mean_absolute_error
 
 from ..cohort_handler import CohortHandler
 from .decoupled_cohort import _DecoupledCohort
 from ...utils.data_utils import err_float_01
+from ...utils import MetricNames, probability_to_class
 
 
 class DecoupledClass(CohortHandler):
-    """
+    r"""
     Concrete class that trains different models over different subsets of data (cohorts).
     Based on the work presented in the following paper: `Decoupled classifiers for group-fair
     and efficient machine learning
@@ -22,7 +26,7 @@ class DecoupledClass(CohortHandler):
     This is useful when a given cohort behaves differently from the rest of the dataset,
     or when a cohort represents a minority group that is underrepresented. For small cohorts,
     it is possible to train a model using the data of other cohorts (outside data) with a
-    smaller weight $\theta$ (only works with models that accept instance weights). This process
+    smaller weight theta (only works with models that accept instance weights). This process
     is herein called Transfer Learning. Instead of using transfer learning, it is also possible
     to merge small cohorts together, resulting in a set of sufficiently large cohorts.
 
@@ -91,48 +95,49 @@ class DecoupledClass(CohortHandler):
         of each cohort. Each cohort is saved in a single JSON file, so the length of the
         ``cohort_json_files`` should be equal to the number of cohorts to be used.
 
-    :param theta: the $\theta$ parameter is used in the transfer learning step of the
+    :param theta: the theta parameter is used in the transfer learning step of the
         decoupled classifier, and it represents the weight assigned to the instances from
         the outside data (data not from the current cohort) when fitting an estimator for
-        a given cohort. The $\theta$ parameter must be a value between [0, 1], or a list
+        a given cohort. The theta parameter must be a value between [0, 1], or a list
         of floats, or a boolean value (more information on each type ahead). This
-        parameter is associated to how the $\theta$ is set. When a cohort with a size
+        parameter is associated to how the theta is set. When a cohort with a size
         smaller than the minimum size allowed is found, transfer learning is used to fix
         this issue. Here, transfer learning occurs when a set of data not belonging to a
         given cohort is used when fitting that cohort's estimator, but the instances from
-        the outside data are assigned a smaller weight equal to $\theta$. This weight can
+        the outside data are assigned a smaller weight equal to theta. This weight can
         be fixed for all cohorts (when theta is a simple float value) or it can be identified
         automatically for each cohort separately (only for those cohorts that require
         transfer learning)(when theta is a list of floats or a boolean value). The theta
         parameter can be a float, a list of floats, or a boolean value. Each of the possible
         values is explained as follows:
-            * float: the exact value assigned to the $\theta$ parameter for all cohorts.
-                Must be a value between [0, 1];
-            * list of float: a list of possible values for $\theta$. All values in this
-                list must be values between [0, 1]. When a cohort uses transfer learning,
-                Cross-Validation is used with the cohort data plus the outside data using
-                different values of $\theta$ (the values within the list of floats), and
-                the final $\theta$ is selected as being the one associated with the highest
-                performance in the Cross-Validation process. The Cross-Validation (CV) here
-                splits the cohort data into K folds (the best K value is identified
-                according to the possible values in valid_k_folds_theta), and then proceeds
-                to use one of the folds as the test set, and the remaining folds plus the
-                outside data as the train set. A model is fitted for the train set and then
-                evaluated in the test set. The ROC AUC metric is obtained for each CV run
-                until all folds have been used as a test set. We then compute the average
-                ROC AUC score for the K runs and that gives the CV score for a given $\theta$
-                value. This is repeated for all possible $\theta$ values (the theta list),
-                and the $\theta$ with the best score is selected for that cohort. This
-                process is repeated for each cohort that requires transfer learning;
-            * boolean: similar to when theta is a list of floats, but here, instead of
-                receiving the list of possible $\theta$ from the user, a default list of
-                possible values is used (self.THETA_VALUES). If True, uses transfer
-                learning over small cohorts, and for each small cohort, select the best
-                $\theta$ among the values in THETA_VALUES. If False, don't use transfer
-                learning;
 
-    :param default_theta: the default value for $\theta$ when a given cohort is too small
-        to use Cross-Validation to find the best $\theta$ value among a list of possible
+            * float: the exact value assigned to the theta parameter for all cohorts.
+              Must be a value between [0, 1];
+            * list of float: a list of possible values for theta. All values in this
+              list must be values between [0, 1]. When a cohort uses transfer learning,
+              Cross-Validation is used with the cohort data plus the outside data using
+              different values of theta (the values within the list of floats), and
+              the final theta is selected as being the one associated with the highest
+              performance in the Cross-Validation process. The Cross-Validation (CV) here
+              splits the cohort data into K folds (the best K value is identified
+              according to the possible values in valid_k_folds_theta), and then proceeds
+              to use one of the folds as the test set, and the remaining folds plus the
+              outside data as the train set. A model is fitted for the train set and then
+              evaluated in the test set. The ROC AUC metric is obtained for each CV run
+              until all folds have been used as a test set. We then compute the average
+              ROC AUC score for the K runs and that gives the CV score for a given theta
+              value. This is repeated for all possible theta values (the theta list),
+              and the theta with the best score is selected for that cohort. This
+              process is repeated for each cohort that requires transfer learning;
+            * boolean: similar to when theta is a list of floats, but here, instead of
+              receiving the list of possible theta from the user, a default list of
+              possible values is used (self.THETA_VALUES). If True, uses transfer
+              learning over small cohorts, and for each small cohort, select the best
+              theta among the values in THETA_VALUES. If False, don't use transfer
+              learning;
+
+    :param default_theta: the default value for theta when a given cohort is too small
+        to use Cross-Validation to find the best theta value among a list of possible
         values. This parameter is only used when the 'theta' parameter is True or a list
         of float values. When splitting a cohort into K folds, each fold must have a
         minimum size according to the min_fold_size_theta parameter. When that is not
@@ -140,35 +145,35 @@ class DecoupledClass(CohortHandler):
         in the valid_k_folds_theta parameter) and test if now we can split the cohort into
         K folds, each fold being larger than min_fold_size_theta. We do this until all K
         values are tested, and if none of these results in folds large enough, a default
-        value of $\theta$ is used to avoid raising an error. This default value is given
+        value of theta is used to avoid raising an error. This default value is given
         by this parameter. If None, then don't use any default value in these cases. Instead,
         raise an error;
 
     :param cohort_dist_th: a value between [0, 1] that represents the threshold used to
-            determine if the label distribution of two cohorts are similar or not. If the
-            distance between these two distributions is <= cohort_dist_th, then the cohorts
-            are considered compatible, and considered incompatible otherwise. This is used
-            to determine how to build the outside data used for transfer learning: when
-            a cohort uses transfer learning (check the parameter 'theta' for more information
-            on that process), the outside data used for it must be comprised of data from
-            other cohorts that follow a somehow similar label distribution. Otherwise, the
-            use of outside data could be more harmful than useful. Therefore, for each cohort
-            using transfer learing, we check which other cohorts have a similar label
-            distribution. The similarity of these distributions is computed using the
-            Jensen-Shanon distance, which computes the distance between two distributions.
-            This distance returns a value between [0, 1], where values close to 0 mean that
-            two distributions being compared are similar, while values close to 1 mean that
-            these distributions are considerably different. If the distance between the label
-            distribution of both cohorts is smaller than a provided threshold (cohort_dist_th),
-            then the outside cohort is considered compatible with the current cohort;
+        determine if the label distribution of two cohorts are similar or not. If the
+        distance between these two distributions is <= cohort_dist_th, then the cohorts
+        are considered compatible, and considered incompatible otherwise. This is used
+        to determine how to build the outside data used for transfer learning: when
+        a cohort uses transfer learning (check the parameter 'theta' for more information
+        on that process), the outside data used for it must be comprised of data from
+        other cohorts that follow a somehow similar label distribution. Otherwise, the
+        use of outside data could be more harmful than useful. Therefore, for each cohort
+        using transfer learing, we check which other cohorts have a similar label
+        distribution. The similarity of these distributions is computed using the
+        Jensen-Shanon distance, which computes the distance between two distributions.
+        This distance returns a value between [0, 1], where values close to 0 mean that
+        two distributions being compared are similar, while values close to 1 mean that
+        these distributions are considerably different. If the distance between the label
+        distribution of both cohorts is smaller than a provided threshold (cohort_dist_th),
+        then the outside cohort is considered compatible with the current cohort;
 
     :param min_fold_size_theta: the minimum size allowed for each fold when doing
-        Cross-Validation to determine the best value for $\theta$. For more information, check
+        Cross-Validation to determine the best value for theta. For more information, check
         the parameter default_theta;
 
     :param valid_k_folds_theta: a list of possible values for K, which represents the number
         of splits used over a cohort data when doing Cross-Validation (to determine the best
-        $\theta$ value). The last value in this list is used, and if this K value results in
+        theta value). The last value in this list is used, and if this K value results in
         invalid folds, the second-to-last value in the list is. This process goes on until
         a valid K value is found in the list. We recommend filling this list with increasing
         values of K. This way, the largest valid value of K will be selected; For more
@@ -186,6 +191,63 @@ class DecoupledClass(CohortHandler):
         multiplied by min_cohort_pct. The maximum value between min_cohort_size and
         (df.shape[0] * min_cohort_pct) is used to determine the minimum size allowed for a
         cohort. Check the ``cohort_col`` parameter for more information;
+
+    :param fairness_loss: The fairness loss that should be optimized alongside the L1 loss.
+        This is only possible for binary classification problems. For regression or multi-class
+        problems, this parameter should be set to None (default value), otherwise, an error will
+        be raised. The L1 and fairnesee losses are computed over the binarized predictions, not
+        over the probabilities. Therefore, the decoupled classifier tries to identify the best
+        set of thresholds (one for each estimator, where we have one estimator for each cohort)
+        that produces the lowest joint loss (L1 + fairness loss). There are 3 available fairness
+        losses:
+
+            * ``None``: don't use any fairness loss. The threshold used for each cohort is
+              identified through the ROC curve, that is, doesn't consider any fairness metric.
+              This is the default behavior;
+            * "balanced": the Balanced loss is computed as the mean loss value over the L1 loss
+              of each cohort. This loss is useful when we want that all cohorts to have a similar
+              L1 loss, where all cohorts are considered with an equal weight, which makes it ideal
+              for unbalanced datasets;
+            * "num_parity": the Numerical Parity loss forces all cohorts to have a similar number
+              of positive labels. This loss is useful in a situation where a model should output
+              an equal number of positive labels for each cohort;
+            * "dem_parity": the Demographic Parity loss forces all cohorts to have a similar rate
+              of positive labels. This is somehow similar to the Numerical Parity loss, but this
+              loss accounts for the difference in size of each cohort, that is, the number of positive
+              labels should be different for cohorts with different sizes, but the ratio of positive
+              labels over the size of the cohort should be consistent across cohorts. This is useful
+              when we want an unbiased model, that is, a model that outputs an equal proportion
+              of positive labels without considering the cohort to which an instance belongs to;
+
+        **Note:** optimizing the threshold values for each cohort according to a fairness loss can take
+        a considerable time depending on the size of the dataset. Check the ``max_joint_loss_time``
+        parameter to learn how to control the allowed time for computing these thresholds;
+
+    :param lambda_coef: the weight assigned to the L1 loss when computing the joint loss (L1 + fairness
+        loss). This parameter is ignored when ``fairness_loss = None``. When ``fairness != None``, after
+        the estimator of each cohort is fitted, we optimize the thresholds used to binarize the final
+        predictions according to the following loss function:
+
+        .. math:: \hat{L} = \lambda L_{1} + (1-\lambda) L_{fair}
+
+        where:
+
+            * ``L_1`` is the L1 loss function over the binarized predictions
+            * ``L_{fair}`` is the fairness loss being used
+
+        The ``L_1`` loss tends to have smaller values than the fairness losses, so we recommend trying
+        larger values for the ``lambda_coef`` parameter, otherwise, the thresholds might look only to
+        the fairness loss;
+
+    :param max_joint_loss_time: the maximum time (in seconds) allowed for the decoupled classifier
+        to run its fairness optimiziation step. This parameter is ignored when ``fairness_loss = None``.
+        When ``fairness != None``, the decoupled classifier will try to find the best set of thresholds
+        to be used for each cohort such that the final predictions result in a mimimum joint loss.
+        However, this optimization step is computationally expensive, and can take some time to be
+        finalized depending on the number of cohorts and the size of the dataset. To avoid long execution
+        times, we can specify the maximum time allowed for the decoupled classifier to run this step.
+        If the optimization step reaches the maximum time, then the best set of thresholds found so far
+        is returned;
 
     :param minority_min_rate: the minimum occurrence rate for the minority class (from the label
         column) that a cohort is allowed to have. If the minority class of the cohort has an
@@ -206,6 +268,11 @@ class DecoupledClass(CohortHandler):
     THETA_VALUES = [0.2, 0.4, 0.6, 0.8]
     MIN_FOLD_SIZE_THETA = 20
     VALID_K_FOLDS = [3, 4, 5]
+
+    BALANCED_LOSS = "balanced"
+    NUMERICAL_PARITY = "num_parity"
+    DEMOGRAPHIC_PARITY = "dem_parity"
+    VALID_FAIRNESS_LOSS = [BALANCED_LOSS, NUMERICAL_PARITY, DEMOGRAPHIC_PARITY]
 
     BASE_CLASSIFIER = DecisionTreeClassifier(max_features="sqrt")
     BASE_REGRESSOR = DecisionTreeRegressor()
@@ -231,6 +298,9 @@ class DecoupledClass(CohortHandler):
         min_cohort_size: int = MIN_COHORT_SIZE,
         min_cohort_pct: float = MIN_COHORT_SIZE_PCT,
         minority_min_rate: float = MINORITY_MIN_RATE,
+        fairness_loss: str = None,
+        lambda_coef: float = 0.8,
+        max_joint_loss_time: float = 50,
         verbose: bool = True,
     ):
         self.regression = regression
@@ -239,6 +309,7 @@ class DecoupledClass(CohortHandler):
         self._set_transforms(transform_pipe)
         self._set_theta_param(theta, min_fold_size_theta, valid_k_folds_theta, default_theta, cohort_dist_th)
         self._set_cohorts_min_size(min_cohort_size, min_cohort_pct, minority_min_rate)
+        self._set_fairness_variables(fairness_loss, lambda_coef, max_joint_loss_time)
         self._check_regression()
         self._build_cohorts()
         self._check_and_update_cohorts()
@@ -280,10 +351,15 @@ class DecoupledClass(CohortHandler):
 
         self.cohorts = []
         index_used = []
+        prev_cohort_def = []
         for i, cohort_def in enumerate(self.cohort_def):
             if cohort_def is None and i < len(self.cohort_def) - 1:
                 raise ValueError("ERROR: only the last cohort is allowed to have a condition list assigned to 'None'.")
             cohort = self._instantiate_cohort(cohort_def, self._cohort_names[i])
+            if cohort_def is None:
+                cohort.create_query_remaining_instances_cohort(prev_cohort_def)
+            else:
+                prev_cohort_def.append(cohort_def)
             subset_x, subset_y, subset_index = cohort.get_cohort_subset(
                 self.df, self.y, index_used=index_used, return_index_list=True
             )
@@ -445,6 +521,41 @@ class DecoupledClass(CohortHandler):
         self.minority_min_rate = minority_min_rate
 
     # -----------------------------------
+    def _set_fairness_variables(self, fairness_loss: str, lambda_coef: float, max_joint_loss_time: float):
+        """
+        Sets the attributes ``lambda_coef``, ``fairness_loss``, and
+        ``max_joint_loss_time``, all of them associated to the fairness
+        optimization step. Also, check for errors in the values provided.
+
+        :param fairness_loss: the fairness_loss parameter provided to the
+            constructor of this class;
+        :param lambda_coef: the lambda_coef parameter provided to the
+            constructor of this class;
+        :param max_joint_loss_time: the max_joint_loss_time parameter
+            provided to the constructor of this class;
+        """
+        self.lambda_coef = lambda_coef
+        self.fairness_loss = fairness_loss
+        self.max_joint_loss_time = max_joint_loss_time
+
+        if self.fairness_loss is None:
+            return
+
+        if self.fairness_loss not in self.VALID_FAIRNESS_LOSS:
+            raise ValueError(
+                f"ERROR: invalid fairness loss provided. Expected 'None' or one of the following values:\n"
+                + f"{self.VALID_FAIRNESS_LOSS}"
+            )
+
+        err_float_01(self.lambda_coef, "lambda_coef")
+
+        if not isinstance(self.max_joint_loss_time, (np.floating, float, int)) or self.max_joint_loss_time < 0:
+            raise ValueError(
+                f"ERROR: the 'max_joint_loss_time' parameter must be a positive float. "
+                + f"Instead, got: {self.max_joint_loss_time}."
+            )
+
+    # -----------------------------------
     def _get_validity_status_dict(self, cohort_list: List[_DecoupledCohort]):
         """
         Returns a dictionary with three keys: (i) key 1 assigned to a list of
@@ -542,6 +653,7 @@ class DecoupledClass(CohortHandler):
             )
 
         self.cohorts = cohort_list
+        self._cohort_names = [cohort.name for cohort in self.cohorts]
 
     # -----------------------------------
     def _error_if_invalid_cohort(self):
@@ -564,18 +676,18 @@ class DecoupledClass(CohortHandler):
         Fix all cohorts with invalid sizes by using Transfer Learning. Here, transfer learning
         occurs when a set of data not belonging to a given cohort is used when fitting that
         cohort's estimator, but the instances from the outside data are assigned a smaller weight
-        equal to $\theta$ (check the theta parameter for the constructor method for more details).
+        equal to theta (check the theta parameter for the constructor method for more details).
         This method executes the following instructions: (i) identify all the invalid cohorts
         using the _get_validity_status_dict() method, (ii) throw an error if there are any cohorts
         with invalid distribution (transfer learning doesn't work in these cases), (iii) for all
         cohorts i with invalid size, do the following:
-            (a) find all other cohorts j (i != j, that is, different ​than the invalid cohort being
+            (a) find all other cohorts j (i != j, that is, different than the invalid cohort being
                 cycled) that have a similar label distribution (check the documentation of the
-                cohort_dist_th parameter for the constructor ​method for more information),
+                cohort_dist_th parameter for the constructor method for more information),
             (b) add the data of cohort j to the outside data of cohort i (the data outside of
                 cohort i that will be used when fitting cohort i's model, but this outside data
-                is assigned a lower weight equal to $\theta$),
-            (c) raise an error if no other cohort j was considered ​compatible with the invalid
+                is assigned a lower weight equal to theta),
+            (c) raise an error if no other cohort j was considered compatible with the invalid
                 cohort i.
         """
         cohort_list = self.cohorts
@@ -644,6 +756,348 @@ class DecoupledClass(CohortHandler):
                 self._fix_invalid_cohort_transfer_learning()
 
     # -----------------------------------
+    def _compute_regular_loss(self, y: np.ndarray, y_pred: np.ndarray):
+        """
+        Computes the performance loss for the joint loss. For now, we
+        only support the L1 loss.
+
+        :param y: true labels
+        :param y_pred: predicted labels
+        :return: Performance loss used in the joint loss (fairness optimization).
+        :rtype: float
+        """
+        loss = mean_absolute_error(y, y_pred, multioutput="uniform_average")
+        return loss
+
+    # -----------------------------------
+    def _balanced_loss(self, loss_dict: dict):
+        """
+        Compute the Balanced fairness loss.
+
+        :param loss_dict: a dictionary with the performance loss
+            of each each cohort.
+        :return: the mean loss value over each cohort's loss.
+        :rtype: float
+        """
+        loss = 0
+        for cohort in self.cohorts:
+            loss += loss_dict[cohort.name]
+        loss = loss / float(len(self.cohorts))
+        return loss
+
+    # -----------------------------------
+    def _parity_loss(self, pred_dict: dict, demographic: bool = False):
+        """
+        Computes the Demographic Parity or the Numerical Parity fairness
+        losses.
+
+        :param pred_dict: a dictionary with the binarized predictions
+            of each cohort;
+        :param demographic: if False, compute the Numerical Parity loss.
+            If True, compute the Demographic Parity loss.
+        :return: Demographic Parity or the Numerical Parity fairness
+            loss.
+        :rtype: float
+        """
+        n = float(self.df.shape[0])
+        p_list = {}
+        for cohort in self.cohorts:
+            if demographic:
+                nk = float(cohort.get_size())
+                p_list[cohort.name] = np.sum(pred_dict[cohort.name]) / nk
+            else:
+                p_list[cohort.name] = np.sum(pred_dict[cohort.name]) / n
+
+        loss = 0
+        for i in range(len(self.cohorts)):
+            sum_p = 0
+            for j in range(len(self.cohorts)):
+                sum_p += p_list[self.cohorts[j].name]
+            sum_p = sum_p / float(len(self.cohorts))
+
+            loss += abs(p_list[self.cohorts[i].name] - sum_p)
+
+        return loss
+
+    # -----------------------------------
+    def _compute_fairness_loss(self, loss_dict: dict, pred_dict: dict):
+        """
+        Computes the fairness loss. The fairness loss computed
+        depends on the ``fairness_loss`` parameter in the
+        constructor method.
+
+        :param loss_dict: a dictionary with the performance loss
+            of each each cohort.
+        :param pred_dict: a dictionary with the binarized predictions
+            of each cohort;
+        :return: the fairness loss
+        :rtype: float
+        """
+        if self.fairness_loss == self.BALANCED_LOSS:
+            loss = self._balanced_loss(loss_dict)
+        elif self.fairness_loss == self.NUMERICAL_PARITY:
+            loss = self._parity_loss(pred_dict, demographic=False)
+        else:
+            loss = self._parity_loss(pred_dict, demographic=True)
+
+        return loss
+
+    # -----------------------------------
+    def _join_regular_fairness_losses(self, regular_loss: float, loss_dict: dict, pred_dict: dict):
+        """
+        Computes the joint loss, comprised of a performance loss (with
+        weight equal to ``lambda_coef``) and a fairness loss (weighed by
+        ``(1-lambda_coef)``).
+
+        :param regular_loss: the performance loss;
+        :param loss_dict: a dictionary with the performance loss
+            of each each cohort.
+        :param pred_dict: a dictionary with the binarized predictions
+            of each cohort;
+        :return: the joint loss.
+        :rtype: float
+        """
+        regular_loss = self.lambda_coef * regular_loss
+        fairness_loss = (1.0 - self.lambda_coef) * (self._compute_fairness_loss(loss_dict, pred_dict))
+        # print(f"{regular_loss} -- {fairness_loss}")
+        joint_loss = regular_loss + fairness_loss
+        return joint_loss
+
+    # -----------------------------------
+    def _compute_initial_joint_loss(self):
+        """
+        Computes the initial loss values for the starting
+        threshold values (computed using the ROC curve).
+
+        :returns: a tuple containing the following:
+
+            * ``joint_loss``: the joint loss using the default
+              threshold values
+            * ``bin_true``: a dictionary with the true labels of
+              each cohort
+            * ``pred_proba``: a dictionary with the predicted
+              probabilities for each cohort
+            * ``bin_pred``: a dictionary with the binarized
+              predictions using the default threshold values.
+              This dictionary will be changed as new threshold
+              values are tested
+            * ``current_loss``: a dictionary with the performance
+              loss for each cohort using the default threshold values.
+              This dictionary will be changed as new threshold
+              values are tested
+
+        :rtype: tuple
+        """
+        pred_proba = self.predict_proba(self.df, split_pred=True)
+        bin_true = {}
+        for cohort in self.cohorts:
+            bin_true[cohort.name] = self.y.filter(items=cohort.get_index_list(), axis=0)
+
+        regular_loss = 0
+        bin_pred = {}
+        current_loss = {}
+        n = float(self.df.shape[0])
+        for cohort in self.cohorts:
+            bin_pred[cohort.name] = probability_to_class(pred_proba[cohort.name], cohort.train_result[MetricNames.TH])
+            current_loss[cohort.name] = self._compute_regular_loss(bin_true[cohort.name], bin_pred[cohort.name])
+            nk = float(cohort.get_size())
+            regular_loss += (nk / n) * current_loss[cohort.name]
+
+        regular_loss = regular_loss / float(len(self.cohorts))
+        joint_loss = self._join_regular_fairness_losses(regular_loss, current_loss, bin_pred)
+
+        return joint_loss, bin_true, pred_proba, bin_pred, current_loss
+
+    # -----------------------------------
+    def _change_single_th_joint_loss(
+        self,
+        cohort_index: int,
+        th: float,
+        pred_proba: dict,
+        bin_pred: dict,
+        bin_true: dict,
+        current_loss: dict,
+    ):
+        """
+        Computes the joint loss if we change the threshold of the
+        cohort with index ``cohort_index`` to a new value given
+        by ``th``. The thresholds of the other cohorts are kept
+        the same. The ``bin_pred`` and ``current_loss`` dicts
+        are also changed inplace for the cohort with index
+        ``cohort_index``, where the new binary predictions and
+        new performance loss are saved.
+
+        :param cohort_index: the index of the cohort that should
+            have its threshold changed;
+        :param th: the new threshold value to be used for the
+            cohort with index ``cohort_index``;
+        :param pred_proba: a dictionary with the predicted
+            probabilities for each cohort;
+        :param bin_pred: a dictionary with the binarized predictions
+            of each cohort;
+        :param bin_true: a dictionary with the true labels of
+            each cohort;
+        :param current_loss: a dictionary with the performance
+            loss of each each cohort.
+        :return: the joint loss using the new threshold value.
+        :rtype: float
+        """
+        regular_loss = 0
+        n = float(self.df.shape[0])
+        for i in range(len(self.cohorts)):
+            cohort = self.cohorts[i]
+            nk = float(cohort.get_size())
+            if i == cohort_index:
+                bin_pred[cohort.name] = probability_to_class(pred_proba[cohort.name], th)
+                current_loss[cohort.name] = self._compute_regular_loss(bin_true[cohort.name], bin_pred[cohort.name])
+            regular_loss += (nk / n) * current_loss[cohort.name]
+
+        regular_loss = regular_loss / float(len(self.cohorts))
+        joint_loss = self._join_regular_fairness_losses(regular_loss, current_loss, bin_pred)
+
+        return joint_loss
+
+    # -----------------------------------
+    def _test_threshold_value(
+        self,
+        min_loss: float,
+        cohort_index: int,
+        th: float,
+        pred_proba: dict,
+        bin_pred: dict,
+        bin_true: dict,
+        current_loss: dict,
+    ):
+        """
+        Computes the joint loss if we change the threshold of the
+        cohort with index ``cohort_index`` to a new value given
+        by ``th``. If the new joint loss is smaller than the
+        current best joint loss, we save the new threshold value
+        as the best solution. Otherwise, we don't change the
+        current best solution.
+
+        :param min_loss: the minimum joint loss found so far;
+        :param cohort_index: the index of the cohort that should
+            have its threshold changed;
+        :param th: the new threshold value to be used for the
+            cohort with index ``cohort_index``;
+        :param pred_proba: a dictionary with the predicted
+            probabilities for each cohort;
+        :param bin_pred: a dictionary with the binarized predictions
+            of each cohort;
+        :param bin_true: a dictionary with the true labels of
+            each cohort;
+        :param current_loss: a dictionary with the performance
+            loss of each each cohort.
+        :return: returns the following tuple:
+
+            * the joint loss using the new threshold value
+            * the new minimum loss
+            * a flag indicating if the best solution was
+              updated or not, that is, if the new joint loss
+              is smaller than ``min_loss``.
+        :rtype: float
+        """
+        changed = False
+        cohort = self.cohorts[cohort_index]
+        # Save the old values in case the new threshold
+        # results in a higher loss
+        bin_pred_bkp = bin_pred[cohort.name]
+        current_loss_bkp = current_loss[cohort.name]
+        # Compute the joint loss if we change the
+        # threshold of cohort "cohort_index" to th
+        joint_loss = self._change_single_th_joint_loss(cohort_index, th, pred_proba, bin_pred, bin_true, current_loss)
+        # If the threshold change improved the loss,
+        # we update the data of the best solution
+        if joint_loss < min_loss:
+            changed = True
+            cohort.train_result[MetricNames.TH] = th
+            min_loss = joint_loss
+        # Otherwise, recover the binary predictions and
+        # loss value for the old threshold value
+        else:
+            bin_pred[cohort.name] = bin_pred_bkp
+            current_loss[cohort.name] = current_loss_bkp
+
+        return joint_loss, min_loss, changed
+
+    # -----------------------------------
+    def _optimize_joint_loss(self):
+        """
+        Runs the optimization loop for the joint loss, comprised of a performance
+        loss and a fairness loss. This method loops through all cohorts, and for
+        each cohort it loops through different threshold values (the best values
+        returned by the ROC curve analysis). For each new threshold value for cohort
+        i, compute the new joint loss and see if it improves the best solution found
+        so far. After looping through all cohorts, repeat this process until no
+        threshold values are changed for any cohort, or until the maximum time allowed
+        for this optimization step is reached (given by the ``max_joint_loss_time``
+        parameter).
+        """
+        if self.fairness_loss is None:
+            return
+
+        if self.cohorts[0].train_result[MetricNames.PROBLEM_TYPE] != MetricNames.BIN_CLASS:
+            raise ValueError(
+                "ERROR: the DecoupledClass can only optimize a fairness loss (using a joint loss) "
+                + "for binary classification problems."
+            )
+
+        # Compute initial losses, prediction probabilities, and true labels
+        joint_loss, bin_true, pred_proba, bin_pred, current_loss = self._compute_initial_joint_loss()
+
+        # The while statement will cycle through different
+        # threshold configurations until the maximum time is reached
+        min_loss = joint_loss
+        total_time = 0
+        start = time.time()
+        while total_time < self.max_joint_loss_time:
+            changed = False
+            # Cycle through all cohorts and get the list of
+            # candidate threshold values
+            for i in range(len(self.cohorts)):
+                cohort = self.cohorts[i]
+                th_list = cohort.train_result[MetricNames.TH_LIST]
+                # Cycle through the threshold candidates for the current cohort
+                for x in range(th_list.shape[0]):
+                    # Check if changing the threshold to th_list[x]
+                    # manages to improve the joint loss
+                    joint_loss, min_loss, changed = self._test_threshold_value(
+                        min_loss, i, th_list[x], pred_proba, bin_pred, bin_true, current_loss
+                    )
+                    # Check if the maximum time was already reached (inner loop)
+                    total_time = time.time() - start
+                    if total_time > self.max_joint_loss_time:
+                        break
+
+                # Check if the maximum time was already reached (middle loop)
+                if total_time > self.max_joint_loss_time:
+                    break
+
+            # if no thresholds were changed, then the best
+            # set of thresholds was already identified
+            if not changed:
+                break
+
+    # -----------------------------------
+    def _check_joint_loss_conditions(self):
+        """
+        Check if the conditions for running the fairness loss
+        optimization step are satisfied. This step can only
+        be executed for if the estimator being used for each
+        cohort has the ``predict_proba()`` method.
+        """
+        if self.fairness_loss is None:
+            return
+        has_att = hasattr(self.estimator.__class__, "predict_proba")
+        has_proba = has_att and callable(getattr(self.estimator.__class__, "predict_proba"))
+        if not has_proba:
+            raise ValueError(
+                f"ERROR: the estimator passed to the DecoupledClass object, from class {self.estimator.__class__}, "
+                + f"doesn't have the 'predict_proba()' method, which is necessary when optimizing a joint loss."
+            )
+
+    # -----------------------------------
     def _fit_cohorts(self):
         """
         Fits the estimator of each cohort using the cohort's data.
@@ -668,10 +1122,13 @@ class DecoupledClass(CohortHandler):
         """
         Steps for running the fit method for the current class.
         """
+        self._check_joint_loss_conditions()
         self._build_cohorts()
         self._check_and_update_cohorts()
         self._set_transforms(self.transform_pipe)
         self._fit_cohorts()
+        self.fitted = True
+        self._optimize_joint_loss()
 
     # -----------------------------------
     def fit(
@@ -699,8 +1156,6 @@ class DecoupledClass(CohortHandler):
         self._set_estimator()
         self._fit()
         self.classes_ = np.sort(self.y.unique())
-
-        self.fitted = True
         return self
 
     # -----------------------------------
@@ -787,3 +1242,27 @@ class DecoupledClass(CohortHandler):
         for cohort in self.cohorts:
             cohort.print()
             print("\n")
+
+    # -----------------------------------
+    def get_threasholds_dict(self):
+        """
+        Returns a dictionary containing the best
+        threshold value found for the estimator
+        of each cohort.
+        """
+        if self.cohorts is None:
+            warnings.warn(
+                "WARNING: No cohorts built yet. To build the cohorts, pass the dataset to the constructor "
+                + "or call the fit method. Returning NONE"
+            )
+            return None
+
+        if self.cohorts[0].train_result[MetricNames.TH] is None:
+            warnings.warn(
+                "WARNING: The problem beinf solved is not a binary classification problem. Therefore, not threshold "
+                + "information is saved or used. Returning NONE."
+            )
+            return None
+
+        th_dict = {cohort.name: cohort.train_result[MetricNames.TH] for cohort in self.cohorts}
+        return th_dict
