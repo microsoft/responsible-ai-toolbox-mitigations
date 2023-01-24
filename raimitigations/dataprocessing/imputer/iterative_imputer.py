@@ -11,23 +11,18 @@ from ..encoder import EncoderOrdinal
 from .imputer import DataImputer
 from ...utils.data_utils import get_cat_cols
 
-import warnings
-
-
-def custom_formatwarning(msg, *args, **kwargs):
-    # ignore everything except the message
-    return str(msg) + "\n"
-
-
-warnings.formatwarning = custom_formatwarning
-
 
 class IterativeDataImputer(DataImputer):
     """
-    Concrete class that imputes missing data of a feature using the other features. It uses a round-robin method of modeling each feature with missing values to be imputed as a function of the other features.
-    This subclass uses the :class:`~sklearn.impute.IterativeImputer` class from :mod:`sklearn` in the background (note that this sklearn class is still in an experimental stage).
-    sklearn.impute.IterativeImputer can only handle numerical data, however, this subclass allows for categorical input by applying ordinal encoding before calling the sklearn class. In order to use this function, use enable_encoder=True, note that encoded columns are not guaranteed to reverse transform if they have imputed values.
-    If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and call your own encoder before calling this subclass for imputation.
+    Concrete class that imputes missing data of a feature using the other features. It uses a round-robin method
+    of modeling each feature with missing values to be imputed as a function of the other features.
+    This subclass uses the :class:`~sklearn.impute.IterativeImputer` class from :mod:`sklearn` in the
+    background (note that this sklearn class is still in an experimental stage).
+    sklearn.impute.IterativeImputer can only handle numerical data, however, this subclass allows for categorical
+    input by applying ordinal encoding before calling the sklearn class. In order to use this function,
+    use enable_encoder=True. Note that encoded columns are not guaranteed to reverse transform if they have imputed values.
+    If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and
+    call your own encoder before calling this subclass for imputation.
     For more details see:
     https://scikit-learn.org/stable/modules/generated/sklearn.impute.IterativeImputer.html#
 
@@ -151,23 +146,25 @@ class IterativeDataImputer(DataImputer):
         all_num_cols = [value for value in list(self.df) if value not in all_cat_cols]
 
         df_valid = pd.DataFrame()
-        self.valid_cols = []
 
         if not isinstance(self.enable_encoder, bool):
             raise ValueError("ERROR: 'enable_encoder' is a boolean parameter, use True/False.")
 
         elif self.enable_encoder is False:
-            warnings.warn(
+            self.print_message(
                 "\nWARNING: Categorical columns will be excluded from the iterative imputation process.\n"
                 + "If you'd like to include these columns, you need to set 'enable_encoder'=True.\n"
-                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and call your own encoder before calling this subclass for imputation.",
+                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline "
+                + "class and call your own encoder before calling this subclass for imputation.",
             )
             df_valid = self._get_df_subset(self.df, all_num_cols)
 
         else:
-            warnings.warn(
-                "\nWARNING: 'enable_encoder'=True and categorical columns will be encoded using ordinal encoding before applying the iterative imputation process.\n"
-                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and call your own encoder before calling this subclass for imputation.",
+            self.print_message(
+                "\nWARNING: 'enable_encoder'=True and categorical columns will be encoded using ordinal encoding before "
+                + "applying the iterative imputation process.\n"
+                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class "
+                + "and call your own encoder before calling this subclass for imputation.",
             )
             ordinal_encoder = EncoderOrdinal(df=self.df, col_encode=all_cat_cols, unknown_value=np.nan)
             ordinal_encoder.fit()
@@ -213,14 +210,7 @@ class IterativeDataImputer(DataImputer):
             )
             self.col_impute = col_with_nan
 
-        for col in self.valid_cols:
-            if col not in list(df):
-                raise KeyError("ERROR: Column: {col} seen at fit time, but not present in dataframe.")
-        for col in self.col_impute:
-            if col not in self.valid_cols:
-                raise KeyError(
-                    "ERROR: Column: {col} not seen at fit time. Note that categorical columns are excluded at fit time unless enable_encoder=True."
-                )
+        self._check_transf_data_structure(df)
 
         df_valid = self._get_df_subset(df, self.valid_cols)
         non_valid_cols = list(set(list(df)) - set(self.valid_cols))
@@ -240,14 +230,16 @@ class IterativeDataImputer(DataImputer):
                     "ERROR: Categorical data unseen at fit time and can't be included in the iterative imputation process without encoding.\n"
                     + "If you'd like to ordinal encode and impute these columns, use 'enable_encoder'=True.\n"
                     + "Note that encoded columns are not guaranteed to reverse transform if they have imputed values.\n"
-                    + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and call your own encoder before calling this subclass."
+                    + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class "
+                    + "and call your own encoder before calling this subclass."
                 )
             df_to_transf = df_valid
 
         else:
-            warnings.warn(
+            self.print_message(
                 "\nWARNING: Note that encoded columns are not guaranteed to reverse transform if they have imputed values.\n"
-                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and call your own encoder before calling this subclass.",
+                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and "
+                + "call your own encoder before calling this subclass.",
             )
             sys.stderr.flush()
 

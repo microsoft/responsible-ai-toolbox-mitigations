@@ -9,23 +9,17 @@ from ..encoder import EncoderOrdinal
 from .imputer import DataImputer
 from ...utils.data_utils import get_cat_cols
 
-import warnings
-
-
-def custom_formatwarning(msg, *args, **kwargs):
-    # ignore everything except the message
-    return str(msg) + "\n"
-
-
-warnings.formatwarning = custom_formatwarning
-
 
 class KNNDataImputer(DataImputer):
     """
-    Concrete class that imputes missing data of a feature using K-nearest neighbours. A feature's missing values are imputed using the mean value from k-nearest neighbors in the dataset. Two samples are close if the features that neither is missing are close.
+    Concrete class that imputes missing data of a feature using K-nearest neighbours. A feature's missing values are imputed using
+    the mean value from k-nearest neighbors in the dataset. Two samples are close if the features that neither is missing are close.
     This subclass uses the :class:`~sklearn.impute.KNNImputer` class from :mod:`sklearn` in the background.
-    sklearn.impute.KNNImputer can only handle numerical data, however, this subclass allows for categorical input by applying ordinal encoding before calling the sklearn class. In order to use this function, use enable_encoder=True, note that encoded columns are not guaranteed to reverse transform if they have imputed values.
-    If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and call your own encoder before calling this subclass for imputation.
+    sklearn.impute.KNNImputer can only handle numerical data, however, this subclass allows for categorical input by applying ordinal
+    encoding before calling the sklearn class. In order to use this function, use enable_encoder=True. Note that encoded columns are
+    not guaranteed to reverse transform if they have imputed values.
+    If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and call your own encoder
+    before calling this subclass for imputation.
     For more details see:
     https://scikit-learn.org/stable/modules/generated/sklearn.impute.KNNImputer.html#
 
@@ -135,17 +129,20 @@ class KNNDataImputer(DataImputer):
             raise ValueError("ERROR: 'enable_encoder' is a boolean parameter, use True/False.")
 
         if self.enable_encoder is False:
-            warnings.warn(
+            self.print_message(
                 "\nWARNING: Categorical columns will be excluded from the iterative imputation process.\n"
                 + "If you'd like to include these columns, you need to set 'enable_encoder'=True.\n"
-                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and call your own encoder before calling this subclass for imputation.",
+                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline "
+                + "class and call your own encoder before calling this subclass for imputation.",
             )
             df_valid = self._get_df_subset(self.df, all_num_cols)
 
         else:
-            warnings.warn(
-                "\nWARNING: 'enable_encoder'=True and categorical columns will be encoded using ordinal encoding before applying the iterative imputation process.\n"
-                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and call your own encoder before calling this subclass for imputation.",
+            self.print_message(
+                "\nWARNING: 'enable_encoder'=True and categorical columns will be encoded using ordinal encoding before "
+                + "applying the iterative imputation process.\n"
+                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class "
+                + "and call your own encoder before calling this subclass for imputation.",
             )
             ordinal_encoder = EncoderOrdinal(df=self.df, col_encode=all_cat_cols, unknown_value=np.nan)
             ordinal_encoder.fit()
@@ -183,14 +180,7 @@ class KNNDataImputer(DataImputer):
             )
             self.col_impute = col_with_nan
 
-        for col in self.valid_cols:
-            if col not in list(df):
-                raise KeyError("ERROR: Column: {col} seen at fit time, but not present in dataframe.")
-        for col in self.col_impute:
-            if col not in self.valid_cols:
-                raise KeyError(
-                    "ERROR: Column: {col} not seen at fit time. Note that categorical columns are excluded at fit time unless enable_encoder=True."
-                )
+        self._check_transf_data_structure(df)
 
         df_valid = self._get_df_subset(df, self.valid_cols)
         non_valid_cols = list(set(list(df)) - set(self.valid_cols))
@@ -210,14 +200,16 @@ class KNNDataImputer(DataImputer):
                     "ERROR: Categorical data unseen at fit time and can't be included in the iterative imputation process without encoding.\n"
                     + "If you'd like to ordinal encode and impute these columns, use 'enable_encoder'=True.\n"
                     + "Note that encoded columns are not guaranteed to reverse transform if they have imputed values.\n"
-                    + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and call your own encoder before calling this subclass."
+                    + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline "
+                    + "class and call your own encoder before calling this subclass."
                 )
             df_to_transf = df_valid
 
         else:
-            warnings.warn(
+            self.print_message(
                 "\nWARNING: Note that encoded columns are not guaranteed to reverse transform if they have imputed values.\n"
-                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and call your own encoder before calling this subclass.",
+                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and "
+                + "call your own encoder before calling this subclass.",
             )
             sys.stderr.flush()
 

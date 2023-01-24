@@ -32,6 +32,7 @@ class DataImputer(DataProcessing):
         self._set_df(df)
         self.col_impute = col_impute
         self.do_nothing = False
+        self.valid_cols = []
         self.none_status = False
 
     # -----------------------------------
@@ -74,6 +75,17 @@ class DataImputer(DataProcessing):
     # -----------------------------------
     def _get_fit_input_type(self):
         return self.FIT_INPUT_DF
+
+    # -----------------------------------
+    def _check_transf_data_structure(self, df: Union[pd.DataFrame, np.ndarray]):
+        for col in self.valid_cols:
+            if col not in list(df):
+                raise KeyError(f"ERROR: Column: {col} seen at fit time, but not present in dataframe.")
+        for col in self.col_impute:
+            if col not in self.valid_cols:
+                raise KeyError(
+                    f"ERROR: Column: {col} not seen at fit time. Note that categorical columns are excluded at fit time unless enable_encoder=True."
+                )
 
     # -----------------------------------
     def fit(self, df: Union[pd.DataFrame, np.ndarray] = None, y: Union[pd.Series, np.ndarray] = None):

@@ -200,6 +200,7 @@ class BasicImputer(DataImputer):
         non_spec_cols = [value for value in self.col_impute if value not in self.specific_col.keys()]
         self.cat_cols = get_cat_cols(self.df, subset=non_spec_cols)
         self.num_cols = [col for col in non_spec_cols if col not in self.cat_cols]
+        self.valid_cols = list(self.df)
 
         self.imputers = {}
         for col in self.col_impute:
@@ -245,6 +246,8 @@ class BasicImputer(DataImputer):
                 + f"have been automatically identified at transform time:\n{col_with_nan}"
             )
             self.col_impute = col_with_nan
+
+        self._check_transf_data_structure(df)
 
         transf_df = df.copy()
         for col in self.col_impute:
