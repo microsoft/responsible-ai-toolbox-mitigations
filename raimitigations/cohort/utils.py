@@ -3,6 +3,9 @@ from typing import Union
 import numpy as np
 import pandas as pd
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+
 from ..cohort import CohortHandler, CohortManager, DecoupledClass
 from ..utils import MetricNames, get_metrics
 
@@ -187,3 +190,40 @@ def fetch_cohort_results(
         return df, final_th_dict
 
     return df
+
+
+def plot_value_counts_cohort(y_full, subsets, normalize=True):
+    plt.figure().clear()
+    plt.close()
+    plt.cla()
+    plt.clf()
+    fig = plt.gcf()
+    fig.set_size_inches(18, 10)
+    sns.set_theme(style="whitegrid")
+    if normalize:
+        plt.ylim(0, 1)
+    # plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0, fontsize=23)
+
+    value_count = y_full.value_counts(normalize=normalize)
+
+    subsets_col = ["full df", "full df"]
+    counts_col = [value_count[0], value_count[1]]
+    label_col = [0, 1]
+
+    for key in subsets.keys():
+        value_count = subsets[key]["y"].value_counts(normalize=normalize)
+        subsets_col += [key, key]
+        counts_col += [value_count[0], value_count[1]]
+        label_col += [0, 1]
+
+    count_df = pd.DataFrame({"subsets": subsets_col, "label": label_col, "counts": counts_col})
+
+    y_label = "Occurrences"
+    if normalize:
+        y_label = "Fraction"
+
+    ax = sns.barplot(x="subsets", y="counts", hue="label", data=count_df)
+    ax.set_xlabel("Subsets", fontsize=30)
+    ax.set_ylabel(y_label, fontsize=30)
+    # ax.tick_params(labelsize=15)
+    plt.show()

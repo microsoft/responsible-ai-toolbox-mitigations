@@ -9,3 +9,4 @@ the **cohort** module.
    ../notebooks/cohort/cohort_definition
    ../notebooks/cohort/cohort_manager
    ../notebooks/cohort/cohort_manager_scenarios
+   ../notebooks/cohort/decoupled

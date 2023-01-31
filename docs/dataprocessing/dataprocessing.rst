@@ -18,6 +18,6 @@ The following is a list of all child classes that inherit from the **DataProcess
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: raimitigations.dataprocessing.DataEncoding raimitigations.dataprocessing.FeatureSelection raimitigations.dataprocessing.DataImputer raimitigations.dataprocessing.DataScaler raimitigations.dataprocessing.Rebalance raimitigations.dataprocessing.Synthesizer
+.. inheritance-diagram:: raimitigations.dataprocessing.DataEncoding raimitigations.dataprocessing.FeatureSelection raimitigations.dataprocessing.DataImputer raimitigations.dataprocessing.DataScaler raimitigations.dataprocessing.Rebalance raimitigations.dataprocessing.Synthesizer raimitigations.cohort.CohortHandler
      :parts: 1
 

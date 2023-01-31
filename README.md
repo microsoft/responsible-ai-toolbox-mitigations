@@ -10,10 +10,10 @@ This repo is a part of the [Responsible AI Toolbox](https://github.com/microsoft
 <img src="./docs/imgs/responsible-ai-toolbox-mitigations.png" alt="ResponsibleAIToolboxMitigationsOverview" width="750"/>
 
 There are three main modules covered in this library:
-- **Data Balance Analysis** (Exploratory Data Analysis): include metrics that help to determine how balanced is your dataset.
 - **Data Processing** (Data Enhancements): include several transformer classes that aim to change or mitigate certain aspects of a dataset.
 The goal of this module is to provide a unified interface for different mitigation methods scattered around
 multiple machine learning libraries, such as scikit-learn, mlxtend, sdv, among others.
+- **Data Balance Analysis** (Exploratory Data Analysis): include metrics that help to determine how balanced is your dataset.
 - **Cohort** (managing cohorts): include a set of classes that allow users to handle cohorts of data by creating customized pipelines
 for each cohort.
 

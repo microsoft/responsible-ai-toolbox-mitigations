@@ -14,21 +14,16 @@ figure.
   :scale: 20
   :alt: Balancing over cohorts
 
-  Figure 1 - The CohortManager class can be used in different ways to target mitigations to different cohorts. The main differences
+  *Figure 1 - The CohortManager class can be used in different ways to target mitigations to different cohorts. The main differences
   between these scenarios consist on whether the same or different type of data mitigation is applied to the cohort data, and whether
   a single or separate models will be trained for different cohorts. Depending on these choices, CohortManager will take care of
-  slicing the data accordingly, applying the specified data mitigation strategy, merging the data back, and retraining the model(s).
+  slicing the data accordingly, applying the specified data mitigation strategy, merging the data back, and retraining the model(s).*
 
 The **Cohort Manager - Scenarios and Examples** notebook, located in ``notebooks/cohort/cohort_manager_scenarios.ipynb`` and listed in
 the **Examples** section below, shows how each of these scenarios can be implemented through simple code snippets.
 
 .. autoclass:: raimitigations.cohort.CohortManager
    :members:
-
-.. rubric:: Class Diagram
-
-.. inheritance-diagram:: raimitigations.cohort.CohortManager
-     :parts: 1
 
 .. _cohort_manager_ex:
 

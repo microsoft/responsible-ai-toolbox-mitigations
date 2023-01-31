@@ -3,7 +3,7 @@ from .cohort_definition import CohortDefinition
 from .cohort_handler import CohortHandler
 from .cohort_manager import CohortManager
 from .decoupled_class import DecoupledClass
-from .utils import fetch_cohort_results
+from .utils import fetch_cohort_results, plot_value_counts_cohort
 
 __all__ = [
     "CohortDefinition",
@@ -11,4 +11,5 @@ __all__ = [
     "CohortManager",
     "DecoupledClass",
     "fetch_cohort_results",
+    "plot_value_counts_cohort",
 ]
