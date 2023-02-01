@@ -3,6 +3,9 @@ import pandas as pd
 import pytest
 from raimitigations.dataprocessing import KNNDataImputer
 
+from sklearn.experimental import enable_iterative_imputer  # noqa # pylint: disable=unused-import
+from sklearn.impute import IterativeImputer, KNNImputer
+
 COL_WITH_NAN = ["num_0", "num_3", "num_4", "CN_0_num_0", "CC_1_num_1"]
 COL_WITH_NAN_IND = [0, 3, 4, 9, 12]
 
@@ -46,6 +49,9 @@ def _get_object_list(df=None, use_index=True):
     imputer_list.append(imputer)
 
     imputer = KNNDataImputer(df=df, col_impute=col_impute4, enable_encoder=True, knn_params=knn_params)
+    imputer_list.append(imputer)
+
+    imputer = KNNDataImputer(df=df, col_impute=col_impute1, enable_encoder=False, sklearn_obj=KNNImputer())
     imputer_list.append(imputer)
 
     return imputer_list
@@ -106,11 +112,17 @@ def test_no_col_name(df_full_nan):
 
 # -----------------------------------
 def test_errors(df_full_nan):
+
+    with pytest.raises(Exception):
+        KNNDataImputer(col_impute=["num_0"], sklearn_obj=IterativeImputer())
+
+    with pytest.raises(ValueError):
+        KNNDataImputer(col_impute=["num_0"], enable_encoder='not boolean')
+
     fit_obj_list = [
         KNNDataImputer(col_impute=["num_0", "num_1", "num_2", "num_3", "num_4"], knn_params=["list"]),
         KNNDataImputer(col_impute=["num0"]),
         KNNDataImputer(col_impute=[99]),
-        KNNDataImputer(col_impute=["num_0"], enable_encoder='not boolean'),
         KNNDataImputer(col_impute=["num_0", "num_1", "num_2", "num_3", "num_4"], knn_params={
             "missing_values": np.nan,
             "weights": "uniform",

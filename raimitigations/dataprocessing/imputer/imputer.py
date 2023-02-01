@@ -71,20 +71,21 @@ class DataImputer(DataProcessing):
     # -----------------------------------
 
     def _reset_columns_to_impute(self, df: Union[pd.DataFrame, np.ndarray]):
-        if self.none_status is True:
-            col_nan_status = df.isna().any()
-            col_with_nan = []
-            for i, value in enumerate(col_nan_status.index):
-                if col_nan_status[value]:
-                    if type(value) == int:
-                        col_with_nan.append(i)
-                    else:
-                        col_with_nan.append(value)
-            self.print_message(
-                f"No columns specified for imputation. These columns "
-                + f"have been automatically identified at transform time:\n{col_with_nan}"
-            )
-            self.col_impute = col_with_nan
+        if not self.none_status:
+            return
+        col_nan_status = df.isna().any()
+        col_with_nan = []
+        for i, value in enumerate(col_nan_status.index):
+            if col_nan_status[value]:
+                if type(value) == int:
+                    col_with_nan.append(i)
+                else:
+                    col_with_nan.append(value)
+        self.print_message(
+            f"No columns specified for imputation. These columns "
+            + f"have been automatically identified at transform time:\n{col_with_nan}"
+        )
+        self.col_impute = col_with_nan
 
     # -----------------------------------
 
@@ -109,7 +110,7 @@ class DataImputer(DataProcessing):
 
     # -----------------------------------
 
-    def _apply_encoding_fit(self):
+    def _apply_encoding_fit(self) -> Union[pd.DataFrame, np.ndarray]:
         all_cat_cols = get_cat_cols(self.df)
         all_num_cols = [value for value in list(self.df) if value not in all_cat_cols]
 
@@ -140,7 +141,9 @@ class DataImputer(DataProcessing):
         return df_valid
 
     # -----------------------------------
-    def _apply_encoding_transf(self, all_cat_cols, df_valid):
+    def _apply_encoding_transf(
+        self, all_cat_cols: list, df_valid: Union[pd.DataFrame, np.ndarray]
+    ) -> Union[pd.DataFrame, np.ndarray]:
         if self.enable_encoder is False:
             if len(all_cat_cols) > 0:
                 raise ValueError(
@@ -168,14 +171,14 @@ class DataImputer(DataProcessing):
 
     def _revert_encoding(
         self,
-        transf_df,
-        df,
-        df_to_transf,
-        cat_cols_missing_value_impute,
-        cat_cols_no_missing_value,
-        missing_value_cols_no_impute,
-        non_valid_cols,
-    ):
+        transf_df: Union[pd.DataFrame, np.ndarray],
+        df: Union[pd.DataFrame, np.ndarray],
+        df_to_transf: Union[pd.DataFrame, np.ndarray],
+        cat_cols_missing_value_impute: list,
+        cat_cols_no_missing_value: list,
+        missing_value_cols_no_impute: list,
+        non_valid_cols: list,
+    ) -> Union[pd.DataFrame, np.ndarray]:
         # attempt inverse_transform encoded imputed columns.
         try:
             if self.enable_encoder is True:

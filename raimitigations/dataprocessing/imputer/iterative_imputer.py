@@ -30,7 +30,8 @@ class IterativeDataImputer(DataImputer):
         If None, this parameter will be set automatically as being a list of all
         columns with any NaN value;
 
-    :param enable_encoder: a boolean flag to allow for applying ordinal encoding of categorical data before applying the IterativeImputer since it only accepts numerical values.
+    :param enable_encoder: a boolean flag to allow for applying ordinal encoding of categorical data before applying the
+        IterativeImputer since it only accepts numerical values.
 
     :param iterative_params: a dict indicating the parameters used by
         :class:`~sklearn.impute.IterativeImputer`. The dict has the following structure:
@@ -54,6 +55,9 @@ class IterativeDataImputer(DataImputer):
         this dict will be auto-filled as the one above.
         ``Note: initial_strategy can take one of these values: ['mean', 'median', 'most_frequent', 'constant']``
 
+    :param sklearn_obj: an sklearn.impute.IterativeImputer object to use directly. If this parameter is used,
+        iterative_params will be overwritten.
+
     :param verbose: indicates whether internal messages should be printed or not.
     """
 
@@ -64,11 +68,13 @@ class IterativeDataImputer(DataImputer):
         col_impute: list = None,
         enable_encoder: bool = False,
         iterative_params: dict = None,
+        sklearn_obj: object = None,
         verbose: bool = True,
     ):
         super().__init__(df, col_impute, verbose)
         self.enable_encoder = enable_encoder
         self.iterative_params = iterative_params
+        self.sklearn_obj = sklearn_obj
         self._set_dicts()
         if not isinstance(self.enable_encoder, bool):
             raise ValueError("ERROR: 'enable_encoder' is a boolean parameter, use True/False.")
@@ -79,7 +85,26 @@ class IterativeDataImputer(DataImputer):
         If the 'iterative_params' dictionary that specifies how to impute given data
         is set to None, then create a default dictionary.
         """
-        if self.iterative_params is None:
+        if self.sklearn_obj is not None:
+            if not isinstance(self.sklearn_obj, IterativeImputer):
+                raise ValueError("ERROR: 'sklearn_obj' needs to be an sklearn.impute.IterativeImputer() object.")
+            sklearn_dict = self.sklearn_obj.get_params()
+            self.iterative_params = {
+                "estimator": sklearn_dict["estimator"],
+                "missing_values": sklearn_dict["missing_values"],
+                "sample_posterior": sklearn_dict["sample_posterior"],
+                "max_iter": sklearn_dict["max_iter"],
+                "tol": sklearn_dict["tol"],
+                "n_nearest_features": sklearn_dict["n_nearest_features"],
+                "initial_strategy": sklearn_dict["initial_strategy"],
+                "imputation_order": sklearn_dict["imputation_order"],
+                "skip_complete": sklearn_dict["skip_complete"],
+                "min_value": sklearn_dict["min_value"],
+                "max_value": sklearn_dict["max_value"],
+                "random_state": sklearn_dict["random_state"],
+            }
+
+        elif self.iterative_params is None:
             self.iterative_params = {
                 "estimator": BayesianRidge(),
                 "missing_values": np.nan,
@@ -98,7 +123,7 @@ class IterativeDataImputer(DataImputer):
     # -----------------------------------
     def _check_valid_dict(self):
         """
-        Checks if 'iterative_params' dictionary that specifis how to impute given data
+        Checks if 'iterative_params' dictionary that specifics how to impute given data
         is appropriately set.
         """
         param_err = type(self.iterative_params) != dict
@@ -144,21 +169,25 @@ class IterativeDataImputer(DataImputer):
 
         df_valid = self._apply_encoding_fit()
 
-        self.imputer = IterativeImputer(
-            estimator=self.iterative_params["estimator"],
-            missing_values=self.iterative_params["missing_values"],
-            sample_posterior=self.iterative_params["sample_posterior"],
-            max_iter=self.iterative_params["max_iter"],
-            tol=self.iterative_params["tol"],
-            n_nearest_features=self.iterative_params["n_nearest_features"],
-            initial_strategy=self.iterative_params["initial_strategy"],
-            imputation_order=self.iterative_params["imputation_order"],
-            skip_complete=self.iterative_params["skip_complete"],
-            min_value=self.iterative_params["min_value"],
-            max_value=self.iterative_params["max_value"],
-            random_state=self.iterative_params["random_state"],
-            verbose=int(self.verbose),
-        )
+        if self.sklearn_obj is None:
+            self.imputer = IterativeImputer(
+                estimator=self.iterative_params["estimator"],
+                missing_values=self.iterative_params["missing_values"],
+                sample_posterior=self.iterative_params["sample_posterior"],
+                max_iter=self.iterative_params["max_iter"],
+                tol=self.iterative_params["tol"],
+                n_nearest_features=self.iterative_params["n_nearest_features"],
+                initial_strategy=self.iterative_params["initial_strategy"],
+                imputation_order=self.iterative_params["imputation_order"],
+                skip_complete=self.iterative_params["skip_complete"],
+                min_value=self.iterative_params["min_value"],
+                max_value=self.iterative_params["max_value"],
+                random_state=self.iterative_params["random_state"],
+                verbose=int(self.verbose),
+            )
+        else:
+            self.imputer = self.sklearn_obj
+
         self.imputer.fit(df_valid)
 
     # -----------------------------------

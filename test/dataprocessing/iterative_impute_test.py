@@ -2,7 +2,9 @@ import numpy as np
 import pandas as pd
 import pytest
 from raimitigations.dataprocessing import IterativeDataImputer
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.experimental import enable_iterative_imputer  # noqa # pylint: disable=unused-import
+from sklearn.impute import IterativeImputer, KNNImputer
 
 COL_WITH_NAN = ["num_0", "num_3", "num_4", "CN_0_num_0", "CC_1_num_1"]
 COL_WITH_NAN_IND = [0, 3, 4, 9, 12]
@@ -14,20 +16,20 @@ def _get_object_list(df=None, use_index=True):
     imputer_list = []
 
     if use_index:
-        col_impute1 = [0, 1, 2, 3, 4] # numerical only
-        col_impute2 = [0, 3, 4, 9, 12] # numerical and categorical
-        col_impute3 = [9, 12] # categorical only
-        col_impute4 = [0, 1, 2, 3, 10]  # numerical and categorical with non-missing data
+        col_impute1 = [0, 1, 2] # numerical only
+        col_impute2 = [0, 9] # numerical and categorical
+        col_impute3 = [12] # categorical only
+        col_impute4 = [1, 2, 3, 10]  # numerical and categorical with non-missing data
     else:
-        col_impute1 = ["num_0", "num_1", "num_2", "num_3", "num_4"]
-        col_impute2 = ["num_0", "num_3", "num_4", "CN_0_num_0", "CC_1_num_1"]
-        col_impute3 = ["CN_0_num_0", "CC_1_num_1"]
-        col_impute4 = ["num_0", "num_1", "num_2", "num_3", "CN_1_num_1"]
+        col_impute1 = ["num_0", "num_1", "num_2"]
+        col_impute2 = ["num_0", "CN_0_num_0"]
+        col_impute3 = ["CC_1_num_1"]
+        col_impute4 = ["num_1", "num_2", "num_3", "CN_1_num_1"]
     iterative_params = {
-        'estimator': RandomForestRegressor(),
+        'estimator': LinearRegression(),
         'missing_values': np.nan,
         'sample_posterior': False,
-        'max_iter': 10,
+        'max_iter': 1,
         'tol': 1e-3,
         'n_nearest_features': None,
         'initial_strategy': 'mean',
@@ -35,7 +37,7 @@ def _get_object_list(df=None, use_index=True):
         'skip_complete': False,
         'min_value': -np.inf,
         'max_value': np.inf,
-        'random_state': None}
+        'random_state': 100}
 
     imputer = IterativeDataImputer(df=df, enable_encoder=True)
     imputer_list.append(imputer)
@@ -53,6 +55,9 @@ def _get_object_list(df=None, use_index=True):
     imputer_list.append(imputer)
 
     imputer = IterativeDataImputer(df=df, col_impute=col_impute4, enable_encoder=True, iterative_params=iterative_params)
+    imputer_list.append(imputer)
+
+    imputer = IterativeDataImputer(df=df, col_impute=col_impute1, enable_encoder=False, sklearn_obj=IterativeImputer(estimator=LinearRegression(), max_iter=1))
     imputer_list.append(imputer)
 
     return imputer_list
@@ -113,16 +118,21 @@ def test_no_col_name(df_full_nan):
 
 # -----------------------------------
 def test_errors(df_full_nan):
+    
+    with pytest.raises(Exception):
+        IterativeDataImputer(col_impute=["num_0"], sklearn_obj=KNNImputer())
+    with pytest.raises(Exception):
+        IterativeDataImputer(col_impute=["num_0"], enable_encoder='not boolean')
+
     fit_obj_list = [
         IterativeDataImputer(col_impute=["num_0", "num_1", "num_2", "num_3", "num_4"], iterative_params=["list"]),
         IterativeDataImputer(col_impute=["num0"]),
         IterativeDataImputer(col_impute=[99]),
-        IterativeDataImputer(col_impute=["num_0"], enable_encoder='not boolean'),
         IterativeDataImputer(col_impute=["num_0", "num_1", "num_2", "num_3", "num_4"], iterative_params={
-            'estimator': RandomForestRegressor(),
+            'estimator': LinearRegression(),
             'missing_values': np.nan,
             'sample_posterior': False,
-            'max_iter': 10,
+            'max_iter': 1,
             'tol': 1e-3,
             'n_nearest_features': None,
             'initial_strategy': 'mean',
