@@ -83,9 +83,7 @@ class DataImputer(DataProcessing):
                 raise KeyError(f"ERROR: Column: {col} seen at fit time, but not present in dataframe.")
         for col in self.col_impute:
             if col not in self.valid_cols:
-                raise KeyError(
-                    f"ERROR: Column: {col} not seen at fit time. Note that categorical columns are excluded at fit time unless enable_encoder=True."
-                )
+                raise KeyError(f"ERROR: Column: {col} not seen at fit time.")
 
     # -----------------------------------
     def fit(self, df: Union[pd.DataFrame, np.ndarray] = None, y: Union[pd.Series, np.ndarray] = None):

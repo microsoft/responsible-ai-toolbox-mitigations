@@ -66,7 +66,7 @@ class IterativeDataImputer(DataImputer):
         col_impute: list = None,
         enable_encoder: bool = False,
         iterative_params: dict = None,
-        verbose: int = 1,
+        verbose: bool = True,
     ):
         super().__init__(df, col_impute, verbose)
         self.enable_encoder = enable_encoder
@@ -184,7 +184,7 @@ class IterativeDataImputer(DataImputer):
             min_value=self.iterative_params["min_value"],
             max_value=self.iterative_params["max_value"],
             random_state=self.iterative_params["random_state"],
-            verbose=self.verbose,
+            verbose=int(self.verbose),
         )
         self.imputer.fit(df_valid)
 

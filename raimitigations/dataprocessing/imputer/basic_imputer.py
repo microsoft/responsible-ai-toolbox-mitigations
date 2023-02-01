@@ -232,21 +232,6 @@ class BasicImputer(DataImputer):
 
         :param df: the full dataset being transformed.
         """
-        if self.none_status is True:
-            col_nan_status = df.isna().any()
-            col_with_nan = []
-            for i, value in enumerate(col_nan_status.index):
-                if col_nan_status[value]:
-                    if type(value) == int:
-                        col_with_nan.append(i)
-                    else:
-                        col_with_nan.append(value)
-            self.print_message(
-                f"No columns specified for imputation. These columns "
-                + f"have been automatically identified at transform time:\n{col_with_nan}"
-            )
-            self.col_impute = col_with_nan
-
         self._check_transf_data_structure(df)
 
         transf_df = df.copy()
