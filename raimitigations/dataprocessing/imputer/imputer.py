@@ -5,6 +5,8 @@ import numpy as np
 import pandas as pd
 
 from ..data_processing import DataProcessing
+from ..encoder.ordinal import EncoderOrdinal
+from ...utils.data_utils import get_cat_cols
 
 
 class DataImputer(DataProcessing):
@@ -33,10 +35,12 @@ class DataImputer(DataProcessing):
         self.col_impute = col_impute
         self.do_nothing = False
         self.valid_cols = []
+        self.enable_encoder = False
+        self.ordinal_encoder = None
         self.none_status = False
 
     # -----------------------------------
-    def _set_column_to_impute(self):
+    def _set_columns_to_impute(self):
         """
         Sets the columns to impute (col_impute) automatically
         if these columns are not provided. col_impute is set
@@ -66,6 +70,24 @@ class DataImputer(DataProcessing):
 
     # -----------------------------------
 
+    def _reset_columns_to_impute(self, df: Union[pd.DataFrame, np.ndarray]):
+        if self.none_status is True:
+            col_nan_status = df.isna().any()
+            col_with_nan = []
+            for i, value in enumerate(col_nan_status.index):
+                if col_nan_status[value]:
+                    if type(value) == int:
+                        col_with_nan.append(i)
+                    else:
+                        col_with_nan.append(value)
+            self.print_message(
+                f"No columns specified for imputation. These columns "
+                + f"have been automatically identified at transform time:\n{col_with_nan}"
+            )
+            self.col_impute = col_with_nan
+
+    # -----------------------------------
+
     def _check_valid_input(self):
         self.col_impute = self._check_error_col_list(self.df, self.col_impute, "col_impute")
 
@@ -86,6 +108,102 @@ class DataImputer(DataProcessing):
                 raise KeyError(f"ERROR: Column: {col} not seen at fit time.")
 
     # -----------------------------------
+
+    def _apply_encoding_fit(self):
+        all_cat_cols = get_cat_cols(self.df)
+        all_num_cols = [value for value in list(self.df) if value not in all_cat_cols]
+
+        df_valid = pd.DataFrame()
+
+        if self.enable_encoder is False:
+            self.print_message(
+                "\nWARNING: Categorical columns will be excluded from the iterative imputation process.\n"
+                + "If you'd like to include these columns, you need to set 'enable_encoder'=True.\n"
+                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline "
+                + "class and call your own encoder before calling this subclass for imputation.",
+            )
+            df_valid = self._get_df_subset(self.df, all_num_cols)
+
+        else:
+            self.print_message(
+                "\nWARNING: 'enable_encoder'=True and categorical columns will be encoded using ordinal encoding before "
+                + "applying the iterative imputation process.\n"
+                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class "
+                + "and call your own encoder before calling this subclass for imputation.",
+            )
+            self.ordinal_encoder = EncoderOrdinal(df=self.df, col_encode=all_cat_cols, unknown_value=np.nan)
+            self.ordinal_encoder.fit()
+            df_valid = self.ordinal_encoder.transform(self.df)
+
+        self.valid_cols = list(df_valid)
+
+        return df_valid
+
+    # -----------------------------------
+    def _apply_encoding_transf(self, all_cat_cols, df_valid):
+        if self.enable_encoder is False:
+            if len(all_cat_cols) > 0:
+                raise ValueError(
+                    "ERROR: Categorical data unseen at fit time and can't be included in the iterative imputation process without encoding.\n"
+                    + "If you'd like to ordinal encode and impute these columns, use 'enable_encoder'=True.\n"
+                    + "Note that encoded columns are not guaranteed to reverse transform if they have imputed values.\n"
+                    + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline "
+                    + "class and call your own encoder before calling this subclass."
+                )
+            df_to_transf = df_valid
+
+        else:
+            self.print_message(
+                "\nWARNING: Note that encoded columns are not guaranteed to reverse transform if they have imputed values.\n"
+                + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class and "
+                + "call your own encoder before calling this subclass."
+            )
+
+            self.ordinal_encoder.fit(df_valid)
+            df_to_transf = self.ordinal_encoder.transform(df_valid)
+
+        return df_to_transf
+
+    # -----------------------------------
+
+    def _revert_encoding(
+        self,
+        transf_df,
+        df,
+        df_to_transf,
+        cat_cols_missing_value_impute,
+        cat_cols_no_missing_value,
+        missing_value_cols_no_impute,
+        non_valid_cols,
+    ):
+        # attempt inverse_transform encoded imputed columns.
+        try:
+            if self.enable_encoder is True:
+                decoded_transf_df = self.ordinal_encoder.inverse_transform(transf_df)
+                transf_df[cat_cols_missing_value_impute] = decoded_transf_df[cat_cols_missing_value_impute]
+                self.print_message(f"\nImputed categorical columns' encoding was reverse transformed.")
+        except IndexError:
+            self.print_message(
+                f"\nImputed categorical columns' encoding was not reverse transformed."
+                + f"Note that encoded columns are not guaranteed to reverse transform if they have imputed values.\n"
+            )
+            pass
+
+        # reverse cols with missing values not in col_impute to their original values.
+        transf_df[missing_value_cols_no_impute] = df[missing_value_cols_no_impute]
+
+        # inverse_transform cat cols not in col_impute.
+        if self.enable_encoder is True and len(cat_cols_no_missing_value) > 0:
+            decoded_df = self.ordinal_encoder.inverse_transform(df_to_transf)
+            transf_df[cat_cols_no_missing_value] = decoded_df[cat_cols_no_missing_value]
+
+        # re-add categorical cols possibly excluded at fit time with enable_encoder=False.
+        for col in non_valid_cols:
+            transf_df[col] = df[col]
+
+        return transf_df
+
+    # -----------------------------------
     def fit(self, df: Union[pd.DataFrame, np.ndarray] = None, y: Union[pd.Series, np.ndarray] = None):
         """
         Default fit method for all imputation methods that inherits from the current
@@ -100,7 +218,7 @@ class DataImputer(DataProcessing):
         if self.do_nothing:
             return
         self._set_df(df, require_set=True)
-        self._set_column_to_impute()
+        self._set_columns_to_impute()
         self._check_valid_input()
         self._fit()
         self.fitted = True
