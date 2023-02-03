@@ -261,7 +261,7 @@ class DataProcessing(ABC):
         """
         For a given dataset df, check if all column names in col_list are present
         in df. col_list can be a list of column names of column indexes. If one of
-        the column names or indexes is not present in df, a ValuError is raised. If
+        the column names or indexes is not present in df, a ValueError is raised. If
         the col_list parameter is made up of integer values (indices) and the dataframe
         has column names, return a new column list using the column names instead.
 

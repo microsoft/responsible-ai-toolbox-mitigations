@@ -19,7 +19,7 @@ class BasicImputer(DataImputer):
     check the `SimpleImputer's documentation
     <https://scikit-learn.org/stable/modules/generated/sklearn.impute.SimpleImputer.html>`_.
 
-    :param df: pandas data frame that contains the columns to be encoded;
+    :param df: pandas data frame that contains the columns to be imputed;
 
     :param col_impute: a list of the column names or indexes that will be imputed.
         If None, this parameter will be set automatically as being a list of all
@@ -200,6 +200,7 @@ class BasicImputer(DataImputer):
         non_spec_cols = [value for value in self.col_impute if value not in self.specific_col.keys()]
         self.cat_cols = get_cat_cols(self.df, subset=non_spec_cols)
         self.num_cols = [col for col in non_spec_cols if col not in self.cat_cols]
+        self.valid_cols = list(self.df)
 
         self.imputers = {}
         for col in self.col_impute:
@@ -231,6 +232,8 @@ class BasicImputer(DataImputer):
 
         :param df: the full dataset being transformed.
         """
+        self._check_transf_data_structure(df)
+
         transf_df = df.copy()
         for col in self.col_impute:
             df_valid = self._get_df_subset(df, [col])
