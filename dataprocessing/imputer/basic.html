@@ -23,7 +23,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="BasicImputer Example" href="../../notebooks/dataprocessing/module_tests/imputation.html" />
+    <link rel="next" title="BasicImputer Example" href="../../notebooks/dataprocessing/module_tests/basic_imputation.html" />
     <link rel="prev" title="Imputers" href="imputer.html" /> 
 </head>
 
@@ -127,7 +127,7 @@
 }
 </style>
 <section id="basicimputer">
-<h1>BasicImputer<a class="headerlink" href="#basicimputer" title="Permalink to this heading"></a></h1>
+<span id="basic"></span><h1>BasicImputer<a class="headerlink" href="#basicimputer" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="raimitigations.dataprocessing.BasicImputer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raimitigations.dataprocessing.</span></span><span class="sig-name descname"><span class="pre">BasicImputer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_impute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numerical</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">specific_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.dataprocessing.BasicImputer" title="Permalink to this definition"></a></dt>
@@ -143,7 +143,7 @@ check the <a class="reference external" href="https://scikit-learn.org/stable/mo
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> – pandas data frame that contains the columns to be encoded;</p></li>
+<li><p><strong>df</strong> – pandas data frame that contains the columns to be imputed;</p></li>
 <li><p><strong>col_impute</strong> – a list of the column names or indexes that will be imputed.
 If None, this parameter will be set automatically as being a list of all
 columns with any NaN value;</p></li>
@@ -240,7 +240,7 @@ columns. The dict structure is given by:</p>
     <img alt="thumbnail" src="../../_static/no_image.png" />
     <p class="caption">
       <span class="caption-text">
-        <a class="reference internal" href="../../notebooks/dataprocessing/module_tests/imputation.html">
+        <a class="reference internal" href="../../notebooks/dataprocessing/module_tests/basic_imputation.html">
           <span class="std std-ref">BasicImputer Example</span>
         </a>
       </span>
@@ -255,7 +255,7 @@ columns. The dict structure is given by:</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="imputer.html" class="btn btn-neutral float-left" title="Imputers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../../notebooks/dataprocessing/module_tests/imputation.html" class="btn btn-neutral float-right" title="BasicImputer Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../../notebooks/dataprocessing/module_tests/basic_imputation.html" class="btn btn-neutral float-right" title="BasicImputer Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

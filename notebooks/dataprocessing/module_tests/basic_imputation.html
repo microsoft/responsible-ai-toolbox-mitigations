@@ -25,7 +25,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Sampling" href="../../../dataprocessing/sampler/sampler.html" />
+    <link rel="next" title="IterativeDataImputer" href="../../../dataprocessing/imputer/iterative.html" />
     <link rel="prev" title="BasicImputer" href="../../../dataprocessing/imputer/basic.html" /> 
 </head>
 
@@ -56,6 +56,8 @@
 <li class="toctree-l4"><a class="reference internal" href="encoding.html">Encoding Examples</a></li>
 <li class="toctree-l4"><a class="reference internal" href="scaler.html">Data Scaling</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">BasicImputer Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="iterative_imputation.html">IterativeDataImputer Example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="knn_imputation.html">KNNDataImputer Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="feat_sel_sequential.html">SeqFeatSelection Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="feat_sel_catboost.html">CatBoostSelection Example</a></li>
 <li class="toctree-l4"><a class="reference internal" href="feat_sel_corr_tutorial.html">Checking Correlations Between Variables - A Comprehensive Guide</a></li>
@@ -100,7 +102,7 @@
           <li class="breadcrumb-item"><a href="../../../dataprocessing/imputer/basic.html">BasicImputer</a></li>
       <li class="breadcrumb-item active">BasicImputer Example</li>
       <li class="wy-breadcrumbs-aside">
-              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/dataprocessing/module_tests/imputation.ipynb" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/dataprocessing/module_tests/basic_imputation.ipynb" class="fa fa-github"> Edit on GitHub</a>
       </li>
   </ul>
   <hr/>
@@ -702,15 +704,6 @@ dtype: bool
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-No columns specified for imputation. These columns have been automatically identified:
-[&#39;education&#39;, &#39;previous_year_rating&#39;]
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -1283,8 +1276,6 @@ dtype: bool
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-No columns specified for imputation. These columns have been automatically identified:
-[&#39;education&#39;, &#39;previous_year_rating&#39;]
 [&#34;Master&#39;s &amp; above&#34; &#34;Bachelor&#39;s&#34; &#39;null&#39; &#39;Below Secondary&#39;]
 </pre></div></div>
 </div>
@@ -1309,8 +1300,6 @@ No columns specified for imputation. These columns have been automatically ident
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-No columns specified for imputation. These columns have been automatically identified:
-[&#39;education&#39;, &#39;previous_year_rating&#39;]
 [ 5.  3.  1.  4. -5.  2.]
 </pre></div></div>
 </div>
@@ -2140,14 +2129,6 @@ dtype: bool
 [   5.    3.    1.    4. -100.    2.]
 </pre></div></div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</div>
 </section>
 </section>
 
@@ -2156,7 +2137,7 @@ dtype: bool
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../../../dataprocessing/imputer/basic.html" class="btn btn-neutral float-left" title="BasicImputer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../../../dataprocessing/sampler/sampler.html" class="btn btn-neutral float-right" title="Sampling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../../../dataprocessing/imputer/iterative.html" class="btn btn-neutral float-right" title="IterativeDataImputer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

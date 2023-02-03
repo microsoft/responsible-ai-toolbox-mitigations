@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KNNDataImputer &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="KNNDataImputer Example" href="../../notebooks/dataprocessing/module_tests/knn_imputation.html" />
+    <link rel="prev" title="IterativeDataImputer Example" href="../../notebooks/dataprocessing/module_tests/iterative_imputation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../intro.html">DataProcessing</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#structure">Structure</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../intro.html#api">API</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../dataprocessing.html">DataProcessing</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../dataprocessing.html#raimitigations.dataprocessing.DataProcessing"><code class="docutils literal notranslate"><span class="pre">DataProcessing</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../encoder/encoder.html">Encoders</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../feat_sel/feat_sel.html">Feature Selection</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="imputer.html">Imputers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sampler/sampler.html">Sampling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../scaler/scaler.html">Scalers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../intro.html#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils/utils.html">Utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="../dataprocessing.html">DataProcessing</a></li>
+          <li class="breadcrumb-item"><a href="imputer.html">Imputers</a></li>
+      <li class="breadcrumb-item active">KNNDataImputer</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/dataprocessing/imputer/knn.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="knndataimputer">
+<span id="knn"></span><h1>KNNDataImputer<a class="headerlink" href="#knndataimputer" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="raimitigations.dataprocessing.KNNDataImputer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raimitigations.dataprocessing.</span></span><span class="sig-name descname"><span class="pre">KNNDataImputer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_impute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_encoder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knn_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sklearn_obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">object</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.dataprocessing.KNNDataImputer" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="imputer.html#raimitigations.dataprocessing.DataImputer" title="raimitigations.dataprocessing.imputer.imputer.DataImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataImputer</span></code></a></p>
+<p>Concrete class that imputes missing data of a feature using K-nearest neighbours. A feature’s missing values are imputed using
+the mean value from k-nearest neighbors in the dataset. Two samples are close if the features that neither is missing are close.
+This subclass uses the <code class="xref py py-class docutils literal notranslate"><span class="pre">KNNImputer</span></code> class from <code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn</span></code> in the background.
+sklearn.impute.KNNImputer can only handle numerical data, however, this subclass allows for categorical input by applying ordinal
+encoding before calling the sklearn class. In order to use this function, use enable_encoder=True. Note that encoded columns are
+not guaranteed to reverse transform if they have imputed values.
+If you’d like to use a different type of encoding before imputation, consider using the Pipeline class and call your own encoder
+before calling this subclass for imputation.
+For more details see:
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.impute.KNNImputer">https://scikit-learn.org/stable/modules/generated/sklearn.impute.KNNImputer</a>.html#</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – pandas data frame that contains the columns to be imputed;</p></li>
+<li><p><strong>col_impute</strong> – a list of the column names or indexes that will be imputed.
+If None, this parameter will be set automatically as being a list of all
+columns with any NaN value;</p></li>
+<li><p><strong>enable_encoder</strong> – a boolean flag to allow for applying ordinal encoding of categorical data before applying the KNNImputer since it only accepts numerical values.</p></li>
+<li><p><strong>knn_params</strong> – <p>a dict indicating the parameters used by
+<code class="xref py py-class docutils literal notranslate"><span class="pre">KNNImputer</span></code>. The dict has the following structure:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">{</div>
+<div class="line-block">
+<div class="line"><strong>‘missing_values’</strong>:np.nan,</div>
+<div class="line"><strong>’n_neighbors’</strong>:5,</div>
+<div class="line"><strong>’weights’</strong>:’uniform’,</div>
+<div class="line"><strong>’metric’</strong>:’nan_euclidean’,</div>
+<div class="line"><strong>’copy’</strong>:True,</div>
+</div>
+<div class="line">}</div>
+</div>
+</div></blockquote>
+<p>where these are the parameters used by sklearn’s KNNImputer. If None,
+this dict will be auto-filled as the one above.
+<code class="docutils literal notranslate"><span class="pre">Note:</span> <span class="pre">'weights'</span> <span class="pre">can</span> <span class="pre">take</span> <span class="pre">one</span> <span class="pre">of</span> <span class="pre">these</span> <span class="pre">values:</span> <span class="pre">['uniform',</span> <span class="pre">'distance']</span> <span class="pre">or</span> <span class="pre">callable</span></code>
+<code class="docutils literal notranslate"><span class="pre">and</span> <span class="pre">'metric'</span> <span class="pre">can</span> <span class="pre">take</span> <span class="pre">one</span> <span class="pre">of</span> <span class="pre">these</span> <span class="pre">values:</span> <span class="pre">['nan_euclidean']</span> <span class="pre">or</span> <span class="pre">callable</span></code></p>
+</p></li>
+<li><p><strong>sklearn_obj</strong> – an sklearn.impute.KNNImputer object to use directly. If this parameter is used,
+knn_params will be overwritten.</p></li>
+<li><p><strong>verbose</strong> – indicates whether internal messages should be printed or not.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Class Diagram</p>
+<div class="graphviz"><img src="../../_images/inheritance-6d79479e3258711d8db173b8ac9ad2f8b9233604.png" alt="Inheritance diagram of raimitigations.dataprocessing.KNNDataImputer" usemap="#inheritancec80b295786" class="inheritance graphviz" /></div>
+<map id="inheritancec80b295786" name="inheritancec80b295786">
+<area shape="rect" id="node3" href="../dataprocessing.html#raimitigations.dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node2" href="imputer.html#raimitigations.dataprocessing.DataImputer" target="_top" title="Base class for all imputer subclasses. Implements basic functionalities" alt="" coords="296,5,400,31"/>
+<area shape="rect" id="node4" href="#raimitigations.dataprocessing.KNNDataImputer" target="_top" title="Concrete class that imputes missing data of a feature using K&#45;nearest neighbours. A feature&#39;s missing values are imputed using" alt="" coords="448,5,581,31"/>
+</map><section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../../notebooks/dataprocessing/module_tests/knn_imputation.html">
+          <span class="std std-ref">KNNDataImputer Example</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-clear"></div></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../notebooks/dataprocessing/module_tests/iterative_imputation.html" class="btn btn-neutral float-left" title="IterativeDataImputer Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../notebooks/dataprocessing/module_tests/knn_imputation.html" class="btn btn-neutral float-right" title="KNNDataImputer Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

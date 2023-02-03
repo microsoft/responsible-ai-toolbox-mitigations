@@ -1,3 +1,5 @@
+.. _basic:
+
 BasicImputer
 ============
 
@@ -14,4 +16,4 @@ Example
 -------
 
 .. nbgallery::
-   ../../notebooks/dataprocessing/module_tests/imputation
+   ../../notebooks/dataprocessing/module_tests/basic_imputation

@@ -1,0 +1,8 @@
+<map id="inheritance8c091e74c9" name="inheritance8c091e74c9">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,55,77,80"/>
+<area shape="rect" id="node4" href="../dataprocessing.html#raimitigations.dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,55,248,80"/>
+<area shape="rect" id="node2" href="basic.html#raimitigations.dataprocessing.BasicImputer" target="_top" title="Concrete class that imputes missing data in a dataset using a set of simple" alt="" coords="473,5,581,31"/>
+<area shape="rect" id="node3" href="#raimitigations.dataprocessing.DataImputer" target="_top" title="Base class for all imputer subclasses. Implements basic functionalities" alt="" coords="296,55,400,80"/>
+<area shape="rect" id="node5" href="iterative.html#raimitigations.dataprocessing.IterativeDataImputer" target="_top" title="Concrete class that imputes missing data of a feature using the other features. It uses a round&#45;robin method" alt="" coords="448,55,607,80"/>
+<area shape="rect" id="node6" href="knn.html#raimitigations.dataprocessing.KNNDataImputer" target="_top" title="Concrete class that imputes missing data of a feature using K&#45;nearest neighbours. A feature&#39;s missing values are imputed using" alt="" coords="461,104,594,129"/>
+</map>
