@@ -60,24 +60,27 @@ def _get_object_list(df=None, use_index=True):
     imputer = IterativeDataImputer(df=df, col_impute=col_impute1, enable_encoder=False, sklearn_obj=IterativeImputer(estimator=LinearRegression(), max_iter=1))
     imputer_list.append(imputer)
 
+    imputer = IterativeDataImputer(df=df, col_impute=col_impute2, enable_encoder=True, iterative_params=iterative_params)
+    imputer_list.append(imputer)
+
     return imputer_list
 
 
 # -----------------------------------
-def _run_main_commands(df, transf, df_in_fit=True):
+def _run_main_commands(df, obj, df_in_fit=True):
     df = df.copy()
     if df_in_fit:
-        transf.fit(df=df)
+        obj.fit(df=df)
     else:
-        transf.fit()
-    new_df = transf.transform(df)
+        obj.fit()
+    new_df = obj.transform(df)
 
     nan_dict = new_df.isna().any()
-    nan_dict = {key: nan_dict[key] for key in nan_dict.keys() if key in transf.col_impute}
+    nan_dict = {key: nan_dict[key] for key in nan_dict.keys() if key in obj.col_impute}
     assert not all(nan_dict.values()), (
         "ERROR: Not all missing values were removed. Something went wrong.\n"
         f"The columns with nan are: {nan_dict}\n"
-        f"The columns that should've been imputed are: {transf.col_impute}"
+        f"The columns that should've been imputed are: {obj.col_impute}"
     )
 
 # -----------------------------------
@@ -94,9 +97,14 @@ def test_col_name(df_full_nan):
     df = df_full_nan
 
     obj_list = _get_object_list(df=None, use_index=False)
+    df_edited = df.copy()
+    df_edited['CN_0_num_0'] = df['CN_0_num_0'].replace({"val0_0": "val0_2", "val0_1": "val0_4"})
     for obj in obj_list:
-        _run_main_commands(df, obj, df_in_fit=True)
-
+        if obj == obj_list[-1]:
+            obj.df = df
+            _run_main_commands(df_edited, obj, df_in_fit=False)
+        else:
+            _run_main_commands(df, obj, df_in_fit=True)
 
 # -----------------------------------
 def test_col_index(df_full_nan):
@@ -104,7 +112,7 @@ def test_col_index(df_full_nan):
 
     obj_list = _get_object_list(df=None, use_index=True)
     for obj in obj_list:
-        _run_main_commands(df, obj, df_in_fit=True)
+         _run_main_commands(df, obj, df_in_fit=True)
 
 
 # -----------------------------------
@@ -113,6 +121,7 @@ def test_no_col_name(df_full_nan):
 
     df.columns = [i for i in range(df.shape[1])]
     obj_list = _get_object_list(df=None, use_index=True)
+
     for obj in obj_list:
         _run_main_commands(df, obj, df_in_fit=True)
 

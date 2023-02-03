@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Union
+from typing import Union, Tuple
 
 import numpy as np
 import pandas as pd
@@ -48,7 +48,7 @@ class DataImputer(DataProcessing):
         """
         Sets the columns to impute (col_impute) automatically
         if these columns are not provided. col_impute is set
-        to be all columns with at least one NaN value in them.
+        to be all columns.
         """
         if self.col_impute is not None:
             return
@@ -56,24 +56,7 @@ class DataImputer(DataProcessing):
         self.none_status = True
         self.col_impute = self.df.columns.to_list()
 
-        col_nan_status = self.df.isna().any()
-        col_with_nan = []
-        for i, value in enumerate(col_nan_status.index):
-            if col_nan_status[value]:
-                if type(value) == int:
-                    col_with_nan.append(i)
-                else:
-                    col_with_nan.append(value)
-
-        self.print_message(
-            f"No columns specified for imputation. These columns "
-            + f"have been automatically identified at fit time:\n{col_with_nan}"
-        )
-
-        self.col_impute = col_with_nan
-
     # -----------------------------------
-
     def _reset_columns_to_impute(self, df: Union[pd.DataFrame, np.ndarray]):
         """
         Resets the columns to impute (col_impute) automatically if col_impute
@@ -100,7 +83,6 @@ class DataImputer(DataProcessing):
         self.col_impute = col_with_nan
 
     # -----------------------------------
-
     def _check_valid_input(self):
         self.col_impute = self._check_error_col_list(self.df, self.col_impute, "col_impute")
 
@@ -127,7 +109,6 @@ class DataImputer(DataProcessing):
                 raise KeyError(f"ERROR: Column: {col} not seen at fit time.")
 
     # -----------------------------------
-
     def _apply_encoding_fit(self) -> Union[pd.DataFrame, np.ndarray]:
         """
         Creates and fits an ordinal encoder to all categorical data before
@@ -167,21 +148,18 @@ class DataImputer(DataProcessing):
         return df_valid
 
     # -----------------------------------
-    def _apply_encoding_transf(
-        self, all_cat_cols: list, df_valid: Union[pd.DataFrame, np.ndarray]
-    ) -> Union[pd.DataFrame, np.ndarray]:
+    def _apply_encoding_transf(self, df_valid: Union[pd.DataFrame, np.ndarray]) -> Union[pd.DataFrame, np.ndarray]:
         """
         Encodes categorical data before applying the imputer's transform function using
         the mapping of the encoder created at fit time while also encoding new values
         on top of the original mapping.
-
-        :param all_cat_cols: a list of all categorical columns in the dataframe;
 
         :param df_valid: pandas dataframe to encode;
 
         :return: resulting pandas dataframe or np.ndarray
         :rtype: pd.dataframe or np.ndarray
         """
+        all_cat_cols = get_cat_cols(df_valid)
         if self.enable_encoder is False:
             if len(all_cat_cols) > 0:
                 raise ValueError(
@@ -207,57 +185,87 @@ class DataImputer(DataProcessing):
         return df_to_transf
 
     # -----------------------------------
-
     def _revert_encoding(
-        self,
-        transf_df: Union[pd.DataFrame, np.ndarray],
-        df: Union[pd.DataFrame, np.ndarray],
-        df_to_transf: Union[pd.DataFrame, np.ndarray],
-        cat_cols_missing_value_impute: list,
-        cat_cols_no_missing_value: list,
-        missing_value_cols_no_impute: list,
-        non_valid_cols: list,
+        self, transf_df: Union[pd.DataFrame, np.ndarray], missing_value_cols_no_impute: list
     ) -> Union[pd.DataFrame, np.ndarray]:
         """
         Attempts to revert the encoding of all categorical data in the set,
         whether it was imputed or not.
 
         :param transf_df: pandas dataframe post possible encoding and imputation;
-
-        :param df: original pandas dataframe before imputation or encoding;
-
-        :param df_to_transf: pandas dataframe post possible encoding, pre imputation;
-
-        :param cat_cols_missing_value_impute: list of categorical columns that were imputed;
-
-        :param cat_cols_no_missing_value: list of categorical columns that had no missing
-            values but needed to be encoded to be part of the imputation process;
-
-        :param missing_value_cols_no_impute: list of columns that contain missing values
-            but weren't specified in col_impute;
-
-        :param non_valid_cols: list of columns excluded at fit time, possibly because
-            they are categorical and enable_encoder=False;
+        :param missing_value_cols_no_impute: list of columns with missing values but not to be imputed;
 
         :return: resulting pandas dataframe or np.ndarray
         :rtype: pd.dataframe or np.ndarray
         """
-
-        # attempt inverse_transform encoded imputed columns.
+        # inverse_transform encoded columns
         if self.enable_encoder is True:
-            decoded_transf_df = _inverse_transform_ordinal_encoder_with_new_values(self.inverse_mapping, transf_df)
-            transf_df[cat_cols_missing_value_impute] = decoded_transf_df[cat_cols_missing_value_impute]
+            self.inverse_mapping = dict(
+                (k, self.inverse_mapping[k]) for k in self.inverse_mapping if k not in missing_value_cols_no_impute
+            )
+            transf_df = _inverse_transform_ordinal_encoder_with_new_values(self.inverse_mapping, transf_df)
             self.print_message(f"\nImputed categorical columns' reverse encoding transformation complete.")
 
-        # reverse cols with missing values not in col_impute to their original values.
+        return transf_df
+
+    # -----------------------------------
+    def _pre_process_transform(
+        self, df: Union[pd.DataFrame, np.ndarray], missing_values_param: any
+    ) -> Tuple[Union[pd.DataFrame, np.ndarray], list]:
+        """
+        Applies pre-processing steps before transform, these include:
+        - Resetting col_impute if it was originally None using the df to be transformed.
+        - Checking that the structure of the df to be transformed matches that of the dataframe at fit.
+        - Encodes categorical data if enable_encoder=True and excludes them otherwise.
+        - Saves a list of columns with missing values but aren't set to be imputed in col_impute.
+
+        :param df: pandas dataframe to be transformed by the imputer;
+        :param missing_values_param: missing value parameter specified for
+            sklearn's imputer object in dict passed by user;
+
+        :return: pre-processed pandas dataframe or np.ndarray, list of columns with missing values but not to be imputed.
+        :rtype: pd.dataframe or np.ndarray, list
+        """
+        self._reset_columns_to_impute(df)
+        self._check_transf_data_structure(df)
+
+        df_valid = self._get_df_subset(df, self.valid_cols)
+        df_to_transf = self._apply_encoding_transf(df_valid)
+        missing_value_cols = [
+            col
+            for col in list(df_to_transf)
+            if (missing_values_param in df_to_transf[col] or df_to_transf[col].isna().any())
+        ]
+        missing_value_cols_no_impute = list(set(missing_value_cols) - set(self.col_impute))
+
+        return df_to_transf, missing_value_cols_no_impute
+
+    # -----------------------------------
+    def _post_process_transform(
+        self,
+        transf_df: Union[pd.DataFrame, np.ndarray],
+        df: Union[pd.DataFrame, np.ndarray],
+        missing_value_cols_no_impute: list,
+    ) -> Union[pd.DataFrame, np.ndarray]:
+        """
+        Applies post-processing steps after transform, these include:
+        - Reverts possible encoding of categorical data..
+        - Reverts columns that had missing values and were automatically imputed
+            but weren't listed in col_impute to their original state.
+        - Re-adds categorical columns that were possibly excluded at fit time with
+            enable_encoder=False.
+
+        :param transf_df: pandas dataframe that was transformed by the imputer;
+        :param df: original pandas dataframe passed to the imputer's transform
+        :param missing_value_cols_no_impute: list of columns with missing values but not to be imputed;
+
+        :return: post-processed pandas dataframe or np.ndarray
+        :rtype: pd.dataframe or np.ndarray
+        """
+        transf_df = self._revert_encoding(transf_df, missing_value_cols_no_impute)
         transf_df[missing_value_cols_no_impute] = df[missing_value_cols_no_impute]
 
-        # inverse_transform cat cols not in col_impute.
-        if self.enable_encoder is True and len(cat_cols_no_missing_value) > 0:
-            decoded_df = _inverse_transform_ordinal_encoder_with_new_values(self.inverse_mapping, df_to_transf)
-            transf_df[cat_cols_no_missing_value] = decoded_df[cat_cols_no_missing_value]
-
-        # re-add categorical cols possibly excluded at fit time with enable_encoder=False.
+        non_valid_cols = list(set(list(df)) - set(self.valid_cols))
         for col in non_valid_cols:
             transf_df[col] = df[col]
 

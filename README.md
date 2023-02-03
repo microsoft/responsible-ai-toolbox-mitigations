@@ -211,7 +211,7 @@ Any use of third-party trademarks or logos are subject to those third-party's po
 
 ## Research and Acknowledgements
 
-**Current Maintainers:** [Marah Abdin](https://github.com/marah-abdin)[Matheus Mendonça](https://github.com/mrfmendonca), [Dany Rouhana](https://github.com/danyrouh), [Mark Encarnación](https://github.com/markenc)
+**Current Maintainers:** [Marah Abdin](https://github.com/marah-abdin), [Matheus Mendonça](https://github.com/mrfmendonca), [Dany Rouhana](https://github.com/danyrouh), [Mark Encarnación](https://github.com/markenc)
 
 **Past Maintainers:** [Akshara Ramakrishnan](https://github.com/akshara-msft), [Irina Spiridonova](https://github.com/irinasp)
 

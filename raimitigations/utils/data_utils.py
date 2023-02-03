@@ -98,11 +98,9 @@ def _transform_ordinal_encoder_with_new_values(
     values unseen at fit time on top of the existing mapping.
 
     :param encoder: an EncoderOrdinal object to use for the base mapping;
-
     :param df: pandas dataframe containing new unmapped values to encode;
 
     :return: the encoded dataframe, the corresponding inverse-encoding map.
-
     :rtype: pd.DataFrame or np.ndarray, dictionary.
     """
     df_cpy = df.copy()
@@ -113,14 +111,14 @@ def _transform_ordinal_encoder_with_new_values(
 
     for col in encoder.col_encode:
         max_encoding = max(encoder_mapping[col]["labels"])
-        for val in (df_cpy.loc[:, col]).unique():
+        for val in (df_cpy[col]).unique():
             if val not in encoder_mapping[col]["values"] and not pd.isna(val):
                 new_mapping[col]["values"].append(val)
                 new_mapping[col]["labels"].append(max_encoding + 1)
                 max_encoding += 1
 
         map_simple = dict(zip(new_mapping[col]["values"], new_mapping[col]["labels"]))
-        df_cpy[col] = df_cpy.loc[:, col].map(map_simple, na_action=None)
+        df_cpy[col] = df_cpy[col].map(map_simple, na_action=None)
 
         inverse_map_dicts[col] = dict(zip(new_mapping[col]["labels"], new_mapping[col]["values"]))
 
@@ -128,32 +126,29 @@ def _transform_ordinal_encoder_with_new_values(
 
 
 # -------------------------------------
-
-
 def _inverse_transform_ordinal_encoder_with_new_values(
-    inverse_mapping: dict, df: Union[pd.DataFrame, np.ndarray]
+    inverse_mapping: dict,
+    df: Union[pd.DataFrame, np.ndarray],
 ) -> Union[pd.DataFrame, np.ndarray]:
     """
     Inverse-transforms encoding created by __ordinal_encoder_with_new_values().
 
     :param inverse_mapping: a dictionary mapping each column to a dictionary
         that maps encoding labels to the corresponding values of that column;
-
     :param df: pandas dataframe to inverse-transform its encoding;
 
     :return: the inverse transformed dataframe.
-
     :rtype: pd.DataFrame or np.ndarray.
     """
     df_cpy = df.copy()
     for col in inverse_mapping.keys():
-        df_cpy[col] = df.loc[:, col].astype("Float64").astype("Int64").map(inverse_mapping[col])
+        df_cpy[col] = df[col].astype("Float64").astype("Int64").map(inverse_mapping[col])
         if df_cpy[col].isnull().values.any():
             # if inverse encode failed for some values in the column, don't inverse encode column
-            df_cpy[col] = df.loc[:, col]
+            df_cpy[col] = df[col]
             print(
-                f"\nImputed categorical columns' encoding was not reverse transformed for column: {col}."
-                + f"Note that encoded columns are not guaranteed to reverse transform if they have imputed values.\n"
+                f"WARNING: Encoding was not reverse transformed for column: {col}."
+                + " Note that encoded columns are not guaranteed to reverse transform if they have imputed values."
             )
 
     return df_cpy

@@ -7,7 +7,6 @@ from sklearn.impute import IterativeImputer
 from sklearn.linear_model import BayesianRidge
 
 from .imputer import DataImputer
-from ...utils.data_utils import get_cat_cols
 
 
 class IterativeDataImputer(DataImputer):
@@ -199,39 +198,12 @@ class IterativeDataImputer(DataImputer):
         :return: the transformed dataset.
         :rtype: pd.DataFrame or np.ndarray
         """
-        self._reset_columns_to_impute(df)
-        self._check_transf_data_structure(df)
-
-        df_valid = self._get_df_subset(df, self.valid_cols)
-        non_valid_cols = list(set(list(df)) - set(self.valid_cols))
-        all_cat_cols = get_cat_cols(df_valid)
-        cat_cols_no_missing_value = [
-            value
-            for value in list(all_cat_cols)
-            if (self.iterative_params["missing_values"] not in df_valid[value] and not df_valid[value].isna().any())
-        ]
-        cat_cols_missing_value_impute = [
-            value for value in list(set(all_cat_cols) - set(cat_cols_no_missing_value)) if (value in self.col_impute)
-        ]
-
-        df_to_transf = self._apply_encoding_transf(all_cat_cols, df_valid)
-        missing_value_cols = [
-            value
-            for value in list(df_to_transf)
-            if (self.iterative_params["missing_values"] in df_to_transf[value] or df_to_transf[value].isna().any())
-        ]
-        missing_value_cols_no_impute = list(set(missing_value_cols) - set(self.col_impute))
+        df_to_transf, missing_value_cols_no_impute = self._pre_process_transform(
+            df, self.iterative_params["missing_values"]
+        )
 
         transf_df = pd.DataFrame(self.imputer.transform(df_to_transf), columns=self.valid_cols)
 
-        transf_df = self._revert_encoding(
-            transf_df,
-            df,
-            df_to_transf,
-            cat_cols_missing_value_impute,
-            cat_cols_no_missing_value,
-            missing_value_cols_no_impute,
-            non_valid_cols,
-        )
+        transf_df = self._post_process_transform(transf_df, df, missing_value_cols_no_impute)
 
         return transf_df

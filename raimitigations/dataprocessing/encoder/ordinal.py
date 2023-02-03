@@ -246,7 +246,7 @@ class EncoderOrdinal(DataEncoding):
           - **"values":** the unique values encountered in the column;
           - **"labels":** the labels assigned to each of the unique values.
             the list from the "values" key is aligned with this
-            list, that is, mapping[column]["labels][i] is the
+            list, that is, mapping[column]["labels"][i] is the
             label assigned to the value mapping[column]["values][i].
           - **"n_labels":** the number of labels. If unknown_err is set to False,
             this will account for the label for unknown values.
