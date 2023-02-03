@@ -152,11 +152,13 @@ class KNNDataImputer(DataImputer):
         self.imputer.fit(df_valid)
 
     # -----------------------------------
-    def _transform(self, df: pd.DataFrame):
+    def _transform(self, df: pd.DataFrame) -> Union[pd.DataFrame, np.ndarray]:
         """
         Transform method complement used specifically for the current class.
 
         :param df: the full dataset being transformed.
+        :return: the transformed dataset.
+        :rtype: pd.DataFrame or np.ndarray
         """
         self._reset_columns_to_impute(df)
         self._check_transf_data_structure(df)
