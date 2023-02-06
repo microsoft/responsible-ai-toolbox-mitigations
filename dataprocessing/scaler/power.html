@@ -159,6 +159,11 @@ be scaled or transformed). If the categorical columns are not added in this
 list (<code class="docutils literal notranslate"><span class="pre">exclude_cols</span></code>), the categorical columns will be automatically identified
 and added into the <code class="docutils literal notranslate"><span class="pre">exclude_cols</span></code> list. If None, this parameter will be set
 automatically as being a list of all categorical variables in the dataset;</p></li>
+<li><p><strong>include_cols</strong> – list of the column names or indexes that should be
+transformed, that is, a list of columns to be included in the dataset being
+transformed. This parameter uses an inverse logic from the <code class="docutils literal notranslate"><span class="pre">exclude_cols</span></code>, and
+thus these two parameters shouldn’t be used at the same time. The user must
+used either the <code class="docutils literal notranslate"><span class="pre">include_cols</span></code>, or the <code class="docutils literal notranslate"><span class="pre">exclude_cols</span></code>, or neither of them;</p></li>
 <li><p><strong>transform_pipe</strong> – a list of transformations to be used as a pre-processing
 pipeline. Each transformation in this list must be a valid subclass of the
 current library (<a class="reference internal" href="../encoder/ordinal.html#raimitigations.dataprocessing.EncoderOrdinal" title="raimitigations.dataprocessing.EncoderOrdinal"><code class="xref py py-class docutils literal notranslate"><span class="pre">EncoderOrdinal</span></code></a>, <a class="reference internal" href="../imputer/basic.html#raimitigations.dataprocessing.BasicImputer" title="raimitigations.dataprocessing.BasicImputer"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasicImputer</span></code></a>, etc.). Some feature selection
