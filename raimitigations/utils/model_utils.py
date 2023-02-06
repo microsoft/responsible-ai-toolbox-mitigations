@@ -19,7 +19,14 @@ LOGISTIC = "log"
 
 
 # -----------------------------------
-def split_data(df: pd.DataFrame, label: str, test_size: float = 0.2, full_df: bool = False, regression: bool = False):
+def split_data(
+    df: pd.DataFrame,
+    label: str,
+    test_size: float = 0.2,
+    full_df: bool = False,
+    regression: bool = False,
+    random_state: int = None,
+):
     """
     Splits the dataset given by df into train and test sets.
 
@@ -53,9 +60,11 @@ def split_data(df: pd.DataFrame, label: str, test_size: float = 0.2, full_df: bo
     X = df.drop(columns=[label])
     y = df[label]
     if regression:
-        train_x, test_x, train_y, test_y = train_test_split(X, y, test_size=test_size)
+        train_x, test_x, train_y, test_y = train_test_split(X, y, test_size=test_size, random_state=random_state)
     else:
-        train_x, test_x, train_y, test_y = train_test_split(X, y, test_size=test_size, stratify=y)
+        train_x, test_x, train_y, test_y = train_test_split(
+            X, y, test_size=test_size, stratify=y, random_state=random_state
+        )
     if full_df:
         train_df = train_x
         train_df[label] = train_y
