@@ -23,7 +23,7 @@ class BasicImputer(DataImputer):
 
     :param col_impute: a list of the column names or indexes that will be imputed.
         If None, this parameter will be set automatically as being a list of all
-        columns with any NaN value;
+        columns;
 
     :param categorical: a dict indicating the parameters used by
         :class:`~sklearn.impute.SimpleImputer`. Represents the parameters of  :class:`~sklearn.impute.SimpleImputer`

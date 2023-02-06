@@ -127,7 +127,7 @@ def test_no_col_name(df_full_nan):
 
 # -----------------------------------
 def test_errors(df_full_nan):
-    
+
     with pytest.raises(Exception):
         IterativeDataImputer(col_impute=["num_0"], sklearn_obj=KNNImputer())
     with pytest.raises(Exception):
@@ -157,9 +157,10 @@ def test_errors(df_full_nan):
 
     df_cp = df_full_nan.copy()
     df_cp2 = df_cp.copy()
+    df_cp2["num_0"] = df_cp2["num_0"].astype("object")
     df_cp2.at[2, "num_0"] = 'x'
     df_cp3 = df_cp.drop(columns=["num_0"])
-    
+
     transf_obj_list = [
         (IterativeDataImputer(df=df_cp, col_impute=["num_0", "num_3", "num_4", "CN_0_num_0", "CC_1_num_1"], enable_encoder=False), df_cp),
         (IterativeDataImputer(df=df_cp, col_impute=["num_0", "num_3", "num_4", "CN_0_num_0", "CC_1_num_1"], enable_encoder=True), df_cp3),
