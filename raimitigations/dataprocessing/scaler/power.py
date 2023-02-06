@@ -37,6 +37,12 @@ class DataPowerTransformer(DataScaler):
         and added into the ``exclude_cols`` list. If None, this parameter will be set
         automatically as being a list of all categorical variables in the dataset;
 
+    :param include_cols: list of the column names or indexes that should be
+        transformed, that is, a list of columns to be included in the dataset being
+        transformed. This parameter uses an inverse logic from the ``exclude_cols``, and
+        thus these two parameters shouldn't be used at the same time. The user must
+        used either the ``include_cols``, or the ``exclude_cols``, or neither of them;
+
     :param transform_pipe: a list of transformations to be used as a pre-processing
         pipeline. Each transformation in this list must be a valid subclass of the
         current library (:class:`~raimitigations.dataprocessing.EncoderOrdinal`, :class:`~raimitigations.dataprocessing.BasicImputer`, etc.). Some feature selection
