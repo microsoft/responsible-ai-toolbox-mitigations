@@ -231,8 +231,8 @@ class CatBoostSelection(FeatureSelection):
         if self.regression:
             self.estimator = CatBoostRegressor(loss_function="RMSE", logging_level=log_level, cat_features=self.cat_col)
         else:
-            if self.df is not None:
-                n_class = self.y.nunique()
+            if self.df_info.df is not None:
+                n_class = self.y_info.df.nunique()
                 # Binary
                 loss = "CrossEntropy"
                 # Multiclass
@@ -285,16 +285,16 @@ class CatBoostSelection(FeatureSelection):
         returned by the select_features method from CatBoost.
         """
         self.select_best_n = False
-        if self.n_feat is None and self.df is not None:
+        if self.n_feat is None and self.df_info.df is not None:
             self.select_best_n = True
-            self.n_feat = int(len(self.df.columns) * self.PCT_FEAT_SEL)
+            self.n_feat = int(len(self.df_info.df.columns) * self.PCT_FEAT_SEL)
             self.n_feat = max(1, self.n_feat)
 
         if self.n_feat is not None:
             error = False
             if type(self.n_feat) != int:
                 error = True
-            elif self.n_feat <= 0 or self.n_feat > self.df.shape[1]:
+            elif self.n_feat <= 0 or self.n_feat > self.df_info.shape[1]:
                 error = True
             if error:
                 raise ValueError(
@@ -307,7 +307,7 @@ class CatBoostSelection(FeatureSelection):
         Checks for any errors or inconsistencies in the fixed_cols parameter.
         If any errors are encountered, an error is raised.
         """
-        self.feat_to_select_from = self.df.columns
+        self.feat_to_select_from = self.df_info.columns
         if self.fixed_cols is None:
             return
 
@@ -317,7 +317,7 @@ class CatBoostSelection(FeatureSelection):
                 + "should be present in the set of selected features."
             )
 
-        self.fixed_cols = self._check_error_col_list(self.df, self.fixed_cols, "fixed_cols")
+        self.fixed_cols = self._check_error_col_list(self.df_info.columns, self.fixed_cols, "fixed_cols")
 
         if len(self.fixed_cols) >= self.n_feat:
             raise ValueError(
@@ -325,7 +325,7 @@ class CatBoostSelection(FeatureSelection):
                 + f"(fixed_cols). Instead, got n_feat = {self.n_feat} <= fixed_cols = {self.fixed_cols}."
             )
 
-        self.feat_to_select_from = [col for col in self.df.columns if col not in self.fixed_cols]
+        self.feat_to_select_from = [col for col in self.df_info.columns if col not in self.fixed_cols]
         self.n_feat -= len(self.fixed_cols)
 
     # -----------------------------------
@@ -338,8 +338,8 @@ class CatBoostSelection(FeatureSelection):
         dataset. Raises an error if the value provided to the cat_col parameter is
         not a list.
         """
-        if self.cat_col is None and self.df is not None:
-            self.cat_col = get_cat_cols(self.df)
+        if self.cat_col is None and self.df_info.df is not None:
+            self.cat_col = get_cat_cols(self.df_info.df)
             if self.cat_col == []:
                 self.cat_col = None
 
@@ -348,17 +348,19 @@ class CatBoostSelection(FeatureSelection):
                 raise ValueError(
                     "ERROR: 'cat_col' must be a list. It should contain a list of column names from categorical features."
                 )
-            self.cat_col = self._check_error_col_list(self.df, self.cat_col, "cat_col")
+            self.cat_col = self._check_error_col_list(self.df_info.columns, self.cat_col, "cat_col")
 
     # -----------------------------------
     def _get_train_test_sets(self):
         if self.regression:
-            train_X, test_X, train_y, test_y = train_test_split(self.df, self.y, test_size=self.test_size)
+            train_X, test_X, train_y, test_y = train_test_split(
+                self.df_info.df, self.y_info.df, test_size=self.test_size
+            )
         else:
             train_X, test_X, train_y, test_y = train_test_split(
-                self.df, self.y, test_size=self.test_size, stratify=self.y
+                self.df_info.df, self.y_info.df, test_size=self.test_size, stratify=self.y_info.df
             )
-        feature_names = list(self.df.columns)
+        feature_names = list(self.df_info.columns)
         train_pool = Pool(train_X, train_y, feature_names=feature_names, cat_features=self.cat_col)
         test_pool = Pool(test_X, test_y, feature_names=feature_names, cat_features=self.cat_col)
         return train_pool, test_pool
@@ -376,7 +378,7 @@ class CatBoostSelection(FeatureSelection):
             return
 
         for col in self.fixed_cols:
-            col_idx = self.df.columns.get_loc(col)
+            col_idx = self.df_info.columns.get_loc(col)
             self.summary["selected_features"].append(col_idx)
             self.summary["selected_features_names"].append(col)
 
@@ -392,7 +394,7 @@ class CatBoostSelection(FeatureSelection):
         log_level = "Silent"
         if self.catboost_log:
             log_level = "Verbose"
-        self.feat_to_select_from = [self.df.columns.get_loc(col) for col in self.feat_to_select_from]
+        self.feat_to_select_from = [self.df_info.columns.get_loc(col) for col in self.feat_to_select_from]
         self.summary = self.estimator.select_features(
             train_pool,
             eval_set=test_pool,
@@ -434,8 +436,8 @@ class CatBoostSelection(FeatureSelection):
 
         self.summary["eliminated_features"] = removed_feat_indices
         self.summary["eliminated_features_names"] = removed_feat_names
-        self.summary["selected_features"] = [i for i in range(self.df.shape[1]) if i not in removed_feat_indices]
-        self.summary["selected_features_names"] = [col for col in self.df.columns if col not in removed_feat_names]
+        self.summary["selected_features"] = [i for i in range(self.df_info.shape[1]) if i not in removed_feat_indices]
+        self.summary["selected_features_names"] = [col for col in self.df_info.columns if col not in removed_feat_names]
 
     # -----------------------------------
     def _save_json(self):
@@ -496,7 +498,7 @@ class CatBoostSelection(FeatureSelection):
         Returns the features selected by the CatBoost model.
         """
         features = self.summary["selected_features_names"]
-        if self.df is not None:
-            if type(self.df.columns.values.tolist()[0]) == int:
+        if self.df_info.df is not None:
+            if type(self.df_info.columns.values.tolist()[0]) == int:
                 features = [int(feat) for feat in features]
         return features

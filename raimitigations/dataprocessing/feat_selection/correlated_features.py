@@ -516,14 +516,14 @@ class CorrelatedFeatures(FeatureSelection):
         if cor_features is not None:
             self.cor_features = cor_features
 
-        if self.df is not None:
+        if self.df_info.df is not None:
             if self.cor_features is None:
-                self.cor_features = self.df.columns.values.tolist()
+                self.cor_features = self.df_info.columns.values.tolist()
             else:
-                self.cor_features = self._check_error_col_list(self.df, self.cor_features, "cor_features")
+                self.cor_features = self._check_error_col_list(self.df_info.columns, self.cor_features, "cor_features")
 
-            cat_col = get_cat_cols(self.df)
-            self.feature_types = dict((feat, str) if feat in cat_col else (feat, int) for feat in self.df.columns)
+            cat_col = get_cat_cols(self.df_info.df)
+            self.feature_types = dict((feat, str) if feat in cat_col else (feat, int) for feat in self.df_info.columns)
 
     # -----------------------------------
     def _num_num_correlation(self, num_x: pd.Series, num_y: pd.Series):
@@ -950,7 +950,7 @@ class CorrelatedFeatures(FeatureSelection):
                 y_type = self.feature_types[feat_y]
 
                 # Create a temporary dataframe and drop all rows with Nan
-                df_temp = self.df[[feat_x, feat_y]]
+                df_temp = self.df_info.df[[feat_x, feat_y]]
                 df_temp = df_temp.dropna()
                 if df_temp.shape[0] == 0:
                     self.corr_dict[feat_x][feat_y] = {self.TYPE_CORR_KEY: self.TYPE_CORR_CC, self.FINAL_CORR_KEY: False}
@@ -1281,14 +1281,14 @@ class CorrelatedFeatures(FeatureSelection):
         Steps for running the fit method for the current class.
         """
         if self.tie_method == "missing":
-            self.missing_count = self.df.isna().sum()
+            self.missing_count = self.df_info.df.isna().sum()
         elif self.tie_method == "var":
-            self.dispersion_index = self.df.std(numeric_only=True) / (
-                self.df.max(numeric_only=True) - self.df.min(numeric_only=True)
+            self.dispersion_index = self.df_info.df.std(numeric_only=True) / (
+                self.df_info.df.max(numeric_only=True) - self.df_info.df.min(numeric_only=True)
             )
-            self.feat_nunique = self.df.nunique()
+            self.feat_nunique = self.df_info.df.nunique()
         else:
-            self.feat_nunique = self.df.nunique()
+            self.feat_nunique = self.df_info.df.nunique()
         self._set_possible_cor_features()
         self._build_correlation_summary()
         self._build_auxiliary_dicts()
@@ -1304,12 +1304,12 @@ class CorrelatedFeatures(FeatureSelection):
         information on this approach).
         """
         feat_remove = self._get_features_to_remove()
-        if self.df is None:
+        if not self.fitted and self.df_info.df is None:
             raise ValueError(
                 "ERROR: trying to set the selected features without providing a dataset. "
                 + "Use the fit method prior to getting the selected features."
             )
-        features = [feat for feat in self.df.columns if feat not in feat_remove]
+        features = [feat for feat in self.df_info.columns if feat not in feat_remove]
         return features
 
     # -----------------------------------

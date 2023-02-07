@@ -198,9 +198,9 @@ class BasicImputer(DataImputer):
         """
         self._check_valid_dicts()
         non_spec_cols = [value for value in self.col_impute if value not in self.specific_col.keys()]
-        self.cat_cols = get_cat_cols(self.df, subset=non_spec_cols)
+        self.cat_cols = get_cat_cols(self.df_info.df, subset=non_spec_cols)
         self.num_cols = [col for col in non_spec_cols if col not in self.cat_cols]
-        self.valid_cols = list(self.df)
+        self.valid_cols = list(self.df_info.df)
 
         self.imputers = {}
         for col in self.col_impute:
@@ -222,7 +222,7 @@ class BasicImputer(DataImputer):
                     strategy=self.specific_col[col]["strategy"],
                     fill_value=self.specific_col[col]["fill_value"],
                 )
-            df_valid = self._get_df_subset(self.df, [col])
+            df_valid = self._get_df_subset(self.df_info.df, [col])
             self.imputers[col].fit(df_valid)
 
     # -----------------------------------

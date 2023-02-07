@@ -313,7 +313,9 @@ class CohortManager(CohortHandler):
         index_used = []
         cht_df_dict = {}
         for i, cohort in enumerate(self.cohorts):
-            cht_x, cht_y, index_list = cohort.get_cohort_subset(self.df, self.y, index_used, return_index_list=True)
+            cht_x, cht_y, index_list = cohort.get_cohort_subset(
+                self.df_info.df, self.y_info.df, index_used, return_index_list=True
+            )
             index_used += index_list
             if cht_x.empty:
                 raise ValueError(
@@ -330,9 +332,11 @@ class CohortManager(CohortHandler):
 
         self._check_compatibility_between_cohorts(cht_df_dict)
         self._check_intersection_cohorts(index_used)
-        self._raise_missing_instances_error(self.df, index_used)
+        self._raise_missing_instances_error(self.df_info.df, index_used)
 
         self.fitted = True
+        self.df_info.clear_df_mem()
+        self.y_info.clear_df_mem()
         return self
 
     # -----------------------------------
@@ -520,7 +524,9 @@ class CohortManager(CohortHandler):
         index_used = []
         cht_df_dict = {}
         for i, cohort in enumerate(self.cohorts):
-            cht_x, cht_y, index_list = cohort.get_cohort_subset(self.df, self.y, index_used, return_index_list=True)
+            cht_x, cht_y, index_list = cohort.get_cohort_subset(
+                self.df_info.df, self.y_info.df, index_used, return_index_list=True
+            )
             index_used += index_list
             if not cht_x.empty:
                 for tf in self._cohort_pipe[i]:
@@ -532,7 +538,7 @@ class CohortManager(CohortHandler):
 
         self._check_compatibility_between_cohorts(cht_df_dict)
         self._check_intersection_cohorts(index_used)
-        self._raise_missing_instances_error(self.df, index_used)
+        self._raise_missing_instances_error(self.df_info.df, index_used)
         final_df = self._merge_cohort_datasets(cht_df_dict)
         self.fitted = True
 

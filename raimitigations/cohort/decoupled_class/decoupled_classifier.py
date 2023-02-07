@@ -328,7 +328,7 @@ class DecoupledClass(CohortHandler):
         :return: an object from the ``_DecoupledCohort`` class.
         :rtype: _DecoupledCohort
         """
-        return _DecoupledCohort(self.y, cohort_definition, name, self.regression)
+        return _DecoupledCohort(self.y_info.df, cohort_definition, name, self.regression)
 
     # -----------------------------------
     def _build_cohorts(self):
@@ -339,12 +339,12 @@ class DecoupledClass(CohortHandler):
         class. And the former class requires a few extra steps after it is created,
         which are implemented here.
         """
-        if self.df is None or self.cohorts is not None:
+        if self.df_info.df is None or self.cohorts is not None:
             return
 
         if self.cohort_def is None:
             self._use_baseline_cohorts = True
-            self.cohort_col = self._check_error_col_list(self.df, self.cohort_col, "cohort_col")
+            self.cohort_col = self._check_error_col_list(self.df_info.columns, self.cohort_col, "cohort_col")
             self._cohort_col_to_def()
             if self.cohort_def is None:
                 return
@@ -361,7 +361,7 @@ class DecoupledClass(CohortHandler):
             else:
                 prev_cohort_def.append(cohort_def)
             subset_x, subset_y, subset_index = cohort.get_cohort_subset(
-                self.df, self.y, index_used=index_used, return_index_list=True
+                self.df_info.df, self.y_info.df, index_used=index_used, return_index_list=True
             )
             index_used += subset_index
             cohort.set_info_df(subset_x, subset_y)
@@ -574,7 +574,7 @@ class DecoupledClass(CohortHandler):
               rate.
         :rtype: dict
         """
-        min_cohort_size = max(self.min_cohort_size, self.df.shape[0] * self.min_cohort_pct)
+        min_cohort_size = max(self.min_cohort_size, self.df_info.shape[0] * self.min_cohort_pct)
         status_dict = {self.VALID_NAME: [], self.INVALID_SIZE_NAME: [], self.INVALID_DIST_NAME: []}
         for i, cohort in enumerate(cohort_list):
             valid_status = cohort.is_valid(min_cohort_size, self.minority_min_rate)
@@ -661,7 +661,7 @@ class DecoupledClass(CohortHandler):
         Check if any of the existing cohorts are invalid.
         If at least one cohort is invalid, raise an error.
         """
-        min_cohort_size = max(self.min_cohort_size, self.df.shape[0] * self.min_cohort_pct)
+        min_cohort_size = max(self.min_cohort_size, self.df_info.shape[0] * self.min_cohort_pct)
         for cohort in self.cohorts:
             if cohort.is_valid(min_cohort_size, self.minority_min_rate) != _DecoupledCohort.VALID:
                 cohort.print()
@@ -736,7 +736,7 @@ class DecoupledClass(CohortHandler):
         Otherwise, either fix the invalid cohorts by merging them with other
         cohorts, or give an error.
         """
-        if self.df is None:
+        if self.df_info.df is None:
             return
         # if the cohorts are specified
         if not self._use_baseline_cohorts:
@@ -799,7 +799,7 @@ class DecoupledClass(CohortHandler):
             loss.
         :rtype: float
         """
-        n = float(self.df.shape[0])
+        n = float(self.df_info.shape[0])
         p_list = {}
         for cohort in self.cohorts:
             if demographic:
@@ -888,15 +888,15 @@ class DecoupledClass(CohortHandler):
 
         :rtype: tuple
         """
-        pred_proba = self.predict_proba(self.df, split_pred=True)
+        pred_proba = self.predict_proba(self.df_info.df, split_pred=True)
         bin_true = {}
         for cohort in self.cohorts:
-            bin_true[cohort.name] = self.y.filter(items=cohort.get_index_list(), axis=0)
+            bin_true[cohort.name] = self.y_info.df.filter(items=cohort.get_index_list(), axis=0)
 
         regular_loss = 0
         bin_pred = {}
         current_loss = {}
-        n = float(self.df.shape[0])
+        n = float(self.df_info.df.shape[0])
         for cohort in self.cohorts:
             bin_pred[cohort.name] = probability_to_class(pred_proba[cohort.name], cohort.train_result[MetricNames.TH])
             current_loss[cohort.name] = self._compute_regular_loss(bin_true[cohort.name], bin_pred[cohort.name])
@@ -943,7 +943,7 @@ class DecoupledClass(CohortHandler):
         :rtype: float
         """
         regular_loss = 0
-        n = float(self.df.shape[0])
+        n = float(self.df_info.shape[0])
         for i in range(len(self.cohorts)):
             cohort = self.cohorts[i]
             nk = float(cohort.get_size())
@@ -1104,12 +1104,17 @@ class DecoupledClass(CohortHandler):
         for i, cohort in enumerate(self.cohorts):
             cohort.set_estimator(deepcopy(self.estimator), self.regression)
             index_list = cohort.get_cohort_and_fit_estimator(
-                self.df, self.y, self._cohort_pipe[i], self.min_size_fold, self.valid_k_folds, self.default_theta
+                self.df_info.df,
+                self.y_info.df,
+                self._cohort_pipe[i],
+                self.min_size_fold,
+                self.valid_k_folds,
+                self.default_theta,
             )
             index_used += index_list
 
         self._check_intersection_cohorts(index_used)
-        self._raise_missing_instances_error(self.df, index_used)
+        self._raise_missing_instances_error(self.df_info.df, index_used)
 
     # -----------------------------------
     def _fit(self):
@@ -1149,7 +1154,9 @@ class DecoupledClass(CohortHandler):
         self._check_regression()
         self._set_estimator()
         self._fit()
-        self.classes_ = np.sort(self.y.unique())
+        self.classes_ = np.sort(self.y_info.df.unique())
+        self.df_info.clear_df_mem()
+        self.y_info.clear_df_mem()
         return self
 
     # -----------------------------------

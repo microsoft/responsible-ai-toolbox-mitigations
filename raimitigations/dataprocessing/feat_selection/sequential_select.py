@@ -170,7 +170,7 @@ class SeqFeatSelection(FeatureSelection):
             )
         if type(self.n_feat) == int:
             n_feat_invalid = False
-            if self.df is not None and self.n_feat >= self.df.shape[1]:
+            if self.df_info.df is not None and self.n_feat >= self.df_info.shape[1]:
                 n_feat_invalid = True
             if self.n_feat <= 0 or n_feat_invalid:
                 raise ValueError(
@@ -185,16 +185,16 @@ class SeqFeatSelection(FeatureSelection):
                 )
         elif type(self.n_feat) == tuple:
             error = False
-            if self.df is not None:
+            if self.df_info.df is not None:
                 if len(self.n_feat) != 2:
                     error = True
                 elif type(self.n_feat[0]) != int or type(self.n_feat[1]) != int:
                     error = True
                 elif self.n_feat[0] >= self.n_feat[1]:
                     error = True
-                elif self.n_feat[0] <= 0 or self.n_feat[0] >= self.df.shape[1]:
+                elif self.n_feat[0] <= 0 or self.n_feat[0] >= self.df_info.shape[1]:
                     error = True
-                elif self.n_feat[1] <= 0 or self.n_feat[1] >= self.df.shape[1]:
+                elif self.n_feat[1] <= 0 or self.n_feat[1] >= self.df_info.shape[1]:
                     error = True
                 if error:
                     raise ValueError(
@@ -225,7 +225,7 @@ class SeqFeatSelection(FeatureSelection):
                 + "should be present in the set of selected features."
             )
 
-        self.fixed_cols = self._check_error_col_list(self.df, self.fixed_cols, "fixed_cols")
+        self.fixed_cols = self._check_error_col_list(self.df_info.columns, self.fixed_cols, "fixed_cols")
 
         if type(self.n_feat) == int:
             if len(self.fixed_cols) >= self.n_feat:
@@ -256,7 +256,7 @@ class SeqFeatSelection(FeatureSelection):
                 self.scoring = "roc_auc"
                 if self.regression:
                     self.scoring = "r2"
-                elif self.y.nunique() > 2:
+                elif self.y_info.df.nunique() > 2:
                     self.scoring = "accuracy"
             return
 
@@ -315,7 +315,7 @@ class SeqFeatSelection(FeatureSelection):
             n_jobs=self.njobs,
             fixed_features=self.fixed_cols,
         )
-        self.selector.fit(self.df, self.y)
+        self.selector.fit(self.df_info.df, self.y_info.df)
 
     # -----------------------------------
     def _save_json(self):

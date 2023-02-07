@@ -4,7 +4,7 @@ from typing import Union
 import numpy as np
 import pandas as pd
 
-from ..data_processing import DataProcessing
+from ..data_processing import DataProcessing, DataFrameInfo
 from ..encoder import DataEncoding, EncoderOrdinal
 from ..imputer import DataImputer, BasicImputer
 
@@ -64,9 +64,8 @@ class FeatureSelection(DataProcessing):
         verbose: bool = True,
     ):
         super().__init__(verbose)
-        self.df = None
-        self.df_org = None
-        self.y = None
+        self.df_info = DataFrameInfo()
+        self.y_info = DataFrameInfo()
         self.in_place = in_place
         self.fitted = False
         self._set_df_mult(df, label_col, X, y)
@@ -135,8 +134,8 @@ class FeatureSelection(DataProcessing):
         """
         if selected is None:
             selected = self._get_selected_features()
-        if self.df is not None:
-            selected = self._check_error_col_list(self.df, selected, "selected")
+        if self.df_info.columns is not None:
+            selected = self._check_error_col_list(self.df_info.columns, selected, "selected")
         self.selected_feat = selected
 
     # -----------------------------------
@@ -161,8 +160,8 @@ class FeatureSelection(DataProcessing):
     ):
         """
         Default fit method for all feature selection classes that inherit from
-        the current class. The following steps are executed: (i) set the ``self.df``
-        and ``self.y`` attributes, (ii) set the transform list (or create a default
+        the current class. The following steps are executed: (i) set the ``self.df_info``
+        and ``self.y_info`` attributes, (ii) set the transform list (or create a default
         one if needed), (iii) fit and then apply the transformations in the
         ``self.transform_pipe`` attribute to the dataset, (iv) call the concrete
         class's specific :meth:`_fit` method, and (v) set the ``self.selected_feat`` attribute.
@@ -178,13 +177,14 @@ class FeatureSelection(DataProcessing):
         """
         self._set_df_mult(df, label_col, X, y, require_set=True)
         self._set_transforms(self.transform_pipe)
-        self._fit_transforms(self.df, self.y)
-        self.df = self._apply_transforms(self.df)
-        if self.in_place:
-            self.df_org = self.df
+        self._fit_transforms(self.df_info.df, self.y_info.df)
+        new_df = self._apply_transforms(self.df_info.df)
+        self.df_info = DataFrameInfo(new_df)
         self._fit()
         self.set_selected_features()
         self.fitted = True
+        self.df_info.clear_df_mem()
+        self.y_info.clear_df_mem()
         return self
 
     # -----------------------------------

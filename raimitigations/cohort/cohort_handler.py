@@ -5,6 +5,7 @@ from copy import deepcopy
 import pandas as pd
 import numpy as np
 
+from ..dataprocessing.data_processing import DataFrameInfo
 from ..dataprocessing import DataProcessing
 from .cohort_definition import CohortFilters
 
@@ -67,9 +68,8 @@ class CohortHandler(DataProcessing):
         verbose: bool = True,
     ):
         super().__init__(verbose)
-        self.df = None
-        self.df_org = None
-        self.y = None
+        self.df_info = DataFrameInfo()
+        self.y_info = DataFrameInfo()
         self.fitted = False
         self.cohorts = None
         self._cohort_names = []
@@ -255,11 +255,11 @@ class CohortHandler(DataProcessing):
         """
         # can only convert 'cohort_col to the 'cohort_def'
         # if the dataset is already set
-        if self.df is None:
+        if self.df_info.df is None:
             return
 
         # get the list of unique combination of values across all columns in 'cohort_col'
-        subset = self._get_df_subset(self.df, self.cohort_col)
+        subset = self._get_df_subset(self.df_info.df, self.cohort_col)
         unique_df = subset.groupby(self.cohort_col, dropna=False).size().reset_index().rename(columns={0: "count"})
         unique_df.drop(columns=["count"], inplace=True)
         unique_arr = unique_df.to_numpy()
@@ -286,7 +286,7 @@ class CohortHandler(DataProcessing):
 
         if self.cohort_def is None:
             self._use_baseline_cohorts = True
-            self.cohort_col = self._check_error_col_list(self.df, self.cohort_col, "cohort_col")
+            self.cohort_col = self._check_error_col_list(self.df_info.columns, self.cohort_col, "cohort_col")
             self._cohort_col_to_def()
             if self.cohort_def is None:
                 return

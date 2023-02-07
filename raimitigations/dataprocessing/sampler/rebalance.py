@@ -7,7 +7,7 @@ from imblearn.under_sampling import RandomUnderSampler
 from imblearn.under_sampling import ClusterCentroids
 from imblearn.under_sampling import TomekLinks
 
-from ..data_processing import DataProcessing
+from ..data_processing import DataProcessing, DataFrameInfo
 from ..encoder import DataEncoding, EncoderOHE
 from ..imputer import DataImputer, BasicImputer
 from ...utils.data_utils import get_cat_cols
@@ -190,9 +190,8 @@ class Rebalance(DataProcessing):
         verbose: bool = True,
     ):
         super().__init__(verbose)
-        self.df = None
-        self.df_org = None
-        self.y = None
+        self.df_info = DataFrameInfo()
+        self.y_info = DataFrameInfo()
         self.in_place = in_place
         self.cat_col = cat_col
         self.transform_pipe = transform_pipe
@@ -227,7 +226,7 @@ class Rebalance(DataProcessing):
                 return 1
             return 0
 
-        has_null = self.y.isnull().values.any()
+        has_null = self.y_info.df.isnull().values.any()
         if has_null:
             raise ValueError(
                 f"ERROR: the column {self.label_col_name} provided to the 'rebalance_col' parameter contains "
@@ -235,7 +234,7 @@ class Rebalance(DataProcessing):
                 + f"represents the classes to be rebalanced."
             )
 
-        not_int = self.y.apply(test_if_float)
+        not_int = self.y_info.df.apply(test_if_float)
         not_int = np.any(not_int)
         if not_int:
             raise ValueError(
@@ -255,10 +254,10 @@ class Rebalance(DataProcessing):
         if self.cat_col is not None:
             return
 
-        if self.df is None:
+        if self.df_info.df is None:
             return
 
-        self.cat_col = get_cat_cols(self.df)
+        self.cat_col = get_cat_cols(self.df_info.df)
         if self.cat_col != []:
             self.print_message(
                 f"No categorical columns specified. These columns "
@@ -332,10 +331,10 @@ class Rebalance(DataProcessing):
             if self.under_sampler is not False:
                 self.default_smote_type = self.SMOTE_TYPE
             # if using only over sampling
-            elif self.df is not None:
+            elif self.df_info.df is not None:
                 # check if all columns in df are categorical.
                 # In this case, we need to use SMOTEN
-                if set(self.cat_col) == set(self.df.columns):
+                if set(self.cat_col) == set(self.df_info.columns):
                     self.default_smote_type = self.SMOTEN_TYPE
                 # otherwise, we must use SMOTENC
                 else:
@@ -461,7 +460,7 @@ class Rebalance(DataProcessing):
         Checks for any errors in the parameters provided to the constructor
         and raise an error in case any problem is found.
         """
-        self.cat_col = self._check_error_col_list(self.df, self.cat_col, "cat_col")
+        self.cat_col = self._check_error_col_list(self.df_info.columns, self.cat_col, "cat_col")
 
         # check strategy_under and strategy_over
         self.strategy_over = self._check_strategy(
@@ -497,12 +496,12 @@ class Rebalance(DataProcessing):
     def _cat_cols2bool(self):
         """
         Returns a list of boolean values. The list has one value for
-        each column in the dataset (self.df), and each value indicates
+        each column in the dataset (self.df_info), and each value indicates
         if that column is categorical (True) or numerical (False).
         """
-        cat_col_bool = [False for _ in range(0, self.df.shape[1])]
+        cat_col_bool = [False for _ in range(0, self.df_info.shape[1])]
         for col in self.cat_col:
-            index = self.df.columns.get_loc(col)
+            index = self.df_info.columns.get_loc(col)
             cat_col_bool[index] = True
         return cat_col_bool
 
@@ -602,22 +601,21 @@ class Rebalance(DataProcessing):
         self._set_cat_col()
         self._check_inputs()
         self._set_transforms(self.transform_pipe)
-        self._fit_transforms(self.df, self.y)
-        self.df = self._apply_transforms(self.df)
-        if self.in_place:
-            self.df_org = self.df
+        self._fit_transforms(self.df_info.df, self.y_info.df)
+        new_df = self._apply_transforms(self.df_info.df)
+        self.df_info = DataFrameInfo(new_df)
         self._set_over_sampler()
         self._set_under_sampler()
         X_resample = None
 
         if self.over_sampler is not None:
             self.print_message("Running oversampling...")
-            X_resample, y_resample = self.over_sampler.fit_resample(self.df, self.y)
+            X_resample, y_resample = self.over_sampler.fit_resample(self.df_info.df, self.y_info.df)
             self.print_message("...finished")
         if self.under_sampler is not None:
             self.print_message("Running undersampling...")
             if X_resample is None:
-                X_resample, y_resample = self.under_sampler.fit_resample(self.df, self.y)
+                X_resample, y_resample = self.under_sampler.fit_resample(self.df_info.df, self.y_info.df)
             else:
                 X_resample, y_resample = self.under_sampler.fit_resample(X_resample, y_resample)
             self.print_message("...finished")
