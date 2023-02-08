@@ -44,11 +44,6 @@ class FeatureSelection(DataProcessing):
         transformations will be used, which depends on the feature selection approach
         (subclass dependent);
 
-    :param in_place: indicates if the original dataset will be saved internally (``df_org``)
-        or not. If True, then the feature selection transformation is saved over the
-        original dataset. If False, the original dataset is saved separately (default
-        value);
-
     :param verbose: indicates whether internal messages should be printed or not.
     """
 
@@ -60,13 +55,11 @@ class FeatureSelection(DataProcessing):
         X: Union[pd.DataFrame, np.ndarray] = None,
         y: Union[pd.DataFrame, np.ndarray] = None,
         transform_pipe: list = None,
-        in_place: bool = False,
         verbose: bool = True,
     ):
         super().__init__(verbose)
         self.df_info = DataFrameInfo()
         self.y_info = DataFrameInfo()
-        self.in_place = in_place
         self.fitted = False
         self._set_df_mult(df, label_col, X, y)
         self._set_transforms(transform_pipe)

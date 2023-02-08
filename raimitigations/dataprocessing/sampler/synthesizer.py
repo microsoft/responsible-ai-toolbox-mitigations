@@ -48,11 +48,6 @@ class Synthesizer(DataProcessing):
         transformations will be used, which depends on the feature selection approach
         (subclass dependent);
 
-    :param in_place: indicates if the original dataset will be saved internally (``df_org``)
-        or not. If True, then the feature selection transformation is saved over the
-        original dataset. If False, the original dataset is saved separately (default
-        value);
-
     :param model: the model that should be used to generate the synthetic instances. Can
         be a string or an object that inherits from :class:`sdv.tabular.base.BaseTabularModel`:
 
@@ -96,7 +91,6 @@ class Synthesizer(DataProcessing):
         X: pd.DataFrame = None,
         y: pd.DataFrame = None,
         transform_pipe: list = None,
-        in_place: bool = False,
         model: Union[BaseTabularModel, str] = "ctgan",
         epochs: int = DEFAULT_EPOCHS,
         save_file: str = None,
@@ -106,7 +100,6 @@ class Synthesizer(DataProcessing):
         super().__init__(verbose)
         self.df_info = DataFrameInfo()
         self.y_info = DataFrameInfo()
-        self.in_place = in_place
         self.fitted = False
         self.transform_pipe = transform_pipe
         self.model = model

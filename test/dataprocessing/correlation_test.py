@@ -72,7 +72,6 @@ def _get_object_list(df=None, label_col=None, X=None, y=None, use_index=True):
         label_col=label_col,
         X=X,
         y=y,
-        in_place=True,
         cor_features=cor_features,
         method_num_num=["kendall", "pearson"],
         method_cat_cat=None,

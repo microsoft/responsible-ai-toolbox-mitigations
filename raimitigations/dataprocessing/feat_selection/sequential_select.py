@@ -56,11 +56,6 @@ class SeqFeatSelection(FeatureSelection):
         transformations will be used, which depends on the feature selection approach
         (subclass dependent);
 
-    :param in_place: indicates if the original dataset will be saved internally (df_org)
-        or not. If True, then the feature selection transformation is saved over the
-        original dataset. If False, the original dataset is saved separately (default
-        value);
-
     :param regression: if True and no estimator is provided, then create a default
         CatBoostRegressor. If False, a CatBoostClassifier is created instead. This parameter
         is ignored if an estimator is provided using the 'estimator' parameter;
@@ -128,7 +123,6 @@ class SeqFeatSelection(FeatureSelection):
         X: Union[pd.DataFrame, np.ndarray] = None,
         y: Union[pd.DataFrame, np.ndarray] = None,
         transform_pipe: list = None,
-        in_place: bool = False,
         regression: bool = None,
         estimator: BaseEstimator = None,
         n_feat: Union[int, str, tuple] = "best",
@@ -141,7 +135,7 @@ class SeqFeatSelection(FeatureSelection):
         n_jobs: int = 1,
         verbose: bool = True,
     ):
-        super().__init__(df, label_col, X, y, transform_pipe, in_place, verbose)
+        super().__init__(df, label_col, X, y, transform_pipe, verbose)
         self.cv = cv
         self.scoring = scoring
         self.forward = forward

@@ -52,11 +52,6 @@ class Rebalance(DataProcessing):
         transformations will be used, which depends on the feature selection approach
         (subclass dependent);
 
-    :param in_place: indicates if the original dataset will be saved internally (``df_org``)
-        or not. If True, then the feature selection transformation is saved over the
-        original dataset. If False, the original dataset is saved separately (default
-        value);
-
     :param cat_col: a list of names or indexes of categorical columns. If None, this
         parameter will be set automatically as a list of all categorical variables
         in the dataset. These columns are used to determine the default ``SMOTE`` type that
@@ -179,7 +174,6 @@ class Rebalance(DataProcessing):
         X: Union[pd.DataFrame, np.ndarray] = None,
         y: Union[pd.DataFrame, np.ndarray] = None,
         transform_pipe: list = None,
-        in_place: bool = False,
         cat_col: list = None,
         strategy_over: Union[str, dict, float] = None,
         k_neighbors: int = 4,
@@ -192,7 +186,6 @@ class Rebalance(DataProcessing):
         super().__init__(verbose)
         self.df_info = DataFrameInfo()
         self.y_info = DataFrameInfo()
-        self.in_place = in_place
         self.cat_col = cat_col
         self.transform_pipe = transform_pipe
         self._set_df_mult(df, rebalance_col, X, y)

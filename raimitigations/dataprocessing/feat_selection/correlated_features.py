@@ -88,11 +88,6 @@ class CorrelatedFeatures(FeatureSelection):
         of default transformations will be used, which depends on the feature selection
         approach (subclass dependent);
 
-    :param in_place: indicates if the original dataset will be saved internally
-        (``df_org``) or not. If True, then the feature selection transformation is saved
-        over the original dataset. If False, the original dataset is saved separately
-        (default value);
-
     :param cor_features: a list of the column names or indexes that should have their
         correlations checked. If None, all columns are checked for correlations, where
         each correlation is checked in pairs (all possible column pairs are checked);
@@ -315,7 +310,6 @@ class CorrelatedFeatures(FeatureSelection):
         X: Union[pd.DataFrame, np.ndarray] = None,
         y: Union[pd.DataFrame, np.ndarray] = None,
         transform_pipe: list = None,
-        in_place: bool = False,
         cor_features: list = None,
         method_num_num: list = ["spearman"],
         num_corr_th: float = NUM_COR_TH,
@@ -339,7 +333,7 @@ class CorrelatedFeatures(FeatureSelection):
         compute_exact_matches: bool = True,
         verbose: bool = True,
     ):
-        super().__init__(df, label_col, X, y, transform_pipe, in_place, verbose)
+        super().__init__(df, label_col, X, y, transform_pipe, verbose)
         self.cor_features = None
         self._set_numerical_corr_param(method_num_num, num_corr_th, num_pvalue_th)
         self._set_num_cat_corr_param(

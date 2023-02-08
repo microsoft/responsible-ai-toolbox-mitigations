@@ -62,11 +62,6 @@ class CatBoostSelection(FeatureSelection):
         regression is set to True or if the type of the label column is float, while the
         former is used otherwise;
 
-    :param in_place: indicates if the original dataset will be saved internally (``df_org``)
-        or not. If True, then the feature selection transformation is saved over the
-        original dataset. If False, the original dataset is saved separately (default
-        value);
-
     :param catboost_log: if True, the default estimator will print logging
         messages during its training phase. If False, no log will be printed. This
         parameter is only used when  ``estimator`` is None, since this parameter is only used
@@ -160,7 +155,6 @@ class CatBoostSelection(FeatureSelection):
         transform_pipe: list = None,
         regression: bool = None,
         estimator: Union[CatBoostClassifier, CatBoostRegressor] = None,
-        in_place: bool = False,
         catboost_log: bool = True,
         catboost_plot: bool = False,
         test_size: float = 0.2,
@@ -173,7 +167,7 @@ class CatBoostSelection(FeatureSelection):
         json_summary: str = "cb_feat_summary.json",
         verbose: bool = True,
     ):
-        super().__init__(df, label_col, X, y, transform_pipe, in_place, verbose)
+        super().__init__(df, label_col, X, y, transform_pipe, verbose)
         self.cat_col = cat_col
         self.n_feat = n_feat
         self.steps = steps
