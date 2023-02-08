@@ -41,6 +41,7 @@ Cohort
    notebooks/cohort/cohort_definition
    notebooks/cohort/cohort_manager
    notebooks/cohort/cohort_manager_scenarios
+   notebooks/cohort/decoupled
 
 
 Using scikit-learn's Pipeline
@@ -90,5 +91,8 @@ Using the Cohort Module
    notebooks/cohort/case_study/case_2
    notebooks/cohort/case_study/case_3
    notebooks/cohort/case_study/integration_raiwidgets
+   notebooks/cohort/case_study/decoupled_class/case_1
+   notebooks/cohort/case_study/decoupled_class/case_2
+   notebooks/cohort/case_study/decoupled_class/case_3
 
 

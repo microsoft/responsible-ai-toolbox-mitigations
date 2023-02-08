@@ -26,4 +26,4 @@ Alternatively, you can also clone the main branch of the `Responsible AI Mitigat
 
 .. code-block:: console
 
-    > pip install -e .
+    > pip install .

@@ -17,19 +17,19 @@ for a more in-depth analysis of this problem. The classes available in this modu
       interface. Finally, allows the creation of different estimators for each cohort using the ``.predict()``
       and ``predict_proba()`` interfaces. This class uses the :ref:`cohort.CohortDefinition<cohort_def>`
       internally in order to create, filter, and manipulate multiple cohorts.
-    * :ref:`cohort.DecoupledClass<decoupled_class>`: allows training different estimators (models) for different 
-      cohorts and combining them in a way that optimizes different definitions of group fairness. It also allows 
-      leveraging transfer learning for minority cohorts when the training data for such cohorts is not sufficient. 
-      The technique was originally presented in `"Decoupled classifiers for group-fair and efficient machine 
-      learning." <https://www.microsoft.com/en-us/research/publication/decoupled-classifiers-for-group-fair-and-efficient-machine-learning/>`_   
-      Cynthia Dwork, Nicole Immorlica, Adam Tauman Kalai, and Max Leiserson. Conference on fairness, 
-      accountability and transparency. PMLR, 2018.
+    * :ref:`cohort.DecoupledClass<decoupled_class>`: allows training different estimators (models) for different
+      cohorts and combining them in a way that optimizes different definitions of group fairness. It also allows
+      leveraging transfer learning for minority cohorts when the training data for such cohorts is not sufficient.
+      The technique was originally presented in `"Decoupled classifiers for group-fair and efficient machine
+      learning." <https://www.microsoft.com/en-us/research/publication/decoupled-classifiers-for-group-fair-and-efficient-machine-learning/>`_
+      (*Cynthia Dwork, Nicole Immorlica, Adam Tauman Kalai, and Max Leiserson. Conference on fairness,
+      accountability and transparency. PMLR, 2018*).
 
 **Highlights include:**
 
     * Interface for breaking a dataset into multiple cohorts.
     * Two approaches for defining cohorts: based on the different values of a column, or based on custom filters.
-    * Creation of custom pipelines for each cohort, allowing the creation of different estimators for each cohort. 
+    * Creation of custom pipelines for each cohort, allowing the creation of different estimators for each cohort.
       Possibility to search and combine the custom estimators for each cohort such that jointly they optimize a group fairness definition of choice.
     * Mitigating cases with low representation data for minority cohorts through transfer learning.
     * Simple interface, which also implements the ``.fit()``, ``.transform()``, ``.predict()``, ``.predict_proba()``, and ``.fit_resample()`` methods

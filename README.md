@@ -95,6 +95,9 @@ cohort can help in some scenarios.
 - [Cohort Case Study 1 - Using RAI Toolbox](notebooks/cohort/case_study/case_1_dashboard.ipynb)
 - [Cohort Case Study 2](notebooks/cohort/case_study/case_2.ipynb)
 - [Cohort Case Study 3](notebooks/cohort/case_study/case_3.ipynb)
+- [Decoupled Classifier Case 1](notebooks/cohort/case_study/decoupled_class/case_1)
+- [Decoupled Classifier Case 2](notebooks/cohort/case_study/decoupled_class/case_2)
+- [Decoupled Classifier Case 3](notebooks/cohort/case_study/decoupled_class/case_3)
 
 
 

@@ -9,7 +9,7 @@ mitigation steps that may be most appropriate when the model underperforms for a
     * :ref:`DataProcessing<dataproc>`: offers mitigation techniques for improving model performance for specific cohorts.
     * :ref:`DataBalanceAnalysis<databalance>`: provides metrics for diagnosing errors that originate from data imbalance either on class labels or feature values.
     * :ref:`Cohort<cohort>`: provides classes for handling and managing cohorts, which allows the creation of custom pipelines for each cohort in an easy and
-      intuitive interface. The module also provides techniques for learning different decoupled estimators (models) for different cohorts and combining them in 
+      intuitive interface. The module also provides techniques for learning different decoupled estimators (models) for different cohorts and combining them in
       a way that optimizes different definitions of group fairness.
 
 Exploring potential mitigations
@@ -83,8 +83,8 @@ This way, the Responsible AI Mitigations Library offers a **targeted approach th
     * **Simplifying the implementation and customization of mitigations** for specific data problems by providing mitigations that are compatible with each other and can be
       combined into a single pipeline. Most functionalities to this end can be found in the :ref:`cohort.CohortManager<cohort_manager>` class.
 
-    * **Enabling custom training of cohort-specific models and post-training classifier mitigations** that search and optimize different definitions of group fairness. 
-      Most functionalities to this end can be found in the :ref:`cohort.CohortManager<cohort_manager>` and :ref:`cohort.DecoupledClass<decoupled_class>` class. 
+    * **Enabling custom training of cohort-specific models and post-training classifier mitigations** that search and optimize different definitions of group fairness.
+      Most functionalities to this end can be found in the :ref:`cohort.CohortManager<cohort_manager>` and :ref:`cohort.DecoupledClass<decoupled_class>` class.
 
 There are multiple ways of using the :ref:`cohort.CohortManager<cohort_manager>` class when building a pipeline, and these different scenarios are summarized in following figure.
 
@@ -100,7 +100,7 @@ The **Cohort Manager - Scenarios and Examples** notebook, located in ``notebooks
 scenarios can be implemented through simple code snippets.
 
 Three modules for targeted error mitigation
---------------------------------
+-------------------------------------------
 
 The Responsible AI Mitigations Library consists of **three modules that work in complement** for targeting and mitigating data problems: DataProcessing and DataBalanceAnalysis.
 
@@ -146,7 +146,7 @@ explicitly manage multiple models. All is done internally in the class, with a u
 
     * Interface for breaking a dataset into multiple cohorts.
     * Two approaches for defining cohorts: based on the different values of a column, or based on custom filters.
-    * Creation of custom pipelines for each cohort, allowing the creation of different estimators for each cohort. 
+    * Creation of custom pipelines for each cohort, allowing the creation of different estimators for each cohort.
       Possibility to search and combine the custom estimators for each cohort such that jointly they optimize a group fairness definition of choice.
     * Mitigating cases with low representation data for minority cohorts through transfer learning.
     * Simple interface, which also implements the ``.fit()``, ``.transform()``, ``.predict()``, ``.predict_proba()``, and ``.fit_resample()`` methods
