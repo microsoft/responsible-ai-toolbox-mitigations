@@ -698,7 +698,11 @@ class DecoupledClass(CohortHandler):
             print("INVALID COHORTS:")
             for index in status_dict[self.INVALID_DIST_NAME]:
                 cohort_list[index].print()
-            raise ValueError("ERROR: Cannot use transfer learning over cohorts with skewed distributions.")
+            raise ValueError(
+                "ERROR: Cannot use transfer learning over cohorts with skewed distributions. "
+                + "Check the documentation of the minority_min_rate parameter for more details "
+                + "on how to overcome this limitation"
+            )
 
         # use transfer learning over cohorts with invalid sizes. To do this, add
         # data from outside each cohort into the invalid cohort's training data
