@@ -9,8 +9,8 @@ for each of the existing cohorts.
    :maxdepth: 1
 
    cohort_definition
-   cohort_manager
    cohort_handler
+   cohort_manager
    decoupled_class
    utils
 

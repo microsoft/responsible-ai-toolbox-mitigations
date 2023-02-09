@@ -25,6 +25,11 @@ the **Examples** section below, shows how each of these scenarios can be impleme
 .. autoclass:: raimitigations.cohort.CohortManager
    :members:
 
+.. rubric:: Class Diagram
+
+.. inheritance-diagram:: raimitigations.cohort.CohortManager
+     :parts: 1
+
 .. _cohort_manager_ex:
 
 Examples
