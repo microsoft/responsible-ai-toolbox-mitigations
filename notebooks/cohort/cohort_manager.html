@@ -34,11 +34,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> Responsible AI Mitigations
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -58,6 +62,7 @@
 <li class="toctree-l4"><a class="reference internal" href="cohort_definition.html">Defining a Cohort</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Managing cohorts</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cohort_manager_scenarios.html">Cohort Manager - Scenarios and Examples</a></li>
+<li class="toctree-l4"><a class="reference internal" href="decoupled.html">Decoupled Classifiers</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
@@ -69,8 +74,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../cohort/intro.html">Cohort</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/utils.html">Utils</a></li>
 </ul>
@@ -88,7 +93,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../api.html">API reference</a></li>
           <li class="breadcrumb-item"><a href="../../cohort/cohort.html">Cohort</a></li>
           <li class="breadcrumb-item"><a href="../../cohort/cohort_manager.html">CohortManager</a></li>
@@ -398,7 +403,7 @@ div.rendered_html tbody tr:hover {
 
 <span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">create_dummy_dataset</span>
 <span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
-<span class="kn">from</span> <span class="nn">raimitigations.cohort</span> <span class="kn">import</span> <span class="n">CohortDefinition</span><span class="p">,</span> <span class="n">CohortManager</span>
+<span class="kn">from</span> <span class="nn">raimitigations.cohort</span> <span class="kn">import</span> <span class="n">CohortDefinition</span><span class="p">,</span> <span class="n">CohortManager</span><span class="p">,</span> <span class="n">plot_value_counts_cohort</span>
 
 <span class="n">SEED</span> <span class="o">=</span> <span class="mi">42</span>
 
@@ -2313,53 +2318,7 @@ dict_keys([&#39;Large num_0&#39;, &#39;Remaining&#39;])
 <h2>Use Rebalance over each cohort separately<a class="headerlink" href="#Use-Rebalance-over-each-cohort-separately" title="Permalink to this heading"></a></h2>
 <p>Rebalancing a dataset is not always a trivial task. In some cases, we might have a class imbalance in the whole dataset, but different cohorts of this dataset depict different imbalance distributions. In such a scenario, rebalancing the full dataset might result in an even greater imbalance for a set of cohorts, even though the full dataset is now balanced. Therefore, we might want to rebalance each cohort separately, in order to obtain a balanced dataset and balanced cohorts.</p>
 <p>In this subsection, we’ll explore how the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> can easily help us achieve this goal.</p>
-<p>First of all, let’s start defining a function that plots a graph with the label distribution for the full dataset, as well as for each cohort.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-
-<span class="k">def</span> <span class="nf">plot_value_counts_cohort</span><span class="p">(</span><span class="n">y_full</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="c1">#plt.legend(bbox_to_anchor=(1.02, 1), loc=&#39;upper left&#39;, borderaxespad=0, fontsize=23)</span>
-
-    <span class="n">value_count</span> <span class="o">=</span> <span class="n">y_full</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
-
-    <span class="n">subsets_col</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;full df&#39;</span><span class="p">,</span> <span class="s1">&#39;full df&#39;</span><span class="p">]</span>
-    <span class="n">counts_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">value_count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-    <span class="n">label_col</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">value_count</span> <span class="o">=</span> <span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
-        <span class="n">subsets_col</span> <span class="o">+=</span> <span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">]</span>
-        <span class="n">counts_col</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value_count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-        <span class="n">label_col</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-
-    <span class="n">count_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;subsets&quot;</span><span class="p">:</span><span class="n">subsets_col</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span><span class="n">label_col</span><span class="p">,</span> <span class="s2">&quot;counts&quot;</span><span class="p">:</span><span class="n">counts_col</span><span class="p">})</span>
-
-    <span class="n">y_label</span> <span class="o">=</span> <span class="s2">&quot;Occurrences&quot;</span>
-    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
-        <span class="n">y_label</span> <span class="o">=</span> <span class="s2">&quot;Fraction&quot;</span>
-
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;subsets&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">count_df</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Subsets&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-    <span class="c1">#ax.tick_params(labelsize=15)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<p>Next, we’ll create a <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> just to obtain the cohorts of interest and plot their distributions.</p>
+<p>We’ll create a <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> just to obtain the cohorts of interest and plot their distributions.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
@@ -2411,7 +2370,7 @@ dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/notebooks_cohort_cohort_manager_62_1.png" src="../../_images/notebooks_cohort_cohort_manager_62_1.png" />
+<img alt="../../_images/notebooks_cohort_cohort_manager_61_1.png" src="../../_images/notebooks_cohort_cohort_manager_61_1.png" />
 </div>
 </div>
 <p>We can see that the full dataset has a great imbalance, where we have a considerably larger number of occurrences of the <code class="docutils literal notranslate"><span class="pre">1</span></code> class in relation to the <code class="docutils literal notranslate"><span class="pre">0</span></code> class. This imbalance is even greater for cohorts <code class="docutils literal notranslate"><span class="pre">cohort_2</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_3</span></code>, while for cohorts <code class="docutils literal notranslate"><span class="pre">cohort_0</span></code> and <code class="docutils literal notranslate"><span class="pre">cohort_1</span></code> this imbalance is inverted: there are a lot more instances from the <code class="docutils literal notranslate"><span class="pre">0</span></code> class when compared to the <code class="docutils literal notranslate"><span class="pre">1</span></code> class.</p>
@@ -2471,7 +2430,7 @@ Name: label, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/notebooks_cohort_cohort_manager_64_2.png" src="../../_images/notebooks_cohort_cohort_manager_64_2.png" />
+<img alt="../../_images/notebooks_cohort_cohort_manager_63_2.png" src="../../_images/notebooks_cohort_cohort_manager_63_2.png" />
 </div>
 </div>
 <p>As we can see, the full dataset is now balanced. However, looking at each cohort separately, we noticed that we only made matters worse: we now have an even greater label imbalance inside each cohort. If we think of these cohorts as sensitive groups, that is, groups separated by sensitive features, <em>e.g.</em> gender, race, and nationality, and that we don’t want our models to perform differently in one group compared to another, then this imbalance between cohorts is a scenario that needs to be
@@ -2516,7 +2475,7 @@ fixed.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/notebooks_cohort_cohort_manager_66_1.png" src="../../_images/notebooks_cohort_cohort_manager_66_1.png" />
+<img alt="../../_images/notebooks_cohort_cohort_manager_65_1.png" src="../../_images/notebooks_cohort_cohort_manager_65_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -2580,7 +2539,7 @@ Name: label, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/notebooks_cohort_cohort_manager_69_1.png" src="../../_images/notebooks_cohort_cohort_manager_69_1.png" />
+<img alt="../../_images/notebooks_cohort_cohort_manager_68_1.png" src="../../_images/notebooks_cohort_cohort_manager_68_1.png" />
 </div>
 </div>
 </section>

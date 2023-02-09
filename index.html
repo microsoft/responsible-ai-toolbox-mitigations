@@ -31,11 +31,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> Responsible AI Mitigations
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -51,8 +55,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cohort/intro.html">Cohort</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils/utils.html">Utils</a></li>
 </ul>
@@ -70,7 +74,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a></li>
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Responsible AI Mitigations Library</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/index.rst" class="fa fa-github"> Edit on GitHub</a>
@@ -116,7 +120,8 @@ mitigation steps that may be most appropriate when the model underperforms for a
 <li><p><a class="reference internal" href="dataprocessing/intro.html#dataproc"><span class="std std-ref">DataProcessing</span></a>: offers mitigation techniques for improving model performance for specific cohorts.</p></li>
 <li><p><a class="reference internal" href="databalanceanalysis/intro.html#databalance"><span class="std std-ref">DataBalanceAnalysis</span></a>: provides metrics for diagnosing errors that originate from data imbalance either on class labels or feature values.</p></li>
 <li><p><a class="reference internal" href="cohort/intro.html#cohort"><span class="std std-ref">Cohort</span></a>: provides classes for handling and managing cohorts, which allows the creation of custom pipelines for each cohort in an easy and
-intuitive interface (also allows using different estimators for each cohort).</p></li>
+intuitive interface. The module also provides techniques for learning different decoupled estimators (models) for different cohorts and combining them in
+a way that optimizes different definitions of group fairness.</p></li>
 </ul>
 </div></blockquote>
 <section id="exploring-potential-mitigations">
@@ -178,7 +183,6 @@ a set of cohorts (check the <code class="docutils literal notranslate"><span cla
 <p>This way, the Responsible AI Mitigations Library offers a <strong>targeted approach that lets you save time and resources by</strong>:</p>
 <blockquote>
 <div><ul>
-<li><p><strong>Testing your hypotheses for why a model is underperforming</strong> in specific data cohorts through exploring data imbalance, features, label noise, or missing values.</p></li>
 <li><p><strong>Improving your understanding of model failures</strong> by zeroing in on:</p>
 <blockquote>
 <div><ul class="simple">
@@ -188,7 +192,9 @@ a set of cohorts (check the <code class="docutils literal notranslate"><span cla
 </div></blockquote>
 </li>
 <li><p><strong>Simplifying the implementation and customization of mitigations</strong> for specific data problems by providing mitigations that are compatible with each other and can be
-combined into a single pipeline.</p></li>
+combined into a single pipeline. Most functionalities to this end can be found in the <a class="reference internal" href="cohort/cohort_manager.html#cohort-manager"><span class="std std-ref">cohort.CohortManager</span></a> class.</p></li>
+<li><p><strong>Enabling custom training of cohort-specific models and post-training classifier mitigations</strong> that search and optimize different definitions of group fairness.
+Most functionalities to this end can be found in the <a class="reference internal" href="cohort/cohort_manager.html#cohort-manager"><span class="std std-ref">cohort.CohortManager</span></a> and <a class="reference internal" href="cohort/decoupled_class.html#decoupled-class"><span class="std std-ref">cohort.DecoupledClass</span></a> class.</p></li>
 </ul>
 </div></blockquote>
 <p>There are multiple ways of using the <a class="reference internal" href="cohort/cohort_manager.html#cohort-manager"><span class="std std-ref">cohort.CohortManager</span></a> class when building a pipeline, and these different scenarios are summarized in following figure.</p>
@@ -203,8 +209,8 @@ these choices, CohortManager will take care of slicing the data accordingly, app
 <p>The <strong>Cohort Manager - Scenarios and Examples</strong> notebook, located in <code class="docutils literal notranslate"><span class="pre">notebooks/cohort/cohort_manager_scenarios.ipynb</span></code>, shows how each of these
 scenarios can be implemented through simple code snippets.</p>
 </section>
-<section id="three-modules-for-targeting-data">
-<h2>Three modules for targeting data<a class="headerlink" href="#three-modules-for-targeting-data" title="Permalink to this heading"></a></h2>
+<section id="three-modules-for-targeted-error-mitigation">
+<h2>Three modules for targeted error mitigation<a class="headerlink" href="#three-modules-for-targeted-error-mitigation" title="Permalink to this heading"></a></h2>
 <p>The Responsible AI Mitigations Library consists of <strong>three modules that work in complement</strong> for targeting and mitigating data problems: DataProcessing and DataBalanceAnalysis.</p>
 <section id="dataprocessing">
 <h3><a class="reference internal" href="dataprocessing/intro.html#dataproc"><span class="std std-ref">DataProcessing</span></a><a class="headerlink" href="#dataprocessing" title="Permalink to this heading"></a></h3>
@@ -246,7 +252,9 @@ explicitly manage multiple models. All is done internally in the class, with a u
 <div><ul class="simple">
 <li><p>Interface for breaking a dataset into multiple cohorts.</p></li>
 <li><p>Two approaches for defining cohorts: based on the different values of a column, or based on custom filters.</p></li>
-<li><p>Creation of custom pipelines for each cohort, allowing the creation of different estimators for each cohort.</p></li>
+<li><p>Creation of custom pipelines for each cohort, allowing the creation of different estimators for each cohort.
+Possibility to search and combine the custom estimators for each cohort such that jointly they optimize a group fairness definition of choice.</p></li>
+<li><p>Mitigating cases with low representation data for minority cohorts through transfer learning.</p></li>
 <li><p>Simple interface, which also implements the <code class="docutils literal notranslate"><span class="pre">.fit()</span></code>, <code class="docutils literal notranslate"><span class="pre">.transform()</span></code>, <code class="docutils literal notranslate"><span class="pre">.predict()</span></code>, <code class="docutils literal notranslate"><span class="pre">.predict_proba()</span></code>, and <code class="docutils literal notranslate"><span class="pre">.fit_resample()</span></code> methods
 (some of these methods will only be available depending on the transformations/estimators in the custom pipelines defined for each cohort).</p></li>
 </ul>
@@ -276,16 +284,16 @@ an estimator for each cohort).</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/intro.html#api">API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/intro.html#examples">Examples</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="dataprocessing/intro.html">DataProcessing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#structure">Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#api">API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#examples">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessing/intro.html#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/intro.html#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/intro.html#examples">Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="cohort/intro.html">Cohort</a><ul>

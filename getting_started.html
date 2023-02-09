@@ -32,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Responsible AI Mitigations
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -81,6 +85,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#cohort-based-estimators">Cohort-based estimators</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#decoupled-classifiers"><span class="xref std std-ref">Decoupled Classifiers</span></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#get-involved">Get involved</a></li>
 </ul>
 </li>
@@ -90,8 +95,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cohort/intro.html">Cohort</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils/utils.html">Utils</a></li>
 </ul>
@@ -109,7 +114,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Getting Started</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/getting_started.rst" class="fa fa-github"> Edit on GitHub</a>
@@ -616,11 +621,37 @@ best approach, instead of creating different pipelines for each cohort.</p>
 </div>
 </section>
 </section>
+<section id="decoupled-classifiers">
+<h2><a class="reference internal" href="cohort/decoupled_class.html#decoupled-class"><span class="std std-ref">Decoupled Classifiers</span></a><a class="headerlink" href="#decoupled-classifiers" title="Permalink to this heading"></a></h2>
+<p>This class implements techniques for learning different estimators (models) for different cohorts based on the approach
+presented in <a class="reference external" href="https://www.microsoft.com/en-us/research/publication/decoupled-classifiers-for-group-fair-and-efficient-machine-learning/">“Decoupled classifiers for group-fair and efficient machine learning.”</a>
+(<em>Cynthia Dwork, Nicole Immorlica, Adam Tauman Kalai, and Max Leiserson. Conference on fairness, accountability and transparency. PMLR, 2018</em>). The approach
+searches and combines cohort-specific classifiers to optimize for different definitions of group fairness and can be used
+as a post-processing step on top of any model class. The current implementation in this library supports only binary
+classification and we welcome contributions that can extend these ideas for multi-class and regression problems.</p>
+<p>The basis decoupling algorithm can be summarized in two steps:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A different family of classifiers is trained on each cohort of interest. The algorithm partitions the training data
+for each cohort and learns a classifier for each cohort. Each cohort-specific trained classifier results in a family
+of potential classifiers to be used after the classifier output is adjusted based on different thresholds on the model
+output. For example, depending on which errors are most important to the application (e.g. false positives vs. false
+negatives for binary classification), thresholding the model prediction at different values of the model output (e.g.
+likelihood, softmax) will result in different classifiers. This step generates a whole family of classifiers based on
+different thresholds.</p></li>
+<li><p>Among the cohort-specific classifiers search for one representative classifier for each cohort such that a joint loss
+is optimized. This step searches through all combinations of classifiers from the previous step to find the combination
+that best optimizes a definition of a joint loss across all cohorts. While there are different definitions of such a joint
+loss, this implementation currently supports definitions of the Balanced Loss, L1 loss, and Demographic Parity as examples
+of losses that focus on group fairness. More definitions of losses are described in the longer version of the paper.</p></li>
+</ul>
+</div></blockquote>
+</section>
 <section id="get-involved">
 <h2>Get involved<a class="headerlink" href="#get-involved" title="Permalink to this heading"></a></h2>
 <p>In the future, we plan to integrate more functionalities around data and model-oriented mitigations. Some top-of-mind improvements for the team include bagging and
 boosting, better data synthesis, constrained optimizers, and handling data noise. If you would like to collaborate or contribute to any of these ideas, contact us
-at <a class="reference external" href="mailto:responsible-ai-toolbox&#37;&#52;&#48;microsoft&#46;com">responsible-ai-toolbox<span>&#64;</span>microsoft<span>&#46;</span>com</a>.</p>
+at <a class="reference external" href="mailto:rai-toolbox&#37;&#52;&#48;microsoft&#46;com">rai-toolbox<span>&#64;</span>microsoft<span>&#46;</span>com</a>.</p>
 </section>
 </section>
 

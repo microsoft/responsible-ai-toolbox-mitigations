@@ -1,0 +1,2465 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decoupled Classifiers Case Study 2 &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Decoupled Classifiers Case Study 3" href="case_3.html" />
+    <link rel="prev" title="Decoupled Classifiers Case Study 1" href="case_1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../gallery.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../../../gallery.html#tutorials">Tutorials</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../../gallery.html#case-studies">Case Studies</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../../../gallery.html#using-the-dataprocessing-module">Using the DataProcessing Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../gallery.html#using-the-databalanceanalysis-module">Using the DataBalanceAnalysis Module</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../../../gallery.html#using-the-cohort-module">Using the Cohort Module</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../case_1.html">Cohort Case Study 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../case_1_rebalance.html">Cohort Case Study 1 - Rebalancing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../case_1_dashboard.html">Cohort Case Study 1 - Using RAI ErrorAnalysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../case_2.html">Cohort Case Study 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../case_3.html">Cohort Case Study 3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../integration_raiwidgets.html">Moving Cohorts from raimitigations to raiwidgets (and vice versa)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="case_1.html">Decoupled Classifiers Case Study 1</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Decoupled Classifiers Case Study 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="case_3.html">Decoupled Classifiers Case Study 3</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../utils/utils.html">Utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../api.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="../../../../cohort/cohort.html">Cohort</a></li>
+          <li class="breadcrumb-item"><a href="../../../../cohort/decoupled_class.html">DecoupledClass</a></li>
+      <li class="breadcrumb-item active">Decoupled Classifiers Case Study 2</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/cohort/case_study/decoupled_class/case_2.ipynb" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars and line breaks on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+    white-space: pre;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Decoupled-Classifiers-Case-Study-2">
+<h1>Decoupled Classifiers Case Study 2<a class="headerlink" href="#Decoupled-Classifiers-Case-Study-2" title="Permalink to this heading"></a></h1>
+<p>This notebook will follow a similar approach to what was done in the notebook <a class="reference internal" href="case_1.html"><span class="doc">Decoupled Classifiers Case Study 1</span></a>, but this time we’ll use a real dataset.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[93]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../../../notebooks&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+<span class="kn">from</span> <span class="nn">lightgbm</span> <span class="kn">import</span> <span class="n">LGBMClassifier</span>
+
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">split_data</span>
+<span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
+<span class="kn">from</span> <span class="nn">raimitigations.cohort</span> <span class="kn">import</span> <span class="n">DecoupledClass</span><span class="p">,</span> <span class="n">CohortDefinition</span><span class="p">,</span> <span class="n">CohortManager</span><span class="p">,</span> <span class="n">fetch_cohort_results</span><span class="p">,</span> <span class="n">plot_value_counts_cohort</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
+
+<span class="n">SEED</span> <span class="o">=</span> <span class="mi">100</span>
+</pre></div>
+</div>
+</div>
+<p>Load and split the data into train and test sets:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[94]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_dir</span> <span class="o">=</span> <span class="s2">&quot;../../../../datasets/census/&quot;</span>
+<span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
+
+<span class="n">label_col</span> <span class="o">=</span> <span class="s2">&quot;income&quot;</span>
+<span class="n">df_train</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s2">&quot;train.csv&quot;</span><span class="p">)</span>
+<span class="n">df_test</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s2">&quot;test.csv&quot;</span><span class="p">)</span>
+<span class="c1"># convert to 0 and 1 encoding</span>
+<span class="n">df_train</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;&lt;=50K&quot;</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">df_test</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;&lt;=50K&quot;</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">X_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">label_col</span><span class="p">])</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span>
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">label_col</span><span class="p">])</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span>
+
+<span class="n">df_train</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[94]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>income</th>
+      <th>age</th>
+      <th>workclass</th>
+      <th>fnlwgt</th>
+      <th>education</th>
+      <th>education-num</th>
+      <th>marital-status</th>
+      <th>occupation</th>
+      <th>relationship</th>
+      <th>race</th>
+      <th>gender</th>
+      <th>capital-gain</th>
+      <th>capital-loss</th>
+      <th>hours-per-week</th>
+      <th>native-country</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>39</td>
+      <td>State-gov</td>
+      <td>77516</td>
+      <td>Bachelors</td>
+      <td>13</td>
+      <td>Never-married</td>
+      <td>Adm-clerical</td>
+      <td>Not-in-family</td>
+      <td>White</td>
+      <td>Male</td>
+      <td>2174</td>
+      <td>0</td>
+      <td>40</td>
+      <td>United-States</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>50</td>
+      <td>Self-emp-not-inc</td>
+      <td>83311</td>
+      <td>Bachelors</td>
+      <td>13</td>
+      <td>Married-civ-spouse</td>
+      <td>Exec-managerial</td>
+      <td>Husband</td>
+      <td>White</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>0</td>
+      <td>13</td>
+      <td>United-States</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>38</td>
+      <td>Private</td>
+      <td>215646</td>
+      <td>HS-grad</td>
+      <td>9</td>
+      <td>Divorced</td>
+      <td>Handlers-cleaners</td>
+      <td>Not-in-family</td>
+      <td>White</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>0</td>
+      <td>40</td>
+      <td>United-States</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>53</td>
+      <td>Private</td>
+      <td>234721</td>
+      <td>11th</td>
+      <td>7</td>
+      <td>Married-civ-spouse</td>
+      <td>Handlers-cleaners</td>
+      <td>Husband</td>
+      <td>Black</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>0</td>
+      <td>40</td>
+      <td>United-States</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>28</td>
+      <td>Private</td>
+      <td>338409</td>
+      <td>Bachelors</td>
+      <td>13</td>
+      <td>Married-civ-spouse</td>
+      <td>Prof-specialty</td>
+      <td>Wife</td>
+      <td>Black</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>0</td>
+      <td>40</td>
+      <td>Cuba</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>32556</th>
+      <td>0</td>
+      <td>27</td>
+      <td>Private</td>
+      <td>257302</td>
+      <td>Assoc-acdm</td>
+      <td>12</td>
+      <td>Married-civ-spouse</td>
+      <td>Tech-support</td>
+      <td>Wife</td>
+      <td>White</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>0</td>
+      <td>38</td>
+      <td>United-States</td>
+    </tr>
+    <tr>
+      <th>32557</th>
+      <td>1</td>
+      <td>40</td>
+      <td>Private</td>
+      <td>154374</td>
+      <td>HS-grad</td>
+      <td>9</td>
+      <td>Married-civ-spouse</td>
+      <td>Machine-op-inspct</td>
+      <td>Husband</td>
+      <td>White</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>0</td>
+      <td>40</td>
+      <td>United-States</td>
+    </tr>
+    <tr>
+      <th>32558</th>
+      <td>0</td>
+      <td>58</td>
+      <td>Private</td>
+      <td>151910</td>
+      <td>HS-grad</td>
+      <td>9</td>
+      <td>Widowed</td>
+      <td>Adm-clerical</td>
+      <td>Unmarried</td>
+      <td>White</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>0</td>
+      <td>40</td>
+      <td>United-States</td>
+    </tr>
+    <tr>
+      <th>32559</th>
+      <td>0</td>
+      <td>22</td>
+      <td>Private</td>
+      <td>201490</td>
+      <td>HS-grad</td>
+      <td>9</td>
+      <td>Never-married</td>
+      <td>Adm-clerical</td>
+      <td>Own-child</td>
+      <td>White</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>0</td>
+      <td>20</td>
+      <td>United-States</td>
+    </tr>
+    <tr>
+      <th>32560</th>
+      <td>1</td>
+      <td>52</td>
+      <td>Self-emp-inc</td>
+      <td>287927</td>
+      <td>HS-grad</td>
+      <td>9</td>
+      <td>Married-civ-spouse</td>
+      <td>Exec-managerial</td>
+      <td>Wife</td>
+      <td>White</td>
+      <td>Female</td>
+      <td>15024</td>
+      <td>0</td>
+      <td>40</td>
+      <td>United-States</td>
+    </tr>
+  </tbody>
+</table>
+<p>32561 rows × 15 columns</p>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[95]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_model</span><span class="p">():</span>
+    <span class="c1">#model = DecisionTreeClassifier(max_features=&quot;sqrt&quot;)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">LGBMClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">SEED</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+</pre></div>
+</div>
+</div>
+<p>Taking a closer look at a few sensitive attributes of this dataset and possible imbalance in the data.</p>
+<section id="The-“race”-cohorts">
+<h2>The <em>“race”</em> cohorts<a class="headerlink" href="#The-“race”-cohorts" title="Permalink to this heading"></a></h2>
+<p>Let’s start by plotting the label distribution over the “race” cohorts.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[96]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># BASELINE: &quot;race&quot;</span>
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">get_model</span><span class="p">()</span>
+    <span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">***********&quot;</span><span class="p">)</span>
+
+<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0    24720
+1     7841
+Name: income, dtype: int64
+
+cohort_0 : (`race` == &#34; Amer-Indian-Eskimo&#34;):
+0    275
+1     36
+Name: income, dtype: int64
+***********
+
+cohort_1 : (`race` == &#34; Asian-Pac-Islander&#34;):
+0    763
+1    276
+Name: income, dtype: int64
+***********
+
+cohort_2 : (`race` == &#34; Black&#34;):
+0    2737
+1     387
+Name: income, dtype: int64
+***********
+
+cohort_3 : (`race` == &#34; Other&#34;):
+0    246
+1     25
+Name: income, dtype: int64
+***********
+
+cohort_4 : (`race` == &#34; White&#34;):
+0    20699
+1     7117
+Name: income, dtype: int64
+***********
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/notebooks_cohort_case_study_decoupled_class_case_2_7_1.png" src="../../../../_images/notebooks_cohort_case_study_decoupled_class_case_2_7_1.png" />
+</div>
+</div>
+<p>Clearly, we can see an imbalance in the size of cohorts and label distribution. Given the sensitivity of the <em>“race”</em> attribute, merging cohorts might not be an appropriate solution, instead, let’s take a look at the effect of transfer learning:</p>
+</section>
+<section id="Transfer-Learning">
+<h2>Transfer Learning<a class="headerlink" href="#Transfer-Learning" title="Permalink to this heading"></a></h2>
+<p><strong>Note:</strong> <em>the following experiment is expected to fail. We’ll explain why it failed in the following cells</em></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[97]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">],</span>
+    <span class="n">theta</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">min_fold_size_theta</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span><span class="p">,</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">get_model</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INVALID COHORTS:
+cohort_3:
+        Size: 271
+        Query:
+                (`race` == &#34; Other&#34;)
+        Value Counts:
+                0: 246 (90.77%)
+                1: 25 (9.23%)
+        Invalid: False
+ERROR: Cannot use transfer learning over cohorts with skewed distributions.
+</pre></div></div>
+</div>
+<p>The above code fails because one or more dataset has a label distribution invalidity, meaning that at least one cohort doesn’t satisfy the minimum rate requirement of the minority class. In order to try and solve this skewed distribution, we can use the <code class="docutils literal notranslate"><span class="pre">Rebalance</span></code> functionality of this library to re-balance the data.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[98]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c0_pipe</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">strategy_over</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="n">c1_pipe</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">c2_pipe</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">c3_pipe</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">strategy_over</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="n">c4_pipe</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span><span class="n">c0_pipe</span><span class="p">,</span> <span class="n">c1_pipe</span><span class="p">,</span> <span class="n">c2_pipe</span><span class="p">,</span> <span class="n">c3_pipe</span><span class="p">,</span> <span class="n">c4_pipe</span><span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">rebalanced_X_train</span><span class="p">,</span> <span class="n">rebalanced_y_train</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:808: FutureWarning: `sparse` was renamed to `sparse_output` in version 1.2 and will be removed in 1.4. `sparse_output` is ignored unless you leave `sparse` to its default value.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:808: FutureWarning: `sparse` was renamed to `sparse_output` in version 1.2 and will be removed in 1.4. `sparse_output` is ignored unless you leave `sparse` to its default value.
+  warnings.warn(
+</pre></div></div>
+</div>
+<p>let’s look at the label distribution plots of the rebalanced data:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[99]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">get_model</span><span class="p">()</span>
+    <span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">rebalanced_X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">rebalanced_y_train</span><span class="p">)</span>
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">rebalanced_X_train</span><span class="p">,</span> <span class="n">rebalanced_y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">rebalanced_y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">***********&quot;</span><span class="p">)</span>
+
+<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">rebalanced_y_train</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0    24720
+1     8040
+Name: income, dtype: int64
+
+cohort_0 : (`race` == &#34; Amer-Indian-Eskimo&#34;):
+0    275
+1    137
+Name: income, dtype: int64
+***********
+
+cohort_1 : (`race` == &#34; Asian-Pac-Islander&#34;):
+0    763
+1    276
+Name: income, dtype: int64
+***********
+
+cohort_2 : (`race` == &#34; Black&#34;):
+0    2737
+1     387
+Name: income, dtype: int64
+***********
+
+cohort_3 : (`race` == &#34; Other&#34;):
+0    246
+1    123
+Name: income, dtype: int64
+***********
+
+cohort_4 : (`race` == &#34; White&#34;):
+0    20699
+1     7117
+Name: income, dtype: int64
+***********
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/notebooks_cohort_case_study_decoupled_class_case_2_14_1.png" src="../../../../_images/notebooks_cohort_case_study_decoupled_class_case_2_14_1.png" />
+</div>
+</div>
+<p>then the performance metrics of the rebalanced baseline cohorts:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[100]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">rebalanced_X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">rebalanced_X_train</span><span class="p">,</span> <span class="n">rebalanced_y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[100]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.919891</td>
+      <td>0.779694</td>
+      <td>0.836502</td>
+      <td>0.798674</td>
+      <td>0.838585</td>
+      <td>0.260096</td>
+      <td>5186</td>
+      <td>0.318531</td>
+      <td>16281</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`race` == " Amer-Indian-Eskimo")</td>
+      <td>0.719173</td>
+      <td>0.736372</td>
+      <td>0.594549</td>
+      <td>0.623024</td>
+      <td>0.886792</td>
+      <td>0.730358</td>
+      <td>7</td>
+      <td>0.044025</td>
+      <td>159</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>(`race` == " Asian-Pac-Islander")</td>
+      <td>0.881606</td>
+      <td>0.795724</td>
+      <td>0.750569</td>
+      <td>0.767495</td>
+      <td>0.827083</td>
+      <td>0.522477</td>
+      <td>104</td>
+      <td>0.216667</td>
+      <td>480</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>cohort_2</td>
+      <td>(`race` == " Black")</td>
+      <td>0.920955</td>
+      <td>0.771581</td>
+      <td>0.767609</td>
+      <td>0.769573</td>
+      <td>0.907111</td>
+      <td>0.367778</td>
+      <td>176</td>
+      <td>0.112748</td>
+      <td>1561</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>cohort_3</td>
+      <td>(`race` == " Other")</td>
+      <td>0.906909</td>
+      <td>0.839147</td>
+      <td>0.595455</td>
+      <td>0.617357</td>
+      <td>0.844444</td>
+      <td>0.943149</td>
+      <td>6</td>
+      <td>0.044444</td>
+      <td>135</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>cohort_4</td>
+      <td>(`race` == " White")</td>
+      <td>0.924379</td>
+      <td>0.780414</td>
+      <td>0.839327</td>
+      <td>0.797787</td>
+      <td>0.830346</td>
+      <td>0.254678</td>
+      <td>4860</td>
+      <td>0.348487</td>
+      <td>13946</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>And now let’s attempt transfer learning again using the rebalanced data:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[101]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race&quot;</span><span class="p">],</span>
+    <span class="n">theta</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">min_fold_size_theta</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span><span class="p">,</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">get_model</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">rebalanced_X_train</span><span class="p">,</span> <span class="n">rebalanced_y_train</span><span class="p">)</span>
+
+<span class="n">dec_class</span><span class="o">.</span><span class="n">print_cohorts</span><span class="p">()</span>
+
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">rebalanced_X_train</span><span class="p">,</span> <span class="n">rebalanced_y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">rebalanced_y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">dec_class</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">***********&quot;</span><span class="p">)</span>
+
+<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">rebalanced_y_train</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FINAL COHORTS
+cohort_0:
+        Size: 412
+        Query:
+                (`race` == &#34; Amer-Indian-Eskimo&#34;)
+        Value Counts:
+                0: 275 (66.75%)
+                1: 137 (33.25%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_1&#39;, &#39;cohort_2&#39;, &#39;cohort_3&#39;, &#39;cohort_4&#39;]
+                Theta = 0.8
+
+
+cohort_1:
+        Size: 1039
+        Query:
+                (`race` == &#34; Asian-Pac-Islander&#34;)
+        Value Counts:
+                0: 763 (73.44%)
+                1: 276 (26.56%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_0&#39;, &#39;cohort_2&#39;, &#39;cohort_3&#39;, &#39;cohort_4&#39;]
+                Theta = 0.8
+
+
+cohort_2:
+        Size: 3124
+        Query:
+                (`race` == &#34; Black&#34;)
+        Value Counts:
+                0: 2737 (87.61%)
+                1: 387 (12.39%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_3&#39;, &#39;cohort_4&#39;]
+                Theta = 0.8
+
+
+cohort_3:
+        Size: 369
+        Query:
+                (`race` == &#34; Other&#34;)
+        Value Counts:
+                0: 246 (66.67%)
+                1: 123 (33.33%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_2&#39;, &#39;cohort_4&#39;]
+                Theta = 0.8
+
+
+cohort_4:
+        Size: 27816
+        Query:
+                (`race` == &#34; White&#34;)
+        Value Counts:
+                0: 20699 (74.41%)
+                1: 7117 (25.59%)
+        Invalid: False
+
+
+0    24720
+1     8040
+Name: income, dtype: int64
+
+cohort_0 : (`race` == &#34; Amer-Indian-Eskimo&#34;):
+0    275
+1    137
+Name: income, dtype: int64
+***********
+
+cohort_1 : (`race` == &#34; Asian-Pac-Islander&#34;):
+0    763
+1    276
+Name: income, dtype: int64
+***********
+
+cohort_2 : (`race` == &#34; Black&#34;):
+0    2737
+1     387
+Name: income, dtype: int64
+***********
+
+cohort_3 : (`race` == &#34; Other&#34;):
+0    246
+1    123
+Name: income, dtype: int64
+***********
+
+cohort_4 : (`race` == &#34; White&#34;):
+0    20699
+1     7117
+Name: income, dtype: int64
+***********
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/notebooks_cohort_case_study_decoupled_class_case_2_18_1.png" src="../../../../_images/notebooks_cohort_case_study_decoupled_class_case_2_18_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[102]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">th_dict</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">get_threasholds_dict</span><span class="p">()</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">cohort_def</span><span class="o">=</span><span class="n">dec_class</span><span class="p">,</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[102]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.927809</td>
+      <td>0.835215</td>
+      <td>0.799236</td>
+      <td>0.814789</td>
+      <td>0.873288</td>
+      <td>0.500000</td>
+      <td>3285</td>
+      <td>0.201769</td>
+      <td>16281</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`race` == " Amer-Indian-Eskimo")</td>
+      <td>0.941729</td>
+      <td>0.799934</td>
+      <td>0.839850</td>
+      <td>0.817998</td>
+      <td>0.918239</td>
+      <td>0.406598</td>
+      <td>22</td>
+      <td>0.138365</td>
+      <td>159</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>(`race` == " Asian-Pac-Islander")</td>
+      <td>0.905202</td>
+      <td>0.793487</td>
+      <td>0.802702</td>
+      <td>0.797815</td>
+      <td>0.835417</td>
+      <td>0.408684</td>
+      <td>140</td>
+      <td>0.291667</td>
+      <td>480</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>cohort_2</td>
+      <td>(`race` == " Black")</td>
+      <td>0.950893</td>
+      <td>0.834517</td>
+      <td>0.809811</td>
+      <td>0.821497</td>
+      <td>0.930173</td>
+      <td>0.404750</td>
+      <td>164</td>
+      <td>0.105061</td>
+      <td>1561</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>cohort_3</td>
+      <td>(`race` == " Other")</td>
+      <td>0.973455</td>
+      <td>0.877273</td>
+      <td>0.877273</td>
+      <td>0.877273</td>
+      <td>0.925926</td>
+      <td>0.395015</td>
+      <td>25</td>
+      <td>0.185185</td>
+      <td>135</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>cohort_4</td>
+      <td>(`race` == " White")</td>
+      <td>0.924379</td>
+      <td>0.805904</td>
+      <td>0.820844</td>
+      <td>0.812812</td>
+      <td>0.856016</td>
+      <td>0.384067</td>
+      <td>3756</td>
+      <td>0.269325</td>
+      <td>13946</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>…thanks to the rebalance, we were able to run transfer learning over the <em>“race”</em> cohorts.</p>
+<p>It seems that transfer learning has a positive effect on most cohorts in the test set. We can see improvement in the ROC metric, label distribution and performance with a generally more comparable distribution among cohorts.</p>
+</section>
+<section id="The-“gender”-cohorts">
+<h2>The <em>“gender”</em> cohorts<a class="headerlink" href="#The-“gender”-cohorts" title="Permalink to this heading"></a></h2>
+<p>Secondly, let’s look at the plots and label distribution of another sensitive attribute:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[103]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">get_model</span><span class="p">()</span>
+    <span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">***********&quot;</span><span class="p">)</span>
+
+<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0    24720
+1     7841
+Name: income, dtype: int64
+
+cohort_0 : (`gender` == &#34; Female&#34;):
+0    9592
+1    1179
+Name: income, dtype: int64
+***********
+
+cohort_1 : (`gender` == &#34; Male&#34;):
+0    15128
+1     6662
+Name: income, dtype: int64
+***********
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/notebooks_cohort_case_study_decoupled_class_case_2_22_1.png" src="../../../../_images/notebooks_cohort_case_study_decoupled_class_case_2_22_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[104]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[104]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.924731</td>
+      <td>0.775651</td>
+      <td>0.840135</td>
+      <td>0.794981</td>
+      <td>0.832750</td>
+      <td>0.243250</td>
+      <td>5447</td>
+      <td>0.334562</td>
+      <td>16281</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`gender` == " Female")</td>
+      <td>0.939232</td>
+      <td>0.749313</td>
+      <td>0.854318</td>
+      <td>0.787376</td>
+      <td>0.899465</td>
+      <td>0.156009</td>
+      <td>895</td>
+      <td>0.165099</td>
+      <td>5421</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>(`gender` == " Male")</td>
+      <td>0.908182</td>
+      <td>0.778074</td>
+      <td>0.818033</td>
+      <td>0.787847</td>
+      <td>0.806906</td>
+      <td>0.280206</td>
+      <td>4349</td>
+      <td>0.400460</td>
+      <td>10860</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>The distribution of the <em>“gender”</em> column might not be as skewed as the <em>“race”</em> column, but we can still see that cohort_1 has a more balanced distribution than cohort_0. Let’s attempt to use transfer learning over these cohorts:</p>
+</section>
+<section id="id1">
+<h2>Transfer Learning<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[105]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">],</span>
+    <span class="n">theta</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">min_fold_size_theta</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span><span class="p">,</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">get_model</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">dec_class</span><span class="o">.</span><span class="n">print_cohorts</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FINAL COHORTS
+cohort_0:
+        Size: 10771
+        Query:
+                (`gender` == &#34; Female&#34;)
+        Value Counts:
+                0: 9592 (89.05%)
+                1: 1179 (10.95%)
+        Invalid: False
+
+
+cohort_1:
+        Size: 21790
+        Query:
+                (`gender` == &#34; Male&#34;)
+        Value Counts:
+                0: 15128 (69.43%)
+                1: 6662 (30.57%)
+        Invalid: False
+
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[106]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">th_dict</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">get_threasholds_dict</span><span class="p">()</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">cohort_def</span><span class="o">=</span><span class="n">dec_class</span><span class="p">,</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[106]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.924731</td>
+      <td>0.832133</td>
+      <td>0.794795</td>
+      <td>0.810810</td>
+      <td>0.870892</td>
+      <td>0.500000</td>
+      <td>3260</td>
+      <td>0.200233</td>
+      <td>16281</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`gender` == " Female")</td>
+      <td>0.939232</td>
+      <td>0.814410</td>
+      <td>0.824649</td>
+      <td>0.819414</td>
+      <td>0.928795</td>
+      <td>0.341452</td>
+      <td>612</td>
+      <td>0.112894</td>
+      <td>5421</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>(`gender` == " Male")</td>
+      <td>0.908182</td>
+      <td>0.791165</td>
+      <td>0.811141</td>
+      <td>0.799352</td>
+      <td>0.825414</td>
+      <td>0.365531</td>
+      <td>3690</td>
+      <td>0.339779</td>
+      <td>10860</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>In the case of the <em>“gender”</em> column, observing the two past results, we notice that transfer learning has improved the precision, F1 score, and accuracy for both cohorts. Therefore, transfer learning has proved useful in this scenario compared to using the more generic <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> approach.</p>
+</section>
+<section id="Fairness-Optimization">
+<h2>Fairness Optimization<a class="headerlink" href="#Fairness-Optimization" title="Permalink to this heading"></a></h2>
+<p>One issue we can identify on the previous result is that the rate of positive labels for <code class="docutils literal notranslate"><span class="pre">cohort_0</span></code> is smaller than the positive rate in <code class="docutils literal notranslate"><span class="pre">cohort_1</span></code>. In some cases, this is not desirable, as this shows that the model fitted has some bias in regard to the sensitive feature (in this case, the <code class="docutils literal notranslate"><span class="pre">gender</span></code> column). Let’s try to mitigate this issue by using the DecoupledClass with Transfer Learning + Fairness optimization using the Demographic Parity loss.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[107]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gender&quot;</span><span class="p">],</span>
+    <span class="n">theta</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">min_fold_size_theta</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span><span class="p">,</span>
+    <span class="n">fairness_loss</span><span class="o">=</span><span class="s2">&quot;dem_parity&quot;</span><span class="p">,</span>
+    <span class="n">lambda_coef</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">max_joint_loss_time</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">get_model</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">dec_class</span><span class="o">.</span><span class="n">print_cohorts</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FINAL COHORTS
+cohort_0:
+        Size: 10771
+        Query:
+                (`gender` == &#34; Female&#34;)
+        Value Counts:
+                0: 9592 (89.05%)
+                1: 1179 (10.95%)
+        Invalid: False
+
+
+cohort_1:
+        Size: 21790
+        Query:
+                (`gender` == &#34; Male&#34;)
+        Value Counts:
+                0: 15128 (69.43%)
+                1: 6662 (30.57%)
+        Invalid: False
+
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[108]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">th_dict</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">get_threasholds_dict</span><span class="p">()</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">cohort_def</span><span class="o">=</span><span class="n">dec_class</span><span class="p">,</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[108]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.924731</td>
+      <td>0.832133</td>
+      <td>0.794795</td>
+      <td>0.810810</td>
+      <td>0.870892</td>
+      <td>0.500000</td>
+      <td>3260</td>
+      <td>0.200233</td>
+      <td>16281</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`gender` == " Female")</td>
+      <td>0.939232</td>
+      <td>0.643159</td>
+      <td>0.834692</td>
+      <td>0.643880</td>
+      <td>0.749124</td>
+      <td>0.023640</td>
+      <td>1884</td>
+      <td>0.347537</td>
+      <td>5421</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>(`gender` == " Male")</td>
+      <td>0.908182</td>
+      <td>0.791165</td>
+      <td>0.811141</td>
+      <td>0.799352</td>
+      <td>0.825414</td>
+      <td>0.365531</td>
+      <td>3690</td>
+      <td>0.339779</td>
+      <td>10860</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="The-“relationship”-cohorts">
+<h2>The <em>“relationship”</em> cohorts<a class="headerlink" href="#The-“relationship”-cohorts" title="Permalink to this heading"></a></h2>
+<p>Lastly, we’ll take a closer look at the relationship column, starting with the baseline:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[82]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">get_model</span><span class="p">()</span>
+    <span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">***********&quot;</span><span class="p">)</span>
+
+<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0    24720
+1     7841
+Name: income, dtype: int64
+
+cohort_0 : (`relationship` == &#34; Husband&#34;):
+0    7275
+1    5918
+Name: income, dtype: int64
+***********
+
+cohort_1 : (`relationship` == &#34; Not-in-family&#34;):
+0    7449
+1     856
+Name: income, dtype: int64
+***********
+
+cohort_2 : (`relationship` == &#34; Other-relative&#34;):
+0    944
+1     37
+Name: income, dtype: int64
+***********
+
+cohort_3 : (`relationship` == &#34; Own-child&#34;):
+0    5001
+1      67
+Name: income, dtype: int64
+***********
+
+cohort_4 : (`relationship` == &#34; Unmarried&#34;):
+0    3228
+1     218
+Name: income, dtype: int64
+***********
+
+cohort_5 : (`relationship` == &#34; Wife&#34;):
+0    823
+1    745
+Name: income, dtype: int64
+***********
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/notebooks_cohort_case_study_decoupled_class_case_2_32_1.png" src="../../../../_images/notebooks_cohort_case_study_decoupled_class_case_2_32_1.png" />
+</div>
+</div>
+<p>similar to the <em>“race”</em> column, we can see that some cohorts are smaller and with more skewness in label distribution than others. Can we apply transfer learning in this case?</p>
+</section>
+<section id="id2">
+<h2>Transfer Learning<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[83]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span>
+    <span class="n">theta</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">min_fold_size_theta</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span><span class="p">,</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">get_model</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+INVALID COHORTS:
+cohort_2:
+        Size: 981
+        Query:
+                (`relationship` == &#34; Other-relative&#34;)
+        Value Counts:
+                0: 944 (96.23%)
+                1: 37 (3.77%)
+        Invalid: False
+cohort_3:
+        Size: 5068
+        Query:
+                (`relationship` == &#34; Own-child&#34;)
+        Value Counts:
+                0: 5001 (98.68%)
+                1: 67 (1.32%)
+        Invalid: False
+cohort_4:
+        Size: 3446
+        Query:
+                (`relationship` == &#34; Unmarried&#34;)
+        Value Counts:
+                0: 3228 (93.67%)
+                1: 218 (6.33%)
+        Invalid: False
+ERROR: Cannot use transfer learning over cohorts with skewed distributions.
+</pre></div></div>
+</div>
+<p>Similar to the <em>“race”</em> column, we are unable to directly apply transfer learning over these cohorts, so we will rebalance the training data first:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[84]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c0_pipe</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">c1_pipe</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">strategy_over</span><span class="o">=</span><span class="s1">&#39;minority&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="n">c2_pipe</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">strategy_over</span><span class="o">=</span><span class="s1">&#39;minority&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="n">c3_pipe</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">strategy_over</span><span class="o">=</span><span class="s1">&#39;minority&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="n">c4_pipe</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">Rebalance</span><span class="p">(</span><span class="n">strategy_over</span><span class="o">=</span><span class="s1">&#39;minority&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="n">c5_pipe</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span><span class="n">c0_pipe</span><span class="p">,</span> <span class="n">c1_pipe</span><span class="p">,</span> <span class="n">c2_pipe</span><span class="p">,</span> <span class="n">c3_pipe</span><span class="p">,</span> <span class="n">c4_pipe</span><span class="p">,</span> <span class="n">c5_pipe</span><span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">rebalanced_X_train</span><span class="p">,</span> <span class="n">rebalanced_y_train</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:808: FutureWarning: `sparse` was renamed to `sparse_output` in version 1.2 and will be removed in 1.4. `sparse_output` is ignored unless you leave `sparse` to its default value.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:808: FutureWarning: `sparse` was renamed to `sparse_output` in version 1.2 and will be removed in 1.4. `sparse_output` is ignored unless you leave `sparse` to its default value.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:808: FutureWarning: `sparse` was renamed to `sparse_output` in version 1.2 and will be removed in 1.4. `sparse_output` is ignored unless you leave `sparse` to its default value.
+  warnings.warn(
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/sklearn/preprocessing/_encoders.py:808: FutureWarning: `sparse` was renamed to `sparse_output` in version 1.2 and will be removed in 1.4. `sparse_output` is ignored unless you leave `sparse` to its default value.
+  warnings.warn(
+</pre></div></div>
+</div>
+<p>Now let’s run the baseline plots again:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[85]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohort_set</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">get_model</span><span class="p">()</span>
+    <span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cohort_set</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">rebalanced_X_train</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">rebalanced_y_train</span><span class="p">)</span>
+<span class="n">subsets</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">get_subsets</span><span class="p">(</span><span class="n">rebalanced_X_train</span><span class="p">,</span> <span class="n">rebalanced_y_train</span><span class="p">,</span> <span class="n">apply_transform</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">rebalanced_y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">cohort_set</span><span class="o">.</span><span class="n">get_queries</span><span class="p">()[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">***********&quot;</span><span class="p">)</span>
+
+<span class="n">plot_value_counts_cohort</span><span class="p">(</span><span class="n">rebalanced_y_train</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0    24720
+1    23285
+Name: income, dtype: int64
+
+cohort_0 : (`relationship` == &#34; Husband&#34;):
+0    7275
+1    5918
+Name: income, dtype: int64
+***********
+
+cohort_1 : (`relationship` == &#34; Not-in-family&#34;):
+0    7449
+1    7449
+Name: income, dtype: int64
+***********
+
+cohort_2 : (`relationship` == &#34; Other-relative&#34;):
+0    944
+1    944
+Name: income, dtype: int64
+***********
+
+cohort_3 : (`relationship` == &#34; Own-child&#34;):
+0    5001
+1    5001
+Name: income, dtype: int64
+***********
+
+cohort_4 : (`relationship` == &#34; Unmarried&#34;):
+0    3228
+1    3228
+Name: income, dtype: int64
+***********
+
+cohort_5 : (`relationship` == &#34; Wife&#34;):
+0    823
+1    745
+Name: income, dtype: int64
+***********
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../../_images/notebooks_cohort_case_study_decoupled_class_case_2_39_1.png" src="../../../../_images/notebooks_cohort_case_study_decoupled_class_case_2_39_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[86]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cohort_set</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">rebalanced_X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">rebalanced_X_train</span><span class="p">,</span> <span class="n">rebalanced_y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[86]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.913161</td>
+      <td>0.799514</td>
+      <td>0.797840</td>
+      <td>0.798671</td>
+      <td>0.855107</td>
+      <td>0.469123</td>
+      <td>3815</td>
+      <td>0.234322</td>
+      <td>16281</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`relationship` == " Husband")</td>
+      <td>0.847310</td>
+      <td>0.763712</td>
+      <td>0.760496</td>
+      <td>0.761651</td>
+      <td>0.765445</td>
+      <td>0.467993</td>
+      <td>2772</td>
+      <td>0.424958</td>
+      <td>6523</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>(`relationship` == " Not-in-family")</td>
+      <td>0.886510</td>
+      <td>0.745795</td>
+      <td>0.738989</td>
+      <td>0.742325</td>
+      <td>0.910005</td>
+      <td>0.535268</td>
+      <td>407</td>
+      <td>0.095138</td>
+      <td>4278</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>cohort_2</td>
+      <td>(`relationship` == " Other-relative")</td>
+      <td>0.905359</td>
+      <td>0.822736</td>
+      <td>0.631373</td>
+      <td>0.684159</td>
+      <td>0.975238</td>
+      <td>0.947751</td>
+      <td>6</td>
+      <td>0.011429</td>
+      <td>525</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>cohort_3</td>
+      <td>(`relationship` == " Own-child")</td>
+      <td>0.907388</td>
+      <td>0.706046</td>
+      <td>0.710644</td>
+      <td>0.708318</td>
+      <td>0.979706</td>
+      <td>0.631069</td>
+      <td>45</td>
+      <td>0.017907</td>
+      <td>2513</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>cohort_4</td>
+      <td>(`relationship` == " Unmarried")</td>
+      <td>0.882609</td>
+      <td>0.677055</td>
+      <td>0.709674</td>
+      <td>0.691634</td>
+      <td>0.930911</td>
+      <td>0.529153</td>
+      <td>109</td>
+      <td>0.064920</td>
+      <td>1679</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>cohort_5</td>
+      <td>(`relationship` == " Wife")</td>
+      <td>0.830681</td>
+      <td>0.734595</td>
+      <td>0.735099</td>
+      <td>0.734815</td>
+      <td>0.736566</td>
+      <td>0.510850</td>
+      <td>353</td>
+      <td>0.462647</td>
+      <td>763</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>And lastly let’s reattempt transfer learning and compare its metrics to the baseline:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[89]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">DataStandardScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unknown_err</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;relationship&quot;</span><span class="p">],</span>
+    <span class="n">theta</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">min_fold_size_theta</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span><span class="p">,</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">get_model</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">rebalanced_X_train</span><span class="p">,</span> <span class="n">rebalanced_y_train</span><span class="p">)</span>
+
+<span class="n">dec_class</span><span class="o">.</span><span class="n">print_cohorts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FINAL COHORTS
+cohort_0:
+        Size: 13193
+        Query:
+                (`relationship` == &#34; Husband&#34;)
+        Value Counts:
+                0: 7275 (55.14%)
+                1: 5918 (44.86%)
+        Invalid: False
+
+
+cohort_1:
+        Size: 14898
+        Query:
+                (`relationship` == &#34; Not-in-family&#34;)
+        Value Counts:
+                0: 7449 (50.00%)
+                1: 7449 (50.00%)
+        Invalid: False
+
+
+cohort_2:
+        Size: 1888
+        Query:
+                (`relationship` == &#34; Other-relative&#34;)
+        Value Counts:
+                0: 944 (50.00%)
+                1: 944 (50.00%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_3&#39;, &#39;cohort_4&#39;, &#39;cohort_5&#39;]
+                Theta = 0.2
+
+
+cohort_3:
+        Size: 10002
+        Query:
+                (`relationship` == &#34; Own-child&#34;)
+        Value Counts:
+                0: 5001 (50.00%)
+                1: 5001 (50.00%)
+        Invalid: False
+
+
+cohort_4:
+        Size: 6456
+        Query:
+                (`relationship` == &#34; Unmarried&#34;)
+        Value Counts:
+                0: 3228 (50.00%)
+                1: 3228 (50.00%)
+        Invalid: False
+
+
+cohort_5:
+        Size: 1568
+        Query:
+                (`relationship` == &#34; Wife&#34;)
+        Value Counts:
+                0: 823 (52.49%)
+                1: 745 (47.51%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_2&#39;, &#39;cohort_3&#39;, &#39;cohort_4&#39;]
+                Theta = 0.2
+
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[90]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">th_dict</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">get_threasholds_dict</span><span class="p">()</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">cohort_def</span><span class="o">=</span><span class="n">dec_class</span><span class="p">,</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[90]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.914236</td>
+      <td>0.809129</td>
+      <td>0.795081</td>
+      <td>0.801682</td>
+      <td>0.860082</td>
+      <td>0.500000</td>
+      <td>3600</td>
+      <td>0.221117</td>
+      <td>16281</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`relationship` == " Husband")</td>
+      <td>0.847310</td>
+      <td>0.746642</td>
+      <td>0.748831</td>
+      <td>0.743895</td>
+      <td>0.744136</td>
+      <td>0.367500</td>
+      <td>3395</td>
+      <td>0.520466</td>
+      <td>6523</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>(`relationship` == " Not-in-family")</td>
+      <td>0.886510</td>
+      <td>0.710561</td>
+      <td>0.753516</td>
+      <td>0.729050</td>
+      <td>0.894109</td>
+      <td>0.444907</td>
+      <td>519</td>
+      <td>0.121318</td>
+      <td>4278</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>cohort_2</td>
+      <td>(`relationship` == " Other-relative")</td>
+      <td>0.940261</td>
+      <td>0.746024</td>
+      <td>0.855882</td>
+      <td>0.789894</td>
+      <td>0.971429</td>
+      <td>0.506925</td>
+      <td>22</td>
+      <td>0.041905</td>
+      <td>525</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>cohort_3</td>
+      <td>(`relationship` == " Own-child")</td>
+      <td>0.907388</td>
+      <td>0.692846</td>
+      <td>0.710036</td>
+      <td>0.701050</td>
+      <td>0.978512</td>
+      <td>0.607914</td>
+      <td>48</td>
+      <td>0.019101</td>
+      <td>2513</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>cohort_4</td>
+      <td>(`relationship` == " Unmarried")</td>
+      <td>0.882609</td>
+      <td>0.677055</td>
+      <td>0.709674</td>
+      <td>0.691634</td>
+      <td>0.930911</td>
+      <td>0.529153</td>
+      <td>109</td>
+      <td>0.064920</td>
+      <td>1679</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>cohort_5</td>
+      <td>(`relationship` == " Wife")</td>
+      <td>0.865590</td>
+      <td>0.780855</td>
+      <td>0.782139</td>
+      <td>0.781301</td>
+      <td>0.782438</td>
+      <td>0.491991</td>
+      <td>360</td>
+      <td>0.471822</td>
+      <td>763</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>In this case, transfer learning hasn’t made a noticeable difference over the cohorts of the training data since the rebalancig has already done most of the heavy lifting to even out the distribution. As for its performance over the test set cohorts, we can see improvement in the label distribution and accuracy of some cohorts, but it is small.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="case_1.html" class="btn btn-neutral float-left" title="Decoupled Classifiers Case Study 1" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="case_3.html" class="btn btn-neutral float-right" title="Decoupled Classifiers Case Study 3" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

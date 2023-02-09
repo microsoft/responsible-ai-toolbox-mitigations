@@ -32,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> Responsible AI Mitigations
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,13 +56,15 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="intro.html">Cohort</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="cohort.html">Cohort</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#">CohortDefinition</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cohort_manager.html">CohortManager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cohort_handler.html">CohortHandler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="decoupled_class.html">DecoupledClass</a></li>
 <li class="toctree-l4"><a class="reference internal" href="utils.html">Cohort Utils</a></li>
 </ul>
 </li>
@@ -83,7 +89,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../api.html">API reference</a></li>
           <li class="breadcrumb-item"><a href="cohort.html">Cohort</a></li>
       <li class="breadcrumb-item active">CohortDefinition</li>
@@ -182,7 +188,7 @@ Each sub-list here follows the same pattern as the parameter
 
 <dl class="py method">
 <dt class="sig sig-object py" id="raimitigations.cohort.CohortDefinition.get_cohort_subset">
-<span class="sig-name descname"><span class="pre">get_cohort_subset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_used</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_index_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.CohortDefinition.get_cohort_subset" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_cohort_subset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_used</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_index_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.CohortDefinition.get_cohort_subset" title="Permalink to this definition"></a></dt>
 <dd><p>Filters a dataset to fetch only the instances that follow the
 conditions of the current cohort. If the current cohort doesn’t
 have any conditions, this means that this cohort is comprised of
@@ -194,7 +200,7 @@ index_used parameter. Finally, return the filtered dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> – a data frame containing the features of a dataset
+<li><p><strong>X</strong> – a data frame containing the features of a dataset
 that should be filtered;</p></li>
 <li><p><strong>y</strong> – the label dataset (<code class="docutils literal notranslate"><span class="pre">y</span></code>) that should also be filtered.
 This <code class="docutils literal notranslate"><span class="pre">y</span></code> dataset should have the same number of rows as the

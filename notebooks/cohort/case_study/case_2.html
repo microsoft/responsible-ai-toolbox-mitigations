@@ -34,11 +34,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> Responsible AI Mitigations
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -62,6 +66,9 @@
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Cohort Case Study 2</a></li>
 <li class="toctree-l4"><a class="reference internal" href="case_3.html">Cohort Case Study 3</a></li>
 <li class="toctree-l4"><a class="reference internal" href="integration_raiwidgets.html">Moving Cohorts from raimitigations to raiwidgets (and vice versa)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="decoupled_class/case_1.html">Decoupled Classifiers Case Study 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="decoupled_class/case_2.html">Decoupled Classifiers Case Study 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="decoupled_class/case_3.html">Decoupled Classifiers Case Study 3</a></li>
 </ul>
 </li>
 </ul>
@@ -71,8 +78,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cohort/intro.html">Cohort</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
@@ -90,7 +97,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../../api.html">API reference</a></li>
           <li class="breadcrumb-item"><a href="../../../cohort/cohort.html">Cohort</a></li>
           <li class="breadcrumb-item"><a href="../../../cohort/cohort_manager.html">CohortManager</a></li>
@@ -388,7 +395,7 @@ div.rendered_html tbody tr:hover {
 <p>This notebook will follow a similar approach to what was done in the notebook <a class="reference internal" href="case_1.html"><span class="doc">Cohort Case Study 1</span></a>, but this time we’ll use a real dataset. Since this time we’re handling a real dataset, it might not be obvious which cohorts follow different behaviors, as we’ve seen in the aforementioned notebook.</p>
 <p>We’ll start by downloading the dataset and reading the train and test sets.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -408,7 +415,8 @@ div.rendered_html tbody tr:hover {
 <span class="kn">from</span> <span class="nn">raimitigations.cohort</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">CohortDefinition</span><span class="p">,</span>
     <span class="n">CohortManager</span><span class="p">,</span>
-    <span class="n">fetch_cohort_results</span>
+    <span class="n">fetch_cohort_results</span><span class="p">,</span>
+    <span class="n">plot_value_counts_cohort</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
 
@@ -432,11 +440,11 @@ div.rendered_html tbody tr:hover {
 <span class="n">y_train</span> <span class="o">=</span> <span class="n">df_train</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span>
 <span class="n">X_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">label_col</span><span class="p">])</span>
 <span class="n">y_test</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span>
-</pre></div>
+<br/></pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">df_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
@@ -454,7 +462,7 @@ div.rendered_html tbody tr:hover {
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_train</span>
@@ -462,7 +470,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -707,7 +715,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>Here we define which model will be used throughout the experiments performed here. Remember that our goal is not to compare different models, but instead to compare different approaches to cohort processing. Therefore, we’ll use the same model for all experiments, but we’ll alternate between training a pipeline using the entire dataset and training multiple pipelines, where each pipeline is associated with a specific cohort. We’ll also see how the cohort definition changes the results obtained.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_model</span><span class="p">():</span>
@@ -725,7 +733,7 @@ first using the training dataset, which gives us the best thresholds for each co
 <h3>Superficial analysis of the “race” cohorts<a class="headerlink" href="#Superficial-analysis-of-the-“race”-cohorts" title="Permalink to this heading"></a></h3>
 <p>Our first analysis will focus on the cohorts defined by the <code class="docutils literal notranslate"><span class="pre">race</span></code> feature.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 1</span>
@@ -745,7 +753,7 @@ first using the training dataset, which gives us the best thresholds for each co
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -775,6 +783,8 @@ first using the training dataset, which gives us the best thresholds for each co
       <th>f1</th>
       <th>accuracy</th>
       <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
       <th>cht_size</th>
     </tr>
   </thead>
@@ -789,6 +799,8 @@ first using the training dataset, which gives us the best thresholds for each co
       <td>0.796679</td>
       <td>0.832934</td>
       <td>0.231817</td>
+      <td>5560</td>
+      <td>0.341502</td>
       <td>16281</td>
     </tr>
     <tr>
@@ -801,6 +813,8 @@ first using the training dataset, which gives us the best thresholds for each co
       <td>0.775560</td>
       <td>0.867925</td>
       <td>0.197201</td>
+      <td>38</td>
+      <td>0.238994</td>
       <td>159</td>
     </tr>
     <tr>
@@ -813,6 +827,8 @@ first using the training dataset, which gives us the best thresholds for each co
       <td>0.777709</td>
       <td>0.800000</td>
       <td>0.203299</td>
+      <td>195</td>
+      <td>0.406250</td>
       <td>480</td>
     </tr>
     <tr>
@@ -825,6 +841,8 @@ first using the training dataset, which gives us the best thresholds for each co
       <td>0.802551</td>
       <td>0.900064</td>
       <td>0.191870</td>
+      <td>285</td>
+      <td>0.182575</td>
       <td>1561</td>
     </tr>
     <tr>
@@ -837,6 +855,8 @@ first using the training dataset, which gives us the best thresholds for each co
       <td>0.917833</td>
       <td>0.948148</td>
       <td>0.189001</td>
+      <td>28</td>
+      <td>0.207407</td>
       <td>135</td>
     </tr>
     <tr>
@@ -849,6 +869,8 @@ first using the training dataset, which gives us the best thresholds for each co
       <td>0.795214</td>
       <td>0.827262</td>
       <td>0.245844</td>
+      <td>4939</td>
+      <td>0.354152</td>
       <td>13946</td>
     </tr>
   </tbody>
@@ -1478,53 +1500,7 @@ for <code class="docutils literal notranslate"><span class="pre">cohort_3</span>
 <section id="A-Closer-Look-at-the-“relationship”-cohorts">
 <h2>A Closer Look at the “relationship” cohorts<a class="headerlink" href="#A-Closer-Look-at-the-“relationship”-cohorts" title="Permalink to this heading"></a></h2>
 <p>In this section, we’ll take a closer look at how we can try to improve the results for the cohorts defined by the <code class="docutils literal notranslate"><span class="pre">relationship</span></code> column. As we’ve shown, this set of cohorts does present some considerably different metrics between different cohorts. Here we’ll try using different cohort definitions, and data rebalancing to improve the performance over a set of cohorts.</p>
-<p>Before starting the analysis, we’ll create a function for plotting the label distribution over different cohorts. This will be useful when we start looking at data imbalance.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-
-<span class="k">def</span> <span class="nf">plot_value_counts_cohort</span><span class="p">(</span><span class="n">y_full</span><span class="p">,</span> <span class="n">subsets</span><span class="p">,</span> <span class="n">normalize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="c1">#plt.legend(bbox_to_anchor=(1.02, 1), loc=&#39;upper left&#39;, borderaxespad=0, fontsize=23)</span>
-
-    <span class="n">value_count</span> <span class="o">=</span> <span class="n">y_full</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
-
-    <span class="n">subsets_col</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;full df&#39;</span><span class="p">,</span> <span class="s1">&#39;full df&#39;</span><span class="p">]</span>
-    <span class="n">counts_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">value_count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-    <span class="n">label_col</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">subsets</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">value_count</span> <span class="o">=</span> <span class="n">subsets</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">)</span>
-        <span class="n">subsets_col</span> <span class="o">+=</span> <span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">]</span>
-        <span class="n">counts_col</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value_count</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value_count</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-        <span class="n">label_col</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-
-    <span class="n">count_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;subsets&quot;</span><span class="p">:</span><span class="n">subsets_col</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">:</span><span class="n">label_col</span><span class="p">,</span> <span class="s2">&quot;counts&quot;</span><span class="p">:</span><span class="n">counts_col</span><span class="p">})</span>
-
-    <span class="n">y_label</span> <span class="o">=</span> <span class="s2">&quot;Occurrences&quot;</span>
-    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
-        <span class="n">y_label</span> <span class="o">=</span> <span class="s2">&quot;Fraction&quot;</span>
-
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;subsets&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;label&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">count_df</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Subsets&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-    <span class="c1">#ax.tick_params(labelsize=15)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<p>We can now look at the label distribution over each of the <code class="docutils literal notranslate"><span class="pre">relationship</span></code> cohorts using the function previously defined (with the help of the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class):</p>
+<p>We can now look at the label distribution over each of the <code class="docutils literal notranslate"><span class="pre">relationship</span></code> cohorts using the <code class="docutils literal notranslate"><span class="pre">plot_value_counts_cohort</span></code> function, this will be useful to look for data imbalance (with the help of the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class):</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
@@ -1593,7 +1569,7 @@ Name: income, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/notebooks_cohort_case_study_case_2_21_1.png" src="../../../_images/notebooks_cohort_case_study_case_2_21_1.png" />
+<img alt="../../../_images/notebooks_cohort_case_study_case_2_20_1.png" src="../../../_images/notebooks_cohort_case_study_case_2_20_1.png" />
 </div>
 </div>
 <section id="Rebalancing-the-entire-dataset">
@@ -1667,7 +1643,7 @@ Name: income, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/notebooks_cohort_case_study_case_2_23_1.png" src="../../../_images/notebooks_cohort_case_study_case_2_23_1.png" />
+<img alt="../../../_images/notebooks_cohort_case_study_case_2_22_1.png" src="../../../_images/notebooks_cohort_case_study_case_2_22_1.png" />
 </div>
 </div>
 <p>Notice that the label distribution became imbalanced towards the opposite class in <code class="docutils literal notranslate"><span class="pre">cohort_0</span></code> after rebalancing. Let’s now use the baseline pipeline with the rebalanced dataset, check the results for the <code class="docutils literal notranslate"><span class="pre">relationship</span></code> cohorts, and compare it to <a class="reference external" href="#baseline3">Baseline 3</a>:</p>
@@ -1994,7 +1970,7 @@ Name: income, dtype: int64
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/notebooks_cohort_case_study_case_2_29_0.png" src="../../../_images/notebooks_cohort_case_study_case_2_29_0.png" />
+<img alt="../../../_images/notebooks_cohort_case_study_case_2_28_0.png" src="../../../_images/notebooks_cohort_case_study_case_2_28_0.png" />
 </div>
 </div>
 <p>We’ll now repeat the same experiments as before. We’ll first train the baseline pipeline over the new rebalanced dataset:</p>

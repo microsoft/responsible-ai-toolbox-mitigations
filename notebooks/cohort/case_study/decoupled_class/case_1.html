@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decoupled Classifiers Case Study 1 &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Decoupled Classifiers Case Study 2" href="case_2.html" />
+    <link rel="prev" title="Decoupled Classifiers" href="../../decoupled.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../gallery.html">Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../../../gallery.html#tutorials">Tutorials</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../../gallery.html#case-studies">Case Studies</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../../../gallery.html#using-the-dataprocessing-module">Using the DataProcessing Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../gallery.html#using-the-databalanceanalysis-module">Using the DataBalanceAnalysis Module</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../../../gallery.html#using-the-cohort-module">Using the Cohort Module</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../case_1.html">Cohort Case Study 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../case_1_rebalance.html">Cohort Case Study 1 - Rebalancing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../case_1_dashboard.html">Cohort Case Study 1 - Using RAI ErrorAnalysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../case_2.html">Cohort Case Study 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../case_3.html">Cohort Case Study 3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../integration_raiwidgets.html">Moving Cohorts from raimitigations to raiwidgets (and vice versa)</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Decoupled Classifiers Case Study 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="case_2.html">Decoupled Classifiers Case Study 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="case_3.html">Decoupled Classifiers Case Study 3</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../utils/utils.html">Utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../api.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="../../../../cohort/cohort.html">Cohort</a></li>
+          <li class="breadcrumb-item"><a href="../../../../cohort/decoupled_class.html">DecoupledClass</a></li>
+      <li class="breadcrumb-item active">Decoupled Classifiers Case Study 1</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/cohort/case_study/decoupled_class/case_1.ipynb" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars and line breaks on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+    white-space: pre;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Decoupled-Classifiers-Case-Study-1">
+<h1>Decoupled Classifiers Case Study 1<a class="headerlink" href="#Decoupled-Classifiers-Case-Study-1" title="Permalink to this heading"></a></h1>
+<p>For the first case study, we’ll highlight the benefits of using the decoupled classifiers over different cohorts of the data. This module implements techniques for searching and combining cohorts to optimize for different definitions of group fairness based on the approach presented in the paper <a class="reference external" href="https://www.microsoft.com/en-us/research/publication/decoupled-classifiers-for-group-fair-and-efficient-machine-learning/">Decoupled classifiers for group-fair and efficient machine learning</a>.</p>
+<p>The techniques implemented in this module work with the <code class="docutils literal notranslate"><span class="pre">Cohort</span></code> module of this library to fit an estimator over each cohort while leveraging transfer learning and other optimization techniques for minority cohorts when the data for such cohorts is not sufficient.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+<span class="kn">from</span> <span class="nn">lightgbm</span> <span class="kn">import</span> <span class="n">LGBMClassifier</span>
+
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">split_data</span>
+<span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
+<span class="kn">from</span> <span class="nn">raimitigations.cohort</span> <span class="kn">import</span> <span class="n">DecoupledClass</span><span class="p">,</span> <span class="n">CohortDefinition</span><span class="p">,</span> <span class="n">CohortManager</span><span class="p">,</span> <span class="n">fetch_cohort_results</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="n">SEED</span> <span class="o">=</span> <span class="mi">100</span>
+</pre></div>
+</div>
+</div>
+<p>Throughout this case study, we will recreate and use a synthetic dataset created as part of <a class="reference internal" href="../case_1.html"><span class="doc">Cohort case study 1</span></a> to showcase the additional techniques this module can use to optimize fairness and performance over cohorts.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_create_country_df</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sectors</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">country_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sectors</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">samples</span> <span class="o">*</span> <span class="n">sectors</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">])</span>
+        <span class="n">invest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="n">sectors</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;min&quot;</span><span class="p">],</span> <span class="n">high</span><span class="o">=</span><span class="n">sectors</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;max&quot;</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+        <span class="n">min_invest</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">invest</span><span class="p">)</span>
+        <span class="n">max_invest</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">invest</span><span class="p">)</span>
+        <span class="n">range_invest</span> <span class="o">=</span> <span class="n">max_invest</span> <span class="o">-</span> <span class="n">min_invest</span>
+        <span class="n">bankrupt_th</span> <span class="o">=</span> <span class="n">sectors</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;prob_success&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">range_invest</span>
+        <span class="n">inverted_behavior</span> <span class="o">=</span> <span class="n">sectors</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;inverted_behavior&quot;</span><span class="p">]</span>
+        <span class="n">bankrupt</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">invest</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">inst_class</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">invest</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">bankrupt_th</span><span class="p">:</span>
+                <span class="n">inst_class</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">inverted_behavior</span><span class="p">:</span>
+                <span class="n">inst_class</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="ow">not</span> <span class="n">inst_class</span><span class="p">)</span>
+            <span class="n">bankrupt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst_class</span><span class="p">)</span>
+        <span class="n">noise_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="o">*</span><span class="mf">0.05</span><span class="p">),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">noise_ind</span><span class="p">:</span>
+            <span class="n">bankrupt</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="ow">not</span> <span class="n">bankrupt</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span>
+        <span class="n">noise_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="o">*</span><span class="mf">0.1</span><span class="p">),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">noise_ind</span><span class="p">:</span>
+            <span class="n">invest</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="n">country_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">country_name</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span>
+        <span class="n">sector_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span>
+        <span class="n">df_sector</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+            <span class="s2">&quot;investment&quot;</span><span class="p">:</span><span class="n">invest</span><span class="p">,</span>
+            <span class="s2">&quot;sector&quot;</span><span class="p">:</span><span class="n">sector_col</span><span class="p">,</span>
+            <span class="s2">&quot;country&quot;</span><span class="p">:</span><span class="n">country_col</span><span class="p">,</span>
+            <span class="s2">&quot;bankrupt&quot;</span><span class="p">:</span><span class="n">bankrupt</span>
+        <span class="p">})</span>
+
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df_sector</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">df_sector</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+<span class="k">def</span> <span class="nf">create_df_multiple_distributions</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+    <span class="n">sectors_c1</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.99</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">2e6</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">1e7</span><span class="p">},</span>
+        <span class="s2">&quot;s2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.2</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">1e7</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">1.5e9</span><span class="p">},</span>
+        <span class="s2">&quot;s3&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.9</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">1e9</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">1e10</span><span class="p">},</span>
+        <span class="s2">&quot;s4&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.3</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.7</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">4e10</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">9e13</span><span class="p">},</span>
+    <span class="p">}</span>
+    <span class="n">sectors_c2</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.6</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">1e3</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">5e3</span><span class="p">},</span>
+        <span class="s2">&quot;s2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.3</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.9</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">1e5</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">1.5e6</span><span class="p">},</span>
+        <span class="s2">&quot;s3&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.3</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">5e4</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">3e5</span><span class="p">},</span>
+        <span class="s2">&quot;s4&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.8</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">1e6</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">1e7</span><span class="p">},</span>
+    <span class="p">}</span>
+    <span class="n">sectors_c3</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;s1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.3</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.9</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">3e2</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">6e2</span><span class="p">},</span>
+        <span class="s2">&quot;s2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.6</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.7</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">5e3</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">9e3</span><span class="p">},</span>
+        <span class="s2">&quot;s3&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.07</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.6</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">4e3</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">2e4</span><span class="p">},</span>
+        <span class="s2">&quot;s4&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;prob_occur&quot;</span><span class="p">:</span><span class="mf">0.03</span><span class="p">,</span> <span class="s2">&quot;prob_success&quot;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;inverted_behavior&quot;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span><span class="mf">6e5</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span><span class="mf">1.3e6</span><span class="p">},</span>
+    <span class="p">}</span>
+    <span class="n">countries</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;A&quot;</span><span class="p">:{</span><span class="s2">&quot;sectors&quot;</span><span class="p">:</span><span class="n">sectors_c1</span><span class="p">,</span> <span class="s2">&quot;sample_rate&quot;</span><span class="p">:</span><span class="mf">0.85</span><span class="p">},</span>
+        <span class="s2">&quot;B&quot;</span><span class="p">:{</span><span class="s2">&quot;sectors&quot;</span><span class="p">:</span><span class="n">sectors_c2</span><span class="p">,</span> <span class="s2">&quot;sample_rate&quot;</span><span class="p">:</span><span class="mf">0.05</span><span class="p">},</span>
+        <span class="s2">&quot;C&quot;</span><span class="p">:{</span><span class="s2">&quot;sectors&quot;</span><span class="p">:</span><span class="n">sectors_c2</span><span class="p">,</span> <span class="s2">&quot;sample_rate&quot;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">countries</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">n_sample</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">samples</span> <span class="o">*</span> <span class="n">countries</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;sample_rate&quot;</span><span class="p">])</span>
+        <span class="n">df_c</span> <span class="o">=</span> <span class="n">_create_country_df</span><span class="p">(</span><span class="n">n_sample</span><span class="p">,</span> <span class="n">countries</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;sectors&quot;</span><span class="p">],</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df_c</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">df_c</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<p><em>Note: this dataset details if a company has gone bankrupt (class 1) or hasn’t (class 0):</em></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">51</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">create_df_multiple_distributions</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>investment</th>
+      <th>sector</th>
+      <th>country</th>
+      <th>bankrupt</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7.405851e+06</td>
+      <td>s1</td>
+      <td>A</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2.357697e+06</td>
+      <td>s1</td>
+      <td>A</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4.746429e+06</td>
+      <td>s1</td>
+      <td>A</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7.152158e+06</td>
+      <td>s1</td>
+      <td>A</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>NaN</td>
+      <td>s1</td>
+      <td>A</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>9995</th>
+      <td>4.226512e+06</td>
+      <td>s4</td>
+      <td>C</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>9996</th>
+      <td>3.566758e+06</td>
+      <td>s4</td>
+      <td>C</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>9997</th>
+      <td>9.281006e+06</td>
+      <td>s4</td>
+      <td>C</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>9998</th>
+      <td>5.770378e+06</td>
+      <td>s4</td>
+      <td>C</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>9999</th>
+      <td>3.661511e+06</td>
+      <td>s4</td>
+      <td>C</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>10000 rows × 4 columns</p>
+</div></div>
+</div>
+<p>Split data into train and test sets:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;bankrupt&quot;</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">SEED</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_model</span><span class="p">():</span>
+    <span class="c1">#model = DecisionTreeClassifier(max_features=&quot;sqrt&quot;)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">LGBMClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">SEED</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+</pre></div>
+</div>
+</div>
+<section id="Baseline-Case">
+<h2>Baseline Case<a class="headerlink" href="#Baseline-Case" title="Permalink to this heading"></a></h2>
+<p>In order to demonstrate the additional benefits of the decoupled classifiers, we start with the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class as the baseline.</p>
+<p>Now, let’s look at the metrics and performance of the <em>“sector”</em> and <em>“country”</em> cohorts:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># BASELINE: &quot;sector&quot;</span>
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">get_model</span><span class="p">()</span>
+    <span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.947905</td>
+      <td>0.929772</td>
+      <td>0.921173</td>
+      <td>0.924828</td>
+      <td>0.927667</td>
+      <td>0.535672</td>
+      <td>1829</td>
+      <td>0.609667</td>
+      <td>3000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`sector` == "s1")</td>
+      <td>0.933652</td>
+      <td>0.863698</td>
+      <td>0.896230</td>
+      <td>0.876748</td>
+      <td>0.893650</td>
+      <td>0.783542</td>
+      <td>863</td>
+      <td>0.660291</td>
+      <td>1307</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>(`sector` == "s2")</td>
+      <td>0.942994</td>
+      <td>0.931929</td>
+      <td>0.916137</td>
+      <td>0.921523</td>
+      <td>0.924084</td>
+      <td>0.381770</td>
+      <td>147</td>
+      <td>0.384817</td>
+      <td>382</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>cohort_2</td>
+      <td>(`sector` == "s3")</td>
+      <td>0.860066</td>
+      <td>0.716087</td>
+      <td>0.787660</td>
+      <td>0.738242</td>
+      <td>0.817073</td>
+      <td>0.156317</td>
+      <td>133</td>
+      <td>0.270325</td>
+      <td>492</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>cohort_3</td>
+      <td>(`sector` == "s4")</td>
+      <td>0.925276</td>
+      <td>0.859874</td>
+      <td>0.885490</td>
+      <td>0.870424</td>
+      <td>0.886447</td>
+      <td>0.724742</td>
+      <td>536</td>
+      <td>0.654457</td>
+      <td>819</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># BASELINE: &quot;country&quot;</span>
+<span class="n">cht_manager</span> <span class="o">=</span> <span class="n">CohortManager</span><span class="p">(</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">get_model</span><span class="p">()</span>
+    <span class="p">],</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">cht_manager</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">pred_cht</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="n">pred_train</span> <span class="o">=</span> <span class="n">cht_manager</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_cht</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.944930</td>
+      <td>0.924198</td>
+      <td>0.917583</td>
+      <td>0.920483</td>
+      <td>0.923333</td>
+      <td>0.618757</td>
+      <td>1814</td>
+      <td>0.604667</td>
+      <td>3000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`country` == "A")</td>
+      <td>0.945985</td>
+      <td>0.927582</td>
+      <td>0.917092</td>
+      <td>0.921732</td>
+      <td>0.926562</td>
+      <td>0.664861</td>
+      <td>1628</td>
+      <td>0.635938</td>
+      <td>2560</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>(`country` == "B")</td>
+      <td>0.935107</td>
+      <td>0.869528</td>
+      <td>0.860549</td>
+      <td>0.864621</td>
+      <td>0.875817</td>
+      <td>0.500140</td>
+      <td>53</td>
+      <td>0.346405</td>
+      <td>153</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>cohort_2</td>
+      <td>(`country` == "C")</td>
+      <td>0.934542</td>
+      <td>0.925572</td>
+      <td>0.928491</td>
+      <td>0.926472</td>
+      <td>0.926829</td>
+      <td>0.340654</td>
+      <td>137</td>
+      <td>0.477352</td>
+      <td>287</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class in this case creates and trains a cohort for each unique value of these columns <strong>regardless of label distribution and size of cohort</strong>.</p>
+</section>
+<section id="DecoupledClass-Techniques">
+<h2>DecoupledClass Techniques<a class="headerlink" href="#DecoupledClass-Techniques" title="Permalink to this heading"></a></h2>
+<p>Instead, what if we were to use the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> to look at the same columns using the same pre-processing pipeline and estimator.</p>
+<p>Let’s start with the <em>“sector”</em> column:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sector&#39;</span><span class="p">],</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span><span class="p">,</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">get_model</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">dec_class</span><span class="o">.</span><span class="n">print_cohorts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FINAL COHORTS
+cohort_0:
+        Size: 3093
+        Query:
+                (`sector` == &#34;s1&#34;)
+        Value Counts:
+                1: 2169 (70.13%)
+                0: 924 (29.87%)
+        Invalid: False
+
+
+cohort_1:
+        Size: 918
+        Query:
+                (`sector` == &#34;s2&#34;)
+        Value Counts:
+                0: 519 (56.54%)
+                1: 399 (43.46%)
+        Invalid: False
+
+
+cohort_2:
+        Size: 1108
+        Query:
+                (`sector` == &#34;s3&#34;)
+        Value Counts:
+                0: 889 (80.23%)
+                1: 219 (19.77%)
+        Invalid: False
+
+
+cohort_3:
+        Size: 1881
+        Query:
+                (`sector` == &#34;s4&#34;)
+        Value Counts:
+                1: 1307 (69.48%)
+                0: 574 (30.52%)
+        Invalid: False
+
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">th_dict</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">get_threasholds_dict</span><span class="p">()</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">cohort_def</span><span class="o">=</span><span class="n">dec_class</span><span class="p">,</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.947905</td>
+      <td>0.929772</td>
+      <td>0.921173</td>
+      <td>0.924828</td>
+      <td>0.927667</td>
+      <td>0.500000</td>
+      <td>1829</td>
+      <td>0.609667</td>
+      <td>3000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`sector` == "s1")</td>
+      <td>0.933652</td>
+      <td>0.937394</td>
+      <td>0.886916</td>
+      <td>0.907627</td>
+      <td>0.928080</td>
+      <td>0.630641</td>
+      <td>994</td>
+      <td>0.760520</td>
+      <td>1307</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>(`sector` == "s2")</td>
+      <td>0.942994</td>
+      <td>0.931929</td>
+      <td>0.916137</td>
+      <td>0.921523</td>
+      <td>0.924084</td>
+      <td>0.381770</td>
+      <td>147</td>
+      <td>0.384817</td>
+      <td>382</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>cohort_2</td>
+      <td>(`sector` == "s3")</td>
+      <td>0.860066</td>
+      <td>0.898785</td>
+      <td>0.851521</td>
+      <td>0.872572</td>
+      <td>0.928862</td>
+      <td>0.310128</td>
+      <td>76</td>
+      <td>0.154472</td>
+      <td>492</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>cohort_3</td>
+      <td>(`sector` == "s4")</td>
+      <td>0.925276</td>
+      <td>0.941381</td>
+      <td>0.885875</td>
+      <td>0.907826</td>
+      <td>0.926740</td>
+      <td>0.474869</td>
+      <td>619</td>
+      <td>0.755800</td>
+      <td>819</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>We can see that the 4 cohorts (one for each unique value of the column) are no different than the cohorts created by the <code class="docutils literal notranslate"><span class="pre">Cohort</span></code> module, the reason for that is that all 4 cohorts were not invalid. <em>An</em><strong>invalid cohort</strong><em>is defined as a cohort that has a size &lt; ``max(min_cohort_size, df.shape[0] * min_cohort_pct)`` or is with a minority class (the label value with least occurrences) with an occurrence rate &lt; ``minority_min_rate``</em>.</p>
+<p>In the case of invalid cohorts, the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> fit method uses a few techniques to create valid cohorts from these invalid ones. So how do we use the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> to handle invalid cohorts? For the remainder of this case study, we’ll explore the cohorts of the <em>“country”</em> column to demonstrate the latter.</p>
+<section id="Merging-Invalid-Cohorts">
+<h3>Merging Invalid Cohorts<a class="headerlink" href="#Merging-Invalid-Cohorts" title="Permalink to this heading"></a></h3>
+<p>First, let’s look at merging invalid cohorts. This technique creates valid cohorts from invalid ones by choosing the smallest cohort different from the invalid cohort and merging the two.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span>
+    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span><span class="p">,</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">get_model</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">dec_class</span><span class="o">.</span><span class="n">print_cohorts</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FINAL COHORTS
+cohort_0:
+        Size: 5940
+        Query:
+                (`country` == &#34;A&#34;)
+        Value Counts:
+                1: 3612 (60.81%)
+                0: 2328 (39.19%)
+        Invalid: False
+
+
+cohort_1:
+        Size: 1060
+        Query:
+                ((`country` == &#34;B&#34;)) or ((`country` == &#34;C&#34;))
+        Value Counts:
+                0: 578 (54.53%)
+                1: 482 (45.47%)
+        Invalid: False
+
+
+</pre></div></div>
+</div>
+<p>Using the <em>“country”</em> column above has created 2 cohorts. Initially, we might have expected 3 for each unique value (“A”,“B”,“C”), however, the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> found invalid cohorts and performed a merge of the <code class="docutils literal notranslate"><span class="pre">(country==&quot;B&quot;)</span></code> and <code class="docutils literal notranslate"><span class="pre">(country==&quot;C&quot;)</span></code> cohorts to create a single valid one. Now let’s see how does this setup perform over the test set.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">th_dict</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">get_threasholds_dict</span><span class="p">()</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">cohort_def</span><span class="o">=</span><span class="n">dec_class</span><span class="p">,</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.946290</td>
+      <td>0.927526</td>
+      <td>0.919864</td>
+      <td>0.923168</td>
+      <td>0.926000</td>
+      <td>0.500000</td>
+      <td>1822</td>
+      <td>0.607333</td>
+      <td>3000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`country` == "A")</td>
+      <td>0.945985</td>
+      <td>0.930449</td>
+      <td>0.916938</td>
+      <td>0.922738</td>
+      <td>0.927734</td>
+      <td>0.525770</td>
+      <td>1643</td>
+      <td>0.641797</td>
+      <td>2560</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>((`country` == "B")) or ((`country` == "C"))</td>
+      <td>0.941379</td>
+      <td>0.919319</td>
+      <td>0.917429</td>
+      <td>0.918328</td>
+      <td>0.920455</td>
+      <td>0.499605</td>
+      <td>183</td>
+      <td>0.415909</td>
+      <td>440</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Comparing the metrics of these merged cohorts to the baseline, it seems in this case that merging the invalid cohort <code class="docutils literal notranslate"><span class="pre">(country==&quot;B&quot;)</span></code> with the cohort <code class="docutils literal notranslate"><span class="pre">(country==&quot;C&quot;)</span></code> has a positive effect on <code class="docutils literal notranslate"><span class="pre">(country==&quot;B&quot;)</span></code>, slightly improving the label distribution and therefore its accuracy.</p>
+</section>
+</section>
+<section id="Transfer-Learning">
+<h2>Transfer Learning<a class="headerlink" href="#Transfer-Learning" title="Permalink to this heading"></a></h2>
+<p>Next, let’s explore the other technique that distinguishes the decoupled classifiers, transfer learning.</p>
+<p>In this approach, when calling the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method with an invalid cohort, we use data from other cohorts (out-data), while weighing down these instances to create a valid cohort.</p>
+<p>In order to use transfer learning with the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> module, we simply need to pass a <code class="docutils literal notranslate"><span class="pre">theta</span></code> value. <code class="docutils literal notranslate"><span class="pre">theta</span></code> can be a fixed float, a list of floats (the best value in the list is found using cross-validation), or a boolean <code class="docutils literal notranslate"><span class="pre">True</span></code> to use a default list of floats optimized using cross-validation. If you’d like to learn more about how we select out-data and how to use different types of theta with transfer learning, see the <a class="reference internal" href="../../decoupled.html"><span class="doc">tutorial notebook for the decoupled
+classifiers</span></a>.</p>
+<p>Let’s take a look at how transfer learning handles the invalid cohorts in our case:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span>
+    <span class="n">theta</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">min_fold_size_theta</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span><span class="p">,</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">get_model</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">dec_class</span><span class="o">.</span><span class="n">print_cohorts</span><span class="p">()</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FINAL COHORTS
+cohort_0:
+        Size: 5940
+        Query:
+                (`country` == &#34;A&#34;)
+        Value Counts:
+                1: 3612 (60.81%)
+                0: 2328 (39.19%)
+        Invalid: False
+
+
+cohort_1:
+        Size: 347
+        Query:
+                (`country` == &#34;B&#34;)
+        Value Counts:
+                0: 190 (54.76%)
+                1: 157 (45.24%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_0&#39;, &#39;cohort_2&#39;]
+                Theta = 0.4
+
+
+cohort_2:
+        Size: 713
+        Query:
+                (`country` == &#34;C&#34;)
+        Value Counts:
+                0: 388 (54.42%)
+                1: 325 (45.58%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_0&#39;, &#39;cohort_1&#39;]
+                Theta = 0.6
+
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">th_dict</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">get_threasholds_dict</span><span class="p">()</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">cohort_def</span><span class="o">=</span><span class="n">dec_class</span><span class="p">,</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.947784</td>
+      <td>0.930492</td>
+      <td>0.921226</td>
+      <td>0.925124</td>
+      <td>0.928000</td>
+      <td>0.500000</td>
+      <td>1834</td>
+      <td>0.611333</td>
+      <td>3000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`country` == "A")</td>
+      <td>0.945985</td>
+      <td>0.930449</td>
+      <td>0.916938</td>
+      <td>0.922738</td>
+      <td>0.927734</td>
+      <td>0.525770</td>
+      <td>1643</td>
+      <td>0.641797</td>
+      <td>2560</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>(`country` == "B")</td>
+      <td>0.953976</td>
+      <td>0.911828</td>
+      <td>0.923049</td>
+      <td>0.916697</td>
+      <td>0.921569</td>
+      <td>0.475236</td>
+      <td>60</td>
+      <td>0.392157</td>
+      <td>153</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>cohort_2</td>
+      <td>(`country` == "C")</td>
+      <td>0.945566</td>
+      <td>0.922287</td>
+      <td>0.923322</td>
+      <td>0.922759</td>
+      <td>0.923345</td>
+      <td>0.594635</td>
+      <td>132</td>
+      <td>0.459930</td>
+      <td>287</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Comparing these results to the metrics of the baseline valid/invalid cohorts, it seems that transfer learning might have made a positive but less noticeable difference for cohort <code class="docutils literal notranslate"><span class="pre">(country==&quot;B&quot;)</span></code> in this case.</p>
+</section>
+<section id="Optimizing-Fairness-Metrics">
+<h2>Optimizing Fairness Metrics<a class="headerlink" href="#Optimizing-Fairness-Metrics" title="Permalink to this heading"></a></h2>
+<p>Lastly, <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> offers the option to optimize all models according to a fairness metric. We have the option for a fairness metric between <em>“balanced”</em>, <em>“num_parity”</em> and <em>“dem_parity”</em>, for a more detailed look on these different metrics and how to use them, see <a class="reference internal" href="../../decoupled.html"><span class="doc">the tutorial notebook for the decoupled classfiers</span></a>.</p>
+<p>In this case, we’ll explore this feature over our cohorts using the <em>“dem_parity”</em> metric.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">DataMinMaxScaler</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOHE</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span>
+    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span><span class="p">,</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">get_model</span><span class="p">(),</span>
+    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+    <span class="n">theta</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">fairness_loss</span><span class="o">=</span><span class="s2">&quot;dem_parity&quot;</span><span class="p">,</span>
+    <span class="n">lambda_coef</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">max_joint_loss_time</span><span class="o">=</span><span class="mi">2000</span>
+<span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">pred</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">cohort_def</span><span class="o">=</span><span class="n">dec_class</span><span class="p">,</span> <span class="n">fixed_th</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.946290</td>
+      <td>0.927526</td>
+      <td>0.919864</td>
+      <td>0.923168</td>
+      <td>0.926000</td>
+      <td>0.500000</td>
+      <td>1822</td>
+      <td>0.607333</td>
+      <td>3000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`country` == "A")</td>
+      <td>0.945985</td>
+      <td>0.886854</td>
+      <td>0.902609</td>
+      <td>0.891498</td>
+      <td>0.894531</td>
+      <td>0.829787</td>
+      <td>1420</td>
+      <td>0.554688</td>
+      <td>2560</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>((`country` == "B")) or ((`country` == "C"))</td>
+      <td>0.941379</td>
+      <td>0.845511</td>
+      <td>0.852320</td>
+      <td>0.838335</td>
+      <td>0.838636</td>
+      <td>0.151803</td>
+      <td>235</td>
+      <td>0.534091</td>
+      <td>440</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Using fairness optimization in addition to merging cohorts <code class="docutils literal notranslate"><span class="pre">(country==&quot;B&quot;)</span></code> and <code class="docutils literal notranslate"><span class="pre">(country==&quot;C&quot;)</span></code> shows an even better distribution of the labels. Although, one should pay attention to the trade-off between accuracy and label distribution when borrowing training data from other cohorts as the merging capability of this tool does.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../decoupled.html" class="btn btn-neutral float-left" title="Decoupled Classifiers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="case_2.html" class="btn btn-neutral float-right" title="Decoupled Classifiers Case Study 2" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

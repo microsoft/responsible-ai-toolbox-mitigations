@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DecoupledClass &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Decoupled Classifiers" href="../notebooks/cohort/decoupled.html" />
+    <link rel="prev" title="CohortHandler" href="cohort_handler.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="intro.html">Cohort</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="cohort.html">Cohort</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cohort_definition.html">CohortDefinition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cohort_manager.html">CohortManager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cohort_handler.html">CohortHandler</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">DecoupledClass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils.html">Cohort Utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/utils.html">Utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="cohort.html">Cohort</a></li>
+      <li class="breadcrumb-item active">DecoupledClass</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/cohort/decoupled_class.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="decoupledclass">
+<span id="decoupled-class"></span><h1>DecoupledClass<a class="headerlink" href="#decoupledclass" title="Permalink to this heading"></a></h1>
+<p>This class implements techniques for learning different estimators (models) for different cohorts based on the approach
+presented in <a class="reference external" href="https://www.microsoft.com/en-us/research/publication/decoupled-classifiers-for-group-fair-and-efficient-machine-learning/">“Decoupled classifiers for group-fair and efficient machine learning.”</a>
+Cynthia Dwork, Nicole Immorlica, Adam Tauman Kalai, and Max Leiserson. Conference on fairness, accountability and transparency. PMLR, 2018. The approach
+searches and combines cohort-specific classifiers to optimize for different definitions of group fairness and can be used
+as a post-processing step on top of any model class. The current implementation in this library supports only binary
+classification and we welcome contributions that can extend these ideas for multi-class and regression problems.</p>
+<p>The basis decoupling algorithm can be summarized in two steps:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A different family of classifiers is trained on each cohort of interest. The algorithm partitions the training data
+for each cohort and learns a classifier for each cohort. Each cohort-specific trained classifier results in a family
+of potential classifiers to be used after the classifier output is adjusted based on different thresholds on the model
+output. For example, depending on which errors are most important to the application (e.g. false positives vs. false
+negatives for binary classification), thresholding the model prediction at different values of the model output (e.g.
+likelihood, softmax) will result in different classifiers. This step generates a whole family of classifiers based on
+different thresholds.</p></li>
+<li><p>Among the cohort-specific classifiers search for one representative classifier for each cohort such that a joint loss
+is optimized. This step searches through all combinations of classifiers from the previous step to find the combination
+that best optimizes a definition of a joint loss across all cohorts. While there are different definitions of such a joint
+loss, this implementation currently supports definitions of the Balanced Loss, L1 loss, and Demographic Parity as examples
+of losses that focus on group fairness. More definitions of losses are described in the longer version of the paper.</p></li>
+</ul>
+</div></blockquote>
+<p>One issue that arises commonly in cohort-specific learning is that some cohorts may also have little data in the training set,
+which may hinder the capability of a decoupled classifier to learn a better estimator for that cohort. To mitigate the problem,
+the DecoupledClassifier class also allows using transfer learning from the overall data for these cohorts.</p>
+<p>The figure below shows the types of scenarios that the DecoupledClassifier class can implement and how it compares to the CohortManager class. First, while the CohortManager class offers a general way to customize pipelines or train custom classifiers for cohorts, it does not offer any post-training capabilities for selecting classifiers such that they optimize a joint loss function for group fairness. In addition, transfer learning for minority cohorts is only available in the DecoupledClassifier class. To implement a scenario where the same type of data processing mitigation is applied to different cohorts separately, one can use the DecoupledClassifier with a transform pipeline (including the estimator).</p>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/decoupled_class_figure_1.png"><img alt="../_images/decoupled_class_figure_1.png" src="../_images/decoupled_class_figure_1.png" style="width: 715.0px; height: 443.5px;" /></a>
+<figcaption>
+<p><span class="caption-text"><em>Figure 1 - The DecoupledClassifier class can currently implement the highlighted scenarios in this figure, with additional functionalities in comparison to the CohortManager being i) joint optimization of a loss function for group fairness, and ii) transfer learning for minority cohorts.</em></span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>The tutorial notebook in addition to the decoupled classifiers case study notebooks demonstrate different scenarios where one can use this class.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="raimitigations.cohort.DecoupledClass">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raimitigations.cohort.</span></span><span class="sig-name descname"><span class="pre">DecoupledClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohort_def</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohort_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohort_json_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohort_dist_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_fold_size_theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_k_folds_theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[3,</span> <span class="pre">4,</span> <span class="pre">5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseEstimator</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_cohort_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_cohort_pct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minority_min_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fairness_loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_coef</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_joint_loss_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.DecoupledClass" title="Permalink to this definition"></a></dt>
+<dd><p>Concrete class that trains different models over different subsets of data (cohorts).
+Based on the work presented in the following paper: <a class="reference external" href="https://www.microsoft.com/en-us/research/publication/decoupled-classifiers-for-group-fair-and-efficient-machine-learning/">Decoupled classifiers for group-fair
+and efficient machine learning</a>.
+This is useful when a given cohort behaves differently from the rest of the dataset,
+or when a cohort represents a minority group that is underrepresented. For small cohorts,
+it is possible to train a model using the data of other cohorts (outside data) with a
+smaller weight theta (only works with models that accept instance weights). This process
+is herein called Transfer Learning. Instead of using transfer learning, it is also possible
+to merge small cohorts together, resulting in a set of sufficiently large cohorts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – the data frame to be used during the fit method.
+This data frame must contain all the features, including the label
+column (specified in the ‘label_col’ parameter). This parameter is
+mandatory if ‘label_col’ is also provided. The user can also provide
+this dataset (along with the ‘label_col’) when calling the fit()
+method. If df is provided during the class instantiation, it is not
+necessary to provide it again when calling fit(). It is also possible
+to use the ‘X’ and ‘y’ instead of ‘df’ and ‘label_col’, although it is
+mandatory to pass the pair of parameters (X,y) or (df, label_col) either
+during the class instantiation or during the fit() method;</p></li>
+<li><p><strong>label_col</strong> – the name or index of the label column. This parameter is
+mandatory if ‘df’ is provided;</p></li>
+<li><p><strong>X</strong> – contains only the features of the original dataset, that is, does not
+contain the label column. This is useful if the user has already separated
+the features from the label column prior to calling this class. This parameter
+is mandatory if ‘y’ is provided;</p></li>
+<li><p><strong>y</strong> – contains only the label column of the original dataset.
+This parameter is mandatory if ‘X’ is provided;</p></li>
+<li><p><strong>transform_pipe</strong> – a list of transformations to be used as a pre-processing
+pipeline. Each transformation in this list must be a valid subclass of the
+current library (EncoderOrdinal, BasicImputer, etc.). Some feature selection
+methods require a dataset with no categorical features or with no missing
+values (depending on the approach). If no transformations are provided, a set
+of default transformations will be used, which depends on the feature selection
+approach (subclass dependent);</p></li>
+<li><p><strong>regression</strong> – if True and no estimator is provided, then create a default
+regression model. If False, a classifier is created instead. This parameter
+is ignored if an estimator is provided using the ‘estimator’ parameter;</p></li>
+<li><p><strong>cohort_def</strong> – a list of cohort definitions or a dictionary of cohort definitions. A
+cohort condition is the same variable received by the <code class="docutils literal notranslate"><span class="pre">cohort_definition</span></code> parameter
+of the <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> class. When using a list of cohort definitions, the cohorts
+will be named automatically. For the dictionary of cohort definitions, the key used represents
+the cohort’s name, and the value assigned to each key is given by that cohort’s conditions.
+This parameter can’t be used together with the <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameter. Only one these two
+parameters must be used at a time;</p></li>
+<li><p><strong>cohort_col</strong> – a list of column names that indicates which columns should be used
+to create a cohort. For example, if <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> = [“C1”, “C2”], then we first identify
+all possible values for column “C1” and “C2”. Suppose that the unique values in “C1”
+are: [0, 1, 2], and the unique values in “C2” are: [‘a’, ‘b’]. Then, we create one
+cohort for each combination between these two sets of unique values. This way, the
+first cohort will be conditioned to instances where (“C1” == 0 and “C2” == ‘a’),
+cohort 2 will be conditioned to (“C1” == 0 and “C2” == ‘b’), and so on. They are
+called the baseline cohorts. We then check if there are any of the baseline cohorts
+that are invalid, where an invalid cohort is considered as being a cohort with
+size &lt; <code class="docutils literal notranslate"><span class="pre">max(min_cohort_size,</span> <span class="pre">df.shape[0]</span> <span class="pre">*</span> <span class="pre">min_cohort_pct)</span></code> or a cohort with a
+minority class (the label value with least occurrences) with an occurrence rate &lt;
+<code class="docutils literal notranslate"><span class="pre">minority_min_rate</span></code>. Every time an invalid cohort is found, we merge this cohort to
+the current smallest cohort. This is simply a heuristic, as identifying the best
+way to merge these cohorts in a way that results in a list of valid cohorts is a
+complex problem that we do not try to solve here. Note that if using transfer
+learning (check the <code class="docutils literal notranslate"><span class="pre">theta</span></code> parameter for more details), then the baseline
+cohorts are not merged if they are found invalid. Instead, we use transfer learning
+over the invalid cohorts;</p></li>
+<li><p><strong>cohort_json_files</strong> – a list with the name of the JSON files that contains the definition
+of each cohort. Each cohort is saved in a single JSON file, so the length of the
+<code class="docutils literal notranslate"><span class="pre">cohort_json_files</span></code> should be equal to the number of cohorts to be used.</p></li>
+<li><p><strong>theta</strong> – <p>the theta parameter is used in the transfer learning step of the
+decoupled classifier, and it represents the weight assigned to the instances from
+the outside data (data not from the current cohort) when fitting an estimator for
+a given cohort. The theta parameter must be a value between [0, 1], or a list
+of floats, or a boolean value (more information on each type ahead). This
+parameter is associated to how the theta is set. When a cohort with a size
+smaller than the minimum size allowed is found, transfer learning is used to fix
+this issue. Here, transfer learning occurs when a set of data not belonging to a
+given cohort is used when fitting that cohort’s estimator, but the instances from
+the outside data are assigned a smaller weight equal to theta. This weight can
+be fixed for all cohorts (when theta is a simple float value) or it can be identified
+automatically for each cohort separately (only for those cohorts that require
+transfer learning)(when theta is a list of floats or a boolean value). The theta
+parameter can be a float, a list of floats, or a boolean value. Each of the possible
+values is explained as follows:</p>
+<blockquote>
+<div><ul>
+<li><p>float: the exact value assigned to the theta parameter for all cohorts.
+Must be a value between [0, 1];</p></li>
+<li><p>list of float: a list of possible values for theta. All values in this
+list must be values between [0, 1]. When a cohort uses transfer learning,
+Cross-Validation is used with the cohort data plus the outside data using
+different values of theta (the values within the list of floats), and
+the final theta is selected as being the one associated with the highest
+performance in the Cross-Validation process. The Cross-Validation (CV) here
+splits the cohort data into K folds (the best K value is identified
+according to the possible values in valid_k_folds_theta), and then proceeds
+to use one of the folds as the test set, and the remaining folds plus the
+outside data as the train set. A model is fitted for the train set and then
+evaluated in the test set. The ROC AUC metric is obtained for each CV run
+until all folds have been used as a test set. We then compute the average
+ROC AUC score for the K runs and that gives the CV score for a given theta
+value. This is repeated for all possible theta values (the theta list),
+and the theta with the best score is selected for that cohort. This
+process is repeated for each cohort that requires transfer learning;</p></li>
+<li><p>boolean: similar to when theta is a list of floats, but here, instead of
+receiving the list of possible theta from the user, a default list of
+possible values is used (self.THETA_VALUES). If True, uses transfer
+learning over small cohorts, and for each small cohort, select the best
+theta among the values in THETA_VALUES. If False, don’t use transfer
+learning;</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>default_theta</strong> – the default value for theta when a given cohort is too small
+to use Cross-Validation to find the best theta value among a list of possible
+values. This parameter is only used when the ‘theta’ parameter is True or a list
+of float values. When splitting a cohort into K folds, each fold must have a
+minimum size according to the min_fold_size_theta parameter. When that is not
+possible, we reduce the value of K (according to the possible values of K specified
+in the valid_k_folds_theta parameter) and test if now we can split the cohort into
+K folds, each fold being larger than min_fold_size_theta. We do this until all K
+values are tested, and if none of these results in folds large enough, a default
+value of theta is used to avoid raising an error. This default value is given
+by this parameter. If None, then don’t use any default value in these cases. Instead,
+raise an error;</p></li>
+<li><p><strong>cohort_dist_th</strong> – a value between [0, 1] that represents the threshold used to
+determine if the label distribution of two cohorts are similar or not. If the
+distance between these two distributions is &lt;= cohort_dist_th, then the cohorts
+are considered compatible, and considered incompatible otherwise. This is used
+to determine how to build the outside data used for transfer learning: when
+a cohort uses transfer learning (check the parameter ‘theta’ for more information
+on that process), the outside data used for it must be comprised of data from
+other cohorts that follow a somehow similar label distribution. Otherwise, the
+use of outside data could be more harmful than useful. Therefore, for each cohort
+using transfer learning, we check which other cohorts have a similar label
+distribution. The similarity of these distributions is computed using the
+Jensen-Shanon distance, which computes the distance between two distributions.
+This distance returns a value between [0, 1], where values close to 0 mean that
+two distributions being compared are similar, while values close to 1 mean that
+these distributions are considerably different. If the distance between the label
+distribution of both cohorts is smaller than a provided threshold (cohort_dist_th),
+then the outside cohort is considered compatible with the current cohort;</p></li>
+<li><p><strong>min_fold_size_theta</strong> – the minimum size allowed for each fold when doing
+Cross-Validation to determine the best value for theta. For more information, check
+the parameter default_theta;</p></li>
+<li><p><strong>valid_k_folds_theta</strong> – a list of possible values for K, which represents the number
+of splits used over a cohort data when doing Cross-Validation (to determine the best
+theta value). The last value in this list is used, and if this K value results in
+invalid folds, the second-to-last value in the list is. This process goes on until
+a valid K value is found in the list. We recommend filling this list with increasing
+values of K. This way, the largest valid value of K will be selected; For more
+information, check the parameter default_theta;</p></li>
+<li><p><strong>estimator</strong> – the estimator used for each cohort. Each cohort will have their own
+copy of this estimator, which means that different instances of the same estimator
+is used for each cohort;</p></li>
+<li><p><strong>min_cohort_size</strong> – the minimum size a cohort is allowed to have to be considered
+valid. Check the <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameter for more information;</p></li>
+<li><p><strong>min_cohort_pct</strong> – a value between [0, 1] that determines the minimum size allowed
+for a cohort. The minimum size is given by the size of the full dataset (df.shape[0])
+multiplied by min_cohort_pct. The maximum value between min_cohort_size and
+(df.shape[0] * min_cohort_pct) is used to determine the minimum size allowed for a
+cohort. Check the <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameter for more information;</p></li>
+<li><p><strong>fairness_loss</strong> – <p>The fairness loss that should be optimized alongside the L1 loss.
+This is only possible for binary classification problems. For regression or multi-class
+problems, this parameter should be set to None (default value), otherwise, an error will
+be raised. The L1 and fairness losses are computed over the binarized predictions, not
+over the probabilities. Therefore, the decoupled classifier tries to identify the best
+set of thresholds (one for each estimator, where we have one estimator for each cohort)
+that produces the lowest joint loss (L1 + fairness loss). There are 3 available fairness
+losses:</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code>: don’t use any fairness loss. The threshold used for each cohort is
+identified through the ROC curve, that is, doesn’t consider any fairness metric.
+This is the default behavior;</p></li>
+<li><p>”balanced”: the Balanced loss is computed as the mean loss value over the L1 loss
+of each cohort. This loss is useful when we want that all cohorts to have a similar
+L1 loss, where all cohorts are considered with an equal weight, which makes it ideal
+for unbalanced datasets;</p></li>
+<li><p>”num_parity”: the Numerical Parity loss forces all cohorts to have a similar number
+of positive labels. This loss is useful in a situation where a model should output
+an equal number of positive labels for each cohort;</p></li>
+<li><p>”dem_parity”: the Demographic Parity loss forces all cohorts to have a similar rate
+of positive labels. This is somehow similar to the Numerical Parity loss, but this
+loss accounts for the difference in size of each cohort, that is, the number of positive
+labels should be different for cohorts with different sizes, but the ratio of positive
+labels over the size of the cohort should be consistent across cohorts. This is useful
+when we want an unbiased model, that is, a model that outputs an equal proportion
+of positive labels without considering the cohort to which an instance belongs to;</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Note:</strong> optimizing the threshold values for each cohort according to a fairness loss can take
+a considerable time depending on the size of the dataset. Check the <code class="docutils literal notranslate"><span class="pre">max_joint_loss_time</span></code>
+parameter to learn how to control the allowed time for computing these thresholds;</p>
+</p></li>
+<li><p><strong>lambda_coef</strong> – <p>the weight assigned to the L1 loss when computing the joint loss (L1 + fairness
+loss). This parameter is ignored when <code class="docutils literal notranslate"><span class="pre">fairness_loss</span> <span class="pre">=</span> <span class="pre">None</span></code>. When <code class="docutils literal notranslate"><span class="pre">fairness</span> <span class="pre">!=</span> <span class="pre">None</span></code>, after
+the estimator of each cohort is fitted, we optimize the thresholds used to binarize the final
+predictions according to the following loss function:</p>
+<div class="math notranslate nohighlight">
+\[\hat{L} = \lambda L_{1} + (1-\lambda) L_{fair}\]</div>
+<p>where:</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">L_1</span></code> is the L1 loss function over the binarized predictions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">L_{fair}</span></code> is the fairness loss being used</p></li>
+</ul>
+</div></blockquote>
+<p>The <code class="docutils literal notranslate"><span class="pre">L_1</span></code> loss tends to have smaller values than the fairness losses, so we recommend trying
+larger values for the <code class="docutils literal notranslate"><span class="pre">lambda_coef</span></code> parameter, otherwise, the thresholds might look only to
+the fairness loss;</p>
+</p></li>
+<li><p><strong>max_joint_loss_time</strong> – the maximum time (in seconds) allowed for the decoupled classifier
+to run its fairness optimization step. This parameter is ignored when <code class="docutils literal notranslate"><span class="pre">fairness_loss</span> <span class="pre">=</span> <span class="pre">None</span></code>.
+When <code class="docutils literal notranslate"><span class="pre">fairness</span> <span class="pre">!=</span> <span class="pre">None</span></code>, the decoupled classifier will try to find the best set of thresholds
+to be used for each cohort such that the final predictions result in a minimum joint loss.
+However, this optimization step is computationally expensive, and can take some time to be
+finalized depending on the number of cohorts and the size of the dataset. To avoid long execution
+times, we can specify the maximum time allowed for the decoupled classifier to run this step.
+If the optimization step reaches the maximum time, then the best set of thresholds found so far
+is returned;</p></li>
+<li><p><strong>minority_min_rate</strong> – the minimum occurrence rate for the minority class (from the label
+column) that a cohort is allowed to have. If the minority class of the cohort has an
+occurrence rate lower than min_rate, the cohort is considered invalid. Check the
+<code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameter for more information;</p></li>
+<li><p><strong>verbose</strong> – indicates whether internal messages should be printed or not.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="raimitigations.cohort.DecoupledClass.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Series</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.DecoupledClass.fit" title="Permalink to this definition"></a></dt>
+<dd><p>Overwrites the fit() method of the base CohortHandler class. Implements
+the steps for running the fit method for the current class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> – contains only the features of the original dataset, that is, does not
+contain the label column;</p></li>
+<li><p><strong>y</strong> – contains only the label column of the original dataset;</p></li>
+<li><p><strong>df</strong> – the full dataset;</p></li>
+<li><p><strong>label_col</strong> – the name or index of the label column;</p></li>
+</ul>
+</dd>
+</dl>
+<p>Check the documentation of the _set_df_mult method (DataProcessing class)
+for more information on how these parameters work.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="raimitigations.cohort.DecoupledClass.get_threasholds_dict">
+<span class="sig-name descname"><span class="pre">get_threasholds_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.DecoupledClass.get_threasholds_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a dictionary containing the best
+threshold value found for the estimator
+of each cohort.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="raimitigations.cohort.DecoupledClass.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.DecoupledClass.predict" title="Permalink to this definition"></a></dt>
+<dd><p>Calls the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method of all transformers in all pipelines, followed
+by the <code class="docutils literal notranslate"><span class="pre">predict()</span></code> method for the estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> – contains only the features of the dataset to be transformed;</p></li>
+<li><p><strong>split_pred</strong> – if True, return a dictionary with the predictions
+for each cohort. If False, return a single predictions array;</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an array with the predictions of all instances of the dataset, built from the
+predictions of each cohort, or a dictionary with the predictions for each cohort;</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray or dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="raimitigations.cohort.DecoupledClass.predict_proba">
+<span class="sig-name descname"><span class="pre">predict_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.DecoupledClass.predict_proba" title="Permalink to this definition"></a></dt>
+<dd><p>Calls the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method of all transformers in all pipelines, followed
+by the <code class="docutils literal notranslate"><span class="pre">predict_proba()</span></code> method for the estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> – contains only the features of the dataset to be transformed;</p></li>
+<li><p><strong>split_pred</strong> – if True, return a dictionary with the predictions
+for each cohort. If False, return a single predictions array;</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an array with the predictions of all instances of the dataset, built from the
+predictions of each cohort, or a dictionary with the predictions for each cohort;</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray or dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="raimitigations.cohort.DecoupledClass.print_cohorts">
+<span class="sig-name descname"><span class="pre">print_cohorts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.DecoupledClass.print_cohorts" title="Permalink to this definition"></a></dt>
+<dd><p>Print the information of all cohorts created.</p>
+</dd></dl>
+
+</dd></dl>
+
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/cohort/decoupled.html">
+          <span class="std std-ref">Decoupled Classifiers</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/cohort/case_study/decoupled_class/case_1.html">
+          <span class="std std-ref">Decoupled Classifiers Case Study 1</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/cohort/case_study/decoupled_class/case_2.html">
+          <span class="std std-ref">Decoupled Classifiers Case Study 2</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/cohort/case_study/decoupled_class/case_3.html">
+          <span class="std std-ref">Decoupled Classifiers Case Study 3</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-clear"></div></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cohort_handler.html" class="btn btn-neutral float-left" title="CohortHandler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../notebooks/cohort/decoupled.html" class="btn btn-neutral float-right" title="Decoupled Classifiers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

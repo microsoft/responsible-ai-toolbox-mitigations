@@ -34,11 +34,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> Responsible AI Mitigations
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -62,6 +66,9 @@
 <li class="toctree-l4"><a class="reference internal" href="case_2.html">Cohort Case Study 2</a></li>
 <li class="toctree-l4"><a class="reference internal" href="case_3.html">Cohort Case Study 3</a></li>
 <li class="toctree-l4"><a class="reference internal" href="integration_raiwidgets.html">Moving Cohorts from raimitigations to raiwidgets (and vice versa)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="decoupled_class/case_1.html">Decoupled Classifiers Case Study 1</a></li>
+<li class="toctree-l4"><a class="reference internal" href="decoupled_class/case_2.html">Decoupled Classifiers Case Study 2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="decoupled_class/case_3.html">Decoupled Classifiers Case Study 3</a></li>
 </ul>
 </li>
 </ul>
@@ -71,8 +78,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../cohort/intro.html">Cohort</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../utils/utils.html">Utils</a></li>
 </ul>
@@ -90,7 +97,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../../api.html">API reference</a></li>
           <li class="breadcrumb-item"><a href="../../../cohort/cohort.html">Cohort</a></li>
           <li class="breadcrumb-item"><a href="../../../cohort/cohort_manager.html">CohortManager</a></li>
@@ -651,7 +658,7 @@ larger than a given threshold then the company succeeded (class 0). For some com
 <section id="Analyzing-the-“country”-cohorts">
 <h2>Analyzing the “country” cohorts<a class="headerlink" href="#Analyzing-the-“country”-cohorts" title="Permalink to this heading"></a></h2>
 <p>Let’s create our baseline model. We’ll use a simple model since our goal is to test the efficiency of data processing pipelines, not test how different models behave. We’ll create a pipeline with an imputer, a data normalization transformer, a one-hot encoding transformer, and finally our simple estimator.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
@@ -668,8 +675,23 @@ larger than a given threshold then the company succeeded (class 0). For some com
 </pre></div>
 </div>
 </div>
+<p>We’ll then test our pipeline over the test set and analyze how this pipeline performs over different cohorts. This analysis is done using the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results</span></code> function, which shows the results obtained for the entire dataset, as well as for different cohorts. Notice that this function computes all metrics for each cohort separately, and therefore, different thresholds might be encountered for each cohort (the optimal threshold of a given set of predictions is found using the ROC curve,
+and this threshold is used to determine if a probability should be converted to class <code class="docutils literal notranslate"><span class="pre">1</span></code> or class <code class="docutils literal notranslate"><span class="pre">0</span></code>). Since we use the thresholds for computing the precision, recall, accuracy and F1 score, we must compute these thresholds using the training set, otherwise, we’ll have some data leakage. Therefore, we first call the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results</span></code> using the training set. Notice that we set the <code class="docutils literal notranslate"><span class="pre">return_th_dict</span></code> to True (its default value is False), which makes the function return a dataframe
+with all of the metrics computed and a dictionary with the best thresholds found for each cohort. We then use this dict of thresholds when we call the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results</span></code> for a second time, but this time for the test dataset. Since we want to use the thresholds computed for the training set, we set the <code class="docutils literal notranslate"><span class="pre">fixed_th</span></code> parameter to be the dict of thresholds.</p>
+<p>Notice that the thresholds are only used for binary problems. For multi-class problems, the class chosen based on the probabilities is the class with the largest probability.</p>
+<p>For now, we’ll focus on the cohorts defined by the different countries in the dataset.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_train_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -755,26 +777,11 @@ larger than a given threshold then the company succeeded (class 0). For some com
 </table>
 </div></div>
 </div>
-<p>We’ll then test our pipeline over the test set and analyze how this pipeline performs over different cohorts. This analysis is done using the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results</span></code> function, which shows the results obtained for the entire dataset, as well as for different cohorts. Notice that this function computes all metrics for each cohort separately, and therefore, different thresholds might be encountered for each cohort (the optimal threshold of a given set of predictions is found using the ROC curve,
-and this threshold is used to determine if a probability should be converted to class <code class="docutils literal notranslate"><span class="pre">1</span></code> or class <code class="docutils literal notranslate"><span class="pre">0</span></code>). Since we use the thresholds for computing the precision, recall, accuracy and F1 score, we must compute these thresholds using the training set, otherwise, we’ll have some data leakage. Therefore, we first call the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results</span></code> using the training set. Notice that we set the <code class="docutils literal notranslate"><span class="pre">return_th_dict</span></code> to True (its default value is False), which makes the function return a dataframe
-with all of the metrics computed and a dictionary with the best thresholds found for each cohort. We then use this dict of thresholds when we call the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results</span></code> for a second time, but this time for the test dataset. Since we want to use the thresholds computed for the training set, we set the <code class="docutils literal notranslate"><span class="pre">fixed_th</span></code> parameter to be the dict of thresholds.</p>
-<p>Notice that the thresholds are only used for binary problems. For multi-class problems, the class chosen based on the probabilities is the class with the largest probability.</p>
-<p>For now, we’ll focus on the cohorts defined by the different countries in the dataset.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_train_org</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-<span class="n">metrics_train</span><span class="p">,</span> <span class="n">th_dict</span> <span class="o">=</span> <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">return_th_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
 <p>We can see that our pipeline managed to get a decent performance for all countries, despite the different behaviors that we injected for each cohort. However, since we have only a single estimator, we should consider only a single threshold for the entire dataset. The function <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results()</span></code> analyzes the results separately for each cohort, that is, all metrics are computed using the isolated predictions of each cohort. That is why we can see that each cohort used different thresholds
 (<code class="docutils literal notranslate"><span class="pre">threshold</span></code> column). But if we use the same optimal threshold computed for the entire dataset for all cohorts (which makes sense in this case, since we have a single estimator), then we’ll notice that the results are very different.</p>
 <p>In the following cell, we call the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results()</span></code> again using the test dataset, but this time we set the <code class="docutils literal notranslate"><span class="pre">shared_th</span></code> to True, and we also specify that the thresholds to be used are the ones from <code class="docutils literal notranslate"><span class="pre">th_dict</span></code> (which were computed using the training set). This way, what will happen is that the precision, recall, accuracy, and F1 score metrics will be computed for all cohorts using the threshold value for the “all” cohort (because <code class="docutils literal notranslate"><span class="pre">shared_th</span></code> is True).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Baseline 2</span>
@@ -783,7 +790,7 @@ with all of the metrics computed and a dictionary with the best thresholds found
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -872,7 +879,7 @@ with all of the metrics computed and a dictionary with the best thresholds found
 <p>For the sake of comparability, we’ll use different thresholds for each cohort for all of our experiments from this point on (that is, <code class="docutils literal notranslate"><span class="pre">shared_th</span></code> will be set to False). This will make our analysis more straightforward and easier to understand.</p>
 <p>Let’s see if we can improve these metrics (compared to <a class="reference external" href="#baseline1">Baseline 1</a>) by applying some pre-processing steps over each cohort separately. To that end, let’s apply the imputation and normalization over each cohort separately and see how this impacts the resulting pipeline. We’ll use the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class to achieve this.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 1</span>
@@ -900,7 +907,7 @@ with all of the metrics computed and a dictionary with the best thresholds found
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -988,7 +995,7 @@ with all of the metrics computed and a dictionary with the best thresholds found
 </div>
 <p>Unfortunately, we only achieved a slight performance increase. Let’s now try using the same pipeline used for the baseline model, but this time each cohort has its own pipeline, that is, the pre-processing steps and the estimator are fitted for each cohort separately.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 2</span>
@@ -1012,7 +1019,7 @@ with all of the metrics computed and a dictionary with the best thresholds found
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1100,7 +1107,7 @@ with all of the metrics computed and a dictionary with the best thresholds found
 </div>
 <p>We managed to get a decent increase in the metrics by simply training different models for each cohort. In this case, we trained different pipelines for each country cohort. However, each industry sector behaves differently, so even though we are now looking at each country separately, the <code class="docutils literal notranslate"><span class="pre">sector</span></code> column still hinders the trained model. Let’s now replicate the previous experiment, but this time train different pipelines for each industry sector instead of each country:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 3</span>
@@ -1123,19 +1130,8 @@ with all of the metrics computed and a dictionary with the best thresholds found
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1224,7 +1220,7 @@ with all of the metrics computed and a dictionary with the best thresholds found
 <p>From the previous results, we can see that the difference in behavior for each sector is greater than the differences imposed by the countries. By training separate pipelines for each sector, we managed to greatly improve the performance of our model.</p>
 <p>Let’s now see if we can improve these results even further using a different pipeline for each combination of country and sector:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 4</span>
@@ -1248,7 +1244,7 @@ with all of the metrics computed and a dictionary with the best thresholds found
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1349,25 +1345,6 @@ with all of the metrics computed and a dictionary with the best thresholds found
 <span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred_org</span><span class="p">,</span> <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sector&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-/home/mmendonca/ResponsibleAI/code/git/responsible-ai-mitigations/raimitigations/utils/metric_utils.py:189: RuntimeWarning: invalid value encountered in true_divide
-  fscore = (2 * precision * recall) / (precision + recall)
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
@@ -1568,7 +1545,7 @@ with all of the metrics computed and a dictionary with the best thresholds found
 instances from country <code class="docutils literal notranslate"><span class="pre">A</span></code> are the majority of instances, then the model prioritized to learn how to classify only the instances of sector == <code class="docutils literal notranslate"><span class="pre">s1</span></code> from country <code class="docutils literal notranslate"><span class="pre">A</span></code>.</p>
 <p>Let’s now check the results for these cohorts using our best pipeline, which is the one where each cohort of sector and country had its own pipeline (<a class="reference external" href="#cohort4">Cohort 4</a>):</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#EXPERIMENT: Cohort 5</span>
@@ -1579,7 +1556,7 @@ instances from country <code class="docutils literal notranslate"><span class="p
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">

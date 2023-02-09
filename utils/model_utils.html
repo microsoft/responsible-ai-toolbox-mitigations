@@ -32,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> Responsible AI Mitigations
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,8 +56,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cohort/intro.html">Cohort</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="utils.html">Utils</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="toy_data.html">Toy Dataset</a></li>
@@ -82,7 +86,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../api.html">API reference</a></li>
           <li class="breadcrumb-item"><a href="utils.html">Utils</a></li>
       <li class="breadcrumb-item active">Model Utils</li>
@@ -193,7 +197,8 @@ given by the parameter <code class="docutils literal notranslate"><span class="p
 <li><p><strong>regression</strong> – if True, the problem is treated as a regression problem. This way, the split between
 train and test is random, without any stratification. If False, then the problem is treated as a
 classification problem, where the label column is treated as a list of labels. This way, the split
-tries to maintain the same proportion of classes in the train and test sets.</p></li>
+tries to maintain the same proportion of classes in the train and test sets;</p></li>
+<li><p><strong>random_state</strong> – controls the randomness of how the data is divided.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

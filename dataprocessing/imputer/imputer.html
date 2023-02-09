@@ -32,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> Responsible AI Mitigations
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,7 +56,6 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../intro.html">DataProcessing</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../intro.html#structure">Structure</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../intro.html#api">API</a><ul class="current">
@@ -71,6 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../intro.html#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../cohort/intro.html">Cohort</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../utils/utils.html">Utils</a></li>
 </ul>
@@ -88,7 +92,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../api.html">API reference</a></li>
           <li class="breadcrumb-item"><a href="../dataprocessing.html">DataProcessing</a></li>
       <li class="breadcrumb-item active">Imputers</li>
@@ -162,7 +166,7 @@ with at least one NaN value;</p></li>
 <dt class="sig sig-object py" id="raimitigations.dataprocessing.DataImputer.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Series</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.dataprocessing.DataImputer.fit" title="Permalink to this definition"></a></dt>
 <dd><p>Default fit method for all imputation methods that inherits from the current
-class. The following steps are executed: (i) set the self.df attribute,
+class. The following steps are executed: (i) set the self.df_info attribute,
 (ii) set the list of columns to impute (or create a default one if needed),
 (iii) check if the dataset provided is valid (contains all columns that
 should be imputed), and (iv) call the concrete class’s specific <code class="docutils literal notranslate"><span class="pre">_fit</span></code> method.</p>

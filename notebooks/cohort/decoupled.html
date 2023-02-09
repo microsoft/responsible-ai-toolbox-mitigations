@@ -1,0 +1,1953 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decoupled Classifiers &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Decoupled Classifiers Case Study 1" href="case_study/decoupled_class/case_1.html" />
+    <link rel="prev" title="DecoupledClass" href="../../cohort/decoupled_class.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../gallery.html">Gallery</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../gallery.html#tutorials">Tutorials</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../gallery.html#dataprocessing">DataProcessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gallery.html#databalanceanalysis">DataBalanceAnalysis</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../gallery.html#cohort">Cohort</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cohort_definition.html">Defining a Cohort</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cohort_manager.html">Managing cohorts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cohort_manager_scenarios.html">Cohort Manager - Scenarios and Examples</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Decoupled Classifiers</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../gallery.html#using-scikit-learn-s-pipeline">Using scikit-learn’s Pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../gallery.html#case-studies">Case Studies</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cohort/intro.html">Cohort</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../utils/utils.html">Utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="../../cohort/cohort.html">Cohort</a></li>
+          <li class="breadcrumb-item"><a href="../../cohort/decoupled_class.html">DecoupledClass</a></li>
+      <li class="breadcrumb-item active">Decoupled Classifiers</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/notebooks/cohort/decoupled.ipynb" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars and line breaks on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+    white-space: pre;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Decoupled-Classifiers">
+<h1>Decoupled Classifiers<a class="headerlink" href="#Decoupled-Classifiers" title="Permalink to this heading"></a></h1>
+<p>This notebook aims to be a tutorial on how to use the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> estimator, provided in the <code class="docutils literal notranslate"><span class="pre">raimitigations.cohort</span></code> package. This class is based on the work presented in the paper <a class="reference external" href="https://www.microsoft.com/en-us/research/publication/decoupled-classifiers-for-group-fair-and-efficient-machine-learning/">Decoupled classifiers for group-fair and efficient machine learning</a>. The <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> estimator will build a different estimator for each cohort, where the cohort separation
+rules are defined by a set of parameters of the class, which is similar to how the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class creates its cohorts. Both <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> and <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> inherit from the same abstract class <code class="docutils literal notranslate"><span class="pre">CohortHandler</span></code>, which implements the core functionalities for handling cohorts. The difference between the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> and the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> is that the former aims to provide an interface for creating a variety of different pipelines that are executed over each cohort
+separately (be it a pipeline with an estimator, different pipelines to each cohort, and so on), while the goal of the latter is to function as an estimator, which means that it will always fit a model over each cohort separately, and it can also apply some transformations to each cohort as well, but the transformations must always be the same (it doesn’t allow using different pre-processing pipelines to each cohort as it is allowed in the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code>).</p>
+<p>In this notebook, we’ll show the different ways we can instantiate and use the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code>. Let’s start off by opening a dataset. Here, we’ll use the UCI Breast Cancer dataset.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">uci_dataset</span> <span class="k">as</span> <span class="nn">database</span>
+
+<span class="kn">from</span> <span class="nn">raimitigations.utils</span> <span class="kn">import</span> <span class="n">split_data</span>
+<span class="kn">import</span> <span class="nn">raimitigations.dataprocessing</span> <span class="k">as</span> <span class="nn">dp</span>
+<span class="kn">from</span> <span class="nn">raimitigations.cohort</span> <span class="kn">import</span> <span class="n">DecoupledClass</span><span class="p">,</span> <span class="n">fetch_cohort_results</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">database</span><span class="o">.</span><span class="n">load_breast_cancer</span><span class="p">()</span>
+<span class="n">label_col</span> <span class="o">=</span> <span class="s2">&quot;Class&quot;</span>
+<span class="n">df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">label_col</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span>     <span class="s2">&quot;recurrence-events&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                                                                            <span class="s2">&quot;no-recurrence-events&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Class</th>
+      <th>age</th>
+      <th>menopause</th>
+      <th>tumor-size</th>
+      <th>inv-nodes</th>
+      <th>node-caps</th>
+      <th>deg-malig</th>
+      <th>breast</th>
+      <th>breast-quad</th>
+      <th>irradiat</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>30-39</td>
+      <td>premeno</td>
+      <td>30-34</td>
+      <td>0-2</td>
+      <td>no</td>
+      <td>3</td>
+      <td>left</td>
+      <td>left_low</td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>40-49</td>
+      <td>premeno</td>
+      <td>20-24</td>
+      <td>0-2</td>
+      <td>no</td>
+      <td>2</td>
+      <td>right</td>
+      <td>right_up</td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>40-49</td>
+      <td>premeno</td>
+      <td>20-24</td>
+      <td>0-2</td>
+      <td>no</td>
+      <td>2</td>
+      <td>left</td>
+      <td>left_low</td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>60-69</td>
+      <td>ge40</td>
+      <td>15-19</td>
+      <td>0-2</td>
+      <td>no</td>
+      <td>2</td>
+      <td>right</td>
+      <td>left_up</td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>40-49</td>
+      <td>premeno</td>
+      <td>0-4</td>
+      <td>0-2</td>
+      <td>no</td>
+      <td>2</td>
+      <td>right</td>
+      <td>right_low</td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>281</th>
+      <td>1</td>
+      <td>30-39</td>
+      <td>premeno</td>
+      <td>30-34</td>
+      <td>0-2</td>
+      <td>no</td>
+      <td>2</td>
+      <td>left</td>
+      <td>left_up</td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>282</th>
+      <td>1</td>
+      <td>30-39</td>
+      <td>premeno</td>
+      <td>20-24</td>
+      <td>0-2</td>
+      <td>no</td>
+      <td>3</td>
+      <td>left</td>
+      <td>left_up</td>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <th>283</th>
+      <td>1</td>
+      <td>60-69</td>
+      <td>ge40</td>
+      <td>20-24</td>
+      <td>0-2</td>
+      <td>no</td>
+      <td>1</td>
+      <td>right</td>
+      <td>left_up</td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>284</th>
+      <td>1</td>
+      <td>40-49</td>
+      <td>ge40</td>
+      <td>30-34</td>
+      <td>3-5</td>
+      <td>no</td>
+      <td>3</td>
+      <td>left</td>
+      <td>left_low</td>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>285</th>
+      <td>1</td>
+      <td>50-59</td>
+      <td>ge40</td>
+      <td>30-34</td>
+      <td>3-5</td>
+      <td>no</td>
+      <td>3</td>
+      <td>left</td>
+      <td>left_low</td>
+      <td>no</td>
+    </tr>
+  </tbody>
+</table>
+<p>286 rows × 10 columns</p>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Class&quot;</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Basic-Scenario">
+<h2>Basic Scenario<a class="headerlink" href="#Basic-Scenario" title="Permalink to this heading"></a></h2>
+<p>Let’s consider the following scenario: suppose that we want to train a different model for each cohort comprised of the different values in the <code class="docutils literal notranslate"><span class="pre">irradiat</span></code> column. To do this, we can call the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> using the following parameters:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+                                    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;irradiat&quot;</span><span class="p">],</span>
+                                    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span>
+                            <span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">dec_class</span><span class="o">.</span><span class="n">print_cohorts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FINAL COHORTS
+cohort_0:
+        Size: 173
+        Query:
+                (`irradiat` == &#34;no&#34;)
+        Value Counts:
+                0: 130 (75.14%)
+                1: 43 (24.86%)
+        Invalid: False
+
+
+cohort_1:
+        Size: 55
+        Query:
+                (`irradiat` == &#34;yes&#34;)
+        Value Counts:
+                0: 30 (54.55%)
+                1: 25 (45.45%)
+        Invalid: False
+
+
+</pre></div></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameter works similarly to the same parameter in the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class: it creates a different cohort for each combination of values found in the columns specified in the <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> list (check this <a class="reference internal" href="cohort_manager.html"><span class="doc">notebook for more details</span></a>). Therefore, since <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> = [“irradiat”], then we’ll create one cohort for all instances where the <code class="docutils literal notranslate"><span class="pre">irradiat</span></code> column is “no”, and another column where its value is “yes”. We then train two models: one for
+each cohort. Since no estimators were provided, we’ll create a copy of the baseline estimator used by the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code>: a <code class="docutils literal notranslate"><span class="pre">sklearn.tree.DecisionTreeClassifier</span></code> for classification problems, or a <code class="docutils literal notranslate"><span class="pre">sklearn.tree.DecisionTreeRegressor</span></code> for regression.</p>
+<p>Note that we also provided a pre-processing pipeline through the <code class="docutils literal notranslate"><span class="pre">transform_pipe</span></code> parameter. What happens here is that each cohort will have their own copy of this pipeline, and before fitting the model, each cohort’s dataset (a subset of the original dataset) will go through this pipeline. In this case, before fitting the model, each cohort will impute the missing values, and then encode the categorical features. Differently from the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class, the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> doesn’t
+allow to use different pipelines for each cohort: all cohorts will use different copies of the same pipeline.</p>
+<p>After creating the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> object, we can then print some information about each cohort created. To do this, we use the <code class="docutils literal notranslate"><span class="pre">print_cohorts()</span></code> method.</p>
+</section>
+<section id="Merging-Invalid-Cohorts">
+<h2>Merging Invalid Cohorts<a class="headerlink" href="#Merging-Invalid-Cohorts" title="Permalink to this heading"></a></h2>
+<p>When creating multiple cohorts, we might end up with a few cohorts with a skewed label distribution, or very small cohorts. In these cases, we might want to fix these cohorts before proceeding. One approach is to use data rebalancing and create new instances for only a few cohorts, and we can do this using the <a class="reference internal" href="../dataprocessing/module_tests/rebalance_sdv.html"><span class="doc">dataprocessing.Synthesizer</span></a> class or using the <a class="reference internal" href="../dataprocessing/module_tests/rebalance_imbl.html"><span class="doc">Rebalance</span></a> class together
+with the <code class="docutils literal notranslate"><span class="pre">CohortManager()</span></code>. Apart from these solutions, the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> also offers some new solutions. The first solution, which we’ll explore in this section, is to greedily merge invalid cohorts until they become valid.</p>
+<p>When merging cohorts, we first need to define what a valid cohort is. Here, we consider that invalid cohorts are those that fall into at least one of the following conditions:</p>
+<ol class="arabic simple">
+<li><p><strong>Small Cohorts:</strong> cohorts with a size below a certain threshold</p></li>
+<li><p><strong>Skewed Cohorts:</strong> cohorts with a label column with a skewed distribution.</p></li>
+</ol>
+<p>After a cohort is deemed invalid, we need to decide which cohort it will be merged into. We simply choose the smallest cohort different from the invalid cohort and then merge them (this is why we mentioned that this is a greedy approach for merging cohorts).</p>
+<p>There are a few parameters used to control these validity checks:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">min_cohort_size</span></code>: the minimum size a cohort is allowed to have to be considered valid</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_cohort_pct</span></code>: a value between [0, 1] that determines the minimum size allowed for a cohort. The minimum size is given by the size of the full dataset (<code class="docutils literal notranslate"><span class="pre">df.shape[0]</span></code>) multiplied by <code class="docutils literal notranslate"><span class="pre">min_cohort_pct</span></code>. The maximum value between <code class="docutils literal notranslate"><span class="pre">min_cohort_size</span></code> and (<code class="docutils literal notranslate"><span class="pre">df.shape[0]</span></code> * <code class="docutils literal notranslate"><span class="pre">min_cohort_pct</span></code>) is used to determine the minimum size allowed for a cohort</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">minority_min_rate</span></code>: the minimum occurrence rate for the minority class (from the label column) that a cohort is allowed to have. If the minority class of the cohort has an occurrence rate lower than min_rate, the cohort is considered invalid.</p></li>
+</ul>
+<p>In the next cell, we’ll create a set of cohorts based on the joint values of the columns [“age”, “menopause”]. We’ll also specify a different value for the parameters <code class="docutils literal notranslate"><span class="pre">min_cohort_pct</span></code> and <code class="docutils literal notranslate"><span class="pre">minority_min_rate</span></code>. Note that the resulting cohorts are not what we expected initially, that is, one cohort for each combination of unique values found between the columns [“age”, “menopause”]. Instead, we end up with only a few cohorts. But note that while cohort <code class="docutils literal notranslate"><span class="pre">cohort_4</span></code> is a combination of simple
+filters based on these two columns, the other cohorts use a complex combination of filters based on these two columns. This means that the other two cohorts are a result of merged cohorts, and when two cohorts are merged, so are their filters.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+                                    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;menopause&quot;</span><span class="p">],</span>
+                                    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                                    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+                                    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span>
+                            <span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s2">&quot;Class&quot;</span><span class="p">)</span>
+
+<span class="n">dec_class</span><span class="o">.</span><span class="n">print_cohorts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FINAL COHORTS
+cohort_0:
+        Size: 91
+        Query:
+                ((((((((`age` == &#34;20-29&#34;) and (`menopause` == &#34;premeno&#34;)) or ((`age` == &#34;30-39&#34;) and (`menopause` == &#34;lt40&#34;))) or ((`age` == &#34;60-69&#34;) and (`menopause` == &#34;lt40&#34;))) or ((`age` == &#34;50-59&#34;) and (`menopause` == &#34;lt40&#34;))) or ((`age` == &#34;70-79&#34;) and (`menopause` == &#34;ge40&#34;))) or ((`age` == &#34;40-49&#34;) and (`menopause` == &#34;ge40&#34;))) or ((`age` == &#34;50-59&#34;) and (`menopause` == &#34;premeno&#34;))) or ((`age` == &#34;30-39&#34;) and (`menopause` == &#34;premeno&#34;))
+        Value Counts:
+                0: 59 (64.84%)
+                1: 32 (35.16%)
+        Invalid: False
+
+
+cohort_4:
+        Size: 81
+        Query:
+                (`age` == &#34;40-49&#34;) and (`menopause` == &#34;premeno&#34;)
+        Value Counts:
+                0: 58 (71.60%)
+                1: 23 (28.40%)
+        Invalid: False
+
+
+cohort_8:
+        Size: 114
+        Query:
+                ((`age` == &#34;60-69&#34;) and (`menopause` == &#34;ge40&#34;)) or ((`age` == &#34;50-59&#34;) and (`menopause` == &#34;ge40&#34;))
+        Value Counts:
+                0: 84 (73.68%)
+                1: 30 (26.32%)
+        Invalid: False
+
+
+</pre></div></div>
+</div>
+</section>
+<section id="Specify-the-Cohorts">
+<h2>Specify the Cohorts<a class="headerlink" href="#Specify-the-Cohorts" title="Permalink to this heading"></a></h2>
+<p>Just like the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> class, the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> also allows users to specify the exact filters they want when creating the cohorts. In the following example, we’ll create three cohorts: 2 of them with specific filters, and the last one will be created to include all instances that don’t belong to any other cohort. <strong>NOTE:</strong> when specifying the exact cohorts using the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> parameter, invalid cohorts won’t be merged. Instead, an error will be raised indicating that one of
+the cohorts is invalid. However, invalid cohorts can still be used if Transfer Learning is used. More details on that in the following sections.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cohorts</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;cohort_1&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;40-49&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;menopause&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;premeno&#39;</span><span class="p">]],</span>
+    <span class="s2">&quot;cohort_2&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">[[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;60-69&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;menopause&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;ge40&#39;</span><span class="p">]],</span> <span class="s1">&#39;or&#39;</span><span class="p">,</span>
+            <span class="p">[[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;30-39&#39;</span><span class="p">],</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;menopause&#39;</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">,</span> <span class="s1">&#39;premeno&#39;</span><span class="p">]],</span>
+        <span class="p">],</span>
+    <span class="s2">&quot;cohort_3&quot;</span><span class="p">:</span> <span class="kc">None</span>
+<span class="p">}</span>
+
+<span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+                                    <span class="n">cohort_def</span><span class="o">=</span><span class="n">cohorts</span><span class="p">,</span>
+                                    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                                    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+                                    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span>
+                            <span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s2">&quot;Class&quot;</span><span class="p">)</span>
+
+<span class="n">dec_class</span><span class="o">.</span><span class="n">print_cohorts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;raimitigations.cohort.decoupled_class.decoupled_classifier.DecoupledClass at 0x7f4c286b7160&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FINAL COHORTS
+cohort_1:
+        Size: 81
+        Query:
+                (`age` == &#34;40-49&#34;) and (`menopause` == &#34;premeno&#34;)
+        Value Counts:
+                0: 58 (71.60%)
+                1: 23 (28.40%)
+        Invalid: False
+
+
+cohort_2:
+        Size: 90
+        Query:
+                ((`age` == &#34;60-69&#34;) and (`menopause` == &#34;ge40&#34;)) or ((`age` == &#34;30-39&#34;) and (`menopause` == &#34;premeno&#34;))
+        Value Counts:
+                0: 58 (64.44%)
+                1: 32 (35.56%)
+        Invalid: False
+
+
+cohort_3:
+        Size: 115
+        Query:
+                ((`age` != &#34;40-49&#34;) or (`menopause` != &#34;premeno&#34;)) and (((`age` != &#34;60-69&#34;) or (`menopause` != &#34;ge40&#34;)) and ((`age` != &#34;30-39&#34;) or (`menopause` != &#34;premeno&#34;)))
+        Value Counts:
+                0: 85 (73.91%)
+                1: 30 (26.09%)
+        Invalid: False
+
+
+</pre></div></div>
+</div>
+</section>
+<section id="Specifying-the-estimator">
+<h2>Specifying the estimator<a class="headerlink" href="#Specifying-the-estimator" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> class has multiple parameters that allow for a wide range of customizations. For example, we can also choose the estimator used by the decoupled classifier. By default, we’ll use a simple <code class="docutils literal notranslate"><span class="pre">DecisionTreeClassifier</span></code> (for classification problems) or <code class="docutils literal notranslate"><span class="pre">DecisionTreeRegressor</span></code> (for regression problems), both from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>. However, if the user wants to use a more powerful estimator or the same estimator, but tweak certain parameters of it, they can specify the estimator
+when creating the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> object. To do this, they just need to instantiate the estimator (don’t call their <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method yet), and pass it through the <code class="docutils literal notranslate"><span class="pre">estimator</span></code> parameter. When doing this, the Decoupled Classifier will create a copy of this estimator for each cohort. This way, each estimator will be fitted using a different dataset (the cohort’s subset).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">XGBClassifier</span><span class="p">(</span>
+            <span class="n">objective</span><span class="o">=</span><span class="s2">&quot;binary:logistic&quot;</span><span class="p">,</span>
+            <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+            <span class="n">n_estimators</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+            <span class="n">max_depth</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">colsample_bytree</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">reg_lambda</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+            <span class="n">nthreads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+            <span class="n">verbosity</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">use_label_encoder</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+                    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;menopause&quot;</span><span class="p">],</span>
+                    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+                    <span class="n">estimator</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span>
+                <span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s2">&quot;Class&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/mmendonca/anaconda3/envs/raipub/lib/python3.9/site-packages/xgboost/sklearn.py:1421: UserWarning: `use_label_encoder` is deprecated in 1.7.0.
+  warnings.warn(&#34;`use_label_encoder` is deprecated in 1.7.0.&#34;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;raimitigations.cohort.decoupled_class.decoupled_classifier.DecoupledClass at 0x7f307a540a00&gt;
+</pre></div></div>
+</div>
+</section>
+<section id="Calling-the-predict()-and-predict_proba()-methods">
+<h2>Calling the predict() and predict_proba() methods<a class="headerlink" href="#Calling-the-predict()-and-predict_proba()-methods" title="Permalink to this heading"></a></h2>
+<p>The Decoupled Classifier also implements the same interface from other <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>’s estimators: the <code class="docutils literal notranslate"><span class="pre">predict()</span></code> and <code class="docutils literal notranslate"><span class="pre">predict_proba()</span></code> methods. It also follows the same standards: the <code class="docutils literal notranslate"><span class="pre">predict()</span></code> method will return the exact classes, while the <code class="docutils literal notranslate"><span class="pre">predict_proba()</span></code> returns the probabilities of each instance belonging to each class. Note that the <code class="docutils literal notranslate"><span class="pre">predict_proba()</span></code> will only work if the estimator being used has the <code class="docutils literal notranslate"><span class="pre">predict_proba()</span></code> method.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">label_col</span><span class="p">])</span>
+
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y_pred size = </span><span class="si">{</span><span class="n">y_pred</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">y_pred</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span><span class="si">}</span><span class="s2"> ... </span><span class="si">{</span><span class="n">y_pred</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+y_pred size = (286,)
+[0 0 0 0 0 0] ... [1 0 1 0 1 1]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y_pred size = </span><span class="si">{</span><span class="n">y_pred</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">y_pred</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span><span class="si">}</span><span class="s2"> ... </span><span class="si">{</span><span class="n">y_pred</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+y_pred size = (286, 2)
+[[0.53159475 0.46840525]
+ [0.78541195 0.21458806]
+ [0.7623236  0.23767635]
+ [0.8384228  0.1615772 ]
+ [0.78541195 0.21458806]
+ [0.8384228  0.1615772 ]] ... [[0.3676687  0.6323313 ]
+ [0.72908753 0.27091247]
+ [0.44569016 0.55430984]
+ [0.81318545 0.18681458]
+ [0.42785716 0.57214284]
+ [0.45488244 0.54511756]]
+</pre></div></div>
+</div>
+</section>
+<section id="Using-Transfer-Learning-for-invalid-cohorts">
+<h2>Using Transfer Learning for invalid cohorts<a class="headerlink" href="#Using-Transfer-Learning-for-invalid-cohorts" title="Permalink to this heading"></a></h2>
+<p>What sets the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> apart from the <code class="docutils literal notranslate"><span class="pre">CohortManager</span></code> is its capability to deal with invalid cohorts. We already showed how to use the Decoupled Classifier to merge invalid cohorts using a greedy approach. In this section, we’ll explore a second approach for dealing with invalid cohorts, called here the transfer learning approach. In this approach, instead of merging an invalid cohort into another cohort, we’ll keep all the cohorts, but when calling the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method of an invalid
+cohort, we’ll also use data from other cohorts (called out-data), but the instances of the outer-data will be weighed down compared to the instances belonging to the cohort (called here the in-data). Note that when an invalid cohort uses the data from other cohorts when calling its <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method, the cohort that lent the data to the invalid cohort (the one from which the out-data was fetched) will still only use its own data when fitting its model (unless it is also an invalid cohort).</p>
+<p>We are now left with questions: (i) which cohorts should be used as the out-data for an invalid cohort, and (ii) how to define the value of <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<section id="Selecting-the-out-data-for-an-invalid-cohort">
+<h3>Selecting the out-data for an invalid cohort<a class="headerlink" href="#Selecting-the-out-data-for-an-invalid-cohort" title="Permalink to this heading"></a></h3>
+<p>When selecting the out-data for an invalid cohort, that is, when selecting which cohorts will be used to lend their data to the invalid cohort, we must be careful not to use cohorts with a very different label distribution (compared to the invalid cohort that needs extra data), otherwise, the use of external data can be more harmful than useful. To check if two cohorts have a similar label distribution (be it for a classification problem where the label column is a set of encoded classes, or for
+regression problems, where the label is an array of real values), we compute the Jensen-Shanon distance between the label distribution of these two cohorts. If the distance is below a predefined threshold (controlled by the <code class="docutils literal notranslate"><span class="pre">cohort_dist_th</span></code> parameter), then the distributions are considered similar.</p>
+<p>Here is a summary of the transfer learning process covered so far:</p>
+<ul class="simple">
+<li><p>When using Transfer Learning, first check if there are any invalid cohorts. Differently from the greedy approach of merging cohorts, when using transfer learning, cohorts deemed invalid due to skewed distributions are not allowed. If a cohort is deemed invalid due to a skewed distribution, an error will be raised. For each invalid cohort <code class="docutils literal notranslate"><span class="pre">i</span></code>, we’ll do the following steps:</p>
+<ol class="arabic simple">
+<li><p>Search all other cohorts <code class="docutils literal notranslate"><span class="pre">j</span></code> <span class="math notranslate nohighlight">\(\neq\)</span> <code class="docutils literal notranslate"><span class="pre">i</span></code> (including other invalid cohorts) and find those that have a similar label distribution</p></li>
+<li><p>Create a new dataset (visible only to cohort <code class="docutils literal notranslate"><span class="pre">i</span></code>) called <em>out-data</em> that will include the subset of all other cohorts with a similar label distribution</p></li>
+<li><p>Train the estimator of cohort <code class="docutils literal notranslate"><span class="pre">i</span></code> using its own subset (<em>in-data</em>) + <em>out-data</em>, where the instances from the out-data have a smaller weight <span class="math notranslate nohighlight">\(\theta\)</span> (we’ll discuss how to set this value in the remainder of this section). Note that the estimator used when using transfer learning must allow for setting a different weight for each instance.</p></li>
+</ol>
+</li>
+<li><p>All valid cohorts will be trained using only their <em>in-data</em>, even if the subset of these cohorts is used as <em>out-data</em> for invalid cohorts.</p></li>
+</ul>
+</section>
+<section id="Setting-the-value-of-\theta">
+<h3>Setting the value of <span class="math notranslate nohighlight">\(\theta\)</span><a class="headerlink" href="#Setting-the-value-of-\theta" title="Permalink to this heading"></a></h3>
+<p>We are now going to focus on how to set the value of the <span class="math notranslate nohighlight">\(\theta\)</span> parameter. We’ll cover the different approaches for setting this value.</p>
+<section id="Using-a-fixed-\theta-value">
+<h4>Using a fixed <span class="math notranslate nohighlight">\(\theta\)</span> value<a class="headerlink" href="#Using-a-fixed-\theta-value" title="Permalink to this heading"></a></h4>
+<p>The most straightforward approach for setting the value of <span class="math notranslate nohighlight">\(\theta\)</span> is to provide a specific value for it directly. This can be done using the <code class="docutils literal notranslate"><span class="pre">theta</span></code> parameter when creating the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> object. When passing a float value between [0, 1] to this parameter, this will be the value used for <span class="math notranslate nohighlight">\(\theta\)</span> for all transfer learning operations.</p>
+<p>In the following cell, we’ll set <span class="math notranslate nohighlight">\(\theta\)</span> = 0.3. Note that this time we first remove any missing values from the dataset. We do this because when using the <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameter to define the cohorts, if the columns used in this list have missing values, these values will be used for creating the cohorts. In this specific case, the <code class="docutils literal notranslate"><span class="pre">breast-quad</span></code> column has very few missing values, so if we try to create a set of cohorts with those missing values, this will result in a cohort (the one
+that holds all instances where this column is NaN) with a skewed label distribution, which, as previously mentioned, is not allowed when using transfer learning. Therefore, we simply remove the missing values prior to creating the cohorts.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">imputer</span> <span class="o">=</span> <span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">categorical</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;missing_values&#39;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                                        <span class="s1">&#39;strategy&#39;</span><span class="p">:</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">,</span>
+                                        <span class="s1">&#39;fill_value&#39;</span><span class="p">:</span><span class="kc">None</span> <span class="p">},</span>
+                            <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">df_nomiss</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+                    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;breast-quad&quot;</span><span class="p">],</span>
+                    <span class="n">theta</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+                    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+                    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span>
+                <span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df_nomiss</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s2">&quot;Class&quot;</span><span class="p">)</span>
+
+<span class="n">dec_class</span><span class="o">.</span><span class="n">print_cohorts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FINAL COHORTS
+cohort_0:
+        Size: 21
+        Query:
+                (`breast-quad` == &#34;central&#34;)
+        Value Counts:
+                0: 17 (80.95%)
+                1: 4 (19.05%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_1&#39;, &#39;cohort_2&#39;, &#39;cohort_3&#39;, &#39;cohort_4&#39;]
+                Theta = 0.3
+
+
+cohort_1:
+        Size: 111
+        Query:
+                (`breast-quad` == &#34;left_low&#34;)
+        Value Counts:
+                0: 75 (67.57%)
+                1: 36 (32.43%)
+        Invalid: False
+
+
+cohort_2:
+        Size: 97
+        Query:
+                (`breast-quad` == &#34;left_up&#34;)
+        Value Counts:
+                0: 71 (73.20%)
+                1: 26 (26.80%)
+        Invalid: False
+
+
+cohort_3:
+        Size: 24
+        Query:
+                (`breast-quad` == &#34;right_low&#34;)
+        Value Counts:
+                0: 18 (75.00%)
+                1: 6 (25.00%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_2&#39;, &#39;cohort_4&#39;]
+                Theta = 0.3
+
+
+cohort_4:
+        Size: 33
+        Query:
+                (`breast-quad` == &#34;right_up&#34;)
+        Value Counts:
+                0: 20 (60.61%)
+                1: 13 (39.39%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_2&#39;, &#39;cohort_3&#39;]
+                Theta = 0.3
+
+
+</pre></div></div>
+</div>
+<p>Note that when using transfer learning and calling the <code class="docutils literal notranslate"><span class="pre">print_cohorts()</span></code> method, the “Invalid” key of the invalid cohorts will be set to True, and in that case, it will also inform which cohorts were used as out-data and the <span class="math notranslate nohighlight">\(\theta\)</span> value used.</p>
+</section>
+<section id="Finding-the-best-\theta-parameter-using-Cross-Validation">
+<h4>Finding the best <span class="math notranslate nohighlight">\(\theta\)</span> parameter using Cross-Validation<a class="headerlink" href="#Finding-the-best-\theta-parameter-using-Cross-Validation" title="Permalink to this heading"></a></h4>
+<p>Instead of using a fixed <span class="math notranslate nohighlight">\(\theta\)</span> value, we can also find the best value using Cross-Validation (CV). When a cohort uses transfer learning, CV is used with the cohort data (in-data) plus the out-data using different values of <span class="math notranslate nohighlight">\(\theta\)</span> (obtained from a list of <span class="math notranslate nohighlight">\(\theta\)</span> values, called here <em>:math:`theta` list</em>), and the final <span class="math notranslate nohighlight">\(\theta\)</span> is selected as being the one associated with the highest performance in the CV process. The CV here splits the in-data into K folds (the
+best K value is identified according to the possible values specified in the <code class="docutils literal notranslate"><span class="pre">valid_k_folds_theta</span></code> parameter), and then proceeds to use one of the folds as the test set, and the remaining folds plus the out-data as the train set. A model is fitted for the train set and then evaluated in the test set. The ROC AUC metric is obtained for each CV run until all folds have been used as a test set. We then compute the average ROC AUC score for the K runs and that gives the CV score for a given
+<span class="math notranslate nohighlight">\(\theta\)</span> value. This is repeated for all possible <span class="math notranslate nohighlight">\(\theta\)</span> values (the <span class="math notranslate nohighlight">\(\theta\)</span> list), and the <span class="math notranslate nohighlight">\(\theta\)</span> with the best score is selected for that cohort. This process is repeated for each cohort that requires transfer learning, which means that some invalid cohorts might end up using different values of <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+<p>There are a set of parameters used for controlling the CV process. These parameters are: <code class="docutils literal notranslate"><span class="pre">default_theta</span></code>, <code class="docutils literal notranslate"><span class="pre">min_fold_size_theta</span></code>, and <code class="docutils literal notranslate"><span class="pre">valid_k_folds_theta</span></code>. We recommend looking through the API documentation of these parameters to better understand this process.</p>
+<p>In the following cells, we’ll check two ways to specify the <strong>:math:`theta` list</strong>, that is, the list of possible <span class="math notranslate nohighlight">\(\theta\)</span> values to be tested during the CV phase.</p>
+<section id="Using-a-specific-list-of-possible-\theta-values">
+<h5>Using a specific list of possible <span class="math notranslate nohighlight">\(\theta\)</span> values<a class="headerlink" href="#Using-a-specific-list-of-possible-\theta-values" title="Permalink to this heading"></a></h5>
+<p>We can specify a list of possible <span class="math notranslate nohighlight">\(\theta\)</span> values. This way, when running the CV process mentioned above, we’ll do it for all the <span class="math notranslate nohighlight">\(\theta\)</span> values contained in the list passed as a parameter. This list is passed to the same <code class="docutils literal notranslate"><span class="pre">theta</span></code> parameter mentioned in the previous cell.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+                                    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;breast-quad&quot;</span><span class="p">],</span>
+                                    <span class="n">theta</span><span class="o">=</span><span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span>
+                                    <span class="n">min_fold_size_theta</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                                    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+                                    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span>
+                            <span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df_nomiss</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s2">&quot;Class&quot;</span><span class="p">)</span>
+
+<span class="n">dec_class</span><span class="o">.</span><span class="n">print_cohorts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FINAL COHORTS
+cohort_0:
+        Size: 21
+        Query:
+                (`breast-quad` == &#34;central&#34;)
+        Value Counts:
+                0: 17 (80.95%)
+                1: 4 (19.05%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_1&#39;, &#39;cohort_2&#39;, &#39;cohort_3&#39;, &#39;cohort_4&#39;]
+                Theta = 0.6
+
+
+cohort_1:
+        Size: 111
+        Query:
+                (`breast-quad` == &#34;left_low&#34;)
+        Value Counts:
+                0: 75 (67.57%)
+                1: 36 (32.43%)
+        Invalid: False
+
+
+cohort_2:
+        Size: 97
+        Query:
+                (`breast-quad` == &#34;left_up&#34;)
+        Value Counts:
+                0: 71 (73.20%)
+                1: 26 (26.80%)
+        Invalid: False
+
+
+cohort_3:
+        Size: 24
+        Query:
+                (`breast-quad` == &#34;right_low&#34;)
+        Value Counts:
+                0: 18 (75.00%)
+                1: 6 (25.00%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_2&#39;, &#39;cohort_4&#39;]
+                Theta = 0.8
+
+
+cohort_4:
+        Size: 33
+        Query:
+                (`breast-quad` == &#34;right_up&#34;)
+        Value Counts:
+                0: 20 (60.61%)
+                1: 13 (39.39%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_2&#39;, &#39;cohort_3&#39;]
+                Theta = 0.8
+
+
+</pre></div></div>
+</div>
+</section>
+<section id="Using-a-default-list-of-possible-\theta-values">
+<h5>Using a default list of possible <span class="math notranslate nohighlight">\(\theta\)</span> values<a class="headerlink" href="#Using-a-default-list-of-possible-\theta-values" title="Permalink to this heading"></a></h5>
+<p>Instead of providing a list of <span class="math notranslate nohighlight">\(\theta\)</span> values, we could also use a default <span class="math notranslate nohighlight">\(\theta\)</span> list. To do this, we only need to set the <code class="docutils literal notranslate"><span class="pre">theta</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code>. This way, the <code class="docutils literal notranslate"><span class="pre">DecoupledClass</span></code> understands that transfer learning must be used, and that the best <span class="math notranslate nohighlight">\(\theta\)</span> value must be identified using a default <span class="math notranslate nohighlight">\(\theta\)</span> list.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+                                    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;breast-quad&quot;</span><span class="p">],</span>
+                                    <span class="n">theta</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                    <span class="n">min_fold_size_theta</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                                    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span>
+                                    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span>
+                            <span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df_nomiss</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s2">&quot;Class&quot;</span><span class="p">)</span>
+
+<span class="n">dec_class</span><span class="o">.</span><span class="n">print_cohorts</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+FINAL COHORTS
+cohort_0:
+        Size: 21
+        Query:
+                (`breast-quad` == &#34;central&#34;)
+        Value Counts:
+                0: 17 (80.95%)
+                1: 4 (19.05%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_1&#39;, &#39;cohort_2&#39;, &#39;cohort_3&#39;, &#39;cohort_4&#39;]
+                Theta = 0.2
+
+
+cohort_1:
+        Size: 111
+        Query:
+                (`breast-quad` == &#34;left_low&#34;)
+        Value Counts:
+                0: 75 (67.57%)
+                1: 36 (32.43%)
+        Invalid: False
+
+
+cohort_2:
+        Size: 97
+        Query:
+                (`breast-quad` == &#34;left_up&#34;)
+        Value Counts:
+                0: 71 (73.20%)
+                1: 26 (26.80%)
+        Invalid: False
+
+
+cohort_3:
+        Size: 24
+        Query:
+                (`breast-quad` == &#34;right_low&#34;)
+        Value Counts:
+                0: 18 (75.00%)
+                1: 6 (25.00%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_2&#39;, &#39;cohort_4&#39;]
+                Theta = 0.4
+
+
+cohort_4:
+        Size: 33
+        Query:
+                (`breast-quad` == &#34;right_up&#34;)
+        Value Counts:
+                0: 20 (60.61%)
+                1: 13 (39.39%)
+        Invalid: True
+                Cohorts used as outside data: [&#39;cohort_0&#39;, &#39;cohort_1&#39;, &#39;cohort_2&#39;, &#39;cohort_3&#39;]
+                Theta = 0.2
+
+
+</pre></div></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+<section id="Optimizing-Fairness-Metrics">
+<h2>Optimizing Fairness Metrics<a class="headerlink" href="#Optimizing-Fairness-Metrics" title="Permalink to this heading"></a></h2>
+<p>Aside from training one estimator for each cohort and adding transfer learning for invalid cohorts, the Decoupled Classifier, as presented in its <a class="reference external" href="https://www.microsoft.com/en-us/research/publication/decoupled-classifiers-for-group-fair-and-efficient-machine-learning/">original paper</a>, also offers the option to optimize all models according to some fairness metric. In this section, we’ll show how to optimize a set of models based on one of the fairness metrics available.</p>
+<p>First of all, let’s start by reading a new dataset, and then splitting it.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../../notebooks&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">lightgbm</span> <span class="kn">import</span> <span class="n">LGBMClassifier</span>
+
+<span class="kn">from</span> <span class="nn">download</span> <span class="kn">import</span> <span class="n">download_datasets</span>
+
+<span class="n">SEED</span> <span class="o">=</span> <span class="mi">42</span>
+
+<span class="k">def</span> <span class="nf">get_model</span><span class="p">():</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">LGBMClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">SEED</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+
+<span class="n">data_dir</span> <span class="o">=</span> <span class="s1">&#39;../../../datasets/&#39;</span>
+<span class="n">download_datasets</span><span class="p">(</span><span class="n">data_dir</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_dir</span> <span class="o">+</span> <span class="s1">&#39;hr_promotion/train.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;employee_id&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">label_col</span> <span class="o">=</span> <span class="s1">&#39;is_promoted&#39;</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">split_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">label_col</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">X_train</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>department</th>
+      <th>region</th>
+      <th>education</th>
+      <th>gender</th>
+      <th>recruitment_channel</th>
+      <th>no_of_trainings</th>
+      <th>age</th>
+      <th>previous_year_rating</th>
+      <th>length_of_service</th>
+      <th>KPIs_met &gt;80%</th>
+      <th>awards_won?</th>
+      <th>avg_training_score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>19004</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_13</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>27</td>
+      <td>3.0</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>52</td>
+    </tr>
+    <tr>
+      <th>54186</th>
+      <td>Technology</td>
+      <td>region_2</td>
+      <td>Bachelor's</td>
+      <td>f</td>
+      <td>other</td>
+      <td>2</td>
+      <td>38</td>
+      <td>4.0</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+      <td>79</td>
+    </tr>
+    <tr>
+      <th>37539</th>
+      <td>Operations</td>
+      <td>region_2</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>26</td>
+      <td>1.0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>57</td>
+    </tr>
+    <tr>
+      <th>51713</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_22</td>
+      <td>Bachelor's</td>
+      <td>f</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>27</td>
+      <td>2.0</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>49</td>
+    </tr>
+    <tr>
+      <th>2051</th>
+      <td>Procurement</td>
+      <td>region_2</td>
+      <td>Bachelor's</td>
+      <td>f</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>28</td>
+      <td>3.0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>66</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>51522</th>
+      <td>Operations</td>
+      <td>region_27</td>
+      <td>Bachelor's</td>
+      <td>f</td>
+      <td>other</td>
+      <td>1</td>
+      <td>33</td>
+      <td>3.0</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+      <td>62</td>
+    </tr>
+    <tr>
+      <th>4220</th>
+      <td>Operations</td>
+      <td>region_32</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>other</td>
+      <td>1</td>
+      <td>33</td>
+      <td>2.0</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>62</td>
+    </tr>
+    <tr>
+      <th>24351</th>
+      <td>Operations</td>
+      <td>region_2</td>
+      <td>Master's &amp; above</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>31</td>
+      <td>5.0</td>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>64</td>
+    </tr>
+    <tr>
+      <th>9214</th>
+      <td>Procurement</td>
+      <td>region_17</td>
+      <td>Bachelor's</td>
+      <td>f</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>43</td>
+      <td>3.0</td>
+      <td>4</td>
+      <td>1</td>
+      <td>0</td>
+      <td>66</td>
+    </tr>
+    <tr>
+      <th>54230</th>
+      <td>Sales &amp; Marketing</td>
+      <td>region_11</td>
+      <td>Bachelor's</td>
+      <td>m</td>
+      <td>sourcing</td>
+      <td>1</td>
+      <td>34</td>
+      <td>1.0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>51</td>
+    </tr>
+  </tbody>
+</table>
+<p>38365 rows × 12 columns</p>
+</div></div>
+</div>
+<section id="Decoupled-Classifier-WITHOUT-Fairness-Optimization">
+<h3>Decoupled Classifier WITHOUT Fairness Optimization<a class="headerlink" href="#Decoupled-Classifier-WITHOUT-Fairness-Optimization" title="Permalink to this heading"></a></h3>
+<p>We’ll look into the cohorts formed by the “department” column. We’ll first train a decoupled classifier without optimizing any fairness metric, and then output the results. Note here that we’re using the <code class="docutils literal notranslate"><span class="pre">get_threasholds_dict()</span></code> method from the <strong>DecoupledClass</strong>, which returns a dictionary with all the optimal thresholds found for the training set for each cohort. These thresholds are used only for binary classification problems, and they are used whenever the user uses the <code class="docutils literal notranslate"><span class="pre">predict()</span></code>
+method: in this case, we’ll first compute the probabilities (<code class="docutils literal notranslate"><span class="pre">predict_proba()</span></code>), and then we binarize the results using this threshold as the cutoff point (values below the threshold are assigned the <code class="docutils literal notranslate"><span class="pre">0</span></code> class, and values above are assigned the <code class="docutils literal notranslate"><span class="pre">1</span></code> class). The dictionary returned by the <code class="docutils literal notranslate"><span class="pre">get_threasholds_dict()</span></code> method can be used when calling the <code class="docutils literal notranslate"><span class="pre">raimitigations.cohort.fetch_cohort_results()</span></code> function.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+                    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;department&quot;</span><span class="p">],</span>
+                    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span><span class="p">,</span>
+                    <span class="n">estimator</span><span class="o">=</span><span class="n">get_model</span><span class="p">(),</span>
+                    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                    <span class="n">theta</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">th_dict</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">get_threasholds_dict</span><span class="p">()</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">cohort_def</span><span class="o">=</span><span class="n">dec_class</span><span class="p">,</span> <span class="n">fixed_th</span><span class="o">=</span><span class="n">th_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.895163</td>
+      <td>0.876146</td>
+      <td>0.685779</td>
+      <td>0.742239</td>
+      <td>0.939488</td>
+      <td>0.500000</td>
+      <td>659</td>
+      <td>0.040078</td>
+      <td>16443</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`department` == "Analytics")</td>
+      <td>0.722190</td>
+      <td>0.619585</td>
+      <td>0.596869</td>
+      <td>0.606264</td>
+      <td>0.875456</td>
+      <td>0.291690</td>
+      <td>126</td>
+      <td>0.076549</td>
+      <td>1646</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>(`department` == "Finance")</td>
+      <td>0.919360</td>
+      <td>0.838021</td>
+      <td>0.786997</td>
+      <td>0.809857</td>
+      <td>0.943570</td>
+      <td>0.399871</td>
+      <td>56</td>
+      <td>0.073491</td>
+      <td>762</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>cohort_2</td>
+      <td>(`department` == "HR")</td>
+      <td>0.895265</td>
+      <td>0.836806</td>
+      <td>0.697395</td>
+      <td>0.746324</td>
+      <td>0.956989</td>
+      <td>0.547408</td>
+      <td>24</td>
+      <td>0.032258</td>
+      <td>744</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>cohort_3</td>
+      <td>(`department` == "Legal")</td>
+      <td>0.915327</td>
+      <td>0.841469</td>
+      <td>0.663451</td>
+      <td>0.717749</td>
+      <td>0.963190</td>
+      <td>0.760291</td>
+      <td>7</td>
+      <td>0.021472</td>
+      <td>326</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>cohort_4</td>
+      <td>(`department` == "Operations")</td>
+      <td>0.896737</td>
+      <td>0.757878</td>
+      <td>0.729081</td>
+      <td>0.742328</td>
+      <td>0.918598</td>
+      <td>0.271413</td>
+      <td>272</td>
+      <td>0.080808</td>
+      <td>3366</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>cohort_5</td>
+      <td>(`department` == "Procurement")</td>
+      <td>0.901670</td>
+      <td>0.758723</td>
+      <td>0.718070</td>
+      <td>0.736035</td>
+      <td>0.915596</td>
+      <td>0.329608</td>
+      <td>173</td>
+      <td>0.079358</td>
+      <td>2180</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>cohort_6</td>
+      <td>(`department` == "R&amp;D")</td>
+      <td>0.718231</td>
+      <td>0.578056</td>
+      <td>0.526861</td>
+      <td>0.535669</td>
+      <td>0.944444</td>
+      <td>0.664189</td>
+      <td>5</td>
+      <td>0.015432</td>
+      <td>324</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>cohort_7</td>
+      <td>(`department` == "Sales &amp; Marketing")</td>
+      <td>0.935592</td>
+      <td>0.765992</td>
+      <td>0.727787</td>
+      <td>0.745056</td>
+      <td>0.938333</td>
+      <td>0.272557</td>
+      <td>298</td>
+      <td>0.059280</td>
+      <td>5027</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>cohort_8</td>
+      <td>(`department` == "Technology")</td>
+      <td>0.869781</td>
+      <td>0.710383</td>
+      <td>0.682738</td>
+      <td>0.695082</td>
+      <td>0.886847</td>
+      <td>0.329839</td>
+      <td>197</td>
+      <td>0.095261</td>
+      <td>2068</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="Decoupled-Classifier-WITH-Fairness-Optimization">
+<h3>Decoupled Classifier WITH Fairness Optimization<a class="headerlink" href="#Decoupled-Classifier-WITH-Fairness-Optimization" title="Permalink to this heading"></a></h3>
+<p>Now, we’ll add the <strong>Demographic Parity</strong> fairness function (refer to the paper for other loss functions). The demographic parity loss forces the decoupled classifier to output a similar rate of positive labels for all cohorts. The Demographic Parity is given by <span class="math notranslate nohighlight">\(\hat{L}\)</span>, expressed in the following equations:</p>
+<div class="math notranslate nohighlight">
+\[L_{1} = \frac{1}{n} \sum_{i = 0...n}{|y_i - z_i|}\]</div>
+<div class="math notranslate nohighlight">
+\[p_k = \frac{1}{n} \sum_{i:g_i = k}{z_i}\]</div>
+<div class="math notranslate nohighlight">
+\[\hat{L} = \lambda L_{1} + (1-\lambda) \sum_{k}{\Bigg| p_k \frac{n}{n_k} - \frac{1}{K}\sum_{k'}{p_{k'} \frac{n}{n_{k'}}} \Bigg|}\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(L_1\)</span> is the L1 loss function</p></li>
+<li><p><span class="math notranslate nohighlight">\(p_k\)</span> is the rate of positive labels (in relation to the entire dataset) inside cohort <span class="math notranslate nohighlight">\(k\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\sum_{k'}\)</span> represents the sum over all cohorts different from cohort <span class="math notranslate nohighlight">\(k\)</span></p></li>
+</ul>
+<p>To use the <strong>Demographic Parity</strong> loss, we’ll use three new parameters:</p>
+<ul class="simple">
+<li><p><strong>fairness_loss</strong>: the fairness loss that should be optimized alongside the L1 loss. This is only possible for binary classification problems. For regression or multi-class problems, this parameter should be set to None (default value), otherwise, an error will be raised. The L1 and fairness losses are computed over the binarized predictions, not over the probabilities. Therefore, the decoupled classifier tries to identify the best set of thresholds (one for each estimator, where we have one
+estimator for each cohort) that produces the lowest joint loss (L1 + fairness loss). There are 3 available fairness losses:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code>: don’t use any fairness loss. The threshold used for each cohort is identified through the ROC curve, that is, doesn’t consider any fairness metric. This is the default behavior;</p></li>
+<li><p>“balanced”: the Balanced loss is computed as the mean loss value over the L1 loss of each cohort. This loss is useful when we want that all cohorts to have a similar L1 loss, where all cohorts are considered with an equal weight, which makes it ideal for unbalanced datasets;</p></li>
+<li><p>“num_parity”: the Numerical Parity loss forces all cohorts to have a similar number of positive labels. This loss is useful in a situation where a model should output an equal number of positive labels for each cohort;</p></li>
+<li><p>“dem_parity”: the Demographic Parity loss forces all cohorts to have a similar rate of positive labels. This is somehow similar to the Numerical Parity loss, but this loss accounts for the difference in size of each cohort, that is, the number of positive labels should be different for cohorts with different sizes, but the ratio of positive labels over the size of the cohort should be consistent across cohorts. This is useful when we want an unbiased model, that is, a model that outputs an
+equal proportion of positive labels without considering the cohort to which an instance belongs to;</p></li>
+</ul>
+</li>
+<li><p><strong>lambda_coef</strong>: the <span class="math notranslate nohighlight">\(\lambda\)</span> variable presented in the equations above, which represents the weight assigned to the L1 loss when computing the joint loss (L1 + fairness loss). This parameter is ignored when <code class="docutils literal notranslate"><span class="pre">fairness_loss</span> <span class="pre">=</span> <span class="pre">None</span></code>;</p></li>
+<li><p><strong>max_joint_loss_time</strong>: the maximum time (in seconds) allowed for the decoupled classifier to run its fairness optimization step. This parameter is ignored when <code class="docutils literal notranslate"><span class="pre">fairness_loss</span> <span class="pre">=</span> <span class="pre">None</span></code>. When <code class="docutils literal notranslate"><span class="pre">fairness</span> <span class="pre">!=</span> <span class="pre">None</span></code>, the decoupled classifier will try to find the best set of thresholds to be used for each cohort such that the final predictions result in a minimum joint loss. However, this optimization step is computationally expensive, and can take some time to be finalized depending on the
+number of cohorts and the size of the dataset. To avoid long execution times, we can specify the maximum time allowed for the decoupled classifier to run this step. If the optimization step reaches the maximum time, then the best set of thresholds found so far is returned;</p></li>
+</ul>
+<p>Finally, another new trick we’ll use is to call the <code class="docutils literal notranslate"><span class="pre">fetch_cohort_results()</span></code> function using <code class="docutils literal notranslate"><span class="pre">fixed_th</span> <span class="pre">=</span> <span class="pre">True</span></code>. What this will do is that it will use the thresholds from the DecoupledClass object passed through the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> parameter (using the <code class="docutils literal notranslate"><span class="pre">get_threasholds_dict()</span></code> method used in the previous cell). Using <code class="docutils literal notranslate"><span class="pre">fixed_th</span> <span class="pre">=</span> <span class="pre">True</span></code> only works if we provide a DecoupledClass object through the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> parameter. Otherwise, an error will be raised.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preprocessing</span> <span class="o">=</span> <span class="p">[</span><span class="n">dp</span><span class="o">.</span><span class="n">BasicImputer</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">dp</span><span class="o">.</span><span class="n">EncoderOrdinal</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">dec_class</span> <span class="o">=</span> <span class="n">DecoupledClass</span><span class="p">(</span>
+                    <span class="n">cohort_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;department&quot;</span><span class="p">],</span>
+                    <span class="n">transform_pipe</span><span class="o">=</span><span class="n">preprocessing</span><span class="p">,</span>
+                    <span class="n">estimator</span><span class="o">=</span><span class="n">get_model</span><span class="p">(),</span>
+                    <span class="n">minority_min_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                    <span class="n">min_cohort_pct</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                    <span class="n">theta</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">fairness_loss</span><span class="o">=</span><span class="s2">&quot;dem_parity&quot;</span><span class="p">,</span>
+                    <span class="n">lambda_coef</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                    <span class="n">max_joint_loss_time</span><span class="o">=</span><span class="mi">200</span>
+                <span class="p">)</span>
+<span class="n">dec_class</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">pred</span> <span class="o">=</span> <span class="n">dec_class</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">fetch_cohort_results</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">cohort_def</span><span class="o">=</span><span class="n">dec_class</span><span class="p">,</span> <span class="n">fixed_th</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>cohort</th>
+      <th>cht_query</th>
+      <th>roc</th>
+      <th>precision</th>
+      <th>recall</th>
+      <th>f1</th>
+      <th>accuracy</th>
+      <th>threshold</th>
+      <th>num_pos</th>
+      <th>%_pos</th>
+      <th>cht_size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>all</td>
+      <td>all</td>
+      <td>0.895163</td>
+      <td>0.876146</td>
+      <td>0.685779</td>
+      <td>0.742239</td>
+      <td>0.939488</td>
+      <td>0.500000</td>
+      <td>659</td>
+      <td>0.040078</td>
+      <td>16443</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cohort_0</td>
+      <td>(`department` == "Analytics")</td>
+      <td>0.722190</td>
+      <td>0.636853</td>
+      <td>0.583599</td>
+      <td>0.600360</td>
+      <td>0.886999</td>
+      <td>0.365011</td>
+      <td>93</td>
+      <td>0.056501</td>
+      <td>1646</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cohort_1</td>
+      <td>(`department` == "Finance")</td>
+      <td>0.919360</td>
+      <td>0.878382</td>
+      <td>0.762182</td>
+      <td>0.807264</td>
+      <td>0.947507</td>
+      <td>0.579517</td>
+      <td>45</td>
+      <td>0.059055</td>
+      <td>762</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>cohort_2</td>
+      <td>(`department` == "HR")</td>
+      <td>0.895265</td>
+      <td>0.655064</td>
+      <td>0.741758</td>
+      <td>0.685869</td>
+      <td>0.913978</td>
+      <td>0.051923</td>
+      <td>68</td>
+      <td>0.091398</td>
+      <td>744</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>cohort_3</td>
+      <td>(`department` == "Legal")</td>
+      <td>0.915327</td>
+      <td>0.630507</td>
+      <td>0.820043</td>
+      <td>0.672362</td>
+      <td>0.898773</td>
+      <td>0.033636</td>
+      <td>40</td>
+      <td>0.122699</td>
+      <td>326</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>cohort_4</td>
+      <td>(`department` == "Operations")</td>
+      <td>0.896737</td>
+      <td>0.759269</td>
+      <td>0.724897</td>
+      <td>0.740439</td>
+      <td>0.918895</td>
+      <td>0.278185</td>
+      <td>265</td>
+      <td>0.078728</td>
+      <td>3366</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>cohort_5</td>
+      <td>(`department` == "Procurement")</td>
+      <td>0.901670</td>
+      <td>0.812134</td>
+      <td>0.709188</td>
+      <td>0.747522</td>
+      <td>0.926606</td>
+      <td>0.418526</td>
+      <td>135</td>
+      <td>0.061927</td>
+      <td>2180</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>cohort_6</td>
+      <td>(`department` == "R&amp;D")</td>
+      <td>0.718231</td>
+      <td>0.578056</td>
+      <td>0.526861</td>
+      <td>0.535669</td>
+      <td>0.944444</td>
+      <td>0.664189</td>
+      <td>5</td>
+      <td>0.015432</td>
+      <td>324</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>cohort_7</td>
+      <td>(`department` == "Sales &amp; Marketing")</td>
+      <td>0.935592</td>
+      <td>0.731392</td>
+      <td>0.742891</td>
+      <td>0.736963</td>
+      <td>0.929779</td>
+      <td>0.231286</td>
+      <td>371</td>
+      <td>0.073801</td>
+      <td>5027</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>cohort_8</td>
+      <td>(`department` == "Technology")</td>
+      <td>0.869781</td>
+      <td>0.775429</td>
+      <td>0.668209</td>
+      <td>0.704017</td>
+      <td>0.904739</td>
+      <td>0.418906</td>
+      <td>134</td>
+      <td>0.064797</td>
+      <td>2068</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Note that, when using Demographic Parity with <span class="math notranslate nohighlight">\(\lambda = 0.5\)</span>, the percentage of positive labels inside each cohort is more equal across different cohorts when compared to the previous result. This is important if the generated model must not be biased for a given group, that is, provide equal rates of positive labels for each cohort, even if this hurts the overall performance of the model. The <span class="math notranslate nohighlight">\(\lambda\)</span> parameter controls how much we should care about the fairness metric compared to
+the L1 loss: low <span class="math notranslate nohighlight">\(\lambda\)</span> values focuses more on the fairness metric, while high <span class="math notranslate nohighlight">\(\lambda\)</span> values gives more attention to the L1 loss.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../cohort/decoupled_class.html" class="btn btn-neutral float-left" title="DecoupledClass" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="case_study/decoupled_class/case_1.html" class="btn btn-neutral float-right" title="Decoupled Classifiers Case Study 1" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

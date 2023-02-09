@@ -32,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> Responsible AI Mitigations
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,13 +56,14 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cohort/intro.html">Cohort</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="utils.html">Utils</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="toy_data.html">Toy Dataset</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Data Utils</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#raimitigations.utils.data_utils.err_float_01"><code class="docutils literal notranslate"><span class="pre">err_float_01()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#raimitigations.utils.data_utils.freedman_diaconis"><code class="docutils literal notranslate"><span class="pre">freedman_diaconis()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#raimitigations.utils.data_utils.get_cat_cols"><code class="docutils literal notranslate"><span class="pre">get_cat_cols()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#raimitigations.utils.data_utils.ordinal_to_onehot"><code class="docutils literal notranslate"><span class="pre">ordinal_to_onehot()</span></code></a></li>
 </ul>
@@ -81,7 +86,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../api.html">API reference</a></li>
           <li class="breadcrumb-item"><a href="utils.html">Utils</a></li>
       <li class="breadcrumb-item active">Data Utils</li>
@@ -134,6 +139,18 @@ error occured.</p>
 <li><p><strong>param_name</strong> – the internal name used for the parameter
 provided in param.</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="raimitigations.utils.data_utils.freedman_diaconis">
+<span class="sig-prename descclassname"><span class="pre">raimitigations.utils.data_utils.</span></span><span class="sig-name descname"><span class="pre">freedman_diaconis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Series</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.utils.data_utils.freedman_diaconis" title="Permalink to this definition"></a></dt>
+<dd><p>Computes the optimal number of bins for a set of data using the
+Freedman Diaconis rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> – the data column used to compute the number of bins.</p>
 </dd>
 </dl>
 </dd></dl>

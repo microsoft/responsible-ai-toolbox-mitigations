@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CohortHandler &mdash; Responsible AI Mitigations  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="DecoupledClass" href="decoupled_class.html" />
+    <link rel="prev" title="Cohort Case Study 3" href="../notebooks/cohort/case_study/case_3.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Responsible AI Mitigations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gallery.html">Gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="intro.html">Cohort</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="cohort.html">Cohort</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cohort_definition.html">CohortDefinition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cohort_manager.html">CohortManager</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">CohortHandler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="decoupled_class.html">DecoupledClass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="utils.html">Cohort Utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/utils.html">Utils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Responsible AI Mitigations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="cohort.html">Cohort</a></li>
+      <li class="breadcrumb-item active">CohortHandler</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/cohort/cohort_handler.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="cohorthandler">
+<span id="cohort-handler"></span><h1>CohortHandler<a class="headerlink" href="#cohorthandler" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="raimitigations.cohort.CohortHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">raimitigations.cohort.</span></span><span class="sig-name descname"><span class="pre">CohortHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cohort_def</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohort_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohort_json_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.CohortHandler" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../dataprocessing/dataprocessing.html#raimitigations.dataprocessing.DataProcessing" title="raimitigations.dataprocessing.data_processing.DataProcessing"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataProcessing</span></code></a></p>
+<p>Abstract class that manages multiple cohorts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cohort_def</strong> – a list of cohort definitions or a dictionary of cohort definitions. A
+cohort condition is the same variable received by the <code class="docutils literal notranslate"><span class="pre">cohort_definition</span></code> parameter
+of the <code class="docutils literal notranslate"><span class="pre">CohortDefinition</span></code> class. When using a list of cohort definitions, the cohorts
+will be named automatically. For the dictionary of cohort definitions, the key used represents
+the cohort’s name, and the value assigned to each key is given by that cohort’s conditions.
+This parameter can’t be used together with the <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameter. Only one these two
+parameters must be used at a time;</p></li>
+<li><p><strong>cohort_col</strong> – a list of column names or indices, from which one cohort is created for each
+unique combination of values for these columns. This parameter can’t be used together with
+the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> parameter. Only one of these two parameters must be used at a time;</p></li>
+<li><p><strong>cohort_json_files</strong> – a list with the name of the JSON files that contains the definition
+of each cohort. Each cohort is saved in a single JSON file, so the length of the
+<code class="docutils literal notranslate"><span class="pre">cohort_json_files</span></code> should be equal to the number of cohorts to be used.</p></li>
+<li><p><strong>df</strong> – the data frame to be used during the fit method.
+This data frame must contain all the features, including the label
+column (specified in the  <code class="docutils literal notranslate"><span class="pre">label_col</span></code> parameter). This parameter is
+mandatory if  <code class="docutils literal notranslate"><span class="pre">label_col</span></code> is also provided. The user can also provide
+this dataset (along with the  <code class="docutils literal notranslate"><span class="pre">label_col</span></code>) when calling the <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code>
+method. If df is provided during the class instantiation, it is not
+necessary to provide it again when calling <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code>. It is also possible
+to use the  <code class="docutils literal notranslate"><span class="pre">X</span></code> and  <code class="docutils literal notranslate"><span class="pre">y</span></code> instead of <code class="docutils literal notranslate"><span class="pre">df</span></code> and <code class="docutils literal notranslate"><span class="pre">label_col</span></code>, although it is
+mandatory to pass the pair of parameters (X,y) or (df, label_col) either
+during the class instantiation or during the <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code> method;</p></li>
+<li><p><strong>label_col</strong> – the name or index of the label column. This parameter is
+mandatory if <code class="docutils literal notranslate"><span class="pre">df</span></code> is provided;</p></li>
+<li><p><strong>X</strong> – contains only the features of the original dataset, that is, does not
+contain the label column. This is useful if the user has already separated
+the features from the label column prior to calling this class. This parameter
+is mandatory if <code class="docutils literal notranslate"><span class="pre">y</span></code> is provided;</p></li>
+<li><p><strong>y</strong> – contains only the label column of the original dataset.
+This parameter is mandatory if <code class="docutils literal notranslate"><span class="pre">X</span></code> is provided;</p></li>
+<li><p><strong>verbose</strong> – indicates whether internal messages should be printed or not.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="raimitigations.cohort.CohortHandler.get_queries">
+<span class="sig-name descname"><span class="pre">get_queries</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.CohortHandler.get_queries" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a dictionary with one key for each cohort’s name, where
+each key is assigned to the pandas query used for filtering the
+instances that belongs to the cohort.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a dictionary containing the pandas queries used by each
+of the existing cohorts.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="raimitigations.cohort.CohortHandler.get_subsets">
+<span class="sig-name descname"><span class="pre">get_subsets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Series</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.CohortHandler.get_subsets" title="Permalink to this definition"></a></dt>
+<dd><p>Fetches a dictionary with the subset associated to all of
+the existing cohorts and their label column (only if <code class="docutils literal notranslate"><span class="pre">y</span></code>
+is provided). If <code class="docutils literal notranslate"><span class="pre">apply_transform</span></code> is set to True, then
+the returned subsets are transformed using the cohort’s
+pipeline before being returned (similar to calling the
+<code class="docutils literal notranslate"><span class="pre">transform()</span></code> method).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> – a dataset that has at least the columns used by
+the cohorts’ filters (this means that the dataset may
+also have other columns not used by the filters);</p></li>
+<li><p><strong>y</strong> – a dataset containing only the label column (<cite>y</cite>
+dataset). This parameter is optional, and it is useful
+when it is necessary to filter a feature dataset (<cite>X</cite>)
+and a label dataset (<cite>y</cite>), and get a list of subsets
+from <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>;</p></li>
+<li><p><strong>apply_transform</strong> – boolean value indicating if we want
+to apply the transformations pipeline used for each cohort
+or not. If True, this method will behave similarly to the
+<cite>transform()</cite> method, with the main difference being that
+this method will always return a list of subsets, even if
+the cohorts are compatible with each other.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>a dictionary where the primary keys are the name of the
+cohorts, and the secondary keys are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">X</span></code>: the subset of the features dataset;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">y</span></code>: the subset of the label dataset. This key will only
+be returned if the <cite>y</cite> dataset is passed in the method’s
+call.</p></li>
+</ul>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="raimitigations.cohort.CohortHandler.save_cohorts">
+<span class="sig-name descname"><span class="pre">save_cohorts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_file_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.CohortHandler.save_cohorts" title="Permalink to this definition"></a></dt>
+<dd><p>Save the definition of each cohort in their respective JSON
+file, which means that one JSON file will be created for each
+cohort. The name of the JSON files created is provided through
+the ‘json_file_names’. If no list of JSON file names is used
+(json_file_names = None), then a default list of JSON file
+names is created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>json_file</strong> – a list of JSON file names. The first file name
+is used to save the first cohort, and so on. If not provided,
+a default list of file names is created.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p class="rubric">Class Diagram</p>
+<div class="graphviz"><img src="../_images/inheritance-0be6f709a534c3edc3b785d1eef1c8b561ae4a36.png" alt="Inheritance diagram of raimitigations.cohort.CohortManager, raimitigations.cohort.DecoupledClass" usemap="#inheritance1126fb5c04" class="inheritance graphviz" /></div>
+<map id="inheritance1126fb5c04" name="inheritance1126fb5c04">
+<area shape="rect" id="node3" href="../dataprocessing/dataprocessing.html#raimitigations.dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,31,248,56"/>
+<area shape="rect" id="node2" href="#raimitigations.cohort.CohortHandler" target="_top" title="Abstract class that manages multiple cohorts." alt="" coords="296,31,412,56"/>
+<area shape="rect" id="node4" href="cohort_manager.html#raimitigations.cohort.CohortManager" target="_top" title="Concrete class that manages multiple cohort pipelines that are" alt="" coords="462,5,585,31"/>
+<area shape="rect" id="node5" href="decoupled_class.html#raimitigations.cohort.DecoupledClass" target="_top" title="Concrete class that trains different models over different subsets of data (cohorts)." alt="" coords="460,55,587,80"/>
+</map></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../notebooks/cohort/case_study/case_3.html" class="btn btn-neutral float-left" title="Cohort Case Study 3" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="decoupled_class.html" class="btn btn-neutral float-right" title="DecoupledClass" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Microsoft.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

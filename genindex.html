@@ -29,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Responsible AI Mitigations
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -49,8 +53,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cohort/intro.html">Cohort</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils/utils.html">Utils</a></li>
 </ul>
@@ -68,7 +72,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Index</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/genindex" class="fa fa-github"> Edit on GitHub</a>
@@ -143,11 +147,13 @@
 </li>
       <li><a href="databalanceanalysis/feature_measures.html#raimitigations.databalanceanalysis.feature_measures.FeatureBalanceMeasure.CLASS_A">CLASS_A (raimitigations.databalanceanalysis.feature_measures.FeatureBalanceMeasure attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="databalanceanalysis/feature_measures.html#raimitigations.databalanceanalysis.feature_measures.FeatureBalanceMeasure.CLASS_B">CLASS_B (raimitigations.databalanceanalysis.feature_measures.FeatureBalanceMeasure attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cohort/cohort_definition.html#raimitigations.cohort.CohortDefinition">CohortDefinition (class in raimitigations.cohort)</a>
+</li>
+      <li><a href="cohort/cohort_handler.html#raimitigations.cohort.CohortHandler">CohortHandler (class in raimitigations.cohort)</a>
 </li>
       <li><a href="cohort/cohort_manager.html#raimitigations.cohort.CohortManager">CohortManager (class in raimitigations.cohort)</a>
 </li>
@@ -184,6 +190,8 @@
       <li><a href="dataprocessing/scaler/scaler.html#raimitigations.dataprocessing.DataScaler">DataScaler (class in raimitigations.dataprocessing)</a>
 </li>
       <li><a href="dataprocessing/scaler/standard.html#raimitigations.dataprocessing.DataStandardScaler">DataStandardScaler (class in raimitigations.dataprocessing)</a>
+</li>
+      <li><a href="cohort/decoupled_class.html#raimitigations.cohort.DecoupledClass">DecoupledClass (class in raimitigations.cohort)</a>
 </li>
       <li><a href="databalanceanalysis/distribution_measures.html#raimitigations.databalanceanalysis.distribution_measures.DistributionBalanceMeasure.DISTRIBUTION_METRICS">DISTRIBUTION_METRICS (raimitigations.databalanceanalysis.distribution_measures.DistributionBalanceMeasure attribute)</a>
 </li>
@@ -224,6 +232,8 @@
       <li><a href="cohort/cohort_manager.html#raimitigations.cohort.CohortManager.fit">fit() (raimitigations.cohort.CohortManager method)</a>
 
       <ul>
+        <li><a href="cohort/decoupled_class.html#raimitigations.cohort.DecoupledClass.fit">(raimitigations.cohort.DecoupledClass method)</a>
+</li>
         <li><a href="dataprocessing/encoder/encoder.html#raimitigations.dataprocessing.DataEncoding.fit">(raimitigations.dataprocessing.DataEncoding method)</a>
 </li>
         <li><a href="dataprocessing/imputer/imputer.html#raimitigations.dataprocessing.DataImputer.fit">(raimitigations.dataprocessing.DataImputer method)</a>
@@ -243,6 +253,8 @@
         <li><a href="dataprocessing/sampler/rebalance.html#raimitigations.dataprocessing.Rebalance.fit_resample">(raimitigations.dataprocessing.Rebalance method)</a>
 </li>
       </ul></li>
+      <li><a href="utils/data_utils.html#raimitigations.utils.data_utils.freedman_diaconis">freedman_diaconis() (in module raimitigations.utils.data_utils)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -263,11 +275,11 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cohort/cohort_manager.html#raimitigations.cohort.CohortManager.get_queries">get_queries() (raimitigations.cohort.CohortManager method)</a>
+      <li><a href="cohort/cohort_handler.html#raimitigations.cohort.CohortHandler.get_queries">get_queries() (raimitigations.cohort.CohortHandler method)</a>
 </li>
       <li><a href="dataprocessing/feat_sel/feat_sel.html#raimitigations.dataprocessing.FeatureSelection.get_selected_features">get_selected_features() (raimitigations.dataprocessing.FeatureSelection method)</a>
 </li>
-      <li><a href="cohort/cohort_manager.html#raimitigations.cohort.CohortManager.get_subsets">get_subsets() (raimitigations.cohort.CohortManager method)</a>
+      <li><a href="cohort/cohort_handler.html#raimitigations.cohort.CohortHandler.get_subsets">get_subsets() (raimitigations.cohort.CohortHandler method)</a>
 </li>
       <li><a href="dataprocessing/feat_sel/catboost.html#raimitigations.dataprocessing.CatBoostSelection.get_summary">get_summary() (raimitigations.dataprocessing.CatBoostSelection method)</a>
 
@@ -277,6 +289,8 @@
         <li><a href="dataprocessing/feat_sel/seq.html#raimitigations.dataprocessing.SeqFeatSelection.get_summary">(raimitigations.dataprocessing.SeqFeatSelection method)</a>
 </li>
       </ul></li>
+      <li><a href="cohort/decoupled_class.html#raimitigations.cohort.DecoupledClass.get_threasholds_dict">get_threasholds_dict() (raimitigations.cohort.DecoupledClass method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -352,11 +366,21 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="dataprocessing/case_study_utils.html#case_study_utils.plot_results">plot_results() (in module case_study_utils)</a>
 </li>
+      <li><a href="cohort/cohort_manager.html#raimitigations.cohort.CohortManager.predict">predict() (raimitigations.cohort.CohortManager method)</a>
+
+      <ul>
+        <li><a href="cohort/decoupled_class.html#raimitigations.cohort.DecoupledClass.predict">(raimitigations.cohort.DecoupledClass method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cohort/cohort_manager.html#raimitigations.cohort.CohortManager.predict">predict() (raimitigations.cohort.CohortManager method)</a>
-</li>
       <li><a href="cohort/cohort_manager.html#raimitigations.cohort.CohortManager.predict_proba">predict_proba() (raimitigations.cohort.CohortManager method)</a>
+
+      <ul>
+        <li><a href="cohort/decoupled_class.html#raimitigations.cohort.DecoupledClass.predict_proba">(raimitigations.cohort.DecoupledClass method)</a>
+</li>
+      </ul></li>
+      <li><a href="cohort/decoupled_class.html#raimitigations.cohort.DecoupledClass.print_cohorts">print_cohorts() (raimitigations.cohort.DecoupledClass method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -433,7 +457,7 @@
 </li>
       <li><a href="cohort/cohort_definition.html#raimitigations.cohort.CohortDefinition.save">save() (raimitigations.cohort.CohortDefinition method)</a>
 </li>
-      <li><a href="cohort/cohort_manager.html#raimitigations.cohort.CohortManager.save_cohorts">save_cohorts() (raimitigations.cohort.CohortManager method)</a>
+      <li><a href="cohort/cohort_handler.html#raimitigations.cohort.CohortHandler.save_cohorts">save_cohorts() (raimitigations.cohort.CohortHandler method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>

@@ -24,7 +24,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Encoders" href="encoder/encoder.html" />
-    <link rel="prev" title="FeatureBalanceMeasure" href="../databalanceanalysis/feature_measures.html" /> 
+    <link rel="prev" title="API reference" href="../api.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -32,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> Responsible AI Mitigations
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,7 +56,6 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="intro.html">DataProcessing</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="intro.html#structure">Structure</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
@@ -71,6 +74,7 @@
 <li class="toctree-l2"><a class="reference internal" href="intro.html#scikit-learn-s-pipeline-support">scikit-learn’s Pipeline Support</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../cohort/intro.html">Cohort</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils/utils.html">Utils</a></li>
 </ul>
@@ -88,7 +92,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../api.html">API reference</a></li>
       <li class="breadcrumb-item active">DataProcessing</li>
       <li class="wy-breadcrumbs-aside">
@@ -220,22 +224,23 @@ order).</p>
 </ul>
 </div>
 <p class="rubric">Class Diagram</p>
-<div class="graphviz"><img src="../_images/inheritance-8cf910d59ac64d3bdd3194843e4f77dddc40ee52.png" alt="Inheritance diagram of raimitigations.dataprocessing.DataEncoding, raimitigations.dataprocessing.FeatureSelection, raimitigations.dataprocessing.DataImputer, raimitigations.dataprocessing.DataScaler, raimitigations.dataprocessing.Rebalance, raimitigations.dataprocessing.Synthesizer" usemap="#inheritancee5e7f22f2c" class="inheritance graphviz" /></div>
-<map id="inheritancee5e7f22f2c" name="inheritancee5e7f22f2c">
-<area shape="rect" id="node3" href="#raimitigations.dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,129,248,155"/>
-<area shape="rect" id="node2" href="encoder/encoder.html#raimitigations.dataprocessing.DataEncoding" target="_top" title="Base class for all encoding subclasses. Implements basic functionalities" alt="" coords="305,5,417,31"/>
-<area shape="rect" id="node4" href="imputer/imputer.html#raimitigations.dataprocessing.DataImputer" target="_top" title="Base class for all imputer subclasses. Implements basic functionalities" alt="" coords="309,55,413,80"/>
-<area shape="rect" id="node5" href="scaler/scaler.html#raimitigations.dataprocessing.DataScaler" target="_top" title="Base class used by all data scaling or data transformation classes." alt="" coords="315,104,408,129"/>
-<area shape="rect" id="node6" href="feat_sel/feat_sel.html#raimitigations.dataprocessing.FeatureSelection" target="_top" title="Base class for all feature selection subclasses. Implements basic" alt="" coords="296,153,427,179"/>
-<area shape="rect" id="node7" href="sampler/rebalance.html#raimitigations.dataprocessing.Rebalance" target="_top" title="Concrete class that uses under and oversampling approaches (implemented" alt="" coords="316,203,407,228"/>
-<area shape="rect" id="node8" href="sampler/synthesizer.html#raimitigations.dataprocessing.Synthesizer" target="_top" title="Concrete class that uses generative models (implemented in the :mod:`sdv` library)" alt="" coords="312,252,411,277"/>
+<div class="graphviz"><img src="../_images/inheritance-ebeeff6d039b797855b50af11df2dc629011781d.png" alt="Inheritance diagram of raimitigations.dataprocessing.DataEncoding, raimitigations.dataprocessing.FeatureSelection, raimitigations.dataprocessing.DataImputer, raimitigations.dataprocessing.DataScaler, raimitigations.dataprocessing.Rebalance, raimitigations.dataprocessing.Synthesizer, raimitigations.cohort.CohortHandler" usemap="#inheritanceec28bc21b8" class="inheritance graphviz" /></div>
+<map id="inheritanceec28bc21b8" name="inheritanceec28bc21b8">
+<area shape="rect" id="node3" href="#raimitigations.dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,153,248,179"/>
+<area shape="rect" id="node2" href="../cohort/cohort_handler.html#raimitigations.cohort.CohortHandler" target="_top" title="Abstract class that manages multiple cohorts." alt="" coords="303,5,419,31"/>
+<area shape="rect" id="node4" href="encoder/encoder.html#raimitigations.dataprocessing.DataEncoding" target="_top" title="Base class for all encoding subclasses. Implements basic functionalities" alt="" coords="305,55,417,80"/>
+<area shape="rect" id="node5" href="imputer/imputer.html#raimitigations.dataprocessing.DataImputer" target="_top" title="Base class for all imputer subclasses. Implements basic functionalities" alt="" coords="309,104,413,129"/>
+<area shape="rect" id="node6" href="scaler/scaler.html#raimitigations.dataprocessing.DataScaler" target="_top" title="Base class used by all data scaling or data transformation classes." alt="" coords="315,153,408,179"/>
+<area shape="rect" id="node7" href="feat_sel/feat_sel.html#raimitigations.dataprocessing.FeatureSelection" target="_top" title="Base class for all feature selection subclasses. Implements basic" alt="" coords="296,203,427,228"/>
+<area shape="rect" id="node8" href="sampler/rebalance.html#raimitigations.dataprocessing.Rebalance" target="_top" title="Concrete class that uses under and oversampling approaches (implemented" alt="" coords="316,252,407,277"/>
+<area shape="rect" id="node9" href="sampler/synthesizer.html#raimitigations.dataprocessing.Synthesizer" target="_top" title="Concrete class that uses generative models (implemented in the :mod:`sdv` library)" alt="" coords="312,301,411,327"/>
 </map></section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../databalanceanalysis/feature_measures.html" class="btn btn-neutral float-left" title="FeatureBalanceMeasure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../api.html" class="btn btn-neutral float-left" title="API reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="encoder/encoder.html" class="btn btn-neutral float-right" title="Encoders" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

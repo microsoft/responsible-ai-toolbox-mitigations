@@ -23,7 +23,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="DataBalanceAnalysis" href="databalanceanalysis/databalanceanalysis.html" />
+    <link rel="next" title="DataProcessing" href="dataprocessing/dataprocessing.html" />
     <link rel="prev" title="Moving Cohorts from raimitigations to raiwidgets (and vice versa)" href="notebooks/cohort/case_study/integration_raiwidgets.html" /> 
 </head>
 
@@ -32,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Responsible AI Mitigations
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -48,8 +52,8 @@
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="integration_to_libs.html">How this library works with the Responsible AI Toolbox</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/databalanceanalysis.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessing/dataprocessing.html">DataProcessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/databalanceanalysis.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cohort/cohort.html">Cohort</a></li>
 <li class="toctree-l2"><a class="reference internal" href="utils/utils.html">Utils</a></li>
 </ul>
@@ -58,8 +62,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cohort/intro.html">Cohort</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils/utils.html">Utils</a></li>
 </ul>
@@ -77,7 +81,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">API reference</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com//microsoft/responsible-ai-toolbox-mitigations/blob/main/docs/api.rst" class="fa fa-github"> Edit on GitHub</a>
@@ -116,12 +120,6 @@
 <span id="api"></span><h1>API reference<a class="headerlink" href="#api-reference" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/databalanceanalysis.html">DataBalanceAnalysis</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/aggregate_measures.html">AggregateBalanceMeasure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/distribution_measures.html">DistributionBalanceMeasure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/feature_measures.html">FeatureBalanceMeasure</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="dataprocessing/dataprocessing.html">DataProcessing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessing/dataprocessing.html#raimitigations.dataprocessing.DataProcessing"><code class="docutils literal notranslate"><span class="pre">DataProcessing</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="dataprocessing/encoder/encoder.html">Encoders</a></li>
@@ -131,9 +129,17 @@
 <li class="toctree-l2"><a class="reference internal" href="dataprocessing/scaler/scaler.html">Scalers</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="databalanceanalysis/databalanceanalysis.html">DataBalanceAnalysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/aggregate_measures.html">AggregateBalanceMeasure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/distribution_measures.html">DistributionBalanceMeasure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="databalanceanalysis/feature_measures.html">FeatureBalanceMeasure</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="cohort/cohort.html">Cohort</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="cohort/cohort_definition.html">CohortDefinition</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cohort/cohort_manager.html">CohortManager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cohort/cohort_handler.html">CohortHandler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cohort/decoupled_class.html">DecoupledClass</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cohort/utils.html">Cohort Utils</a></li>
 </ul>
 </li>
@@ -152,7 +158,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="notebooks/cohort/case_study/integration_raiwidgets.html" class="btn btn-neutral float-left" title="Moving Cohorts from raimitigations to raiwidgets (and vice versa)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="databalanceanalysis/databalanceanalysis.html" class="btn btn-neutral float-right" title="DataBalanceAnalysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="dataprocessing/dataprocessing.html" class="btn btn-neutral float-right" title="DataProcessing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

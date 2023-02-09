@@ -24,7 +24,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Utils" href="../utils/utils.html" />
-    <link rel="prev" title="Cohort Case Study 3" href="../notebooks/cohort/case_study/case_3.html" /> 
+    <link rel="prev" title="Decoupled Classifiers Case Study 3" href="../notebooks/cohort/case_study/decoupled_class/case_3.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -32,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> Responsible AI Mitigations
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Responsible AI Mitigations
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,13 +56,15 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dataprocessing/intro.html">DataProcessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../databalanceanalysis/intro.html">DataBalanceAnalysis</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="intro.html">Cohort</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="cohort.html">Cohort</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="cohort_definition.html">CohortDefinition</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cohort_manager.html">CohortManager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cohort_handler.html">CohortHandler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="decoupled_class.html">DecoupledClass</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Cohort Utils</a></li>
 </ul>
 </li>
@@ -83,7 +89,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../api.html">API reference</a></li>
           <li class="breadcrumb-item"><a href="cohort.html">Cohort</a></li>
       <li class="breadcrumb-item active">Cohort Utils</li>
@@ -124,7 +130,7 @@
 <span id="id1"></span><span id="cohort-utils"></span><h1>Cohort Utils<a class="headerlink" href="#module-raimitigations.cohort.utils" title="Permalink to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="raimitigations.cohort.utils.fetch_cohort_results">
-<span class="sig-prename descclassname"><span class="pre">raimitigations.cohort.utils.</span></span><span class="sig-name descname"><span class="pre">fetch_cohort_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohort_def</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohort_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_th_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.utils.fetch_cohort_results" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">raimitigations.cohort.utils.</span></span><span class="sig-name descname"><span class="pre">fetch_cohort_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_true</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohort_def</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohort_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared_th</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_th_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.utils.fetch_cohort_results" title="Permalink to this definition"></a></dt>
 <dd><p>Computes several classification or regression metrics for a given array of predictions
 for the entire dataset and for a set of cohorts. The cohorts used to compute
 these metrics are defined by the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> or <code class="docutils literal notranslate"><span class="pre">cohort_col</span></code> parameters
@@ -138,9 +144,9 @@ separately for each set of predictions belonging to each of the existing cohorts
 filter the instances that belong to each cohort;</p></li>
 <li><p><strong>y_true</strong> – the true labels of the instances in the <code class="docutils literal notranslate"><span class="pre">X</span></code> dataset;</p></li>
 <li><p><strong>y_pred</strong> – the predicted labels;</p></li>
-<li><p><strong>cohort_def</strong> – a list of cohort definitions, a dictionary of cohort definitions,
-or the path to a JSON file containing the definition of all cohorts. For more
-details on this parameter, please check the <a class="reference internal" href="cohort_manager.html#raimitigations.cohort.CohortManager" title="raimitigations.cohort.CohortManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">CohortManager</span></code></a>
+<li><p><strong>cohort_def</strong> – a list of cohort definitions, a dictionary of cohort definitions, a
+<strong>CohortHandler</strong> object, or the path to a JSON file containing the definition of all cohorts.
+For more details on this parameter, please check the <a class="reference internal" href="cohort_manager.html#raimitigations.cohort.CohortManager" title="raimitigations.cohort.CohortManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">CohortManager</span></code></a>
 class;</p></li>
 <li><p><strong>cohort_col</strong> – a list of column names or indices, from which one cohort is created for each
 unique combination of values for these columns. This parameter is ignored if <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code>
@@ -152,8 +158,11 @@ is provided, then this threshold is used for all cohorts (in this case, <code cl
 be ignored). If <code class="docutils literal notranslate"><span class="pre">fixed_th</span></code> is a dictionary, it must have the following structure: one key
 equal to each cohort name (including one key named “all” for the entire dataset), and each
 key is associated with the threshold that should be used for that cohort. If <code class="docutils literal notranslate"><span class="pre">fixed_th</span></code>
-is a dictionary and <code class="docutils literal notranslate"><span class="pre">shared_th</span></code> is True, then the only threshold used will be
-<code class="docutils literal notranslate"><span class="pre">fixed_th[&quot;all&quot;]</span></code>. This parameter is ignored if <code class="docutils literal notranslate"><span class="pre">regression</span></code> is True;</p></li>
+is True, then the thresholds used will be the ones found in the <strong>DecoupledClass</strong> object
+passed in the <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> (if <code class="docutils literal notranslate"><span class="pre">cohort_def</span></code> is anything but a <strong>DecoupledClass</strong> object,
+an error will be raised). If <code class="docutils literal notranslate"><span class="pre">fixed_th</span></code> is a dictionary and <code class="docutils literal notranslate"><span class="pre">shared_th</span></code> is True, then
+the only threshold used will be <code class="docutils literal notranslate"><span class="pre">fixed_th[&quot;all&quot;]</span></code>. This parameter is ignored if <code class="docutils literal notranslate"><span class="pre">regression</span></code>
+is True;</p></li>
 <li><p><strong>shared_th</strong> – if True, the binarization of the predictions is made using the same threshold
 for all cohorts. The threshold used is the one computed for the entire dataset. If False,
 a different threshold is computed for each cohort;</p></li>
@@ -237,6 +246,42 @@ and <code class="docutils literal notranslate"><span class="pre">th_dict</span><
     </p>
   </div>
 </div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/cohort/case_study/decoupled_class/case_1.html">
+          <span class="std std-ref">Decoupled Classifiers Case Study 1</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/cohort/case_study/decoupled_class/case_2.html">
+          <span class="std std-ref">Decoupled Classifiers Case Study 2</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
+<div class="sphx-glr-thumbcontainer">
+  <div class="figure align-center">
+    <img alt="thumbnail" src="../_static/no_image.png" />
+    <p class="caption">
+      <span class="caption-text">
+        <a class="reference internal" href="../notebooks/cohort/case_study/decoupled_class/case_3.html">
+          <span class="std std-ref">Decoupled Classifiers Case Study 3</span>
+        </a>
+      </span>
+    </p>
+  </div>
+</div>
 <div class="sphx-glr-clear"></div></section>
 </section>
 
@@ -244,7 +289,7 @@ and <code class="docutils literal notranslate"><span class="pre">th_dict</span><
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../notebooks/cohort/case_study/case_3.html" class="btn btn-neutral float-left" title="Cohort Case Study 3" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../notebooks/cohort/case_study/decoupled_class/case_3.html" class="btn btn-neutral float-left" title="Decoupled Classifiers Case Study 3" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="../utils/utils.html" class="btn btn-neutral float-right" title="Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
