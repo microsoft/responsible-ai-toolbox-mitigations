@@ -1,11 +1,31 @@
 from abc import ABC, abstractmethod
 from typing import Union, Any
+from copy import deepcopy
+from sklearn.base import BaseEstimator, is_classifier
 
-import random
 import pandas as pd
 import numpy as np
 
 
+class DataFrameInfo:
+    def __init__(self, df: pd.DataFrame = None):
+        self.df = df
+        self.columns = None
+        if df is not None:
+            if type(df) == pd.core.series.Series:
+                self.columns = deepcopy(df.name)
+            else:
+                self.columns = deepcopy(df.columns)
+                self.shape = deepcopy(df.shape)
+
+    def clear_df_mem(self):
+        del self.df
+        self.df = None
+
+
+# -----------------------------------
+# -----------------------------------
+# -----------------------------------
 class DataProcessing(ABC):
     """
     Base class for all classes present in the dataprocessing module
@@ -31,7 +51,7 @@ class DataProcessing(ABC):
     def __init__(self, verbose: bool = True):
         self.verbose = verbose
         self.label_col_name = None
-        self.y = None
+        self.y_info = DataFrameInfo()
         self.column_type = self.COL_NAME
         self.in_pipe = False
 
@@ -196,18 +216,18 @@ class DataProcessing(ABC):
         if df is not None:
             df = self._fix_col_transform(df)
             error = False
-            if len(df.columns) != len(self.df.columns):
+            if len(df.columns) != len(self.df_info.columns):
                 error = True
             if not error:
                 for col in df.columns:
-                    if col not in self.df.columns:
+                    if col not in self.df_info.columns:
                         error = True
                         break
             if error:
                 raise ValueError(
                     "ERROR: the data frame passed to the transform method does not "
                     + "follow the same structure as the one used during the fit method. "
-                    + f"The data frame used during the fit method had the following columns: {self.df.columns}. "
+                    + f"The data frame used during the fit method had the following columns: {self.df_info.columns}. "
                     + f"\nThe data frame passed to the transform method has the following columns: {df.columns}."
                 )
 
@@ -257,7 +277,7 @@ class DataProcessing(ABC):
         return self.col_index_to_name[column_index]
 
     # -----------------------------------
-    def _check_error_col_list(self, df: pd.DataFrame, col_list: list, col_var_name: str):
+    def _check_error_col_list(self, df_columns: list, col_list: list, col_var_name: str):
         """
         For a given dataset df, check if all column names in col_list are present
         in df. col_list can be a list of column names of column indexes. If one of
@@ -265,7 +285,7 @@ class DataProcessing(ABC):
         the col_list parameter is made up of integer values (indices) and the dataframe
         has column names, return a new column list using the column names instead.
 
-        :param df: the dataframe that should be checked;
+        :param df_columns: the columns present in the dataframe that should be checked;
         :param col_list: a list of column names or column indexes;
         :param col_var_name: a name that identifies where the error occurred (if a
             ValueError is raised). This method can be called from many child classes,
@@ -284,7 +304,7 @@ class DataProcessing(ABC):
 
         if col_list == []:
             self.do_nothing = True
-        elif df is not None:
+        elif df_columns is not None:
             if type(col_list[0]) != int and type(col_list[0]) != str:
                 raise ValueError(f"ERROR: '{col_var_name}' must be a list of strings or a list of integers.")
 
@@ -294,7 +314,7 @@ class DataProcessing(ABC):
                 else:
                     col_list = [str(val) for val in col_list]
 
-            missing = [value for value in col_list if value not in df.columns]
+            missing = [value for value in col_list if value not in df_columns]
             if missing != []:
                 err_msg = (
                     f"ERROR: at least one of the columns provided in the '{col_var_name}' param is "
@@ -405,16 +425,16 @@ class DataProcessing(ABC):
     # -----------------------------------
     def _set_df(self, df: Union[pd.DataFrame, np.ndarray], require_set: bool = False):
         """
-        Sets the current dataset self.df using a new dataset df. If both
-        self.df and df are None, then a ValueError is raised. df can be None
-        if a valid self.df has already been set beforehand.
+        Sets the current dataset self.df_info using a new dataset df. If both
+        self.df_info and df are None, then a ValueError is raised. df can be None
+        if a valid self.df_info has already been set beforehand.
 
         :param df: the full dataset;
         :param require_set: a boolean value indicating if the df parameter must
             be a valid dataframe or not. If true and df is None, an error is raised.
         """
         self._check_error_df(df)
-        if self.df is None and df is None and require_set:
+        if self.df_info.df is None and df is None and require_set:
             raise ValueError(
                 "ERROR: dataframe not provided. Provide the dataframe "
                 + "through the class constructor or through the fit() method."
@@ -422,7 +442,8 @@ class DataProcessing(ABC):
         if df is not None:
             if isinstance(df, np.ndarray):
                 df = self._numpy_array_to_df(df)
-            self.df = self._fix_num_col(df)
+            df_temp = self._fix_num_col(df)
+            self.df_info = DataFrameInfo(df_temp)
 
     # -----------------------------------
     def _set_df_mult(
@@ -434,7 +455,7 @@ class DataProcessing(ABC):
         require_set: bool = False,
     ):
         """
-        Sets the current dataset self.df and the current label column self.y.
+        Sets the current dataset self.df_info and the current label column self.y_info.
         This method is reserved for classes that require a label column. Otherwise,
         use the _set_df method. For the current method, first it is checked which
         input scheme is used by the user using the  _check_df_input_format method
@@ -462,32 +483,28 @@ class DataProcessing(ABC):
         input_scheme = self._check_df_input_format(df, label_col, X, y)
         if input_scheme == self.INPUT_DF:
             df, label_col = self._fix_num_col(df, label_col)
-            self.df = df.drop(columns=[label_col])
-            self.y = df[label_col]
+            X = df.drop(columns=[label_col])
+            self.df_info = DataFrameInfo(X)
+            self.y_info = DataFrameInfo(df[label_col])
             self.input_scheme = input_scheme
             self.label_col_name = label_col
         elif input_scheme == self.INPUT_XY:
             X = self._fix_num_col(X)
 
-            self.df = X
-            self.y = y
+            self.df_info = DataFrameInfo(X)
+            self.y_info = DataFrameInfo(y)
 
-            if type(self.y) == pd.core.series.Series or type(self.y) == pd.DataFrame:
-                if type(self.y) == pd.core.series.Series:
-                    self.label_col_name = self.y.name
-                else:
-                    self.label_col_name = self.y.columns[0]
-                    self.y = self.y[self.label_col_name]
+            # At this point, self.y_info.df is either a dataframe or a pd.Series object
+            if type(self.y_info.df) == pd.core.series.Series:
+                self.label_col_name = self.y_info.columns
             else:
-                label_col_name = self.DEFAULT_LABEL_NAME
-                while label_col_name in self.df.columns:
-                    label_col_name += str(random.randint([0, 9]))
-                self.label_col_name = label_col_name
+                self.label_col_name = self.y_info.columns[0]
+                new_y = self.y_info.df[self.label_col_name]
+                self.y_info = DataFrameInfo(new_y)
 
             self.input_scheme = input_scheme
-        self.df_org = self.df
 
-        if (self.df is None or self.y is None) and require_set:
+        if (self.df_info.df is None or self.y_info.df is None) and require_set:
             raise ValueError(
                 "ERROR: dataframe not provided. Provide the dataframe through the 'df' and "
                 + "'label_col' parameters or through the 'X' and 'y' parameters during the "
@@ -597,7 +614,7 @@ class DataProcessing(ABC):
             transform_pipe = []
         if type(transform_pipe) != list:
             raise ValueError("ERROR: 'transform_pipe' must be a list of transform objects.")
-        if transform_pipe == [] and self.df is not None:
+        if transform_pipe == [] and self.df_info.df is not None:
             transform_pipe = self._create_default_transforms()
         self.transform_pipe = transform_pipe
         self._check_transforms()
@@ -698,3 +715,59 @@ class DataProcessing(ABC):
                 df = transform._inverse_transform(df)
 
         return df
+
+    # -----------------------------------
+    def _get_base_estimator(self):
+        """
+        Returns the default estimator that should be used. This base
+        estimator is only used if the user doesn't provide any estimator
+        through the estimator parameter.
+        """
+        pass
+
+    # -----------------------------------
+    def _check_regression(self):
+        if self.regression is not None or self.y_info.df is None:
+            return
+
+        self.regression = False
+        if "float" in self.y_info.df.dtype.name:
+            self.regression = True
+
+    # -----------------------------------
+    def _set_regression_based_on_estimator(self):
+        self.regression = True
+        if is_classifier(self.estimator):
+            self.regression = False
+
+    # -----------------------------------
+    def _set_estimator(self):
+        """
+        Sets the self.estimator attribute based on the estimator passed by
+        the user through the estimator parameter. If estimator is None, then
+        a default estimator is used (implemented in the abstract _get_base_estimator
+        method). Otherwise, the estimator is checked to see if it is an estimator
+        from the sklearn library. If not, an error is raised, since only sklearn
+        estimators are allowed.
+        """
+        if self.estimator is None:
+            if self.regression is not None:
+                self.estimator = self._get_base_estimator()
+        else:
+            if not isinstance(self.estimator, BaseEstimator):
+                raise ValueError("ERROR: Expected 'estimator' to be a SKLearn classifier or regressor.")
+
+            is_class = is_classifier(self.estimator)
+            if self.regression is not None:
+                if self.regression and is_class:
+                    raise ValueError(
+                        "ERROR: Expected a regression model (regression = True), but instead got a "
+                        + f"classifier model ({self.estimator.__class__.__name__})"
+                    )
+                if not self.regression and not is_class:
+                    raise ValueError(
+                        "ERROR: Expected a classification model (regression = False), but instead got a "
+                        + f"regression model ({self.estimator.__class__.__name__})"
+                    )
+            else:
+                self._set_regression_based_on_estimator()

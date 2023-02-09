@@ -3,7 +3,7 @@
 Cohort Case Studies
 ===================
 
-Here is a set of case study scenarios where we use the **CohortManager** class.
+Here is a set of case study scenarios where we use the **CohortManager** class and the **DecoupledClass** class.
 
 
 .. nbgallery::
@@ -13,3 +13,6 @@ Here is a set of case study scenarios where we use the **CohortManager** class.
    ../notebooks/cohort/case_study/case_2
    ../notebooks/cohort/case_study/case_3
    ../notebooks/cohort/case_study/integration_raiwidgets
+   ../notebooks/cohort/case_study/decoupled_class/case_1
+   ../notebooks/cohort/case_study/decoupled_class/case_2
+   ../notebooks/cohort/case_study/decoupled_class/case_3

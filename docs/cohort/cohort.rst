@@ -10,5 +10,7 @@ for each of the existing cohorts.
 
    cohort_definition
    cohort_manager
+   cohort_handler
+   decoupled_class
    utils
 

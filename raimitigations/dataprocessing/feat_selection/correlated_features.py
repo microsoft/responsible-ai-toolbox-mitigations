@@ -13,7 +13,7 @@ import researchpy as rp
 
 from .selector import FeatureSelection
 from ..encoder import EncoderOrdinal
-from ...utils.data_utils import get_cat_cols, ordinal_to_onehot, err_float_01
+from ...utils.data_utils import get_cat_cols, ordinal_to_onehot, err_float_01, freedman_diaconis
 
 
 """
@@ -52,25 +52,6 @@ def _get_exact_matches(col1: list, col2: list):
 
 
 # -----------------------------------
-def freedman_diaconis(data: pd.Series):
-    """
-    Computes the optimal number of bins for a set of data using the
-    Freedman Diaconis rule.
-
-    :param data: the data column used to compute the number of bins.
-    """
-    data = np.asarray(data, dtype=np.float_)
-    iqr = stats.iqr(data, rng=(25, 75), scale=1.0, nan_policy="omit")
-    N = data.size
-    bw = (2 * iqr) / np.power(N, 1 / 3)
-
-    min_val, max_val = data.min(), data.max()
-    datrng = max_val - min_val
-    result = int((datrng / bw) + 1)
-    return result
-
-
-# -----------------------------------
 class CorrelatedFeatures(FeatureSelection):
     """
     Concrete class that measures the correlation between variables
@@ -106,11 +87,6 @@ class CorrelatedFeatures(FeatureSelection):
         values (depending on the approach). If no transformations are provided, a set
         of default transformations will be used, which depends on the feature selection
         approach (subclass dependent);
-
-    :param in_place: indicates if the original dataset will be saved internally
-        (``df_org``) or not. If True, then the feature selection transformation is saved
-        over the original dataset. If False, the original dataset is saved separately
-        (default value);
 
     :param cor_features: a list of the column names or indexes that should have their
         correlations checked. If None, all columns are checked for correlations, where
@@ -334,7 +310,6 @@ class CorrelatedFeatures(FeatureSelection):
         X: Union[pd.DataFrame, np.ndarray] = None,
         y: Union[pd.DataFrame, np.ndarray] = None,
         transform_pipe: list = None,
-        in_place: bool = False,
         cor_features: list = None,
         method_num_num: list = ["spearman"],
         num_corr_th: float = NUM_COR_TH,
@@ -358,7 +333,7 @@ class CorrelatedFeatures(FeatureSelection):
         compute_exact_matches: bool = True,
         verbose: bool = True,
     ):
-        super().__init__(df, label_col, X, y, transform_pipe, in_place, verbose)
+        super().__init__(df, label_col, X, y, transform_pipe, verbose)
         self.cor_features = None
         self._set_numerical_corr_param(method_num_num, num_corr_th, num_pvalue_th)
         self._set_num_cat_corr_param(
@@ -535,14 +510,14 @@ class CorrelatedFeatures(FeatureSelection):
         if cor_features is not None:
             self.cor_features = cor_features
 
-        if self.df is not None:
+        if self.df_info.df is not None:
             if self.cor_features is None:
-                self.cor_features = self.df.columns.values.tolist()
+                self.cor_features = self.df_info.columns.values.tolist()
             else:
-                self.cor_features = self._check_error_col_list(self.df, self.cor_features, "cor_features")
+                self.cor_features = self._check_error_col_list(self.df_info.columns, self.cor_features, "cor_features")
 
-            cat_col = get_cat_cols(self.df)
-            self.feature_types = dict((feat, str) if feat in cat_col else (feat, int) for feat in self.df.columns)
+            cat_col = get_cat_cols(self.df_info.df)
+            self.feature_types = dict((feat, str) if feat in cat_col else (feat, int) for feat in self.df_info.columns)
 
     # -----------------------------------
     def _num_num_correlation(self, num_x: pd.Series, num_y: pd.Series):
@@ -969,7 +944,7 @@ class CorrelatedFeatures(FeatureSelection):
                 y_type = self.feature_types[feat_y]
 
                 # Create a temporary dataframe and drop all rows with Nan
-                df_temp = self.df[[feat_x, feat_y]]
+                df_temp = self.df_info.df[[feat_x, feat_y]]
                 df_temp = df_temp.dropna()
                 if df_temp.shape[0] == 0:
                     self.corr_dict[feat_x][feat_y] = {self.TYPE_CORR_KEY: self.TYPE_CORR_CC, self.FINAL_CORR_KEY: False}
@@ -1300,14 +1275,14 @@ class CorrelatedFeatures(FeatureSelection):
         Steps for running the fit method for the current class.
         """
         if self.tie_method == "missing":
-            self.missing_count = self.df.isna().sum()
+            self.missing_count = self.df_info.df.isna().sum()
         elif self.tie_method == "var":
-            self.dispersion_index = self.df.std(numeric_only=True) / (
-                self.df.max(numeric_only=True) - self.df.min(numeric_only=True)
+            self.dispersion_index = self.df_info.df.std(numeric_only=True) / (
+                self.df_info.df.max(numeric_only=True) - self.df_info.df.min(numeric_only=True)
             )
-            self.feat_nunique = self.df.nunique()
+            self.feat_nunique = self.df_info.df.nunique()
         else:
-            self.feat_nunique = self.df.nunique()
+            self.feat_nunique = self.df_info.df.nunique()
         self._set_possible_cor_features()
         self._build_correlation_summary()
         self._build_auxiliary_dicts()
@@ -1323,12 +1298,12 @@ class CorrelatedFeatures(FeatureSelection):
         information on this approach).
         """
         feat_remove = self._get_features_to_remove()
-        if self.df is None:
+        if not self.fitted and self.df_info.df is None:
             raise ValueError(
                 "ERROR: trying to set the selected features without providing a dataset. "
                 + "Use the fit method prior to getting the selected features."
             )
-        features = [feat for feat in self.df.columns if feat not in feat_remove]
+        features = [feat for feat in self.df_info.columns if feat not in feat_remove]
         return features
 
     # -----------------------------------

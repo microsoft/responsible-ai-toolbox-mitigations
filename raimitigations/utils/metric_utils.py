@@ -37,6 +37,12 @@ class MetricNames:
     TH_PR = "th_pr_rc"
     TH = "th"
     FINAL_PRED = "y_pred_final"
+    TH_LIST = "th_tested"
+    PROBLEM_TYPE = "problem_type"
+
+    BIN_CLASS = "bin"
+    MULTI_CLASS = "multi"
+    REGRESSION = "reg"
 
 
 # ----------------------------------------
@@ -82,6 +88,7 @@ def _roc_evaluation(y: np.ndarray, y_pred: np.ndarray):
         problem, 'th' will be None;
     :rtype: tuple
     """
+    th = None
     # Binary classification
     if y_pred.shape[1] <= 2:
         if y_pred.shape[1] == 1:
@@ -103,7 +110,7 @@ def _roc_evaluation(y: np.ndarray, y_pred: np.ndarray):
         roc_auc = roc_auc_score(y_temp, y_pred, average="weighted", multi_class="ovo")
         best_th = None
 
-    return roc_auc, best_th
+    return roc_auc, best_th, th
 
 
 # -----------------------------------
@@ -169,7 +176,7 @@ def probability_to_class(prediction: np.ndarray, th: float):
 
 # -----------------------------------
 def _get_precision_recall_fscore(y: Union[np.ndarray, list], y_pred: Union[np.ndarray, list]):
-    precision, recall, f1, sup = precision_recall_fscore_support(y, y_pred)
+    precision, recall, f1, _ = precision_recall_fscore_support(y, y_pred, warn_for=tuple())
     precision = np.mean(precision)
     recall = np.mean(recall)
     f1 = np.mean(f1)
@@ -179,16 +186,19 @@ def _get_precision_recall_fscore(y: Union[np.ndarray, list], y_pred: Union[np.nd
 # -----------------------------------
 def _get_precision_recall_th(y, y_pred):
     if y_pred.shape[1] > 2:
-        return None
+        return None, None
     if y_pred.shape[1] == 1:
         y_pred_temp = y_pred[:, 0]
     else:
         y_pred_temp = y_pred[:, 1]
     precision, recall, thresholds = precision_recall_curve(y, y_pred_temp)
+
+    np.seterr(invalid="ignore")
+
     fscore = (2 * precision * recall) / (precision + recall)
     index = np.argmax(fscore)
     best_th = thresholds[index]
-    return best_th
+    return best_th, thresholds
 
 
 # ----------------------------------------
@@ -208,6 +218,7 @@ def _get_classification_metrics(
     y_pred: np.ndarray,
     best_th_auc: bool = True,
     fixed_th: float = None,
+    return_th_list: bool = False,
 ):
     """
     Given a set of true labels (y) and predicted labels (y_pred), compute a series
@@ -239,30 +250,39 @@ def _get_classification_metrics(
         the threshold is computed using the precision x recall graph. This parameter is ignored
         if 'fixed_th' is a value different from None;
     :param fixed_th: a value between [0, 1] that should be used as the threshold for classification
-        tasks.
+        tasks;
+    :param return_th_list: returns the list of thresholds tested (be it using the ROC curve, or the
+        precision and recall curve).
     :return: a dictionary with multiple classification metrics (check the description above
         for more details);
     :param rtype: dict
     """
     probability = _check_if_probability_pred(y_pred)
+    problem_type = MetricNames.BIN_CLASS
     if probability:
-        roc_auc, th_roc = _roc_evaluation(y, y_pred)
+        roc_auc, th_roc, th_list_roc = _roc_evaluation(y, y_pred)
         y_float = y.astype(np.float64)
         y_pred_float = y_pred.astype(np.float64)
         loss = log_loss(y_float, y_pred_float)
-        th_pr_rc = _get_precision_recall_th(y, y_pred_float)
+        th_pr_rc, th_list_prrc = _get_precision_recall_th(y, y_pred_float)
         th = th_roc
+        th_list = th_list_roc
         if not best_th_auc:
             th = th_pr_rc
+            th_list = th_list_prrc
         if fixed_th is not None:
             err_float_01(fixed_th, "fixed_th")
             th = fixed_th
         y_pred = probability_to_class(y_pred, th)
 
+        if th is None:
+            problem_type = MetricNames.MULTI_CLASS
+
     precision_sup, recall_sup, f1_sup = _get_precision_recall_fscore(y, y_pred)
     acc = accuracy_score(y, y_pred)
 
     results = {
+        MetricNames.PROBLEM_TYPE: problem_type,
         MetricNames.ACC_KEY: acc,
         MetricNames.PREC_KEY: precision_sup,
         MetricNames.RECALL_KEY: recall_sup,
@@ -276,6 +296,9 @@ def _get_classification_metrics(
         results[MetricNames.TH_PR] = th_pr_rc
         results[MetricNames.TH] = th
         results[MetricNames.FINAL_PRED] = y_pred
+
+    if return_th_list:
+        results[MetricNames.TH_LIST] = th_list
 
     return results
 
@@ -308,6 +331,7 @@ def _get_regression_metrics(y: np.ndarray, y_pred: np.ndarray):
         MetricNames.RMSE_KEY: rmse,
         MetricNames.MAE_KEY: mae,
         MetricNames.R2_KEY: r2,
+        MetricNames.PROBLEM_TYPE: MetricNames.REGRESSION,
     }
 
     return results
@@ -320,6 +344,7 @@ def get_metrics(
     regression: bool = False,
     best_th_auc: bool = True,
     fixed_th: float = None,
+    return_th_list: bool = False,
 ):
     """
     Evaluates the performance of a prediction array based on its true values. This function computes
@@ -339,7 +364,9 @@ def get_metrics(
     :param best_th_auc: if True, the best threshold is computed using ROC graph. If False,
         the threshold is computed using the precision x recall graph;
     :param fixed_th: a value between [0, 1] that should be used as the threshold for classification
-        tasks.
+        tasks;
+    :param return_th_list: returns the list of thresholds tested (be it using the ROC curve, or the
+        precision and recall curve).
     :return: a dictionary with the following metrics:
 
         * **Classification:** ROC AUC, Precision, Recall, F1, acuracy, log loss, threshold used, and
@@ -354,5 +381,5 @@ def get_metrics(
     if regression:
         results = _get_regression_metrics(y, y_pred)
     else:
-        results = _get_classification_metrics(y, y_pred, best_th_auc, fixed_th)
+        results = _get_classification_metrics(y, y_pred, best_th_auc, fixed_th, return_th_list)
     return results

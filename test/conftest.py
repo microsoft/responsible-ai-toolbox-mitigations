@@ -4,8 +4,10 @@ from py.xml import html
 import pytest
 import numpy as np
 import torch
+import uci_dataset as database
 
 from raimitigations.utils import create_dummy_dataset
+from raimitigations.dataprocessing import BasicImputer
 
 
 SEED = 42
@@ -130,6 +132,39 @@ def df_multiclass():
     )
     return df
 
+# -----------------------------------
+@pytest.fixture
+def df_multiclass1():
+    _set_seed()
+    df = create_dummy_dataset(
+        samples=5000,
+        n_classes=3,
+        n_features=6,
+        n_num_num=3,
+        n_cat_num=3,
+        n_cat_cat=0,
+        num_num_noise=[0.01, 0.02],
+        pct_change=[0.06, 0.15],
+    )
+    return df
+
+
+# -----------------------------------
+@pytest.fixture
+def df_multiclass2():
+    _set_seed()
+    df = create_dummy_dataset(
+        samples=2000,
+        n_classes=3,
+        n_features=6,
+        n_num_num=2,
+        n_cat_num=2,
+        n_cat_cat=0,
+        num_num_noise=[0.01, 0.02],
+        pct_change=[0.03, 0.05],
+    )
+    return df
+
 
 # -----------------------------------
 @pytest.fixture
@@ -156,6 +191,33 @@ def df_full_nan():
         if col != "label":
             df[col] = add_nan(df[col], 0.1)
     return df
+
+# -----------------------------------
+@pytest.fixture
+def df_breast_cancer():
+    df = database.load_breast_cancer()
+    df["Class"] = df["Class"].replace({"recurrence-events": 1, "no-recurrence-events": 0})
+    imputer = BasicImputer(
+        col_impute=["breast-quad"],
+        specific_col={
+            "breast-quad":{"missing_values": np.nan, "strategy": "most_frequent", "fill_value": None}
+        },
+        verbose=False
+    )
+    imputer.fit(df)
+    df = imputer.transform(df)
+    return df
+
+# -----------------------------------
+@pytest.fixture
+def label_name_bc():
+    return "Class"
+
+
+# -----------------------------------
+@pytest.fixture
+def label_index_bc():
+    return 0
 
 # -----------------------------------
 @pytest.fixture

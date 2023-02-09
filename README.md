@@ -10,10 +10,10 @@ This repo is a part of the [Responsible AI Toolbox](https://github.com/microsoft
 <img src="./docs/imgs/responsible-ai-toolbox-mitigations.png" alt="ResponsibleAIToolboxMitigationsOverview" width="750"/>
 
 There are three main modules covered in this library:
-- **Data Balance Analysis** (Exploratory Data Analysis): include metrics that help to determine how balanced is your dataset.
 - **Data Processing** (Data Enhancements): include several transformer classes that aim to change or mitigate certain aspects of a dataset.
 The goal of this module is to provide a unified interface for different mitigation methods scattered around
 multiple machine learning libraries, such as scikit-learn, mlxtend, sdv, among others.
+- **Data Balance Analysis** (Exploratory Data Analysis): include metrics that help to determine how balanced is your dataset.
 - **Cohort** (managing cohorts): include a set of classes that allow users to handle cohorts of data by creating customized pipelines
 for each cohort.
 
@@ -85,6 +85,7 @@ Here is a set of tutorial notebooks that aim to explain how to manage cohorts.
 - [Creating Single Cohorts](notebooks/cohort/cohort_definition.ipynb)
 - [Creating Different Pipelines for each Cohort](notebooks/cohort/cohort_manager.ipynb)
 - [Different Pre-processing Scenarios using cohorts](notebooks/cohort/cohort_manager_scenarios.ipynb)
+- [Using Decoupled Classifiers](notebooks/cohort/decoupled.ipynb)
 
 Here is a set of case study notebooks showing how creating customized dataprocessing pipelines for each
 cohort can help in some scenarios.
@@ -94,6 +95,9 @@ cohort can help in some scenarios.
 - [Cohort Case Study 1 - Using RAI Toolbox](notebooks/cohort/case_study/case_1_dashboard.ipynb)
 - [Cohort Case Study 2](notebooks/cohort/case_study/case_2.ipynb)
 - [Cohort Case Study 3](notebooks/cohort/case_study/case_3.ipynb)
+- [Decoupled Classifier Case 1](notebooks/cohort/case_study/decoupled_class/case_1)
+- [Decoupled Classifier Case 2](notebooks/cohort/case_study/decoupled_class/case_2)
+- [Decoupled Classifier Case 3](notebooks/cohort/case_study/decoupled_class/case_3)
 
 
 

@@ -96,7 +96,7 @@ class EncoderOHE(DataEncoding):
         OneHotEncoder object, and (iii) create the new column names that will
         be associated with the one-hot encoding columns.
         """
-        df_valid = self._get_df_subset(self.df, self.col_encode)
+        df_valid = self._get_df_subset(self.df_info.df, self.col_encode)
         self.encoder.fit(df_valid)
         self.new_col_names = self._get_new_col_name()
 

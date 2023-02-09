@@ -16,7 +16,7 @@ def _run_assertions(new_df, cor_feat, include_label=True):
         f"cor_feat.get_selected_features() = {cor_feat.get_selected_features()}"
     )
 
-    fixed_cols = [col for col in cor_feat.df.columns.to_list() if col not in cor_feat.cor_features]
+    fixed_cols = [col for col in cor_feat.df_info.columns.to_list() if col not in cor_feat.cor_features]
     assert utils.check_fixed_col(fixed_cols, cor_feat.get_selected_features()), (
         f"The selected features does not include the fixed features.\n"
         f"fixed features = {fixed_cols}\n"
@@ -72,7 +72,6 @@ def _get_object_list(df=None, label_col=None, X=None, y=None, use_index=True):
         label_col=label_col,
         X=X,
         y=y,
-        in_place=True,
         cor_features=cor_features,
         method_num_num=["kendall", "pearson"],
         method_cat_cat=None,

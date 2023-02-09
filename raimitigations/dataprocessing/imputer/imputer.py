@@ -4,7 +4,7 @@ from typing import Union, Tuple
 import numpy as np
 import pandas as pd
 
-from ..data_processing import DataProcessing
+from ..data_processing import DataProcessing, DataFrameInfo
 from ..encoder.ordinal import EncoderOrdinal
 from ...utils.data_utils import (
     get_cat_cols,
@@ -33,7 +33,7 @@ class DataImputer(DataProcessing):
     # -----------------------------------
     def __init__(self, df: Union[pd.DataFrame, np.ndarray] = None, col_impute: list = None, verbose: bool = True):
         super().__init__(verbose)
-        self.df = None
+        self.df_info = DataFrameInfo()
         self.fitted = False
         self._set_df(df)
         self.col_impute = col_impute
@@ -54,7 +54,7 @@ class DataImputer(DataProcessing):
             return
 
         self.none_status = True
-        self.col_impute = self.df.columns.to_list()
+        self.col_impute = self.df_info.columns.to_list()
 
     # -----------------------------------
     def _reset_columns_to_impute(self, df: Union[pd.DataFrame, np.ndarray]):
@@ -84,7 +84,7 @@ class DataImputer(DataProcessing):
 
     # -----------------------------------
     def _check_valid_input(self):
-        self.col_impute = self._check_error_col_list(self.df, self.col_impute, "col_impute")
+        self.col_impute = self._check_error_col_list(self.df_info.columns, self.col_impute, "col_impute")
 
         if self.do_nothing:
             self.print_message("WARNING: No columns with NaN values identified. Nothing to be done.")
@@ -118,8 +118,8 @@ class DataImputer(DataProcessing):
         :return: resulting pandas dataframe or np.ndarray
         :rtype: pd.dataframe or np.ndarray
         """
-        all_cat_cols = get_cat_cols(self.df)
-        all_num_cols = [value for value in list(self.df) if value not in all_cat_cols]
+        all_cat_cols = get_cat_cols(self.df_info.df)
+        all_num_cols = [value for value in list(self.df_info.df) if value not in all_cat_cols]
 
         df_valid = pd.DataFrame()
 
@@ -130,7 +130,7 @@ class DataImputer(DataProcessing):
                 + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline "
                 + "class and call your own encoder before calling this subclass for imputation.",
             )
-            df_valid = self._get_df_subset(self.df, all_num_cols)
+            df_valid = self._get_df_subset(self.df_info.df, all_num_cols)
 
         else:
             self.print_message(
@@ -139,9 +139,9 @@ class DataImputer(DataProcessing):
                 + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class "
                 + "and call your own encoder before calling this subclass for imputation.",
             )
-            self.ordinal_encoder = EncoderOrdinal(df=self.df, col_encode=all_cat_cols, unknown_value=np.nan)
+            self.ordinal_encoder = EncoderOrdinal(df=self.df_info.df, col_encode=all_cat_cols, unknown_value=np.nan)
             self.ordinal_encoder.fit()
-            df_valid = self.ordinal_encoder.transform(self.df)
+            df_valid = self.ordinal_encoder.transform(self.df_info.df)
 
         self.valid_cols = list(df_valid)
 
@@ -275,7 +275,7 @@ class DataImputer(DataProcessing):
     def fit(self, df: Union[pd.DataFrame, np.ndarray] = None, y: Union[pd.Series, np.ndarray] = None):
         """
         Default fit method for all imputation methods that inherits from the current
-        class. The following steps are executed: (i) set the self.df attribute,
+        class. The following steps are executed: (i) set the self.df_info attribute,
         (ii) set the list of columns to impute (or create a default one if needed),
         (iii) check if the dataset provided is valid (contains all columns that
         should be imputed), and (iv) call the concrete class's specific ``_fit`` method.
@@ -290,6 +290,7 @@ class DataImputer(DataProcessing):
         self._check_valid_input()
         self._fit()
         self.fitted = True
+        self.df_info.clear_df_mem()
         return self
 
     # -----------------------------------

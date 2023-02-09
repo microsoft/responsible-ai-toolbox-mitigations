@@ -7,7 +7,7 @@ from sdv.tabular.base import BaseTabularModel
 from sdv.tabular import GaussianCopula, CTGAN, CopulaGAN, TVAE
 from sdv.sampling import Condition
 
-from ..data_processing import DataProcessing
+from ..data_processing import DataProcessing, DataFrameInfo
 
 
 class Synthesizer(DataProcessing):
@@ -47,11 +47,6 @@ class Synthesizer(DataProcessing):
         (depending on the approach). If no transformations are provided, a set of default
         transformations will be used, which depends on the feature selection approach
         (subclass dependent);
-
-    :param in_place: indicates if the original dataset will be saved internally (``df_org``)
-        or not. If True, then the feature selection transformation is saved over the
-        original dataset. If False, the original dataset is saved separately (default
-        value);
 
     :param model: the model that should be used to generate the synthetic instances. Can
         be a string or an object that inherits from :class:`sdv.tabular.base.BaseTabularModel`:
@@ -96,7 +91,6 @@ class Synthesizer(DataProcessing):
         X: pd.DataFrame = None,
         y: pd.DataFrame = None,
         transform_pipe: list = None,
-        in_place: bool = False,
         model: Union[BaseTabularModel, str] = "ctgan",
         epochs: int = DEFAULT_EPOCHS,
         save_file: str = None,
@@ -104,10 +98,8 @@ class Synthesizer(DataProcessing):
         verbose: bool = True,
     ):
         super().__init__(verbose)
-        self.df = None
-        self.df_org = None
-        self.y = None
-        self.in_place = in_place
+        self.df_info = DataFrameInfo()
+        self.y_info = DataFrameInfo()
         self.fitted = False
         self.transform_pipe = transform_pipe
         self.model = model
@@ -137,7 +129,7 @@ class Synthesizer(DataProcessing):
     ):
         """
         Overwrites the _set_df_mult from the BaseClass. Here the label column is added to
-        the self.df dataset.
+        the self.df_info dataset.
 
         :param df: the full dataset;
         :param label_col: the name or index of the label column;
@@ -153,9 +145,9 @@ class Synthesizer(DataProcessing):
                 + "The provided label_col parameter is an integer. Please provide the column name as string."
             )
         super()._set_df_mult(df, label_col, X, y, require_set)
-        if self.df is not None:
-            self.df = self.df.copy()
-            self.df[self.label_col_name] = self.y
+        if self.df_info.df is not None:
+            self.df_info.df = self.df_info.df.copy()
+            self.df_info.df[self.label_col_name] = self.y_info.df
 
     # -----------------------------------
     def _set_save_file(self, save_file: str):
@@ -233,10 +225,9 @@ class Synthesizer(DataProcessing):
         Apply the transforms provided in the transform_pipe parameter of the constructor method.
         """
         self._set_transforms(self.transform_pipe)
-        self._fit_transforms(self.df, self.y)
-        self.df = self._apply_transforms(self.df)
-        if self.in_place:
-            self.df_org = self.df
+        self._fit_transforms(self.df_info.df, self.y_info.df)
+        new_df = self._apply_transforms(self.df_info.df)
+        self.df_info = DataFrameInfo(new_df)
 
     # -----------------------------------
     def _save_model(self):
@@ -276,16 +267,18 @@ class Synthesizer(DataProcessing):
         :param label_col: the name or index of the label column;
         """
         self._set_df_mult(df, label_col, X, y, require_set=True)
-        self._check_valid_df(self.df)
+        self._check_valid_df(self.df_info.df)
 
         self._preprocess_dataset()
 
         loaded = self._load_model()
         if not loaded:
-            self.model.fit(self.df)
+            self.model.fit(self.df_info.df)
             self._save_model()
 
         self.fitted = True
+        self.df_info.clear_df_mem()
+        self.y_info.clear_df_mem()
         return self
 
     # -----------------------------------

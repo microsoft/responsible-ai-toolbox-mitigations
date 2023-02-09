@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import pytest
+from raimitigations.dataprocessing.data_processing import DataFrameInfo
 from raimitigations.dataprocessing import IterativeDataImputer
 from sklearn.linear_model import LinearRegression
 from sklearn.experimental import enable_iterative_imputer  # noqa # pylint: disable=unused-import
@@ -101,7 +102,7 @@ def test_col_name(df_full_nan):
     df_edited['CN_0_num_0'] = df['CN_0_num_0'].replace({"val0_0": "val0_2", "val0_1": "val0_4"})
     for obj in obj_list:
         if obj == obj_list[-1]:
-            obj.df = df
+            obj.df_info = DataFrameInfo(df)
             _run_main_commands(df_edited, obj, df_in_fit=False)
         else:
             _run_main_commands(df, obj, df_in_fit=True)

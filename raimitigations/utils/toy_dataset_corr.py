@@ -74,7 +74,7 @@ def _add_cor_num_num_var_det(df: pd.DataFrame, n_correlated: int, num_num_noise:
         features. This dataframe must be created using the 'create_num_var' function;
     :param n_correlated: the number of correlated numerical features that should be
         created;
-    :param num_num_noise:  a list with two values, where num_num_noise[0] < num_num_noise[1]
+    :param num_num_noise: a list with two values, where num_num_noise[0] < num_num_noise[1]
         and both values must be between [0, 1]. The ith new numerical feature is created
         by copying the ith existing numerical feature in the dataset df and adding a noise
         to it. The standard deviation used for generating the noise is a random value
@@ -187,6 +187,11 @@ def create_dummy_dataset(
         constituted by a numerical and a categorical feature;
     :param n_cat_cat: the number of pairs of correlated features, wherein each pair both
         features are categorical;
+    :param num_num_noise: a list with two values, where num_num_noise[0] < num_num_noise[1]
+        and both values must be between [0, 1]. The ith new numerical feature is created
+        by copying the ith existing numerical feature in the dataset df and adding a noise
+        to it. The standard deviation used for generating the noise is a random value
+        between num_num_noise[0] and num_num_noise[1];
     :param pct_change: a list with two values, where pct_change[0] < pct_change[1]
         and both values must be between [0, 1]. For each categorical feature created, a
         fraction of p values will be swapped randomly. Here, p is a value selected
