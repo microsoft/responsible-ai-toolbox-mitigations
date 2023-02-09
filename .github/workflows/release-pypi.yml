@@ -47,6 +47,14 @@ jobs:
           python-version: 3.9
 
       # -------------------
+      # Install basic packages (not associated with the repo)
+      - name: update and upgrade pip, setuptools, wheel and twine
+        run: |
+           pip install --upgrade pip
+           pip install --upgrade setuptools wheel twine pip-tools
+           pip install configparser semver
+
+      # -------------------
       # Update the package version by bumping the version to the next
       - name: Bump version
         run: |
