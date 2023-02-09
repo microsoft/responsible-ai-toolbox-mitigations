@@ -24,7 +24,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Managing cohorts" href="../notebooks/cohort/cohort_manager.html" />
-    <link rel="prev" title="Defining a Cohort" href="../notebooks/cohort/cohort_definition.html" /> 
+    <link rel="prev" title="CohortHandler" href="cohort_handler.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -62,8 +62,8 @@
 <li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="cohort.html">Cohort</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="cohort_definition.html">CohortDefinition</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">CohortManager</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cohort_handler.html">CohortHandler</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">CohortManager</a></li>
 <li class="toctree-l4"><a class="reference internal" href="decoupled_class.html">DecoupledClass</a></li>
 <li class="toctree-l4"><a class="reference internal" href="utils.html">Cohort Utils</a></li>
 </ul>
@@ -360,7 +360,13 @@ subsets into a single dataset.</p>
 
 </dd></dl>
 
-<section id="examples">
+<p class="rubric">Class Diagram</p>
+<div class="graphviz"><img src="../_images/inheritance-a346f30c2ea2c2081eb75ab3c53240ef059a5370.png" alt="Inheritance diagram of raimitigations.cohort.CohortManager" usemap="#inheritance6082ae817f" class="inheritance graphviz" /></div>
+<map id="inheritance6082ae817f" name="inheritance6082ae817f">
+<area shape="rect" id="node3" href="../dataprocessing/dataprocessing.html#raimitigations.dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node2" href="cohort_handler.html#raimitigations.cohort.CohortHandler" target="_top" title="Abstract class that manages multiple cohorts." alt="" coords="296,5,412,31"/>
+<area shape="rect" id="node4" href="#raimitigations.cohort.CohortManager" target="_top" title="Concrete class that manages multiple cohort pipelines that are" alt="" coords="460,5,583,31"/>
+</map><section id="examples">
 <span id="cohort-manager-ex"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>
@@ -467,7 +473,7 @@ subsets into a single dataset.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../notebooks/cohort/cohort_definition.html" class="btn btn-neutral float-left" title="Defining a Cohort" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cohort_handler.html" class="btn btn-neutral float-left" title="CohortHandler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="../notebooks/cohort/cohort_manager.html" class="btn btn-neutral float-right" title="Managing cohorts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

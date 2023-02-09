@@ -1,0 +1,6 @@
+<map id="inheritance7afd28ca29" name="inheritance7afd28ca29">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node3" href="../dataprocessing/dataprocessing.html#raimitigations.dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node2" href="cohort_handler.html#raimitigations.cohort.CohortHandler" target="_top" title="Abstract class that manages multiple cohorts." alt="" coords="296,5,412,31"/>
+<area shape="rect" id="node4" href="#raimitigations.cohort.DecoupledClass" target="_top" title="Concrete class that trains different models over different subsets of data (cohorts)." alt="" coords="460,5,587,31"/>
+</map>

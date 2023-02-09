@@ -26,7 +26,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Decoupled Classifiers" href="../notebooks/cohort/decoupled.html" />
-    <link rel="prev" title="CohortHandler" href="cohort_handler.html" /> 
+    <link rel="prev" title="Cohort Case Study 3" href="../notebooks/cohort/case_study/case_3.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -64,8 +64,8 @@
 <li class="toctree-l2 current"><a class="reference internal" href="intro.html#api">API</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="cohort.html">Cohort</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="cohort_definition.html">CohortDefinition</a></li>
-<li class="toctree-l4"><a class="reference internal" href="cohort_manager.html">CohortManager</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cohort_handler.html">CohortHandler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cohort_manager.html">CohortManager</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">DecoupledClass</a></li>
 <li class="toctree-l4"><a class="reference internal" href="utils.html">Cohort Utils</a></li>
 </ul>
@@ -477,7 +477,13 @@ predictions of each cohort, or a dictionary with the predictions for each cohort
 
 </dd></dl>
 
-<section id="examples">
+<p class="rubric">Class Diagram</p>
+<div class="graphviz"><img src="../_images/inheritance-7717b5bea0c3643330623556aded00fbf9e17093.png" alt="Inheritance diagram of raimitigations.cohort.DecoupledClass" usemap="#inheritance7afd28ca29" class="inheritance graphviz" /></div>
+<map id="inheritance7afd28ca29" name="inheritance7afd28ca29">
+<area shape="rect" id="node3" href="../dataprocessing/dataprocessing.html#raimitigations.dataprocessing.DataProcessing" target="_top" title="Base class for all classes present in the dataprocessing module" alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node2" href="cohort_handler.html#raimitigations.cohort.CohortHandler" target="_top" title="Abstract class that manages multiple cohorts." alt="" coords="296,5,412,31"/>
+<area shape="rect" id="node4" href="#raimitigations.cohort.DecoupledClass" target="_top" title="Concrete class that trains different models over different subsets of data (cohorts)." alt="" coords="460,5,587,31"/>
+</map><section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 </div>
@@ -536,7 +542,7 @@ predictions of each cohort, or a dictionary with the predictions for each cohort
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="cohort_handler.html" class="btn btn-neutral float-left" title="CohortHandler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../notebooks/cohort/case_study/case_3.html" class="btn btn-neutral float-left" title="Cohort Case Study 3" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="../notebooks/cohort/decoupled.html" class="btn btn-neutral float-right" title="Decoupled Classifiers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
