@@ -7,7 +7,7 @@ from sdv.tabular.base import BaseTabularModel
 from sdv.tabular import GaussianCopula, CTGAN, CopulaGAN, TVAE
 from sdv.sampling import Condition
 
-from ..data_processing import DataProcessing
+from ..data_processing import DataProcessing, DataFrameInfo
 
 
 class Synthesizer(DataProcessing):
@@ -47,11 +47,6 @@ class Synthesizer(DataProcessing):
         (depending on the approach). If no transformations are provided, a set of default
         transformations will be used, which depends on the feature selection approach
         (subclass dependent);
-
-    :param in_place: indicates if the original dataset will be saved internally (``df_org``)
-        or not. If True, then the feature selection transformation is saved over the
-        original dataset. If False, the original dataset is saved separately (default
-        value);
 
     :param model: the model that should be used to generate the synthetic instances. Can
         be a string or an object that inherits from :class:`sdv.tabular.base.BaseTabularModel`:
@@ -96,7 +91,6 @@ class Synthesizer(DataProcessing):
         X: pd.DataFrame = None,
         y: pd.DataFrame = None,
         transform_pipe: list = None,
-        in_place: bool = False,
         model: Union[BaseTabularModel, str] = "ctgan",
         epochs: int = DEFAULT_EPOCHS,
         save_file: str = None,
@@ -104,10 +98,8 @@ class Synthesizer(DataProcessing):
         verbose: bool = True,
     ):
         super().__init__(verbose)
-        self.df = None
-        self.df_org = None
-        self.y = None
-        self.in_place = in_place
+        self.df_info = DataFrameInfo()
+        self.y_info = DataFrameInfo()
         self.fitted = False
         self.transform_pipe = transform_pipe
         self.model = model
@@ -118,12 +110,26 @@ class Synthesizer(DataProcessing):
         self._set_save_file(save_file)
 
     # -----------------------------------
+    def _get_fit_input_type(self):
+        return self.FIT_INPUT_XY
+
+    # -----------------------------------
+    def _works_with_cohort_manager(self):
+        """
+        Overwrites this method from the base class. Returns False, since the
+        transform() method of this class returns a dataset with the features
+        and the label column, which is not expected when using the CohortManager
+        class.
+        """
+        return False
+
+    # -----------------------------------
     def _set_df_mult(
         self, df: pd.DataFrame, label_col: str, X: pd.DataFrame, y: pd.DataFrame, require_set: bool = False
     ):
         """
         Overwrites the _set_df_mult from the BaseClass. Here the label column is added to
-        the self.df dataset.
+        the self.df_info dataset.
 
         :param df: the full dataset;
         :param label_col: the name or index of the label column;
@@ -139,9 +145,9 @@ class Synthesizer(DataProcessing):
                 + "The provided label_col parameter is an integer. Please provide the column name as string."
             )
         super()._set_df_mult(df, label_col, X, y, require_set)
-        if self.df is not None:
-            self.df = self.df.copy()
-            self.df[self.label_col_name] = self.y
+        if self.df_info.df is not None:
+            self.df_info.df = self.df_info.df.copy()
+            self.df_info.df[self.label_col_name] = self.y_info.df
 
     # -----------------------------------
     def _set_save_file(self, save_file: str):
@@ -157,10 +163,6 @@ class Synthesizer(DataProcessing):
         if type(save_file) != str:
             raise ValueError("ERROR: save_file should be a string.")
         self.save_file = save_file
-
-    # -----------------------------------
-    def _get_fit_input_type(self):
-        return self.FIT_INPUT_XY
 
     # -----------------------------------
     def _check_model_param(self):
@@ -223,10 +225,9 @@ class Synthesizer(DataProcessing):
         Apply the transforms provided in the transform_pipe parameter of the constructor method.
         """
         self._set_transforms(self.transform_pipe)
-        self._fit_transforms(self.df, self.y)
-        self.df = self._apply_transforms(self.df)
-        if self.in_place:
-            self.df_org = self.df
+        self._fit_transforms(self.df_info.df, self.y_info.df)
+        new_df = self._apply_transforms(self.df_info.df)
+        self.df_info = DataFrameInfo(new_df)
 
     # -----------------------------------
     def _save_model(self):
@@ -266,16 +267,18 @@ class Synthesizer(DataProcessing):
         :param label_col: the name or index of the label column;
         """
         self._set_df_mult(df, label_col, X, y, require_set=True)
-        self._check_valid_df(self.df)
+        self._check_valid_df(self.df_info.df)
 
         self._preprocess_dataset()
 
         loaded = self._load_model()
         if not loaded:
-            self.model.fit(self.df)
+            self.model.fit(self.df_info.df)
             self._save_model()
 
         self.fitted = True
+        self.df_info.clear_df_mem()
+        self.y_info.clear_df_mem()
         return self
 
     # -----------------------------------
@@ -458,53 +461,6 @@ class Synthesizer(DataProcessing):
             conditions_obj = Condition(conditions, num_rows=n_samples)
             samples = self.model.sample_conditions(conditions=[conditions_obj], max_tries_per_batch=200)
         return samples
-
-    # -----------------------------------
-    def _arrange_transform_df(self, df: pd.DataFrame = None, X: pd.DataFrame = None, y: pd.DataFrame = None):
-        """
-        Arranges the data provided to the transform method to a standardized pattern, which is:
-        a dataframe where the label column is named after the attribute ``self.label_col_name``, and
-        the remaining columns are the feature columns. If the dataset is provided through the df
-        parameter, no changes are made, but df must follow the same structure as the dataset
-        provided during :meth:`fit`. If the data is provided through ``X`` and ``y``, then a new dataset
-        is created such that it contains all columns in ``X`` plus the label column ``y``.
-
-        :param df: the full dataset to be transformed, which contains the label column
-            (specified during :meth:`fit`);
-        :param X: contains only the features of the dataset, that is, does not contain the
-            label column;
-        :param y: contains only the label column of the dataset to be transformed. If the
-            user provides ``df``, ``X`` and ``y`` must be left as None. Alternatively, if the user
-            provides (X, y), ``df`` must be left as None;
-        """
-        input_mode = self.INPUT_DF
-        if df is not None:
-            df = self._fix_col_transform(df)
-            error = False
-            if len(df.columns) != len(self.df.columns):
-                error = True
-            if not error:
-                for col in df.columns:
-                    if col not in self.df.columns:
-                        error = True
-                        break
-            if error:
-                raise ValueError(
-                    "ERROR: the data frame passed to the transform method does not "
-                    + "follow the same structure as the one used during the fit method. "
-                    + f"The data frame used during the fit method had the following columns: {self.df.columns}. "
-                    + f"\nThe data frame passed to the transform method has the following columns: {df.columns}."
-                )
-
-        elif X is not None and y is not None:
-            df = X.copy()
-            df[self.label_col_name] = y
-            df = self._fix_col_transform(df)
-            input_mode = self.INPUT_XY
-        else:
-            input_mode = self.INPUT_NULL
-
-        return df, input_mode
 
     # -----------------------------------
     def transform(

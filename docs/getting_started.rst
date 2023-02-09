@@ -455,10 +455,84 @@ Mitchell).
 .. _ratio: https://en.wikipedia.org/wiki/Likelihood_function#Likelihood_ratio
 .. _T-test: https://en.wikipedia.org/wiki/Student's_t-test
 
+
+:ref:`Cohort Management<cohort>`
+--------------------------------
+
+The :ref:`Cohort Management<cohort>` feature allows managing multiple cohorts using a simple interface.
+This is an important tool for guaranteeing fairness across different cohorts, as shown in the scenarios
+described here. The :ref:`cohort.CohortManager<cohort_manager>` allows the application of different data
+processing pipelines over each cohort, and therefore represents a powerful tool when dealing with sensitive
+cohorts.
+
+.. admonition:: Example: Imputing missing values for each cohort separately
+
+    Consider the following situation: a dataset that shows several details of similar cars from a specific brand.
+    The column ``price`` stores the price of a car model in US Dollars, while the column ``country`` indicates
+    the country where that price was observed. Due to the differences in economy and local currency, it is expected
+    that the price of these models will vary greatly based on the ``country`` column. Suppose now that we want to
+    impute the missing values in the ``price`` columns using the mean value of that column. Given that the prices
+    differ greatly based on the different country cohorts, then it is expected that this imputation approach
+    will end up inserting a lot of noise into the ``price`` column. Instead, we could use the mean value of the
+    ``price`` column based on each cohort, that is: compute the mean ``price`` value for each cohort and impute
+    the missing values based on the mean value of the cohort to which the instance belongs. This will
+    greatly reduce the noise inserted by the imputation method. This can be easily achieved by using the
+    :ref:`cohort.CohortManager<cohort_manager>` class.
+
+Cohort-based estimators
+#######################
+
+The :ref:`Cohort<cohort>` module allows applying different mitigations to each cohort separately, as previously highlighted.
+But it allows us to go beyond that: it also allows creating full pipelines, including an estimator, for each cohort, while
+using a familiar and easy-to-use interface. If we are faced with a dataset that has a set of cohorts that behave very
+differently from each other, we are able of creating a custom pipeline for each cohort individually, which means that the
+pipeline is fitted separately for each cohort. This might help achieving more fair results, that is, the performance for each
+cohort is similar when compared to the other cohorts.
+
+.. admonition:: Tutorials and Examples
+
+    Check the :ref:`Gallery<gallery>` page for some tutorials and examples of how to use the :ref:`Cohort<cohort>` module.
+
+    * The :ref:`Tutorial - Cohort<gallery_cohort>` section has a set of tutorial notebooks that shows all of the features implemented
+      in the different classes inside the :ref:`Cohort<cohort>` module, as well as when and how to use each one of them.
+    * The :ref:`Tutorial - Using the Cohort Module<gallery_cohort_case>` sections presents a set of notebooks where we analyze a datasets
+      that present some behavioral differences between different cohorts, and we use the :ref:`Cohort<cohort>` module to create different
+      pre-processing pipelines for each cohort, and in some cases, we even create different estimators for each cohort.
+
+    **Note that this module is more useful in scenarios where there are considerable behavioral differences between cohorts.**
+    If that is not the case, then applying mitigations and training a single estimator over the entire dataset might prove the
+    best approach, instead of creating different pipelines for each cohort.
+
+:ref:`Decoupled Classifiers<decoupled_class>`
+---------------------------------------------
+
+This class implements techniques for learning different estimators (models) for different cohorts based on the approach
+presented in `"Decoupled classifiers for group-fair and efficient machine learning." <https://www.microsoft.com/en-us/research/publication/decoupled-classifiers-for-group-fair-and-efficient-machine-learning/>`_
+(*Cynthia Dwork, Nicole Immorlica, Adam Tauman Kalai, and Max Leiserson. Conference on fairness, accountability and transparency. PMLR, 2018*). The approach
+searches and combines cohort-specific classifiers to optimize for different definitions of group fairness and can be used
+as a post-processing step on top of any model class. The current implementation in this library supports only binary
+classification and we welcome contributions that can extend these ideas for multi-class and regression problems.
+
+The basis decoupling algorithm can be summarized in two steps:
+
+    * A different family of classifiers is trained on each cohort of interest. The algorithm partitions the training data
+      for each cohort and learns a classifier for each cohort. Each cohort-specific trained classifier results in a family
+      of potential classifiers to be used after the classifier output is adjusted based on different thresholds on the model
+      output. For example, depending on which errors are most important to the application (e.g. false positives vs. false
+      negatives for binary classification), thresholding the model prediction at different values of the model output (e.g.
+      likelihood, softmax) will result in different classifiers. This step generates a whole family of classifiers based on
+      different thresholds.
+
+    * Among the cohort-specific classifiers search for one representative classifier for each cohort such that a joint loss
+      is optimized. This step searches through all combinations of classifiers from the previous step to find the combination
+      that best optimizes a definition of a joint loss across all cohorts. While there are different definitions of such a joint
+      loss, this implementation currently supports definitions of the Balanced Loss, L1 loss, and Demographic Parity as examples
+      of losses that focus on group fairness. More definitions of losses are described in the longer version of the paper.
+
 Get involved
 ------------
 
 In the future, we plan to integrate more functionalities around data and model-oriented mitigations. Some top-of-mind improvements for the team include bagging and
 boosting, better data synthesis, constrained optimizers, and handling data noise. If you would like to collaborate or contribute to any of these ideas, contact us
-at responsible-ai-toolbox@microsoft.com.
+at rai-toolbox@microsoft.com.
 

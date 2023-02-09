@@ -1,7 +1,7 @@
 from typing import Union
 import pandas as pd
 import numpy as np
-from sklearn.base import BaseEstimator, is_classifier
+from sklearn.base import BaseEstimator
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 import json
 from mlxtend.feature_selection import SequentialFeatureSelector as SFS
@@ -55,11 +55,6 @@ class SeqFeatSelection(FeatureSelection):
         (depending on the approach). If no transformations are provided, a set of default
         transformations will be used, which depends on the feature selection approach
         (subclass dependent);
-
-    :param in_place: indicates if the original dataset will be saved internally (df_org)
-        or not. If True, then the feature selection transformation is saved over the
-        original dataset. If False, the original dataset is saved separately (default
-        value);
 
     :param regression: if True and no estimator is provided, then create a default
         CatBoostRegressor. If False, a CatBoostClassifier is created instead. This parameter
@@ -128,7 +123,6 @@ class SeqFeatSelection(FeatureSelection):
         X: Union[pd.DataFrame, np.ndarray] = None,
         y: Union[pd.DataFrame, np.ndarray] = None,
         transform_pipe: list = None,
-        in_place: bool = False,
         regression: bool = None,
         estimator: BaseEstimator = None,
         n_feat: Union[int, str, tuple] = "best",
@@ -141,7 +135,7 @@ class SeqFeatSelection(FeatureSelection):
         n_jobs: int = 1,
         verbose: bool = True,
     ):
-        super().__init__(df, label_col, X, y, transform_pipe, in_place, verbose)
+        super().__init__(df, label_col, X, y, transform_pipe, verbose)
         self.cv = cv
         self.scoring = scoring
         self.forward = forward
@@ -170,7 +164,7 @@ class SeqFeatSelection(FeatureSelection):
             )
         if type(self.n_feat) == int:
             n_feat_invalid = False
-            if self.df is not None and self.n_feat >= self.df.shape[1]:
+            if self.df_info.df is not None and self.n_feat >= self.df_info.shape[1]:
                 n_feat_invalid = True
             if self.n_feat <= 0 or n_feat_invalid:
                 raise ValueError(
@@ -185,16 +179,16 @@ class SeqFeatSelection(FeatureSelection):
                 )
         elif type(self.n_feat) == tuple:
             error = False
-            if self.df is not None:
+            if self.df_info.df is not None:
                 if len(self.n_feat) != 2:
                     error = True
                 elif type(self.n_feat[0]) != int or type(self.n_feat[1]) != int:
                     error = True
                 elif self.n_feat[0] >= self.n_feat[1]:
                     error = True
-                elif self.n_feat[0] <= 0 or self.n_feat[0] >= self.df.shape[1]:
+                elif self.n_feat[0] <= 0 or self.n_feat[0] >= self.df_info.shape[1]:
                     error = True
-                elif self.n_feat[1] <= 0 or self.n_feat[1] >= self.df.shape[1]:
+                elif self.n_feat[1] <= 0 or self.n_feat[1] >= self.df_info.shape[1]:
                     error = True
                 if error:
                     raise ValueError(
@@ -225,7 +219,7 @@ class SeqFeatSelection(FeatureSelection):
                 + "should be present in the set of selected features."
             )
 
-        self.fixed_cols = self._check_error_col_list(self.df, self.fixed_cols, "fixed_cols")
+        self.fixed_cols = self._check_error_col_list(self.df_info.columns, self.fixed_cols, "fixed_cols")
 
         if type(self.n_feat) == int:
             if len(self.fixed_cols) >= self.n_feat:
@@ -256,6 +250,8 @@ class SeqFeatSelection(FeatureSelection):
                 self.scoring = "roc_auc"
                 if self.regression:
                     self.scoring = "r2"
+                elif self.y_info.df.nunique() > 2:
+                    self.scoring = "accuracy"
             return
 
         if self.scoring not in self.VALID_SCORING_CLASS and self.scoring not in self.VALID_SCORING_REG:
@@ -293,35 +289,6 @@ class SeqFeatSelection(FeatureSelection):
         return self.BASE_CLASSIFIER
 
     # -----------------------------------
-    def _set_estimator(self):
-        """
-        Sets the self.estimator attribute based on the estimator passed by
-        the user through the estimator parameter. If estimator is None, then
-        a default estimator is used (defined by BASE_CLASSIFIER and BASE_REGRESSOR).
-        Otherwise, the estimator is checked to see if it is an estimator from the
-        sklearn library. If not, an error is raised, since only sklearn estimators
-        are allowed.
-        """
-        if self.estimator is None:
-            if self.regression is not None:
-                self.estimator = self._get_base_estimator()
-        else:
-            if not isinstance(self.estimator, BaseEstimator):
-                raise ValueError("ERROR: Expected 'estimator' to be a SKLearn classifier or regressor.")
-            self.regression = True
-            if is_classifier(self.estimator):
-                self.regression = False
-
-    # -----------------------------------
-    def _check_regression(self):
-        if self.regression is not None:
-            return
-
-        self.regression = False
-        if "float" in self.y.dtype.name:
-            self.regression = True
-
-    # -----------------------------------
     def _run_feat_selection(self):
         """
         Runs the Sequential Feature Selection method using the
@@ -342,7 +309,7 @@ class SeqFeatSelection(FeatureSelection):
             n_jobs=self.njobs,
             fixed_features=self.fixed_cols,
         )
-        self.selector.fit(self.df, self.y)
+        self.selector.fit(self.df_info.df, self.y_info.df)
 
     # -----------------------------------
     def _save_json(self):

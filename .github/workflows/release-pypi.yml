@@ -44,15 +44,7 @@ jobs:
       # Setup environment in remote runner
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.8
-
-      # -------------------
-      # Install basic packages (not associated with the repo)
-      - name: update and upgrade pip, setuptools, wheel and twine
-        run: |
-           pip install --upgrade pip
-           pip install --upgrade setuptools wheel twine pip-tools
-           pip install configparser semver
+          python-version: 3.9
 
       # -------------------
       # Update the package version by bumping the version to the next
@@ -67,7 +59,8 @@ jobs:
       # package.__version__ will point to the previous version
       - name: Install current package
         run: |
-          pip install -e .
+          pip install --upgrade pip
+          pip install -e .[dev]
           pip list
 
       # -------------------
@@ -78,7 +71,7 @@ jobs:
       # -------------------
       # Build wheel
       - name: build wheel
-        run: python setup.py sdist bdist_wheel
+        run: python -m build
 
       # -------------------
       # Publish package to PyPi as ...

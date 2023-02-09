@@ -4,7 +4,7 @@ import seaborn as sns
 import raimitigations.dataprocessing as dp
 
 
-RESULT_KEYS = ["roc", "pr", "rc", "f1"]
+RESULT_KEYS = ["roc", "precision", "recall", "f1"]
 COL_METRIC = "Metric"
 COL_VALUE = "Value"
 COL_TEST = "Test Case"
@@ -163,7 +163,7 @@ def result_statistics(result_list):
 
     :param result_list: a list of result metrics. Each index
         in this list must be a list of result metrics returned
-        by the dataprocessing.train_model_fetch_results function.
+        by the utils.train_model_fetch_results function.
     """
     result_stat = {}
     for result in result_list:

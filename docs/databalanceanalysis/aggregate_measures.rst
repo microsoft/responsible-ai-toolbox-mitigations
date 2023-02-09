@@ -85,7 +85,7 @@ Pacific Islander]``)
 
    <br />
 
-.. automodule:: databalanceanalysis.aggregate_measures
+.. automodule:: raimitigations.databalanceanalysis.aggregate_measures
    :members:
    :undoc-members:
    :show-inheritance:

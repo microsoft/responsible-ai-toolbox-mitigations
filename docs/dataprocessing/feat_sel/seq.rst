@@ -1,13 +1,13 @@
 SeqFeatSelection
 ================
 
-.. autoclass:: dataprocessing.SeqFeatSelection
+.. autoclass:: raimitigations.dataprocessing.SeqFeatSelection
    :members:
    :show-inheritance:
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.SeqFeatSelection
+.. inheritance-diagram:: raimitigations.dataprocessing.SeqFeatSelection
      :parts: 1
 
 Example

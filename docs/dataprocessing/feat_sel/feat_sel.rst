@@ -8,7 +8,7 @@ features from a dataset. The difference between each feature selection approach 
 is computed. All the feature selection methods from the **dataprocessing** package are based on the abstract
 class presented below, called **FeatureSelection**.
 
-.. autoclass:: dataprocessing.FeatureSelection
+.. autoclass:: raimitigations.dataprocessing.FeatureSelection
    :members:
    :show-inheritance:
 
@@ -28,7 +28,7 @@ all of the methods previously shown.
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.CatBoostSelection dataprocessing.SeqFeatSelection dataprocessing.CorrelatedFeatures
+.. inheritance-diagram:: raimitigations.dataprocessing.CatBoostSelection raimitigations.dataprocessing.SeqFeatSelection raimitigations.dataprocessing.CorrelatedFeatures
      :parts: 1
 
 

@@ -1,0 +1,25 @@
+{
+    "name": "cohort",
+    "cohort_filter_list": [
+        {
+            "compositeFilters": [
+                {
+                    "column": "height(m)",
+                    "method": "in the range of",
+                    "arg": [
+                        1.1,
+                        1.7
+                    ]
+                },
+                {
+                    "column": "race",
+                    "method": "excludes",
+                    "arg": [
+                        "halfling"
+                    ]
+                }
+            ],
+            "operation": "and"
+        }
+    ]
+}

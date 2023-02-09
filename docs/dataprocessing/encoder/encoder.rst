@@ -8,7 +8,7 @@ Encoders are responsible for encoding categorical features into numerical featur
 methods from the **dataprocessing** package are based on the abstract class presented below, called
 **DataEncoding**.
 
-.. autoclass:: dataprocessing.DataEncoding
+.. autoclass:: raimitigations.dataprocessing.DataEncoding
    :members:
    :show-inheritance:
 
@@ -25,7 +25,7 @@ the **DataEncoding** class, and thus, have access to all of the methods previous
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.EncoderOHE dataprocessing.EncoderOrdinal
+.. inheritance-diagram:: raimitigations.dataprocessing.EncoderOHE raimitigations.dataprocessing.EncoderOrdinal
      :parts: 1
 
 Examples

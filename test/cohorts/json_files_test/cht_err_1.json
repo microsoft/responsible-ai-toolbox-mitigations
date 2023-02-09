@@ -1,0 +1,11 @@
+{
+    "name": "Cohort True Y",
+    "cohort_filter_list":
+        [
+            {
+                "method": "includes",
+                "arg": [">50K"],
+                "column": "True Y"
+            }
+        ]
+}

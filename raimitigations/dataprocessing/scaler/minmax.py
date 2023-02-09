@@ -17,9 +17,9 @@ class DataMinMaxScaler(DataScaler):
     The user can also use a list of transformations using other non-scaler classes
     implemented in this library (:class:`~raimitigations.datapreprocessing.SeqFeatSelection`,
     :class:`~raimitigations.datapreprocessing.EncoderOHE., :class:`~raimitigations.datapreprocessing.DataImputer`, etc.).
-    For more details on how the :class:`~sklearn.preprocessing.MinMaxScaler` scales the data, check the official
-    documentation from :mod:`sklearn`:
-    https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html
+    For more details on how the :class:`~sklearn.preprocessing.MinMaxScaler` scales the data, check the `official
+    documentation from sklearn
+    <https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html>`_.
 
     :param scaler_obj: an object from the :class:`~sklearn.preprocessing.MinMaxScaler` class. This :mod:`sklearn`
         scaler will be used to perform the scaling process. If None, a :class:`~sklearn.preprocessing.MinMaxScaler`
@@ -37,6 +37,12 @@ class DataMinMaxScaler(DataScaler):
         list (``exclude_cols``), the categorical columns will be automatically identified
         and added into the ``exclude_cols`` list. If None, this parameter will be set
         automatically as being a list of all categorical variables in the dataset;
+
+    :param include_cols: list of the column names or indexes that should be
+        transformed, that is, a list of columns to be included in the dataset being
+        transformed. This parameter uses an inverse logic from the ``exclude_cols``, and
+        thus these two parameters shouldn't be used at the same time. The user must
+        used either the ``include_cols``, or the ``exclude_cols``, or neither of them;
 
     :param transform_pipe: a list of transformations to be used as a pre-processing
         pipeline. Each transformation in this list must be a valid subclass of the

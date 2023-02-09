@@ -1,0 +1,24 @@
+{
+    "name": "cohort_0",
+    "cohort_filter_list": [
+        {
+            "compositeFilters": [
+                {
+                    "column": "CN_0_num_0",
+                    "method": "includes",
+                    "arg": [
+                        "val0_1"
+                    ]
+                },
+                {
+                    "column": "num_0",
+                    "method": "greater",
+                    "arg": [
+                        0.0
+                    ]
+                }
+            ],
+            "operation": "and"
+        }
+    ]
+}

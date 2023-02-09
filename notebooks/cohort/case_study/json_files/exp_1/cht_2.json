@@ -1,0 +1,12 @@
+{
+    "name": "cohort_2",
+    "cohort_filter_list": [
+        {
+            "column": "race",
+            "method": "includes",
+            "arg": [
+                " Black"
+            ]
+        }
+    ]
+}

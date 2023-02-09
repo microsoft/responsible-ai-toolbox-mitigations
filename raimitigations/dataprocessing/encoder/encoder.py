@@ -4,8 +4,8 @@ from typing import Union
 import numpy as np
 import pandas as pd
 
-from ..data_processing import DataProcessing
-from ..data_utils import get_cat_cols
+from ..data_processing import DataProcessing, DataFrameInfo
+from ...utils.data_utils import get_cat_cols
 
 
 class DataEncoding(DataProcessing):
@@ -25,11 +25,26 @@ class DataEncoding(DataProcessing):
     # -----------------------------------
     def __init__(self, df: Union[pd.DataFrame, np.ndarray] = None, col_encode: list = None, verbose: bool = True):
         super().__init__(verbose)
-        self.df = None
+        self.df_info = DataFrameInfo()
         self._set_df(df)
         self.col_encode = col_encode
         self.do_nothing = False
         self.fitted = False
+
+    # -----------------------------------
+    def _get_fit_input_type(self):
+        return self.FIT_INPUT_DF
+
+    # -----------------------------------
+    def _is_cohort_merging_compatible(self):
+        """
+        Overwrites this method from the base class. Returns False, since running
+        an encoding method over each cohort individually may result in each cohort
+        having different feature-encoding mappings, or different features (in the
+        case of one-hot encoding). In those cases, the cohorts become incompatible
+        between each other.
+        """
+        return False
 
     # -----------------------------------
     def _set_column_to_encode(self):
@@ -42,7 +57,7 @@ class DataEncoding(DataProcessing):
         if self.col_encode is not None:
             return
 
-        cat_col = get_cat_cols(self.df)
+        cat_col = get_cat_cols(self.df_info.df)
         self.col_encode = cat_col
         self.print_message(
             f"No columns specified for encoding. These columns "
@@ -51,13 +66,10 @@ class DataEncoding(DataProcessing):
 
     # -----------------------------------
     def _check_valid_input(self):
-        self.col_encode = self._check_error_col_list(self.df, self.col_encode, "col_encode")
+        self.col_encode = self._check_error_col_list(self.df_info.columns, self.col_encode, "col_encode")
 
     # -----------------------------------
-    def _get_fit_input_type(self):
-        return self.FIT_INPUT_DF
 
-    # -----------------------------------
     @abstractmethod
     def _fit(self):
         """
@@ -84,6 +96,7 @@ class DataEncoding(DataProcessing):
         self._check_valid_input()
         self._fit()
         self.fitted = True
+        self.df_info.clear_df_mem()
         return self
 
     # -----------------------------------

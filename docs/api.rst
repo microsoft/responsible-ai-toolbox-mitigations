@@ -6,6 +6,8 @@ API reference
 .. toctree::
    :maxdepth: 2
 
-   databalanceanalysis/databalanceanalysis
    dataprocessing/dataprocessing
+   databalanceanalysis/databalanceanalysis
+   cohort/cohort
+   utils/utils
 

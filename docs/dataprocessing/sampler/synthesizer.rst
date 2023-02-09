@@ -3,13 +3,13 @@
 Synthesizer
 ===========
 
-.. autoclass:: dataprocessing.Synthesizer
+.. autoclass:: raimitigations.dataprocessing.Synthesizer
    :members:
    :show-inheritance:
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.Synthesizer
+.. inheritance-diagram:: raimitigations.dataprocessing.Synthesizer
      :parts: 1
 
 

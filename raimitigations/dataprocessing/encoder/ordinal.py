@@ -91,12 +91,12 @@ class EncoderOrdinal(DataEncoding):
                         new_key = self._get_column_from_index(key)
                     else:
                         new_key = str(key)
-                    if new_key not in self.df.columns:
+                    if new_key not in self.df_info.df.columns:
                         raise ValueError(
                             f"ERROR: the key '{key}' from the categories parameter is not a valid "
                             + f"column index in the dataset provided."
                         )
-                elif key not in self.df.columns:
+                elif key not in self.df_info.columns:
                     raise ValueError(
                         f"ERROR: the key '{key}' from the categories parameter is not a valid "
                         + f"column name in the dataset provided."
@@ -104,7 +104,7 @@ class EncoderOrdinal(DataEncoding):
 
                 # check if the values provided to the current key are
                 # actually in the unique values of the desired column
-                subset = self._get_df_subset(self.df, [key])
+                subset = self._get_df_subset(self.df_info.df, [key])
                 unique = subset.iloc[:, 0].unique()
                 for value in self.categories[key]:
                     if value not in unique:
@@ -192,13 +192,13 @@ class EncoderOrdinal(DataEncoding):
     def _fit(self):
         """
         Steps for running the fit method for the current class. Starts by
-        (i) setting the dataset (self.df), (ii) checking if the categories
+        (i) setting the dataset (self.df_info), (ii) checking if the categories
         parameter is valid, (iii) generate the categories_list, required
         by the OrdinalEncoding class, followed by (iv) the creation of the
         OrdinalEncoding object, and (v) the call to the fit method of the
         OrdinalEncoding object.
         """
-        df_valid = self._get_df_subset(self.df, self.col_encode)
+        df_valid = self._get_df_subset(self.df_info.df, self.col_encode)
         self._check_categories()
         self._auto_complete_categories(df_valid)
         self._create_ordinal_encoder()
@@ -246,8 +246,8 @@ class EncoderOrdinal(DataEncoding):
           - **"values":** the unique values encountered in the column;
           - **"labels":** the labels assigned to each of the unique values.
             the list from the "values" key is aligned with this
-            list, that is, mapping[column]["labels][i] is the
-            label assigned to the value mapping[column]["values][i].
+            list, that is, mapping[column]["labels"][i] is the
+            label assigned to the value mapping[column]["values"][i].
           - **"n_labels":** the number of labels. If unknown_err is set to False,
             this will account for the label for unknown values.
 

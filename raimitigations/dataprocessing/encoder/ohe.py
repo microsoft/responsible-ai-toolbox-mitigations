@@ -1,4 +1,5 @@
 from typing import Union
+import inspect
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
@@ -60,7 +61,12 @@ class EncoderOHE(DataEncoding):
             unk_err = "error"
         else:
             unk_err = "ignore"
-        self.encoder = OneHotEncoder(drop=drop, dtype=np.int32, sparse=False, handle_unknown=unk_err)
+
+        parameters = str(inspect.signature(OneHotEncoder))
+        if "sparse_output" in parameters:
+            self.encoder = OneHotEncoder(drop=drop, dtype=np.int32, sparse_output=False, handle_unknown=unk_err)
+        else:
+            self.encoder = OneHotEncoder(drop=drop, dtype=np.int32, sparse=False, handle_unknown=unk_err)
 
     # -----------------------------------
     def _get_new_col_name(self):
@@ -90,7 +96,7 @@ class EncoderOHE(DataEncoding):
         OneHotEncoder object, and (iii) create the new column names that will
         be associated with the one-hot encoding columns.
         """
-        df_valid = self._get_df_subset(self.df, self.col_encode)
+        df_valid = self._get_df_subset(self.df_info.df, self.col_encode)
         self.encoder.fit(df_valid)
         self.new_col_names = self._get_new_col_name()
 
@@ -109,10 +115,10 @@ class EncoderOHE(DataEncoding):
             columns in self.col_encode.
         """
         new_df = pd.DataFrame(ohe_data, columns=self.new_col_names)
+        new_df.index = org_df.index
 
         org_df.drop(columns=self.col_encode, inplace=True)
-        for col in self.new_col_names:
-            org_df[col] = new_df[col].values.tolist()
+        org_df = pd.concat([org_df, new_df], axis=1)
 
         return org_df
 
@@ -130,7 +136,7 @@ class EncoderOHE(DataEncoding):
         return new_df
 
     # -----------------------------------
-    def get_encoded_columns(self):
+    def get_one_hot_columns(self):
         """
         Returns a list with the column names or column indices of the one-hot
         encoded columns. These are the columns created by the one-hot encoder

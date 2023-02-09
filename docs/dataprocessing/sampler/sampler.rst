@@ -23,7 +23,7 @@ abstract class. Below is a list of the sampling methods present in the **datapro
 
 .. rubric:: Class Diagram
 
-.. inheritance-diagram:: dataprocessing.Rebalance dataprocessing.Synthesizer
+.. inheritance-diagram:: raimitigations.dataprocessing.Rebalance raimitigations.dataprocessing.Synthesizer
      :parts: 1
 
 

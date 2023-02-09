@@ -9,11 +9,13 @@ This repo is a part of the [Responsible AI Toolbox](https://github.com/microsoft
 <p align="center">
 <img src="./docs/imgs/responsible-ai-toolbox-mitigations.png" alt="ResponsibleAIToolboxMitigationsOverview" width="750"/>
 
-There are two main functions covered in this library:
-- **Data Balance Analysis** (Exploratory Data Analysis): covering metrics that help to determine how balanced is your dataset.
-- **Data Processing** (Data Enhancements): covering several transformer classes that aim to change or mitigate certain aspects of a dataset.
+There are three main modules covered in this library:
+- **Data Processing** (Data Enhancements): include several transformer classes that aim to change or mitigate certain aspects of a dataset.
 The goal of this module is to provide a unified interface for different mitigation methods scattered around
 multiple machine learning libraries, such as scikit-learn, mlxtend, sdv, among others.
+- **Data Balance Analysis** (Exploratory Data Analysis): include metrics that help to determine how balanced is your dataset.
+- **Cohort** (managing cohorts): include a set of classes that allow users to handle cohorts of data by creating customized pipelines
+for each cohort.
 
 
 In this library, we take a **targeted approach to mitigating errors** in Machine Learning models. This is complementary and different from the traditional blanket approaches which aim at maximizing a single-score performance number, such as overall accuracy, by merely increasing the size of traning data or model architecture. Since blanket approaches are often costly but also ineffective for improving the model in areas of poorest performance, with targeted approaches to model improvement we focus the improvement efforts in areas previously identified to have more errors and their underlying diagnoses of error. For example, if a practitioner has identified that the model is underperforming for a cohort of interest by using Error Analysis in the Responsible AI Dashboard, they may also continue the debugging process by finding out through Data Balance Analysis and find out that there is class imbalance for this particular cohort. To mitigate the issue, they then focus on improving class imbalance for the cohort of interest by using the Responsible AI Mitigations library. This and several other examples in the documentation of each mitigation function illustrate how targeted approaches may help practitioner best at mitigation giving them more control in the model improvement process.
@@ -21,13 +23,26 @@ In this library, we take a **targeted approach to mitigating errors** in Machine
 
 ## Installation
 
-Use the following pip command to install the Responsible AI Toolbox. Make sure you are using Python 3.7, 3.8, or 3.9.
+Use the following pip command to install the Responsible AI Toolbox. Make sure you are using Python 3.7, 3.8, or 3.9. If running in jupyter, please make sure to restart the jupyter kernel after installing. There are three installation options for the ``raimitigations`` package:
 
-If running in jupyter, please make sure to restart the jupyter kernel after installing.
+* To install the minimum dependencies, use:
 
 ```
 pip install raimitigations
 ```
+
+* To install the minimum dependencies + the packages required to run all of the notebooks in the ``notebooks/`` folder:
+
+```
+pip install raimitigations[all]
+```
+
+* To install all the dependencies used for development (such as ``pytest``, for example), use:
+
+```
+pip install raimitigations[dev]
+```
+
 ## Documentation
 
 To learn more about the supported dataset measurements and mitigation techniques covered in the **raimitigations** package, [please check out this documentation.](https://responsible-ai-toolbox-mitigations.readthedocs.io/en/latest/)
@@ -53,6 +68,7 @@ methods offered in the **dataprocessing** module.
 - [Identifying correlated features: tutorial](notebooks/dataprocessing/module_tests/feat_sel_corr_tutorial.ipynb)
 - [Data Rebalance using imblearn](notebooks/dataprocessing/module_tests/rebalance_imbl.ipynb)
 - [Data Rebalance using SDV](notebooks/dataprocessing/module_tests/rebalance_sdv.ipynb)
+- [Using scikit-learn's Pipeline](notebooks/dataprocessing/module_tests/pipeline_test.ipynb)
 
 Here is a set of case study scenarios where we use the transformations available in the **dataprocessing**
 module in order to train a model for a real-world dataset.
@@ -61,6 +77,27 @@ module in order to train a model for a real-world dataset.
 - [Case Study 1](notebooks/dataprocessing/case_study/case1.ipynb)
 - [Case Study 2](notebooks/dataprocessing/case_study/case2.ipynb)
 - [Case Study 3](notebooks/dataprocessing/case_study/case3.ipynb)
+
+## Handling Cohorts
+
+Here is a set of tutorial notebooks that aim to explain how to manage cohorts.
+
+- [Creating Single Cohorts](notebooks/cohort/cohort_definition.ipynb)
+- [Creating Different Pipelines for each Cohort](notebooks/cohort/cohort_manager.ipynb)
+- [Different Pre-processing Scenarios using cohorts](notebooks/cohort/cohort_manager_scenarios.ipynb)
+- [Using Decoupled Classifiers](notebooks/cohort/decoupled.ipynb)
+
+Here is a set of case study notebooks showing how creating customized dataprocessing pipelines for each
+cohort can help in some scenarios.
+
+- [Cohort Case Study 1](notebooks/cohort/case_study/case_1.ipynb)
+- [Cohort Case Study 1 - Rebalancing only specific cohorts](notebooks/cohort/case_study/case_1_rebalance.ipynb)
+- [Cohort Case Study 1 - Using RAI Toolbox](notebooks/cohort/case_study/case_1_dashboard.ipynb)
+- [Cohort Case Study 2](notebooks/cohort/case_study/case_2.ipynb)
+- [Cohort Case Study 3](notebooks/cohort/case_study/case_3.ipynb)
+- [Decoupled Classifier Case 1](notebooks/cohort/case_study/decoupled_class/case_1)
+- [Decoupled Classifier Case 2](notebooks/cohort/case_study/decoupled_class/case_2)
+- [Decoupled Classifier Case 3](notebooks/cohort/case_study/decoupled_class/case_3)
 
 
 
@@ -95,6 +132,14 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
+### Installing Using ``dev`` Mode
+
+After cloning this repo and moving to its root folder, install the package in editable mode with the development dependencies using:
+
+```console
+> pip install -e .[dev]
+```
+
 ### Pre-Commit
 
 This repository uses pre-commit hooks to guarantee that the code format is kept consistent. For development, make sure to
@@ -102,7 +147,8 @@ activate pre-commit before creating a pull request. Any code pushed to this repo
 Github Actions, so if pre-commit is not used when doing a commit, there is a chance that it fails in the format check workflow.
 Using pre-commit will avoid this.
 
-To use pre-commit with this repository, first install pre-commit:
+To use pre-commit with this repository, first install pre-commit (**NOTE:** when installing the package with the ``[dev]`` tag, the
+``pre-commit`` package will already be installed):
 
 ```console
 > pip install pre-commit
@@ -169,7 +215,7 @@ Any use of third-party trademarks or logos are subject to those third-party's po
 
 ## Research and Acknowledgements
 
-**Current Maintainers:** [Matheus Mendonça](https://github.com/mrfmendonca), [Dany Rouhana](https://github.com/danyrouh), [Mark Encarnación](https://github.com/markenc)
+**Current Maintainers:** [Marah Abdin](https://github.com/marah-abdin), [Matheus Mendonça](https://github.com/mrfmendonca), [Dany Rouhana](https://github.com/danyrouh), [Mark Encarnación](https://github.com/markenc)
 
 **Past Maintainers:** [Akshara Ramakrishnan](https://github.com/akshara-msft), [Irina Spiridonova](https://github.com/irinasp)
 

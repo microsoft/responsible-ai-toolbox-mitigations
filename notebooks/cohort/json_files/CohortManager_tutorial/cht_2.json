@@ -1,0 +1,72 @@
+{
+    "name": "cohort_2",
+    "cohort_filter_list": [
+        {
+            "compositeFilters": [
+                {
+                    "compositeFilters": [
+                        {
+                            "column": "CN_0_num_0",
+                            "method": "excludes",
+                            "arg": [
+                                "val0_1"
+                            ]
+                        },
+                        {
+                            "compositeFilters": [
+                                {
+                                    "column": "num_0",
+                                    "method": "less and equal",
+                                    "arg": [
+                                        0.0
+                                    ]
+                                },
+                                {
+                                    "column": "num_0",
+                                    "method": "equal",
+                                    "arg": [
+                                        NaN
+                                    ]
+                                }
+                            ],
+                            "operation": "or"
+                        }
+                    ],
+                    "operation": "or"
+                },
+                {
+                    "compositeFilters": [
+                        {
+                            "column": "CN_0_num_0",
+                            "method": "excludes",
+                            "arg": [
+                                "val0_0"
+                            ]
+                        },
+                        {
+                            "compositeFilters": [
+                                {
+                                    "column": "num_0",
+                                    "method": "less and equal",
+                                    "arg": [
+                                        0.0
+                                    ]
+                                },
+                                {
+                                    "column": "num_0",
+                                    "method": "equal",
+                                    "arg": [
+                                        NaN
+                                    ]
+                                }
+                            ],
+                            "operation": "or"
+                        }
+                    ],
+                    "operation": "or"
+                }
+            ],
+            "operation": "and"
+        }
+    ]
+}

@@ -4,8 +4,8 @@ from typing import Union
 import numpy as np
 import pandas as pd
 
-from ..data_processing import DataProcessing
-from ..data_utils import get_cat_cols
+from ..data_processing import DataProcessing, DataFrameInfo
+from ...utils.data_utils import get_cat_cols
 
 
 class DataScaler(DataProcessing):
@@ -27,7 +27,7 @@ class DataScaler(DataProcessing):
         and added into the ``exclude_cols`` list. If None, this parameter will be set
         automatically as being a list of all categorical variables in the dataset;
 
-    :param include_cols:  list of the column names or indexes that should be
+    :param include_cols: list of the column names or indexes that should be
         transformed, that is, a list of columns to be included in the dataset being
         transformed. This parameter uses an inverse logic from the ``exclude_cols``, and
         thus these two parameters shouldn't be used at the same time. The user must
@@ -68,7 +68,7 @@ class DataScaler(DataProcessing):
         verbose: bool = True,
     ):
         super().__init__(verbose)
-        self.df = None
+        self.df_info = DataFrameInfo()
         self.fitted = False
         self._set_df(df)
         self.exclude_cols = exclude_cols
@@ -96,21 +96,21 @@ class DataScaler(DataProcessing):
             if self.include_cols != []:
                 # fill the exclude_cols parameter with all column names or indices
                 # not present in the parameter include_cols
-                self.exclude_cols = [col for col in self.df.columns if col not in self.include_cols]
+                self.exclude_cols = [col for col in self.df_info.columns if col not in self.include_cols]
                 filters_err_msg = f"include_cols = {self.include_cols}"
 
-        cat_col = get_cat_cols(self.df)
+        cat_col = get_cat_cols(self.df_info.df)
         if self.exclude_cols is None:
             self.exclude_cols = cat_col
         else:
-            for col in self.df.columns:
+            for col in self.df_info.columns:
                 if col in cat_col and col not in self.exclude_cols:
                     self.exclude_cols.append(col)
 
         if filters_err_msg is None:
             filters_err_msg = f"exclude_cols = {self.exclude_cols}"
 
-        self.scale_col = [col for col in self.df.columns if col not in self.exclude_cols]
+        self.scale_col = [col for col in self.df_info.columns if col not in self.exclude_cols]
         if self.scale_col == []:
             raise ValueError(
                 f"ERROR: the scaler {type(self).__name__} isn't being applied to any numeric column. There must be "
@@ -129,9 +129,9 @@ class DataScaler(DataProcessing):
         are present in the dataset.
         """
         if self.exclude_cols is not None:
-            self.exclude_cols = self._check_error_col_list(self.df, self.exclude_cols, "exclude_cols")
+            self.exclude_cols = self._check_error_col_list(self.df_info.columns, self.exclude_cols, "exclude_cols")
         if self.include_cols is not None:
-            self.include_cols = self._check_error_col_list(self.df, self.include_cols, "include_cols")
+            self.include_cols = self._check_error_col_list(self.df_info.columns, self.include_cols, "include_cols")
 
     # -----------------------------------
     def _get_fit_input_type(self):
@@ -203,11 +203,12 @@ class DataScaler(DataProcessing):
         self._check_error_col_filters()
         self._set_col_filters()
         self._set_transforms(self.transform_pipe)
-        self._fit_transforms(self.df)
-        transf_df = self._apply_transforms(self.df)
+        self._fit_transforms(self.df_info.df)
+        transf_df = self._apply_transforms(self.df_info.df)
         subset_df = self._get_df_subset(transf_df, self.scale_col)
         self._fit(subset_df)
         self.fitted = True
+        self.df_info.clear_df_mem()
         return self
 
     # -----------------------------------
