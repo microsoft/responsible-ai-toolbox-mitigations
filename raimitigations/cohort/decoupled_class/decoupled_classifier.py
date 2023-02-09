@@ -82,12 +82,12 @@ class DecoupledClass(CohortHandler):
         called the baseline cohorts. We then check if there are any of the baseline cohorts
         that are invalid, where an invalid cohort is considered as being a cohort with
         size < ``max(min_cohort_size, df.shape[0] * min_cohort_pct)`` or a cohort with a
-        minority class (the label value with least ocurrences) with an occurrence rate <
+        minority class (the label value with least occurrences) with an occurrence rate <
         ``minority_min_rate``. Every time an invalid cohort is found, we merge this cohort to
         the current smallest cohort. This is simply a heuristic, as identifying the best
         way to merge these cohorts in a way that results in a list of valid cohorts is a
         complex problem that we do not try to solve here. Note that if using transfer
-        learing (check the ``theta`` parameter for more details), then the baseline
+        learning (check the ``theta`` parameter for more details), then the baseline
         cohorts are not merged if they are found invalid. Instead, we use transfer learning
         over the invalid cohorts;
 
@@ -158,7 +158,7 @@ class DecoupledClass(CohortHandler):
         on that process), the outside data used for it must be comprised of data from
         other cohorts that follow a somehow similar label distribution. Otherwise, the
         use of outside data could be more harmful than useful. Therefore, for each cohort
-        using transfer learing, we check which other cohorts have a similar label
+        using transfer learning, we check which other cohorts have a similar label
         distribution. The similarity of these distributions is computed using the
         Jensen-Shanon distance, which computes the distance between two distributions.
         This distance returns a value between [0, 1], where values close to 0 mean that
@@ -195,7 +195,7 @@ class DecoupledClass(CohortHandler):
     :param fairness_loss: The fairness loss that should be optimized alongside the L1 loss.
         This is only possible for binary classification problems. For regression or multi-class
         problems, this parameter should be set to None (default value), otherwise, an error will
-        be raised. The L1 and fairnesee losses are computed over the binarized predictions, not
+        be raised. The L1 and fairness losses are computed over the binarized predictions, not
         over the probabilities. Therefore, the decoupled classifier tries to identify the best
         set of thresholds (one for each estimator, where we have one estimator for each cohort)
         that produces the lowest joint loss (L1 + fairness loss). There are 3 available fairness
@@ -387,10 +387,10 @@ class DecoupledClass(CohortHandler):
     # -----------------------------------
     def _set_transforms(self, transform_pipe: list):
         """
-        Overwrites the _set_transforms() method from the DataProcessing. Thismethod
+        Overwrites the _set_transforms() method from the DataProcessing. This method
         first calls the _set_transforms() method from the DataProcessing to check for
-        errors in the list of transformations (transform_pipe) and then set the
-        transform_pipe attribute. Following this call, it is created a copy of
+        errors in the list of transformations (transform_pipe) and then sets the
+        transform_pipe attribute. Following this call, a copy is created of
         the transform_pipe attribute to each cohort. This way, each cohort will
         have its own list of transformations, which should be applied
         independently.
@@ -458,7 +458,7 @@ class DecoupledClass(CohortHandler):
 
         # check for errors and set the valid_k_folds parameter
         error = False
-        if type(valid_k_folds) != list or valid_k_folds == []:
+        if type(valid_k_folds) != list or not valid_k_folds:
             error = True
         else:
             for k in valid_k_folds:

@@ -19,7 +19,7 @@ class _DecoupledCohort(CohortDefinition):
     """
     Extends the ``CohortDefinition`` class by adding functionalities for the
     ``DecoupledClass`` class. The ``_DecoupledCohort`` is used directly by the
-    ``DecoupledClass`` class, which implements the Decoupled Classfier.
+    ``DecoupledClass`` class, which implements the Decoupled Classifier.
 
     :param cohort_definition: a list of conditions or a string containing the path
         to a JSON file that has the list condition. A basic condition is a list
@@ -71,7 +71,7 @@ class _DecoupledCohort(CohortDefinition):
 
         :param label_col: the label column of the full dataset. This column is
             used to save some information about the label column that is later
-            used in other funtions;
+            used in other functions;
         """
         if type(self.regression) != bool:
             raise ValueError("ERROR: the 'regression' parameter must a boolean value.")
@@ -393,7 +393,7 @@ class _DecoupledCohort(CohortDefinition):
         for regression tasks means updating the distribution of values found in the
         label column.
 
-        :param cohort: an object of the current class (ChortHandler) representing
+        :param cohort: an object of the current class (CohortHandler) representing
             the cohort to be merged into the current cohort (self).
         """
         self.index_list += cohort.index_list
@@ -509,7 +509,7 @@ class _DecoupledCohort(CohortDefinition):
             column.
         :return: True if all label values have an occurrence rate greater
             than min_rate. False if at least one of the label values has an
-            occurance smaller than min_rate.
+            occurrence smaller than min_rate.
         :rtype: boolean
         """
         if self.regression:
@@ -652,7 +652,7 @@ class _DecoupledCohort(CohortDefinition):
         list of class predictions for each instance. The following steps are executed:
         (i) filter the dataset so that the subset contains only the instances that
         follows the cohort's conditions, (ii) apply the transformations from the
-        trainsform_list over the filtered subset, (iii) compute the probabilities
+        trainsform_pipe over the filtered subset, (iii) compute the probabilities
         of each instance belonging to each class using the cohort's trained estimator,
         (iv) transform each probability to a class value using the probability threshold
         computed using the _get_best_prob_th() method (but only if the 'probability'

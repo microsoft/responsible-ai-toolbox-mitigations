@@ -24,7 +24,7 @@ class CohortHandler(DataProcessing):
 
     :param cohort_col: a list of column names or indices, from which one cohort is created for each
         unique combination of values for these columns. This parameter can't be used together with
-        the ``cohort_def`` parameter. Only one these two parameters must be used at a time;
+        the ``cohort_def`` parameter. Only one of these two parameters must be used at a time;
 
     :param cohort_json_files: a list with the name of the JSON files that contains the definition
         of each cohort. Each cohort is saved in a single JSON file, so the length of the
@@ -191,7 +191,7 @@ class CohortHandler(DataProcessing):
             )
 
         if cohort_def is not None:
-            if type(cohort_def) != dict and type(cohort_def) != list:
+            if not isinstance(cohort_def, (dict, list)):
                 raise ValueError(
                     "ERROR: 'cohort_def' must be a dict or a list with the definition of all cohorts, or a string "
                     + "with the path of a valid json containing the definition of all cohorts."
@@ -206,7 +206,7 @@ class CohortHandler(DataProcessing):
             elif type(cohort_def) == list:
                 self._cohort_names = [f"cohort_{i}" for i in range(len(cohort_def))]
         else:
-            if type(cohort_col) != list or cohort_col == []:
+            if type(cohort_col) != list or not cohort_col:
                 raise ValueError(
                     "ERROR: cohort_col must be a list of column names that indicates "
                     + "the columns used to build the cohorts."
@@ -311,7 +311,7 @@ class CohortHandler(DataProcessing):
         belongs to more than one cohort, which is not allowed.
 
         :param index_used: a list with the index of all instances that have a
-            mathcing cohort.
+            matching cohort.
         """
         set_index = list(set(index_used))
         if len(set_index) != len(index_used):
@@ -321,7 +321,7 @@ class CohortHandler(DataProcessing):
     def _merge_cohort_datasets(self, cht_df: dict, org_index: list = None):
         """
         Merges all cohort subsets (after going through their own
-        transformations) into a single dataset. After concatanating all
+        transformations) into a single dataset. After concatenating all
         predictions into a single array, it is reordered so that it keeps
         the same order as the original dataset. The ``org_index`` is
         is used to determine this order.
@@ -347,10 +347,7 @@ class CohortHandler(DataProcessing):
 
         final_df = None
         for df in cht_df.values():
-            if final_df is None:
-                final_df = df
-            else:
-                final_df = pd.concat([final_df, df], axis=0)
+            final_df = pd.concat([final_df, df], axis=0)
 
         if org_index is not None:
             new_index = [index for index in org_index if index in final_df.index]

@@ -110,6 +110,7 @@ def get_cross_validation_results(
     valid_k_folds: List[int],
     estimator: BaseEstimator,
     regression: bool,
+    random_state: int = None,
 ):
     """
     Trains a model (estimator parameter) over different training and test
@@ -146,7 +147,8 @@ def get_cross_validation_results(
     :param estimator: the estimator used for each data split. This estimator must
         accept a list of weights for each instance and must also have the
         .predict_proba() method implemented;
-    :param regression: indicates if the estimator is a classifier or a regressor.
+    :param regression: indicates if the estimator is a classifier or a regressor;
+    :param random_state: controls the randomness of how the folds are divided.
     """
     if regression:
         k = _get_k_value(cohort_x.shape[0], min_size_fold, valid_k_folds, None)
@@ -155,9 +157,9 @@ def get_cross_validation_results(
     if k is None:
         return None
     if regression:
-        k_fold_obj = KFold(n_splits=k)
+        k_fold_obj = KFold(n_splits=k, random_state=random_state)
     else:
-        k_fold_obj = StratifiedKFold(n_splits=k)
+        k_fold_obj = StratifiedKFold(n_splits=k, random_state=random_state)
     results = []
     for train_index, test_index in k_fold_obj.split(cohort_x, cohort_y):
         train_x, train_y, test_x, test_y, weights = _get_fold_subsets(

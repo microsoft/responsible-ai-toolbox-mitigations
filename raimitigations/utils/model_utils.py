@@ -46,7 +46,8 @@ def split_data(
     :param regression: if True, the problem is treated as a regression problem. This way, the split between
         train and test is random, without any stratification. If False, then the problem is treated as a
         classification problem, where the label column is treated as a list of labels. This way, the split
-        tries to maintain the same proportion of classes in the train and test sets.
+        tries to maintain the same proportion of classes in the train and test sets;
+    :param random_state: controls the randomness of how the data is divided.
     :return: if ``full_df`` is set to True, this function returns 2 dataframes: a train and a test dataframe,
         where both datasets include the label column given by the parameter ``label``. Otherwise, 4 values are
         returned:
