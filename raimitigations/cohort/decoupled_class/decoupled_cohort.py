@@ -9,7 +9,7 @@ from scipy.spatial import distance
 
 from ...dataprocessing import DataProcessing
 from ..cohort_definition import CohortDefinition
-from ...utils import MetricNames, get_metrics, probability_to_class
+from ...utils import _MetricNames, get_metrics, probability_to_class
 from ...utils.data_utils import freedman_diaconis, err_float_01
 from .decoupled_utils import get_cross_validation_results
 
@@ -578,7 +578,7 @@ class _DecoupledCohort(CohortDefinition):
                         "ERROR: calling the function '_get_best_prob_th()' to compute the test metrics before "
                         + "computing the train metrics. Compute the train metrics before computing the test metrics."
                     )
-                th = self.test_result[MetricNames.TH]
+                th = self.test_result[_MetricNames.TH]
                 self.test_result = get_metrics(y, pred, self.regression, best_th_auc, fixed_th=th, return_th_list=True)
 
     # -----------------------------------
@@ -691,7 +691,7 @@ class _DecoupledCohort(CohortDefinition):
             if has_proba:
                 pred = self.estimator.predict_proba(subset)
                 if not probability:
-                    pred = probability_to_class(pred, self.train_result[MetricNames.TH])
+                    pred = probability_to_class(pred, self.train_result[_MetricNames.TH])
             else:
                 if probability:
                     raise ValueError(

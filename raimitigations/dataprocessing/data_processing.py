@@ -643,10 +643,10 @@ class DataProcessing(ABC):
             elif fit_params == self.FIT_INPUT_XY:
                 if y is None:
                     raise ValueError(
-                        f"ERROR: using the tranformation class {type(tf).__name__} "
+                        f"ERROR: using the transformation class {type(tf).__name__} "
                         + "that requires an X and Y datasets as a preprocessing step "
                         + "inside another class that does not require the separation "
-                        + "a Y dataset (whcich contains only the labels)."
+                        + "a Y dataset (which contains only the labels)."
                     )
                 tf.fit(df, y)
                 df = tf.transform(df)

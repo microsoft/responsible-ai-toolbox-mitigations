@@ -10,7 +10,7 @@ from sklearn.base import BaseEstimator
 import xgboost as xgb
 import matplotlib.pyplot as plt
 
-from .metric_utils import MetricNames, get_metrics
+from .metric_utils import _MetricNames, get_metrics
 
 DECISION_TREE = "tree"
 KNN = "knn"
@@ -131,18 +131,18 @@ def _plot_confusion_matrix(classes, y, y_pred):
 # -----------------------------------
 def _print_stats(result_metrics: dict):
     metrics_print = {
-        MetricNames.AUC_KEY: "ROC AUC",
-        MetricNames.PREC_KEY: "Precision",
-        MetricNames.RECALL_KEY: "Recall",
-        MetricNames.F1_KEY: "F1",
-        MetricNames.ACC_KEY: "Accuracy",
-        MetricNames.TH_ROC: "Optimal Threshold (ROC curve)",
-        MetricNames.TH_PR: "Optimal Threshold (Precision x Recall curve)",
-        MetricNames.TH: "Threshold used",
-        MetricNames.MSE_KEY: "MSE",
-        MetricNames.RMSE_KEY: "RMSE",
-        MetricNames.MAE_KEY: "MAE",
-        MetricNames.R2_KEY: "R2",
+        _MetricNames.AUC_KEY: "ROC AUC",
+        _MetricNames.PREC_KEY: "Precision",
+        _MetricNames.RECALL_KEY: "Recall",
+        _MetricNames.F1_KEY: "F1",
+        _MetricNames.ACC_KEY: "Accuracy",
+        _MetricNames.TH_ROC: "Optimal Threshold (ROC curve)",
+        _MetricNames.TH_PR: "Optimal Threshold (Precision x Recall curve)",
+        _MetricNames.TH: "Threshold used",
+        _MetricNames.MSE_KEY: "MSE",
+        _MetricNames.RMSE_KEY: "RMSE",
+        _MetricNames.MAE_KEY: "MAE",
+        _MetricNames.R2_KEY: "R2",
     }
     for key in metrics_print.keys():
         if key in result_metrics.keys():
@@ -191,8 +191,8 @@ def evaluate_set(
     results_dict = get_metrics(y, y_pred, regression=regression, best_th_auc=best_th_auc)
     if not regression:
         _plot_precision_recall(y, y_pred, plot_pr)
-        if MetricNames.FINAL_PRED in results_dict.keys():
-            _plot_confusion_matrix(classes, y, results_dict[MetricNames.FINAL_PRED])
+        if _MetricNames.FINAL_PRED in results_dict.keys():
+            _plot_confusion_matrix(classes, y, results_dict[_MetricNames.FINAL_PRED])
 
     _print_stats(results_dict)
 

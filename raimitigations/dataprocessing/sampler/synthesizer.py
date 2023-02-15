@@ -8,6 +8,7 @@ from sdv.tabular import GaussianCopula, CTGAN, CopulaGAN, TVAE
 from sdv.sampling import Condition
 
 from ..data_processing import DataProcessing, DataFrameInfo
+from ..encoder import DataEncoding
 
 
 class Synthesizer(DataProcessing):
@@ -458,6 +459,16 @@ class Synthesizer(DataProcessing):
         if conditions is None:
             samples = self.model.sample(num_rows=n_samples, max_tries_per_batch=200)
         else:
+            conditions_df = pd.DataFrame([conditions])
+            for transf in self.transform_pipe:
+                if isinstance(transf, DataEncoding):
+                    missing_columns = list(set(transf.col_encode) - set(conditions))
+                    for col in missing_columns:
+                        conditions_df[col] = ""
+                    conditions_df = transf.transform(conditions_df)
+                    conditions_df.drop(columns=missing_columns, inplace=True)
+            conditions = conditions_df.to_dict("records")[0]
+
             conditions_obj = Condition(conditions, num_rows=n_samples)
             samples = self.model.sample_conditions(conditions=[conditions_obj], max_tries_per_batch=200)
         return samples

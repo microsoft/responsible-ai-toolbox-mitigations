@@ -17,7 +17,7 @@ from .data_utils import err_float_01
 
 
 # ----------------------------------------
-class MetricNames:
+class _MetricNames:
     """
     Defines the keys used in the dictionary returned by the
     ``get_metric()`` function.
@@ -258,7 +258,7 @@ def _get_classification_metrics(
     :param rtype: dict
     """
     probability = _check_if_probability_pred(y_pred)
-    problem_type = MetricNames.BIN_CLASS
+    problem_type = _MetricNames.BIN_CLASS
     if probability:
         roc_auc, th_roc, th_list_roc = _roc_evaluation(y, y_pred)
         y_float = y.astype(np.float64)
@@ -276,29 +276,29 @@ def _get_classification_metrics(
         y_pred = probability_to_class(y_pred, th)
 
         if th is None:
-            problem_type = MetricNames.MULTI_CLASS
+            problem_type = _MetricNames.MULTI_CLASS
 
     precision_sup, recall_sup, f1_sup = _get_precision_recall_fscore(y, y_pred)
     acc = accuracy_score(y, y_pred)
 
     results = {
-        MetricNames.PROBLEM_TYPE: problem_type,
-        MetricNames.ACC_KEY: acc,
-        MetricNames.PREC_KEY: precision_sup,
-        MetricNames.RECALL_KEY: recall_sup,
-        MetricNames.F1_KEY: f1_sup,
+        _MetricNames.PROBLEM_TYPE: problem_type,
+        _MetricNames.ACC_KEY: acc,
+        _MetricNames.PREC_KEY: precision_sup,
+        _MetricNames.RECALL_KEY: recall_sup,
+        _MetricNames.F1_KEY: f1_sup,
     }
 
     if probability:
-        results[MetricNames.AUC_KEY] = roc_auc
-        results[MetricNames.LOG_LOSS_KEY] = loss
-        results[MetricNames.TH_ROC] = th_roc
-        results[MetricNames.TH_PR] = th_pr_rc
-        results[MetricNames.TH] = th
-        results[MetricNames.FINAL_PRED] = y_pred
+        results[_MetricNames.AUC_KEY] = roc_auc
+        results[_MetricNames.LOG_LOSS_KEY] = loss
+        results[_MetricNames.TH_ROC] = th_roc
+        results[_MetricNames.TH_PR] = th_pr_rc
+        results[_MetricNames.TH] = th
+        results[_MetricNames.FINAL_PRED] = y_pred
 
     if return_th_list:
-        results[MetricNames.TH_LIST] = th_list
+        results[_MetricNames.TH_LIST] = th_list
 
     return results
 
@@ -327,11 +327,11 @@ def _get_regression_metrics(y: np.ndarray, y_pred: np.ndarray):
     r2 = r2_score(y, y_pred, multioutput="uniform_average")
 
     results = {
-        MetricNames.MSE_KEY: mse,
-        MetricNames.RMSE_KEY: rmse,
-        MetricNames.MAE_KEY: mae,
-        MetricNames.R2_KEY: r2,
-        MetricNames.PROBLEM_TYPE: MetricNames.REGRESSION,
+        _MetricNames.MSE_KEY: mse,
+        _MetricNames.RMSE_KEY: rmse,
+        _MetricNames.MAE_KEY: mae,
+        _MetricNames.R2_KEY: r2,
+        _MetricNames.PROBLEM_TYPE: _MetricNames.REGRESSION,
     }
 
     return results
@@ -351,12 +351,12 @@ def get_metrics(
     a set of metrics and return a dictionary with the following metrics (depends if it is a regression
     or classification problem):
 
-        * **Classification:** ROC AUC, Precision, Recall, F1, acuracy, log loss, threshold used, and
+        * **Classification:** ROC AUC, Precision, Recall, F1, accuracy, log loss, threshold used, and
           final classes predicted (using the probabilities with the threshold);
         * **Regression:** MSE, RMSE, MAE, and R2
 
     :param y: an array with the true labels;
-    :param y_pred: an arry with the predicted values. For classification problems, this array must contain
+    :param y_pred: an array with the predicted values. For classification problems, this array must contain
         the probabilities for each class, with shape = (N, C), where N is the number of rows and C is the
         number of classes;
     :param regression: if True, regression metrics are computed. If False, only classification
@@ -369,7 +369,7 @@ def get_metrics(
         precision and recall curve).
     :return: a dictionary with the following metrics:
 
-        * **Classification:** ROC AUC, Precision, Recall, F1, acuracy, log loss, threshold used, and
+        * **Classification:** ROC AUC, Precision, Recall, F1, accuracy, log loss, threshold used, and
           final classes predicted (using the probabilities with the threshold);
         * **Regression:** MSE, RMSE, MAE, and R2
 
