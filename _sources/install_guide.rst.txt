@@ -3,7 +3,7 @@
 Installation guide
 ==================
 
-Responsible AI Mitigations requires Python 3.7, 3.8, or 3.9. Make sure you have one of these Python versions before continuing.
+Responsible AI Mitigations requires Python 3.7, 3.8, 3.9 or 3.10. Make sure you have one of these Python versions before continuing.
 
 To install, open your console and type:
 
