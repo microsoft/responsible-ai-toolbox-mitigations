@@ -90,7 +90,7 @@ class _DecoupledCohort(CohortDefinition):
 
         :param label_col: the label column of the full dataset. This column is
             used to save some information about the label column that is later
-            used in other funtions;
+            used in other functions;
         """
         if self.regression:
             self.label_info = {

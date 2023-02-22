@@ -1162,7 +1162,7 @@ class CorrelatedFeatures(FeatureSelection):
     # -----------------------------------
     def _select_best_feat_remove(self, base_feature: str, feat_degree: dict):
         """
-        Check if there are other features ​apart from the selected feature
+        Check if there are other features apart from the selected feature
         (base_feature) that has the same number of correlated features. If
         that is the case, check which of these two features should be removed
         using the _select_feature_tie method.
@@ -1662,7 +1662,7 @@ class CorrelatedFeatures(FeatureSelection):
         :param print_summary: if True, print the values stored in the correlated
             and the uncorrelated dictionary. If False, just return the three
             dictionaries previously mentioned.
-        :return: three internal dictionaries that summurizes the correlations found.
+        :return: three internal dictionaries that summarizes the correlations found.
         :rtype: tuple
         """
         if print_summary:

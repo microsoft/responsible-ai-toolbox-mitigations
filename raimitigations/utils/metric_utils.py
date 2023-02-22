@@ -81,7 +81,7 @@ def _roc_evaluation(y: np.ndarray, y_pred: np.ndarray):
     to binarize the predictions. This function works for binary and multiclass problems.
 
     :param y: an array with the true labels;
-    :param y_pred: an arry with the predicted probabilities for each class, with shape = (N, C),
+    :param y_pred: an array with the predicted probabilities for each class, with shape = (N, C),
         where N is the number of rows and C is the number of classes;
     :return: a tuple (roc, th), where 'roc' is the AUC ROC metric, and 'th' is the optimal
         threshold found using the ROC curve for binary problems. In case it is a multiclass
@@ -116,7 +116,7 @@ def _roc_evaluation(y: np.ndarray, y_pred: np.ndarray):
 # -----------------------------------
 def _probability_to_class_binary(prediction: np.ndarray, th: float):
     """
-    Converts an array with the predicted probablities for a binary classification
+    Converts an array with the predicted probabilities for a binary classification
     problem into an array with the predicted labels (0 or 1). The 'prediction'
     parameter is expected to have the shape (N, 2), where N is the number of
     predictions and 2 is the number of classes. Only the probabilities of class
@@ -151,7 +151,7 @@ def _probability_to_class_binary(prediction: np.ndarray, th: float):
 # -----------------------------------
 def _probability_to_class_multi(prediction: np.ndarray):
     """
-    Converts an array with the predicted probablities for a multiclass classification
+    Converts an array with the predicted probabilities for a multiclass classification
     problem into an array with the predicted labels. The 'prediction' parameter is
     expected to have the shape (N, C), where N is the number of predictions and C is
     the number of classes. The class of each instance is chosen as being the class
@@ -244,7 +244,7 @@ def _get_classification_metrics(
         * log loss
 
     :param y: an array with the true labels;
-    :param y_pred: an arry with the predicted probabilities for each class, with shape = (N, C),
+    :param y_pred: an array with the predicted probabilities for each class, with shape = (N, C),
         where N is the number of rows and C is the number of classes;
     :param best_th_auc: if True, the best threshold is computed using ROC graph. If False,
         the threshold is computed using the precision x recall graph. This parameter is ignored
@@ -316,7 +316,7 @@ def _get_regression_metrics(y: np.ndarray, y_pred: np.ndarray):
         * R2
 
     :param y: an array with the true labels;
-    :param y_pred: an arry with the predicted values for each instance;
+    :param y_pred: an array with the predicted values for each instance;
     :return: a dictionary with multiple regression metrics (check the description above
         for more details);
     :param rtype: dict

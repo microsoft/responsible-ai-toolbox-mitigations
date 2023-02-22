@@ -288,7 +288,7 @@ class Synthesizer(DataProcessing):
         Builds a dictionary that informs which of the label values (from the
         column self.label_col_name of dataframe df) represents the minority,
         which represents the majority, not minority, and not majority. This
-        information is useful when using one of the predifined sampling
+        information is useful when using one of the predefined sampling
         strategies.
 
         :param df: the dataframe that contains the label column.

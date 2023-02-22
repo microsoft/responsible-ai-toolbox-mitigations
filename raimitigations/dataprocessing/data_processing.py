@@ -131,7 +131,7 @@ class DataProcessing(ABC):
         used when a the object uses the transform_pipe parameter. In these cases,
         the dataset might change its column structure, but we need to map these changes
         and guarantee that the indices provided by the user for a given transformation
-        (provided before any transformation is applied) are maped to the correct columns
+        (provided before any transformation is applied) are mapped to the correct columns
         even if these columns are changed by other transforms in the transform_pipe.
 
         :param df: the full dataset;

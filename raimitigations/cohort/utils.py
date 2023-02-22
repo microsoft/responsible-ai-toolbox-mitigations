@@ -139,7 +139,7 @@ def fetch_cohort_results(
         metrics_dict[ALL_KEY]["%_pos"] = metrics_dict[ALL_KEY]["num_pos"] / float(y_true.shape[0])
     metrics_dict[ALL_KEY]["cht_size"] = y_true.shape[0]
 
-    # Compute the metrics when we analyyze the each
+    # Compute the metrics when we analyze the each
     # subset of predictions for each cohort separately
     subsets = cht_manager.get_subsets(X, y_true)
     for cht_name in subsets.keys():
@@ -192,6 +192,7 @@ def fetch_cohort_results(
     return df
 
 
+# -----------------------------------
 def plot_value_counts_cohort(y_full, subsets, normalize=True):
     plt.figure().clear()
     plt.close()

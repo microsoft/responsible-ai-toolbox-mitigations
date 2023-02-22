@@ -160,16 +160,16 @@ def evaluate_set(
 ):
     """
     Evaluates the performance of a prediction array based on its true values. This function computes
-    a set of metrics, prints the computed metrics, and if the problem is a classfication problem, then
+    a set of metrics, prints the computed metrics, and if the problem is a classification problem, then
     it also plots the confusion matrix and the precision x recall graph. Finally, return a dictionary
     with the following metrics (depends if it is a regression or classification problem):
 
-        * **Classification:** ROC AUC, Precision, Recall, F1, acuracy, log loss, threshold used, and
+        * **Classification:** ROC AUC, Precision, Recall, F1, accuracy, log loss, threshold used, and
           final classes predicted (using the probabilities with the threshold);
         * **Regression:** MSE, RMSE, MAE, and R2
 
     :param y: an array with the true labels or true values;
-    :param y_pred: an arry with the predicted values. For classification problems, this array must contain
+    :param y_pred: an array with the predicted values. For classification problems, this array must contain
         the probabilities for each class, with shape = (N, C), where N is the number of rows and C is the
         number of classes;
     :param regression: if True, regression metrics are computed. If False, only classification
@@ -182,7 +182,7 @@ def evaluate_set(
         are used when plotting the confusion matrix.
     :return: a dictionary with the following metrics:
 
-        * **Classification:** ROC AUC, Precision, Recall, F1, acuracy, log loss, threshold used, and
+        * **Classification:** ROC AUC, Precision, Recall, F1, accuracy, log loss, threshold used, and
           final classes predicted (using the probabilities with the threshold);
         * **Regression:** MSE, RMSE, MAE, and R2
 
