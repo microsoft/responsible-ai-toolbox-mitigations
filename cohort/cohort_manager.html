@@ -339,7 +339,7 @@ predictions of each cohort, or a dictionary with the predictions for each cohort
 <span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.cohort.CohortManager.transform" title="Permalink to this definition"></a></dt>
 <dd><p>Calls the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method of all transformers in all pipelines. Each cohort
 has its own pipeline. This way, the following steps are executed: (i) iterate
-over each cohort, (ii) filter the dataset <code class="docutils literal notranslate"><span class="pre">X</span></code> using eachcohort’s filter, (iii)
+over each cohort, (ii) filter the dataset <code class="docutils literal notranslate"><span class="pre">X</span></code> using each cohort’s filter, (iii)
 cycle through each of the transformers in the cohort’s pipeline and call the
 transformer’s <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method, which returns a new transformed subset,
 that is then used in the <code class="docutils literal notranslate"><span class="pre">transform()</span></code> call of the following transformer.

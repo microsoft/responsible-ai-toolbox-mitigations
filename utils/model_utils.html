@@ -23,7 +23,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Gallery" href="../gallery.html" />
+    <link rel="next" title="Metric Utils" href="metric_utils.html" />
     <link rel="prev" title="Data Utils" href="data_utils.html" /> 
 </head>
 
@@ -69,6 +69,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#raimitigations.utils.model_utils.train_model_plot_results"><code class="docutils literal notranslate"><span class="pre">train_model_plot_results()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="metric_utils.html">Metric Utils</a></li>
 </ul>
 </li>
 </ul>
@@ -129,12 +130,12 @@
 <dt class="sig sig-object py" id="raimitigations.utils.model_utils.evaluate_set">
 <span class="sig-prename descclassname"><span class="pre">raimitigations.utils.model_utils.</span></span><span class="sig-name descname"><span class="pre">evaluate_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_pr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_th_auc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#raimitigations.utils.model_utils.evaluate_set" title="Permalink to this definition"></a></dt>
 <dd><p>Evaluates the performance of a prediction array based on its true values. This function computes
-a set of metrics, prints the computed metrics, and if the problem is a classfication problem, then
+a set of metrics, prints the computed metrics, and if the problem is a classification problem, then
 it also plots the confusion matrix and the precision x recall graph. Finally, return a dictionary
 with the following metrics (depends if it is a regression or classification problem):</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><strong>Classification:</strong> ROC AUC, Precision, Recall, F1, acuracy, log loss, threshold used, and
+<li><p><strong>Classification:</strong> ROC AUC, Precision, Recall, F1, accuracy, log loss, threshold used, and
 final classes predicted (using the probabilities with the threshold);</p></li>
 <li><p><strong>Regression:</strong> MSE, RMSE, MAE, and R2</p></li>
 </ul>
@@ -143,7 +144,7 @@ final classes predicted (using the probabilities with the threshold);</p></li>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> – an array with the true labels or true values;</p></li>
-<li><p><strong>y_pred</strong> – an arry with the predicted values. For classification problems, this array must contain
+<li><p><strong>y_pred</strong> – an array with the predicted values. For classification problems, this array must contain
 the probabilities for each class, with shape = (N, C), where N is the number of rows and C is the
 number of classes;</p></li>
 <li><p><strong>regression</strong> – if True, regression metrics are computed. If False, only classification
@@ -159,7 +160,7 @@ are used when plotting the confusion matrix.</p></li>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>a dictionary with the following metrics:</p>
 <ul class="simple">
-<li><p><strong>Classification:</strong> ROC AUC, Precision, Recall, F1, acuracy, log loss, threshold used, and
+<li><p><strong>Classification:</strong> ROC AUC, Precision, Recall, F1, accuracy, log loss, threshold used, and
 final classes predicted (using the probabilities with the threshold);</p></li>
 <li><p><strong>Regression:</strong> MSE, RMSE, MAE, and R2</p></li>
 </ul>
@@ -314,7 +315,7 @@ the threshold is computed using the precision x recall graph.</p></li>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="data_utils.html" class="btn btn-neutral float-left" title="Data Utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../gallery.html" class="btn btn-neutral float-right" title="Gallery" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="metric_utils.html" class="btn btn-neutral float-right" title="Metric Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
