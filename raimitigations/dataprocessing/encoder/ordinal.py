@@ -126,8 +126,8 @@ class EncoderOrdinal(DataEncoding):
         """
         Generates the 'categories' parameter used by OrdinalEncoder (from``sklearn``)
         based on the value provided to the categories parameter. If a categorical
-        column in col_encode is missing from the categories parameter, it is auto-
-        matically generated.
+        column in col_encode is missing from the categories parameter, it is automatically
+        generated.
 
         :param df: the full dataset with the columns to be encoded.
         """

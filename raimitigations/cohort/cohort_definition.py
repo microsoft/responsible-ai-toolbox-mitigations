@@ -408,7 +408,7 @@ class CohortDefinition:
 
         :param op: a string representing one of the operators from the raimitigations
             library, defined in the ``CohortFilters`` class;
-        :param value: the value assinged to the operator ``op``;
+        :param value: the value assigned to the operator ``op``;
         :return: the equivalent operator from the raiutils library.
         :rtype: str
         """
@@ -454,13 +454,13 @@ class CohortDefinition:
     def _conditions_to_raiutils_filters(self, conditions: list):
         """
         Convert a condition list (used by the raimitigations) to the JSON format used
-        to represent the filters of a cohort in the raiutils library. This mehtod is
+        to represent the filters of a cohort in the raiutils library. This method is
         called recursively for each condition list inside the original condition list
         that is not a simple condition list (comprised of column, operator, and value).
 
         :param conditions: the condition list to be converted;
         :return: a dictionary representing the composite filter passed through the
-            ``conditions`` parameter. The dictionary thfollows the format used in raiutils
+            ``conditions`` parameter. The dictionary follows the format used in raiutils
             when saving a cohort to a JSON.
         :rtype: dict
         """
@@ -495,7 +495,7 @@ class CohortDefinition:
         to represent the filters of a cohort in the raiutils library.
 
         :return: a dictionary representing the composite filter passed through the
-            ``conditions`` parameter. The dictionary thfollows the format used in raiutils
+            ``conditions`` parameter. The dictionary follows the format used in raiutils
             when saving a cohort to a JSON.
         :rtype: dict
         """
@@ -580,7 +580,7 @@ class CohortDefinition:
         found in the JSON file.
 
         :param filters: a list of filters in the JSON file;
-        :param connector: the connector ('and' or 'or') to be used when concatanating two
+        :param connector: the connector ('and' or 'or') to be used when concatenating two
             or more conditions. The default connector used is 'and';
         :return: a list of conditions formatted according to raimitigations' standards;
         :rtype: list
@@ -672,7 +672,7 @@ class CohortDefinition:
                   the following dataframe is returned: subset
 
             Here, ``subset`` is the subset of ``df`` that belongs to the cohort,
-            ``subset_y`` is the label dataset associeted to ``subset``, and
+            ``subset_y`` is the label dataset associated to ``subset``, and
             ``index_list`` is the list of indices of instances that belongs to the
             cohort;
         :rtype: tuple or pd.DataFrame

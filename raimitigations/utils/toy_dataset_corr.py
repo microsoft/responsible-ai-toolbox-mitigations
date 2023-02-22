@@ -14,7 +14,7 @@ def _create_num_var(samples: int, n_classes: int, regression: bool, n_features: 
     :param n_classes: the number of classes in the label column. This parameter is
         ignored if regression is set to True;
     :param regression: if True, the label column consists of float values. If False,
-        the label column is created to resamble a classification task.
+        the label column is created to resample a classification task.
     :param n_features: the number of features to be created
     :param n_correlated: the number of correlated features. If
         n_correlated > 0, some features will be correlated to each other

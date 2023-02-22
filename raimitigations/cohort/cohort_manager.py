@@ -344,7 +344,7 @@ class CohortManager(CohortHandler):
         """
         Calls the ``transform()`` method of all transformers in all pipelines. Each cohort
         has its own pipeline. This way, the following steps are executed: (i) iterate
-        over each cohort, (ii) filter the dataset ``X`` using eachcohort's filter, (iii)
+        over each cohort, (ii) filter the dataset ``X`` using each cohort's filter, (iii)
         cycle through each of the transformers in the cohort's pipeline and call the
         transformer's ``transform()`` method, which returns a new transformed subset,
         that is then used in the ``transform()`` call of the following transformer.

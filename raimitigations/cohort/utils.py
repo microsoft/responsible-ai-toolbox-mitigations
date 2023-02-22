@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from ..cohort import CohortHandler, CohortManager, DecoupledClass
-from ..utils import MetricNames, get_metrics
+from ..utils import _MetricNames, get_metrics
 
 # -----------------------------------
 def fetch_cohort_results(
@@ -68,19 +68,19 @@ def fetch_cohort_results(
     def _metric_tuple_to_dict(metric_dict, reg):
         if reg:
             metric_dict = {
-                "mse": metric_dict[MetricNames.MSE_KEY],
-                "rmse": metric_dict[MetricNames.RMSE_KEY],
-                "mae": metric_dict[MetricNames.MAE_KEY],
-                "r2": metric_dict[MetricNames.R2_KEY],
+                "mse": metric_dict[_MetricNames.MSE_KEY],
+                "rmse": metric_dict[_MetricNames.RMSE_KEY],
+                "mae": metric_dict[_MetricNames.MAE_KEY],
+                "r2": metric_dict[_MetricNames.R2_KEY],
             }
         else:
             metric_dict = {
-                "roc": metric_dict[MetricNames.AUC_KEY],
-                "precision": metric_dict[MetricNames.PREC_KEY],
-                "recall": metric_dict[MetricNames.RECALL_KEY],
-                "f1": metric_dict[MetricNames.F1_KEY],
-                "accuracy": metric_dict[MetricNames.ACC_KEY],
-                "threshold": metric_dict[MetricNames.TH],
+                "roc": metric_dict[_MetricNames.AUC_KEY],
+                "precision": metric_dict[_MetricNames.PREC_KEY],
+                "recall": metric_dict[_MetricNames.RECALL_KEY],
+                "f1": metric_dict[_MetricNames.F1_KEY],
+                "accuracy": metric_dict[_MetricNames.ACC_KEY],
+                "threshold": metric_dict[_MetricNames.TH],
             }
         return metric_dict
 
@@ -134,12 +134,12 @@ def fetch_cohort_results(
     # we analyze all predictions at the same time
     results = get_metrics(y_true, y_pred, regression, best_th_auc=True, fixed_th=th_dict[ALL_KEY])
     metrics_dict[ALL_KEY] = _metric_tuple_to_dict(results, regression)
-    if results[MetricNames.PROBLEM_TYPE] == MetricNames.BIN_CLASS:
-        metrics_dict[ALL_KEY]["num_pos"] = np.sum(results[MetricNames.FINAL_PRED])
+    if results[_MetricNames.PROBLEM_TYPE] == _MetricNames.BIN_CLASS:
+        metrics_dict[ALL_KEY]["num_pos"] = np.sum(results[_MetricNames.FINAL_PRED])
         metrics_dict[ALL_KEY]["%_pos"] = metrics_dict[ALL_KEY]["num_pos"] / float(y_true.shape[0])
     metrics_dict[ALL_KEY]["cht_size"] = y_true.shape[0]
 
-    # Compute the metrics when we analyyze the each
+    # Compute the metrics when we analyze the each
     # subset of predictions for each cohort separately
     subsets = cht_manager.get_subsets(X, y_true)
     for cht_name in subsets.keys():
@@ -160,8 +160,8 @@ def fetch_cohort_results(
         y_pred_subset = y_pred_dict[cht_name]
         results = get_metrics(y_subset, y_pred_subset, regression, best_th_auc=True, fixed_th=th)
         metrics_dict[cht_name] = _metric_tuple_to_dict(results, regression)
-        if results[MetricNames.PROBLEM_TYPE] == MetricNames.BIN_CLASS:
-            metrics_dict[cht_name]["num_pos"] = np.sum(results[MetricNames.FINAL_PRED])
+        if results[_MetricNames.PROBLEM_TYPE] == _MetricNames.BIN_CLASS:
+            metrics_dict[cht_name]["num_pos"] = np.sum(results[_MetricNames.FINAL_PRED])
             metrics_dict[cht_name]["%_pos"] = metrics_dict[cht_name]["num_pos"] / float(y_subset.shape[0])
         metrics_dict[cht_name]["cht_size"] = y_subset.shape[0]
 
@@ -192,6 +192,7 @@ def fetch_cohort_results(
     return df
 
 
+# -----------------------------------
 def plot_value_counts_cohort(y_full, subsets, normalize=True):
     plt.figure().clear()
     plt.close()

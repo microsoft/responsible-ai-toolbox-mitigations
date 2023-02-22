@@ -77,7 +77,7 @@ def err_float_01(param, param_name):
     Raises an error if param is not in the range [0, 1].
     param_name represents the name of the parameter 'param'.
     This makes it easier for the user to identify where the
-    error occured.
+    error occurred.
 
     :param param: the numerical parameter being analyzed;
     :param param_name: the internal name used for the parameter
