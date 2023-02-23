@@ -1191,8 +1191,9 @@ class DecoupledClass(CohortHandler):
             cohort_index, cohort_pred = self.cohorts[i].find_instances_cohort_and_predict(
                 df, self._cohort_pipe[i], index_used, probability
             )
-            index_used += cohort_index
-            pred_dict[cohort.name] = cohort_pred
+            if cohort_index:
+                index_used += cohort_index
+                pred_dict[cohort.name] = cohort_pred
 
         self._check_intersection_cohorts(index_used)
         self._raise_missing_instances_error(df, index_used)
