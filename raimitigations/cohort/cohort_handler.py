@@ -390,7 +390,7 @@ class CohortHandler(DataProcessing):
                 final_pred = np.concatenate((final_pred, pred), axis=0)
 
         new_index = np.argsort(index_list)
-        final_pred = final_pred[new_index]
+        final_pred = np.array(final_pred)[new_index]
 
         return final_pred
 
