@@ -14,7 +14,7 @@ from sklearn.metrics import mean_absolute_error
 from ..cohort_handler import CohortHandler
 from .decoupled_cohort import _DecoupledCohort
 from ...utils.data_utils import err_float_01
-from ...utils import MetricNames, probability_to_class
+from ...utils import _MetricNames, probability_to_class
 
 
 class DecoupledClass(CohortHandler):
@@ -902,7 +902,7 @@ class DecoupledClass(CohortHandler):
         current_loss = {}
         n = float(self.df_info.df.shape[0])
         for cohort in self.cohorts:
-            bin_pred[cohort.name] = probability_to_class(pred_proba[cohort.name], cohort.train_result[MetricNames.TH])
+            bin_pred[cohort.name] = probability_to_class(pred_proba[cohort.name], cohort.train_result[_MetricNames.TH])
             current_loss[cohort.name] = self._compute_regular_loss(bin_true[cohort.name], bin_pred[cohort.name])
             nk = float(cohort.get_size())
             regular_loss += (nk / n) * current_loss[cohort.name]
@@ -1015,7 +1015,7 @@ class DecoupledClass(CohortHandler):
         # we update the data of the best solution
         if joint_loss < min_loss:
             changed = True
-            cohort.train_result[MetricNames.TH] = th
+            cohort.train_result[_MetricNames.TH] = th
             min_loss = joint_loss
         # Otherwise, recover the binary predictions and
         # loss value for the old threshold value
@@ -1055,7 +1055,7 @@ class DecoupledClass(CohortHandler):
             # candidate threshold values
             for i in range(len(self.cohorts)):
                 cohort = self.cohorts[i]
-                th_list = cohort.train_result[MetricNames.TH_LIST]
+                th_list = cohort.train_result[_MetricNames.TH_LIST]
                 # Cycle through the threshold candidates for the current cohort
                 for x in range(th_list.shape[0]):
                     # Check if changing the threshold to th_list[x]
@@ -1263,7 +1263,7 @@ class DecoupledClass(CohortHandler):
             return None
 
         has_proba = self.cohorts[0].train_result is not None
-        bin_problem = has_proba and self.cohorts[0].train_result[MetricNames.PROBLEM_TYPE] == MetricNames.BIN_CLASS
+        bin_problem = has_proba and self.cohorts[0].train_result[_MetricNames.PROBLEM_TYPE] == _MetricNames.BIN_CLASS
         if not bin_problem:
             warnings.warn(
                 "WARNING: The problem beinf solved is not a binary classification problem. Therefore, not threshold "
@@ -1271,5 +1271,5 @@ class DecoupledClass(CohortHandler):
             )
             return None
 
-        th_dict = {cohort.name: cohort.train_result[MetricNames.TH] for cohort in self.cohorts}
+        th_dict = {cohort.name: cohort.train_result[_MetricNames.TH] for cohort in self.cohorts}
         return th_dict

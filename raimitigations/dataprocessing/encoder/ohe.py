@@ -29,11 +29,11 @@ class EncoderOHE(DataEncoding):
         N-1 one-hot encoded columns. This is useful when using models that does not
         work properly with colinear columns: when using all one-hot columns, each of these
         columns can be expressed as a linear combination of the other columns. By removing
-        one of these columns using drop=True, we remove this colinearity. Note however that
+        one of these columns using drop=True, we remove this collinearity. Note however that
         several models can work even with colinear columns;
 
-    :param unknown_err: if True, when an unknwon category is encontered, an error is
-        raaised. If False, when an unknown category is found, all encoded columns will be
+    :param unknown_err: if True, when an unknown category is encountered, an error is
+        raised. If False, when an unknown category is found, all encoded columns will be
         set to zero. Note that unknown_err = False does not work with drop = True;
 
     :param verbose: indicates whether internal messages should be printed or not.

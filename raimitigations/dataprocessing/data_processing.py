@@ -131,7 +131,7 @@ class DataProcessing(ABC):
         used when a the object uses the transform_pipe parameter. In these cases,
         the dataset might change its column structure, but we need to map these changes
         and guarantee that the indices provided by the user for a given transformation
-        (provided before any transformation is applied) are maped to the correct columns
+        (provided before any transformation is applied) are mapped to the correct columns
         even if these columns are changed by other transforms in the transform_pipe.
 
         :param df: the full dataset;
@@ -643,10 +643,10 @@ class DataProcessing(ABC):
             elif fit_params == self.FIT_INPUT_XY:
                 if y is None:
                     raise ValueError(
-                        f"ERROR: using the tranformation class {type(tf).__name__} "
+                        f"ERROR: using the transformation class {type(tf).__name__} "
                         + "that requires an X and Y datasets as a preprocessing step "
                         + "inside another class that does not require the separation "
-                        + "a Y dataset (whcich contains only the labels)."
+                        + "a Y dataset (which contains only the labels)."
                     )
                 tf.fit(df, y)
                 df = tf.transform(df)

@@ -7,7 +7,7 @@ from sklearn.base import BaseEstimator
 from sklearn.model_selection import KFold, StratifiedKFold
 
 from ...dataprocessing import DataProcessing
-from ...utils import MetricNames, get_metrics
+from ...utils import _MetricNames, get_metrics
 
 # -----------------------------------
 def _get_k_value(cohort_size: int, min_size_fold: int, valid_k_folds: List[int], cohort_y: pd.DataFrame):
@@ -169,10 +169,10 @@ def get_cross_validation_results(
         if regression:
             y_pred = estimator.predict(test_x)
             result_dict = get_metrics(test_y, y_pred, regression=regression)
-            results.append(result_dict[MetricNames.MSE_KEY])
+            results.append(result_dict[_MetricNames.MSE_KEY])
         else:
             y_pred = estimator.predict_proba(test_x)
             result_dict = get_metrics(test_y, y_pred, regression=regression)
-            results.append(result_dict[MetricNames.AUC_KEY])
+            results.append(result_dict[_MetricNames.AUC_KEY])
 
     return np.mean(results)

@@ -9,13 +9,11 @@ This repo is a part of the [Responsible AI Toolbox](https://github.com/microsoft
 <p align="center">
 <img src="./docs/imgs/responsible-ai-toolbox-mitigations.png" alt="ResponsibleAIToolboxMitigationsOverview" width="750"/>
 
-There are three main modules covered in this library:
-- **Data Processing** (Data Enhancements): include several transformer classes that aim to change or mitigate certain aspects of a dataset.
-The goal of this module is to provide a unified interface for different mitigation methods scattered around
-multiple machine learning libraries, such as scikit-learn, mlxtend, sdv, among others.
-- **Data Balance Analysis** (Exploratory Data Analysis): include metrics that help to determine how balanced is your dataset.
-- **Cohort** (managing cohorts): include a set of classes that allow users to handle cohorts of data by creating customized pipelines
-for each cohort.
+The Responsible AI Mitigations Library helps AI practitioners explore different measurements and mitigation steps that may be most appropriate when the model underperforms for a given data cohort. The library currently has three modules:
+
+- **DataProcessing** offers mitigation techniques for improving model performance for specific cohorts.
+- **DataBalanceAnalysis** provides metrics for diagnosing errors that originate from data imbalance either on class labels or feature values.
+- **Cohort** provides classes for handling and managing cohorts, which allows the creation of custom pipelines for each cohort in an easy and intuitive interface. The module also provides techniques for learning different decoupled estimators (models) for different cohorts and combining them in a way that optimizes different definitions of group fairness.
 
 
 In this library, we take a **targeted approach to mitigating errors** in Machine Learning models. This is complementary and different from the traditional blanket approaches which aim at maximizing a single-score performance number, such as overall accuracy, by merely increasing the size of traning data or model architecture. Since blanket approaches are often costly but also ineffective for improving the model in areas of poorest performance, with targeted approaches to model improvement we focus the improvement efforts in areas previously identified to have more errors and their underlying diagnoses of error. For example, if a practitioner has identified that the model is underperforming for a cohort of interest by using Error Analysis in the Responsible AI Dashboard, they may also continue the debugging process by finding out through Data Balance Analysis and find out that there is class imbalance for this particular cohort. To mitigate the issue, they then focus on improving class imbalance for the cohort of interest by using the Responsible AI Mitigations library. This and several other examples in the documentation of each mitigation function illustrate how targeted approaches may help practitioner best at mitigation giving them more control in the model improvement process.
@@ -23,7 +21,7 @@ In this library, we take a **targeted approach to mitigating errors** in Machine
 
 ## Installation
 
-Use the following pip command to install the Responsible AI Toolbox. Make sure you are using Python 3.7, 3.8, or 3.9. If running in jupyter, please make sure to restart the jupyter kernel after installing. There are three installation options for the ``raimitigations`` package:
+Use the following pip command to install the Responsible AI Toolbox. Make sure you are using Python 3.7, 3.8, 3.9 or 3.10. If running in jupyter, please make sure to restart the jupyter kernel after installing. There are three installation options for the ``raimitigations`` package:
 
 * To install the minimum dependencies, use:
 
