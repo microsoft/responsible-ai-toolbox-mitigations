@@ -43,7 +43,7 @@ class ActiveDetect(ErrorDetection):
     ):
         super().__init__(df, col_predict, verbose)    
         self._set_error_modules(error_modules)
-        self.error_module_matrix_dict: dict = {}
+        self.module_error_matrix_dict: dict = {}
     
     # -----------------------------------
     def _check_error_modules(self, error_modules: list):
@@ -92,16 +92,16 @@ class ActiveDetect(ErrorDetection):
             if col in self.col_predict:
                 col_type = self.types[self.col_predict.index(col)]
                 indicator_vector = np.full(self.n_rows, 1)
-                if col_type in error_module.availTypes():
+                if col_type in error_module.get_available_types():
                     col_vals = self.df[col].values
+                    print(col)
                     erroneous_indices = error_module.get_erroneous_rows_in_col(col_vals)
                     indicator_vector[erroneous_indices] = -1
             else:
                 indicator_vector = np.full(self.n_rows, np.nan)
+            error_matrix.append(indicator_vector)
 
-            error_matrix.append(indicator_vector.T)
-
-        return np.array(error_matrix)
+        return np.array(error_matrix).T
     
     # -----------------------------------
     def _get_final_error_matrix(self):
@@ -124,8 +124,8 @@ class ActiveDetect(ErrorDetection):
     def _predict(self, df: pd.DataFrame):
         """
         """
-        for module in self.modules:
-            self.module_error_matrix_dict[str(module)] = self._predictModule(module)
+        for module in self.error_modules:
+            self.module_error_matrix_dict[module.module_name] = self._predictModule(module)
         return self._get_final_error_matrix()
     
     # ------------------------------------

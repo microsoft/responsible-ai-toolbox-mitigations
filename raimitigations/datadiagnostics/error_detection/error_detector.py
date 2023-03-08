@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 from ..data_diagnostics import DataDiagnostics
-from .utils import *
+from .utils import _is_addr, _is_cat, _is_num
 
 class ErrorDetection(DataDiagnostics):
     """
@@ -55,12 +55,11 @@ class ErrorDetection(DataDiagnostics):
                                num_thresh: float = 0.25,
                                addr_thresh: float = 0.25) -> list: #TODO: fyi: note: some thresholds are percent and other count
         """
-        Finds the data type of each column in col_predict. It has 5 data type options:
+        Finds the data type of each column in col_predict. It has 4 data type options:
             - numerical
             - categorical
             - string
             - address
-            - unknown
 		
         :param cat_thresh:;
         :param num_thresh: ;
@@ -68,16 +67,14 @@ class ErrorDetection(DataDiagnostics):
 		"""
         for col in self.col_predict:
             col_vals = self.df[col].values
-            if self._is_addr(col_vals, addr_thresh): #TODO: do we even have any error modules that handle address
+            if _is_addr(col_vals, addr_thresh): #TODO: do we even have any error modules that handle address
                 self.types.append('address')
-            elif self._is_num(col_vals, num_thresh):
+            elif _is_num(col_vals, num_thresh):
                 self.types.append('numerical')
-            elif self._is_cat(col_vals, cat_thresh):
+            elif _is_cat(col_vals, cat_thresh):
                 self.types.append('categorical')
-            elif self._is_str(col_vals):
-                self.types.append('string')
             else:
-                self.types.append('unknown')
+                self.types.append('string')
 
     # -----------------------------------
     @abstractmethod

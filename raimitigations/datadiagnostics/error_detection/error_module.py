@@ -35,7 +35,7 @@ class ErrorModule():
 		raise NotImplemented("An error module must implement description.")
 
     # -----------------------------------
-	def get_available_types(self):
+	def get_available_types(self) -> list:
 		"""
 		Returns a list of data types supported by the error detection module.
 		"""

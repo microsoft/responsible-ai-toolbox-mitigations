@@ -11,6 +11,7 @@ class QuantitativeErrorModule(ErrorModule):
     # -----------------------------------
     def __init__(self, thresh=3.5):
         self.thresh = thresh
+        self.module_name = "QuantitativeErrorModule"
 
     # -----------------------------------
     def _predict(self, vals):
@@ -19,7 +20,7 @@ class QuantitativeErrorModule(ErrorModule):
         erroneous.
         :param vals: a list of values to predict quantitative errors on;
         """
-        vals = filter(lambda x : not np.isinf(x) , [self.checktype(v) for v in list(vals)])  # TODO: does this simply filter non floats (checktype()) and np.inf?
+        vals = list(filter(lambda x : not np.isinf(x) , [self.checktype(v) for v in list(vals)]))  # TODO: does this simply filter non floats (checktype()) and np.inf?
 
         std = np.std(vals)
         mean = np.mean(vals)
@@ -51,6 +52,7 @@ class QuantitativeErrorModule(ErrorModule):
         :rtype:
         """
         erroneous_vals = self._predict(col_vals)
+        print("error_vals: ", list(erroneous_vals))
         erroneous_indices = []
         for e_val in erroneous_vals:
             erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))

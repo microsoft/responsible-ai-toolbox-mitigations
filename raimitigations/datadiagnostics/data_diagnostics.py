@@ -165,7 +165,7 @@ class DataDiagnostics(ABC):
                     col_list = [str(val) for val in col_list]
 
             missing = [value for value in col_list if value not in df.columns]
-            if not missing:
+            if missing:
                 err_msg = (
                     f"ERROR: at least one of the columns provided in the '{col_var_name}' param is "
                     f"not present in the 'df' dataframe. The following columns are missing:\n{missing}"
