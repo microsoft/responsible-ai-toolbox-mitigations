@@ -60,7 +60,9 @@ methods offered in the **dataprocessing** module.
 
 - [Encoders](notebooks/dataprocessing/module_tests/encoding.ipynb)
 - [Scalers](notebooks/dataprocessing/module_tests/scaler.ipynb)
-- [Imputers](notebooks/dataprocessing/module_tests/imputation.ipynb)
+- [Basic Imputer](notebooks/dataprocessing/module_tests/basic_imputation.ipynb)
+- [Iterative Imputer](notebooks/dataprocessing/module_tests/iterative_imputation.ipynb)
+- [KNN Imputer](notebooks/dataprocessing/module_tests/knn_imputation.ipynb)
 - [Sequential Feature Selection](notebooks/dataprocessing/module_tests/feat_sel_sequential.ipynb)
 - [Feature Selection using Catboost](notebooks/dataprocessing/module_tests/feat_sel_catboost.ipynb)
 - [Identifying correlated features: tutorial](notebooks/dataprocessing/module_tests/feat_sel_corr_tutorial.ipynb)
@@ -93,9 +95,9 @@ cohort can help in some scenarios.
 - [Cohort Case Study 1 - Using RAI Toolbox](notebooks/cohort/case_study/case_1_dashboard.ipynb)
 - [Cohort Case Study 2](notebooks/cohort/case_study/case_2.ipynb)
 - [Cohort Case Study 3](notebooks/cohort/case_study/case_3.ipynb)
-- [Decoupled Classifier Case 1](notebooks/cohort/case_study/decoupled_class/case_1)
-- [Decoupled Classifier Case 2](notebooks/cohort/case_study/decoupled_class/case_2)
-- [Decoupled Classifier Case 3](notebooks/cohort/case_study/decoupled_class/case_3)
+- [Decoupled Classifier Case 1](notebooks/cohort/case_study/decoupled_class/case_1.ipynb)
+- [Decoupled Classifier Case 2](notebooks/cohort/case_study/decoupled_class/case_2.ipynb)
+- [Decoupled Classifier Case 3](notebooks/cohort/case_study/decoupled_class/case_3.ipynb)
 
 
 
