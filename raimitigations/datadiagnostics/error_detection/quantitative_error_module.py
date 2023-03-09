@@ -1,5 +1,6 @@
 import numpy as np
 from .error_module import ErrorModule
+from .utils import checkfloattype
 
 class QuantitativeErrorModule(ErrorModule):
     """
@@ -20,7 +21,7 @@ class QuantitativeErrorModule(ErrorModule):
         erroneous.
         :param vals: a list of values to predict quantitative errors on;
         """
-        vals = list(filter(lambda x : not np.isinf(x) , [self.checktype(v) for v in list(vals)]))  # TODO: does this simply filter non floats (checktype()) and np.inf?
+        vals = list(filter(lambda x : not np.isinf(x) , [checkfloattype(v) for v in list(vals)]))
 
         std = np.std(vals)
         mean = np.mean(vals)
@@ -33,13 +34,6 @@ class QuantitativeErrorModule(ErrorModule):
                 erroneous_vals.add(val)
 
         return erroneous_vals
-
-    # -----------------------------------
-    def checktype(self, num):
-        try:
-            return float(num)
-        except ValueError:
-            return np.inf
 
     # -----------------------------------
     def get_erroneous_rows_in_col(self, col_vals):

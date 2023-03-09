@@ -2,6 +2,13 @@ import numpy as np
 #import usaddress #TODO: Install
 
 #TODO: fix doc strings for all these functions
+
+# -----------------------------------
+def checkfloattype(num):
+    try:
+        return float(num)
+    except ValueError:
+        return np.inf
 # -----------------------------------
 def _mad(arr):
     """ Median Absolute Deviation: a "Robust" version of standard deviation.

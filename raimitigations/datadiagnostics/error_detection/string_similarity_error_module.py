@@ -12,6 +12,7 @@ class StringSimilarityErrorModule(ErrorModule):
     # -----------------------------------
     def __init__(self, thresh=3.5):
         self.thresh = thresh
+        self.module_name = "StringSimilarityErrorModule"
 
     # -----------------------------------
     def _predict(self, strings):
@@ -59,6 +60,7 @@ class StringSimilarityErrorModule(ErrorModule):
         :rtype:
         """
         erroneous_vals = self._predict(col_vals)
+        print(list(erroneous_vals))
         erroneous_indices = []
         for e_val in erroneous_vals:
             erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))

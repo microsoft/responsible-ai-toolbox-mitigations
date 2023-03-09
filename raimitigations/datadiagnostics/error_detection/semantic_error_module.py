@@ -17,12 +17,12 @@ class SemanticErrorModule(ErrorModule):
     """
 
     # -----------------------------------
-    def __init__(self, corpus: str ='corpora/text8', thresh: float = 3.5, fail_thresh: int = 5):
+    def __init__(self, corpus: str = os.path.join(os.path.abspath(os.path.dirname(__file__)),'corpora/text8'), thresh: float = 3.5, fail_thresh: int = 5):
         #compiles the corpus first time
         if os.path.isfile(corpus + '-pretrained.bin'):
             self.model = Word2Vec.load(corpus + '-pretrained.bin')
         else:
-            sentences = word2vec.LineSentence(corpus)
+            sentences = word2vec.Text8Corpus(corpus)
             self.model = word2vec.Word2Vec(sentences)
             self.model.save(corpus + '-pretrained.bin')
 
@@ -30,6 +30,7 @@ class SemanticErrorModule(ErrorModule):
         self.model.init_sims(replace=True) 
         self.thresh = thresh
         self.fail_thresh = fail_thresh
+        self.module_name = "SemanticErrorModule"
 
     # -----------------------------------
     def _predict(self, vals: list) -> set:
@@ -41,29 +42,32 @@ class SemanticErrorModule(ErrorModule):
         :return: returns erroneous values;
         :rtype: set.
         """
-        #TODO: current status: we use the average total similarity score for each val before calculating distribution and finding outliers. Their way: find erroneous values and basically if val has that token (or no tokens) then it's erroneous, they return erroneous tokens/no taken vals in predict and check what erroneous vals are (that have these tokens or no tokens) in the next function, instead if we do this, we should do that check here and the next function remains for indices of the erroneous vals only.
+        # current status: find erroneous tokens and if val has an erroneous token (or no tokens) then it's an erroneous val.
         
         vals_set = set(vals)
-        erroneous_vals = set()
+        #model_vals_set = set(vals)
         modeled_tokens = set()
+        erroneous_vals = set()
 
+        vals_tokens = {}
         for val in vals_set:
             # tokenize categorical value
-            tokens = [t.strip().lower() for t in re.findall(r"[\w']+", val)]
+            tokens = [t.strip().lower() for t in re.findall(r"[\w']+", str(val))]
+            vals_tokens[val] = tokens
 
             # if value has no tokens (words), add to error list
             if not tokens:
                 erroneous_vals.add(val)
-                vals_set.remove(val)
+                #model_vals_set.remove(val)
             else:
-                match = False
+                #match = False
                 # iterate through tokens, find modeled tokens
                 for t in tokens:
-                    if t not in STOPWORDS and t in self.model:
-                        match = True
-                        modeled_tokens.add(token)
-                if not match:
-                    vals_set.remove(val)
+                    if t not in STOPWORDS and t in self.model.wv:
+                        #match = True
+                        modeled_tokens.add(t)
+                #if not match:
+                    #model_vals_set.remove(val)
 
         # fails if not enough tokens are present in model
         if len(modeled_tokens) < self.fail_thresh:
@@ -74,14 +78,29 @@ class SemanticErrorModule(ErrorModule):
         for token_i in modeled_tokens:
             total_i_similarity = 0
             for token_j in modeled_tokens:
-                total_i_similarity += self.model.similarity(token_i, token_j)
+                total_i_similarity += self.model.wv.similarity(token_i, token_j)
             token_total_similarities[token_i] = total_i_similarity
-            
+
+        #take MAD to filter corpus
+        mad = _mad(list(token_total_similarities.values()))
+        median = np.median(list(token_total_similarities.values()))
+        erroneous_tokens = set()
+
+        for token in list(token_total_similarities.keys()):
+            if np.abs(median - token_total_similarities[token]) > self.thresh * mad:
+                erroneous_tokens.add(token)
+
+        for val in vals_set:
+            if list(set(vals_tokens[val]).intersection(erroneous_tokens)):
+                erroneous_vals.add(val)
+
+        ''' 
+        # or: we use the average total similarity score for each val before calculating distribution and finding outliers. 
 
         # find average similarity score for each input value
         val_avg_similarity = {}
         scores = []
-        for val in vals_set:
+        for val in model_vals_set:
             tokens = [t.strip().lower() for t in re.findall(r"[\w']+", val)]
             avg_score = np.mean(np.array([token_total_similarities.get(key) for key in tokens]))
             val_avg_similarity[val] = avg_score
@@ -96,7 +115,8 @@ class SemanticErrorModule(ErrorModule):
                 erroneous_vals.add(val)
 
         # return erroneous_vals
-        return list(erroneous_vals)
+        '''
+        return erroneous_vals
 
     # -----------------------------------
     def get_erroneous_rows_in_col(self, col_vals):
@@ -109,8 +129,9 @@ class SemanticErrorModule(ErrorModule):
         :rtype: 
         """
         erroneous_vals = self._predict(col_vals)
+        print(list(erroneous_vals))
         erroneous_indices = [] 
-        for e_val in erroneous_vals: #TODO: what about new vals that weren't in predict, do we check here for all no tokens vals for example? (to include new values?), maybe not, should have been part of predict, will be how I set it up.
+        for e_val in erroneous_vals: 
             erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))
 
         '''

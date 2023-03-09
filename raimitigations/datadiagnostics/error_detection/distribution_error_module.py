@@ -14,6 +14,7 @@ class DistributionErrorModule(ErrorModule):
     def __init__(self, thresh=3.5, fail_thresh=2):
         self.thresh = thresh
         self.fail_thresh = fail_thresh
+        self.module_name = "DistributionErrorModule"
 
     # -----------------------------------
     def _predict(self, vals: list) -> set:
@@ -27,23 +28,23 @@ class DistributionErrorModule(ErrorModule):
         :rtype: a set
         """
         dist = {}
+        vals = [x for x in vals if str(x) != 'nan']
+        vals_set = set(vals)
         for v in vals:
             if v not in dist:
                 dist[v] = 0 #initialize the distribution of this value at 0 if not seen before
-
             dist[v] = dist[v] + 1 # increment by 1 (a counter for each value's frequency/distribution in the data)
+        
+        val_scores = [dist[v] for v in vals_set] #list of distribution scores for each value
 
-        vals_set = set(vals) # set of values, removes duplicates
-        dist_vals = [dist[v] for v in vals_set] #list of distribution values
-
-        dist_std = np.std(dist_vals) # std of all value distributions
-        dist_mean = np.mean(dist_vals)  # mean of all value distributions
+        dist_std = np.std(val_scores) # std of all value distributions
+        dist_mean = np.mean(val_scores)  # mean of all value distributions
 
         erroneous_vals = set()
 
         #fail if number of unique values is less than the fail threshold, or if
         #dist_std not informative
-        if len(dist_vals) <= self.fail_thresh or dist_std < 1.0:  # if the std of dist is <1 #TODO: can we do len(valsv) instead
+        if len(val_scores) <= self.fail_thresh or dist_std < 1.0:  # if the std of dist is <1 #TODO: can we do len(valsv) instead
             return erroneous_vals
 
         for val in vals_set:
@@ -64,6 +65,7 @@ class DistributionErrorModule(ErrorModule):
         :rtype:
         """
         erroneous_vals = self._predict(col_vals)
+        print(list(erroneous_vals))
         erroneous_indices = [] 
         for e_val in erroneous_vals:
             erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))

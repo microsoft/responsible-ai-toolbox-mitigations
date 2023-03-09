@@ -9,6 +9,7 @@ class PuncErrorModule(ErrorModule):
     """
     # -----------------------------------
     def __init__(self):
+        self.module_name = "PuncErrorModule"
         pass
 
     # -----------------------------------
@@ -24,7 +25,7 @@ class PuncErrorModule(ErrorModule):
         vals_set = set(strings)  # get unique values
 
         for s in vals_set:
-            sstrip = re.sub(r'\W+', '', s.lower())
+            sstrip = re.sub(r'\W+', '', str(s).lower())
             cleaned_string = sstrip.lower().strip()
             if len(cleaned_string) == 0:
                 erroneous_vals.add(s)
@@ -43,6 +44,7 @@ class PuncErrorModule(ErrorModule):
         :rtype:
         """
         erroneous_vals = self._predict(col_vals)
+        print(list(erroneous_vals))
         erroneous_indices = []
         for e_val in erroneous_vals:
             erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))
