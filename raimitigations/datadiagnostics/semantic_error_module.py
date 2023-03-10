@@ -1,12 +1,11 @@
 from gensim.models.word2vec import Word2Vec
 from gensim.parsing.preprocessing import STOPWORDS
-from gensim.models import word2vec
-import gensim.downloader as downloader
 import numpy as np
 import re
 from .error_module import ErrorModule
 from .utils import calculate_mad
 import os.path
+
 
 class SemanticErrorModule(ErrorModule):
     """
@@ -14,23 +13,20 @@ class SemanticErrorModule(ErrorModule):
 
     :param corpus: a file path referring to a corpus of text;
     :param thresh: a float similarity threshold to determine when a value doesn't belong. The higher this parameter is, the less sensitive the similarity metric. This parameter defaults at 3.5;
-    :param fail_thresh: an int representing the fraction of tokens not found in the corpus before short-circuiting. This parameter defaults at 5; 
+    :param fail_thresh: an int representing the fraction of tokens not found in the corpus before short-circuiting. This parameter defaults at 5;
     """
 
     # -----------------------------------
-    def __init__(self, corpus: str = os.path.join(os.path.abspath(os.path.dirname(__file__)),'corpora/text8'), thresh: float = 3.5, fail_thresh: int = 5):
-        #compiles the corpus first time
-        #if os.path.isfile(corpus + '-pretrained.bin'):
-        #    
-        #else:
-            #sentences = word2vec.Text8Corpus(corpus)
-            #dataset = downloader.load("text8")
-            #self.model = word2vec.Word2Vec(dataset)
-        self.model = Word2Vec.load(corpus + '-pretrained.bin')
-        #self.model.save(corpus + '-pretrained.bin')
+    def __init__(
+        self,
+        corpus: str = os.path.join(os.path.abspath(os.path.dirname(__file__)), "corpora/text8"),
+        thresh: float = 3.5,
+        fail_thresh: int = 5,
+    ):
+        self.model = Word2Vec.load(corpus + "-pretrained.bin")
 
         # l2-normalizes vectors, replace=True replaces original vectors.
-        self.model.init_sims(replace=True) 
+        self.model.init_sims(replace=True)
         self.thresh = thresh
         self.fail_thresh = fail_thresh
         self.module_name = "SemanticErrorModule"
@@ -46,9 +42,9 @@ class SemanticErrorModule(ErrorModule):
         :rtype: set.
         """
         # current status: find erroneous tokens and if val has an erroneous token (or no tokens) then it's an erroneous val.
-        
+
         vals_set = set(vals)
-        #model_vals_set = set(vals)
+        # model_vals_set = set(vals)
         modeled_tokens = set()
         erroneous_vals = set()
 
@@ -61,21 +57,21 @@ class SemanticErrorModule(ErrorModule):
             # if value has no tokens (words), add to error list
             if not tokens:
                 erroneous_vals.add(val)
-                #model_vals_set.remove(val)
+                # model_vals_set.remove(val)
             else:
-                #match = False
+                # match = False
                 # iterate through tokens, find modeled tokens
                 for t in tokens:
                     if t not in STOPWORDS and t in self.model.wv:
-                        #match = True
+                        # match = True
                         modeled_tokens.add(t)
-                #if not match:
-                    #model_vals_set.remove(val)
+                # if not match:
+                # model_vals_set.remove(val)
 
         # fails if not enough tokens are present in model
         if len(modeled_tokens) < self.fail_thresh:
             return erroneous_vals
-        
+
         # calculate total similarity score of each token to other tokens.
         token_total_similarities = {}
         for token_i in modeled_tokens:
@@ -84,7 +80,7 @@ class SemanticErrorModule(ErrorModule):
                 total_i_similarity += self.model.wv.similarity(token_i, token_j)
             token_total_similarities[token_i] = total_i_similarity
 
-        #take MAD to filter corpus
+        # take MAD to filter corpus
         mad = calculate_mad(list(token_total_similarities.values()))
         median = np.median(list(token_total_similarities.values()))
         erroneous_tokens = set()
@@ -97,14 +93,14 @@ class SemanticErrorModule(ErrorModule):
             if list(set(vals_tokens[val]).intersection(erroneous_tokens)):
                 erroneous_vals.add(val)
 
-        ''' 
-        # or: we use the average total similarity score for each val before calculating distribution and finding outliers. 
+        """
+        # or: we use the average total similarity score for each val before calculating distribution and finding outliers.
 
         # find average similarity score for each input value
         val_avg_similarity = {}
         scores = []
         for val in model_vals_set:
-            tokens = [t.strip().lower() for t in re.findall(r"[\w']+", val)]
+            tokens = [t.strip().lower() for t in re.findall(r"[\w']+", str(val))] # noqa
             avg_score = np.mean(np.array([token_total_similarities.get(key) for key in tokens]))
             val_avg_similarity[val] = avg_score
             scores.append(avg_score)
@@ -118,7 +114,7 @@ class SemanticErrorModule(ErrorModule):
                 erroneous_vals.add(val)
 
         # return erroneous_vals
-        '''
+        """
         return erroneous_vals
 
     # -----------------------------------
@@ -128,36 +124,15 @@ class SemanticErrorModule(ErrorModule):
         in the column, returning a list of erroneous row indices.
 
         :param col_vals: a list of values to predict semantic errors on;
-        :return: 
-        :rtype: 
+        :return:
+        :rtype:
         """
         erroneous_vals = self._predict(col_vals)
         print(list(erroneous_vals))
-        erroneous_indices = [] 
-        for e_val in erroneous_vals: 
+        erroneous_indices = []
+        for e_val in erroneous_vals:
             erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))
 
-        '''
-        erroneous_rows = []
-        indices = []
-
-        for row_idx, row in enumerate(dataset):
-            val = d[col]
-            tokens = [t.strip().lower() for t in re.findall(r"[\w']+", val)] 
-
-            match = False
-
-            for e in errors:
-
-                if e in tokens or \ 
-                    (len(tokens) == 0 and e in val):
-                    match = True
-                    break
-
-            if match:
-                erroneous_rows.append(row)
-                indices.append(row_idx)
-        '''
         return erroneous_indices
 
     # -----------------------------------
@@ -172,4 +147,4 @@ class SemanticErrorModule(ErrorModule):
         """
         Returns a list of data types available for prediction using this error detection module.
         """
-        return ['categorical']
+        return ["categorical"]
