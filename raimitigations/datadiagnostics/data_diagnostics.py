@@ -1,205 +1,182 @@
-from abc import ABC, abstractmethod
-from typing import *
+from abc import abstractmethod
+from typing import Union
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-class DataDiagnostics(ABC):
+from ..dataprocessing import DataProcessing
+from ..dataprocessing.data_processing import DataFrameInfo
+from ..dataprocessing.imputer.basic_imputer import DataImputer
+from .utils import is_cat, is_num
+
+class DataDiagnostics(DataProcessing):
     """
-    Base class for all classes present in the DataDiagnostics module
-    of the RAIMitigation library. Implements basic functionalities
-    that can be used throughout different mitigations.
+    Base class for all data diagnostics subclasses. Implements basic functionalities
+    that can be used for different error detection approaches.
 
+    :param df: pandas data frame to detect errors in;
+
+    :param col_predict: a list of the column names or indexes that will be subject to error detection.
+        If None, this parameter will be set automatically as being a list of all feature
+        columns;
+    
     :param verbose: indicates whether internal messages should be printed or not.
     """
-    COL_NAME = 0
-    COL_INDEX = 1
 
     # -----------------------------------
-    def __init__(self, verbose: bool = True):
-        self.verbose = verbose
-        self.column_type = self.COL_NAME
-        self.n_rows: int = None
-        self.n_cols: int = None
+    def __init__(self, df: Union[pd.DataFrame, np.ndarray] = None, col_predict: list = None, verbose: bool = True): 
+        super().__init__(verbose)
+        self.df_info = DataFrameInfo()
+        self._set_df(df)
+        self.n_rows = None
+        self.n_cols = None
+        self.types = []
+        self.col_predict = col_predict
+        self.fitted = False
+        self.predicted = False
 
     # -----------------------------------
-    def print_message(self, text: str):
-        if self.verbose:
-            print(text)
-
+    def _get_fit_input_type(self):
+        return self.FIT_INPUT_DF
+    
     # -----------------------------------
-    def _check_error_df(self, df):
-        # Check consistency of the df param
-        if df is not None and type(df) != pd.DataFrame and type(df) != np.ndarray:
-            class_name = type(self).__name__
-            raise ValueError(
-                f"ERROR: expected parameter 'df' of {class_name} to be of type pandas.DataFrame "
-                + f"or numpy.ndarray, but got a parameter of type {type(df)} instead."
-            )
-
-    # -----------------------------------
-    def _fix_num_col(self, df: pd.DataFrame, label_col: Union[int, str] = None):
+    def _set_column_to_predict(self):
         """
-        Checks if the column names of the dataset are present or not. If not, create
-        valid column names using the index number (converted to string) of each column.
-        Also check if the label_col parameter is provided as an index or as a column
-        name. In the former case, convert the label_col to a column name. Finally,
-        create a dictionary that maps each column index to the column name. This is
-        used when a the object uses the transform_pipe parameter. In these cases,
-        the dataset might change its column structure, but we need to map these changes
-        and guarantee that the indices provided by the user for a given transformation
-        (provided before any transformation is applied) are mapped to the correct columns
-        even if these columns are changed by other transforms in the transform_pipe.
-
-        :param df: the full dataset;
-        :param label_col: the name or index of the label column;
-        :return: if label_col is None, returns only the fixed dataset. Otherwise, return
-            a tuple (df, label_col) containing the fixed dataset and the fixed label
-            column, respectively.
-        :rtype: pd.DataFrame or a tuple
+        Sets the columns to detect errors in (col_predict) automatically
+        if these columns are not provided, set to be all feature columns. 
         """
-        column_type = self.COL_NAME
-        if type(df.columns[0]) != str:
-            column_type = self.COL_INDEX
-            df.columns = [str(i) for i in range(df.shape[1])]
-            if label_col is not None:
-                label_col = str(label_col)
+        if self.col_predict is not None:
+            return
 
-        self.col_index_to_name = {i: df.columns[i] for i in range(df.shape[1])}
-        self.column_type = column_type
+        self.col_predict = self.df_info.columns.to_list()
+        self.print_message(
+            "No columns specified for error detection. Error detection applied to all columns."
+        )
 
-        if label_col is not None:
-            if self.column_type == self.COL_INDEX:
-                label_col = str(label_col)
+    # -----------------------------------
+    def _check_valid_col_predict(self):
+        self.col_predict = self._check_error_col_list(self.df_info.columns, self.col_predict, "col_predict")
+
+    # -----------------------------------
+    def _set_column_data_types(self,
+                               cat_thresh:int = 1000,
+                               num_thresh: float = 0.25) -> list:
+        """
+        Finds the data type of each column in col_predict. It has 3 data type options:
+            - numerical
+            - categorical
+            - string
+		
+        :param cat_thresh:;
+        :param num_thresh: ;
+        :param addr_thresh: ;
+		"""
+        for col in self.col_predict:
+            col_vals = self.df_info.df[col].values
+            if is_num(col_vals, num_thresh):
+                self.types.append('numerical')
+            elif is_cat(col_vals, cat_thresh):
+                self.types.append('categorical')
             else:
-                if type(label_col) == int:
-                    label_col = self._get_column_from_index(label_col)
-            return df, label_col
-
-        return df
+                self.types.append('string')
 
     # -----------------------------------
-    def _numpy_array_to_df(self, df: Union[pd.DataFrame, np.ndarray]):
-        if isinstance(df, np.ndarray):
-            df = pd.DataFrame(df)
-        return df
+    @abstractmethod
+    def _fit(self):
+        """
+        Abstract method. For a given concrete class, this method must
+        create the error detection module implemented and save any
+        important information in a set of class-specific attributes to be used for error prediction.
+        """
+        pass
 
     # -----------------------------------
-    def _fix_col_predict(self, df: Union[pd.DataFrame, np.ndarray]):
+    def fit(self, df: Union[pd.DataFrame, np.ndarray] = None):
         """
-        Checks if the column names of the dataset are present or not. If not, create
-        valid column names using the index number (converted to string) of each column.
+        Default fit method for all encoders that inherit from the ErrorDetection class. The
+        following steps are executed: (i) set the dataset, (ii) set the list of columns that
+        will be subject to error detection, (iii) check for any invalid input, (iv) call the fit method of the
+        child class.
 
-        :param df: the full dataset;
-        :return: the fixed dataset.
-        :rtype: pd.DataFrame
+        :param df: the full dataset to fit the error detection module on;
         """
-        if isinstance(df, np.ndarray):
-            df = self._numpy_array_to_df(df)
-        invalid = False
-        if type(df.columns[0]) != str:
-            if self.column_type == self.COL_NAME:
-                invalid = True
-            else:
-                df.columns = [str(i) for i in range(df.shape[1])]
-
-        if invalid:
-            raise ValueError(
-                "ERROR: the columns of the dataset provided to the transform() method from class "
-                + f"{type(self).__name__} does not match with the columns provided during the fit() method."
-            )
-        return df
+        self._set_df(df, require_set=True)
+        self._set_column_to_predict()
+        self._check_valid_col_predict()
+        self._set_column_data_types()
+        self._fit()
+        self.fitted = True
+        self.error_matrix = None
+        return self
 
     # -----------------------------------
-    def _get_column_from_index(self, column_index: int):
+    @abstractmethod
+    def _predict(self, df: pd.DataFrame):
         """
-        Get the column name associated to a given column index.
+        Abstract method. For a given concrete class, this method must predict errors present 
+        in col_predict columns of a dataset using the error detection module implemented and
+        return the errors in the data.
 
-        :param column_index: the column index.
-        :return: the column name associated to the column specified by the index column_index.
-        :rtype: str
+        :param df: the full dataset to perform error detection on.
         """
-        if column_index not in self.col_index_to_name.keys():
-            raise ValueError(
-                f"ERROR: invalid index provided to the class {type(self).__name__}.\n"
-                + f"Error caused by the following index: {column_index}"
-            )
-        return self.col_index_to_name[column_index]
+        pass
 
     # -----------------------------------
-    def _check_error_col_list(self, df: pd.DataFrame, col_list: list, col_var_name: str):
+    def predict(self, df: Union[pd.DataFrame, np.ndarray]) -> dict:
         """
-        For a given dataset df, check if all column names in col_list are present
-        in df. col_list can be a list of column names or column indexes. If one of
-        the column names or indexes is not present in df, a ValueError is raised. If
-        the col_list parameter is made up of integer values (indices) and the dataframe
-        has column names, return a new column list using the column names instead.
+        Predicts errors in a given dataset in all columns in col_predict. 
+        Returns all data with detected errors.
 
-        :param df: the dataframe that should be checked;
-        :param col_list: a list of column names or column indexes;
-        :param col_var_name: a name that identifies where the error occurred (if a
-            ValueError is raised). This method can be called from many child classes,
-            so this parameter shows the name of the parameter from the child class
-            that caused the error.
-        :return: the col_list parameter. If the col_list parameter is made up of integer
-            values (indices) and the dataframe has column names, return a new column list
-            using the column names instead.
+        :param df: the full dataset to perform error detection on..
+        :return: a dictionary mapping each error module to an error matrix. Each value's prediction is indicated as follows:
+            - -1 indicates an error;
+            - +1 indicates no error was predicted or that this error module is not applicable for the column's data type;
+            - np.nan for columns not in col_predict.
+
+        :rtype: a dictionary.
+        """
+        self._check_if_fitted()
+        predict_df = self._fix_col_transform(df)
+        self.error_matrix = self._predict(predict_df)
+        self.predicted = True
+        return self.error_matrix
+    
+    # -----------------------------------
+    def transform(self, df: Union[pd.DataFrame, np.ndarray], imputer: DataImputer = None) -> pd.DataFrame:
+        """ 
+        :param imputer: an imputer object to fit to and impute this dataset. You can use 
+            imputers present in this library of type dataprocessing.imputer.DataImputer(), 
+            your options are: BasicImputer(), IterativeDataImputer() or KNNDataImputer(). 
+            If you'd like to leave erroneous values as np.nan, use None.
+        """
+        self._check_if_predicted()
+        transf_df = self._fix_col_transform(df)
+        error_mask = np.where(self.error_matrix == -1, False, True)
+        mask_df = pd.DataFrame(data = error_mask, columns = transf_df.columns)
+        masked_df = transf_df[mask_df]
+        if imputer is None:
+            return masked_df
+        else:
+            imputer.fit(masked_df)
+            new_df = imputer.transform(masked_df)
+            return new_df
+    '''
+    # -----------------------------------
+    @abstractmethod
+    def _transform(self, df: pd.DataFrame, imputer: DataImputer = None) -> pd.DataFrame:
+        """
+        Abstract method. For a given concrete class, this method 
+        """
+        pass
+    '''
+    # -----------------------------------
+    def get_col_predict(self):
+        """
+        Returns a list with the column names or column indices of 
+            columns subject to error detection.
+
+        :return: a list with the column names or column indices of
+            columns subject to error detection.
         :rtype: list
         """
-        if type(col_list) != list:
-            raise ValueError(
-                f"ERROR: the parameter '{col_var_name}' must be a list of column names."
-                + f" Each of these columns must be present in the DataFrame 'df'."
-            )
-
-        if not col_list:
-            self.do_nothing = True
-        elif df is not None:
-            if type(col_list[0]) != int and type(col_list[0]) != str:
-                raise ValueError(f"ERROR: '{col_var_name}' must be a list of strings or a list of integers.")
-
-            if type(col_list[0]) == int:
-                if self.column_type == self.COL_NAME:
-                    col_list = [self._get_column_from_index(index) for index in col_list]
-                else:
-                    col_list = [str(val) for val in col_list]
-
-            missing = [value for value in col_list if value not in df.columns]
-            if missing:
-                err_msg = (
-                    f"ERROR: at least one of the columns provided in the '{col_var_name}' param is "
-                    f"not present in the 'df' dataframe. The following columns are missing:\n{missing}"
-                )
-                raise ValueError(err_msg)
-        return col_list
-
-    # -----------------------------------
-    def _check_if_fitted(self):
-        if not self.fitted:
-            raise ValueError(
-                f"ERROR: trying to call the transform() method from an instance of the {self.__class__.__name__} class "
-                + "before calling the fit() method. "
-                + "Call the fit() method before using this instance to transform a dataset."
-            )
-
-    # -----------------------------------
-    def _set_df(self, df: Union[pd.DataFrame, np.ndarray], require_set: bool = False):
-        """
-        Sets the current dataset self.df using a new dataset df. If both
-        self.df and df are None, then a ValueError is raised. df can be None
-        if a valid self.df has already been set beforehand.
-
-        :param df: the full dataset;
-        :param require_set: a boolean value indicating if the df parameter must
-            be a valid dataframe or not. If true and df is None, an error is raised.
-        """
-        self._check_error_df(df)
-        if self.df is None and df is None and require_set:
-            raise ValueError(
-                "ERROR: dataframe not provided. You need to provide the dataframe "
-                + "through the class constructor or through the fit() method."
-            )
-        if df is not None:
-            if isinstance(df, np.ndarray):
-                df = self._numpy_array_to_df(df)
-            self.df = self._fix_num_col(df)
+        return self.col_predict.copy()

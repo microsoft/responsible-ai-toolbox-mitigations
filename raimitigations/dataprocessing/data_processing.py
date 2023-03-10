@@ -357,6 +357,15 @@ class DataProcessing(ABC):
                 + "before calling the fit() method. "
                 + "Call the fit() method before using this instance to do a transformation or prediction."
             )
+    
+    # -----------------------------------
+    def _check_if_predicted(self):
+        if not self.predicted:
+            raise ValueError(
+                f"ERROR: trying to call a method from an instance of the {self.__class__.__name__} class "
+                + "before calling the predict() method. "
+                + "You need to call both the fit() and predict() methods first."
+            )
 
     # -----------------------------------
     def _check_df_input_format(self, df: pd.DataFrame, label_col: str, X: pd.DataFrame, y: pd.DataFrame):
