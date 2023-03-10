@@ -1,6 +1,7 @@
 import numpy as np
 from .error_module import ErrorModule
 
+
 class DistributionErrorModule(ErrorModule):
     """
     This module detects values that appear more or less frequently than typical in the dataset using standard deviation.
@@ -28,22 +29,22 @@ class DistributionErrorModule(ErrorModule):
         :rtype: a set
         """
         dist = {}
-        vals = [x for x in vals if str(x) != 'nan']
+        vals = [x for x in vals if str(x) != "nan"]
         vals_set = set(vals)
         for v in vals:
             if v not in dist:
-                dist[v] = 0 #initialize the distribution of this value at 0 if not seen before
-            dist[v] = dist[v] + 1 # increment by 1 (a counter for each value's frequency/distribution in the data)
-        
-        val_scores = [dist[v] for v in vals_set] #list of distribution scores for each value
+                dist[v] = 0  # initialize the distribution of this value at 0 if not seen before
+            dist[v] = dist[v] + 1  # increment by 1 (a counter for each value's frequency/distribution in the data)
 
-        dist_std = np.std(val_scores) # std of all value distributions
+        val_scores = [dist[v] for v in vals_set]  # list of distribution scores for each value
+
+        dist_std = np.std(val_scores)  # std of all value distributions
         dist_mean = np.mean(val_scores)  # mean of all value distributions
 
         erroneous_vals = set()
 
-        #fail if number of unique values is less than the fail threshold, or if
-        #dist_std not informative
+        # fail if number of unique values is less than the fail threshold, or if
+        # dist_std not informative
         if len(val_scores) <= self.fail_thresh or dist_std < 1.0:
             return erroneous_vals
 
@@ -65,8 +66,7 @@ class DistributionErrorModule(ErrorModule):
         :rtype:
         """
         erroneous_vals = self._predict(col_vals)
-        print(list(erroneous_vals))
-        erroneous_indices = [] 
+        erroneous_indices = []
         for e_val in erroneous_vals:
             erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))
 
@@ -84,4 +84,4 @@ class DistributionErrorModule(ErrorModule):
         """
         Returns a list of data types available for prediction using this error detection module.
         """
-        return ['numerical', 'categorical', 'string']
+        return ["numerical", "categorical", "string"]

@@ -9,7 +9,7 @@ class ErrorModule:
 
     def _predict(self, vals):
         """
-                Predicts and returns a list of the subset of a domain that is potentially
+        Predicts and returns a list of the subset of a domain that is potentially
         erroneous.
 
         :param vals: a list of values to predict errors on;
@@ -19,7 +19,7 @@ class ErrorModule:
     # -----------------------------------
     def get_erroneous_rows_in_col(self, col_vals) -> list:
         """
-                This method maps the erroneous values to particular rows in the column, returning a list of erroneous row indices.
+        This method maps the erroneous values to particular rows in the column, returning a list of erroneous row indices.
 
         :param col_vals: aa list of values to predict distribution errors on
 

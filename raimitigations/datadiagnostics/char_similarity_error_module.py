@@ -2,6 +2,7 @@ from gensim.models.word2vec import Word2Vec
 import numpy as np
 from .error_module import ErrorModule
 
+
 class CharSimilarityErrorModule(ErrorModule):
 
     """
@@ -9,11 +10,15 @@ class CharSimilarityErrorModule(ErrorModule):
 
     :param thresh: a standard deviation count threshold to determine how many stds can a non-erroneous string's likelihood score be beyond the dataset's mean. This parameter defaults at 3.5;
     """
+
     # -----------------------------------
+
     def __init__(self, thresh=3.5):
         self.thresh = thresh
         self.module_name = "CharSimilarityErrorModule"
+
     # -----------------------------------
+
     def _predict(self, strings: list) -> set:
         """
         Predicts and returns a set of the subset of a domain that is potentially
@@ -24,12 +29,13 @@ class CharSimilarityErrorModule(ErrorModule):
         :return: a set of errors predicted by the predict function;
         :rtype: a set
         """
+        strings = [x for x in strings if str(x) != "nan"]
         chars = [[c for c in s.lower().strip()] for s in strings]
         self.model = Word2Vec(chars, hs=1, negative=0)
 
         erroneous_vals = set()
 
-        #for each val in the column
+        # for each val in the column
         string_scores = []
         scoredict = {}
 
@@ -63,11 +69,10 @@ class CharSimilarityErrorModule(ErrorModule):
         :rtype:
         """
         erroneous_vals = self._predict(col_vals)
-        print(list(erroneous_vals))
         erroneous_indices = []
         for e_val in erroneous_vals:
             erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))
-    
+
         return erroneous_indices
 
     # -----------------------------------
@@ -82,4 +87,4 @@ class CharSimilarityErrorModule(ErrorModule):
         """
         Returns a list of data types available for prediction using this error detection module.
         """
-        return ['string']
+        return ["string"]

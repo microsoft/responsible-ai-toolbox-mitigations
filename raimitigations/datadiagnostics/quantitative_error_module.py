@@ -2,6 +2,7 @@ import numpy as np
 from .error_module import ErrorModule
 from .utils import checkfloattype
 
+
 class QuantitativeErrorModule(ErrorModule):
     """
     This module detects both quantitative parsing failures and abnormal values in a dataset using standard deviation.
@@ -21,12 +22,12 @@ class QuantitativeErrorModule(ErrorModule):
         erroneous.
         :param vals: a list of values to predict quantitative errors on;
         """
-        vals = list(filter(lambda x : not np.isinf(x) , [checkfloattype(v) for v in list(vals)]))
+        vals = list(filter(lambda x: not np.isinf(x), [checkfloattype(v) for v in list(vals)]))
 
         std = np.std(vals)
         mean = np.mean(vals)
 
-        vals_set = set(vals) # get unique values
+        vals_set = set(vals)  # get unique values
 
         erroneous_vals = set()
         for val in vals_set:
@@ -46,21 +47,10 @@ class QuantitativeErrorModule(ErrorModule):
         :rtype:
         """
         erroneous_vals = self._predict(col_vals)
-        print("error_vals: ", list(erroneous_vals))
         erroneous_indices = []
         for e_val in erroneous_vals:
             erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))
 
-        '''
-        erroneous_indices = []
-        eset = set(erroneous_vals)
-
-        for i, d in enumerate(dataset):
-            val = self.checktype(d[col])
-
-            if val in eset or np.isinf(val): 
-                erroneous_indices.append(i)
-        '''
         return erroneous_indices
 
     # -----------------------------------
@@ -75,4 +65,4 @@ class QuantitativeErrorModule(ErrorModule):
         """
         Returns a list of data types available for prediction using this error detection module.
         """
-        return ['numerical']
+        return ["numerical"]

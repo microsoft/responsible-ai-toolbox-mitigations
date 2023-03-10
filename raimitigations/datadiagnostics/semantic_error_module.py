@@ -11,19 +11,18 @@ class SemanticErrorModule(ErrorModule):
     """
     This module detects values that do not belong in a categorical column, it does so by using Word2Vec architecture. Note that this module is relatively slow when using a large training corpus.
 
-    :param corpus: a file path referring to a corpus of text;
-    :param thresh: a float similarity threshold to determine when a value doesn't belong. The higher this parameter is, the less sensitive the similarity metric. This parameter defaults at 3.5;
+    :param thresh: a float similarity threshold to determine when a value doesn't belong. This parameter defaults at 3.5;
     :param fail_thresh: an int representing the fraction of tokens not found in the corpus before short-circuiting. This parameter defaults at 5;
     """
 
     # -----------------------------------
     def __init__(
         self,
-        corpus: str = os.path.join(os.path.abspath(os.path.dirname(__file__)), "corpora/text8"),
         thresh: float = 3.5,
         fail_thresh: int = 5,
     ):
-        self.model = Word2Vec.load(corpus + "-pretrained.bin")
+        self.corpus = os.path.join(os.path.abspath(os.path.dirname(__file__)), "corpora/text8")
+        self.model = Word2Vec.load(self.corpus + "-pretrained.bin")
 
         # l2-normalizes vectors, replace=True replaces original vectors.
         self.model.init_sims(replace=True)
@@ -43,6 +42,7 @@ class SemanticErrorModule(ErrorModule):
         """
         # current status: find erroneous tokens and if val has an erroneous token (or no tokens) then it's an erroneous val.
 
+        vals = [x for x in vals if str(x) != "nan"]
         vals_set = set(vals)
         # model_vals_set = set(vals)
         modeled_tokens = set()
@@ -128,7 +128,6 @@ class SemanticErrorModule(ErrorModule):
         :rtype:
         """
         erroneous_vals = self._predict(col_vals)
-        print(list(erroneous_vals))
         erroneous_indices = []
         for e_val in erroneous_vals:
             erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))

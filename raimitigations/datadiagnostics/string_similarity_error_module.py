@@ -2,6 +2,7 @@ from gensim.models.word2vec import Word2Vec
 import numpy as np
 from .error_module import ErrorModule
 
+
 class StringSimilarityErrorModule(ErrorModule):
 
     """
@@ -9,7 +10,9 @@ class StringSimilarityErrorModule(ErrorModule):
 
     :param thresh: a standard deviation count threshold to determine how many stds can a non-erroneous string's likelihood score be beyond the dataset's mean. This parameter defaults at 3.5;
     """
+
     # -----------------------------------
+
     def __init__(self, thresh=3.5):
         self.thresh = thresh
         self.module_name = "StringSimilarityErrorModule"
@@ -22,11 +25,14 @@ class StringSimilarityErrorModule(ErrorModule):
 
         :param strings: a list of string values to predict string-similarity errors on;
         """
-        self.model = Word2Vec([s.lower().split() for s in strings], hs=1, negative=0) # train a word2vec model using the input word strings
+        strings = [x for x in strings if str(x) != "nan"]
+        self.model = Word2Vec(
+            [s.lower().split() for s in strings], hs=1, negative=0, min_count=1
+        )  # train a word2vec model using the input word strings
 
         erroneous_vals = set()
 
-        #for each val in the column
+        # for each val in the column
         string_scores = []
         scoredict = {}
 
@@ -35,7 +41,7 @@ class StringSimilarityErrorModule(ErrorModule):
             if len(cleaned_string) == 0:
                 erroneous_vals.add(s)
             else:
-                score = np.squeeze(self.model.score([cleaned_string])) / len(cleaned_string) # sentence average score
+                score = np.squeeze(self.model.score([cleaned_string])) / len(cleaned_string)  # sentence average score
                 string_scores.append(score)
                 scoredict[s] = score
 
@@ -60,21 +66,10 @@ class StringSimilarityErrorModule(ErrorModule):
         :rtype:
         """
         erroneous_vals = self._predict(col_vals)
-        print(list(erroneous_vals))
         erroneous_indices = []
         for e_val in erroneous_vals:
             erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))
-        '''
-        erroneous_indices = []
-        errorset = set(erroneous_vals)
 
-        for i, d in enumerate(dataset):
-
-            val = d[col]
-
-            if val in errorset:
-                erroneous_indices.append(i)
-        '''
         return erroneous_indices
 
     # -----------------------------------
@@ -89,4 +84,4 @@ class StringSimilarityErrorModule(ErrorModule):
         """
         Returns a list of data types available for prediction using this error detection module.
         """
-        return ['string']
+        return ["string"]

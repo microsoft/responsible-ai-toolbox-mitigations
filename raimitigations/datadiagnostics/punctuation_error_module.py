@@ -2,12 +2,15 @@ import numpy as np
 import re
 from .error_module import ErrorModule
 
+
 class PuncErrorModule(ErrorModule):
 
     """
     This module detects attributes that are only punctuation, whitespace, etc.
     """
+
     # -----------------------------------
+
     def __init__(self):
         self.module_name = "PuncErrorModule"
         pass
@@ -21,11 +24,11 @@ class PuncErrorModule(ErrorModule):
         :param strings: a list of string values to predict punctuation errors on;
         """
         erroneous_vals = set()
-
+        strings = [x for x in strings if str(x) != "nan"]
         vals_set = set(strings)  # get unique values
 
         for s in vals_set:
-            sstrip = re.sub(r'\W+', '', str(s).lower())
+            sstrip = re.sub(r"\W+", "", str(s).lower())
             cleaned_string = sstrip.lower().strip()
             if len(cleaned_string) == 0:
                 erroneous_vals.add(s)
@@ -44,20 +47,9 @@ class PuncErrorModule(ErrorModule):
         :rtype:
         """
         erroneous_vals = self._predict(col_vals)
-        print(list(erroneous_vals))
         erroneous_indices = []
         for e_val in erroneous_vals:
             erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))
-
-        '''
-        erroneous_indices = []
-        eset = set(erroneous_vals)
-
-        for i, d in enumerate(dataset):
-            val = d[col]
-            if val in eset:
-                erroneous_indices.append(i)
-        '''
 
         return erroneous_indices
 
@@ -73,4 +65,4 @@ class PuncErrorModule(ErrorModule):
         """
         Returns a list of data types available for prediction using this error detection module.
         """
-        return ['categorical', 'string']
+        return ["categorical", "string"]
