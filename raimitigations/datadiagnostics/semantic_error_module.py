@@ -2,25 +2,19 @@ from gensim.models.word2vec import Word2Vec
 from gensim.parsing.preprocessing import STOPWORDS
 import numpy as np
 import re
+from scipy import stats
 from .error_module import ErrorModule
-from .utils import calculate_mad
 import os.path
-
 
 class SemanticErrorModule(ErrorModule):
     """
-    This module detects values that do not belong in a categorical column, it does so by using Word2Vec architecture. Note that this module is relatively slow when using a large training corpus.
+    This module predicts values that do not belong in a categorical column, it does so by using Word2Vec architecture.
 
     :param thresh: a float similarity threshold to determine when a value doesn't belong. This parameter defaults at 3.5;
-    :param fail_thresh: an int representing the fraction of tokens not found in the corpus before short-circuiting. This parameter defaults at 5;
+    :param fail_thresh: an int representing the minimum required number of tokens found in the corpus before short-circuiting. This parameter defaults at 5;
     """
-
     # -----------------------------------
-    def __init__(
-        self,
-        thresh: float = 3.5,
-        fail_thresh: int = 5,
-    ):
+    def __init__(self, thresh: float = 3.5, fail_thresh: int = 5):
         self.corpus = os.path.join(os.path.abspath(os.path.dirname(__file__)), "corpora/text8")
         self.model = Word2Vec.load(self.corpus + "-pretrained.bin")
 
@@ -37,8 +31,9 @@ class SemanticErrorModule(ErrorModule):
         erroneous.
 
         :param vals: a list of values to predict semantic errors on;
-        :return: returns erroneous values;
-        :rtype: set.
+
+        :return: a set of predicted erroneous values;
+        :rtype: a set.
         """
         # current status: find erroneous tokens and if val has an erroneous token (or no tokens) then it's an erroneous val.
 
@@ -80,8 +75,8 @@ class SemanticErrorModule(ErrorModule):
                 total_i_similarity += self.model.wv.similarity(token_i, token_j)
             token_total_similarities[token_i] = total_i_similarity
 
-        # take MAD to filter corpus
-        mad = calculate_mad(list(token_total_similarities.values()))
+        # take MAD
+        mad = stats.median_abs_deviation(list(token_total_similarities.values()))
         median = np.median(list(token_total_similarities.values()))
         erroneous_tokens = set()
 
@@ -118,32 +113,15 @@ class SemanticErrorModule(ErrorModule):
         return erroneous_vals
 
     # -----------------------------------
-    def get_erroneous_rows_in_col(self, col_vals):
-        """
-        Given the error set found by predict, this method maps the errors to particular rows
-        in the column, returning a list of erroneous row indices.
-
-        :param col_vals: a list of values to predict semantic errors on;
-        :return:
-        :rtype:
-        """
-        erroneous_vals = self._predict(col_vals)
-        erroneous_indices = []
-        for e_val in erroneous_vals:
-            erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))
-
-        return erroneous_indices
-
-    # -----------------------------------
-    def description(self):
+    def _description(self) -> str:
         """
         Returns a description of the error.
         """
         return f"SemanticError: A value was found with a word2vec similarity score greater than > {str(self.thresh)} stds beyond the mean similarity score of all values."
 
     # -----------------------------------
-    def get_available_types(self):
+    def _get_available_types(self) -> list:
         """
-        Returns a list of data types available for prediction using this error detection module.
+        Returns a list of data types available for prediction using this error prediction module.
         """
         return ["categorical"]

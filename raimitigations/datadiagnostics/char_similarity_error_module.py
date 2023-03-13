@@ -2,18 +2,16 @@ from gensim.models.word2vec import Word2Vec
 import numpy as np
 from .error_module import ErrorModule
 
-
 class CharSimilarityErrorModule(ErrorModule):
-
     """
-    This module detects values that do not belong in a string-valued column. It fine-tunes Word2Vec on the given set of data on the character level and compares the score of likelihood of input values within the set using standard deviation to predict possibly erroneous values.
+    This module predicts values that do not belong in a string-valued column. It fine-tunes Word2Vec on the given set of data on the character level and compares the score of likelihood of input values within the set using standard deviation to predict possibly erroneous values.
 
     :param thresh: a standard deviation count threshold to determine how many stds can a non-erroneous string's likelihood score be beyond the dataset's mean. This parameter defaults at 3.5;
     """
 
     # -----------------------------------
 
-    def __init__(self, thresh=3.5):
+    def __init__(self, thresh: float =3.5):
         self.thresh = thresh
         self.module_name = "CharSimilarityErrorModule"
 
@@ -26,7 +24,7 @@ class CharSimilarityErrorModule(ErrorModule):
 
         :param strings: a list of string values to predict character-similarity errors on;
 
-        :return: a set of errors predicted by the predict function;
+        :return: a set of predicted erroneous values;
         :rtype: a set
         """
         strings = [x for x in strings if str(x) != "nan"]
@@ -58,33 +56,15 @@ class CharSimilarityErrorModule(ErrorModule):
         return erroneous_vals
 
     # -----------------------------------
-    def get_erroneous_rows_in_col(self, col_vals):
-        """
-        Given the error set found by predict, this method maps the errors to particular rows
-        in the column, returning a list of erroneous row indices.
-
-        :param col_vals: a list of string values to predict character-similarity errors on;
-
-        :return:
-        :rtype:
-        """
-        erroneous_vals = self._predict(col_vals)
-        erroneous_indices = []
-        for e_val in erroneous_vals:
-            erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))
-
-        return erroneous_indices
-
-    # -----------------------------------
-    def description(self):
+    def _description(self) -> str:
         """
         Returns a description of the error.
         """
-        return f"CharSimilarityError: A string was found that was not well predicted by a finetuned word2vec model. Its character-level likelihood score was found to be greater than > {str(self.thresh)} stds beyond the mean likelihood."
+        return f"CharSimilarityError: A string was found that was not well predicted by a fine-tuned word2vec model. Its character-level likelihood score was found to be greater than > {str(self.thresh)} stds beyond the mean likelihood."
 
     # -----------------------------------
-    def get_available_types(self):
+    def _get_available_types(self) -> list:
         """
-        Returns a list of data types available for prediction using this error detection module.
+        Returns a list of data types available for prediction using this error module.
         """
         return ["string"]

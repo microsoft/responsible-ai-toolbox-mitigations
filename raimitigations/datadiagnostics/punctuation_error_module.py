@@ -2,26 +2,24 @@ import numpy as np
 import re
 from .error_module import ErrorModule
 
-
 class PuncErrorModule(ErrorModule):
-
     """
-    This module detects attributes that are only punctuation, whitespace, etc.
+    This module predicts attributes that are only punctuation, whitespace, etc.
     """
-
     # -----------------------------------
-
     def __init__(self):
         self.module_name = "PuncErrorModule"
-        pass
 
     # -----------------------------------
-    def _predict(self, strings):
+    def _predict(self, strings: list) -> set:
         """
         Predicts and returns a set of the subset of a domain that is potentially
         erroneous.
 
         :param strings: a list of string values to predict punctuation errors on;
+
+        :return: a set of predicted erroneous values;
+        :rtype: a set.
         """
         erroneous_vals = set()
         strings = [x for x in strings if str(x) != "nan"]
@@ -36,33 +34,15 @@ class PuncErrorModule(ErrorModule):
         return erroneous_vals
 
     # -----------------------------------
-    def get_erroneous_rows_in_col(self, col_vals):
-        """
-        Given the error set found by predict, this method maps the errors to particular rows
-        in the column, returning a list of erroneous row indices.
-
-        :param col_vals: a list of string values to predict punctuation errors on;
-
-        :return:
-        :rtype:
-        """
-        erroneous_vals = self._predict(col_vals)
-        erroneous_indices = []
-        for e_val in erroneous_vals:
-            erroneous_indices.extend(list(np.where(col_vals == e_val)[0]))
-
-        return erroneous_indices
-
-    # -----------------------------------
-    def description(self):
+    def _description(self) -> str:
         """
         Returns a description of the error.
         """
-        return "PunctuationError: An attribute was found with no alpha numeric characeters."
+        return "PunctuationError: An attribute was found with no alpha numeric characters."
 
     # -----------------------------------
-    def get_available_types(self):
+    def _get_available_types(self) -> list:
         """
-        Returns a list of data types available for prediction using this error detection module.
+        Returns a list of data types available for prediction using this error prediction module.
         """
         return ["categorical", "string"]
