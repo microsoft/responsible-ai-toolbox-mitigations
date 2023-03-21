@@ -8,6 +8,7 @@ from .semantic_error_module import SemanticErrorModule
 from .distribution_error_module import DistributionErrorModule
 from .string_similarity_error_module import StringSimilarityErrorModule
 from .char_similarity_error_module import CharSimilarityErrorModule
+from .isolation_forest import IsolationForestDetect
 
 __all__ = [
     "DataDiagnostics",
@@ -19,4 +20,5 @@ __all__ = [
     "DistributionErrorModule", 
     "StringSimilarityErrorModule", 
     "CharSimilarityErrorModule",
+    "IsolationForestDetect",
 ]

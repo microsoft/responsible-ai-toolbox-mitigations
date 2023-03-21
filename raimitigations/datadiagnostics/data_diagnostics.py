@@ -7,7 +7,12 @@ import pandas as pd
 from ..dataprocessing import DataProcessing
 from ..dataprocessing.data_processing import DataFrameInfo
 from ..dataprocessing.imputer.basic_imputer import DataImputer
+from ..dataprocessing.encoder.ordinal import EncoderOrdinal
 from .utils import is_cat, is_num
+from ..utils.data_utils import (
+    get_cat_cols,
+    _transform_ordinal_encoder_with_new_values,
+)
 
 
 class DataDiagnostics(DataProcessing):
@@ -31,6 +36,8 @@ class DataDiagnostics(DataProcessing):
         self.n_cols = None
         self.types = []
         self.col_predict = col_predict
+        self.ordinal_encoder = None
+        self.valid_cols = []
         self.fitted = False
         self.predicted = False
 
@@ -82,7 +89,81 @@ class DataDiagnostics(DataProcessing):
                 self.types.append("categorical")
             else:
                 self.types.append("string")
+    # -----------------------------------
+    def _check_predict_data_structure(self, df: Union[pd.DataFrame, np.ndarray]):
+        """
+        Checks that all columns seen at fit time are present
+        at predict time and vice versa.
 
+        :param df: pandas dataframe used at predict time.
+        """
+        for col in self.valid_cols:
+            if col not in list(df):
+                raise KeyError(f"ERROR: Column: {col} seen at fit time, but not present in dataframe.")
+        for col in self.col_predict:
+            if col not in self.valid_cols:
+                raise KeyError(f"ERROR: Column: {col} not seen at fit time.")
+            
+    # -----------------------------------
+    def _apply_encoding_fit(self) -> pd.DataFrame:
+        """
+        Creates and fits an ordinal encoder to all categorical data before
+        fitting the child class if enable_encoder=True, otherwise it excludes
+        all categorical data from the process.
+
+        :return: resulting pandas dataframe;
+        :rtype: pd.dataframe.
+        """
+        all_cat_cols = [col for i,col in enumerate(self.col_predict) if self.types[i] in ["categorical", "string"]]
+        all_num_cols = [col for col in self.col_predict if col not in all_cat_cols]
+        
+        df_valid = pd.DataFrame()
+
+        if self.enable_encoder is False:
+            self.print_message(
+                "\nWARNING: Categorical columns will be excluded from this process.\n"
+                + "If you'd like to include these columns, you need to use 'enable_encoder'=True.\n"
+            )
+            df_valid = self._get_df_subset(self.df_info.df, all_num_cols)
+
+        else:
+            self.print_message(
+                "\nWARNING: 'enable_encoder'=True and categorical columns will be encoded using ordinal encoding.\n "
+            )
+            self.ordinal_encoder = EncoderOrdinal(df=self.df_info.df, col_encode=all_cat_cols, unknown_value=np.nan)
+            self.ordinal_encoder.fit()
+            df_valid = self.ordinal_encoder.transform(self.df_info.df)
+            
+        df_valid = self._get_df_subset(df_valid, self.col_predict)
+        self.valid_cols = list(df_valid)
+
+        return df_valid
+    # -----------------------------------
+    def _apply_encoding_predict(self, df_valid: pd.DataFrame) -> pd.DataFrame:
+        """
+        Encodes categorical data before applying predict. It uses the 
+        mapping of the encoder created at fit time while also encoding 
+        new values on top of the original mapping.
+
+        :param df_valid: pandas dataframe to encode;
+
+        :return: resulting pandas dataframe;
+        :rtype: pd.dataframe.
+        """
+        all_cat_cols = get_cat_cols(df_valid)
+        if self.enable_encoder is False:
+            if len(all_cat_cols) > 0:
+                raise ValueError(
+                    "ERROR: Categorical data unseen at fit time and can't be included in the prediction process without encoding.\n"
+                    + "If you'd like to ordinal encode and include these columns, use 'enable_encoder'=True.\n"
+                )
+            df_to_transf = df_valid
+
+        else:
+            df_to_transf, _ = _transform_ordinal_encoder_with_new_values(self.ordinal_encoder, df_valid)
+
+        return df_to_transf
+    
     # -----------------------------------
     @abstractmethod
     def _fit(self):

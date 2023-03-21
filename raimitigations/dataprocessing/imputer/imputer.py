@@ -125,7 +125,7 @@ class DataImputer(DataProcessing):
 
         if self.enable_encoder is False:
             self.print_message(
-                "\nWARNING: Categorical columns will be excluded from the iterative imputation process.\n"
+                "\nWARNING: Categorical columns will be excluded from the imputation process.\n"
                 + "If you'd like to include these columns, you need to set 'enable_encoder'=True.\n"
                 + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline "
                 + "class and call your own encoder before calling this subclass for imputation.",
@@ -135,7 +135,7 @@ class DataImputer(DataProcessing):
         else:
             self.print_message(
                 "\nWARNING: 'enable_encoder'=True and categorical columns will be encoded using ordinal encoding before "
-                + "applying the iterative imputation process.\n"
+                + "applying the imputation process.\n"
                 + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline class "
                 + "and call your own encoder before calling this subclass for imputation.",
             )
@@ -163,7 +163,7 @@ class DataImputer(DataProcessing):
         if self.enable_encoder is False:
             if len(all_cat_cols) > 0:
                 raise ValueError(
-                    "ERROR: Categorical data unseen at fit time and can't be included in the iterative imputation process without encoding.\n"
+                    "ERROR: Categorical data unseen at fit time and can't be included in the imputation process without encoding.\n"
                     + "If you'd like to ordinal encode and impute these columns, use 'enable_encoder'=True.\n"
                     + "Note that encoded columns are not guaranteed to reverse transform if they have imputed values.\n"
                     + "If you'd like to use a different type of encoding before imputation, consider using the Pipeline "
