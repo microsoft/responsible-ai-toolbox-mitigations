@@ -1,6 +1,7 @@
 from typing import Union
 import pandas as pd
 import numpy as np
+from copy import deepcopy
 from sklearn.ensemble import IsolationForest
 
 from .data_diagnostics import DataDiagnostics
@@ -14,14 +15,20 @@ class IsolationForestDetect(DataDiagnostics):
     background.
     sklearn.ensemble.IsolationForest can only handle numerical data, however, this subclass allows for categorical
     input by applying ordinal encoding before calling the sklearn class. In order to use this function,
-    use enable_encoder=True. If you'd like to use a different type of encoding before imputation, 
-    consider using the Pipeline class and call your own encoder before calling this subclass for imputation.
+    use enable_encoder=True. If you'd like to use a different type of encoding, 
+    consider using the Pipeline class and call your own encoder before calling this subclass.
     For more details see:
     https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationForest.html#
 
     :param df: pandas dataframe or np.ndarray to predict errors in;
 
     :param col_predict: a list of column names or indexes that will be subject to error prediction. If None, a list of all columns will be used by default;
+
+    :param mode: a string that can take the values:
+        - "column", fit and prediction will be applied to each column independently. 
+            An error matrix of the same shape as the data will be returned by predict.
+        - "row", fits over the whole data and prediction will be applied over each row. A list of 
+            erroneous row indices will be returned by predict.
 
     :param isf_params: a dict indicating the parameters used by
         :class:`~sklearn.ensemble.IsolationForest`. The dict has the following structure:
@@ -57,12 +64,13 @@ class IsolationForestDetect(DataDiagnostics):
         self,
         df: Union[pd.DataFrame, np.ndarray] = None,
         col_predict: list = None,
+        mode: str = "row",
         isf_params: dict = None,
         sklearn_obj: object = None,
         enable_encoder: bool = False,
         verbose: bool = True,
     ):
-        super().__init__(df, col_predict, verbose)
+        super().__init__(df, col_predict, mode, verbose)
         self.isf_params = isf_params
         self.sklearn_obj = sklearn_obj
         self.enable_encoder = enable_encoder
@@ -142,16 +150,18 @@ class IsolationForestDetect(DataDiagnostics):
         Fit method for this DataDiagnostics class. This method: 
         (i) verifies input passed by the user, (ii) applies encoding 
         to categorical data if enable_encoder=True, excludes it 
-        otherwise and (iii) creates and fits the IsolationForest 
+        otherwise and (iii) checks the mode parameter, if mode = "row" 
+        it creates and fits an IsolationForest object to the full dataset, 
+        otherwise if mode = "column", it creates and fits the IsolationForest 
         object over each column.
         """
         self._check_valid_dict()
         df_valid = self._apply_encoding_fit()
         self.n_rows = df_valid.shape[0]
 
-        for col in self.valid_cols:
+        if self.mode == "row":
             if self.sklearn_obj is None:
-                self.detectors[col] = IsolationForest(
+                self.detectors["complete"] = IsolationForest(
                     n_estimators=self.isf_params["n_estimators"],
                     max_samples=self.isf_params["max_samples"],
                     contamination=self.isf_params["contamination"],
@@ -162,31 +172,54 @@ class IsolationForestDetect(DataDiagnostics):
                     warm_start=self.isf_params["warm_start"]
                 )
             else:
-                self.detectors[col] = self.sklearn_obj
-            self.detectors[col].fit(df_valid[[col]])
+                self.detectors["complete"] = self.sklearn_obj
+            self.detectors["complete"].fit(df_valid)
+                
+        else:
+            for col in self.valid_cols:
+                if self.sklearn_obj is None:
+                    self.detectors[col] = IsolationForest(
+                        n_estimators=self.isf_params["n_estimators"],
+                        max_samples=self.isf_params["max_samples"],
+                        contamination=self.isf_params["contamination"],
+                        max_features=self.isf_params["max_features"],
+                        bootstrap=self.isf_params["bootstrap"],
+                        n_jobs=self.isf_params["n_jobs"],
+                        random_state=self.isf_params["random_state"],
+                        warm_start=self.isf_params["warm_start"]
+                    )
+                else:
+                    self.detectors[col] = deepcopy(self.sklearn_obj)
+                self.detectors[col].fit(df_valid[[col]])
 
     # -----------------------------------
-    def _predict(self, df: pd.DataFrame) -> Union[pd.DataFrame, np.ndarray]:
+    def _predict(self, df: pd.DataFrame) -> Union[np.ndarray, list]:
         """
         Predict method complement used specifically for the current class.
 
         :param df: the full dataset to predict anomalies over;
 
-        :return: the predicted error matrix dataset;
-        :rtype: np.array
+        :return: if mode = "row", the predicted error matrix dataset otherwise if 
+            mode = "column", a list of erroneous row indices;
+        :rtype: 2-dimensional np.array or list
         """
         error_matrix = []
         self._check_predict_data_structure(df)
         df_valid = self._get_df_subset(df, self.valid_cols)
-        df_to_transf = self._apply_encoding_predict(df_valid)
+        df_to_predict = self._apply_encoding_predict(df_valid)
 
-        for col in self.df_info.columns:
-            if col in self.valid_cols:
-                #indicator_vector = np.full(self.n_rows, 1)
-                indicator_vector = self.detectors[col].predict(df_to_transf[[col]])
-            else:
-                indicator_vector = np.full(self.n_rows, np.nan)
-            error_matrix.append(indicator_vector)
+        if self.mode == "row":
+            indicator_vector = self.detectors["complete"].predict(df_to_predict)
+            indices = np.where(indicator_vector == -1)[0]
+            erroneous_row_indices = df_to_predict.index[indices].tolist()
+            return erroneous_row_indices
+        else:
+            for col in self.df_info.columns:
+                if col in self.valid_cols:
+                    indicator_vector = self.detectors[col].predict(df_to_predict[[col]])
+                else:
+                    indicator_vector = np.full(self.n_rows, np.nan)
+                error_matrix.append(indicator_vector)
 
-        return np.array(error_matrix).T
+            return np.array(error_matrix).T
     

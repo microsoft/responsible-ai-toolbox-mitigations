@@ -29,6 +29,12 @@ class ActiveDetect(DataDiagnostics):
 
     :param col_predict: a list of column names or indexes that will be subject to error prediction. If None, a list of all columns will be used by default;
 
+    :param mode: a string that can take the values:
+        - "column", prediction will be applied to each column. 
+            An error matrix of the same shape as the data will be returned by predict.
+        - "row", prediction will be applied over each row as a whole. A list of 
+            erroneous row indices will be returned by predict.
+
     :param error_modules: a list of error module objects to be used for prediction, chosen from the above list. If None, all available modules are used by default.
 
     :param verbose: boolean flag indicating whether internal messages should be printed or not.
@@ -39,10 +45,11 @@ class ActiveDetect(DataDiagnostics):
         self,
         df: Union[pd.DataFrame, np.ndarray] = None,
         col_predict: list = None,
+        mode: str = "column",
         error_modules: list = [],
         verbose: bool = True,
     ):
-        super().__init__(df, col_predict, verbose)
+        super().__init__(df, col_predict, mode, verbose)
         self._set_error_modules(error_modules)
         self.module_error_matrix_dict: dict = {}
 
@@ -141,6 +148,23 @@ class ActiveDetect(DataDiagnostics):
         return final_error_matrix
 
     # -----------------------------------
+    def _get_erroneous_row_indices(self, final_error_matrix: np.array) -> list:
+        """
+        Get a list of erroneous row indices from the final error 
+        matrix. If any column in a row contains an error, it's 
+        considered erroneous.
+
+        :param final_error_matrix: the final error matrix;
+
+        :return: a list of erroneous row indices;
+        :rtype: list.
+        """
+        bool_matrix = final_error_matrix == -1
+        error_count_per_row = np.sum(bool_matrix, axis=1)
+        erroneous_row_indices = np.where(error_count_per_row > 0)[0]
+
+        return list(erroneous_row_indices)
+    # -----------------------------------
     def _fit(self):
         """
         Fit method for this DataDiagnostics class.
@@ -150,7 +174,7 @@ class ActiveDetect(DataDiagnostics):
         return
 
     # -----------------------------------
-    def _predict(self, df: pd.DataFrame) -> np.array:
+    def _predict(self, df: pd.DataFrame) -> Union[np.array, list]:
         """ 
         Predict method of this class. It loops over error modules to predict 
         errors over all applicable columns in the input dataset. It then calculates 
@@ -163,7 +187,13 @@ class ActiveDetect(DataDiagnostics):
         """
         for module in self.error_modules:
             self.module_error_matrix_dict[module.module_name] = self._predictModule(df, module)
-        return self._get_final_error_matrix()
+        
+        final_error_matrix = self._get_final_error_matrix()
+        if self.mode == "column":
+            return final_error_matrix
+        else:
+            indices = self._get_erroneous_row_indices(final_error_matrix)
+            return df.index[indices].tolist()
 
     # ------------------------------------
     def get_error_module_matrix(self, error_module: str) -> np.array:

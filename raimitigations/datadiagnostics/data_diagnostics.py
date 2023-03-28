@@ -24,11 +24,17 @@ class DataDiagnostics(DataProcessing):
 
     :param col_predict: a list of the column names or indices that will be subject to error prediction.
         If None, this parameter will be set automatically as being a list of all columns;
+    
+    :param mode: a string that can take the values:
+        - "column", prediction will be applied to each column independently. 
+            An error matrix of the same shape as the data will be returned by predict.
+        - "row", prediction will be applied over each row as a whole. A list of 
+            erroneous row indices will be returned by predict.
 
     :param verbose: indicates whether internal messages should be printed or not.
     """
     # -----------------------------------
-    def __init__(self, df: Union[pd.DataFrame, np.ndarray] = None, col_predict: list = None, verbose: bool = True):
+    def __init__(self, df: Union[pd.DataFrame, np.ndarray] = None, col_predict: list = None, mode: str = None, verbose: bool = True):
         super().__init__(verbose)
         self.df_info = DataFrameInfo()
         self._set_df(df)
@@ -36,6 +42,7 @@ class DataDiagnostics(DataProcessing):
         self.n_cols = None
         self.types = []
         self.col_predict = col_predict
+        self.mode = self._check_valid_mode(mode)
         self.ordinal_encoder = None
         self.valid_cols = []
         self.fitted = False
@@ -66,6 +73,28 @@ class DataDiagnostics(DataProcessing):
     # -----------------------------------
     def _check_valid_col_predict(self):
         self.col_predict = self._check_error_col_list(self.df_info.columns, self.col_predict, "col_predict")
+
+     # -----------------------------------
+    def _check_valid_mode(self, mode: str):
+        """
+        Verify that the mode parameter passed by the user is a string 
+        equal to "row" or "column" only.
+
+        :param mode: string passed by the user for the mode parameter;
+
+        :return: mode parameter in lower case post validation checks;
+        :rtype: string.
+        """
+        if not isinstance(mode, str):
+            raise ValueError(
+                f"ERROR: the parameter 'mode' must be a string equal to 'row' or 'column'."
+            )
+        mode = mode.lower()
+        if mode not in ["row", "column"]:
+            raise ValueError(
+                f"ERROR: the parameter 'mode' must be a string equal to 'row' or 'column' only."
+            )
+        return mode
 
     # -----------------------------------
     def _set_column_data_types(self, num_thresh: float = 0.25, cat_thresh: float = 0.05) -> list:
@@ -133,8 +162,8 @@ class DataDiagnostics(DataProcessing):
             self.ordinal_encoder = EncoderOrdinal(df=self.df_info.df, col_encode=all_cat_cols, unknown_value=np.nan)
             self.ordinal_encoder.fit()
             df_valid = self.ordinal_encoder.transform(self.df_info.df)
+            df_valid = self._get_df_subset(df_valid, self.col_predict)
             
-        df_valid = self._get_df_subset(df_valid, self.col_predict)
         self.valid_cols = list(df_valid)
 
         return df_valid
@@ -157,12 +186,12 @@ class DataDiagnostics(DataProcessing):
                     "ERROR: Categorical data unseen at fit time and can't be included in the prediction process without encoding.\n"
                     + "If you'd like to ordinal encode and include these columns, use 'enable_encoder'=True.\n"
                 )
-            df_to_transf = df_valid
+            df_to_predict = df_valid
 
         else:
-            df_to_transf, _ = _transform_ordinal_encoder_with_new_values(self.ordinal_encoder, df_valid)
+            df_to_predict, _ = _transform_ordinal_encoder_with_new_values(self.ordinal_encoder, df_valid)
 
-        return df_to_transf
+        return df_to_predict
     
     # -----------------------------------
     @abstractmethod
@@ -183,7 +212,7 @@ class DataDiagnostics(DataProcessing):
         will be subject to error prediction, (iii) check for any invalid input, (iv) call the fit method of the
         child class.
 
-        :param df: the full dataset to fit the error prediction class on.
+        :param df: the dataset to fit the error prediction class on.
         """
         self._set_df(df, require_set=True)
         self._set_column_to_predict()
@@ -191,72 +220,81 @@ class DataDiagnostics(DataProcessing):
         self._set_column_data_types()
         self._fit()
         self.fitted = True
-        self.error_matrix = None
+        self.df_info.clear_df_mem()
         return self
 
     # -----------------------------------
     @abstractmethod
     def _predict(self, df: pd.DataFrame):
         """
-        Abstract method. For a given concrete class, this method must predict errors present
-        in col_predict columns of a dataset using the error prediction class implemented and
-        return an error matrix.
+        Abstract method. For a given concrete class, this method must 
+        predict errors present in the dataset using the error prediction 
+        class implemented and return an error matrix or a list of erroneous 
+        row indices based on the mode parameter.
 
         :param df: a pandas dataframe to perform error prediction on.
         """
         pass
 
     # -----------------------------------
-    def predict(self, df: Union[pd.DataFrame, np.ndarray]) -> np.array:
+    def predict(self, df: Union[pd.DataFrame, np.ndarray]) -> Union[np.array, list]:
         """
         Default predict method for all error predictors that inherit from 
-        the DataDiagnostics class. Predicts errors in a given dataset over 
-        columns specified in col_predict. Returns an error matrix.
+        the DataDiagnostics class. Predicts errors in a given dataset.
 
         :param df: the dataset to perform error prediction over.
 
-        :return: an error matrix of the same shape as the input data mapping an 
-            error indicator to each value as follows:
+        :return: if mode = "row", an error matrix of the same shape as the input 
+            data, mapping an error indicator to each value as follows:
             - -1 indicates an error;
             - +1 indicates no error was predicted or that this error module is 
                 not applicable for the column's data type;
             - np.nan for columns not in col_predict.
-        :rtype: a 2-dimensional np.array.
+            otherwise if mode = "column", a list of erroneous row indices.
+        :rtype: a 2-dimensional np.array or a list.
         """
         self._check_if_fitted()
         predict_df = self._fix_col_transform(df)
-        self.error_matrix = self._predict(predict_df)
+        error_result = self._predict(predict_df)
         self.predicted = True
-        return self.error_matrix
+        return error_result
 
     # -----------------------------------
     def transform(self, df: Union[pd.DataFrame, np.ndarray], imputer: DataImputer = None) -> pd.DataFrame:
         """
         The default transform function of all error predictors that inherit 
-        from the DataDiagnostics class. Transforms an input dataset using 
-        the error matrix predicted by the predict function. It removes erroneous 
-        values in the data with the option to apply a fit/transform imputer object afterwards.
+        from the DataDiagnostics class. Calls the predict function and transforms 
+        an input dataset using the error matrix or list of erroneous row indices 
+        predicted. If mode = "row", it removes erroneous rows from the dataset, otherwise 
+        if mode = "column", it removes erroneous values in the data with the option 
+        to apply a fit/transform imputer object afterwards.
 
-        :param df: the dataset to transform using the error matrix;
-        :param imputer: an imputer object to fit to and impute this dataset. You can use
-            imputers present in this library of type dataprocessing.DataImputer,
+        :param df: the dataset to transform;
+        :param imputer: an imputer object to fit to and impute this dataset if mode = "column". 
+            You can use imputers present in this library of type dataprocessing.DataImputer,
             your options are: BasicImputer(), IterativeDataImputer() or KNNDataImputer().
             If you'd like to leave erroneous values as np.nan, use None;
 
         :return: the transformed dataframe;
         :rtype: pandas dataframe.
         """
-        self._check_if_predicted()
+
+        #self._check_if_predicted()
         transf_df = self._fix_col_transform(df)
-        error_mask = np.where(self.error_matrix == -1, False, True)
-        mask_df = pd.DataFrame(data=error_mask, columns=transf_df.columns)
-        masked_df = transf_df[mask_df]
-        if imputer is None:
-            return masked_df
+        if self.mode == "row":
+            erroneous_indices = self.predict(transf_df)
+            return transf_df.drop(erroneous_indices, axis=0).reset_index(drop=True)
         else:
-            imputer.fit(masked_df)
-            new_df = imputer.transform(masked_df)
-            return new_df
+            error_matrix = self.predict(transf_df)
+            error_mask = np.where(error_matrix == -1, False, True)
+            mask_df = pd.DataFrame(data=error_mask, columns=transf_df.columns)
+            masked_df = transf_df[mask_df]
+            if imputer is None:
+                return masked_df
+            else:
+                imputer.fit(masked_df)
+                new_df = imputer.transform(masked_df)
+                return new_df
 
     '''
     # -----------------------------------
@@ -267,9 +305,9 @@ class DataDiagnostics(DataProcessing):
         an input dataset using the error matrix predicted by the predict function.
         """
         pass
+        
     '''
     # -----------------------------------
-
     def get_col_predict(self) -> list:
         """
         Returns a list with the column names or column indices of

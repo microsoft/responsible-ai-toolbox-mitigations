@@ -29,7 +29,7 @@ class CharSimilarityErrorModule(ErrorModule):
         """
         strings = [x for x in strings if str(x) != "nan"]
         chars = [[c for c in s.lower().strip()] for s in strings]
-        self.model = Word2Vec(chars, hs=1, negative=0)
+        self.model = Word2Vec(chars, hs=1, negative=0, min_count=1)
 
         erroneous_vals = set()
 
