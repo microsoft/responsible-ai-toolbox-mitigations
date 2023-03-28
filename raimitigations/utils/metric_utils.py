@@ -74,7 +74,7 @@ def _pred_to_numpy(pred: Union[np.ndarray, list, pd.DataFrame]):
 
 
 # -----------------------------------
-def _roc_evaluation(y: np.ndarray, y_pred: np.ndarray):
+def _roc_evaluation(y: np.ndarray, y_pred: np.ndarray, average: str = "macro"):
     """
     Computes the AUC ROC metric for classification problems, as well as the optimal threshold
     identified using the ROC curve to be used (in case it is a binary classification problem)
@@ -83,34 +83,49 @@ def _roc_evaluation(y: np.ndarray, y_pred: np.ndarray):
     :param y: an array with the true labels;
     :param y_pred: an array with the predicted probabilities for each class, with shape = (N, C),
         where N is the number of rows and C is the number of classes;
+    :param average: the average used in the sklearn's roc_auc_score function;
     :return: a tuple (roc, th), where 'roc' is the AUC ROC metric, and 'th' is the optimal
         threshold found using the ROC curve for binary problems. In case it is a multiclass
         problem, 'th' will be None;
     :rtype: tuple
     """
     th = None
-    # Binary classification
-    if y_pred.shape[1] <= 2:
-        if y_pred.shape[1] == 1:
-            y_pred_temp = y_pred[:, 0]
+    labels = None
+    try:
+        # Binary classification
+        if y_pred.shape[1] <= 2:
+            if y_pred.shape[1] == 1:
+                y_pred_temp = y_pred[:, 0]
+            else:
+                y_pred_temp = y_pred[:, 1]
+            roc_auc = roc_auc_score(y, y_pred_temp, average=average)
+            fpr, tpr, th = roc_curve(y, y_pred_temp, drop_intermediate=True)
+            target = tpr - fpr
+            index = np.argmax(target)
+            best_th = th[index]
+            # scikit-learn uses 1 th > 1.0 for technical reasons.
+            # If this th is selected, move to the next th value
+            if best_th > 1.0:
+                best_th = th[index + 1]
+        # Multi-class
         else:
-            y_pred_temp = y_pred[:, 1]
-        roc_auc = roc_auc_score(y, y_pred_temp, average="weighted")
-        fpr, tpr, th = roc_curve(y, y_pred_temp, drop_intermediate=True)
-        target = tpr - fpr
-        index = np.argmax(target)
-        best_th = th[index]
-        # scikit-learn uses 1 th > 1.0 for technical reasons.
-        # If this th is selected, move to the next th value
-        if best_th > 1.0:
-            best_th = th[index + 1]
-    # Multi-class
-    else:
-        y_temp = np.squeeze(y)
-        roc_auc = roc_auc_score(y_temp, y_pred, average="weighted", multi_class="ovo")
-        best_th = None
+            y_temp = np.squeeze(y)
+            labels = [i for i in range(y_pred.shape[1])]
+            roc_auc = roc_auc_score(y_temp, y_pred, average=average, multi_class="ovr", labels=labels)
+            best_th = None
+    except Exception as e:
+        if "Only one class present in y_true" in str(e):
+            roc_auc = None
+            if y_pred.shape[1] <= 2:
+                best_th = 0.5
+            else:
+                best_th = None
+            th = None
+            roc_auc = None
+        else:
+            raise ValueError(f"ERROR: {e}")
 
-    return roc_auc, best_th, th
+    return roc_auc, best_th, th, labels
 
 
 # -----------------------------------
@@ -175,11 +190,8 @@ def probability_to_class(prediction: np.ndarray, th: float):
 
 
 # -----------------------------------
-def _get_precision_recall_fscore(y: Union[np.ndarray, list], y_pred: Union[np.ndarray, list]):
-    precision, recall, f1, _ = precision_recall_fscore_support(y, y_pred, warn_for=tuple())
-    precision = np.mean(precision)
-    recall = np.mean(recall)
-    f1 = np.mean(f1)
+def _get_precision_recall_fscore(y: Union[np.ndarray, list], y_pred: Union[np.ndarray, list], average: str):
+    precision, recall, f1, _ = precision_recall_fscore_support(y, y_pred, warn_for=tuple(), average=average)
     return precision, recall, f1
 
 
@@ -260,10 +272,10 @@ def _get_classification_metrics(
     probability = _check_if_probability_pred(y_pred)
     problem_type = _MetricNames.BIN_CLASS
     if probability:
-        roc_auc, th_roc, th_list_roc = _roc_evaluation(y, y_pred)
+        roc_auc, th_roc, th_list_roc, labels = _roc_evaluation(y, y_pred)
         y_float = y.astype(np.float64)
         y_pred_float = y_pred.astype(np.float64)
-        loss = log_loss(y_float, y_pred_float)
+        loss = log_loss(y_float, y_pred_float, labels=labels)
         th_pr_rc, th_list_prrc = _get_precision_recall_th(y, y_pred_float)
         th = th_roc
         th_list = th_list_roc
@@ -278,7 +290,11 @@ def _get_classification_metrics(
         if th is None:
             problem_type = _MetricNames.MULTI_CLASS
 
-    precision_sup, recall_sup, f1_sup = _get_precision_recall_fscore(y, y_pred)
+    # average = "binary"
+    average = "macro"  # setting to 'macro' so the results in the case study notebooks doesn't change
+    if np.unique(y).shape[0] > 2:
+        average = "macro"
+    precision_sup, recall_sup, f1_sup = _get_precision_recall_fscore(y, y_pred, average)
     acc = accuracy_score(y, y_pred)
 
     results = {
