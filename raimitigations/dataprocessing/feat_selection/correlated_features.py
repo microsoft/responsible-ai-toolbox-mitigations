@@ -95,21 +95,20 @@ class CorrelatedFeatures(FeatureSelection):
     :param method_num_num: the method used to test the correlation between numerical
         variables. Must be a list containing one or more methods (limited to the
         number of available methods). The available methods are:
-        ["spearman", "pearson", "kendall"]. If None, none of the correlations between
+        [``"spearman"``, ``"pearson"``, ``"kendall"``]. If None, none of the correlations between
         two numerical variables will be tested;
 
     :param num_corr_th: the correlation coefficient value used as a threshold for
         considering if there is a correlation between two numerical variables.
         That is, given two variables with a correlation coefficient of 'x' (depends on
         the correlation used, specified by ``method_num_num``), a correlation is considered
-        only if abs(x) >= method_num_num and if the associated p-value 'p' is smaller than
-        'p' <= num_pvalue_th;
+        only if ``abs(x) >= num_corr_th`` and if the associated p-value ``p <= num_pvalue_th``;
 
     :param num_pvalue_th: the p-value used as a threshold when considering if there is a
         correlation between two variables. That is, given two variables with a correlation
         coefficient of 'x' (depends on the correlation used, specified by ``method_num_num``),
-        a correlation is considered only if abs(x) >= method_num_num and if the associated
-        p-value 'p' is smaller than 'p' <= num_pvalue_th;
+        a correlation is considered only if ``abs(x) >= num_corr_th`` and if the associated
+        p-value 'p' is smaller than ``num_pvalue_th`` (``p <= num_pvalue_th``);
 
     :param method_num_cat: the method used to compute the correlation between a categorical and
         a numerical variable. There are currently three approaches implemented:
