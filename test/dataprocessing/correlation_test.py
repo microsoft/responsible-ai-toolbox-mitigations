@@ -116,6 +116,8 @@ def _run_main_commands(df, label_col, cor_feat, df_in_fit=True):
 # -----------------------------------
 def test_df_const(df_full, label_col_name):
     df = df_full
+    df["const_num"] = [1 for _ in range(df.shape[0])]
+    df["new_col"] = [1 if i > df.shape[0]/2 else 2 for i in range(df.shape[0])]
 
     obj_list = _get_object_list(df, label_col_name, use_index=False)
     for obj in obj_list:

@@ -537,9 +537,13 @@ class CorrelatedFeatures(FeatureSelection):
         for method in self.method_num_num:
             func = self.VALID_NUM_COR[method]
             corr, p = func(num_x, num_y)
+            if np.isnan(corr):
+                corr = None
+                p = None
             is_correlated = False
-            if abs(corr) > self.num_corr_th and p < self.num_pvalue_th:
+            if corr is not None and abs(corr) > self.num_corr_th and p < self.num_pvalue_th:
                 is_correlated = True
+
             result[method] = {self.CORR_KEY: corr, self.PVAL_KEY: p, self.CORRELATED_KEY: is_correlated}
 
         is_correlated = True
@@ -1388,7 +1392,7 @@ class CorrelatedFeatures(FeatureSelection):
         for method in self.method_num_num:
             corr = result[method][self.CORR_KEY]
             p = result[method][self.PVAL_KEY]
-            if abs(corr) > self.num_corr_th and p < self.num_pvalue_th:
+            if corr is not None and abs(corr) > self.num_corr_th and p < self.num_pvalue_th:
                 result[method][self.CORRELATED_KEY] = True
             if not result[method][self.CORRELATED_KEY]:
                 final_corr = False

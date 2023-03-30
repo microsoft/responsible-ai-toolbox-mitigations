@@ -181,7 +181,7 @@ def create_dummy_dataset(
 
     :param samples: the number of samples to be created;
     :param n_features: the number of numerical features to be created;
-    :param n_correlated: the number of pairs of correlated features, wherein each pair
+    :param n_num_num: the number of pairs of correlated features, wherein each pair
         both features are numerical;
     :param n_cat_num: the number of pairs of correlated features, where each pair is
         constituted by a numerical and a categorical feature;

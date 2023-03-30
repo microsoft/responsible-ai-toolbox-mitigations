@@ -163,12 +163,28 @@ def freedman_diaconis(data: pd.Series):
 
     :param data: the data column used to compute the number of bins.
     """
+    default_n_bins = min(5, data.nunique())
+
     data = np.asarray(data, dtype=np.float_)
-    iqr = stats.iqr(data, rng=(25, 75), scale=1.0, nan_policy="omit")
+
+    min_qr = 25
+    max_qr = 75
+    iqr = 0
+    while iqr == 0:
+        if min_qr < 0 or max_qr > 100:
+            return default_n_bins
+        iqr = stats.iqr(data, rng=(min_qr, max_qr), scale=1.0, nan_policy="omit")
+        min_qr -= 5
+        max_qr += 5
+
     N = data.size
     bw = (2 * iqr) / np.power(N, 1 / 3)
 
     min_val, max_val = data.min(), data.max()
     datrng = max_val - min_val
-    result = int((datrng / bw) + 1)
+    try:
+        result = int((datrng / bw) + 1)
+    except:
+        return default_n_bins
+
     return result
