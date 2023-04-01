@@ -3,6 +3,8 @@ from typing import Union
 
 import numpy as np
 import pandas as pd
+from itertools import compress
+import json
 
 from ..dataprocessing import DataProcessing
 from ..dataprocessing.data_processing import DataFrameInfo
@@ -13,7 +15,6 @@ from ..utils.data_utils import (
     get_cat_cols,
     _transform_ordinal_encoder_with_new_values,
 )
-
 
 class DataDiagnostics(DataProcessing):
     """
@@ -31,10 +32,13 @@ class DataDiagnostics(DataProcessing):
         - "row", prediction will be applied over each row as a whole. A list of 
             erroneous row indices will be returned by predict.
 
+    :param json_log_path: a string pointing to a path to save a json log file to when 
+        calling predict. It defaults to None, in that case, no log file is saved.
+
     :param verbose: indicates whether internal messages should be printed or not.
     """
     # -----------------------------------
-    def __init__(self, df: Union[pd.DataFrame, np.ndarray] = None, col_predict: list = None, mode: str = None, verbose: bool = True):
+    def __init__(self, df: Union[pd.DataFrame, np.ndarray] = None, col_predict: list = None, mode: str = None, json_log_path: str = None, verbose: bool = True):
         super().__init__(verbose)
         self.df_info = DataFrameInfo()
         self._set_df(df)
@@ -43,6 +47,7 @@ class DataDiagnostics(DataProcessing):
         self.types = []
         self.col_predict = col_predict
         self.mode = self._check_valid_mode(mode)
+        self.json_log_path = json_log_path
         self.ordinal_encoder = None
         self.valid_cols = []
         self.fitted = False
@@ -187,7 +192,6 @@ class DataDiagnostics(DataProcessing):
                     + "If you'd like to ordinal encode and include these columns, use 'enable_encoder'=True.\n"
                 )
             df_to_predict = df_valid
-
         else:
             df_to_predict, _ = _transform_ordinal_encoder_with_new_values(self.ordinal_encoder, df_valid)
 
@@ -257,6 +261,7 @@ class DataDiagnostics(DataProcessing):
         predict_df = self._fix_col_transform(df)
         error_result = self._predict(predict_df)
         self.predicted = True
+        self._log_output(df, error_result)
         return error_result
 
     # -----------------------------------
@@ -287,7 +292,7 @@ class DataDiagnostics(DataProcessing):
         else:
             error_matrix = self.predict(transf_df)
             error_mask = np.where(error_matrix == -1, False, True)
-            mask_df = pd.DataFrame(data=error_mask, columns=transf_df.columns)
+            mask_df = pd.DataFrame(data=error_mask, index=transf_df.index, columns=transf_df.columns)
             masked_df = transf_df[mask_df]
             if imputer is None:
                 return masked_df
@@ -307,6 +312,39 @@ class DataDiagnostics(DataProcessing):
         pass
         
     '''
+    # -----------------------------------
+    @abstractmethod
+    def _serialize(self) -> dict:
+        """
+        Abstract method. For a given concrete class, this method serializes 
+        class attributes into a dictionary for logging.
+        """
+        pass
+    # -----------------------------------
+    def _log_output(self, df: pd.DataFrame, prediction_output: Union[np.array, list]):
+        """
+        Given a json_log_path, this method logs the following outputs to a json file:
+            - "object_config": contains set attributes of the concrete class.
+            - if mode = "row", it logs "erroneous_rows": containing a list of 
+            erroneous row indices; if mode = "column", it maps every column 
+            containing errors to a list of its erroneous values.
+        """
+        if not self.json_log_path:
+            return
+        else:
+            log_dict = {}
+            log_dict["object_config"] = self._serialize()
+            if self.mode == "row":
+                log_dict["erroneous_rows"] = prediction_output
+            else:
+                for i, col in enumerate(df):
+                    mask = np.where(prediction_output == -1, True, False)
+                    errors = set(compress(list(df[col]), mask[:, i]))
+                    if errors:
+                        log_dict[str(col)] = list(errors)
+            with open(self.json_log_path, "w") as json_file:
+                json.dump(log_dict, json_file)
+    
     # -----------------------------------
     def get_col_predict(self) -> list:
         """

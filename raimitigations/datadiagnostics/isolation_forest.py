@@ -68,9 +68,10 @@ class IsolationForestDetect(DataDiagnostics):
         isf_params: dict = None,
         sklearn_obj: object = None,
         enable_encoder: bool = False,
+        json_log_path: str = None,
         verbose: bool = True,
     ):
-        super().__init__(df, col_predict, mode, verbose)
+        super().__init__(df, col_predict, mode, json_log_path, verbose)
         self.isf_params = isf_params
         self.sklearn_obj = sklearn_obj
         self.enable_encoder = enable_encoder
@@ -222,4 +223,18 @@ class IsolationForestDetect(DataDiagnostics):
                 error_matrix.append(indicator_vector)
 
             return np.array(error_matrix).T
-    
+        
+    # -----------------------------------
+    def _serialize(self) -> dict:
+        """
+        Serializes class attributes into a dictionary for logging.
+        """
+        return {
+            "col_predict": self.col_predict,
+            "mode": self.mode,
+            "isf_params": self.isf_params,
+            "sklearn_obj": str(self.sklearn_obj),
+            "enable_encoder": self.enable_encoder,
+            "json_log_path": self.json_log_path,
+            "verbose": self.verbose,
+        }
