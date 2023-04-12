@@ -29,7 +29,7 @@ class CharSimilarityErrorModule(ErrorModule):
         """
         strings = [x for x in strings if str(x) != "nan"]
         chars = [[c for c in s.lower().strip()] for s in strings]
-        self.model = Word2Vec(chars, hs=1, negative=0, min_count=1)
+        self.model = Word2Vec(chars, hs=1, negative=0, min_count=1, seed=42, workers=1)
 
         erroneous_vals = set()
 
@@ -52,7 +52,6 @@ class CharSimilarityErrorModule(ErrorModule):
         for s in scoredict:
             if np.abs(score_median - scoredict[s]) > self.thresh * score_std:
                 erroneous_vals.add(s)
-
         return erroneous_vals
 
     # -----------------------------------

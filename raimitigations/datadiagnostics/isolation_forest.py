@@ -68,10 +68,10 @@ class IsolationForestDetect(DataDiagnostics):
         isf_params: dict = None,
         sklearn_obj: object = None,
         enable_encoder: bool = False,
-        json_log_path: str = None,
+        save_json: str = None,
         verbose: bool = True,
     ):
-        super().__init__(df, col_predict, mode, json_log_path, verbose)
+        super().__init__(df, col_predict, mode, save_json, verbose)
         self.isf_params = isf_params
         self.sklearn_obj = sklearn_obj
         self.enable_encoder = enable_encoder
@@ -200,8 +200,8 @@ class IsolationForestDetect(DataDiagnostics):
 
         :param df: the full dataset to predict anomalies over;
 
-        :return: if mode = "row", the predicted error matrix dataset otherwise if 
-            mode = "column", a list of erroneous row indices;
+        :return: if mode = "column", the predicted error matrix dataset otherwise if 
+            mode = "row", a list of erroneous row indices;
         :rtype: 2-dimensional np.array or list
         """
         error_matrix = []
@@ -230,11 +230,12 @@ class IsolationForestDetect(DataDiagnostics):
         Serializes class attributes into a dictionary for logging.
         """
         return {
+            "name":"IsolationForestDetect",
             "col_predict": self.col_predict,
             "mode": self.mode,
             "isf_params": self.isf_params,
             "sklearn_obj": str(self.sklearn_obj),
             "enable_encoder": self.enable_encoder,
-            "json_log_path": self.json_log_path,
+            "save_json": self.save_json,
             "verbose": self.verbose,
         }

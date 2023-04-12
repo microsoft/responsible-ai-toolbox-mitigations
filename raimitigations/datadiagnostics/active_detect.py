@@ -47,10 +47,10 @@ class ActiveDetect(DataDiagnostics):
         col_predict: list = None,
         mode: str = "column",
         error_modules: list = [],
-        json_log_path: str = None,
+        save_json: str = None,
         verbose: bool = True,
     ):
-        super().__init__(df, col_predict, mode, json_log_path, verbose)
+        super().__init__(df, col_predict, mode, save_json, verbose)
         self._set_error_modules(error_modules)
         self.module_error_matrix_dict: dict = {}
 
@@ -221,9 +221,10 @@ class ActiveDetect(DataDiagnostics):
         Serializes class attributes into a dictionary for logging.
         """
         return {
+            "name": "ActiveDetect",
             "col_predict": self.col_predict,
             "mode": self.mode,
-            "error_modules": [str(e_mod) for e_mod in self.error_modules],
-            "json_log_path": self.json_log_path,
+            "error_modules": [str(e_mod.module_name) for e_mod in self.error_modules],
+            "save_json": self.save_json,
             "verbose": self.verbose,
         }

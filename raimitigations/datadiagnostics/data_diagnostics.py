@@ -1,3 +1,4 @@
+import os
 from abc import abstractmethod
 from typing import Union
 
@@ -32,13 +33,13 @@ class DataDiagnostics(DataProcessing):
         - "row", prediction will be applied over each row as a whole. A list of 
             erroneous row indices will be returned by predict.
 
-    :param json_log_path: a string pointing to a path to save a json log file to when 
+    :param save_json: a string pointing to a path to save a json log file to when 
         calling predict. It defaults to None, in that case, no log file is saved.
 
     :param verbose: indicates whether internal messages should be printed or not.
     """
     # -----------------------------------
-    def __init__(self, df: Union[pd.DataFrame, np.ndarray] = None, col_predict: list = None, mode: str = None, json_log_path: str = None, verbose: bool = True):
+    def __init__(self, df: Union[pd.DataFrame, np.ndarray] = None, col_predict: list = None, mode: str = None, save_json: str = None, verbose: bool = True):
         super().__init__(verbose)
         self.df_info = DataFrameInfo()
         self._set_df(df)
@@ -47,7 +48,7 @@ class DataDiagnostics(DataProcessing):
         self.types = []
         self.col_predict = col_predict
         self.mode = self._check_valid_mode(mode)
-        self.json_log_path = json_log_path
+        self.save_json = self._check_valid_json(save_json)
         self.ordinal_encoder = None
         self.valid_cols = []
         self.fitted = False
@@ -79,7 +80,7 @@ class DataDiagnostics(DataProcessing):
     def _check_valid_col_predict(self):
         self.col_predict = self._check_error_col_list(self.df_info.columns, self.col_predict, "col_predict")
 
-     # -----------------------------------
+    # -----------------------------------
     def _check_valid_mode(self, mode: str):
         """
         Verify that the mode parameter passed by the user is a string 
@@ -101,6 +102,22 @@ class DataDiagnostics(DataProcessing):
             )
         return mode
 
+    # -----------------------------------
+    def _check_valid_json(self, json_path: str):
+        """
+        Verify that the save_json parameter is a valid json path.
+        """
+        if not json_path:
+            return 
+        
+        abs_path = os.path.abspath(json_path)
+        dir_path = os.path.dirname(os.path.abspath(json_path))
+        _, ext = os.path.splitext(abs_path)
+        
+        if not os.path.exists(dir_path) or ext.lower() != '.json':
+            raise ValueError(f"The provided path '{json_path}' is not valid, it's not a JSON file or the directory does not exist.")
+        else:
+            return json_path
     # -----------------------------------
     def _set_column_data_types(self, num_thresh: float = 0.25, cat_thresh: float = 0.05) -> list:
         """
@@ -323,13 +340,13 @@ class DataDiagnostics(DataProcessing):
     # -----------------------------------
     def _log_output(self, df: pd.DataFrame, prediction_output: Union[np.array, list]):
         """
-        Given a json_log_path, this method logs the following outputs to a json file:
+        Given a save_json, this method logs the following outputs to a json file:
             - "object_config": contains set attributes of the concrete class.
             - if mode = "row", it logs "erroneous_rows": containing a list of 
             erroneous row indices; if mode = "column", it maps every column 
             containing errors to a list of its erroneous values.
         """
-        if not self.json_log_path:
+        if not self.save_json:
             return
         else:
             log_dict = {}
@@ -341,8 +358,8 @@ class DataDiagnostics(DataProcessing):
                     mask = np.where(prediction_output == -1, True, False)
                     errors = set(compress(list(df[col]), mask[:, i]))
                     if errors:
-                        log_dict[str(col)] = list(errors)
-            with open(self.json_log_path, "w") as json_file:
+                        log_dict[str(col)] = {"values": list(errors), "erroneous_rows": list(df[df[col].isin(errors)].index)}
+            with open(self.save_json, "w") as json_file:
                 json.dump(log_dict, json_file)
     
     # -----------------------------------

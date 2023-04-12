@@ -28,9 +28,7 @@ class StringSimilarityErrorModule(ErrorModule):
         strings = [x for x in strings if str(x) != "nan"]
 
         #train a word2vec model using the input word strings
-        self.model = Word2Vec(
-            [s.lower().split() for s in strings], hs=1, negative=0, min_count=1
-        )
+        self.model = Word2Vec([s.lower().split() for s in strings], hs=1, negative=0, min_count=1, seed=42, workers=1)
 
         erroneous_vals = set()
 
