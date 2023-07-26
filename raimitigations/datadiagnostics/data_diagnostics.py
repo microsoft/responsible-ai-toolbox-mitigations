@@ -17,6 +17,7 @@ from ..utils.data_utils import (
     _transform_ordinal_encoder_with_new_values,
 )
 
+
 class DataDiagnostics(DataProcessing):
     """
     Base class for all data diagnostics subclasses. Implements basic functionalities
@@ -26,23 +27,33 @@ class DataDiagnostics(DataProcessing):
 
     :param col_predict: a list of the column names or indices that will be subject to error prediction.
         If None, this parameter will be set automatically as being a list of all columns;
-    
+
     :param mode: a string that can take the values:
-        - "column", prediction will be applied to each column independently. 
+        - "column", prediction will be applied to each column independently.
             An error matrix of the same shape as the data will be returned by predict.
-        - "row", prediction will be applied over each row as a whole. A list of 
+        - "row", prediction will be applied over each row as a whole. A list of
             erroneous row indices will be returned by predict.
 
-    :param save_json: a string pointing to a path to save a json log file to when 
+    :param save_json: a string pointing to a path to save a json log file to when
         calling predict. It defaults to None, in that case, no log file is saved.
 
     :param verbose: indicates whether internal messages should be printed or not.
     """
+
     # -----------------------------------
-    def __init__(self, df: Union[pd.DataFrame, np.ndarray] = None, col_predict: list = None, mode: str = None, save_json: str = None, verbose: bool = True):
+
+    def __init__(
+        self,
+        df: Union[pd.DataFrame, np.ndarray] = None,
+        col_predict: list = None,
+        label_col: str = None,
+        mode: str = None,
+        save_json: str = None,
+        verbose: bool = True,
+    ):
         super().__init__(verbose)
         self.df_info = DataFrameInfo()
-        self._set_df(df)
+        self._set_df(df)  # self._set_df_mult(df=df, X=None, y=None, label_col=label_col)
         self.n_rows = None
         self.n_cols = None
         self.types = []
@@ -53,11 +64,13 @@ class DataDiagnostics(DataProcessing):
         self.valid_cols = []
         self.fitted = False
         self.predicted = False
+        # self._check_label_col(self.df_info.df, label_col)
+        self.label_col = label_col
 
     # -----------------------------------
     def _get_fit_input_type(self) -> int:
         """
-        Returns the type of data format this class uses. 
+        Returns the type of data format this class uses.
 
         :return: 0 indicating a pandas dataframe data format;
         :rtype: int.
@@ -67,7 +80,7 @@ class DataDiagnostics(DataProcessing):
     # -----------------------------------
     def _set_column_to_predict(self):
         """
-        Sets the col_predict attribute representing columns to predict errors over. 
+        Sets the col_predict attribute representing columns to predict errors over.
         If these columns are not provided, it defaults to all columns.
         """
         if self.col_predict is not None:
@@ -83,7 +96,7 @@ class DataDiagnostics(DataProcessing):
     # -----------------------------------
     def _check_valid_mode(self, mode: str):
         """
-        Verify that the mode parameter passed by the user is a string 
+        Verify that the mode parameter passed by the user is a string
         equal to "row" or "column" only.
 
         :param mode: string passed by the user for the mode parameter;
@@ -92,14 +105,10 @@ class DataDiagnostics(DataProcessing):
         :rtype: string.
         """
         if not isinstance(mode, str):
-            raise ValueError(
-                f"ERROR: the parameter 'mode' must be a string equal to 'row' or 'column'."
-            )
+            raise ValueError(f"ERROR: the parameter 'mode' must be a string equal to 'row' or 'column'.")
         mode = mode.lower()
         if mode not in ["row", "column"]:
-            raise ValueError(
-                f"ERROR: the parameter 'mode' must be a string equal to 'row' or 'column' only."
-            )
+            raise ValueError(f"ERROR: the parameter 'mode' must be a string equal to 'row' or 'column' only.")
         return mode
 
     # -----------------------------------
@@ -108,17 +117,21 @@ class DataDiagnostics(DataProcessing):
         Verify that the save_json parameter is a valid json path.
         """
         if not json_path:
-            return 
-        
+            return
+
         abs_path = os.path.abspath(json_path)
         dir_path = os.path.dirname(os.path.abspath(json_path))
         _, ext = os.path.splitext(abs_path)
-        
-        if not os.path.exists(dir_path) or ext.lower() != '.json':
-            raise ValueError(f"The provided path '{json_path}' is not valid, it's not a JSON file or the directory does not exist.")
+
+        if not os.path.exists(dir_path) or ext.lower() != ".json":
+            raise ValueError(
+                f"The provided path '{json_path}' is not valid, it's not a JSON file or the directory does not exist."
+            )
         else:
             return json_path
+
     # -----------------------------------
+
     def _set_column_data_types(self, num_thresh: float = 0.25, cat_thresh: float = 0.05) -> list:
         """
         Detects the data type of each column in col_predict. It has 3 data type options:
@@ -140,7 +153,9 @@ class DataDiagnostics(DataProcessing):
                 self.types.append("categorical")
             else:
                 self.types.append("string")
+
     # -----------------------------------
+
     def _check_predict_data_structure(self, df: Union[pd.DataFrame, np.ndarray]):
         """
         Checks that all columns seen at fit time are present
@@ -154,7 +169,25 @@ class DataDiagnostics(DataProcessing):
         for col in self.col_predict:
             if col not in self.valid_cols:
                 raise KeyError(f"ERROR: Column: {col} not seen at fit time.")
-            
+
+    # -----------------------------------
+    def _check_label_col(self, df: pd.DataFrame, label_col: str):
+        """
+        Verifies that label_col exists in the provided dataframe
+        before setting it as a class attribute.
+
+        :param df: pandas dataframe to check the label column in;
+        :param label_col: label column name to verify.
+        """
+        if label_col is not None:
+            if label_col not in list(df):
+                print(label_col)
+                print(list(df))
+                raise KeyError(f"{label_col} column doesn't exist in given dataframe.")
+
+            else:
+                self.label_col = label_col
+
     # -----------------------------------
     def _apply_encoding_fit(self) -> pd.DataFrame:
         """
@@ -165,9 +198,9 @@ class DataDiagnostics(DataProcessing):
         :return: resulting pandas dataframe;
         :rtype: pd.dataframe.
         """
-        all_cat_cols = [col for i,col in enumerate(self.col_predict) if self.types[i] in ["categorical", "string"]]
+        all_cat_cols = [col for i, col in enumerate(self.col_predict) if self.types[i] in ["categorical", "string"]]
         all_num_cols = [col for col in self.col_predict if col not in all_cat_cols]
-        
+
         df_valid = pd.DataFrame()
 
         if self.enable_encoder is False:
@@ -185,15 +218,17 @@ class DataDiagnostics(DataProcessing):
             self.ordinal_encoder.fit()
             df_valid = self.ordinal_encoder.transform(self.df_info.df)
             df_valid = self._get_df_subset(df_valid, self.col_predict)
-            
+
         self.valid_cols = list(df_valid)
 
         return df_valid
+
     # -----------------------------------
+
     def _apply_encoding_predict(self, df_valid: pd.DataFrame) -> pd.DataFrame:
         """
-        Encodes categorical data before applying predict. It uses the 
-        mapping of the encoder created at fit time while also encoding 
+        Encodes categorical data before applying predict. It uses the
+        mapping of the encoder created at fit time while also encoding
         new values on top of the original mapping.
 
         :param df_valid: pandas dataframe to encode;
@@ -213,20 +248,20 @@ class DataDiagnostics(DataProcessing):
             df_to_predict, _ = _transform_ordinal_encoder_with_new_values(self.ordinal_encoder, df_valid)
 
         return df_to_predict
-    
+
     # -----------------------------------
     @abstractmethod
     def _fit(self):
         """
         Abstract method. For a given concrete class, this method must run the
-        error prediction steps implemented and save any important information 
-        in a set of class-specific attributes. These attributes are then used 
+        error prediction steps implemented and save any important information
+        in a set of class-specific attributes. These attributes are then used
         in the predict and transform methods for error prediction.
         """
         pass
 
     # -----------------------------------
-    def fit(self, df: Union[pd.DataFrame, np.ndarray] = None):
+    def fit(self, df: Union[pd.DataFrame, np.ndarray] = None, label_col=None):
         """
         Default fit method for all error predictors that inherit from the DataDiagnostics class. The
         following steps are executed: (i) set the dataset, (ii) set the list of columns that
@@ -235,10 +270,11 @@ class DataDiagnostics(DataProcessing):
 
         :param df: the dataset to fit the error prediction class on.
         """
-        self._set_df(df, require_set=True)
+        self._set_df(df, require_set=True)  # self._set_df_mult(df=df, X=X, y=y, label_col=label_col, require_set=True)
         self._set_column_to_predict()
         self._check_valid_col_predict()
         self._set_column_data_types()
+        self._check_label_col(self.df_info.df, label_col)
         self._fit()
         self.fitted = True
         self.df_info.clear_df_mem()
@@ -248,9 +284,9 @@ class DataDiagnostics(DataProcessing):
     @abstractmethod
     def _predict(self, df: pd.DataFrame):
         """
-        Abstract method. For a given concrete class, this method must 
-        predict errors present in the dataset using the error prediction 
-        class implemented and return an error matrix or a list of erroneous 
+        Abstract method. For a given concrete class, this method must
+        predict errors present in the dataset using the error prediction
+        class implemented and return an error matrix or a list of erroneous
         row indices based on the mode parameter.
 
         :param df: a pandas dataframe to perform error prediction on.
@@ -260,15 +296,15 @@ class DataDiagnostics(DataProcessing):
     # -----------------------------------
     def predict(self, df: Union[pd.DataFrame, np.ndarray]) -> Union[np.array, list]:
         """
-        Default predict method for all error predictors that inherit from 
+        Default predict method for all error predictors that inherit from
         the DataDiagnostics class. Predicts errors in a given dataset.
 
         :param df: the dataset to perform error prediction over.
 
-        :return: if mode = "row", an error matrix of the same shape as the input 
+        :return: if mode = "row", an error matrix of the same shape as the input
             data, mapping an error indicator to each value as follows:
             - -1 indicates an error;
-            - +1 indicates no error was predicted or that this error module is 
+            - +1 indicates no error was predicted or that this error module is
                 not applicable for the column's data type;
             - np.nan for columns not in col_predict.
             otherwise if mode = "column", a list of erroneous row indices.
@@ -284,15 +320,15 @@ class DataDiagnostics(DataProcessing):
     # -----------------------------------
     def transform(self, df: Union[pd.DataFrame, np.ndarray], imputer: DataImputer = None) -> pd.DataFrame:
         """
-        The default transform function of all error predictors that inherit 
-        from the DataDiagnostics class. Calls the predict function and transforms 
-        an input dataset using the error matrix or list of erroneous row indices 
-        predicted. If mode = "row", it removes erroneous rows from the dataset, otherwise 
-        if mode = "column", it removes erroneous values in the data with the option 
+        The default transform function of all error predictors that inherit
+        from the DataDiagnostics class. Calls the predict function and transforms
+        an input dataset using the error matrix or list of erroneous row indices
+        predicted. If mode = "row", it removes erroneous rows from the dataset, otherwise
+        if mode = "column", it removes erroneous values in the data with the option
         to apply a fit/transform imputer object afterwards.
 
         :param df: the dataset to transform;
-        :param imputer: an imputer object to fit to and impute this dataset if mode = "column". 
+        :param imputer: an imputer object to fit to and impute this dataset if mode = "column".
             You can use imputers present in this library of type dataprocessing.DataImputer,
             your options are: BasicImputer(), IterativeDataImputer() or KNNDataImputer().
             If you'd like to leave erroneous values as np.nan, use None;
@@ -301,7 +337,7 @@ class DataDiagnostics(DataProcessing):
         :rtype: pandas dataframe.
         """
 
-        #self._check_if_predicted()
+        # self._check_if_predicted()
         transf_df = self._fix_col_transform(df)
         if self.mode == "row":
             erroneous_indices = self.predict(transf_df)
@@ -323,27 +359,29 @@ class DataDiagnostics(DataProcessing):
     @abstractmethod
     def _transform(self, df: pd.DataFrame, imputer: DataImputer = None) -> pd.DataFrame:
         """
-        Abstract method. For a given concrete class, this method transforms 
+        Abstract method. For a given concrete class, this method transforms
         an input dataset using the error matrix predicted by the predict function.
         """
         pass
-        
+
     '''
     # -----------------------------------
     @abstractmethod
     def _serialize(self) -> dict:
         """
-        Abstract method. For a given concrete class, this method serializes 
+        Abstract method. For a given concrete class, this method serializes
         class attributes into a dictionary for logging.
         """
         pass
+
     # -----------------------------------
+
     def _log_output(self, df: pd.DataFrame, prediction_output: Union[np.array, list]):
         """
         Given a save_json, this method logs the following outputs to a json file:
             - "object_config": contains set attributes of the concrete class.
-            - if mode = "row", it logs "erroneous_rows": containing a list of 
-            erroneous row indices; if mode = "column", it maps every column 
+            - if mode = "row", it logs "erroneous_rows": containing a list of
+            erroneous row indices; if mode = "column", it maps every column
             containing errors to a list of its erroneous values.
         """
         if not self.save_json:
@@ -358,10 +396,13 @@ class DataDiagnostics(DataProcessing):
                     mask = np.where(prediction_output == -1, True, False)
                     errors = set(compress(list(df[col]), mask[:, i]))
                     if errors:
-                        log_dict[str(col)] = {"values": list(errors), "erroneous_rows": list(df[df[col].isin(errors)].index)}
+                        log_dict[str(col)] = {
+                            "values": list(errors),
+                            "erroneous_rows": list(df[df[col].isin(errors)].index),
+                        }
             with open(self.save_json, "w") as json_file:
                 json.dump(log_dict, json_file)
-    
+
     # -----------------------------------
     def get_col_predict(self) -> list:
         """

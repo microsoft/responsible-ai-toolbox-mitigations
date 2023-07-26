@@ -30,12 +30,15 @@ class ActiveDetect(DataDiagnostics):
     :param col_predict: a list of column names or indexes that will be subject to error prediction. If None, a list of all columns will be used by default;
 
     :param mode: a string that can take the values:
-        - "column", prediction will be applied to each column. 
+        - "column", prediction will be applied to each column.
             An error matrix of the same shape as the data will be returned by predict.
-        - "row", prediction will be applied over each row as a whole. A list of 
+        - "row", prediction will be applied over each row as a whole. A list of
             erroneous row indices will be returned by predict.
 
     :param error_modules: a list of error module objects to be used for prediction, chosen from the above list. If None, all available modules are used by default.
+
+    :param save_json: a string pointing to a path to save a json log file to when
+        calling predict. It defaults to None, in that case, no log file is saved.
 
     :param verbose: boolean flag indicating whether internal messages should be printed or not.
     """
@@ -50,14 +53,14 @@ class ActiveDetect(DataDiagnostics):
         save_json: str = None,
         verbose: bool = True,
     ):
-        super().__init__(df, col_predict, mode, save_json, verbose)
+        super().__init__(df, col_predict, None, mode, save_json, verbose)
         self._set_error_modules(error_modules)
         self.module_error_matrix_dict: dict = {}
 
     # -----------------------------------
     def _check_error_modules(self, error_modules: list):
         """
-        Verifies that each object in the input list is an ErrorModule object 
+        Verifies that each object in the input list is an ErrorModule object
         and raises an error otherwise.
 
         :param error_modules: a list of values to be verified as ErrorModule objects.
@@ -74,8 +77,8 @@ class ActiveDetect(DataDiagnostics):
     # -----------------------------------
     def _set_error_modules(self, error_modules: list):
         """
-        Sets up the error_modules attribute. It verifies that each value in the user's 
-        input list is an ErrorModule object. If no list was passed by the user, 
+        Sets up the error_modules attribute. It verifies that each value in the user's
+        input list is an ErrorModule object. If no list was passed by the user,
         a default list of all available modules is used.
 
         :param error_modules: a list of ErrorModule objects.
@@ -97,7 +100,7 @@ class ActiveDetect(DataDiagnostics):
     # -----------------------------------
     def _predictModule(self, df: pd.DataFrame, error_module: ErrorModule) -> np.array:
         """
-        Loops over columns of the data, checks if the current error module 
+        Loops over columns of the data, checks if the current error module
         applies to the column's data type and predicts erroneous rows over it.
 
         :param df: pd.DataFrame containing column data to predict errors on.
@@ -128,15 +131,15 @@ class ActiveDetect(DataDiagnostics):
 
     # -----------------------------------
     def _get_final_error_matrix(self) -> np.array:
-        """ 
-        Combines the error matrices returned by all error modules into a single 
-        union error matrix. For a given element in the set, if any error module 
-        predicted that it was an error, then it's set as an error(-1) in the 
-        final matrix, if no module predicted an error, then it's set as a 
-        non-error(+1) and if a column was not included in col_predict, all 
+        """
+        Combines the error matrices returned by all error modules into a single
+        union error matrix. For a given element in the set, if any error module
+        predicted that it was an error, then it's set as an error(-1) in the
+        final matrix, if no module predicted an error, then it's set as a
+        non-error(+1) and if a column was not included in col_predict, all
         values of that column map to np.nan in the final error matrix.
 
-        :return: the final error matrix mapping each value in the set to its error 
+        :return: the final error matrix mapping each value in the set to its error
             indicator value.
         :rtype: a 2-dimensional np.array.
         """
@@ -151,8 +154,8 @@ class ActiveDetect(DataDiagnostics):
     # -----------------------------------
     def _get_erroneous_row_indices(self, final_error_matrix: np.array) -> list:
         """
-        Get a list of erroneous row indices from the final error 
-        matrix. If any column in a row contains an error, it's 
+        Get a list of erroneous row indices from the final error
+        matrix. If any column in a row contains an error, it's
         considered erroneous.
 
         :param final_error_matrix: the final error matrix;
@@ -165,7 +168,9 @@ class ActiveDetect(DataDiagnostics):
         erroneous_row_indices = np.where(error_count_per_row > 0)[0]
 
         return list(erroneous_row_indices)
+
     # -----------------------------------
+
     def _fit(self):
         """
         Fit method for this DataDiagnostics class.
@@ -176,19 +181,22 @@ class ActiveDetect(DataDiagnostics):
 
     # -----------------------------------
     def _predict(self, df: pd.DataFrame) -> Union[np.array, list]:
-        """ 
-        Predict method of this class. It loops over error modules to predict 
-        errors over all applicable columns in the input dataset. It then calculates 
-        and returns the final union error matrix. 
+        """
+        Predict method of this class. It loops over error modules to predict
+        errors over all applicable columns in the input dataset. It then calculates
+        and returns the final union error matrix.
 
         :param df: a pandas dataframe to predict errors over.
 
         :return: the final error matrix.
         :rtype: a 2-dimensional np.array.
         """
+        self.valid_cols = self.df_info.columns
+        self._check_predict_data_structure(df)  # TODO: test this!
+
         for module in self.error_modules:
             self.module_error_matrix_dict[module.module_name] = self._predictModule(df, module)
-        
+
         final_error_matrix = self._get_final_error_matrix()
         if self.mode == "column":
             return final_error_matrix
@@ -201,7 +209,7 @@ class ActiveDetect(DataDiagnostics):
         """
         Returns the individual error matrix of a certain ErrorModule object post prediction.
 
-        :param error_module: string name of an error module used during prediction. 
+        :param error_module: string name of an error module used during prediction.
 
         :return: an error matrix indicating errors predicted by the input error module.
         :rtype: a 2-dimensional np.array
@@ -214,7 +222,7 @@ class ActiveDetect(DataDiagnostics):
             )
 
         return self.module_error_matrix_dict[error_module]
-    
+
     # -----------------------------------
     def _serialize(self) -> dict:
         """

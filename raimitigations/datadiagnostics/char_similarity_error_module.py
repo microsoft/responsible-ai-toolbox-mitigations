@@ -2,6 +2,7 @@ from gensim.models.word2vec import Word2Vec
 import numpy as np
 from .error_module import ErrorModule
 
+
 class CharSimilarityErrorModule(ErrorModule):
     """
     This module predicts values that do not belong in a string-valued column. It fine-tunes Word2Vec on the given set of data on the character level and compares the score of likelihood of input values within the set using standard deviation to predict possibly erroneous values.
@@ -11,7 +12,7 @@ class CharSimilarityErrorModule(ErrorModule):
 
     # -----------------------------------
 
-    def __init__(self, thresh: float =3.5):
+    def __init__(self, thresh: float = 3.5):
         self.thresh = thresh
         self.module_name = "CharSimilarityErrorModule"
 

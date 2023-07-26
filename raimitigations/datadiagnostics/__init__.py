@@ -8,17 +8,21 @@ from .semantic_error_module import SemanticErrorModule
 from .distribution_error_module import DistributionErrorModule
 from .string_similarity_error_module import StringSimilarityErrorModule
 from .char_similarity_error_module import CharSimilarityErrorModule
+from .missing_value_error_module import MissingValueErrorModule
 from .isolation_forest import IsolationForestDetect
+from .correlated_features_detect import CorrelatedFeaturesDetect
 
 __all__ = [
     "DataDiagnostics",
     "ErrorModule",
     "ActiveDetect",
-    "QuantitativeErrorModule", 
-    "PuncErrorModule", 
-    "SemanticErrorModule", 
-    "DistributionErrorModule", 
-    "StringSimilarityErrorModule", 
+    "QuantitativeErrorModule",
+    "PuncErrorModule",
+    "SemanticErrorModule",
+    "DistributionErrorModule",
+    "StringSimilarityErrorModule",
     "CharSimilarityErrorModule",
+    "MissingValueErrorModule",
     "IsolationForestDetect",
+    "CorrelatedFeaturesDetect",
 ]

@@ -357,7 +357,7 @@ class DataProcessing(ABC):
                 + "before calling the fit() method. "
                 + "Call the fit() method before using this instance to do a transformation or prediction."
             )
-    
+
     # -----------------------------------
     def _check_if_predicted(self):
         if not self.predicted:
@@ -462,6 +462,7 @@ class DataProcessing(ABC):
         X: Union[pd.DataFrame, np.ndarray],
         y: Union[pd.DataFrame, np.ndarray],
         require_set: bool = False,
+        drop: bool = True,  # TODO: remove the drop flag, docs, and ifs
     ):
         """
         Sets the current dataset self.df_info and the current label column self.y_info.
@@ -477,7 +478,8 @@ class DataProcessing(ABC):
             contain the label column;
         :param y: contains only the label column of the original dataset;
         :param require_set: if True, a ValueError will be raised if both pairs of
-            variables ((df, label_col) and (X, y)) are all None.
+            variables ((df, label_col) and (X, y)) are all None;
+        :param drop: boolean flag to determine if the label_col should be dropped.
         """
         self._check_error_df(df)
         self._check_error_df(X)
@@ -490,9 +492,13 @@ class DataProcessing(ABC):
             df = self._numpy_array_to_df(df)
 
         input_scheme = self._check_df_input_format(df, label_col, X, y)
+
         if input_scheme == self.INPUT_DF:
             df, label_col = self._fix_num_col(df, label_col)
-            X = df.drop(columns=[label_col])
+            if drop:
+                X = df.drop(columns=[label_col])
+            else:
+                X = df
             self.df_info = DataFrameInfo(X)
             self.y_info = DataFrameInfo(df[label_col])
             self.input_scheme = input_scheme

@@ -6,16 +6,17 @@ from sklearn.ensemble import IsolationForest
 
 from .data_diagnostics import DataDiagnostics
 
+
 class IsolationForestDetect(DataDiagnostics):
     """
-    Concrete class that performs anomaly detection over data. It uses the IsolationForest 
-    algorithm which isolates observations by randomly selecting a feature and then randomly 
+    Concrete class that performs anomaly detection over data. It uses the IsolationForest
+    algorithm which isolates observations by randomly selecting a feature and then randomly
     selecting a split value between the maximum and minimum values of the selected feature.
     This subclass uses the :class:`~sklearn.ensemble.IsolationForest` class from :mod:`sklearn` in the
     background.
     sklearn.ensemble.IsolationForest can only handle numerical data, however, this subclass allows for categorical
     input by applying ordinal encoding before calling the sklearn class. In order to use this function,
-    use enable_encoder=True. If you'd like to use a different type of encoding, 
+    use enable_encoder=True. If you'd like to use a different type of encoding,
     consider using the Pipeline class and call your own encoder before calling this subclass.
     For more details see:
     https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationForest.html#
@@ -25,9 +26,9 @@ class IsolationForestDetect(DataDiagnostics):
     :param col_predict: a list of column names or indexes that will be subject to error prediction. If None, a list of all columns will be used by default;
 
     :param mode: a string that can take the values:
-        - "column", fit and prediction will be applied to each column independently. 
+        - "column", fit and prediction will be applied to each column independently.
             An error matrix of the same shape as the data will be returned by predict.
-        - "row", fits over the whole data and prediction will be applied over each row. A list of 
+        - "row", fits over the whole data and prediction will be applied over each row. A list of
             erroneous row indices will be returned by predict.
 
     :param isf_params: a dict indicating the parameters used by
@@ -56,6 +57,9 @@ class IsolationForestDetect(DataDiagnostics):
     :param enable_encoder: a boolean flag to allow for applying ordinal encoding of categorical data before applying
         IsolationForestDetect as it only accepts numerical values.
 
+    :param save_json: a string pointing to a path to save a json log file to when
+        calling predict. It defaults to None, in that case, no log file is saved.
+
     :param verbose: boolean flag indicating whether internal messages should be printed or not.
     """
 
@@ -71,7 +75,7 @@ class IsolationForestDetect(DataDiagnostics):
         save_json: str = None,
         verbose: bool = True,
     ):
-        super().__init__(df, col_predict, mode, save_json, verbose)
+        super().__init__(df, col_predict, None, mode, save_json, verbose)
         self.isf_params = isf_params
         self.sklearn_obj = sklearn_obj
         self.enable_encoder = enable_encoder
@@ -86,7 +90,7 @@ class IsolationForestDetect(DataDiagnostics):
         If the 'isf_params' dictionary that specifies how to impute given data
         is set to None, then create a default dictionary.
         """
-        
+
         if self.sklearn_obj is not None:
             if not isinstance(self.sklearn_obj, IsolationForest):
                 raise ValueError("ERROR: 'sklearn_obj' needs to be an sklearn.ensemble.IsolationForest() object.")
@@ -148,12 +152,12 @@ class IsolationForestDetect(DataDiagnostics):
     # -----------------------------------
     def _fit(self):
         """
-        Fit method for this DataDiagnostics class. This method: 
-        (i) verifies input passed by the user, (ii) applies encoding 
-        to categorical data if enable_encoder=True, excludes it 
-        otherwise and (iii) checks the mode parameter, if mode = "row" 
-        it creates and fits an IsolationForest object to the full dataset, 
-        otherwise if mode = "column", it creates and fits the IsolationForest 
+        Fit method for this DataDiagnostics class. This method:
+        (i) verifies input passed by the user, (ii) applies encoding
+        to categorical data if enable_encoder=True, excludes it
+        otherwise and (iii) checks the mode parameter, if mode = "row"
+        it creates and fits an IsolationForest object to the full dataset,
+        otherwise if mode = "column", it creates and fits the IsolationForest
         object over each column.
         """
         self._check_valid_dict()
@@ -170,12 +174,12 @@ class IsolationForestDetect(DataDiagnostics):
                     bootstrap=self.isf_params["bootstrap"],
                     n_jobs=self.isf_params["n_jobs"],
                     random_state=self.isf_params["random_state"],
-                    warm_start=self.isf_params["warm_start"]
+                    warm_start=self.isf_params["warm_start"],
                 )
             else:
                 self.detectors["complete"] = self.sklearn_obj
             self.detectors["complete"].fit(df_valid)
-                
+
         else:
             for col in self.valid_cols:
                 if self.sklearn_obj is None:
@@ -187,7 +191,7 @@ class IsolationForestDetect(DataDiagnostics):
                         bootstrap=self.isf_params["bootstrap"],
                         n_jobs=self.isf_params["n_jobs"],
                         random_state=self.isf_params["random_state"],
-                        warm_start=self.isf_params["warm_start"]
+                        warm_start=self.isf_params["warm_start"],
                     )
                 else:
                     self.detectors[col] = deepcopy(self.sklearn_obj)
@@ -200,7 +204,7 @@ class IsolationForestDetect(DataDiagnostics):
 
         :param df: the full dataset to predict anomalies over;
 
-        :return: if mode = "column", the predicted error matrix dataset otherwise if 
+        :return: if mode = "column", the predicted error matrix dataset otherwise if
             mode = "row", a list of erroneous row indices;
         :rtype: 2-dimensional np.array or list
         """
@@ -215,7 +219,7 @@ class IsolationForestDetect(DataDiagnostics):
             erroneous_row_indices = df_to_predict.index[indices].tolist()
             return erroneous_row_indices
         else:
-            for col in self.df_info.columns:
+            for col in list(df):
                 if col in self.valid_cols:
                     indicator_vector = self.detectors[col].predict(df_to_predict[[col]])
                 else:
@@ -223,14 +227,14 @@ class IsolationForestDetect(DataDiagnostics):
                 error_matrix.append(indicator_vector)
 
             return np.array(error_matrix).T
-        
+
     # -----------------------------------
     def _serialize(self) -> dict:
         """
         Serializes class attributes into a dictionary for logging.
         """
         return {
-            "name":"IsolationForestDetect",
+            "name": "IsolationForestDetect",
             "col_predict": self.col_predict,
             "mode": self.mode,
             "isf_params": self.isf_params,
