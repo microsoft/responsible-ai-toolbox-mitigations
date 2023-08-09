@@ -11,6 +11,7 @@ from .char_similarity_error_module import CharSimilarityErrorModule
 from .missing_value_error_module import MissingValueErrorModule
 from .isolation_forest import IsolationForestDetect
 from .correlated_features_detect import CorrelatedFeaturesDetect
+from .diagnostic_metadata import MetaDataDiagnostic
 
 __all__ = [
     "DataDiagnostics",
@@ -25,4 +26,5 @@ __all__ = [
     "MissingValueErrorModule",
     "IsolationForestDetect",
     "CorrelatedFeaturesDetect",
+    "MetaDataDiagnostic",
 ]
