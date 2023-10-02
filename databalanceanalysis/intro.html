@@ -9,6 +9,7 @@
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/nbsphinx-gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -105,31 +106,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="databalanceanalysis">
+  <section id="databalanceanalysis">
 <span id="databalance"></span><h1>DataBalanceAnalysis<a class="headerlink" href="#databalanceanalysis" title="Permalink to this heading"></a></h1>
 <p>DataBalanceAnalysis contains a set of metrics for diagnosing and measuring data imbalance. This module is intended to be used as part of the error
 diagnosis process for failure modes that are due to class or feature imbalance. After measuring with DataBalanceAnalysis, AI practitioners can then
@@ -158,44 +135,22 @@ techniques available in the library’s DataProcessing module for augmenting dat
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <p>All notebooks listed here can be found in the folder <strong>notebooks/</strong>.</p>
 <div class="toctree-wrapper compound">
+<div class="nbsphinx-gallery">
+<a class="reference internal" href="../notebooks/databalanceanalysis/data_balance_census.html">
+  <div><img alt="" src="../_images/notebooks_databalanceanalysis_data_balance_census_16_0.png"></div>
+  <div>Data Balance Analysis using the Adult Census Income dataset</div>
+</a>
+<a class="reference internal" href="../notebooks/databalanceanalysis/data_balance_overall.html">
+  <div><img alt="" src="../_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Python Data Balance Analysis</div>
+</a>
+<a class="reference internal" href="../notebooks/data_balance_e2e.html">
+  <div><img alt="" src="../_images/notebooks_data_balance_e2e_22_0.png"></div>
+  <div>End to End Data Balance and Error Mitigation</div>
+</a>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="../_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="../notebooks/databalanceanalysis/data_balance_census.html">
-          <span class="std std-ref">Data Balance Analysis using the Adult Census Income dataset</span>
-        </a>
-      </span>
-    </p>
-  </div>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="../_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="../notebooks/databalanceanalysis/data_balance_overall.html">
-          <span class="std std-ref">Python Data Balance Analysis</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="../_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="../notebooks/data_balance_e2e.html">
-          <span class="std std-ref">End to End Data Balance and Error Mitigation</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-clear"></div></section>
+</section>
 </section>
 
 

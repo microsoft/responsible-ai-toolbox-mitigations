@@ -9,6 +9,7 @@
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/nbsphinx-gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -102,31 +103,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="cohortmanager">
+  <section id="cohortmanager">
 <span id="cohort-manager"></span><h1>CohortManager<a class="headerlink" href="#cohortmanager" title="Permalink to this heading"></a></h1>
 <p>The <strong>CohortManager</strong> allows the application of different data processing pipelines over each cohort. Also allows the creation and
 filtering of multiple cohorts using a simple interface. Finally, allows the creation of different estimators for each cohort using
@@ -369,104 +346,42 @@ subsets into a single dataset.</p>
 </map><section id="examples">
 <span id="cohort-manager-ex"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
+<div class="nbsphinx-gallery">
+<a class="reference internal" href="../notebooks/cohort/cohort_manager.html">
+  <div><img alt="" src="../_images/notebooks_cohort_cohort_manager_68_1.png"></div>
+  <div>Managing cohorts</div>
+</a>
+<a class="reference internal" href="../notebooks/cohort/cohort_manager_scenarios.html">
+  <div><img alt="" src="../_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Cohort Manager - Scenarios and Examples</div>
+</a>
+<a class="reference internal" href="../notebooks/cohort/case_study/case_1.html">
+  <div><img alt="" src="../_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Cohort Case Study 1</div>
+</a>
+<a class="reference internal" href="../notebooks/cohort/case_study/case_1_rebalance.html">
+  <div><img alt="" src="../_images/notebooks_cohort_case_study_case_1_rebalance_19_0.png"></div>
+  <div>Cohort Case Study 1 - Rebalancing</div>
+</a>
+<a class="reference internal" href="../notebooks/cohort/case_study/case_1_dashboard.html">
+  <div><img alt="" src="../_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Cohort Case Study 1 - Using RAI ErrorAnalysis</div>
+</a>
+<a class="reference internal" href="../notebooks/cohort/case_study/case_2.html">
+  <div><img alt="" src="../_images/notebooks_cohort_case_study_case_2_28_0.png"></div>
+  <div>Cohort Case Study 2</div>
+</a>
+<a class="reference internal" href="../notebooks/cohort/case_study/case_3.html">
+  <div><img alt="" src="../_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Cohort Case Study 3</div>
+</a>
+<a class="reference internal" href="../notebooks/cohort/case_study/integration_raiwidgets.html">
+  <div><img alt="" src="../_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Moving Cohorts from raimitigations to raiwidgets (and vice versa)</div>
+</a>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="../_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="../notebooks/cohort/cohort_manager.html">
-          <span class="std std-ref">Managing cohorts</span>
-        </a>
-      </span>
-    </p>
-  </div>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="../_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="../notebooks/cohort/cohort_manager_scenarios.html">
-          <span class="std std-ref">Cohort Manager - Scenarios and Examples</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="../_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="../notebooks/cohort/case_study/case_1.html">
-          <span class="std std-ref">Cohort Case Study 1</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="../_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="../notebooks/cohort/case_study/case_1_rebalance.html">
-          <span class="std std-ref">Cohort Case Study 1 - Rebalancing</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="../_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="../notebooks/cohort/case_study/case_1_dashboard.html">
-          <span class="std std-ref">Cohort Case Study 1 - Using RAI ErrorAnalysis</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="../_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="../notebooks/cohort/case_study/case_2.html">
-          <span class="std std-ref">Cohort Case Study 2</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="../_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="../notebooks/cohort/case_study/case_3.html">
-          <span class="std std-ref">Cohort Case Study 3</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="../_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="../notebooks/cohort/case_study/integration_raiwidgets.html">
-          <span class="std std-ref">Moving Cohorts from raimitigations to raiwidgets (and vice versa)</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-clear"></div></section>
+</section>
 </section>
 
 

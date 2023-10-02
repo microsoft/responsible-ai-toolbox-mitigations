@@ -9,6 +9,7 @@
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="_static/nbsphinx-gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -156,31 +157,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="gallery">
+  <section id="gallery">
 <span id="id1"></span><h1>Gallery<a class="headerlink" href="#gallery" title="Permalink to this heading"></a></h1>
 <p>The best way to get started is to go through the notebook tutorials, which showcase the benefits and usage of each mitigation and metrics available
 in the Responsible AI Mitigations Library. Here you can find all notebooks grouped according to their goals.</p>
@@ -189,449 +166,191 @@ in the Responsible AI Mitigations Library. Here you can find all notebooks group
 <section id="dataprocessing">
 <h3>DataProcessing<a class="headerlink" href="#dataprocessing" title="Permalink to this heading"></a></h3>
 <div class="toctree-wrapper compound">
+<div class="nbsphinx-gallery">
+<a class="reference internal" href="notebooks/dataprocessing/module_tests/encoding.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Encoding Examples</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/module_tests/scaler.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Data Scaling</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/module_tests/basic_imputation.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>BasicImputer Example</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/module_tests/iterative_imputation.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>IterativeDataImputer Example</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/module_tests/knn_imputation.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>KNNDataImputer Example</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/module_tests/feat_sel_sequential.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>SeqFeatSelection Example</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/module_tests/feat_sel_catboost.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>CatBoostSelection Example</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/module_tests/feat_sel_corr_tutorial.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Checking Correlations Between Variables - A Comprehensive Guide</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/module_tests/rebalance_imbl.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Rebalance Class (imblearn)</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/module_tests/rebalance_sdv.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Synthesizer Class (SDV)</div>
+</a>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/module_tests/encoding.html">
-          <span class="std std-ref">Encoding Examples</span>
-        </a>
-      </span>
-    </p>
-  </div>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/module_tests/scaler.html">
-          <span class="std std-ref">Data Scaling</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/module_tests/basic_imputation.html">
-          <span class="std std-ref">BasicImputer Example</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/module_tests/iterative_imputation.html">
-          <span class="std std-ref">IterativeDataImputer Example</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/module_tests/knn_imputation.html">
-          <span class="std std-ref">KNNDataImputer Example</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/module_tests/feat_sel_sequential.html">
-          <span class="std std-ref">SeqFeatSelection Example</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/module_tests/feat_sel_catboost.html">
-          <span class="std std-ref">CatBoostSelection Example</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/module_tests/feat_sel_corr_tutorial.html">
-          <span class="std std-ref">Checking Correlations Between Variables - A Comprehensive Guide</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/module_tests/rebalance_imbl.html">
-          <span class="std std-ref">Rebalance Class (imblearn)</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/module_tests/rebalance_sdv.html">
-          <span class="std std-ref">Synthesizer Class (SDV)</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-clear"></div></section>
+</section>
 <section id="databalanceanalysis">
 <h3>DataBalanceAnalysis<a class="headerlink" href="#databalanceanalysis" title="Permalink to this heading"></a></h3>
 <div class="toctree-wrapper compound">
+<div class="nbsphinx-gallery">
+<a class="reference internal" href="notebooks/databalanceanalysis/data_balance_census.html">
+  <div><img alt="" src="./_images/notebooks_databalanceanalysis_data_balance_census_16_0.png"></div>
+  <div>Data Balance Analysis using the Adult Census Income dataset</div>
+</a>
+<a class="reference internal" href="notebooks/databalanceanalysis/data_balance_overall.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Python Data Balance Analysis</div>
+</a>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/databalanceanalysis/data_balance_census.html">
-          <span class="std std-ref">Data Balance Analysis using the Adult Census Income dataset</span>
-        </a>
-      </span>
-    </p>
-  </div>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/databalanceanalysis/data_balance_overall.html">
-          <span class="std std-ref">Python Data Balance Analysis</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-clear"></div></section>
+</section>
 <section id="cohort">
 <h3>Cohort<a class="headerlink" href="#cohort" title="Permalink to this heading"></a></h3>
 <div class="toctree-wrapper compound" id="gallery-cohort">
+<div class="nbsphinx-gallery">
+<a class="reference internal" href="notebooks/cohort/cohort_definition.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Defining a Cohort</div>
+</a>
+<a class="reference internal" href="notebooks/cohort/cohort_manager.html">
+  <div><img alt="" src="./_images/notebooks_cohort_cohort_manager_68_1.png"></div>
+  <div>Managing cohorts</div>
+</a>
+<a class="reference internal" href="notebooks/cohort/cohort_manager_scenarios.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Cohort Manager - Scenarios and Examples</div>
+</a>
+<a class="reference internal" href="notebooks/cohort/decoupled.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Decoupled Classifiers</div>
+</a>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/cohort/cohort_definition.html">
-          <span class="std std-ref">Defining a Cohort</span>
-        </a>
-      </span>
-    </p>
-  </div>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/cohort/cohort_manager.html">
-          <span class="std std-ref">Managing cohorts</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/cohort/cohort_manager_scenarios.html">
-          <span class="std std-ref">Cohort Manager - Scenarios and Examples</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/cohort/decoupled.html">
-          <span class="std std-ref">Decoupled Classifiers</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-clear"></div></section>
+</section>
 <section id="using-scikit-learn-s-pipeline">
 <h3>Using scikit-learn’s Pipeline<a class="headerlink" href="#using-scikit-learn-s-pipeline" title="Permalink to this heading"></a></h3>
 <div class="toctree-wrapper compound">
+<div class="nbsphinx-gallery">
+<a class="reference internal" href="notebooks/dataprocessing/module_tests/pipeline_test.html">
+  <div><img alt="" src="./_images/notebooks_dataprocessing_module_tests_pipeline_test_18_2.png"></div>
+  <div>Using Pipelines</div>
+</a>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/module_tests/pipeline_test.html">
-          <span class="std std-ref">Using Pipelines</span>
-        </a>
-      </span>
-    </p>
-  </div>
 </div>
-<div class="sphx-glr-clear"></div></section>
+</section>
 </section>
 <section id="case-studies">
 <h2>Case Studies<a class="headerlink" href="#case-studies" title="Permalink to this heading"></a></h2>
 <section id="using-the-dataprocessing-module">
 <h3>Using the DataProcessing Module<a class="headerlink" href="#using-the-dataprocessing-module" title="Permalink to this heading"></a></h3>
 <div class="toctree-wrapper compound">
+<div class="nbsphinx-gallery">
+<a class="reference internal" href="notebooks/dataprocessing/module_tests/model_test.html">
+  <div><img alt="" src="./_images/notebooks_dataprocessing_module_tests_model_test_23_3.png"></div>
+  <div>Simple Example</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/case_study/case1.html">
+  <div><img alt="" src="./_images/notebooks_dataprocessing_case_study_case1_35_1.png"></div>
+  <div>Case Study 1</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/case_study/case2.html">
+  <div><img alt="" src="./_images/notebooks_dataprocessing_case_study_case2_56_1.png"></div>
+  <div>Case Study 2</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/case_study/case3.html">
+  <div><img alt="" src="./_images/notebooks_dataprocessing_case_study_case3_50_1.png"></div>
+  <div>Case Study 3</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/case_study/case1_stat.html">
+  <div><img alt="" src="./_images/notebooks_dataprocessing_case_study_case1_stat_25_0.png"></div>
+  <div>Case Study 1 - Multiple Runs</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/case_study/case2_stat.html">
+  <div><img alt="" src="./_images/notebooks_dataprocessing_case_study_case2_stat_29_0.png"></div>
+  <div>Case Study 2 - Multiple Runs</div>
+</a>
+<a class="reference internal" href="notebooks/dataprocessing/case_study/case3_stat.html">
+  <div><img alt="" src="./_images/notebooks_dataprocessing_case_study_case3_stat_29_0.png"></div>
+  <div>Case Study 3 - Multiple Runs</div>
+</a>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/module_tests/model_test.html">
-          <span class="std std-ref">Simple Example</span>
-        </a>
-      </span>
-    </p>
-  </div>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/case_study/case1.html">
-          <span class="std std-ref">Case Study 1</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/case_study/case2.html">
-          <span class="std std-ref">Case Study 2</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/case_study/case3.html">
-          <span class="std std-ref">Case Study 3</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/case_study/case1_stat.html">
-          <span class="std std-ref">Case Study 1 - Multiple Runs</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/case_study/case2_stat.html">
-          <span class="std std-ref">Case Study 2 - Multiple Runs</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/dataprocessing/case_study/case3_stat.html">
-          <span class="std std-ref">Case Study 3 - Multiple Runs</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-clear"></div></section>
+</section>
 <section id="using-the-databalanceanalysis-module">
 <h3>Using the DataBalanceAnalysis Module<a class="headerlink" href="#using-the-databalanceanalysis-module" title="Permalink to this heading"></a></h3>
 <div class="toctree-wrapper compound">
+<div class="nbsphinx-gallery">
+<a class="reference internal" href="notebooks/data_balance_e2e.html">
+  <div><img alt="" src="./_images/notebooks_data_balance_e2e_22_0.png"></div>
+  <div>End to End Data Balance and Error Mitigation</div>
+</a>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/data_balance_e2e.html">
-          <span class="std std-ref">End to End Data Balance and Error Mitigation</span>
-        </a>
-      </span>
-    </p>
-  </div>
 </div>
-<div class="sphx-glr-clear"></div></section>
+</section>
 <section id="using-the-cohort-module">
 <h3>Using the Cohort Module<a class="headerlink" href="#using-the-cohort-module" title="Permalink to this heading"></a></h3>
 <div class="toctree-wrapper compound" id="gallery-cohort-case">
+<div class="nbsphinx-gallery">
+<a class="reference internal" href="notebooks/cohort/case_study/case_1.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Cohort Case Study 1</div>
+</a>
+<a class="reference internal" href="notebooks/cohort/case_study/case_1_rebalance.html">
+  <div><img alt="" src="./_images/notebooks_cohort_case_study_case_1_rebalance_19_0.png"></div>
+  <div>Cohort Case Study 1 - Rebalancing</div>
+</a>
+<a class="reference internal" href="notebooks/cohort/case_study/case_1_dashboard.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Cohort Case Study 1 - Using RAI ErrorAnalysis</div>
+</a>
+<a class="reference internal" href="notebooks/cohort/case_study/case_2.html">
+  <div><img alt="" src="./_images/notebooks_cohort_case_study_case_2_28_0.png"></div>
+  <div>Cohort Case Study 2</div>
+</a>
+<a class="reference internal" href="notebooks/cohort/case_study/case_3.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Cohort Case Study 3</div>
+</a>
+<a class="reference internal" href="notebooks/cohort/case_study/integration_raiwidgets.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Moving Cohorts from raimitigations to raiwidgets (and vice versa)</div>
+</a>
+<a class="reference internal" href="notebooks/cohort/case_study/decoupled_class/case_1.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Decoupled Classifiers Case Study 1</div>
+</a>
+<a class="reference internal" href="notebooks/cohort/case_study/decoupled_class/case_2.html">
+  <div><img alt="" src="./_images/notebooks_cohort_case_study_decoupled_class_case_2_39_1.png"></div>
+  <div>Decoupled Classifiers Case Study 2</div>
+</a>
+<a class="reference internal" href="notebooks/cohort/case_study/decoupled_class/case_3.html">
+  <div><img alt="" src="./_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Decoupled Classifiers Case Study 3</div>
+</a>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/cohort/case_study/case_1.html">
-          <span class="std std-ref">Cohort Case Study 1</span>
-        </a>
-      </span>
-    </p>
-  </div>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/cohort/case_study/case_1_rebalance.html">
-          <span class="std std-ref">Cohort Case Study 1 - Rebalancing</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/cohort/case_study/case_1_dashboard.html">
-          <span class="std std-ref">Cohort Case Study 1 - Using RAI ErrorAnalysis</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/cohort/case_study/case_2.html">
-          <span class="std std-ref">Cohort Case Study 2</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/cohort/case_study/case_3.html">
-          <span class="std std-ref">Cohort Case Study 3</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/cohort/case_study/integration_raiwidgets.html">
-          <span class="std std-ref">Moving Cohorts from raimitigations to raiwidgets (and vice versa)</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/cohort/case_study/decoupled_class/case_1.html">
-          <span class="std std-ref">Decoupled Classifiers Case Study 1</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/cohort/case_study/decoupled_class/case_2.html">
-          <span class="std std-ref">Decoupled Classifiers Case Study 2</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="./_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="notebooks/cohort/case_study/decoupled_class/case_3.html">
-          <span class="std std-ref">Decoupled Classifiers Case Study 3</span>
-        </a>
-      </span>
-    </p>
-  </div>
-</div>
-<div class="sphx-glr-clear"></div></section>
+</section>
 </section>
 </section>
 

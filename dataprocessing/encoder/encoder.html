@@ -9,6 +9,7 @@
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/nbsphinx-gallery.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -105,31 +106,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="encoders">
+  <section id="encoders">
 <span id="dataencoding"></span><h1>Encoders<a class="headerlink" href="#encoders" title="Permalink to this heading"></a></h1>
 <p>This sub-module of the <strong>dataprocessing</strong> package collects all encoding transformers implemented here.
 Encoders are responsible for encoding categorical features into numerical features. All the encoder
@@ -224,20 +201,14 @@ the <strong>DataEncoding</strong> class, and thus, have access to all of the met
 </map><section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
+<div class="nbsphinx-gallery">
+<a class="reference internal" href="../../notebooks/dataprocessing/module_tests/encoding.html">
+  <div><img alt="" src="../../_static/nbsphinx-no-thumbnail.svg"></div>
+  <div>Encoding Examples</div>
+</a>
 </div>
-<div class="sphx-glr-thumbcontainer">
-  <div class="figure align-center">
-    <img alt="thumbnail" src="../../_static/no_image.png" />
-    <p class="caption">
-      <span class="caption-text">
-        <a class="reference internal" href="../../notebooks/dataprocessing/module_tests/encoding.html">
-          <span class="std std-ref">Encoding Examples</span>
-        </a>
-      </span>
-    </p>
-  </div>
 </div>
-<div class="sphx-glr-clear"></div></section>
+</section>
 </section>
 
 
