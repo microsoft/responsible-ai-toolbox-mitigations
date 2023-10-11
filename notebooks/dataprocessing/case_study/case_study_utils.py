@@ -151,8 +151,7 @@ def artificial_ctgan(train_x, train_y, strategy, savefile, epochs=400):
                 save_file=savefile,
                 verbose=False
             )
-    synth.fit()
-    syn_train_x, syn_train_y = synth.transform(X=train_x, y=train_y, strategy=strategy)
+    syn_train_x, syn_train_y = synth.fit_resample(X=train_x, y=train_y, strategy=strategy)
     return syn_train_x, syn_train_y
 
 # -----------------------------------

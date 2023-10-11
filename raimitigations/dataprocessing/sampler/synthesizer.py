@@ -589,16 +589,17 @@ class Synthesizer(DataProcessing):
         :return: the transformed dataset.
         :rtype: pd.DataFrame or np.ndarray
         """
-        self._fit(X, y, df, label_col)
-
         if n_samples is None and conditions is not None:
             raise ValueError("ERROR: if 'conditions' is provided, the parameter 'n_samples' is also required.")
+
+        self._fit(X, y, df, label_col)
+
         if n_samples is not None:
             samples = self.sample(n_samples, conditions)
-        elif self.strategy is not None:
-            samples = self._generate_samples_strategy(self.df_info.df, self.strategy)
-        else:
+        elif strategy is not None:
             samples = self._generate_samples_strategy(self.df_info.df, strategy)
+        else:
+            samples = self._generate_samples_strategy(self.df_info.df, self.strategy)
 
         if self.df_info.df is not None:
             samples = pd.concat([self.df_info.df, samples], axis=0)
