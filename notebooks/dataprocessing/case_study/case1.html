@@ -1378,9 +1378,9 @@ Threshold used: 0.6
                             <span class="n">model</span><span class="o">=</span><span class="s2">&quot;ctgan&quot;</span><span class="p">,</span>
                             <span class="n">load_existing</span><span class="o">=</span><span class="kc">False</span>
                     <span class="p">)</span>
-<span class="n">synth</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
 <span class="n">conditions</span> <span class="o">=</span> <span class="p">{</span><span class="n">label_col</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
-<span class="n">syn_train_x</span><span class="p">,</span> <span class="n">syn_train_y</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">train_x_sel</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">conditions</span><span class="o">=</span><span class="n">conditions</span><span class="p">)</span>
+<span class="n">syn_train_x</span><span class="p">,</span> <span class="n">syn_train_y</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">train_x_sel</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_y</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">conditions</span><span class="o">=</span><span class="n">conditions</span><span class="p">)</span>
 <span class="n">syn_train_y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
 </pre></div>
 </div>

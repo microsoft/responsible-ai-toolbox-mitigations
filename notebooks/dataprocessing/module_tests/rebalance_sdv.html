@@ -659,12 +659,12 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 <p>500 rows × 12 columns</p>
 </div></div>
 </div>
-<p>We can also create a set of samples and automatically add it to the original dataset. For that, we use the transform() method, which must receive a dataset as a mandatory parameter, along with the number of samples to be created (optional):</p>
+<p>We can also create a set of samples and automatically add it to the original dataset. For that, we use the fit_resample() method, which must receive a dataset as a mandatory parameter, along with the number of samples to be created (optional):</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df_resample</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -684,7 +684,7 @@ Name: is_promoted, dtype: int64
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df_resample</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -722,7 +722,7 @@ such as RandomUnderSampler, ClusterCentroids (from imblearn). If any other under
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;not majority&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;not majority&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df_resample</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -747,7 +747,7 @@ Name: is_promoted, dtype: int64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conditions</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;education&quot;</span><span class="p">:</span> <span class="s2">&quot;Below Secondary&quot;</span><span class="p">,</span> <span class="s2">&quot;is_promoted&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
-<span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">conditions</span><span class="o">=</span><span class="n">conditions</span><span class="p">)</span>
+<span class="n">df_resample</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">label_col</span><span class="o">=</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">conditions</span><span class="o">=</span><span class="n">conditions</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df_resample</span><span class="p">[</span><span class="s1">&#39;is_promoted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
 <span class="n">df_resample</span>
 </pre></div>

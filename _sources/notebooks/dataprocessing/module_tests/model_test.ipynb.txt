@@ -1706,8 +1706,7 @@
     "\t\t\t\tepochs=150,\n",
     "\t\t\t\tload_existing=False\n",
     "\t\t\t)\n",
-    "synth.fit()\n",
-    "balance_train = synth.transform(df=train_df, strategy=0.3)\n",
+    "balance_train = synth.fit_resample(df=train_df, label_col=label_col, strategy=0.3)\n",
     "balance_train[label_col].value_counts(normalize=True)"
    ]
   },
@@ -2067,8 +2066,7 @@
     "\t\t\t\tepochs=130,\n",
     "\t\t\t\tload_existing=False\n",
     "\t\t\t)\n",
-    "synth.fit()\n",
-    "balance_train = synth.transform(df=train_df, strategy=0.3)\n",
+    "balance_train = synth.fit_resample(df=train_df, label_col=label_col, strategy=0.3)\n",
     "balance_train[label_col].value_counts(normalize=True)"
    ]
   },
@@ -2156,7 +2154,7 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.9.13"
+   "version": "3.9.18"
   },
   "vscode": {
    "interpreter": {
