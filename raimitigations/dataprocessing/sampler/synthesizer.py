@@ -108,7 +108,7 @@ class Synthesizer(DataProcessing):
             the under_sampler parameter along with a float value for the ``strategy_under``
             parameter, an error will be raised;
             If None, the default value is set to "auto", which is the same as "minority".
-        
+
     :param verbose: indicates whether internal messages should be printed or not
     """
 
@@ -525,9 +525,9 @@ class Synthesizer(DataProcessing):
     # -----------------------------------
     def fit_resample(
         self,
-        df: Union[pd.DataFrame, np.ndarray] = None,
         X: Union[pd.DataFrame, np.ndarray] = None,
         y: Union[pd.DataFrame, np.ndarray] = None,
+        df: Union[pd.DataFrame, np.ndarray] = None,
         n_samples: int = None,
         conditions: dict = None,
         strategy: Union[str, dict, float] = None,
