@@ -157,7 +157,7 @@ class Synthesizer(DataProcessing):
         and the label column, which is not expected when using the CohortManager
         class.
         """
-        return False
+        return True
 
     # -----------------------------------
     def _set_df_mult(
@@ -604,7 +604,7 @@ class Synthesizer(DataProcessing):
         if self.df_info.df is not None:
             samples = pd.concat([self.df_info.df, samples], axis=0)
 
-            if X is not None and y is not None:
+            if self.input_scheme == self.INPUT_XY:
                 df_x = samples.drop(columns=[self.label_col_name])
                 df_y = samples[self.label_col_name]
                 self._free_mem()
