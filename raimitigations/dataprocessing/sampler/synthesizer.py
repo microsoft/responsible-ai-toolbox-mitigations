@@ -76,6 +76,39 @@ class Synthesizer(DataProcessing):
         ``save_file`` already exists) containing the model's wights of a new model. If True, the
         model will be loaded from the file ``save_file``;
 
+    :param strategy: represents the strategy used to generate the artificial instances.
+        This parameter is ignored when ``n_samples`` is provided. Strategy can assume the
+        following values:
+
+        - **String:** one of the following predefined strategies:
+
+            * **'minority':** generates synthetic samples for only the minority class;
+            * **'not majority':** generates synthetic samples for all classes but the
+            majority class;
+            * **'auto':** equivalent to 'minority';
+
+            Note that for a binary classification problem, "minority" is similar to
+            "not majority";
+        - **Dictionary:** the dictionary must have one key for each of the possible classes
+            found in the label column, and the value associated with each key represents the
+            number of instances desired for that class after the undersampling process is done.
+            Note: this parameter only works with undersampling approaches that allow
+            controlling the number of instances to be undersampled, such as :class:`~imblearn.under_sampling.RandomUnderSampler`,
+            :class:`~imblearn.under_sampling.ClusterCentroids` (from :mod:`imblearn`). If any other undersampler is provided in the
+            ``under_sampler`` parameter along with a float value for the strategy_under parameter,
+            an error will be raised;
+        - **Float:** a value between [0, 1] that represents the desired ratio between
+            the number of instances of the minority class over the majority class
+            after undersampling. The ratio 'r' is given by: :math:`r = N_m/N_M` where
+            :math:`N_m` is the number of instances of the minority class and :math:`N_M` is the
+            number of instances of the majority class after undersampling. Note: this
+            parameter only works with undersampling approaches that allow controlling
+            the number of instances to be undersampled, such as :class:`~imblearn.under_sampling.RandomUnderSampler`,
+            :class:`~imblearn.under_sampling.ClusterCentroids` (from :mod:`imblearn`). If any other undersampler is provided in
+            the under_sampler parameter along with a float value for the ``strategy_under``
+            parameter, an error will be raised;
+            If None, the default value is set to "auto", which is the same as "minority".
+
     :param verbose: indicates whether internal messages should be printed or not
     """
 
@@ -96,6 +129,7 @@ class Synthesizer(DataProcessing):
         epochs: int = DEFAULT_EPOCHS,
         save_file: str = None,
         load_existing: bool = True,
+        strategy: Union[str, dict, float] = None,
         verbose: bool = True,
     ):
         super().__init__(verbose)
@@ -106,6 +140,7 @@ class Synthesizer(DataProcessing):
         self.model = model
         self.epochs = epochs
         self.load_existing = load_existing
+        self.strategy = self._check_strategy(strategy)
         self._set_df_mult(df, label_col, X, y)
         self._set_model()
         self._set_save_file(save_file)
@@ -122,7 +157,7 @@ class Synthesizer(DataProcessing):
         and the label column, which is not expected when using the CohortManager
         class.
         """
-        return False
+        return True
 
     # -----------------------------------
     def _set_df_mult(
@@ -250,6 +285,27 @@ class Synthesizer(DataProcessing):
         return loaded
 
     # -----------------------------------
+    def _fit(
+        self,
+        X: Union[pd.DataFrame, np.ndarray] = None,
+        y: Union[pd.Series, np.ndarray] = None,
+        df: Union[pd.DataFrame, np.ndarray] = None,
+        label_col: str = None,
+    ):
+        self._set_df_mult(df, label_col, X, y, require_set=True)
+        self._check_valid_df(self.df_info.df)
+
+        self._preprocess_dataset()
+
+        loaded = self._load_model()
+        if not loaded:
+            self.model.fit(self.df_info.df)
+            self._save_model()
+
+        self.fitted = True
+        return self
+
+    # -----------------------------------
     def fit(
         self,
         X: Union[pd.DataFrame, np.ndarray] = None,
@@ -267,19 +323,8 @@ class Synthesizer(DataProcessing):
         :param df: the full dataset;
         :param label_col: the name or index of the label column;
         """
-        self._set_df_mult(df, label_col, X, y, require_set=True)
-        self._check_valid_df(self.df_info.df)
-
-        self._preprocess_dataset()
-
-        loaded = self._load_model()
-        if not loaded:
-            self.model.fit(self.df_info.df)
-            self._save_model()
-
-        self.fitted = True
-        self.df_info.clear_df_mem()
-        self.y_info.clear_df_mem()
+        self._fit(X, y, df, label_col)
+        self._free_mem()
         return self
 
     # -----------------------------------
@@ -440,6 +485,10 @@ class Synthesizer(DataProcessing):
                     all_samples = pd.concat([all_samples, samples], axis=0)
         return all_samples
 
+    def _free_mem(self):
+        self.df_info.clear_df_mem()
+        self.y_info.clear_df_mem()
+
     # -----------------------------------
     def sample(self, n_samples: int, conditions: dict = None):
         """
@@ -474,14 +523,15 @@ class Synthesizer(DataProcessing):
         return samples
 
     # -----------------------------------
-    def transform(
+    def fit_resample(
         self,
-        df: Union[pd.DataFrame, np.ndarray] = None,
         X: Union[pd.DataFrame, np.ndarray] = None,
         y: Union[pd.DataFrame, np.ndarray] = None,
+        df: Union[pd.DataFrame, np.ndarray] = None,
         n_samples: int = None,
         conditions: dict = None,
         strategy: Union[str, dict, float] = None,
+        label_col: str = None,
     ):
         """
         Transforms a dataset by adding synthetic instances to it. The types of instances
@@ -535,27 +585,30 @@ class Synthesizer(DataProcessing):
               the under_sampler parameter along with a float value for the ``strategy_under``
               parameter, an error will be raised;
               If None, the default value is set to "auto", which is the same as "minority".
+        :param label_col: the name or index of the label column;
         :return: the transformed dataset.
         :rtype: pd.DataFrame or np.ndarray
         """
-        self._check_if_fitted()
-        df, input_mode = self._arrange_transform_df(df, X, y)
-        if df is not None:
-            self._check_valid_df(df)
-            df = self._apply_transforms(df)
-
         if n_samples is None and conditions is not None:
             raise ValueError("ERROR: if 'conditions' is provided, the parameter 'n_samples' is also required.")
+
+        self._fit(X, y, df, label_col)
+
         if n_samples is not None:
             samples = self.sample(n_samples, conditions)
+        elif strategy is not None:
+            samples = self._generate_samples_strategy(self.df_info.df, strategy)
         else:
-            samples = self._generate_samples_strategy(df, strategy)
+            samples = self._generate_samples_strategy(self.df_info.df, self.strategy)
 
-        if df is not None:
-            samples = pd.concat([df, samples], axis=0)
-            if input_mode == self.INPUT_XY:
+        if self.df_info.df is not None:
+            samples = pd.concat([self.df_info.df, samples], axis=0)
+
+            if self.input_scheme == self.INPUT_XY:
                 df_x = samples.drop(columns=[self.label_col_name])
                 df_y = samples[self.label_col_name]
+                self._free_mem()
                 return df_x, df_y
 
+        self._free_mem()
         return samples

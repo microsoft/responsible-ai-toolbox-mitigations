@@ -59,14 +59,19 @@ def _run_main_commands(df, label_col, transf, df_in_fit=True):
             raise ValueError(f"ERROR: the following error occured while generating synthetic data: {error_msg}")
 
     try:
-        _ = transf.transform(df=df)
+        _ = transf.fit_resample(df=df, label_col=label_col)
     except Exception as error:
         error_msg = str(error)
         if "valid rows" not in error_msg:
             raise ValueError(f"ERROR: the following error occured while generating synthetic data: {error_msg}")
 
+    # Evaluate various strategies
+    _ = transf.fit_resample(df=df, label_col=label_col, strategy="not majority")
+
+    _ = transf.fit_resample(df=df, label_col=label_col, strategy=0.3)
+
     try:
-        _ = transf.transform(df=df, n_samples=10)
+        _ = transf.fit_resample(df=df, label_col=label_col, n_samples=10)
     except Exception as error:
         error_msg = str(error)
         if "Unable to sample any rows for the given conditions" not in error_msg:
@@ -75,7 +80,7 @@ def _run_main_commands(df, label_col, transf, df_in_fit=True):
     X = df.drop(columns=[label_col])
     y = df[label_col]
     try:
-        _ = transf.transform(X=X, y=y, n_samples=5, conditions=conditions)
+        _ = transf.fit_resample(X=X, y=y, n_samples=5, conditions=conditions)
     except Exception as error:
         error_msg = str(error)
         if "Unable to sample any rows for the given conditions" not in error_msg:
@@ -139,22 +144,17 @@ def test_errors(df_full_nan, label_col_name):
     with pytest.raises(Exception):
         obj = Synthesizer(save_file=10)
 
-    df_err1 = df.copy()
-    df_err1.rename(columns={"num_0":"new"}, inplace=True)
-    df_err2 = df.copy()
-    df_err2["new"] = df_err2["num_0"].values.tolist()
     conditions = {"CN_1_num_1": "val1_0", label_col_name: 1}
 
     obj = Synthesizer(epochs=1)
-    obj.fit(df=df, label_col=label_col_name)
     with pytest.raises(Exception):
-        obj.transform(strategy="a")
+        obj.fit_resample(df=df, label_col=label_col_name, strategy="a")
     with pytest.raises(Exception):
-        obj.transform(strategy=10)
+        obj.fit_resample(df=df, label_col=label_col_name, strategy=10)
     with pytest.raises(Exception):
-        obj.transform(df=df_err1)
+        obj.fit_resample(df=df)
     with pytest.raises(Exception):
-        obj.transform(df=df_err2)
+        obj.fit_resample(df=df, label_col=6)
     with pytest.raises(Exception):
-        obj.transform(conditions=conditions)
+        obj.fit_resample(conditions=conditions)
     os.remove(obj.save_file)
