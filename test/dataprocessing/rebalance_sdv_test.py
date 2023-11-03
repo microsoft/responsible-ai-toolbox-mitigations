@@ -65,6 +65,11 @@ def _run_main_commands(df, label_col, transf, df_in_fit=True):
         if "valid rows" not in error_msg:
             raise ValueError(f"ERROR: the following error occured while generating synthetic data: {error_msg}")
 
+    # Evaluate various strategies
+    _ = transf.fit_resample(df=df, label_col=label_col, strategy="not majority")
+
+    _ = transf.fit_resample(df=df, label_col=label_col, strategy=0.3)
+
     try:
         _ = transf.fit_resample(df=df, label_col=label_col, n_samples=10)
     except Exception as error:
