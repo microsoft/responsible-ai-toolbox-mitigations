@@ -1,5 +1,3 @@
 from .automitigator import AutoMitigator
 
-__all__ = [
-    "AutoMitigator"
-]
+__all__ = ["AutoMitigator"]
