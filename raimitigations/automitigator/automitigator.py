@@ -58,8 +58,8 @@ class AutoMitigator(BaseEstimator):
         if self.num_samples < 1:
             raise ValueError("num_samples should be at least 1")
 
-        if self.automl_args is None:
-            self.automl_args = {"task": "classification", "time_budget": 30, "metric": "log_loss"}
+        if self.automl_args is None or len(self.automl_args) == 0:
+            self.automl_args = {"task": "classification", "time_budget": 30, "metric": "log_loss", "early_stop": True}
 
         task = self.automl_args["task"] if "task" in self.automl_args else "classification"
         search_space = SearchSpaceBuilder(self.max_mitigations, task).build()
