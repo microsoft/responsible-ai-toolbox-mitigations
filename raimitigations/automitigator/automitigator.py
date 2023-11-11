@@ -3,7 +3,6 @@ from functools import partial
 from flaml import tune
 from typing import Union, List
 from pandas import DataFrame
-from flaml.tune.searcher.blendsearch import BlendSearch
 from sklearn.base import BaseEstimator
 
 from .searchspacebuilder import SearchSpaceBuilder
