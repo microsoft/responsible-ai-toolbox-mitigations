@@ -14,6 +14,21 @@ class Evaluator:
 
     def __init__(self, automl_args=None) -> None:
         self.automl_args = automl_args
+        self.pipeline = None
+
+    def _pipeline_append(self, step):
+        """
+        Append a step to the pipeline.
+        Note: This is done to support older versions of sklearn < 1.1 (required to support python 3.7)
+        which doesn't support an empty pipeline to be initialized.
+
+        :param sklearn.pipeline.Pipeline pipeline: The pipeline to add the step to
+        :param step: The step to add
+        """
+        if self.pipeline is None:
+            self.pipeline = Pipeline([step])
+        else:
+            self.pipeline.steps.append(step)
 
     def evaluate(self, train_x, train_y, search_config):
         """
@@ -32,6 +47,7 @@ class Evaluator:
         #            'mitigations':
         #               {'action0': {'type': 0, 'strategy': 0, 'name': 'rebalancer'}}}}
 
+        self.pipeline = None
         search_space = search_config["search_space"]
         cohort = search_space["cohort"]
         if cohort == "all":
@@ -39,20 +55,19 @@ class Evaluator:
         else:
             raise ValueError(f"Unknown cohort type {cohort}")
 
-    def _process_feature_selector(self, pipeline, selector_type):
+    def _process_feature_selector(self, selector_type):
         """
         Process the feature selector
 
-        :param pipeline: The pipeline to add the feature selector to
         :param dict selector_type: The feature selector configuration
 
         :raises ValueError: If the feature selector is unknown
         """
         selector_name = selector_type["selector_name"]
         if selector_name == "sequential_selector":
-            pipeline.steps.append(("sequential_selector", dp.SeqFeatSelection()))
+            self._pipeline_append(("sequential_selector", dp.SeqFeatSelection()))
         elif selector_name == "correlated_feature_selector":
-            pipeline.steps.append(
+            self._pipeline_append(
                 (
                     "correlated_feature_selector",
                     dp.CorrelatedFeatures(
@@ -64,7 +79,7 @@ class Evaluator:
                 )
             )
         elif selector_name == "catboost_selector":
-            pipeline.steps.append(
+            self._pipeline_append(
                 (
                     "catboost_selector",
                     dp.CatBoostSelection(
@@ -88,8 +103,6 @@ class Evaluator:
         :rtype: dict
         """
 
-        pipeline = Pipeline([])
-
         mitigation_set = set()
         for mitigation in search_space["mitigations"]:
             config = search_space["mitigations"][mitigation]
@@ -103,83 +116,74 @@ class Evaluator:
                 continue
 
             if mitigation_name == "synthesizer":
-                pipeline.steps.append(
+                self._pipeline_append(
                     ("synthesizer", MitigationActions.get_synthesizer(config["epochs"], config["model"]))
                 )
             elif mitigation_name == "rebalancer":
-                pipeline.steps.append(
+                self._pipeline_append(
                     ("rebalancer", MitigationActions.get_rebalancer(config["type"], config["strategy"]))
                 )
             elif mitigation_name == "scaler":
-                self._process_scaler(pipeline, config["type"])
+                self._process_scaler(config["type"])
             elif mitigation_name == "imputer":
-                self._process_imputer(pipeline, config["type"])
+                self._process_imputer(config["type"])
             elif mitigation_name == "feature_selector":
-                self._process_feature_selector(pipeline, config["type"])
+                self._process_feature_selector(config["type"])
             elif mitigation_name == "nomitigation":
                 continue
             else:
                 raise ValueError(f"Unknown mitigation {mitigation_name}")
 
-        fit_results = self._fit_model(pipeline, train_x, train_y)
+        fit_results = self._fit_model(train_x, train_y)
         fit_results["search_space"] = search_space
         return fit_results
 
-    def _process_imputer(self, pipeline, imputer_type):
+    def _process_imputer(self, imputer_type):
         """
         Process the imputer
 
-        :param pipeline: The pipeline to add the imputer to
         :param dict imputer_type: The imputer configuration
 
         :raises ValueError: If the imputer is unknown
-
-        :return: The pipeline with the imputer added
-        :rtype: sklearn.pipeline.Pipeline
         """
         imputer_name = imputer_type["imputer_name"]
         if imputer_name == "basic":
-            pipeline.steps.append(("basic_imputer", dp.BasicImputer()))
+            self._pipeline_append(("basic_imputer", dp.BasicImputer()))
         elif imputer_name == "iterative":
-            pipeline.steps.append(("iterative_imputer", dp.IterativeDataImputer()))
+            self._pipeline_append(("iterative_imputer", dp.IterativeDataImputer()))
         elif imputer_name == "knn":
-            pipeline.steps.append(("knn_imputer", dp.KNNDataImputer()))
+            self._pipeline_append(("knn_imputer", dp.KNNDataImputer()))
         else:
             raise ValueError(f"Unknown imputer {imputer_name}")
 
-    def _process_scaler(self, pipeline, scaler_type):
+    def _process_scaler(self, scaler_type):
         """
         Process the scaler
 
-        :param sklearn.pipeline.Pipeline pipeline: The pipeline to add the scaler to
         :param dict scaler_type: The scaler configuration
 
         :raises ValueError: If the scaler is unknown
-
-        :return: The pipeline with the scaler added
-        :rtype: sklearn.pipeline.Pipeline
         """
         scaler_name = scaler_type["scaler_name"]
         if scaler_name == "standard_scaler":
-            pipeline.steps.append(("standard_scaler", dp.DataStandardScaler()))
+            self._pipeline_append(("standard_scaler", dp.DataStandardScaler()))
         elif scaler_name == "robust_scaler":
-            pipeline.steps.append(("robust_scaler", dp.DataRobustScaler()))
+            self._pipeline_append(("robust_scaler", dp.DataRobustScaler()))
         elif scaler_name == "quantile_scaler":
-            pipeline.steps.append(("quantile_scaler", dp.DataQuantileTransformer()))
+            self._pipeline_append(("quantile_scaler", dp.DataQuantileTransformer()))
         elif scaler_name == "power_scaler":
-            pipeline.steps.append(("power_scaler", dp.DataPowerTransformer()))
+            self._pipeline_append(("power_scaler", dp.DataPowerTransformer()))
         elif scaler_name == "normalize_scaler":
-            pipeline.steps.append(("normalize_scaler", dp.DataNormalizer()))
+            self._pipeline_append(("normalize_scaler", dp.DataNormalizer()))
         elif scaler_name == "minmax_scaler":
-            pipeline.steps.append(("minmax_scaler", dp.DataMinMaxScaler()))
+            self._pipeline_append(("minmax_scaler", dp.DataMinMaxScaler()))
         else:
             raise ValueError(f"Unknown scaler {scaler_name}")
 
-    def _fit_model(self, pipeline, train_x, train_y):
+    def _fit_model(self, train_x, train_y):
         """
         Fit the model
 
-        :param sklearn.pipeline.Pipeline pipeline: The pipeline to add the scaler to
         :param train_x: The training data
         :param train_y: The training labels
 
@@ -188,17 +192,17 @@ class Evaluator:
 
         :raises ValueError: If the scaler is unknown
 
-        :return: The pipeline with the scaler added
-        :rtype: sklearn.pipeline.Pipeline
+        :return: Dictionary containing best loss, automl object and pipeline used
+        :rtype: dict
         """
         automl = AutoML(**self.automl_args)
-        pipeline.steps.append(("automl", automl))
+        self._pipeline_append(("automl", automl))
 
         try:
-            pipeline.fit(train_x, train_y)
+            self.pipeline.fit(train_x, train_y)
             loss = automl.best_loss
         except Exception as ex:
-            print(f"Evaluating pipeline {pipeline} caused error {ex} with trace {traceback.format_exc()}")
+            print(f"Evaluating pipeline {self.pipeline} caused error {ex} with trace {traceback.format_exc()}")
             loss = math.inf
 
-        return {"loss": loss, "automl": automl, "pipeline": pipeline}
+        return {"loss": loss, "automl": automl, "pipeline": self.pipeline}

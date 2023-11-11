@@ -27,11 +27,57 @@ def _prepare_data(df, label_col):
     proc_df = enc_ohe.transform(proc_df)
     return split_data(proc_df, label_col, test_size=0.25)
 
+def _test_mitigation(train_x, train_y, test_x, mitigation):
+    config = {
+        'search_space':
+        {
+            'cohort': 'all',
+            'mitigations': { 'action0': mitigation}
+        }
+    }
+
+    tune_args = {'points_to_evaluate':[config]}
+    autoMitigator = AutoMitigator(max_mitigations=1, num_samples=1, use_ray=False, tune_args=tune_args)
+    autoMitigator.fit(train_x, train_y)
+    _ = autoMitigator.predict(test_x)
+    _ = autoMitigator.predict_proba(test_x)
+
+    assert autoMitigator._pipeline is not None
+
+def test_auto_mitigator_starting_points(df_breast_cancer, label_name_bc):
+    train_x, test_x, train_y, test_y = _prepare_data(df_breast_cancer, label_name_bc)
+
+    _test_mitigation(train_x, train_y, test_x, {'name': 'nomitigation'})
+
+    _test_mitigation(train_x, train_y, test_x, {'type': 0, 'strategy': 0, 'name': 'rebalancer'})
+    _test_mitigation(train_x, train_y, test_x, {'type': 1, 'strategy': 0, 'name': 'rebalancer'})
+
+    _test_mitigation(train_x, train_y, test_x, {'epochs': 200, 'model': 0, 'name': 'synthesizer'})
+
+    _test_mitigation(train_x, train_y, test_x, {"name": "scaler", "type": {"scaler_name": "standard_scaler"}})
+    _test_mitigation(train_x, train_y, test_x, {"name": "scaler", "type": {"scaler_name": "robust_scaler"}})
+    _test_mitigation(train_x, train_y, test_x, {"name": "scaler", "type": {"scaler_name": "quantile_scaler"}})
+    _test_mitigation(train_x, train_y, test_x, {"name": "scaler", "type": {"scaler_name": "power_scaler"}})
+    _test_mitigation(train_x, train_y, test_x, {"name": "scaler", "type": {"scaler_name": "normalize_scaler"}})
+    _test_mitigation(train_x, train_y, test_x, {"name": "scaler", "type": {"scaler_name": "minmax_scaler"}})
+
+    _test_mitigation(train_x, train_y, test_x, {"name": "imputer", "type": {"imputer_name": "basic"}})
+    _test_mitigation(train_x, train_y, test_x, {"name": "imputer", "type": {"imputer_name": "iterative"}})
+    _test_mitigation(train_x, train_y, test_x, {"name": "imputer", "type": {"imputer_name": "knn"}})
+
+    _test_mitigation(train_x, train_y, test_x, {"name": "feature_selector", "type": {"selector_name": "sequential_selector"}})
+    _test_mitigation(train_x, train_y, test_x, {"name": "feature_selector", "type": {"selector_name": "sequential_selector"}})
+    _test_mitigation(train_x, train_y, test_x, {"name": "feature_selector", "type": 
+        {"selector_name": "correlated_feature_selector", "num_corr_th": 0.7, "num_pvalue_th": 0.01, 
+            "cat_corr_th": 0.7, "cat_pvalue_th": 0.01}})
+    _test_mitigation(train_x, train_y, test_x, {"name": "feature_selector", "type": 
+        {"selector_name": "catboost_selector", "test_size": 0.1, "algorithm": "predict", "steps": 1}})
+
 # -----------------------------------
 def test_auto_mitigator(df_breast_cancer, label_name_bc):
     train_x, test_x, train_y, test_y = _prepare_data(df_breast_cancer, label_name_bc)
 
-    autoMitigator = AutoMitigator(max_mitigations=1, num_samples=20, use_ray=False)
+    autoMitigator = AutoMitigator(max_mitigations=1, num_samples=2, use_ray=False)
     autoMitigator.fit(train_x, train_y)
     _ = autoMitigator.predict(test_x)
     _ = autoMitigator.predict_proba(test_x)

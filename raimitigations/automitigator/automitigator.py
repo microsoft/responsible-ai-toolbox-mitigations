@@ -65,8 +65,6 @@ class AutoMitigator(BaseEstimator):
         search_space = SearchSpaceBuilder(self.max_mitigations, task).build()
         evaluator = Evaluator(automl_args=self.automl_args)
 
-        alg = BlendSearch(metric="loss", mode="min", space=search_space)
-
         analysis = tune.run(
             partial(evaluator.evaluate, X_train, y_train),
             config=search_space,
@@ -74,7 +72,7 @@ class AutoMitigator(BaseEstimator):
             mode="min",
             num_samples=self.num_samples,
             time_budget_s=self.time_budget_s,
-            search_alg=alg,
+            search_alg="BlendSearch",
             use_ray=self.use_ray,
             **self.tune_args,
         )
