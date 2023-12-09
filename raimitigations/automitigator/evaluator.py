@@ -5,7 +5,7 @@ from flaml import AutoML
 from imblearn.pipeline import Pipeline
 
 from .mitigation_actions import MitigationActions
-
+from .automitigator_definitions import AutoMitigatorDefinitions as amd
 
 class Evaluator:
     """
@@ -48,9 +48,9 @@ class Evaluator:
         #               {'action0': {'type': 0, 'strategy': 0, 'name': 'rebalancer'}}}}
 
         self.pipeline = None
-        search_space = search_config["search_space"]
-        cohort = search_space["cohort"]
-        if cohort == "all":
+        search_space = search_config[amd.search_space_key]
+        cohort = search_space[amd.cohort_key]
+        if cohort == amd.all_cohort:
             return self.mitigate_full_dataset(train_x, train_y, search_space)
         else:
             raise ValueError(f"Unknown cohort type {cohort}")
@@ -63,29 +63,29 @@ class Evaluator:
 
         :raises ValueError: If the feature selector is unknown
         """
-        selector_name = selector_type["selector_name"]
-        if selector_name == "sequential_selector":
-            self._pipeline_append(("sequential_selector", dp.SeqFeatSelection()))
-        elif selector_name == "correlated_feature_selector":
+        selector_name = selector_type[amd.selector_name_key]
+        if selector_name == amd.sequential_selector:
+            self._pipeline_append((amd.sequential_selector, dp.SeqFeatSelection()))
+        elif selector_name == amd.correlated_feature_selector:
             self._pipeline_append(
                 (
-                    "correlated_feature_selector",
+                    amd.correlated_feature_selector,
                     dp.CorrelatedFeatures(
-                        num_corr_th=selector_type["num_corr_th"],
-                        num_pvalue_th=selector_type["num_pvalue_th"],
-                        cat_corr_th=selector_type["cat_corr_th"],
-                        cat_pvalue_th=selector_type["cat_pvalue_th"],
+                        num_corr_th=selector_type[amd.cfs_num_corr_th_key],
+                        num_pvalue_th=selector_type[amd.cfs_num_pvalue_th_key],
+                        cat_corr_th=selector_type[amd.cfs_cat_corr_th_key],
+                        cat_pvalue_th=selector_type[amd.cfs_cat_pvalue_th_key],
                     ),
                 )
             )
-        elif selector_name == "catboost_selector":
+        elif selector_name == amd.catboost_selector:
             self._pipeline_append(
                 (
-                    "catboost_selector",
+                    amd.catboost_selector,
                     dp.CatBoostSelection(
-                        test_size=selector_type["test_size"],
-                        algorithm=selector_type["algorithm"],
-                        steps=selector_type["steps"],
+                        test_size=selector_type[amd.cs_test_size_key],
+                        algorithm=selector_type[amd.cs_algorithm_key],
+                        steps=selector_type[amd.cs_steps_key],
                         verbose=False,
                     ),
                 )
@@ -104,32 +104,32 @@ class Evaluator:
         """
 
         mitigation_set = set()
-        for mitigation in search_space["mitigations"]:
-            config = search_space["mitigations"][mitigation]
-            mitigation_name = config["name"]
+        for mitigation in search_space[amd.mitigations_key]:
+            config = search_space[amd.mitigations_key][mitigation]
+            mitigation_name = config[amd.mitigation_name_key]
 
             # Skip if we've already seen this mitigation, except if it's nomitigation to allow for
             # combinations with fewer mitigations to be evaluated
-            if (mitigation_name == "nomitigation") or (mitigation_name not in mitigation_set):
+            if (mitigation_name == amd.no_mitigation) or (mitigation_name not in mitigation_set):
                 mitigation_set.add(mitigation_name)
             else:
                 continue
 
-            if mitigation_name == "synthesizer":
+            if mitigation_name == amd.synthesizer:
                 self._pipeline_append(
-                    ("synthesizer", MitigationActions.get_synthesizer(config["epochs"], config["model"]))
+                    (amd.synthesizer, MitigationActions.get_synthesizer(config[amd.synthesizer_epochs_key], config[amd.synthesizer_model_key]))
                 )
-            elif mitigation_name == "rebalancer":
+            elif mitigation_name == amd.rebalancer:
                 self._pipeline_append(
-                    ("rebalancer", MitigationActions.get_rebalancer(config["type"], config["strategy"]))
+                    (amd.rebalancer, MitigationActions.get_rebalancer(config[amd.mitigation_type_key], config[amd.rebalancer_strategy_key]))
                 )
-            elif mitigation_name == "scaler":
-                self._process_scaler(config["type"])
-            elif mitigation_name == "imputer":
-                self._process_imputer(config["type"])
-            elif mitigation_name == "feature_selector":
-                self._process_feature_selector(config["type"])
-            elif mitigation_name == "nomitigation":
+            elif mitigation_name == amd.scaler:
+                self._process_scaler(config[amd.mitigation_type_key])
+            elif mitigation_name == amd.imputer:
+                self._process_imputer(config[amd.mitigation_type_key])
+            elif mitigation_name == amd.feature_selector:
+                self._process_feature_selector(config[amd.mitigation_type_key])
+            elif mitigation_name == amd.no_mitigation:
                 continue
             else:
                 raise ValueError(f"Unknown mitigation {mitigation_name}")
@@ -146,13 +146,13 @@ class Evaluator:
 
         :raises ValueError: If the imputer is unknown
         """
-        imputer_name = imputer_type["imputer_name"]
-        if imputer_name == "basic":
-            self._pipeline_append(("basic_imputer", dp.BasicImputer()))
-        elif imputer_name == "iterative":
-            self._pipeline_append(("iterative_imputer", dp.IterativeDataImputer()))
-        elif imputer_name == "knn":
-            self._pipeline_append(("knn_imputer", dp.KNNDataImputer()))
+        imputer_name = imputer_type[amd.imputer_name_key]
+        if imputer_name == amd.basic_imputer:
+            self._pipeline_append((amd.basic_imputer, dp.BasicImputer()))
+        elif imputer_name == amd.iterative_imputer:
+            self._pipeline_append((amd.iterative_imputer, dp.IterativeDataImputer()))
+        elif imputer_name == amd.knn_imputer:
+            self._pipeline_append((amd.knn_imputer, dp.KNNDataImputer()))
         else:
             raise ValueError(f"Unknown imputer {imputer_name}")
 
@@ -164,19 +164,19 @@ class Evaluator:
 
         :raises ValueError: If the scaler is unknown
         """
-        scaler_name = scaler_type["scaler_name"]
-        if scaler_name == "standard_scaler":
-            self._pipeline_append(("standard_scaler", dp.DataStandardScaler()))
-        elif scaler_name == "robust_scaler":
-            self._pipeline_append(("robust_scaler", dp.DataRobustScaler()))
-        elif scaler_name == "quantile_scaler":
-            self._pipeline_append(("quantile_scaler", dp.DataQuantileTransformer()))
-        elif scaler_name == "power_scaler":
-            self._pipeline_append(("power_scaler", dp.DataPowerTransformer()))
-        elif scaler_name == "normalize_scaler":
-            self._pipeline_append(("normalize_scaler", dp.DataNormalizer()))
-        elif scaler_name == "minmax_scaler":
-            self._pipeline_append(("minmax_scaler", dp.DataMinMaxScaler()))
+        scaler_name = scaler_type[amd.scaler_name_key]
+        if scaler_name == amd.standard_scaler:
+            self._pipeline_append((amd.standard_scaler, dp.DataStandardScaler()))
+        elif scaler_name == amd.robust_scaler:
+            self._pipeline_append((amd.robust_scaler, dp.DataRobustScaler()))
+        elif scaler_name == amd.quantile_scaler:
+            self._pipeline_append((amd.quantile_scaler, dp.DataQuantileTransformer()))
+        elif scaler_name == amd.power_scaler:
+            self._pipeline_append((amd.power_scaler, dp.DataPowerTransformer()))
+        elif scaler_name == amd.normalize_scaler:
+            self._pipeline_append((amd.normalize_scaler, dp.DataNormalizer()))
+        elif scaler_name == amd.minmax_scaler:
+            self._pipeline_append((amd.minmax_scaler, dp.DataMinMaxScaler()))
         else:
             raise ValueError(f"Unknown scaler {scaler_name}")
 
@@ -205,4 +205,4 @@ class Evaluator:
             print(f"Evaluating pipeline {self.pipeline} caused error {ex} with trace {traceback.format_exc()}")
             loss = math.inf
 
-        return {"loss": loss, "automl": automl, "pipeline": self.pipeline}
+        return {amd.results_loss_key: loss, amd.results_automl_key: automl, amd.results_pipeline_key: self.pipeline}

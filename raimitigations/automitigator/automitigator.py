@@ -7,6 +7,7 @@ from sklearn.base import BaseEstimator
 
 from .searchspacebuilder import SearchSpaceBuilder
 from .evaluator import Evaluator
+from .automitigator_definitions import AutoMitigatorDefinitions as amd
 
 
 class AutoMitigator(BaseEstimator):
@@ -79,9 +80,9 @@ class AutoMitigator(BaseEstimator):
         if analysis is None or analysis.best_trial is None:
             raise ValueError("Failed to fit. Try adjusting the parameters.")
 
-        self._automl = analysis.best_result["automl"]
-        self._pipeline = analysis.best_result["pipeline"]
-        self._search_space = analysis.best_result["search_space"]
+        self._automl = analysis.best_result[amd.results_automl_key]
+        self._pipeline = analysis.best_result[amd.results_pipeline_key]
+        self._search_space = analysis.best_result[amd.search_space_key]
 
         return self
 
