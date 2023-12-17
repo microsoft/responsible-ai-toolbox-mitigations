@@ -1,12 +1,13 @@
 from flaml import tune
 from .automitigator_definitions import AutoMitigatorDefinitions as amd
 
+
 class SearchSpaceBuilder:
     """
     SearchSpaceBuilder is a class for building the search space for the AutoML
     hyperparameter search.
-    All potential mitigations are included in the search space. The search space is modeled 
-    as a hyperparameter optimization problem, where the hyperparameters are each of the mitigation's 
+    All potential mitigations are included in the search space. The search space is modeled
+    as a hyperparameter optimization problem, where the hyperparameters are each of the mitigation's
     parameters and the values are the possible values for each parameter.
 
     :param int max_mitigations: The maximum number of mitigations to be applied to the dataset.
@@ -28,13 +29,17 @@ class SearchSpaceBuilder:
         synthesizer = {
             amd.mitigation_name_key: amd.synthesizer,
             amd.synthesizer_epochs_key: tune.randint(lower=200, upper=700),
-            amd.synthesizer_model_key: tune.randint(lower=0, upper=4),  # 0 - ctgan, 1 - tvae, 2 - copula, 3 - copula_gan
+            amd.synthesizer_model_key: tune.randint(
+                lower=0, upper=4
+            ),  # 0 - ctgan, 1 - tvae, 2 - copula, 3 - copula_gan
         }
 
         rebalancer = {
             amd.mitigation_name_key: amd.rebalancer,
             amd.mitigation_type_key: tune.randint(lower=0, upper=3),  # 0 - oversample, 1 - undersample, 2 - both
-            amd.rebalancer_strategy_key: tune.randint(lower=0, upper=4),  # 0 - majority, 1 - not minority, 2 - not majority, 3 - all
+            amd.rebalancer_strategy_key: tune.randint(
+                lower=0, upper=4
+            ),  # 0 - majority, 1 - not minority, 2 - not majority, 3 - all
         }
 
         standard_scaler = {amd.scaler_name_key: amd.standard_scaler}
@@ -62,7 +67,10 @@ class SearchSpaceBuilder:
 
         knn_imputer = {amd.imputer_name_key: amd.knn_imputer}
 
-        imputer = {amd.mitigation_name_key: amd.imputer, amd.mitigation_type_key: tune.choice([basic_imputer, iterative_imputer, knn_imputer])}
+        imputer = {
+            amd.mitigation_name_key: amd.imputer,
+            amd.mitigation_type_key: tune.choice([basic_imputer, iterative_imputer, knn_imputer]),
+        }
 
         sequential_selector = {
             amd.selector_name_key: amd.sequential_selector,

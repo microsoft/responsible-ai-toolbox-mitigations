@@ -7,6 +7,7 @@ from imblearn.pipeline import Pipeline
 from .mitigation_actions import MitigationActions
 from .automitigator_definitions import AutoMitigatorDefinitions as amd
 
+
 class Evaluator:
     """
     Evaluates a given set of mitigations on a given dataset.
@@ -47,6 +48,7 @@ class Evaluator:
         #               {'action0': {'type': 0, 'strategy': 0, 'name': 'rebalancer'}}}}
 
         self.pipeline = None
+        self.pipeline_steps = []
         search_space = search_config[amd.search_space_key]
         cohort = search_space[amd.cohort_key]
         if cohort == amd.all_cohort:
@@ -114,11 +116,21 @@ class Evaluator:
 
             if mitigation_name == amd.synthesizer:
                 self._pipeline_append(
-                    (amd.synthesizer, MitigationActions.get_synthesizer(config[amd.synthesizer_epochs_key], config[amd.synthesizer_model_key]))
+                    (
+                        amd.synthesizer,
+                        MitigationActions.get_synthesizer(
+                            config[amd.synthesizer_epochs_key], config[amd.synthesizer_model_key]
+                        ),
+                    )
                 )
             elif mitigation_name == amd.rebalancer:
                 self._pipeline_append(
-                    (amd.rebalancer, MitigationActions.get_rebalancer(config[amd.mitigation_type_key], config[amd.rebalancer_strategy_key]))
+                    (
+                        amd.rebalancer,
+                        MitigationActions.get_rebalancer(
+                            config[amd.mitigation_type_key], config[amd.rebalancer_strategy_key]
+                        ),
+                    )
                 )
             elif mitigation_name == amd.scaler:
                 self._process_scaler(config[amd.mitigation_type_key])
