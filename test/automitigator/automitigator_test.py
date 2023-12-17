@@ -44,6 +44,27 @@ def _test_mitigation(train_x, train_y, test_x, mitigation):
 
     assert autoMitigator._pipeline is not None
 
+# -----------------------------------
+def test_duplicate_mitigations(df_breast_cancer, label_name_bc):
+    train_x, test_x, train_y, test_y = _prepare_data(df_breast_cancer, label_name_bc)
+
+    config = {
+        'search_space':
+        {
+            'cohort': 'all',
+            'mitigations': { 'action0': {'type': 0, 'strategy': 0, 'name': 'rebalancer'},
+                             'action1': {'type': 0, 'strategy': 0, 'name': 'rebalancer'}}
+        }
+    }
+
+    tune_args = {'points_to_evaluate':[config]}
+    autoMitigator = AutoMitigator(max_mitigations=2, num_samples=1, use_ray=False, tune_args=tune_args)
+    autoMitigator.fit(train_x, train_y)
+    _ = autoMitigator.predict(test_x)
+
+    assert autoMitigator._pipeline is not None
+    
+# -----------------------------------
 def test_auto_mitigator_starting_points(df_breast_cancer, label_name_bc):
     train_x, test_x, train_y, test_y = _prepare_data(df_breast_cancer, label_name_bc)
 

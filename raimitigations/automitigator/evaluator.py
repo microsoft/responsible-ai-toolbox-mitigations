@@ -14,21 +14,20 @@ class Evaluator:
 
     def __init__(self, automl_args=None) -> None:
         self.automl_args = automl_args
+        self.pipeline_steps = []
         self.pipeline = None
 
     def _pipeline_append(self, step):
         """
         Append a step to the pipeline.
         Note: This is done to support older versions of sklearn < 1.1 (required to support python 3.7)
-        which doesn't support an empty pipeline to be initialized.
+        which doesn't support an empty pipeline to be initialized nor appending a step to an existing pipeline
+        without an estimator at the end.
 
         :param sklearn.pipeline.Pipeline pipeline: The pipeline to add the step to
         :param step: The step to add
         """
-        if self.pipeline is None:
-            self.pipeline = Pipeline([step])
-        else:
-            self.pipeline.steps.append(step)
+        self.pipeline_steps.append(step)
 
     def evaluate(self, train_x, train_y, search_config):
         """
@@ -52,8 +51,6 @@ class Evaluator:
         cohort = search_space[amd.cohort_key]
         if cohort == amd.all_cohort:
             return self.mitigate_full_dataset(train_x, train_y, search_space)
-        else:
-            raise ValueError(f"Unknown cohort type {cohort}")
 
     def _process_feature_selector(self, selector_type):
         """
@@ -131,8 +128,6 @@ class Evaluator:
                 self._process_feature_selector(config[amd.mitigation_type_key])
             elif mitigation_name == amd.no_mitigation:
                 continue
-            else:
-                raise ValueError(f"Unknown mitigation {mitigation_name}")
 
         fit_results = self._fit_model(train_x, train_y)
         fit_results["search_space"] = search_space
@@ -153,8 +148,6 @@ class Evaluator:
             self._pipeline_append((amd.iterative_imputer, dp.IterativeDataImputer()))
         elif imputer_name == amd.knn_imputer:
             self._pipeline_append((amd.knn_imputer, dp.KNNDataImputer()))
-        else:
-            raise ValueError(f"Unknown imputer {imputer_name}")
 
     def _process_scaler(self, scaler_type):
         """
@@ -177,8 +170,6 @@ class Evaluator:
             self._pipeline_append((amd.normalize_scaler, dp.DataNormalizer()))
         elif scaler_name == amd.minmax_scaler:
             self._pipeline_append((amd.minmax_scaler, dp.DataMinMaxScaler()))
-        else:
-            raise ValueError(f"Unknown scaler {scaler_name}")
 
     def _fit_model(self, train_x, train_y):
         """
@@ -197,6 +188,7 @@ class Evaluator:
         """
         automl = AutoML(**self.automl_args)
         self._pipeline_append(("automl", automl))
+        self.pipeline = Pipeline(self.pipeline_steps)
 
         try:
             self.pipeline.fit(train_x, train_y)
