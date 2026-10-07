@@ -35,14 +35,14 @@ jobs:
 
       # -------------------
       # Checkout code
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2.8.0
         with:
           persist-credentials: false
           fetch-depth: 0
 
       # -------------------
       # Setup environment in remote runner
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@e9aba2c848f5ebd159c070c61ea2c4e2b122355e # v2.3.4
         with:
           python-version: 3.9
 
@@ -86,7 +86,7 @@ jobs:
       # ...a Test package (in test.pypi.org)
       - name: Publish package to Test Pypi
         if: ${{ github.event.inputs.releaseType == 'Test'}}
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_TOKEN }}
@@ -94,7 +94,7 @@ jobs:
       # ...an official pip package
       - name: Publish package to Pypi
         if: ${{ github.event.inputs.releaseType == 'Prod'}}
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
         with:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN }}
@@ -117,7 +117,7 @@ jobs:
       # Push the changes performed by bump2version to the current branch
       - name: Push changes
         if: ${{ github.event.inputs.bumpType != 'none' }}
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@881a6320fdb16eb5318c5054f31c218aec2b324c # v1.3.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
